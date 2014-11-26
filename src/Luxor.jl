@@ -11,7 +11,7 @@ global currentdrawing # will hold the current drawing
 export Drawing, currentdrawing, 
     finish, preview,
     origin, axes, background, 
-    newpath, closepath, 
+    newpath, closepath, newsubpath, 
     randompoint, randompointarray, 
 	circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
 	move, rmove,
@@ -42,10 +42,10 @@ type Drawing
         this.width = w
         this.height = h
         this.filename = f
-        this.redvalue = 0
-        this.greenvalue = 0
-        this.bluevalue = 0 
-        this.alpha = 0.5
+        this.redvalue = 0.0
+        this.greenvalue = 0.0
+        this.bluevalue = 0.0 
+        this.alpha = 1.0
          (path, ext) = splitext(f)
          if ext == ".pdf"
             this.surface =  Cairo.CairoPDFSurface(f, w, h)
@@ -124,6 +124,7 @@ setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
 # paths
 
 newpath() = Cairo.new_path(currentdrawing.cr)
+newsubpath() = Cairo.new_sub_path(currentdrawing.cr)
 closepath() = Cairo.close_path(currentdrawing.cr)
 
 # shapes and lines
@@ -325,10 +326,9 @@ end
 #    end
 
 function setcolor(color)
-    global redvalue, greenvalue, bluevalue, alpha
     temp = convert(RGBA, color)
-    (redvalue,greenvalue,bluevalue) = (temp.c.r, temp.c.g, temp.c.b)
-    Cairo.set_source_rgba(currentdrawing.cr, redvalue, greenvalue, bluevalue, temp.alpha)
+    (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) = (temp.c.r, temp.c.g, temp.c.b, temp.alpha)
+    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
 end
 
 function setcolor(r, g, b, a=1)
