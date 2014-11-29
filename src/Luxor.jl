@@ -36,7 +36,7 @@ type Drawing
     greenvalue::Float64
     bluevalue::Float64
     alpha::Float64
-    function Drawing(w=800, h=800, f="/tmp/test.png")
+    function Drawing(w=800, h=800, f="/tmp/test.png") #TODO this is Unix only?
         global currentdrawing
         this = new()
         this.width = w
@@ -68,9 +68,11 @@ function finish()
     end
 end
 
-# TODO what to do on non-OS X
+# TODO what will these do on non-OSX?
 function preview()
-    @osx_only run(`open $(currentdrawing.filename)`)
+    @osx_only      run(`open $(currentdrawing.filename)`)
+    @windows_only  run(`open $(currentdrawing.filename)`)
+    @linux_only    run(`open $(currentdrawing.filename)`)
 end
 
 function origin()
@@ -100,6 +102,8 @@ function axes()
 end
 
 function background(color)
+# TODO: at present this works after you call origin() to put 0/0 in the center
+# but how can it tell whether you've used origin() first?
    setcolor(color)
    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, fill)
 end
@@ -354,7 +358,7 @@ end
 
 function setopacity(a)
     # use current RGB values
-    alpha = a
+    currentdrawing.alpha = a
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
