@@ -4,7 +4,7 @@ module Luxor
 
 using  Color
 
-import Cairo
+import Cairo, Cairo.CairoSurface, Cairo.CairoContext
 
 global currentdrawing # will hold the current drawing
 
@@ -28,10 +28,10 @@ export Drawing, currentdrawing,
 type Drawing
     width::Float64
     height::Float64
-    filename
-    surface
-    cr
-    surfacetype
+    filename::String
+    surface::CairoSurface
+    cr::CairoContext
+    surfacetype::String
     redvalue::Float64
     greenvalue::Float64
     bluevalue::Float64
@@ -46,17 +46,17 @@ type Drawing
         this.greenvalue = 0.0
         this.bluevalue = 0.0 
         this.alpha = 1.0
-         (path, ext) = splitext(f)
-         if ext == ".pdf"
-            this.surface =  Cairo.CairoPDFSurface(f, w, h)
-            this.surfacetype = "pdf"
-            this.cr      =  Cairo.CairoContext(this.surface)
-         elseif ext == ".png" || ext == "" # default to PNG
-            this.surface = Cairo.CairoRGBSurface(w,h)
-            this.surfacetype = "png"
-            this.cr      = Cairo.CairoContext(this.surface)
-         end
-         currentdrawing = this
+        (path, ext) = splitext(f)
+        if ext == ".pdf"
+           this.surface =  Cairo.CairoPDFSurface(f, w, h)
+           this.surfacetype = "pdf"
+           this.cr      =  Cairo.CairoContext(this.surface)
+        elseif ext == ".png" || ext == "" # default to PNG
+           this.surface = Cairo.CairoRGBSurface(w,h)
+           this.surfacetype = "png"
+           this.cr      = Cairo.CairoContext(this.surface)
+        end
+        currentdrawing = this
     end
 end
 
@@ -105,7 +105,7 @@ function background(color)
 # TODO: at present this works after you call origin() to put 0/0 in the center
 # but how can it tell whether you've used origin() first?
    setcolor(color)
-   rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, fill)
+   rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
 end
 
 function randompoint(low, high)
@@ -154,13 +154,13 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
 function circle(x, y, r, action=())
     newpath()
     Cairo.circle(currentdrawing.cr, x, y, r)
-    if action == fill
+    if action == :fill
         fill()
-    elseif action == stroke
+    elseif action == :stroke
         stroke()
-    elseif action == clip
+    elseif action == :clip
         clip()
-    elseif action == fillstroke
+    elseif action == :fillstroke
         fillstroke()
     end
 end         
@@ -169,13 +169,13 @@ end
 function arc(xc, yc, radius, angle1, angle2, action=())
     newpath()
     Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-    if action == fill
+    if action == :fill
         fill()
-    elseif action == stroke
+    elseif action == :stroke
         stroke()
-    elseif action == clip
+    elseif action == :clip
         clip()
-    elseif action == fillstroke
+    elseif action == :fillstroke
         fillstroke()
     end
 end
@@ -183,13 +183,13 @@ end
 function rect(xmin, ymin, w, h, action=())
     newpath()
     Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
-    if action == fill
+    if action == :fill
         fill()
-    elseif action == stroke
+    elseif action == :stroke
         stroke()
-    elseif action == clip
+    elseif action == :clip
         clip()
-    elseif action == fillstroke
+    elseif action == :fillstroke
         fillstroke()
     end
 end         
@@ -245,13 +245,13 @@ function poly(list, action = (); close=false, )
     if close
         closepath()
     end
-    if action == fill
+    if action == :fill
         fill()
-    elseif action == stroke
+    elseif action == :stroke
         stroke()
-    elseif action == clip
+    elseif action == :clip
         clip()
-    elseif action == fillstroke
+    elseif action == :fillstroke
         fillstroke()
     end
 end
@@ -370,4 +370,4 @@ function randomcolor()
     setcolor(rand(), rand(),rand(), rand())
 end
 
-end
+end # module
