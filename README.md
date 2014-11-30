@@ -10,24 +10,24 @@ Color.jl provides excellent color definitions.
 
 # Example usage
 
-![output](my-png.png)
+![output](luxor-test1.png)
 
     using Luxor, Color
-    Drawing(1200, 1400, "/tmp/my-pdf.pdf") # or PNG filename for PNG
+    Drawing(1200, 1400, "/tmp/luxor-test1.png") # or PDF filename for PDF
 
     origin() # move 0/0 to center
     background(color("purple"))
-    
+
     setopacity(0.7)     # opacity from 0 to 1
-    sethue(0.3,.7,0.9) # sethue sets the color but doesn't change the opacity
+    sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
     setline(20) # line width
-    # graphics functions use fill, stroke, fillstroke, clip, or leave blank
-    rect(-400,-400,800,800, fill)
+    # graphics functions use :fill, :stroke, :fillstroke, :clip, or leave blank
+    rect(-400,-400,800,800, :fill)
     randomhue()
-    circle(0, 0, 460, stroke)
+    circle(0, 0, 460, :stroke)
 
     # clip the following graphics to a circle positioned above the x axis
-    circle(0,-200,400,clip)
+    circle(0,-200,400,:clip)
     sethue(color("gold"))
     setopacity(0.7)
     setline(10)
@@ -49,7 +49,7 @@ Color.jl provides excellent color definitions.
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
     text("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
-    
+
     # text on curve starting on an arc: arc starts at a line through (0,-10) radius 550, centered at 0,0 
     fontsize(18)
     fontface("Avenir-Black")
