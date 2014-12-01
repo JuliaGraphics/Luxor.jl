@@ -2,13 +2,11 @@
 
 module Luxor
 
-using  Color
-
-import Cairo, Cairo.CairoSurface, Cairo.CairoContext
+using  Color, Cairo
 
 global currentdrawing # will hold the current drawing
 
-export Drawing, currentdrawing, 
+export Drawing, Point, currentdrawing, 
     finish, preview,
     origin, axes, background, 
     newpath, closepath, newsubpath, 
@@ -60,6 +58,11 @@ type Drawing
     end
 end
 
+type Point{T}
+   x::T
+   y::T
+end
+
 function finish()
     if currentdrawing.surfacetype == "png"
         Cairo.write_to_png(currentdrawing.surface, currentdrawing.filename)
@@ -102,27 +105,29 @@ function axes()
 end
 
 function background(color)
-# TODO: at present this works after you call origin() to put 0/0 in the center
+# TODO: at present this only works properly after you call origin() to put 0/0 in the center
 # but how can it tell whether you've used origin() first?
    setcolor(color)
    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
 end
 
-function randompoint(low, high)
-# random (x, y) tuple between low and high
-    (low + rand() * abs(high - low), low + rand() * abs(high - low))
+function randomordinate(low, high)
+    low + rand() * abs(high - low)
 end
 
-function randompointarray(low, high, n)
-    array = Tuple[]
+function randompoint(lowx, lowy, highx, highy)
+    Point{Float64}(randomordinate(lowx, highx), randomordinate(lowy, highy))
+end
+       
+function randompointarray(lowx, lowy, highx, highy, n)
+    array = Point[]
     for i in 1:n
-       push!(array, randompoint(low,high))
+         push!(array, randompoint(lowx, lowy, highx, highy))
     end
     array
 end
 
 # does this do anything in Cairo?
-
 setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
 
 # paths
@@ -151,7 +156,7 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
 # circles and arcs
 
-function circle(x, y, r, action=())
+function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     newpath()
     Cairo.circle(currentdrawing.cr, x, y, r)
     if action == :fill
@@ -166,7 +171,7 @@ function circle(x, y, r, action=())
 end         
 
 # positive clockwise from x axis in radians
-function arc(xc, yc, radius, angle1, angle2, action=())
+function arc(xc, yc, radius, angle1, angle2, action=:nothing)
     newpath()
     Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
     if action == :fill
@@ -180,7 +185,7 @@ function arc(xc, yc, radius, angle1, angle2, action=())
     end
 end
 
-function rect(xmin, ymin, w, h, action=())
+function rect(xmin, ymin, w, h, action=:nothing)
     newpath()
     Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
     if action == :fill
@@ -234,13 +239,13 @@ scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
-function poly(list, action = (); close=false, )
+function poly(list, action = :nothing; close=false)
 # where list is [(x,y), (x1,y1), (x2,y2),....]
 # by default doesn't close or fill, to allow for clipping.etc
     newpath()
-    move(list[1][1], list[1][2])    
+    move(list[1].x, list[1].y)    
     for p in 1:length(list)
-        line(list[p][1], list[p][2])
+        line(list[p].x, list[p].y)
     end
     if close
         closepath()

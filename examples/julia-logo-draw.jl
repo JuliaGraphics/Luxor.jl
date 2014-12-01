@@ -38,7 +38,6 @@ function expandingspiral()
     restore()
 end
 
-
 function dropshadow()
     steps=20
     # white-gray ramp
@@ -54,7 +53,6 @@ function dropshadow()
     julialogo()
     restore()
 end
-
 
 function colorgrid()
     #cols = colormap("RdBu", 5; mid=0.5, logscale=false)
