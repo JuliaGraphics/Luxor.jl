@@ -55,6 +55,7 @@ type Drawing
            this.cr      = Cairo.CairoContext(this.surface)
         end
         currentdrawing = this
+        return currentdrawing
     end
 end
 
