@@ -20,7 +20,7 @@ export Drawing, Point, currentdrawing,
 	scale, rotate, translate, 
 	clip, clippreserve, clipreset,
 	fontface, fontsize, text,
-	textextents, textcurve, 
+	textextents, textcurve, textcentred,
 	setcolor, setopacity, sethue, randomhue, randomcolor
 
 type Drawing
@@ -290,9 +290,14 @@ advance is smaller than the width would suggest.
 # text doesn't affect current point!
 function text(t, x=0, y=0)
     save()
-    Cairo.move_to(currentdrawing.cr, x, y)
-    Cairo.show_text(currentdrawing.cr, t)
+        Cairo.move_to(currentdrawing.cr, x, y)
+        Cairo.show_text(currentdrawing.cr, t)
     restore()
+end
+
+function textcentred(t, x=0, y=0)
+    textwidth = textextents(t)[5]
+    text(t, x - textwidth/2, y)
 end
 
 function textcurve(str, x, y, xc, yc, r)
@@ -317,7 +322,7 @@ function textcurve(str, x, y, xc, yc, r)
         for i in 1:length(str)
             save()
                 theta = arclength/r  # angle for this character
-                delta = widths[i]/ r # amount of turn created by width of this char
+                delta = widths[i]/r # amount of turn created by width of this char
                 translate(r * cos(theta), r * sin(theta)) # move the origin to this point
                 rotate(theta + pi/2 + delta/2) # rotate so text baseline perp to center
                 text(str[i:i])
