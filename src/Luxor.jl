@@ -19,7 +19,7 @@ export Drawing, Point, currentdrawing,
 	save, restore, 
 	scale, rotate, translate, 
 	clip, clippreserve, clipreset,
-	fontface, fontsize, text,
+	fontface, fontsize, text, textpath,
 	textextents, textcurve, textcentred,
 	setcolor, setopacity, sethue, randomhue, randomcolor
 
@@ -67,6 +67,7 @@ end
 function finish()
     if currentdrawing.surfacetype == "png"
         Cairo.write_to_png(currentdrawing.surface, currentdrawing.filename)
+        Cairo.finish(currentdrawing.surface)
     elseif currentdrawing.surfacetype == "pdf"
         Cairo.finish(currentdrawing.surface)
     end
@@ -93,7 +94,7 @@ function axes()
     save()
         setline(1)
         fontsize(20)
-        setcolor(color("gray"))
+        sethue(color("gray")) # inherit opacity
         move(0,0)
         line(currentdrawing.width/2 - 20,0)
         stroke()
@@ -240,13 +241,39 @@ scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
-function poly(list, action = :nothing; close=false)
-# where list is [(x,y), (x1,y1), (x2,y2),....]
+# method with Array of Points
+
+function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
+# where list is array of Points
 # by default doesn't close or fill, to allow for clipping.etc
     newpath()
     move(list[1].x, list[1].y)    
+    for p in list
+        line(p.x, p.y)
+    end
+    if close
+        closepath()
+    end
+    if action == :fill
+        fill()
+    elseif action == :stroke
+        stroke()
+    elseif action == :clip
+        clip()
+    elseif action == :fillstroke
+        fillstroke()
+    end
+end
+
+# method with Array of tuples
+
+function poly(list::Array, action = :nothing; close=false)
+# where list is [(x,y), (x1,y1), (x2,y2),....]
+# by default doesn't close or fill, to allow for clipping.etc
+    newpath()
+    move(list[1][1], list[1][2])    
     for p in 1:length(list)
-        line(list[p].x, list[p].y)
+        line(list[p][1], list[p][2])
     end
     if close
         closepath()
@@ -298,6 +325,10 @@ end
 function textcentred(t, x=0, y=0)
     textwidth = textextents(t)[5]
     text(t, x - textwidth/2, y)
+end
+
+function textpath(t)
+        Cairo.text_path(currentdrawing.cr, t)
 end
 
 function textcurve(str, x, y, xc, yc, r)
