@@ -4,7 +4,7 @@ module Luxor
 
 using  Color, Cairo
 
-global currentdrawing # will hold the current drawing
+global currentdrawing # to hold the current drawing
 
 export Drawing, Point, currentdrawing, 
     finish, preview,
@@ -328,7 +328,7 @@ function textcentred(t, x=0, y=0)
 end
 
 function textpath(t)
-        Cairo.text_path(currentdrawing.cr, t)
+    Cairo.text_path(currentdrawing.cr, t)
 end
 
 function textcurve(str, x, y, xc, yc, r)
