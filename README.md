@@ -8,9 +8,24 @@ It's for when you just want to draw something without too much ceremony.
 
 Color.jl provides excellent color definitions.
 
-# Example usage
+## Example usage
 
-![output](luxor-test1.png)
+# "Hello World"
+
+!["Hello world"](hello-world.png)
+
+    using Luxor
+    Drawing(1000, 1000, "/tmp/hello-world.png")
+    origin()
+    sethue(Color.color("red"))
+    fontsize(50)
+    text("hello world")
+    finish()
+    preview()
+
+# "General Graphics"
+
+![Luxor test](luxor-test1.png)
 
     using Luxor, Color
     Drawing(1200, 1400, "/tmp/luxor-test1.png") # or PDF filename for PDF
@@ -58,6 +73,6 @@ Color.jl provides excellent color definitions.
     preview() # Mac OS X only, opens in Preview
     
 
-# To do
+## To do
 
 make it better
