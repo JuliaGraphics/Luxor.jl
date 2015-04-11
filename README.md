@@ -227,7 +227,7 @@ The current matrix is a 6 number array, perhaps like this:
 
 - `transform(a)` transform the current matrix by 'multiplying' it with matrix `a`. For example, to skew by 45 degrees in x and move by 20 in y direction:
 
-    transform([1, 0, tand(45), 1, 0, 20]) 
+    `transform([1, 0, tand(45), 1, 0, 20])`
 
 #### Color and opacity
 
@@ -235,13 +235,15 @@ For color definitions, use Colors.jl. The difference between the `setcolor()` an
 
 - `setcolor(color)`
 
-	setcolor(color("gold"))
-	setcolor(color("darkturquoise"))
-	setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
+	`setcolor(color("gold"))`
+
+	`setcolor(color("darkturquoise"))`
+	
+	`setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))`
 
 - `setcolor(r, g, b, alpha)`
 	
-	setcolor(.2, .3, .4, .5)
+	`setcolor(.2, .3, .4, .5)`
 
 - `sethue(r, g, b)` like `setcolor` but doesn't change opacity
 
@@ -290,5 +292,5 @@ For color definitions, use Colors.jl. The difference between the `setcolor()` an
 - `textextents(str)`
 	get array of dimensions of the string `str`, given current font:
 	
-	`[xb, yb, width, height, advance, yadvance]`
+	`[xb, yb, width, height, xadvance, yadvance]`
 
