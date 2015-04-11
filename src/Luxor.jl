@@ -11,17 +11,18 @@ export Drawing, Point, currentdrawing,
     origin, axes, background, 
     newpath, closepath, newsubpath, 
     randompoint, randompointarray, 
-	circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
-	move, rmove,
-	line, rline, curve, arc,
-	stroke, fill, fillstroke, poly, strokepreserve, 
-	fillpreserve, 
-	save, restore, 
-	scale, rotate, translate, 
-	clip, clippreserve, clipreset,
-	fontface, fontsize, text, textpath,
-	textextents, textcurve, textcentred,
-	setcolor, setopacity, sethue, randomhue, randomcolor
+    circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
+    move, rmove,
+    line, rline, curve, arc,
+    stroke, fill, fillstroke, poly, strokepreserve, 
+    fillpreserve, 
+    save, restore, 
+    scale, rotate, translate, 
+    clip, clippreserve, clipreset,
+    fontface, fontsize, text, textpath,
+    textextents, textcurve, textcentred,
+    setcolor, setopacity, sethue, randomhue, randomcolor,
+    getmatrix, setmatrix, transform
 
 type Drawing
     width::Float64
@@ -82,10 +83,6 @@ end
 
 function origin()
     # set the origin at the center
-    # this was going to do reflection as well
-    # but doesn't
-    #    reflection = Cairo.CairoMatrix(1.0, 0.0, 0.0, -1.0, 0.0, 0.0)
-    #    Cairo.setmatrix(cr,reflection)
     Cairo.translate(currentdrawing.cr, currentdrawing.width/2, currentdrawing.height/2)
 end
 
@@ -224,7 +221,7 @@ function setlinejoin(str="miter")
 end
 
 function setdash(dashing)
-# solid, dotted, dot, dotdashed, longdashed, shortdashed, dash, dased, dotdotdashed, dotdotdotdashed
+# solid, dotted, dot, dotdashed, longdashed, shortdashed, dash, dashed, dotdotdashed, dotdotdotdashed
     Cairo.set_line_type(currentdrawing.cr, dashing)
 end
 
@@ -243,7 +240,7 @@ translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
 # method with Array of Points
 
-function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
+function poly(list::Array{Point}, action = :nothing; close=false)
 # where list is array of Points
 # by default doesn't close or fill, to allow for clipping.etc
     newpath()
@@ -265,7 +262,7 @@ function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
     end
 end
 
-# method with Array of tuples
+# method with Array of tuple coordinates
 
 function poly(list::Array, action = :nothing; close=false)
 # where list is [(x,y), (x1,y1), (x2,y2),....]
@@ -410,6 +407,51 @@ end
 
 function randomcolor()
     setcolor(rand(), rand(),rand(), rand())
+end
+
+#  In Luxor, a matrix is an array of 6 float64 numbers.
+#= In Cairo.jl, a matrix has 6 fields:
+    xx component of the affine transformation
+    yx component of the affine transformation
+    xy component of the affine transformation
+    yy component of the affine transformation
+    x0 translation component of the affine transformation
+    y0 translation component of the affine transformation
+=#
+
+function getmatrix() 
+# return current matrix as an array
+    gm = Cairo.get_matrix(currentdrawing.cr)
+    return([gm.xx, gm.yx, gm.xy, gm.yy, gm.x0, gm.y0])
+end
+
+# changes the current matrix to be matrix
+function setmatrix(m::Array)
+    if eltype(m) != Float64
+        m = float(m)
+    end
+    # some matrices make Cairo freak out and reset. Not sure what the rules are yet…
+    if length(m) < 6 
+        println("didn't like that matrix $m: not enough values")
+    elseif countnz(m) == 0
+        println("didn't like that matrix $m: too many zeroes")
+    else
+        cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
+        Cairo.set_matrix(currentdrawing.cr, cm)
+    end
+end
+
+# modify the current cairo matrix by multiplying it by another matrix
+function transform(a::Array)
+    b = Cairo.get_matrix(currentdrawing.cr)
+    setmatrix([
+                (a[1] * b.xx)  + a[2]  * b.xy,             # xx
+                (a[1] * b.yx)  + a[2]  * b.yy,             # yx
+                (a[3] * b.xx)  + a[4]  * b.xy,             # xy
+                (a[3] * b.yx)  + a[4]  * b.yy,             # yy
+                (a[5] * b.xx)  + (a[6] * b.xy) + b.x0,     # x0
+                (a[5] * b.yx)  + (a[6] * b.yy) + b.y0      # y0
+                ])
 end
 
 end # module
