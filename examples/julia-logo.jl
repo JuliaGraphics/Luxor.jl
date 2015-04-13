@@ -1,3 +1,16 @@
+# the current julia logo
+
+#= Usage:
+using Luxor, Color
+include(joinpath(Pkg.dir(), "Luxor", "Examples", "julia-logo.jl"))
+Drawing(1000, 1000, "/tmp/heart-julia.pdf")
+origin()
+background(color("white"))
+julialogo()
+finish()
+preview()
+=#
+
 function julialogo(colored=true)
     # draw colors if colored is true
     colored && setcolor(color("black"))
