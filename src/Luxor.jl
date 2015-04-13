@@ -35,7 +35,7 @@ type Drawing
     greenvalue::Float64
     bluevalue::Float64
     alpha::Float64
-    function Drawing(w=800, h=800, f="/tmp/test.png") #TODO this is Unix only?
+    function Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only?
         global currentdrawing
         this = new()
         this.width = w
