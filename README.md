@@ -2,7 +2,7 @@
 
 Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
 
-Luxor is intended to be slightly easier to use than Cairo, with shorter names, fewer underscores, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org).
+The idea of Luxor is that it's slightly easier to use than Cairo, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org).
 
 [Color.jl](https://github.com/JuliaLang/Color.jl) provides excellent color definitions and is required.
 
@@ -36,41 +36,37 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     setopacity(0.7)     # opacity from 0 to 1
     sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
     setline(20) # line width
-    # graphics functions use :fill, :stroke, :fillstroke, :clip, or leave blank
-    rect(-400,-400,800,800, :fill)
+    
+    rect(-400,-400,800,800, :fill) # or :stroke, :fillstroke, :clip
     randomhue()
     circle(0, 0, 460, :stroke)
 
-    # clip the following graphics to a circle positioned above the x axis
-    circle(0,-200,400,:clip)
+    circle(0,-200,400,:clip)     # set a circular mask above the x axis
     sethue(color("gold"))
     setopacity(0.7)
     setline(10)
 
-    # simple line drawing
     for i in 0:pi/36:2*pi - pi/36
         move(0, 0)
         line(cos(i) * 600, sin(i) * 600 )
         stroke()
     end
 
-    # finish clipping
-    clipreset()
+    clipreset()     # finish clipping
 
-    # here using Mac OS X fonts
     fontsize(60)
     setcolor(color("turquoise"))
-    fontface("Optima-ExtraBlack")
+    fontface("Optima-ExtraBlack")     # a Mac OS X font
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
     text("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
 
-    # text on curve starting on an arc: arc starts at a line through (0,-10) radius 550, centered at 0,0 
     fontsize(18)
     fontface("Avenir-Black")
+    # text on curve starting on an arc
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 0, 0, -10, 550)
     finish()
-    preview() # Mac OS X only, opens in Preview
+    preview() # on Mac OS X, opens in Preview
  
 #### Sierpinski triangle
 
@@ -78,10 +74,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
     using Luxor, Color
     Drawing(400, 400, "/tmp/luxor-test1.pdf") # or PNG filename for PNG
-
-    origin()
-    randomhue()
-
+    
     function drawTriangle(points, degree)
         setcolor(cols[degree+1])
         move(points[1].x,    points[1].y)
@@ -109,6 +102,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     end
 
     function  main()
+    	  origin()
         setopacity(0.5)
         depth = 8 # 12 is ok, 20 is right out
         cols = distinguishable_colors(depth+1)
@@ -125,26 +119,41 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 #### Files
 
 - `Drawing()`
- 	create a PNG drawing defaulting to 800 by 800
+ 	create a drawing, defaulting to PNG format, file called "/tmp/luxor-drawing.png", 800 pixels square
 - `Drawing(300,300)`
- 	create a PNG drawing 300 by 300 pixels
+ 	create a drawing 300 by 300 pixels, defaulting to PNG format, file called "/tmp/luxor-drawing.png",
 - `Drawing(300,300, "/tmp/my-drawing.pdf")`
- 	create a PDF drawing in the file, of 300 by 300 pixels
+ 	create a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels
 - `finish()`
  	finish the drawing
 - `preview()`
- 	open finished drawing in Preview (MacOS X only)
+ 	open the file in Preview (MacOS X only)
+
+The global variable `currentdrawing` keeps a few parameters:
+
+    julia> names(currentdrawing)
+    10-element Array{Symbol,1}:
+     :width      
+     :height     
+     :filename   
+     :surface    
+     :cr         
+     :surfacetype
+     :redvalue   
+     :greenvalue 
+     :bluevalue  
+     :alpha      
 
 #### Axes and backgrounds
 
 The origin (0/0) is at the top left, x axis runs left to right, y axis runs top to bottom
 
 - `origin()`
-	move origin to the centre of the image
+	move the 0/0 origin to the centre of the image
 - `axes()` 
 	draw axes at current 0/0
 - `background(color)`
-	fill background with a coloured rectangle
+	fill background with a colored rectangle
 
 #### Shapes and lines
 
@@ -152,38 +161,48 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `circle(x, y, r, action)`
 
-- `arc(xc, yc, radius, angle1, angle2, action)`
+- `arc(xc, yc, radius, angle1, angle2, action)` centered at `xc/yc` starting at `angle1` and ending at `angle2`. 
 
+Angles are measured from the positive x-axis to the positive y-axis in radians. So, for the default position of the axes, that's clockwise. 
+    
 - `rect(xmin, ymin, w, h, action)`
+
+There is a 'current position':
 
 - `move(x, y)`
 	move to this position
 
 - `rmove(x, y)`
-	move relative to current position
+	move relative to current position by `x` and `y`
 
 - `line(x, y)`
-	draw line from current position to new position
+	draw line from current position to the `x/y` position
 
 - `rline(x, y)`
-	draw line from current position 
+	draw line from current position by `x` and `y`
 
 - `curve(x1, y1, x2, y2, x3, y3)`
-	
-- `poly(list::Array{Point{Float64}}, action = :nothing; close=false)` draw polygon from array of Points. For example:
+    a cubic Bézier spline, starting at the current position, finishing at `x3/y3`, following two control points `x1/y1` and `x2/y2`
+
+There is a Point type (the only main type, apart from `Drawing`):
+
+   `Point{Float64}(12.0, 13.0)`
+
+- `poly(list::Array{Point{Float64}}, action = :nothing; close=false)` draws a polygon using array of Points. For example:
     
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
 
+- `randompoint(lowx, lowy, highx, highy)` returns a random point
 
-- `poly(list::Array, action = :nothing; close=false)` draw polygon from array of tuples. For example:
-
-    `poly([(100,345), (456,523),(150,253)], :stroke)`
-	
-- `randompoint(lowx, lowy, highx, highy)` return a random point
-
-- `randompointarray(lowx, lowy, highx, highy, n)` return an array of random points. For example:
+- `randompointarray(lowx, lowy, highx, highy, n)` returns an array of random points. For example:
 
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
+
+But there's also:
+
+- `poly(list::Array, action = :nothing; close=false)` draws a polygon from an array of tuples. For example:
+
+    `poly([(100,345), (456,523),(150,253)], :stroke)`	
 
 #### Styles
 
@@ -193,7 +212,7 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `setlinejoin(s)` set line joins to "miter", "round", or "bevel"
 
-- `setdash(dashing)` set line dashing to "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
+- `setdash(dashing)` set line dashing to "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", or "dotdotdotdashed"
 
 - `fillstroke()` fill and stroke the current path
 
@@ -205,6 +224,8 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `fillpreserve()` fill the path but keep it current
 
+`save()` and `restore()` should always be balanced in pairs. `save()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `restore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `save()`. 
+
 - `save()` save the graphics state
 
 - `restore()` restore the graphics state
@@ -213,11 +234,11 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `scale(sx, sy)` scale by sx and sy
 
-- `rotate(a)` rotate clockwise by a radians around current 0/0
+- `rotate(a)` rotate clockwise (positive x-axis to positive y-axis) by `a` radians around current 0/0
 
 - `translate(tx, ty)` translate by tx/ty
 
-The current matrix is a 6 number array, perhaps like this:
+The current matrix is a six number array, perhaps like this:
 
 	[1, 0, 0, 1, 0, 0]
 
@@ -231,7 +252,9 @@ The current matrix is a 6 number array, perhaps like this:
 
 #### Color and opacity
 
-For color definitions, use Colors.jl. The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (like in Mathematica).
+For color definitions, use Colors.jl. 
+
+The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (like in Mathematica).
 
 - `setcolor(color)`
 
@@ -241,19 +264,21 @@ For color definitions, use Colors.jl. The difference between the `setcolor()` an
 	
 	`setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))`
 
-- `setcolor(r, g, b, alpha)`
+- `setcolor(r, g, b, alpha)` eg:
 	
 	`setcolor(.2, .3, .4, .5)`
+
+- `setcolor(r, g, b)`
 
 - `sethue(r, g, b)` like `setcolor` but doesn't change opacity
 
 - `sethue(color)` like `setcolor`
 
-- `setopacity(alpha)` change the alpha opacity (to between 0 and 1) 
+- `setopacity(alpha)` change the alpha opacity (`alpha` is between 0 and 1) 
 
-- `randomhue()` random color (without changing current alpha opacity)
+- `randomhue()` choose a random color without changing current alpha opacity
 
-- `randomcolor()` random color
+- `randomcolor()` choose a random color
 
 #### Paths
 
@@ -265,11 +290,11 @@ For color definitions, use Colors.jl. The difference between the `setcolor()` an
     
 #### Clipping
 
-- `clip()`
+- `clip()` turn the current path into a clipping region, masking any graphics outside the path 
 
-- `clippreserve()`
+- `clippreserve()` keep the current path, but also use it as a clipping region
 
-- `clipreset()`
+- `clipreset()` 
     
 #### Text and fonts
 
@@ -281,7 +306,7 @@ For color definitions, use Colors.jl. The difference between the `setcolor()` an
 	make the string `t` into a graphic path suitable for `fill()`, `stroke()`...
 
 - `textcurve(str, x, y, xc, yc, r)`
-	draw string `str` on a circular arc of radius `r` entered at `xc/yc` starting at line passing from `xc/yc` through `x/y`
+	draw string `str` on a circular arc of radius `r` centered at `xc/yc` starting on a line passing from `xc/yc` through `x/y`
 
 - `fontface(fontname)`
 	choose font `fontname`
