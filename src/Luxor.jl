@@ -425,12 +425,12 @@ function getmatrix()
     return([gm.xx, gm.yx, gm.xy, gm.yy, gm.x0, gm.y0])
 end
 
-# changes the current matrix to be matrix
+# changes the current Cairo matrix to match passed-in Array
 function setmatrix(m::Array)
     if eltype(m) != Float64
-        m = float(m)
+        m = float64(m)
     end
-    # some matrices make Cairo freak out and reset. Not sure what the rules are yet…
+    # some matrices make Cairo freak out and need reset. Not sure what the rules are yet…
     if length(m) < 6 
         println("didn't like that matrix $m: not enough values")
     elseif countnz(m) == 0
