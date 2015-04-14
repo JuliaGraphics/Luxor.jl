@@ -73,46 +73,51 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 ![Sierpinski](sierpinski.png)
 
     using Luxor, Color
-    Drawing(400, 400, "/tmp/luxor-test1.pdf") # or PNG filename for PNG
     
-    function drawTriangle(points, degree)
+    function draw_triangle(points::Array{Point, 1}, degree::Int64)
+        global triangle_count, cols
         setcolor(cols[degree+1])
         move(points[1].x,    points[1].y)
-        line(   points[2].x,    points[2].y)
-        line(   points[3].x,    points[3].y)
-        line(   points[1].x,    points[1].y)
-        fill()
+            line(points[2].x, points[2].y)
+            line(points[3].x, points[3].y)
+            line(points[1].x, points[1].y)
+            fill()
+        triangle_count += 1
     end
 
-    getMid(p1,p2) = Point((p1.x+p2.x) / 2, (p1.y + p2.y) / 2)
+    get_midpoint(p1::Point,p2::Point) = Point((p1.x+p2.x) / 2, (p1.y + p2.y) / 2)
 
-    function sierpinski(points, degree)
-        drawTriangle(points, degree)
+    function sierpinski(points::Array{Point, 1}, degree::Int64)
+        draw_triangle(points, degree)
         if degree > 0
             sierpinski([points[1],
-                            getMid(points[1], points[2]),
-                            getMid(points[1], points[3])], degree-1)
+                            get_midpoint(points[1], points[2]),
+                            get_midpoint(points[1], points[3])], degree-1)
             sierpinski([points[2],
-                            getMid(points[1], points[2]),
-                            getMid(points[2], points[3])], degree-1)
+                            get_midpoint(points[1], points[2]),
+                            get_midpoint(points[2], points[3])], degree-1)
             sierpinski([points[3],
-                            getMid(points[3], points[2]),
-                            getMid(points[1], points[3])], degree-1)
+                            get_midpoint(points[3], points[2]),
+                            get_midpoint(points[1], points[3])], degree-1)
         end
     end
-
-    function  main()
-    	  origin()
-        setopacity(0.5)
+    
+    @time begin
         depth = 8 # 12 is ok, 20 is right out
         cols = distinguishable_colors(depth+1)
-        myPoints = [Point(-100,-50), Point(0,100), Point(100,-50)]
-        sierpinski(myPoints, depth)
+        Drawing(400, 400, "/tmp/luxor-test1.pdf") # or PNG filename for PNG
+        origin()
+        setopacity(0.5)
+        triangle_count = 0
+        my_points = [Point(-100,-50), Point(0,100), Point(100,-50)]
+        sierpinski(my_points, depth)
         finish()
         preview()
+        println("drew $triangle_count triangles")
     end
 
-    main()  
+    # drew 9841 triangles
+    # elapsed time: 0.886685274 seconds (98032860 bytes allocated, 7.58% gc time)
 
 ### Functions
 
