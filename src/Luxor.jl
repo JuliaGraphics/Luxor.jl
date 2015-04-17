@@ -13,7 +13,7 @@ export Drawing, Point, currentdrawing,
     randompoint, randompointarray, 
     circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc,
+    line, rline, curve, arc, ngon,
     stroke, fill, fillstroke, poly, strokepreserve, 
     fillpreserve, 
     save, restore, 
@@ -275,6 +275,28 @@ function poly(list::Array, action = :nothing; close=false)
     if close
         closepath()
     end
+    if action == :fill
+        fill()
+    elseif action == :stroke
+        stroke()
+    elseif action == :clip
+        clip()
+    elseif action == :fillstroke
+        fillstroke()
+    end
+end
+
+# regular polygons
+function ngon(x, y, radius, sides::Int, angle, action=:nothing)
+    @assert sides > 2
+    newpath()
+    a = 2 * pi/sides
+    move(x+cos(angle)*radius, y+sin(angle)*radius)
+    for var in 0:sides
+        angle += a
+        line(x+cos(angle)*radius, y+sin(angle)*radius)
+    end
+    closepath()
     if action == :fill
         fill()
     elseif action == :stroke
