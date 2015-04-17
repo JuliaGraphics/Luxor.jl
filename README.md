@@ -25,10 +25,10 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 #### General Graphics
 
-![Luxor test](luxor-test1.png)
+![Luxor test](basic-test.png)
 
     using Luxor, Color
-    Drawing(1200, 1400, "/tmp/luxor-test1.png") # or PDF filename for PDF
+    Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF filename for PDF
 
     origin() # move 0/0 to center
     background(color("purple"))
@@ -119,6 +119,34 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     # drew 9841 triangles
     # elapsed time: 0.886685274 seconds (98032860 bytes allocated, 7.58% gc time)
 
+#### n-gons
+
+![n-gons](n-gon.png)
+
+    using Luxor, Color
+    Drawing(1200, 1400)
+
+    origin()
+    cols = diverging_palette(60,120, 20) # hue 60 to hue 120
+    background(cols[1])
+    setopacity(0.7)
+    setline(2)
+
+    ngon(0, 0, 500, 8, 0, :clip)
+
+    for y in -500:50:500
+        for x in -500:50:500
+            setcolor(cols[rand(1:20)])
+            ngon(x, y, rand(20:25), rand(3:12), 0, :fill)
+            setcolor(cols[rand(1:20)])
+            ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)
+        end
+    end
+
+    finish()
+    preview()
+
+
 ### Functions
 
 #### Files
@@ -208,6 +236,10 @@ But there's also:
 - `poly(list::Array, action = :nothing; close=false)` draws a polygon from an array of tuples. For example:
 
     `poly([(100,345), (456,523),(150,253)], :stroke)`	
+    
+Regular polygons with:
+
+- `ngon(xc, yc, radius, sides, angle, action=:nothing)` draws a regular polygon
 
 #### Styles
 
