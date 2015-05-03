@@ -6,18 +6,18 @@ using  Color, Cairo
 
 global currentdrawing # to hold the current drawing
 
-export Drawing, Point, currentdrawing, 
+export Drawing, Point, currentdrawing,
     finish, preview,
-    origin, axes, background, 
-    newpath, closepath, newsubpath, 
-    randompoint, randompointarray, 
+    origin, axes, background,
+    newpath, closepath, newsubpath,
+    randompoint, randompointarray,
     circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, ngon,
-    stroke, fill, fillstroke, poly, strokepreserve, 
-    fillpreserve, 
-    save, restore, 
-    scale, rotate, translate, 
+    stroke, fill, fillstroke, poly, strokepreserve,
+    fillpreserve,
+    save, restore,
+    scale, rotate, translate,
     clip, clippreserve, clipreset,
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred,
@@ -43,7 +43,7 @@ type Drawing
         this.filename = f
         this.redvalue = 0.0
         this.greenvalue = 0.0
-        this.bluevalue = 0.0 
+        this.bluevalue = 0.0
         this.alpha = 1.0
         (path, ext) = splitext(f)
         if ext == ".pdf"
@@ -117,9 +117,9 @@ end
 function randompoint(lowx, lowy, highx, highy)
     Point{Float64}(randomordinate(lowx, highx), randomordinate(lowy, highy))
 end
-       
+
 function randompointarray(lowx, lowy, highx, highy, n)
-    array = Point[]
+    array = Point{Float64}[]
     for i in 1:n
          push!(array, randompoint(lowx, lowy, highx, highy))
     end
@@ -167,7 +167,7 @@ function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     elseif action == :fillstroke
         fillstroke()
     end
-end         
+end
 
 # positive clockwise from x axis in radians
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
@@ -196,7 +196,7 @@ function rect(xmin, ymin, w, h, action=:nothing)
     elseif action == :fillstroke
         fillstroke()
     end
-end         
+end
 
 setline(n)      = Cairo.set_line_width(currentdrawing.cr, n)
 
@@ -206,8 +206,8 @@ function setlinecap(str="butt")
     elseif str == "square"
         Cairo.set_line_cap(currentdrawing.cr, Cairo.CAIRO_LINE_CAP_SQUARE)
     else
-        Cairo.set_line_cap(currentdrawing.cr, Cairo.CAIRO_LINE_CAP_BUTT)        
-    end 
+        Cairo.set_line_cap(currentdrawing.cr, Cairo.CAIRO_LINE_CAP_BUTT)
+    end
 end
 
 function setlinejoin(str="miter")
@@ -240,11 +240,11 @@ translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
 # method with Array of Points
 
-function poly(list::Array{Point}, action = :nothing; close=false)
+function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
 # where list is array of Points
 # by default doesn't close or fill, to allow for clipping.etc
     newpath()
-    move(list[1].x, list[1].y)    
+    move(list[1].x, list[1].y)
     for p in list
         line(p.x, p.y)
     end
@@ -264,11 +264,11 @@ end
 
 # method with Array of tuple coordinates
 
-function poly(list::Array, action = :nothing; close=false)
+function poly(list::Array{(Float64,Float64)}, action = :nothing; close=false)
 # where list is [(x,y), (x1,y1), (x2,y2),....]
 # by default doesn't close or fill, to allow for clipping.etc
     newpath()
-    move(list[1][1], list[1][2])    
+    move(list[1][1], list[1][2])
     for p in 1:length(list)
         line(list[p][1], list[p][2])
     end
@@ -287,7 +287,7 @@ function poly(list::Array, action = :nothing; close=false)
 end
 
 # regular polygons
-function ngon(x, y, radius, sides::Int, angle, action=:nothing)
+function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
     @assert sides > 2
     newpath()
     a = 2 * pi/sides
@@ -325,13 +325,13 @@ textextents(string) = Cairo.text_extents(currentdrawing.cr, string)
 #=
 
 The bearing is the displacement from the reference point to the upper-left corner of the bounding box.
-It is often zero or a small positive value for x displacement, but can be negative x for characters like 
-j as shown; it's almost always a negative value for y displacement. The width and height then describe the 
-size of the bounding box. The advance takes you to the suggested reference point for the next letter. 
-Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the 
+It is often zero or a small positive value for x displacement, but can be negative x for characters like
+j as shown; it's almost always a negative value for y displacement. The width and height then describe the
+size of the bounding box. The advance takes you to the suggested reference point for the next letter.
+Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the
 advance is smaller than the width would suggest.
 
-=# 
+=#
 
 # text doesn't affect current point!
 function text(t, x=0, y=0)
@@ -378,7 +378,7 @@ function textcurve(str, x, y, xc, yc, r)
                 text(str[i:i])
                 arclength += widths[i] # move on by the width of this character
             restore()
-        end    
+        end
     restore()
 end
 
@@ -401,7 +401,7 @@ function setcolor(r, g, b, a=1)
 end
 
 # like Mathematica we sometimes want to change the current 'color' without changing alpha/opacity
-# using sethue() rather than setcolor() doesn't change the current alpha 
+# using sethue() rather than setcolor() doesn't change the current alpha
 
 function sethue(r, g, b)
     (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue) = (r, g, b)
@@ -441,7 +441,7 @@ end
     y0 translation component of the affine transformation
 =#
 
-function getmatrix() 
+function getmatrix()
 # return current matrix as an array
     gm = Cairo.get_matrix(currentdrawing.cr)
     return([gm.xx, gm.yx, gm.xy, gm.yy, gm.x0, gm.y0])
@@ -453,7 +453,7 @@ function setmatrix(m::Array)
         m = float64(m)
     end
     # some matrices make Cairo freak out and need reset. Not sure what the rules are yet…
-    if length(m) < 6 
+    if length(m) < 6
         println("didn't like that matrix $m: not enough values")
     elseif countnz(m) == 0
         println("didn't like that matrix $m: too many zeroes")
