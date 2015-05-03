@@ -11,7 +11,7 @@ using Luxor
 # y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])               yskew by A
 # flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)]) flip
 
-Drawing(1000,1000, "/tmp/test.pdf")
+Drawing(1000,1000, "/tmp/matrix-tests.pdf")
 
 # absolute position 200,250 relative to top left origin (0, 0)
 setmatrix([1, 0, 0, 1, 200, 250.0])

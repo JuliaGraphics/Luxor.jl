@@ -2,4 +2,9 @@ using Luxor
 using Base.Test
 
 # write your own tests here
-@test 1 == 1
+include("luxor-test1.jl")
+include("polygon-test.jl")
+include("matrix-tests.jl")
+include("clipping-test.jl")
+
+
