@@ -36,7 +36,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     setopacity(0.7)     # opacity from 0 to 1
     sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
     setline(20) # line width
-    
+
     rect(-400,-400,800,800, :fill) # or :stroke, :fillstroke, :clip
     randomhue()
     circle(0, 0, 460, :stroke)
@@ -67,13 +67,13 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 0, 0, -10, 550)
     finish()
     preview() # on Mac OS X, opens in Preview
- 
+
 #### Sierpinski triangle
 
 ![Sierpinski](sierpinski.png)
 
     using Luxor, Color
-    
+
     function draw_triangle(points::Array{Point, 1}, degree::Int64)
         global triangle_count, cols
         setcolor(cols[degree+1])
@@ -101,7 +101,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
                             get_midpoint(points[1], points[3])], degree-1)
         end
     end
-    
+
     @time begin
         depth = 8 # 12 is ok, 20 is right out
         cols = distinguishable_colors(depth+1)
@@ -146,6 +146,37 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     finish()
     preview()
 
+#### clipping masks
+
+![julia logo mask](julia-logo-mask.png)
+
+    using Luxor, Color
+
+    include("../examples/julia-logo.jl") # the julia logo coordinates
+
+    currentwidth = 595 # pts
+    currentheight = 842 # pts
+    Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
+
+    origin()
+    background(color("white"))
+
+    sethue(color("black"))
+    foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
+    backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
+
+    setopacity(.4)
+    sethue(backgroundcolors[rand(1:end)])
+    translate(-100,0)
+    # use julia logo as clipping mask
+    julialogomask()
+    clip()
+    for i in 1:500
+        randomhue()
+        circle(rand(-50:300), rand(0:300), 20, :fill)
+    end
+    finish()
+    preview()
 
 ### Functions
 
@@ -166,16 +197,16 @@ The global variable `currentdrawing` keeps a few parameters:
 
     julia> names(currentdrawing)
     10-element Array{Symbol,1}:
-     :width      
-     :height     
-     :filename   
-     :surface    
-     :cr         
+     :width
+     :height
+     :filename
+     :surface
+     :cr
      :surfacetype
-     :redvalue   
-     :greenvalue 
-     :bluevalue  
-     :alpha      
+     :redvalue
+     :greenvalue
+     :bluevalue
+     :alpha
 
 #### Axes and backgrounds
 
@@ -183,7 +214,7 @@ The origin (0/0) is at the top left, x axis runs left to right, y axis runs top 
 
 - `origin()`
 	move the 0/0 origin to the centre of the image
-- `axes()` 
+- `axes()`
 	draw axes at current 0/0
 - `background(color)`
 	fill background with a colored rectangle
@@ -194,10 +225,10 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `circle(x, y, r, action)`
 
-- `arc(xc, yc, radius, angle1, angle2, action)` centered at `xc/yc` starting at `angle1` and ending at `angle2`. 
+- `arc(xc, yc, radius, angle1, angle2, action)` centered at `xc/yc` starting at `angle1` and ending at `angle2`.
 
-Angles are measured from the positive x-axis to the positive y-axis in radians. So, for the default position of the axes, that's clockwise. 
-    
+Angles are measured from the positive x-axis to the positive y-axis in radians. So, for the default position of the axes, that's clockwise.
+
 - `rect(xmin, ymin, w, h, action)`
 
 There is a 'current position':
@@ -222,7 +253,7 @@ There is a Point type (the only main type, apart from `Drawing`):
    `Point{Float64}(12.0, 13.0)`
 
 - `poly(list::Array{Point{Float64}}, action = :nothing; close=false)` draws a polygon using array of Points. For example:
-    
+
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
 
 - `randompoint(lowx, lowy, highx, highy)` returns a random point
@@ -235,11 +266,11 @@ But there's also:
 
 - `poly(list::Array, action = :nothing; close=false)` draws a polygon from an array of tuples. For example:
 
-    `poly([(100,345), (456,523),(150,253)], :stroke)`	
-    
-Regular polygons with:
+    `poly([(100,345), (456,523),(150,253)], :stroke)`
 
-- `ngon(xc, yc, radius, sides, angle, action=:nothing)` draws a regular polygon
+Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons, with:
+
+- `ngon(xc, yc, radius, sides, angle, action=:nothing)` draws a `sides`-sided polygon
 
 #### Styles
 
@@ -261,7 +292,7 @@ Regular polygons with:
 
 - `fillpreserve()` fill the path but keep it current
 
-`save()` and `restore()` should always be balanced in pairs. `save()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `restore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `save()`. 
+`save()` and `restore()` should always be balanced in pairs. `save()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `restore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `save()`.
 
 - `save()` save the graphics state
 
@@ -289,7 +320,7 @@ The current matrix is a six number array, perhaps like this:
 
 #### Color and opacity
 
-For color definitions, use Colors.jl. 
+For color definitions, use Colors.jl.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (like in Mathematica).
 
@@ -298,11 +329,11 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 	`setcolor(color("gold"))`
 
 	`setcolor(color("darkturquoise"))`
-	
+
 	`setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))`
 
 - `setcolor(r, g, b, alpha)` eg:
-	
+
 	`setcolor(.2, .3, .4, .5)`
 
 - `setcolor(r, g, b)`
@@ -311,7 +342,7 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `sethue(color)` like `setcolor`
 
-- `setopacity(alpha)` change the alpha opacity (`alpha` is between 0 and 1) 
+- `setopacity(alpha)` change the alpha opacity (`alpha` is between 0 and 1)
 
 - `randomhue()` choose a random color without changing current alpha opacity
 
@@ -324,15 +355,15 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 - `newsubpath()` used for example to make holes in shapes
 
 - `closepath()`
-    
+
 #### Clipping
 
-- `clip()` turn the current path into a clipping region, masking any graphics outside the path 
+- `clip()` turn the current path into a clipping region, masking any graphics outside the path
 
 - `clippreserve()` keep the current path, but also use it as a clipping region
 
-- `clipreset()` 
-    
+- `clipreset()`
+
 #### Text and fonts
 
 - `text(t, x, y)` draw string `t` at `x`/`y`, or at 0/0 if `x`/`y` omitted
@@ -347,12 +378,12 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `fontface(fontname)`
 	choose font `fontname`
-	 
+
 - `fontsize(n)`
 	set font size in points
 
 - `textextents(str)`
 	get array of dimensions of the string `str`, given current font:
-	
+
 	`[xb, yb, width, height, xadvance, yadvance]`
 
