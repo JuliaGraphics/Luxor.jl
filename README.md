@@ -151,29 +151,31 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 ![julia logo mask](julia-logo-mask.png)
 
     using Luxor, Color
-
     include("../examples/julia-logo.jl") # the julia logo coordinates
+    currentwidth = 2000 # pts
+    currentheight = 2000 # pts
+    Drawing(currentwidth, currentheight, "/tmp/clipping-tests.png")
 
-    currentwidth = 595 # pts
-    currentheight = 842 # pts
-    Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
-
+    function draw_logo_clip(x, y)
+        foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
+        save()
+        translate(x-100, y)
+        # use julia logo as clipping mask
+        julialogomask()
+        clip()
+        for i in 1:500
+            sethue(foregroundcolors[rand(1:end)])
+            circle(rand(-50:350), rand(0:300), 15, :fill)
+        end
+        restore()
+    end
     origin()
-    background(color("white"))
-
-    sethue(color("black"))
-    foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
-    backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
-
+    background(color("black"))
     setopacity(.4)
-    sethue(backgroundcolors[rand(1:end)])
-    translate(-100,0)
-    # use julia logo as clipping mask
-    julialogomask()
-    clip()
-    for i in 1:500
-        randomhue()
-        circle(rand(-50:300), rand(0:300), 20, :fill)
+    for y in (-currentheight/2)+200:250:(currentheight/2)-100
+        for x in (-currentwidth/2)+175:375:currentwidth/2
+            draw_logo_clip(x,y)
+        end
     end
     finish()
     preview()
