@@ -14,11 +14,16 @@ export Drawing, Point, currentdrawing,
     circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, ngon,
-    stroke, fill, fillstroke, poly, strokepreserve,
+    stroke, fill, paint, fillstroke, poly, strokepreserve,
     fillpreserve,
     save, restore,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
+
+    pattern_create_radial, pattern_create_linear,
+    pattern_add_color_stop_rgb, pattern_add_color_stop_rgba,
+    pattern_set_filter, pattern_set_extend,
+
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred,
     setcolor, setopacity, sethue, randomhue, randomcolor,
@@ -139,6 +144,7 @@ closepath() = Cairo.close_path(currentdrawing.cr)
 
 stroke()            = Cairo.stroke(currentdrawing.cr)
 fill()              = Cairo.fill(currentdrawing.cr)
+paint()             = Cairo.paint(currentdrawing.cr)
 strokepreserve()    = Cairo.stroke_preserve(currentdrawing.cr)
 fillpreserve()      = Cairo.fill_preserve(currentdrawing.cr)
 
@@ -238,7 +244,9 @@ scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
-# method with Array of Points
+# Polygons: I can't decide which method is best...
+
+# method 1: with Array of Point{Float64}s
 
 function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
 # where list is array of Points
@@ -262,7 +270,7 @@ function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
     end
 end
 
-# method with Array of tuple coordinates
+# method 2: with Array of (Float64,Float64) tuples
 
 function poly(list::Array{(Float64,Float64)}, action = :nothing; close=false)
 # where list is [(x,y), (x1,y1), (x2,y2),....]
@@ -286,6 +294,41 @@ function poly(list::Array{(Float64,Float64)}, action = :nothing; close=false)
     end
 end
 
+# method 3 with Array{Float64,2}
+# eg: pl = hcat(randn(n)*m, randn(n)*m)
+#=
+  pl = hcat(cumsum(randn(n)*100),cumsum(randn(n)*100))
+  1000x2 Array{Float64,2}:
+  -116.617    -24.6469
+    60.2516   123.141
+    40.4187   -77.765
+   155.986    -15.4135
+   121.336     51.1406
+   ...
+=#
+
+function poly(list::Array{Float64,2}, action = :nothing; close=false)
+# where list is [(x,y), (x1,y1), (x2,y2),....]
+# by default doesn't close or fill, to allow for clipping.etc
+   newpath()
+   move(list[1, 1], list[1, 2])
+   for i in 2:size(list,1)
+           line(list[i, 1], list[i,2])
+   end
+   if close
+       closepath()
+   end
+   if action == :fill
+       fill()
+   elseif action == :stroke
+       stroke()
+   elseif action == :clip
+       clip()
+   elseif action == :fillstroke
+       fillstroke()
+   end
+end
+
 # regular polygons
 function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
     @assert sides > 2
@@ -307,6 +350,19 @@ function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
         fillstroke()
     end
 end
+
+
+# patterns
+
+#=
+Cairo.pattern_create_radial(cx0::Real, cy0::Real, radius0::Real, cx1::Real, cy1::Real, radius1::Real)
+Cairo.pattern_create_linear(x0::Real, y0::Real, x1::Real, y1::Real)
+Cairo.pattern_add_color_stop_rgb(pat::CairoPattern, offset::Real, red::Real, green::Real, blue::Real)
+Cairo.pattern_add_color_stop_rgba(pat::CairoPattern, offset::Real, red::Real, green::Real, blue::Real, alpha::Real)
+Cairo.pattern_set_filter(p::CairoPattern, f)
+Cairo.pattern_set_extend(p::CairoPattern, val)
+Cairo.set_source(dest::CairoContext, src::CairoPattern)
+=#
 
 # text, the 'toy' API... "Any serious application should avoid them." :)
 
@@ -346,6 +402,7 @@ function textcentred(t, x=0, y=0)
     text(t, x - textwidth/2, y)
 end
 
+# convert the text to a path, for subsequent filling
 function textpath(t)
     Cairo.text_path(currentdrawing.cr, t)
 end
