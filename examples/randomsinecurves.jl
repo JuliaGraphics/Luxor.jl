@@ -9,7 +9,8 @@ background(Color.color("black"))
 function randomsine(func, m, l, style)
     # y is positive downwards...
     x_vals = [0:pi/100:l*2*pi]
-    pl = float(hcat(x_vals * l*2*pi, [-func(d) * m for d in x_vals]))
+    # pl = float(hcat(x_vals * l*2*pi, [-func(d) * m for d in x_vals]))
+    pl = [Point(d * 2 * pi , -sin(d) * cos(12 * d) * 8 * sin(d/10)) for d in x_vals]
     poly(pl, close=false, style)
 end
 
@@ -24,12 +25,13 @@ for i in 1:100
     randomhue()
     setopacity(0.5 * rand())
     randomsine(
-        [sin, cos][rand(1:end)],     # random function
-        rand(50:250),                # random vertical scale
-        rand(4:20), # random length
+        [sin, cos][rand(1:end)],                   # random function
+        rand(50:250),                              # random vertical scale
+        rand(4:20),                                # random length
         [:fill, :stroke, :fillstroke][rand(1:end)] # random drawing style
         )
     restore()
+
 end
 finish()
 preview()

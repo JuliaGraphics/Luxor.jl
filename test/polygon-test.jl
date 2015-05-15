@@ -34,12 +34,11 @@ function backgroundpattern()
                  poly(hexagon(rand() * 10, rand() * 5, 15 + rand() * 5))
                  setopacity(0.3)
                  randomhue()
-                 # tuple version
                  poly([
-                        (rand() * -100,rand() * 100),
-                        (rand() * -100,rand() * 100),
-                        (rand() * -100,rand() * 100),
-                        (rand() * -100,rand() * 100)
+                        Point(rand() * -100,rand() * 100),
+                        Point(rand() * -100,rand() * 100),
+                        Point(rand() * -100,rand() * 100),
+                        Point(rand() * -100,rand() * 100)
                      ], :fill)
                  # rect(0,0, hstep-5, vstep-5, :stroke)
             restore()

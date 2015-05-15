@@ -4,7 +4,7 @@ module Luxor
 
 using  Color, Cairo
 
-global currentdrawing # to hold the current drawing
+global currentdrawing
 
 export Drawing, Point, currentdrawing,
     finish, preview,
@@ -14,8 +14,8 @@ export Drawing, Point, currentdrawing,
     circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, ngon,
-    stroke, fill, paint, fillstroke, poly, strokepreserve,
-    fillpreserve,
+    stroke, fill, paint, fillstroke, poly, simplify,
+    strokepreserve, fillpreserve,
     save, restore,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
@@ -244,13 +244,11 @@ scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
-# Polygons: I can't decide which method is best...
-
-# method 1: with Array of Point{Float64}s
+# polygon is an Array of Point{Float64}s
 
 function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
-# where list is array of Points
-# by default doesn't close or fill, to allow for clipping.etc
+    # where list is array of Points
+    # by default doesn't close or fill, to allow for clipping.etc
     newpath()
     move(list[1].x, list[1].y)
     for p in list
@@ -259,7 +257,7 @@ function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
     if close
         closepath()
     end
-    if action == :fill
+    if action     == :fill
         fill()
     elseif action == :stroke
         stroke()
@@ -270,87 +268,66 @@ function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
     end
 end
 
-# method 2: with Array of (Float64,Float64) tuples
-
-function poly(list::Array{(Float64,Float64)}, action = :nothing; close=false)
-# where list is [(x,y), (x1,y1), (x2,y2),....]
-# by default doesn't close or fill, to allow for clipping.etc
-    newpath()
-    move(list[1][1], list[1][2])
-    for p in 1:length(list)
-        line(list[p][1], list[p][2])
-    end
-    if close
-        closepath()
-    end
-    if action == :fill
-        fill()
-    elseif action == :stroke
-        stroke()
-    elseif action == :clip
-        clip()
-    elseif action == :fillstroke
-        fillstroke()
-    end
+function point_line_distance(p, a, b)
+    # area of triangle
+    area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
+    # length of the bottom edge
+    dx = a.x - b.x
+    dy = a.y - b.y
+    bottom = sqrt(dx * dx + dy * dy)
+    return area / bottom
 end
 
-# method 3 with Array{Float64,2}
-# eg: pl = hcat(randn(n)*m, randn(n)*m)
-#=
-  pl = hcat(cumsum(randn(n)*100),cumsum(randn(n)*100))
-  1000x2 Array{Float64,2}:
-  -116.617    -24.6469
-    60.2516   123.141
-    40.4187   -77.765
-   155.986    -15.4135
-   121.336     51.1406
-   ...
-=#
+# use non-recusrive Douglas-Peucker algorithm to simplify polygon
+function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
+    temp_stack = Array((Int64,Int64), 0)
+	push!(temp_stack, (start_index, last_index))
+    global_start_index = start_index
+	keep_list = trues(length(points))
+	while length(temp_stack) > 0
+        start_index = first(temp_stack[end])
+        last_index =  last(temp_stack[end])
+        pop!(temp_stack)
+        dmax = 0.0
+        index = start_index
+        for i in index + 1:last_index - 1
+            if (keep_list[i - global_start_index])
+                d = point_line_distance(points[i], points[start_index], points[last_index])
+                if d > dmax
+                    index = i
+                    dmax = d
+                end
+            end
+        end
+        if dmax > epsilon
+            push!(temp_stack, (start_index, index))
+            push!(temp_stack, (index,       last_index))
+        else
+            for i in start_index + 2:last_index - 1 # 2 seems to keep the starting point...
+                keep_list[i - global_start_index] = false
+            end
+        end
+	end
+	return points[keep_list]
+end
 
-function poly(list::Array{Float64,2}, action = :nothing; close=false)
-# where list is [(x,y), (x1,y1), (x2,y2),....]
-# by default doesn't close or fill, to allow for clipping.etc
-   newpath()
-   move(list[1, 1], list[1, 2])
-   for i in 2:size(list,1)
-           line(list[i, 1], list[i,2])
-   end
-   if close
-       closepath()
-   end
-   if action == :fill
-       fill()
-   elseif action == :stroke
-       stroke()
-   elseif action == :clip
-       clip()
-   elseif action == :fillstroke
-       fillstroke()
-   end
+function simplify(polygon::Array{Point{Float64}}, detail)
+    douglas_peucker(polygon, 1, length(polygon), detail)
 end
 
 # regular polygons
+
 function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
     @assert sides > 2
-    newpath()
     a = 2 * pi/sides
-    move(x+cos(angle)*radius, y+sin(angle)*radius)
+    pgon = Array(Point{Float64},0)
+    push!(pgon, Point(x+cos(angle)*radius, y+sin(angle)*radius))
     for var in 0:sides
         angle += a
-        line(x+cos(angle)*radius, y+sin(angle)*radius)
+        push!(pgon, Point(x+cos(angle)*radius, y+sin(angle)*radius))
     end
-    closepath()
-    if action == :fill
-        fill()
-    elseif action == :stroke
-        stroke()
-    elseif action == :clip
-        clip()
-    elseif action == :fillstroke
-        fillstroke()
-    end
+    poly(pgon, close=true, action)
 end
-
 
 # patterns
 

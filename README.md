@@ -310,15 +310,13 @@ There is a Point type (the only main type, apart from `Drawing`):
 
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
 
-But there's also:
-
-- `poly(list::Array, action = :nothing; close=false)` draws a polygon from an array of tuples. For example:
-
-    `poly([(100,345), (456,523),(150,253)], :stroke)`
-
 Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons, with:
 
 - `ngon(xc, yc, radius, sides, angle, action=:nothing)` draws a `sides`-sided polygon
+
+Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version):
+
+- `simplify(polygon, tolerance)` to delete points from an array of Points within the tolerance provided
 
 #### Styles
 

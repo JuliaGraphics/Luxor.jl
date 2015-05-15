@@ -2,9 +2,12 @@ using Luxor
 using Base.Test
 
 # write your own tests here
-include("luxor-test1.jl")
-include("polygon-test.jl")
-include("matrix-tests.jl")
-include("clipping-test.jl")
 
+tests = filter!(f -> endswith(f, ".jl"), readdir())
 
+deleteat!(tests,findfirst(tests, "runtests.jl"))
+
+for test in tests
+    println("running $test")
+    include(test)
+end
