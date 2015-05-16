@@ -1,15 +1,13 @@
 #!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
 
 using Luxor, Color
-
 include("./julia-logo.jl")
-
 Drawing(1000, 1000, "/tmp/heart-julia.pdf")
 origin()
-background(color("white"))
+background(color("lightcyan"))
 
 function heart()
-    move(127,1)
+    move(127,1) # damn, it's offset from 0/0
     curve(134.2, -6.5, 134.2, -6.5, 156.1, -29.6)
     curve(185.8, -60.5, 198.1, -74.3, 213.7, -95.3)
     curve(240.4, -131, 253.3, -163.7, 253.3, -194.9)
@@ -25,10 +23,12 @@ function heart()
     closepath()
 end
 
-function clipheart(x, y)
+function heart_with_julias(x=0, y=0)
     save()
     translate(x,y)
     heart()
+    sethue(color("lavenderblush"))
+    fillpreserve()
     clip()
     translate(-50,-300)
     for y in 0:30:500
@@ -47,18 +47,21 @@ function clipheart(x, y)
     restore()
 end
 
-setcolor(color("red"))
-for y in -200:300:400
-    for x in -500:300:350
-        clipheart(x,y)
-        save()
-            translate(x,y)
-            heart()
-            stroke()
-        restore()
-    end
+function outlined_heart()
+    save()
+    scale(1.2, 1.2)
+    translate(-127, -30) # must fix offset one day
+    heart_with_julias()
+    heart()
+    sethue(color("red"))
+    setline(4)
+    stroke()
+    restore()
 end
 
+for theta in 1:5
+    outlined_heart()
+    rotate(2 * pi  / 5)
+end
 finish()
-
 preview()

@@ -278,7 +278,7 @@ function point_line_distance(p, a, b)
     return area / bottom
 end
 
-# use non-recusrive Douglas-Peucker algorithm to simplify polygon
+# use non-recursive Douglas-Peucker algorithm to simplify polygon
 function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
     temp_stack = Array((Int64,Int64), 0)
 	push!(temp_stack, (start_index, last_index))
