@@ -2,8 +2,8 @@
 
 using Luxor, Color
 include("./julia-logo.jl")
-const currentwidth = 1000 # pts
-const currentheight = 1000 # pts
+currentwidth = 1000 # pts
+currentheight = 1000 # pts
 Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
 
 origin()
@@ -12,11 +12,12 @@ background(color("black"))
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
     save()
+    setopacity(0.5)
     x = -currentwidth/2
     y = -currentheight/2
     fontsize(12)
     while y < currentheight/2
-        setcolor(colorband[rand(1:end)])
+        sethue(colorband[rand(1:end)])
         s = str_array[rand(1:end)]
         text(s, x, y)
         se = textextents(s)
@@ -30,7 +31,7 @@ function background_text(str_array)
 end
 
 function heart()
-    move(127,1) # damn, it's offset from 0/0
+    move(127,1) # damn, it's offset from 0/0 :/
     curve(134.2, -6.5, 134.2, -6.5, 156.1, -29.6)
     curve(185.8, -60.5, 198.1, -74.3, 213.7, -95.3)
     curve(240.4, -131, 253.3, -163.7, 253.3, -194.9)
@@ -49,8 +50,8 @@ end
 function heart_with_julias(x=0, y=0)
     save()
     translate(x,y)
+    setcolor(color("lavenderblush"))
     heart()
-    sethue(color("lavenderblush"))
     fillpreserve()
     clip()
     translate(-50,-300)
@@ -77,19 +78,17 @@ function outlined_heart()
     heart_with_julias()
     heart()
     setline(4)
-    sethue(1,0,0)
+    setcolor(1,0,0)
     stroke()
     restore()
 end
 
 const namelist = map(x->string(x), names(Base)) # list of names in Base.
 
-
 background_text(namelist)
-
-for theta in 1:5
+for n in 1:5
+    rotate(2 * pi / 5)
     outlined_heart()
-    rotate(2 * pi  / 5)
 end
 finish()
 preview()
