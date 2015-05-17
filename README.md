@@ -74,50 +74,47 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
     using Luxor, Color
 
-    function draw_triangle(points::Array{Point, 1}, degree::Int64)
+    function draw_triangle(points::Array{Point{Float64}}, degree::Int64)
         global triangle_count, cols
         setcolor(cols[degree+1])
-        move(points[1].x,    points[1].y)
-            line(points[2].x, points[2].y)
-            line(points[3].x, points[3].y)
-            line(points[1].x, points[1].y)
-            fill()
+        poly(points, :fill)
         triangle_count += 1
     end
 
     get_midpoint(p1::Point,p2::Point) = Point((p1.x+p2.x) / 2, (p1.y + p2.y) / 2)
 
-    function sierpinski(points::Array{Point, 1}, degree::Int64)
+    function sierpinski(points::Array{Point{Float64}}, degree::Int64)
         draw_triangle(points, degree)
         if degree > 0
             sierpinski([points[1],
-                            get_midpoint(points[1], points[2]),
-                            get_midpoint(points[1], points[3])], degree-1)
+                get_midpoint(points[1], points[2]),
+                get_midpoint(points[1], points[3])], degree-1)
             sierpinski([points[2],
-                            get_midpoint(points[1], points[2]),
-                            get_midpoint(points[2], points[3])], degree-1)
+                get_midpoint(points[1], points[2]),
+                get_midpoint(points[2], points[3])], degree-1)
             sierpinski([points[3],
-                            get_midpoint(points[3], points[2]),
-                            get_midpoint(points[1], points[3])], degree-1)
+                get_midpoint(points[3], points[2]),
+                get_midpoint(points[1], points[3])], degree-1)
         end
     end
 
     @time begin
         depth = 8 # 12 is ok, 20 is right out
         cols = distinguishable_colors(depth+1)
-        Drawing(400, 400, "/tmp/luxor-test1.pdf") # or PNG filename for PNG
+        Drawing(400, 400, "/tmp/sierpinski.pdf") # or PNG filename for PNG
         origin()
         setopacity(0.5)
         triangle_count = 0
-        my_points = [Point(-100,-50), Point(0,100), Point(100,-50)]
+        my_points = [Point{Float64}(-100,-50), Point{Float64}(0,100), Point{Float64}(100.0,-50.0)]
         sierpinski(my_points, depth)
-        finish()
-        preview()
         println("drew $triangle_count triangles")
     end
 
+    finish()
+    preview()
+
     # drew 9841 triangles
-    # elapsed time: 0.886685274 seconds (98032860 bytes allocated, 7.58% gc time)
+    # elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)
 
 #### n-gons
 

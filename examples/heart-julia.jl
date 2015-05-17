@@ -2,9 +2,32 @@
 
 using Luxor, Color
 include("./julia-logo.jl")
-Drawing(1000, 1000, "/tmp/heart-julia.pdf")
+const currentwidth = 1000 # pts
+const currentheight = 1000 # pts
+Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
+
 origin()
-background(color("lightcyan"))
+background(color("black"))
+
+function background_text(str_array)
+    colorband = diverging_palette(0, 10, 100)
+    save()
+    x = -currentwidth/2
+    y = -currentheight/2
+    fontsize(12)
+    while y < currentheight/2
+        setcolor(colorband[rand(1:end)])
+        s = str_array[rand(1:end)]
+        text(s, x, y)
+        se = textextents(s)
+        x += se[5] # move to the right
+        if x > currentwidth/2
+           x = -currentwidth/2 # next row
+           y += 10
+        end
+    end
+    restore()
+end
 
 function heart()
     move(127,1) # damn, it's offset from 0/0
@@ -50,14 +73,19 @@ end
 function outlined_heart()
     save()
     scale(1.2, 1.2)
-    translate(-127, -30) # must fix offset one day
+    translate(-127, -30) # must fix that x-offset one day
     heart_with_julias()
     heart()
-    sethue(color("red"))
     setline(4)
+    sethue(1,0,0)
     stroke()
     restore()
 end
+
+const namelist = map(x->string(x), names(Base)) # list of names in Base.
+
+
+background_text(namelist)
 
 for theta in 1:5
     outlined_heart()
