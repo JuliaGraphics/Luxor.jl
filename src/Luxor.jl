@@ -153,6 +153,22 @@ function fillstroke()
     stroke()
 end
 
+function do_action(action)
+    if action == :fill
+            fill()
+    elseif action == :stroke
+        stroke()
+    elseif action == :clip
+        clip()
+    elseif action == :fillstroke
+        fillstroke()
+    elseif action == :fillpreserve
+        fillpreserve()
+    elseif action == :strokepreserve
+        strokepreserve()
+    end
+end
+
 # clipping
 
 clip() = Cairo.clip(currentdrawing.cr)
@@ -164,44 +180,20 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
 function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     newpath()
     Cairo.circle(currentdrawing.cr, x, y, r)
-    if action == :fill
-        fill()
-    elseif action == :stroke
-        stroke()
-    elseif action == :clip
-        clip()
-    elseif action == :fillstroke
-        fillstroke()
-    end
+    do_action(action)
 end
 
 # positive clockwise from x axis in radians
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
     newpath()
     Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-    if action == :fill
-        fill()
-    elseif action == :stroke
-        stroke()
-    elseif action == :clip
-        clip()
-    elseif action == :fillstroke
-        fillstroke()
-    end
+    do_action(action)
 end
 
 function rect(xmin, ymin, w, h, action=:nothing)
     newpath()
     Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
-    if action == :fill
-        fill()
-    elseif action == :stroke
-        stroke()
-    elseif action == :clip
-        clip()
-    elseif action == :fillstroke
-        fillstroke()
-    end
+    do_action(action)
 end
 
 setline(n)      = Cairo.set_line_width(currentdrawing.cr, n)
@@ -251,21 +243,13 @@ function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
     # by default doesn't close or fill, to allow for clipping.etc
     newpath()
     move(list[1].x, list[1].y)
-    for p in list
+    for p in list[2:end]
         line(p.x, p.y)
     end
     if close
         closepath()
     end
-    if action     == :fill
-        fill()
-    elseif action == :stroke
-        stroke()
-    elseif action == :clip
-        clip()
-    elseif action == :fillstroke
-        fillstroke()
-    end
+    do_action(action)
 end
 
 function point_line_distance(p, a, b)
@@ -317,7 +301,7 @@ end
 
 # regular polygons
 
-function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
+#=function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
     @assert sides > 2
     a = 2 * pi/sides
     pgon = Array(Point{Float64},0)
@@ -327,6 +311,12 @@ function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
         push!(pgon, Point(x+cos(angle)*radius, y+sin(angle)*radius))
     end
     poly(pgon, close=true, action)
+end
+=#
+
+function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
+    poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
+           y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action)
 end
 
 # patterns

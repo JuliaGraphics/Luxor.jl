@@ -4,8 +4,8 @@
 
 using Luxor, Color
 
-const pagewidth = 1190 # points
-const pageheight = 1684 # points
+pagewidth = 1190 # points
+pageheight = 1684 # points
 
 Drawing(pagewidth, pageheight, "/tmp/simplify-poly.pdf")
 

@@ -3,7 +3,7 @@
 using Luxor
 
 # matrix tests
- 
+
 # translate(dx,dy) =	transform([1,  0, 0,  1, dx, dy])                shift by
 # scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                 scale by
 # rotate(A)        =    transform([c, s, -c, c,   0, 0])                 rotate to A radians
@@ -66,7 +66,7 @@ n = 10
 angle = (2 * pi)/n
 for i in 1:n
     # rotate another 'angle' radians
-    transform([cos(angle), sin(angle), -sin(angle), cos(angle), 0, 0]) 
+    transform([cos(angle), sin(angle), -sin(angle), cos(angle), 0, 0])
     text("$i hello world")
 end
 
@@ -94,7 +94,7 @@ end
 
 
 # flip hv
-# Flip H/V with center shifted by cx:cy	
+# Flip H/V with center shifted by cx:cy
 
 sethue(Color.color("magenta"))
 setmatrix([1, 0, 0, 1, 800, 200.0])
