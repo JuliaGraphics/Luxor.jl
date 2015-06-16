@@ -4,13 +4,14 @@ module Luxor
 
 using  Color, Cairo
 
+include("point.jl")
+
 global currentdrawing
 
-export Drawing, Point, currentdrawing,
+export Drawing, currentdrawing,
     finish, preview,
     origin, axes, background,
     newpath, closepath, newsubpath,
-    randompoint, randompointarray,
     circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, ngon,
@@ -19,6 +20,8 @@ export Drawing, Point, currentdrawing,
     save, restore,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
+
+    isinside,
 
     pattern_create_radial, pattern_create_linear,
     pattern_add_color_stop_rgb, pattern_add_color_stop_rgba,
@@ -63,11 +66,6 @@ type Drawing
         currentdrawing = this
         return currentdrawing
     end
-end
-
-type Point{T}
-   x::T
-   y::T
 end
 
 function finish()
@@ -115,21 +113,7 @@ function background(color)
    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
 end
 
-function randomordinate(low, high)
-    low + rand() * abs(high - low)
-end
 
-function randompoint(lowx, lowy, highx, highy)
-    Point{Float64}(randomordinate(lowx, highx), randomordinate(lowy, highy))
-end
-
-function randompointarray(lowx, lowy, highx, highy, n)
-    array = Point{Float64}[]
-    for i in 1:n
-         push!(array, randompoint(lowx, lowy, highx, highy))
-    end
-    array
-end
 
 # does this do anything in Cairo?
 setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
@@ -319,6 +303,46 @@ function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action)
 end
 
+
+function isinside(p::Point, poly::Array{Point{Float64}})
+    # An implementation of Hormann-Agathos (2001) Point in Polygon algorithm
+    c = false
+    detq(q1,q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
+    for counter in 1:length(poly)
+        q1 = poly[counter]
+        # if reached last point, set "next point" to first point
+        if counter == length(poly)
+            q2 = poly[1]
+        else
+            q2 = poly[counter + 1]
+        end
+        if q1 == p
+            error("VertexException")
+        end
+        if q2.y == p.y
+            if q2.x == p.x
+                error("VertexException")
+            elseif (q1.y == p.y) && ((q2.x > p.x) == (q1.x < p.x))
+                error("EdgeException")
+            end
+        end
+        if (q1.y < p.y) != (q2.y < p.y) # crossing
+            if q1.x >= p.x
+                if q2.x > p.x
+                    c = !c
+                elseif ((detq(q1,q2) > 0) == (q2.y > q1.y)) # right crossing
+                    c = !c
+                end
+            elseif q2.x > p.x
+                if ((detq(q1,q2) > 0) == (q2.y > q1.y)) # right crossing
+                    c = !c
+                end
+            end
+        end
+    end
+    return c
+end
+
 # patterns
 
 #=
@@ -448,10 +472,12 @@ function setopacity(a)
 end
 
 function randomhue()
+    # don't touch current alpha
     sethue(rand(), rand(),rand())
 end
 
 function randomcolor()
+    # can change alpha transparency
     setcolor(rand(), rand(),rand(), rand())
 end
 
