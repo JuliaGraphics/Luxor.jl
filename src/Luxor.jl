@@ -285,24 +285,12 @@ end
 
 # regular polygons
 
-#=function ngon(x, y, radius, sides::Int, angle=0, action=:nothing)
-    @assert sides > 2
-    a = 2 * pi/sides
-    pgon = Array(Point{Float64},0)
-    push!(pgon, Point(x+cos(angle)*radius, y+sin(angle)*radius))
-    for var in 0:sides
-        angle += a
-        push!(pgon, Point(x+cos(angle)*radius, y+sin(angle)*radius))
-    end
-    poly(pgon, close=true, action)
-end
-=#
-
 function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
     poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action)
 end
 
+# is a point inside a polygon?
 
 function isinside(p::Point, poly::Array{Point{Float64}})
     # An implementation of Hormann-Agathos (2001) Point in Polygon algorithm

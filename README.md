@@ -297,6 +297,8 @@ There is a Point type (the only main type, apart from `Drawing`):
 
    `Point{Float64}(12.0, 13.0)`
 
+Polygons are arrays of points.
+
 - `poly(list::Array{Point{Float64}}, action = :nothing; close=false)` draws a polygon using array of Points. For example:
 
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
@@ -314,6 +316,8 @@ Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, oct
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version):
 
 - `simplify(polygon, tolerance)` to delete points from an array of Points within the tolerance provided
+
+- `isinside(point, polygon)` returns true if the point is inside the polygon
 
 #### Styles
 
@@ -429,4 +433,3 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 	get array of dimensions of the string `str`, given current font:
 
 	`[xb, yb, width, height, xadvance, yadvance]`
-
