@@ -44,3 +44,4 @@ fontface("Avenir-Black")
 textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 0, 0, -10, 550)
 finish()
 preview() # Mac OS X only, opens in Preview
+exit()
