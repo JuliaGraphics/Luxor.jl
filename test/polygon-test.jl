@@ -1,4 +1,4 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
+#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
 
 using Luxor, Color
 
@@ -95,5 +95,5 @@ clipreset()
 simple_polys()
 
 finish()
-
 preview()
+exit()

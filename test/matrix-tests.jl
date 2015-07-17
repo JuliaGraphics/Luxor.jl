@@ -106,3 +106,4 @@ text("hello world")
 
 finish()
 preview()
+exit()
