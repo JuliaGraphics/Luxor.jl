@@ -23,6 +23,8 @@ export Drawing, currentdrawing,
 
     isinside,
 
+    getpath, getpathflat,
+
     pattern_create_radial, pattern_create_linear,
     pattern_add_color_stop_rgb, pattern_add_color_stop_rgba,
     pattern_set_filter, pattern_set_extend,
@@ -112,8 +114,6 @@ function background(color)
    setcolor(color)
    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
 end
-
-
 
 # does this do anything in Cairo?
 setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
@@ -330,6 +330,12 @@ function isinside(p::Point, poly::Array{Point{Float64}})
     end
     return c
 end
+
+# copy paths (thanks Andreas Lobinger!)
+# return a CairoPath which is array of .element_type and .points
+
+getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(currentdrawing.cr))
+getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
 
 # patterns
 

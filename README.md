@@ -403,6 +403,10 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `closepath()`
 
+- `getpath()`     get the current path as an array of element types and points
+
+- `getpathflat()` get the current path as an array of type/points with curves flattened to lines
+
 #### Clipping
 
 - `clip()` turn the current path into a clipping region, masking any graphics outside the path
