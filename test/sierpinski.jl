@@ -38,6 +38,3 @@ end
 
 finish()
 preview()
-exit()
-# drew 9841 triangles
-# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)

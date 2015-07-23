@@ -42,7 +42,3 @@ draw_color_bars(720,  20, 50, diverging_palette(120, 140, 50, mid=1.0), "divergi
 
 finish()
 preview()
-exit()
-
-#=mid is used for diverging colormaps to change the relative location of the middle point where the color changes from e.g. red to blue in RdBu. What you want to modify is the brightness b that defines the starting point of the color palette.
-=#

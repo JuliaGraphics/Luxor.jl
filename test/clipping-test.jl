@@ -20,6 +20,7 @@ function draw_logo_clip(x, y)
         sethue(foregroundcolors[rand(1:end)])
         circle(rand(-50:350), rand(0:300), 15, :fill)
     end
+    clipreset()
     restore()
 end
 
@@ -37,4 +38,3 @@ end
 =#
 finish()
 preview()
-exit()

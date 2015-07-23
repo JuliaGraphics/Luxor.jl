@@ -153,4 +153,3 @@ show_glyph("G", 700, 500)
 
 finish()
 preview()
-exit()
