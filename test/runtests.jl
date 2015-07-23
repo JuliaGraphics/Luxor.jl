@@ -1,15 +1,20 @@
-using Luxor
 using Base.Test
 
-# write your own tests here
+println("clipping")            ; include("clipping-test.jl")
 
-tests = filter!(f -> endswith(f, ".jl"), readdir())
+# this test doesn't fail on its own but fails when run as part of a batch of tests
+#println("copy_path")           ; include("copy_path.jl")
 
-deleteat!(tests,findfirst(tests, "runtests.jl")) # don't run this file again.. .:)
+println("luxor-test1")         ; include("luxor-test1.jl")
 
-for test in tests
-    println("started $test")
-    include(test)
-    sleep(1)
-    println("finished $test")
-end
+println("matrix-tests")        ; include("matrix-tests.jl")
+
+println("palette")             ; include("palette_test.jl")
+
+println("point inside polygon"); include("point-inside-polygon.jl")
+
+println("polygon")             ; include("polygon-test.jl")
+
+println("sierpinski")          ; include("sierpinski.jl")
+
+println("simplify-polygons")   ; include("simplify-polygons.jl")

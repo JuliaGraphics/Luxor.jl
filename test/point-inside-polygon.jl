@@ -44,4 +44,3 @@ end
 
 finish()
 preview()
-exit()

@@ -96,4 +96,3 @@ simple_polys()
 
 finish()
 preview()
-exit()
