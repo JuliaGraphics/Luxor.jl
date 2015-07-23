@@ -313,6 +313,21 @@ Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, oct
 
 - `ngon(xc, yc, radius, sides, angle, action=:nothing)` draws a `sides`-sided polygon
 
+Without an action, returns a poly (array of points) instead:
+
+- `ngon(xc, yc, radius, sides, angle)`
+
+Compare:
+
+    ngon(0,0,4,4,0) # returns polygon
+    4-element Array{Point{Float64},1}:
+     Point{Float64}(2.4492935982947064e-16,4.0)
+     Point{Float64}(-4.0,4.898587196589413e-16)
+     Point{Float64}(-7.347880794884119e-16,-4.0)
+     Point{Float64}(4.0,-9.797174393178826e-16)
+
+    ngon(0,0,4,4,0, :close) # draws polygon
+
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version):
 
 - `simplify(polygon, tolerance)` to delete points from an array of Points within the tolerance provided
