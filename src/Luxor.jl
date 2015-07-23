@@ -285,9 +285,16 @@ end
 
 # regular polygons
 
+# draw a poly
 function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
     poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action)
+end
+
+# if no action supplied, return a poly
+function ngon(x, y, radius, sides::Int64, orientation=0)
+    [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
+           y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides]
 end
 
 # is a point inside a polygon?
