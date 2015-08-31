@@ -1,5 +1,3 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
 using Luxor
 
 # matrix tests
@@ -15,16 +13,16 @@ Drawing(1000,1000, "/tmp/matrix-tests.pdf")
 
 # absolute position 200,250 relative to top left origin (0, 0)
 setmatrix([1, 0, 0, 1, 200, 250.0])
-sethue(Color.color("red"))
+sethue("red")
 fontsize(20)
 text("hello world")
 
-sethue(Color.color("green"))
+sethue("green")
 # absolute position 400,500 from top left origin (0, 0)
 setmatrix([1, 0, 0, 1, 400, 500.0])
 text("hello world")
 
-sethue(Color.color("white"))
+sethue("white")
 # absolute position 230 230
 setmatrix([1, 0, 0, 1, 230, 230.0])
 text("hello world")
@@ -32,25 +30,25 @@ text("hello world")
 # shift relative by 10 x (right) and 20 y (down) after moving to absolute 300 300
 setmatrix([1, 0, 0, 1, 300, 300])
 transform([1, 0, 0, 1, 10, 20])
-sethue(Color.color("yellow"))
+sethue("yellow")
 text("hello world")
 
 setmatrix([1, 0, 0, 1, 300, 300])
 transform([1, 0, 0, 1, 0, 0])
-sethue(Color.color("gray"))
+sethue("gray")
 text("hello world")
 
 # scale by 2 x (right) and 3 y after moving to 300 300
 setmatrix([1, 0, 0, 1, 300, 300.0])
 transform([2, 0, 0, 3, 0, 0.0])
-sethue(Color.color("purple"))
+sethue("purple")
 text("hello world")
 
 # using rotate by angle, not using matrix
 # absolute move to 100, 100
 setmatrix([1, 0, 0, 1, 100.0, 100])
 fontsize(20)
-sethue(Color.color("brown"))
+sethue("brown")
 for i in 1:4
     # rotate by pi/2 radians
     rotate(pi/2)
@@ -61,7 +59,7 @@ end
 # absolute move to 500 across 500 down
 setmatrix([1, 0, 0, 1, 300.0, 600])
 fontsize(20)
-sethue(Color.color("cyan"))
+sethue("cyan")
 n = 10
 angle = (2 * pi)/n
 for i in 1:n
@@ -73,7 +71,7 @@ end
 fontsize(20)
 # skew X
 setopacity(0.5)
-sethue(Color.color("purple"))
+sethue("purple")
 # move to 800 across 300 down
 setmatrix([1, 0, 0, 1, 800, 300])
 # Cairo doesn't like tan(90) skews (or the matrix that results)
@@ -84,7 +82,7 @@ end
 
 # skew y
 setopacity(0.75)
-sethue(Color.color("orange"))
+sethue("orange")
 setmatrix([1, 0, 0, 1, 800, 500])
 # Cairo doesn't like tan(90) skews
 for i in 0:5:40
@@ -96,7 +94,7 @@ end
 # flip hv
 # Flip H/V with center shifted by cx:cy
 
-sethue(Color.color("magenta"))
+sethue("magenta")
 setmatrix([1, 0, 0, 1, 800, 200.0])
 fx = 1
 fy = -1

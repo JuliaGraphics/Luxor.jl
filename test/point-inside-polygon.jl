@@ -1,9 +1,7 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
 # testing isinside(), is point inside polygon
 # all the random points are drawn only if they're inside one of the polygons
 
-using Luxor
+using Luxor, Colors
 
 function ngon_poly(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
     [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
@@ -18,7 +16,7 @@ Drawing(1200, 1200, "/tmp/test.pdf")
 
 origin()
 
-background(Color.color("grey20"))
+background("grey20")
 
 polys = [ngon_poly(x, y, 60, 5, pi/2) for x in -500:150:500, y in -500:150:500]
 

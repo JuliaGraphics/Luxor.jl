@@ -1,6 +1,4 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 currentwidth = 1000 # pts
 currentheight = 1000 # pts
 Drawing(currentwidth, currentheight, "/tmp/color-palette.pdf")
@@ -24,7 +22,7 @@ function draw_color_bars(x, y, n, colmap, label)
 end
 
 # background
-setcolor(color("grey50"))
+setcolor("grey50")
 rect(0,0,currentwidth, currentheight, :fill)
 
 # sequential_palette(h, [N::Int=100; c=0.88, s=0.6, b=0.75, w=0.15, d=0.0, wcolor=RGB(1,1,0), dcolor=RGB(0,0,1), logscale=false])
