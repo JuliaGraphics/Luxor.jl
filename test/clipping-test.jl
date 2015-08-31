@@ -1,6 +1,4 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 
 include("../examples/julia-logo.jl") # the julia logo coordinates
 
@@ -25,7 +23,7 @@ function draw_logo_clip(x, y)
 end
 
 origin()
-background(color("white"))
+background("white")
 setopacity(.4)
 foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
 draw_logo_clip(0, 0)

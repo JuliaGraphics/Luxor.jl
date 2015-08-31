@@ -1,8 +1,6 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
 # test polygon simplification
 
-using Luxor, Color
+using Luxor, Colors
 
 pagewidth = 1190 # points
 pageheight = 1684 # points
@@ -23,7 +21,7 @@ function draw_sine_curves()
     translate(100, 100)
     setline(0.25)
     sethue(0,0,0)
-    x_vals = [0:pi/180: 10 * 2 * pi]
+    x_vals = collect(0:pi/180: 10 * 2 * pi)
     # generate array of Points
     plist = [Point(d * 2 * pi , -sin(d) * cos(12 * d) * 8 * sin(d/10)) for d in x_vals]
     poly(plist, :stroke) # draw original
@@ -44,7 +42,7 @@ function test()
     translate(100, pageheight/2)
     setline(0.25)
     sethue(0,0,0)
-    x_vals = [0:pi/100: 4 * pi]
+    x_vals = collect(0:pi/100: 4 * pi)
     polyline = [Point(d * 2 * pi * 10 , 5 * -sin(d) * cos(12 * d) * 8 * sin(d/10)) for d in x_vals]
     poly(polyline, :stroke)
     draw_circles(polyline)

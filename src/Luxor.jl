@@ -1,8 +1,8 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
+VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 module Luxor
 
-using  Color, Cairo
+using  Colors, Cairo
 
 include("point.jl")
 
@@ -108,11 +108,17 @@ function axes()
     restore()
 end
 
-function background(color)
+function background(col::AbstractString)
 # TODO: at present this only works properly after you call origin() to put 0/0 in the center
 # but how can it tell whether you've used origin() first?
-   setcolor(color)
+   setcolor(col)
    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
+end
+
+function background(col::ColorTypes.Colorant)
+    temp = convert(RGBA,  col)
+    setcolor(temp.r, temp.g, temp.b)
+    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
 end
 
 # does this do anything in Cairo?
@@ -248,7 +254,7 @@ end
 
 # use non-recursive Douglas-Peucker algorithm to simplify polygon
 function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
-    temp_stack = Array((Int64,Int64), 0)
+    temp_stack = Tuple{Int,Int}[] # version 0.4 only?
 	push!(temp_stack, (start_index, last_index))
     global_start_index = start_index
 	keep_list = trues(length(points))
@@ -358,7 +364,7 @@ Cairo.set_source(dest::CairoContext, src::CairoPattern)
 
 # text, the 'toy' API... "Any serious application should avoid them." :)
 
-fontface(f) = Cairo.select_font_face (currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
+fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
 fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
 textextents(string) = Cairo.text_extents(currentdrawing.cr, string)
@@ -431,38 +437,52 @@ function textcurve(str, x, y, xc, yc, r)
     restore()
 end
 
-# colours, relying on Color.jl to convert anything to RGBA
-# eg setcolor(color("gold")) # or "green", "darkturquoise", "lavender" or what have you
+# colours, relying on Colors.jl to convert anything to RGBA
+# eg setcolor("gold") # or "green", "darkturquoise", "lavender" or what have you
 #    setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
 #    for i in 1:15:360
 #       setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
 #       ...
 #    end
 
-function setcolor(color)
-    temp = convert(RGBA, color)
-    (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) = (temp.c.r, temp.c.g, temp.c.b, temp.alpha)
+function setcolor(col::AbstractString)
+    temp = parse(RGBA,  col)
+    (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) = (temp.r, temp.g, temp.b, temp.alpha)
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
 end
 
+function setcolor(col::ColorTypes.Colorant)
+  temp = convert(RGBA,  col)
+  setcolor(temp.r, temp.g, temp.b)
+end
+
 function setcolor(r, g, b, a=1)
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
 end
 
 # like Mathematica we sometimes want to change the current 'color' without changing alpha/opacity
 # using sethue() rather than setcolor() doesn't change the current alpha
 
+function sethue(col::AbstractString)
+    temp = parse(RGBA,  col)
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = temp.r, temp.g, temp.b
+    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) # use current alpha, not incoming one
+end
+
+function sethue(col::ColorTypes.Colorant)
+    temp = convert(RGBA,  col)
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = temp.r, temp.g, temp.b
+    # use current alpha
+    Cairo.set_source_rgba(currentdrawing.cr, temp.r, temp.g, temp.b, currentdrawing.alpha)
+end
+
 function sethue(r, g, b)
-    (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue) = (r, g, b)
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
     # use current alpha
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, currentdrawing.alpha)
 end
 
-function sethue(color)
-    temp = convert(RGBA, color)
-    (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue) = (temp.c.r, temp.c.g, temp.c.b)
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) # use current alpha, not incoming one
-end
 
 # like Mathematica we sometimes want to change the current opacity without changing the current color
 
@@ -505,9 +525,9 @@ function setmatrix(m::Array)
     end
     # some matrices make Cairo freak out and need reset. Not sure what the rules are yet…
     if length(m) < 6
-        println("didn't like that matrix $m: not enough values")
+        throw("didn't like that matrix $m: not enough values")
     elseif countnz(m) == 0
-        println("didn't like that matrix $m: too many zeroes")
+        throw("didn't like that matrix $m: too many zeroes")
     else
         cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
         Cairo.set_matrix(currentdrawing.cr, cm)

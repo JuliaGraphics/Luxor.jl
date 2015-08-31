@@ -1,13 +1,11 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 include("./julia-logo.jl")
 currentwidth = 1000 # pts
 currentheight = 1000 # pts
 Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
 
 origin()
-background(color("black"))
+background("black")
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
@@ -50,7 +48,7 @@ end
 function heart_with_julias(x=0, y=0)
     save()
     translate(x,y)
-    setcolor(color("lavenderblush"))
+    setcolor("lavenderblush")
     heart()
     fillpreserve()
     clip()
