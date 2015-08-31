@@ -1,6 +1,4 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 
 function draw_triangle(points::Array{Point{Float64}}, degree::Int64)
     global triangle_count, cols

@@ -1,18 +1,16 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 
 include("./julia-logo.jl")
 
 Drawing(1600,1600, "/tmp/test.png")
 origin()
-background(color("white"))
+background("white")
 
 function spiral()
-    save()  
+    save()
     scale(.3, .3)
     r = 200
-    setcolor(color("gray"))
+    setcolor("gray")
     for i in 0:pi/8:(2*pi)
         save()
         translate(r * cos(i), r * sin(i))
@@ -64,9 +62,9 @@ function colorgrid()
         for column in 100:100:500
                 save()
                     setcolor(color(cols[c+=1]))
-                    translate(row, column)            
+                    translate(row, column)
                     scale(0.3, 0.3)
-                    julialogo(false) 
+                    julialogo(false)
                 restore()
         end
     end

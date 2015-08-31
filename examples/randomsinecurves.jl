@@ -2,10 +2,11 @@
 
 # random sin/cos curves
 
-using Luxor
+using Luxor, Colors
+
 Drawing(1200, 1200, "/tmp/random-sines.pdf")
 origin()
-background(Color.color("black"))
+background("black")
 function randomsine(func, m, l, style)
     # y is positive downwards...
     x_vals = [0:pi/100:l*2*pi]
