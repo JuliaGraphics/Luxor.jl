@@ -1,5 +1,3 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
 using Luxor
 
 function draw_path(path::Array)

@@ -1,10 +1,9 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
+using Luxor, Colors
 
-using Luxor, Color
 Drawing(1200, 1400, "/tmp/luxor-test1.png") # or PDF filename for PDF
 
 origin() # move 0/0 to center
-background(color("purple"))
+background("purple")
 
 setopacity(0.7)     # opacity from 0 to 1
 sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
@@ -32,7 +31,7 @@ clipreset()
 
 # here using Mac OS X fonts
 fontsize(60)
-setcolor(color("turquoise"))
+setcolor("turquoise")
 fontface("Optima-ExtraBlack")
 textwidth = textextents("Luxor")[5]
 # move the text by half the width

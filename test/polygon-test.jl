@@ -1,13 +1,11 @@
-#!/Applications/Julia-0.3.10.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 
 currentwidth = 595 # pts
 currentheight = 842 # pts
 Drawing(currentwidth, currentheight, "/tmp/polygon-test.pdf")
 
 origin()
-background(color("antiquewhite"))
+background("antiquewhite")
 
 foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
 backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
@@ -83,10 +81,10 @@ function hex_mixtures()
 end
 
 # fill, then clip to heptagon
-setcolor(color("lightcyan"))
+setcolor("lightcyan")
 setline(3)
 ngon(0, 0, 270, 7, 0, :fillpreserve) # fill it
-sethue(color("orange"))
+sethue("orange")
 strokepreserve()                     # stroke it
 clip()                               # then use to clip
 hex_mixtures()

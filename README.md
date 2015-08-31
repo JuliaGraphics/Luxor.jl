@@ -4,9 +4,13 @@ Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics packa
 
 The idea of Luxor is that it's slightly easier to use than Cairo, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org).
 
-[Color.jl](https://github.com/JuliaLang/Color.jl) provides excellent color definitions and is required.
+[Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
 I've only tried this on MacOS X. It will need some changes to work on Windows (but I can't test it).
+
+### Current status ###
+
+It's currently being updated for Julia version 0.4 and for the modified Colors.jl.
 
 ### Example usage
 
@@ -14,10 +18,10 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 !["Hello world"](hello-world.png)
 
-    using Luxor
+    using Luxor, Colors
     Drawing(1000, 1000, "/tmp/hello-world.png")
     origin()
-    sethue(Color.color("red"))
+    sethue("red")
     fontsize(50)
     text("hello world")
     finish()
@@ -27,11 +31,11 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ![Luxor test](basic-test.png)
 
-    using Luxor, Color
+    using Luxor, Colors
     Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF filename for PDF
 
     origin() # move 0/0 to center
-    background(color("purple"))
+    background("purple")
 
     setopacity(0.7)     # opacity from 0 to 1
     sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
@@ -42,7 +46,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     circle(0, 0, 460, :stroke)
 
     circle(0,-200,400,:clip)     # set a circular mask above the x axis
-    sethue(color("gold"))
+    sethue("gold")
     setopacity(0.7)
     setline(10)
 
@@ -55,7 +59,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     clipreset()     # finish clipping
 
     fontsize(60)
-    setcolor(color("turquoise"))
+    setcolor("turquoise")
     fontface("Optima-ExtraBlack")     # a Mac OS X font
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
@@ -72,7 +76,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ![Sierpinski](sierpinski.png)
 
-    using Luxor, Color
+    using Luxor, Colors
 
     function draw_triangle(points::Array{Point{Float64}}, degree::Int64)
         global triangle_count, cols
@@ -120,7 +124,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ![n-gons](n-gon.png)
 
-    using Luxor, Color
+    using Luxor, Colors
     Drawing(1200, 1400)
 
     origin()
@@ -151,7 +155,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
     currentwidth = 500 # pts
     currentheight = 500 # pts
-    Drawing(currentwidth, currentheight, "/tmp/clipping-tests.png")
+    Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
 
     function draw_logo_clip(x, y)
         foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
@@ -167,7 +171,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
     end
 
     origin()
-    background(color("white"))
+    background("white")
     setopacity(.4)
     draw_logo_clip(0,0)
 
@@ -180,14 +184,14 @@ Using a text path as a clipping region - here filled with names of Julia functio
 
 ![text clipping](text-path-clipping.png)
 
-    using Luxor, Color
+    using Luxor, Colors
 
     currentwidth = 1250 # pts
     currentheight = 800 # pts
     Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
 
     origin()
-    background(color("darkslategray3"))
+    background("darkslategray3")
 
     fontsize(600) # big fontsize to use for clipping
     fontface("Agenda-Black")
@@ -198,7 +202,7 @@ Using a text path as a clipping region - here filled with names of Julia functio
 
     textpath(str) # make text into a path
     setline(3)
-    setcolor(color("black"))
+    setcolor("black")
     fillpreserve() # fill but keep
     clip()  # clip
 
@@ -240,7 +244,7 @@ Using a text path as a clipping region - here filled with names of Julia functio
 
 The global variable `currentdrawing` keeps a few parameters:
 
-    julia> names(currentdrawing)
+    julia> fieldnames(currentdrawing)
     10-element Array{Symbol,1}:
      :width
      :height
@@ -319,14 +323,14 @@ Without an action, returns a poly (array of points) instead:
 
 Compare:
 
-    ngon(0,0,4,4,0) # returns polygon
-    4-element Array{Point{Float64},1}:
+    ngon(0, 0, 4, 4, 0) # returns polygon
+     4-element Array{Point{Float64},1}:
      Point{Float64}(2.4492935982947064e-16,4.0)
      Point{Float64}(-4.0,4.898587196589413e-16)
      Point{Float64}(-7.347880794884119e-16,-4.0)
      Point{Float64}(4.0,-9.797174393178826e-16)
 
-    ngon(0,0,4,4,0, :close) # draws polygon
+    ngon(0, 0, 4, 4, 0, :close) # draws polygon
 
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version):
 
@@ -382,17 +386,17 @@ The current matrix is a six number array, perhaps like this:
 
 #### Color and opacity
 
-For color definitions, use Colors.jl.
+For color definitions and conversions, use Colors.jl.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (like in Mathematica).
 
 - `setcolor(color)`
 
-	`setcolor(color("gold"))`
+	`setcolor("gold")`
 
-	`setcolor(color("darkturquoise"))`
+	`setcolor("darkturquoise")`
 
-	`setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))`
+	`setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))`
 
 - `setcolor(r, g, b, alpha)` eg:
 
@@ -400,9 +404,9 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `setcolor(r, g, b)`
 
-- `sethue(r, g, b)` like `setcolor` but doesn't change opacity
-
 - `sethue(color)` like `setcolor`
+
+- `sethue(r, g, b)` like `setcolor` but doesn't change opacity
 
 - `setopacity(alpha)` change the alpha opacity (`alpha` is between 0 and 1)
 

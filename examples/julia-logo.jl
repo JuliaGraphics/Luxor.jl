@@ -1,11 +1,11 @@
 # the current julia logo
 
-#= Usage:
-using Luxor, Color
+#= typical usage:
+using Luxor, Colors
 include(joinpath(Pkg.dir(), "Luxor", "Examples", "julia-logo.jl"))
 Drawing(1000, 1000, "/tmp/heart-julia.pdf")
 origin()
-background(color("white"))
+background("white")
 julialogo()
 finish()
 preview()
@@ -13,7 +13,7 @@ preview()
 
 function julialogo(colored=true)
     # draw colors if colored is true
-    colored && setcolor(color("black"))
+    colored && setcolor("black")
     move(72.872, 177.311)
     curve(72.872, 184.847, 72.024, 190.932, 70.329, 195.567)
     curve( 68.633, 200.202, 66.222, 203.8, 63.094, 206.362)

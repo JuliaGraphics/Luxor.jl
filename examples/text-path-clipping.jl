@@ -1,13 +1,11 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
-
-using Luxor, Color
+using Luxor, Colors
 
 currentwidth = 1250 # pts
 currentheight = 800 # pts
 Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
 
 origin()
-background(color("darkslategray3"))
+background("darkslategray3")
 
 fontsize(600) # big text to use for clipping
 fontface("Agenda-Black")
@@ -18,7 +16,7 @@ translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
 
 textpath(str) # make text into a path
 setline(3)
-setcolor(color("black"))
+setcolor("black")
 fillpreserve() # fill but keep
 clip()  # clip
 
