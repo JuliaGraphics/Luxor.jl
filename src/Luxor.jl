@@ -541,7 +541,7 @@ end
 # changes the current Cairo matrix to match passed-in Array
 function setmatrix(m::Array)
     if eltype(m) != Float64
-        m = Float64(m)
+        m = map(Float64,m)
     end
     # some matrices make Cairo freak out and need reset. Not sure what the rules are yet…
     if length(m) < 6
