@@ -31,7 +31,7 @@ export Drawing, currentdrawing,
 
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred,
-    setcolor, setopacity, sethue, randomhue, randomcolor,
+    setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform
 
 type Drawing
@@ -461,6 +461,26 @@ function setcolor(r, g, b, a=1)
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
 end
 
+
+"""
+
+does a macro work here?
+
+setcolor("red")
+
+"""
+
+macro setcolor_str(ex)
+    isa(ex, AbstractString) || error("colorant requires literal strings")
+    col = parse(RGBA, ex)
+    quote
+
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
+    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, $col.alpha)
+    end
+end
+
+
 # like Mathematica we sometimes want to change the current 'color' without changing alpha/opacity
 # using sethue() rather than setcolor() doesn't change the current alpha
 
@@ -521,7 +541,7 @@ end
 # changes the current Cairo matrix to match passed-in Array
 function setmatrix(m::Array)
     if eltype(m) != Float64
-        m = float64(m)
+        m = map(Float64,m)
     end
     # some matrices make Cairo freak out and need reset. Not sure what the rules are yet…
     if length(m) < 6
