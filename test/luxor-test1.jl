@@ -15,7 +15,7 @@ circle(0, 0, 460, :stroke)
 
 # clip the following graphics to a circle positioned above the x axis
 circle(0,-200,400,:clip)
-sethue(color("gold"))
+sethue("gold")
 setopacity(0.7)
 setline(10)
 
@@ -31,7 +31,7 @@ clipreset()
 
 # here using Mac OS X fonts
 fontsize(60)
-setcolor("turquoise")
+setcolor"turquoise"
 fontface("Optima-ExtraBlack")
 textwidth = textextents("Luxor")[5]
 # move the text by half the width
