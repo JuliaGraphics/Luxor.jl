@@ -1,3 +1,5 @@
+import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=
+
 export Point, randompoint, randompointarray
 
 type Point{T}

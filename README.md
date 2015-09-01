@@ -392,6 +392,8 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `setcolor(color)`
 
+    `setcolor"gold"` (is a string macro, still experimental but might be quicker ...)
+
 	`setcolor("gold")`
 
 	`setcolor("darkturquoise")`
