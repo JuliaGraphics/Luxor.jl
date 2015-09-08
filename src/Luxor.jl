@@ -1,12 +1,87 @@
+#=
+contents
+61       Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
+119   finish()
+137   preview()
+150   origin()
+159   axes()
+183   background(col::AbstractString)
+190   background(col::ColorTypes.Colorant)
+213   fillstroke()
+218   do_action(action)
+251   circle(x, y, r, action=:nothing) # action is a symbol or nothing
+266   arc(xc, yc, radius, angle1, angle2, action=:nothing)
+282   rect(xmin, ymin, w, h, action=:nothing)
+297   setlinecap(str="butt")
+307   setlinejoin(str="miter")
+317   setdash(dashing)
+337   poly(list::Array{Point{Float64}}, action = :nothing; close=false)
+351   point_line_distance(p, a, b)
+362   douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
+394   simplify(polygon::Array{Point{Float64}}, detail)
+401   ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
+407   ngon(x, y, radius, sides::Int64, orientation=0)
+414   isinside(p::Point, poly::Array{Point{Float64}})
+506   text(t, x=0, y=0)
+521   textcentred(t, x=0, y=0)
+533   textpath(t)
+546   textcurve(str, x, y, xc, yc, r)
+584   setcolor(col::AbstractString)
+601   setcolor(col::ColorTypes.Colorant)
+612   setcolor(r, g, b, a=1)
+644   sethue(col::AbstractString)
+650   sethue(col::ColorTypes.Colorant)
+657   sethue(r, g, b)
+671   setopacity(a)
+677   randomhue()
+682   randomcolor()
+704   getmatrix()
+718   setmatrix(m::Array)
+744   transform(a::Array)
+=#
 VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 module Luxor
 
-using  Colors, Cairo
+using Colors, Cairo
 
 include("point.jl")
 
-global currentdrawing
+type Drawing
+    width::Float64
+    height::Float64
+    filename::AbstractString
+    surface::CairoSurface
+    cr::CairoContext
+    surfacetype::AbstractString
+    redvalue::Float64
+    greenvalue::Float64
+    bluevalue::Float64
+    alpha::Float64
+    function Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
+        global currentdrawing
+        this                = new()
+        this.width          = w
+        this.height         = h
+        this.filename       = f
+        this.redvalue       = 0.0
+        this.greenvalue     = 0.0
+        this.bluevalue      = 0.0
+        this.alpha          = 1.0
+        (path, ext)         = splitext(f)
+        if ext == ".pdf"
+           this.surface     =  Cairo.CairoPDFSurface(f, w, h)
+           this.surfacetype = "pdf"
+           this.cr          =  Cairo.CairoContext(this.surface)
+        elseif ext == ".png" || ext == "" # default to PNG
+           this.surface     = Cairo.CairoRGBSurface(w,h)
+           this.surfacetype = "png"
+           this.cr          = Cairo.CairoContext(this.surface)
+        end
+        currentdrawing      = this
+        return "drawing '$f' ($w w x $h h) created"
+    end
+end
 
 export Drawing, currentdrawing,
     finish, preview,
@@ -34,41 +109,12 @@ export Drawing, currentdrawing,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform
 
-type Drawing
-    width::Float64
-    height::Float64
-    filename::String
-    surface::CairoSurface
-    cr::CairoContext
-    surfacetype::String
-    redvalue::Float64
-    greenvalue::Float64
-    bluevalue::Float64
-    alpha::Float64
-    function Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only?
-        global currentdrawing
-        this = new()
-        this.width = w
-        this.height = h
-        this.filename = f
-        this.redvalue = 0.0
-        this.greenvalue = 0.0
-        this.bluevalue = 0.0
-        this.alpha = 1.0
-        (path, ext) = splitext(f)
-        if ext == ".pdf"
-           this.surface =  Cairo.CairoPDFSurface(f, w, h)
-           this.surfacetype = "pdf"
-           this.cr      =  Cairo.CairoContext(this.surface)
-        elseif ext == ".png" || ext == "" # default to PNG
-           this.surface = Cairo.CairoRGBSurface(w,h)
-           this.surfacetype = "png"
-           this.cr      = Cairo.CairoContext(this.surface)
-        end
-        currentdrawing = this
-        return currentdrawing
-    end
-end
+"""
+    finish()
+
+    Stop drawing, and close the file.
+
+"""
 
 function finish()
     if currentdrawing.surfacetype == "png"
@@ -79,6 +125,14 @@ function finish()
     end
 end
 
+"""
+    preview()
+
+    On OS X, opens the file, probably using the default app, Preview.app
+    On Windows, ?
+    On Unix, ?
+
+"""
 # TODO what will these do on non-OSX?
 function preview()
     @osx_only      run(`open $(currentdrawing.filename)`)
@@ -86,10 +140,21 @@ function preview()
     @linux_only    run(`open $(currentdrawing.filename)`)
 end
 
+"""
+    origin()
+
+    Set the 0/0 origin at the center of the drawing (otherwise it will stay
+    at the top left corner).
+
+"""
 function origin()
     # set the origin at the center
     Cairo.translate(currentdrawing.cr, currentdrawing.width/2, currentdrawing.height/2)
 end
+
+"""
+    Draw two axes lines centered at 0/0.
+"""
 
 function axes()
     # draw axes
@@ -108,6 +173,13 @@ function axes()
     restore()
 end
 
+"""
+    background(color)
+
+    Draw a colored rectangle centered at 0/0 and filling the canvas. Probably
+    works best after `axes()`.
+
+"""
 function background(col::AbstractString)
 # TODO: at present this only works properly after you call origin() to put 0/0 in the center
 # but how can it tell whether you've used origin() first?
@@ -157,6 +229,7 @@ function do_action(action)
     elseif action == :strokepreserve
         strokepreserve()
     end
+    return true
 end
 
 # clipping
@@ -167,18 +240,44 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
 # circles and arcs
 
+"""
+    circle(x, y, r, action)
+
+    Draw a circle. `action` can be one of:
+
+       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
+
+"""
 function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     newpath()
     Cairo.circle(currentdrawing.cr, x, y, r)
     do_action(action)
 end
 
-# positive clockwise from x axis in radians
+"""
+    arc(xc, yc, radius, angle1, angle2, action)
+
+    Draw an arc clockwise from the x-axis from `angle1` to `angle2`. `action` can be one of:
+
+       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
+
+"""
+
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
     newpath()
     Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
     do_action(action)
 end
+
+
+"""
+    rect(xmin, ymin, w, h, action)
+
+    Draw a rectangle. `action` can be one of:
+
+       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
+
+"""
 
 function rect(xmin, ymin, w, h, action=:nothing)
     newpath()
@@ -187,6 +286,13 @@ function rect(xmin, ymin, w, h, action=:nothing)
 end
 
 setline(n)      = Cairo.set_line_width(currentdrawing.cr, n)
+
+"""
+    setlinecap(s)
+
+    Set the line ends. `s` can be "butt", "square", or "round".
+
+"""
 
 function setlinecap(str="butt")
     if str == "round"
@@ -367,27 +473,36 @@ Cairo.set_source(dest::CairoContext, src::CairoPattern)
 fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
 fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
+"""
+    textextents(string)
+
+    Return the measurements of `string`:
+
+    x_bearing
+    y_bearing
+    width
+    height
+    x_advance
+    y_advance
+
+    The bearing is the displacement from the reference point to the upper-left corner of the bounding box.
+    It is often zero or a small positive value for x displacement, but can be negative x for characters like
+    j as shown; it's almost always a negative value for y displacement. The width and height then describe the
+    size of the bounding box. The advance takes you to the suggested reference point for the next letter.
+    Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the
+    advance is smaller than the width would suggest.
+"""
+
 textextents(string) = Cairo.text_extents(currentdrawing.cr, string)
-# typedef struct {
-#     double x_bearing;
-#     double y_bearing;
-#     double width;
-#     double height;
-#     double x_advance;
-#     double y_advance;
-# } cairo_text_extents_t;
-#=
 
-The bearing is the displacement from the reference point to the upper-left corner of the bounding box.
-It is often zero or a small positive value for x displacement, but can be negative x for characters like
-j as shown; it's almost always a negative value for y displacement. The width and height then describe the
-size of the bounding box. The advance takes you to the suggested reference point for the next letter.
-Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the
-advance is smaller than the width would suggest.
+"""
+    text(string, x, y)
 
-=#
+    Draw text in `string` at `x`/`y`.
 
-# text doesn't affect current point!
+    Text doesn't affect the current point!
+"""
+
 function text(t, x=0, y=0)
     save()
         Cairo.move_to(currentdrawing.cr, x, y)
@@ -395,21 +510,40 @@ function text(t, x=0, y=0)
     restore()
 end
 
+"""
+    textcentred(string, x, y)
+
+    Draw text in `string` centered at `x`/`y`.
+
+    Text doesn't affect the current point!
+"""
+
 function textcentred(t, x=0, y=0)
     textwidth = textextents(t)[5]
     text(t, x - textwidth/2, y)
 end
 
-# convert the text to a path, for subsequent filling
+"""
+    textpath(t)
+
+    Convert the text in `t` to a path, for subsequent filling...
+
+
+"""
 function textpath(t)
     Cairo.text_path(currentdrawing.cr, t)
 end
 
-function textcurve(str, x, y, xc, yc, r)
-    # put string of text on a circular arc
-    # starting on line passing through (x,y), on arc/circle centred (xc,yc) on circle with radius r
-    # the radius is used to define the circle, the x/y are just used to define the start position
+"""
+    textcurve(str, x, y, xc, yc, r)
 
+    Put string of text on a circular arc
+    Starting on line passing through (x,y), on arc/circle centred (xc,yc) on circle with radius r
+    The radius is used to define the circle, the x/y are just used to define the start position...
+
+"""
+
+function textcurve(str, x, y, xc, yc, r)
     # first get widths of every character:
     widths = Float64[]
     for i in 1:length(str)
@@ -437,25 +571,44 @@ function textcurve(str, x, y, xc, yc, r)
     restore()
 end
 
-# colours, relying on Colors.jl to convert anything to RGBA
-# eg setcolor("gold") # or "green", "darkturquoise", "lavender" or what have you
-#    setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
-#    for i in 1:15:360
-#       setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
-#       ...
-#    end
+
+"""
+    setcolor(col::AbstractString)
+
+    Set the color to a string. Relying on Colors.jl to convert anything to RGBA
+    eg setcolor("gold") # or "green", "darkturquoise", "lavender" or what have you
+
+
+"""
 
 function setcolor(col::AbstractString)
-    temp = parse(RGBA,  col)
+    temp = parse(RGBA, col)
     (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) = (temp.r, temp.g, temp.b, temp.alpha)
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
 end
 
+"""
+    setcolor(col::ColorTypes.Colorant)
+
+        setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
+        for i in 1:15:360
+           setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
+           ...
+        end
+
+"""
+
 function setcolor(col::ColorTypes.Colorant)
-  temp = convert(RGBA,  col)
+  temp = convert(RGBA, col)
   setcolor(temp.r, temp.g, temp.b)
 end
 
+"""
+   setcolor(r, g, b, a=1)
+
+    Set the color to r, g, b, a.
+
+"""
 function setcolor(r, g, b, a=1)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
@@ -464,9 +617,11 @@ end
 
 """
 
-does a macro work here?
+    setcolor_str(ex)
 
-setcolor("red")
+    Macro to set color:
+
+        @setcolor"red"
 
 """
 
@@ -480,9 +635,11 @@ macro setcolor_str(ex)
     end
 end
 
-
-# like Mathematica we sometimes want to change the current 'color' without changing alpha/opacity
-# using sethue() rather than setcolor() doesn't change the current alpha
+"""
+    sethue is like setcolor(), but, like Mathematica we sometimes want to change the current 'color'
+    without changing alpha/opacity. Using `sethue()` rather than `setcolor()` doesn't change the current alpha
+    opacity.
+"""
 
 function sethue(col::AbstractString)
     temp = parse(RGBA,  col)
@@ -504,7 +661,12 @@ function sethue(r, g, b)
 end
 
 
-# like Mathematica we sometimes want to change the current opacity without changing the current color
+"""
+    setopacity(a)
+
+    Like Mathematica we sometimes want to change the current opacity without changing the current color.
+
+"""
 
 function setopacity(a)
     # use current RGB values
@@ -522,15 +684,22 @@ function randomcolor()
     setcolor(rand(), rand(),rand(), rand())
 end
 
-#  In Luxor, a matrix is an array of 6 float64 numbers.
-#= In Cairo.jl, a matrix has 6 fields:
-    xx component of the affine transformation
-    yx component of the affine transformation
-    xy component of the affine transformation
-    yy component of the affine transformation
-    x0 translation component of the affine transformation
-    y0 translation component of the affine transformation
-=#
+
+"""
+    getmatrix()
+
+    Return current Cairo matrix as an array.
+
+    In Luxor, a matrix is an array of 6 float64 numbers.
+
+        xx component of the affine transformation
+        yx component of the affine transformation
+        xy component of the affine transformation
+        yy component of the affine transformation
+        x0 translation component of the affine transformation
+        y0 translation component of the affine transformation
+
+"""
 
 function getmatrix()
 # return current matrix as an array
@@ -538,7 +707,14 @@ function getmatrix()
     return([gm.xx, gm.yx, gm.xy, gm.yy, gm.x0, gm.y0])
 end
 
-# changes the current Cairo matrix to match passed-in Array
+"""
+    setmatrix(m::Array)
+
+    Change the current Cairo matrix to match matrix `a`.
+
+
+"""
+
 function setmatrix(m::Array)
     if eltype(m) != Float64
         m = map(Float64,m)
@@ -554,7 +730,17 @@ function setmatrix(m::Array)
     end
 end
 
-# modify the current cairo matrix by multiplying it by another matrix
+"""
+    transform(a::Array)
+
+    Modify the current matrix by multiplying it by matrix `a`.
+
+    For example, to skew the current state by 45 degrees in x and move by 20 in y direction:
+
+        transform([1, 0, tand(45), 1, 0, 20])
+
+"""
+
 function transform(a::Array)
     b = Cairo.get_matrix(currentdrawing.cr)
     setmatrix([
@@ -568,3 +754,4 @@ function transform(a::Array)
 end
 
 end # module
+
