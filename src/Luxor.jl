@@ -1,44 +1,45 @@
 #=
 contents
-61       Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
-119   finish()
-137   preview()
-150   origin()
-159   axes()
-183   background(col::AbstractString)
-190   background(col::ColorTypes.Colorant)
-213   fillstroke()
-218   do_action(action)
-251   circle(x, y, r, action=:nothing) # action is a symbol or nothing
-266   arc(xc, yc, radius, angle1, angle2, action=:nothing)
-282   rect(xmin, ymin, w, h, action=:nothing)
-297   setlinecap(str="butt")
-307   setlinejoin(str="miter")
-317   setdash(dashing)
-337   poly(list::Array{Point{Float64}}, action = :nothing; close=false)
-351   point_line_distance(p, a, b)
-362   douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
-394   simplify(polygon::Array{Point{Float64}}, detail)
-401   ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
-407   ngon(x, y, radius, sides::Int64, orientation=0)
-414   isinside(p::Point, poly::Array{Point{Float64}})
-506   text(t, x=0, y=0)
-521   textcentred(t, x=0, y=0)
-533   textpath(t)
-546   textcurve(str, x, y, xc, yc, r)
-584   setcolor(col::AbstractString)
-601   setcolor(col::ColorTypes.Colorant)
-612   setcolor(r, g, b, a=1)
-644   sethue(col::AbstractString)
-650   sethue(col::ColorTypes.Colorant)
-657   sethue(r, g, b)
-671   setopacity(a)
-677   randomhue()
-682   randomcolor()
-704   getmatrix()
-718   setmatrix(m::Array)
-744   transform(a::Array)
+65       Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
+123   finish()
+141   preview()
+154   origin()
+163   axes()
+187   background(col::AbstractString)
+194   background(col::ColorTypes.Colorant)
+217   fillstroke()
+222   do_action(action)
+255   circle(x, y, r, action=:nothing) # action is a symbol or nothing
+270   arc(xc, yc, radius, angle1, angle2, action=:nothing)
+286   rect(xmin, ymin, w, h, action=:nothing)
+301   setlinecap(str="butt")
+311   setlinejoin(str="miter")
+321   setdash(dashing)
+341   poly(list::Array{Point{Float64}}, action = :nothing; close=false)
+355   point_line_distance(p, a, b)
+366   douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
+398   simplify(polygon::Array{Point{Float64}}, detail)
+405   ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
+411   ngon(x, y, radius, sides::Int64, orientation=0)
+418   isinside(p::Point, poly::Array{Point{Float64}})
+510   text(t, x=0, y=0)
+525   textcentred(t, x=0, y=0)
+537   textpath(t)
+550   textcurve(str, x, y, xc, yc, r)
+588   setcolor(col::AbstractString)
+605   setcolor(col::ColorTypes.Colorant)
+616   setcolor(r, g, b, a=1)
+647   sethue(col::AbstractString)
+653   sethue(col::ColorTypes.Colorant)
+660   sethue(r, g, b)
+674   setopacity(a)
+680   randomhue()
+685   randomcolor()
+707   getmatrix()
+721   setmatrix(m::Array)
+747   transform(a::Array)
 =#
+
 VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 module Luxor
@@ -46,6 +47,7 @@ module Luxor
 using Colors, Cairo
 
 include("point.jl")
+include("Turtle.jl")
 
 type Drawing
     width::Float64
@@ -70,13 +72,13 @@ type Drawing
         this.alpha          = 1.0
         (path, ext)         = splitext(f)
         if ext == ".pdf"
-           this.surface     =  Cairo.CairoPDFSurface(f, w, h)
-           this.surfacetype = "pdf"
-           this.cr          =  Cairo.CairoContext(this.surface)
+            this.surface     =  Cairo.CairoPDFSurface(f, w, h)
+            this.surfacetype = "pdf"
+            this.cr          =  Cairo.CairoContext(this.surface)
         elseif ext == ".png" || ext == "" # default to PNG
-           this.surface     = Cairo.CairoRGBSurface(w,h)
-           this.surfacetype = "png"
-           this.cr          = Cairo.CairoContext(this.surface)
+            this.surface     = Cairo.CairoRGBSurface(w,h)
+            this.surfacetype = "png"
+            this.cr          = Cairo.CairoContext(this.surface)
         end
         currentdrawing      = this
         return "drawing '$f' ($w w x $h h) created"
@@ -133,7 +135,9 @@ end
     On Unix, ?
 
 """
+
 # TODO what will these do on non-OSX?
+
 function preview()
     @osx_only      run(`open $(currentdrawing.filename)`)
     @windows_only  run(`open $(currentdrawing.filename)`)
@@ -147,6 +151,7 @@ end
     at the top left corner).
 
 """
+
 function origin()
     # set the origin at the center
     Cairo.translate(currentdrawing.cr, currentdrawing.width/2, currentdrawing.height/2)
@@ -159,19 +164,20 @@ end
 function axes()
     # draw axes
     save()
-        setline(1)
-        fontsize(20)
-        sethue(color("gray")) # inherit opacity
-        move(0,0)
-        line(currentdrawing.width/2 - 20,0)
-        stroke()
-        text("x", currentdrawing.width/2 - 20, 0)
-        move(0,0)
-        line(0, currentdrawing.height/2 - 20)
-        stroke()
-        text("y", 0, currentdrawing.height/2 - 20)
+    setline(1)
+    fontsize(20)
+    sethue(color("gray")) # inherit opacity
+    move(0,0)
+    line(currentdrawing.width/2 - 20,0)
+    stroke()
+    text("x", currentdrawing.width/2 - 20, 0)
+    move(0,0)
+    line(0, currentdrawing.height/2 - 20)
+    stroke()
+    text("y", 0, currentdrawing.height/2 - 20)
     restore()
 end
+
 
 """
     background(color)
@@ -217,7 +223,7 @@ end
 
 function do_action(action)
     if action == :fill
-            fill()
+        fill()
     elseif action == :stroke
         stroke()
     elseif action == :clip
@@ -315,9 +321,10 @@ function setlinejoin(str="miter")
 end
 
 function setdash(dashing)
-# solid, dotted, dot, dotdashed, longdashed, shortdashed, dash, dashed, dotdotdashed, dotdotdotdashed
+    # solid, dotted, dot, dotdashed, longdashed, shortdashed, dash, dashed, dotdotdashed, dotdotdotdashed
     Cairo.set_line_type(currentdrawing.cr, dashing)
 end
+
 
 move(x, y)      = Cairo.move_to(currentdrawing.cr,x, y)
 rmove(x, y)     = Cairo.rel_move(currentdrawing.cr,x, y)
@@ -361,10 +368,10 @@ end
 # use non-recursive Douglas-Peucker algorithm to simplify polygon
 function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
     temp_stack = Tuple{Int,Int}[] # version 0.4 only?
-	push!(temp_stack, (start_index, last_index))
+    push!(temp_stack, (start_index, last_index))
     global_start_index = start_index
-	keep_list = trues(length(points))
-	while length(temp_stack) > 0
+    keep_list = trues(length(points))
+    while length(temp_stack) > 0
         start_index = first(temp_stack[end])
         last_index =  last(temp_stack[end])
         pop!(temp_stack)
@@ -387,8 +394,8 @@ function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index,
                 keep_list[i - global_start_index] = false
             end
         end
-	end
-	return points[keep_list]
+    end
+    return points[keep_list]
 end
 
 function simplify(polygon::Array{Point{Float64}}, detail)
@@ -474,9 +481,9 @@ fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORM
 fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
 """
-    textextents(string)
+    textextents(str)
 
-    Return the measurements of `string`:
+    Return the measurements of string `str`:
 
     x_bearing
     y_bearing
@@ -493,27 +500,28 @@ fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
     advance is smaller than the width would suggest.
 """
 
-textextents(string) = Cairo.text_extents(currentdrawing.cr, string)
+textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
 
 """
-    text(string, x, y)
+    text(str, x, y)
 
-    Draw text in `string` at `x`/`y`.
+    Draw text in string `str` at `x`/`y`.
 
     Text doesn't affect the current point!
 """
 
 function text(t, x=0, y=0)
     save()
-        Cairo.move_to(currentdrawing.cr, x, y)
-        Cairo.show_text(currentdrawing.cr, t)
+    Cairo.move_to(currentdrawing.cr, x, y)
+    Cairo.show_text(currentdrawing.cr, t)
     restore()
 end
 
-"""
-    textcentred(string, x, y)
 
-    Draw text in `string` centered at `x`/`y`.
+"""
+    textcentred(str, x, y)
+
+    Draw text in string `str` centered at `x`/`y`.
 
     Text doesn't affect the current point!
 """
@@ -548,29 +556,28 @@ function textcurve(str, x, y, xc, yc, r)
     widths = Float64[]
     for i in 1:length(str)
         extents = textextents(str[i:i])
-#        x_bearing = extents[1]
-#        y_bearing = extents[2]
-#        w = extents[3]
-#        h = extents[4]
+        #        x_bearing = extents[1]
+        #        y_bearing = extents[2]
+        #        w = extents[3]
+        #        h = extents[4]
         x_advance = extents[5]
-#        y_advance = extents[6]
+        #        y_advance = extents[6]
         push!(widths, x_advance )
     end
     save()
-        arclength = r * atan2(y, x) # starting on line passing through x/y but using radius
-        for i in 1:length(str)
-            save()
-                theta = arclength/r  # angle for this character
-                delta = widths[i]/r # amount of turn created by width of this char
-                translate(r * cos(theta), r * sin(theta)) # move the origin to this point
-                rotate(theta + pi/2 + delta/2) # rotate so text baseline perp to center
-                text(str[i:i])
-                arclength += widths[i] # move on by the width of this character
-            restore()
-        end
+    arclength = r * atan2(y, x) # starting on line passing through x/y but using radius
+    for i in 1:length(str)
+        save()
+        theta = arclength/r  # angle for this character
+        delta = widths[i]/r # amount of turn created by width of this char
+        translate(r * cos(theta), r * sin(theta)) # move the origin to this point
+        rotate(theta + pi/2 + delta/2) # rotate so text baseline perp to center
+        text(str[i:i])
+        arclength += widths[i] # move on by the width of this character
+        restore()
+    end
     restore()
 end
-
 
 """
     setcolor(col::AbstractString)
@@ -629,7 +636,6 @@ macro setcolor_str(ex)
     isa(ex, AbstractString) || error("colorant requires literal strings")
     col = parse(RGBA, ex)
     quote
-
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, $col.alpha)
     end
@@ -730,6 +736,7 @@ function setmatrix(m::Array)
     end
 end
 
+
 """
     transform(a::Array)
 
@@ -744,14 +751,13 @@ end
 function transform(a::Array)
     b = Cairo.get_matrix(currentdrawing.cr)
     setmatrix([
-                (a[1] * b.xx)  + a[2]  * b.xy,             # xx
-                (a[1] * b.yx)  + a[2]  * b.yy,             # yx
-                (a[3] * b.xx)  + a[4]  * b.xy,             # xy
-                (a[3] * b.yx)  + a[4]  * b.yy,             # yy
-                (a[5] * b.xx)  + (a[6] * b.xy) + b.x0,     # x0
-                (a[5] * b.yx)  + (a[6] * b.yy) + b.y0      # y0
-                ])
+        (a[1] * b.xx)  + a[2]  * b.xy,             # xx
+        (a[1] * b.yx)  + a[2]  * b.yy,             # yx
+        (a[3] * b.xx)  + a[4]  * b.xy,             # xy
+        (a[3] * b.yx)  + a[4]  * b.yy,             # yy
+        (a[5] * b.xx)  + (a[6] * b.xy) + b.x0,     # x0
+        (a[5] * b.yx)  + (a[6] * b.yy) + b.y0      # y0
+    ])
 end
 
 end # module
-

@@ -1,8 +1,8 @@
 ## Luxor
 
-Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
+Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, and turtle graphics.
 
-The idea of Luxor is that it's slightly easier to use than Cairo, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org).
+The idea of Luxor is that it's slightly easier to use than Cairo, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org). Also worth looking at is Andrew Cooke's Drawing.jl package.
 
 [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
@@ -14,9 +14,13 @@ It's currently being updated for Julia version 0.4 and for the modified Colors.j
 
 ### Example usage
 
+To install:
+
+    Pkg.clone(...)
+
 #### "Hello World"
 
-!["Hello world"](hello-world.png)
+!["Hello world"](examples/hello-world.png)
 
     using Luxor, Colors
     Drawing(1000, 1000, "/tmp/hello-world.png")
@@ -29,7 +33,7 @@ It's currently being updated for Julia version 0.4 and for the modified Colors.j
 
 #### General Graphics
 
-![Luxor test](basic-test.png)
+![Luxor test](examples/basic-test.png)
 
     using Luxor, Colors
     Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF filename for PDF
@@ -72,9 +76,47 @@ It's currently being updated for Julia version 0.4 and for the modified Colors.j
     finish()
     preview() # on Mac OS X, opens in Preview
 
+#### Turtle graphics
+
+Some simple "turtle graphics" commands are included:
+
+![Turtle](examples/turtle.png)
+
+    using Luxor, Colors
+
+    Drawing(1200, 1200, "/tmp/turtles.png")
+    origin()
+    background("black")
+
+    # let's have two turtles
+    raphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
+
+    setopacity(0.95)
+    setline(6)
+
+    Pencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)
+    Reposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)
+    Message(raphael, "Raphael");            Message(michaelangelo, "Michaelangelo")
+    Reposition(raphael, 0, -200);           Reposition(michaelangelo, 0, 200)
+
+    pace = 10
+    for i in 1:5:400
+        for turtle in [raphael, michaelangelo]
+            Circle(turtle, 3)
+            HueShift(turtle, rand())
+            Forward(turtle, pace)
+            Turn(turtle, 30 - rand())
+            Message(turtle, string(i))
+            pace += 1
+        end
+    end
+
+    finish()
+    preview()
+
 #### Sierpinski triangle
 
-![Sierpinski](sierpinski.png)
+![Sierpinski](examples/sierpinski.png)
 
     using Luxor, Colors
 
@@ -149,7 +191,7 @@ It's currently being updated for Julia version 0.4 and for the modified Colors.j
 
 #### clipping masks
 
-![julia logo mask](julia-logo-mask.png)
+![julia logo mask](examples/julia-logo-mask.png)
 
     include("../examples/julia-logo.jl") # the julia logo coordinates
 
@@ -182,7 +224,7 @@ It's currently being updated for Julia version 0.4 and for the modified Colors.j
 
 Using a text path as a clipping region - here filled with names of Julia functions.
 
-![text clipping](text-path-clipping.png)
+![text clipping](examples/text-path-clipping.png)
 
     using Luxor, Colors
 

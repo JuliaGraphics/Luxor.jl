@@ -18,3 +18,5 @@ println("polygon")             ; include("polygon-test.jl")
 println("sierpinski")          ; include("sierpinski.jl")
 
 println("simplify-polygons")   ; include("simplify-polygons.jl")
+
+println("turtle")   ; include("turtle.jl")
