@@ -88,7 +88,7 @@ function show_beziers(path::Array, dotsize = 5; labels=false)
     restore()
 end
 
-function show_glyph(s::String, x, y)
+function show_glyph(s::AbstractString, x, y)
 # draw glyph s anchored at position x/y
     save()
         setopacity(0.5)
