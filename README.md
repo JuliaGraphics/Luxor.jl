@@ -80,7 +80,7 @@ To install:
 
 Some simple "turtle graphics" commands are included:
 
-![Turtle](examples/turtle.png)
+![Turtle](examples/turtles.png)
 
     using Luxor, Colors
 
