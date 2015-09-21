@@ -164,7 +164,7 @@ Some simple "turtle graphics" commands are included:
 
 #### n-gons
 
-![n-gons](n-gon.png)
+![n-gons](examples/n-gon.png)
 
     using Luxor, Colors
     Drawing(1200, 1400)
