@@ -10,7 +10,9 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ### Current status ###
 
-It's currently being updated for Julia version 0.4 and for the modified Colors.jl.
+It's been updated for Julia version 0.4 and for the modified Colors.jl.
+
+SVG rendering currently seems unreliable — text placement generates segmentation faults.
 
 ### Example usage
 
@@ -36,7 +38,7 @@ To install:
 ![Luxor test](examples/basic-test.png)
 
     using Luxor, Colors
-    Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF filename for PDF
+    Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
 
     origin() # move 0/0 to center
     background("purple")
@@ -164,7 +166,7 @@ Some simple "turtle graphics" commands are included:
 
 #### n-gons
 
-![n-gons](examples/n-gon.png)
+![n-gons](examples/ n-gon.png)
 
     using Luxor, Colors
     Drawing(1200, 1400)
@@ -279,6 +281,8 @@ Using a text path as a clipping region - here filled with names of Julia functio
  	create a drawing 300 by 300 pixels, defaulting to PNG format, file called "/tmp/luxor-drawing.png",
 - `Drawing(300,300, "/tmp/my-drawing.pdf")`
  	create a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels
+- `Drawing(800,800, "/tmp/my-drawing.svg")`
+ 	create an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels
 - `finish()`
  	finish the drawing
 - `preview()`
@@ -316,9 +320,13 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `circle(x, y, r, action)`
 
-- `arc(xc, yc, radius, angle1, angle2, action)` centered at `xc/yc` starting at `angle1` and ending at `angle2`.
+- `arc(xc, yc, radius, angle1, angle2, action)` add arc to current path centered at `xc/yc` starting at `angle1` and ending at `angle2` drawing arc clockwise
 
-Angles are measured from the positive x-axis to the positive y-axis in radians. So, for the default position of the axes, that's clockwise.
+- `carc(xc, yc, radius, angle1, angle2, action)` add arc to current path centered at `xc/yc` starting at `angle1` and ending at `angle2`, drawing arc counterclockwise.
+
+- `sector(innerradius, outerradius, startangle, endangle, action)` draw a sector/track
+
+Angles are measured from the positive x-axis to the positive y-axis in radians, clockwise.
 
 - `rect(xmin, ymin, w, h, action)`
 

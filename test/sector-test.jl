@@ -1,0 +1,22 @@
+#!/Applications/Julia-0.4.0.app/Contents/Resources/julia/bin/julia
+
+using Luxor, Colors
+
+Drawing(1500, 1500, "/tmp/sector-test.pdf") # points/pixels, 2000 points is 70.56cm × 70.56cm
+
+setline(1)
+setopacity(0.8)
+origin()
+background("black")
+
+for inner in 0:20:600
+    for a in 0:pi/12:2*pi
+        randomhue()
+        sector(inner, inner + 20, a, a + pi/12, :fill)
+        sethue("black")
+        sector(inner, inner + 20, a, a + pi/12, :stroke)
+    end
+end
+
+finish()
+preview()

@@ -1,21 +1,5 @@
 using Luxor, Colors
 
-currentwidth = 595 # pts
-currentheight = 842 # pts
-Drawing(currentwidth, currentheight, "/tmp/polygon-test.pdf")
-
-origin()
-background("antiquewhite")
-
-foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
-backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
-
-setopacity(0.6)
-
-setline(2)
-
-hexagon(x, y, size) = [Point{Float64}(x + size * cos(2 * pi/6 * i), y + size * sin(2 * pi/6 * i)) for i in 1:6]
-
 function simple_polys()
     save()
     sethue(0,0,0)
@@ -27,14 +11,20 @@ function simple_polys()
     for sides in 3:12
         ngon(x, y, 20, sides, 0, :stroke)
         x += hstep
-        if x > currentwidth x = 0; y += vstep end
+        if x > currentwidth
+            x = 0
+            y += vstep
+        end
     end
     translate(0, currentheight - 150)
     x = 0
     for sides in 3:12
         ngon(x, y, 20, sides, 0, :fill, close=false)
         x += hstep
-        if x > currentwidth x = 0; y += vstep end
+        if x > currentwidth
+            x = 0
+            y += vstep
+        end
     end
 
     restore()
@@ -80,17 +70,35 @@ function hex_mixtures()
     restore()
 end
 
-# fill, then clip to heptagon
-setcolor("lightcyan")
-setline(3)
-ngon(0, 0, 270, 7, 0, :fillpreserve) # fill it
-sethue("orange")
-strokepreserve()                     # stroke it
-clip()                               # then use to clip
-hex_mixtures()
-clipreset()
+hexagon(x, y, size) = [Point{Float64}(x + size * cos(2 * pi/6 * i), y + size * sin(2 * pi/6 * i)) for i in 1:6]
 
-simple_polys()
+function main()
+    global currentwidth = 595 # pts
+    global currentheight = 842 # pts
+    Drawing(currentwidth, currentheight, "/tmp/polygon-test.pdf")
 
-finish()
-preview()
+    origin()
+    background("antiquewhite")
+
+    global foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
+    global backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
+
+    setopacity(0.6)
+    setline(2)
+
+
+    # fill, then clip to heptagon
+    setcolor("lightcyan")
+    setline(3)
+    ngon(0, 0, 270, 7, 0, :fillpreserve) # fill it
+    sethue("orange")
+    strokepreserve()                     # stroke it
+    clip()                               # then use to clip
+    hex_mixtures()
+    clipreset()
+    simple_polys()
+    finish()
+    preview()
+end
+
+main()

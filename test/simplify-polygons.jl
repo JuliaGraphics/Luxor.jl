@@ -2,11 +2,6 @@
 
 using Luxor, Colors
 
-pagewidth = 1190 # points
-pageheight = 1684 # points
-
-Drawing(pagewidth, pageheight, "/tmp/simplify-poly.pdf")
-
 function draw_circles(points)
     save()
     sethue(1.0,0,0)
@@ -37,7 +32,7 @@ function draw_sine_curves()
     restore()
 end
 
-function test()
+function test(pagewidth, pageheight)
     save()
     translate(100, pageheight/2)
     setline(0.25)
@@ -57,7 +52,16 @@ function test()
     restore()
 end
 
-draw_sine_curves()
-test()
-finish()
-preview()
+
+function main()
+    pagewidth  = 1190.0 # points
+    pageheight = 1684.0 # points
+    Drawing(pagewidth, pageheight, "/tmp/simplify-poly.pdf")
+    draw_sine_curves()
+    test(pagewidth, pageheight)
+    finish()
+    preview()
+end
+
+@time main()
+@time main()

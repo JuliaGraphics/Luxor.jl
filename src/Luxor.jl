@@ -1,45 +1,3 @@
-#=
-contents
-65       Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
-123   finish()
-141   preview()
-154   origin()
-163   axes()
-187   background(col::AbstractString)
-194   background(col::ColorTypes.Colorant)
-217   fillstroke()
-222   do_action(action)
-255   circle(x, y, r, action=:nothing) # action is a symbol or nothing
-270   arc(xc, yc, radius, angle1, angle2, action=:nothing)
-286   rect(xmin, ymin, w, h, action=:nothing)
-301   setlinecap(str="butt")
-311   setlinejoin(str="miter")
-321   setdash(dashing)
-341   poly(list::Array{Point{Float64}}, action = :nothing; close=false)
-355   point_line_distance(p, a, b)
-366   douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
-398   simplify(polygon::Array{Point{Float64}}, detail)
-405   ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
-411   ngon(x, y, radius, sides::Int64, orientation=0)
-418   isinside(p::Point, poly::Array{Point{Float64}})
-510   text(t, x=0, y=0)
-525   textcentred(t, x=0, y=0)
-537   textpath(t)
-550   textcurve(str, x, y, xc, yc, r)
-588   setcolor(col::AbstractString)
-605   setcolor(col::ColorTypes.Colorant)
-616   setcolor(r, g, b, a=1)
-647   sethue(col::AbstractString)
-653   sethue(col::ColorTypes.Colorant)
-660   sethue(r, g, b)
-674   setopacity(a)
-680   randomhue()
-685   randomcolor()
-707   getmatrix()
-721   setmatrix(m::Array)
-747   transform(a::Array)
-=#
-
 VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 module Luxor
@@ -48,6 +6,10 @@ using Colors, Cairo
 
 include("point.jl")
 include("Turtle.jl")
+
+# as of version 0.4, it seems I've got to share fill() and scale() with Base.
+
+import Base: fill, scale
 
 type Drawing
     width::Float64
@@ -62,25 +24,26 @@ type Drawing
     alpha::Float64
     function Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
         global currentdrawing
-        this                = new()
-        this.width          = w
-        this.height         = h
-        this.filename       = f
-        this.redvalue       = 0.0
-        this.greenvalue     = 0.0
-        this.bluevalue      = 0.0
-        this.alpha          = 1.0
         (path, ext)         = splitext(f)
         if ext == ".pdf"
-            this.surface     =  Cairo.CairoPDFSurface(f, w, h)
-            this.surfacetype = "pdf"
-            this.cr          =  Cairo.CairoContext(this.surface)
+            the_surface     =  Cairo.CairoPDFSurface(f, w, h)
+            the_surfacetype = "pdf"
+            the_cr          =  Cairo.CairoContext(the_surface)
         elseif ext == ".png" || ext == "" # default to PNG
-            this.surface     = Cairo.CairoRGBSurface(w,h)
-            this.surfacetype = "png"
-            this.cr          = Cairo.CairoContext(this.surface)
+            the_surface     = Cairo.CairoRGBSurface(w,h)
+            the_surfacetype = "png"
+            the_cr          = Cairo.CairoContext(the_surface)
+        elseif ext == ".eps"
+            the_surface     = Cairo.CairoEPSSurface(f, w,h)
+            the_surfacetype = "eps"
+            the_cr          = Cairo.CairoContext(the_surface)
+        elseif ext == ".svg"
+            the_surface     = Cairo.CairoSVGSurface(f, w,h)
+            the_surfacetype = "svg"
+            the_cr          = Cairo.CairoContext(the_surface)
+
         end
-        currentdrawing      = this
+        const currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
         return "drawing '$f' ($w w x $h h) created"
     end
 end
@@ -91,8 +54,8 @@ export Drawing, currentdrawing,
     newpath, closepath, newsubpath,
     circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc, ngon,
-    stroke, fill, paint, fillstroke, poly, simplify,
+    line, rline, curve, arc, carc, ngon, sector,
+    do_action, stroke, fill, paint, fillstroke, poly, simplify,
     strokepreserve, fillpreserve,
     save, restore,
     scale, rotate, translate,
@@ -122,7 +85,7 @@ function finish()
     if currentdrawing.surfacetype == "png"
         Cairo.write_to_png(currentdrawing.surface, currentdrawing.filename)
         Cairo.finish(currentdrawing.surface)
-    elseif currentdrawing.surfacetype == "pdf"
+    else
         Cairo.finish(currentdrawing.surface)
     end
 end
@@ -166,7 +129,7 @@ function axes()
     save()
     setline(1)
     fontsize(20)
-    sethue(color("gray")) # inherit opacity
+    sethue("gray")
     move(0,0)
     line(currentdrawing.width/2 - 20,0)
     stroke()
@@ -263,15 +226,34 @@ end
 """
     arc(xc, yc, radius, angle1, angle2, action)
 
-    Draw an arc clockwise from the x-axis from `angle1` to `angle2`. `action` can be one of:
+    Add an arc to the current path from `angle1` to `angle2` going clockwise.
+    Angles are defined relative to the x-axis, positive clockwise.
+    `action` can be one of:
 
        `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
 
 """
 
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
-    newpath()
+    #newpath()
     Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+    do_action(action)
+end
+
+"""
+    carc(xc, yc, radius, angle1, angle2, action)
+
+    Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
+    Angles are defined relative to the x-axis, positive clockwise.
+    `action` can be one of:
+
+       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
+
+"""
+
+function carc(xc, yc, radius, angle1, angle2, action=:nothing)
+    #newpath()
+    Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
@@ -288,6 +270,26 @@ end
 function rect(xmin, ymin, w, h, action=:nothing)
     newpath()
     Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
+    do_action(action)
+end
+
+"""
+    sector(innerradius, outerradius, startangle, endangle, action=:none)
+
+    Draw a track/sector. `action` can be one of:
+
+       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`
+
+"""
+
+function sector(innerradius, outerradius, startangle, endangle, action=:none)
+    newpath()
+    move(innerradius * cos(startangle), innerradius * sin(startangle))
+    line(outerradius * cos(startangle), outerradius * sin(startangle))
+    arc(0, 0, outerradius, startangle, endangle,:none)
+    line(innerradius * cos(endangle), innerradius * sin(endangle))
+    carc(0, 0, innerradius, endangle, startangle, :none)
+    closepath()
     do_action(action)
 end
 
@@ -463,7 +465,7 @@ end
 getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(currentdrawing.cr))
 getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
 
-# patterns
+# patterns not yet looked at these
 
 #=
 Cairo.pattern_create_radial(cx0::Real, cy0::Real, radius0::Real, cx1::Real, cy1::Real, radius1::Real)
@@ -536,7 +538,6 @@ end
 
     Convert the text in `t` to a path, for subsequent filling...
 
-
 """
 function textpath(t)
     Cairo.text_path(currentdrawing.cr, t)
@@ -569,7 +570,7 @@ function textcurve(str, x, y, xc, yc, r)
     for i in 1:length(str)
         save()
         theta = arclength/r  # angle for this character
-        delta = widths[i]/r # amount of turn created by width of this char
+        delta = widths[i]/r  # amount of turn created by width of this char
         translate(r * cos(theta), r * sin(theta)) # move the origin to this point
         rotate(theta + pi/2 + delta/2) # rotate so text baseline perp to center
         text(str[i:i])
@@ -620,7 +621,6 @@ function setcolor(r, g, b, a=1)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
 end
-
 
 """
 
@@ -690,7 +690,6 @@ function randomcolor()
     setcolor(rand(), rand(),rand(), rand())
 end
 
-
 """
     getmatrix()
 
@@ -718,7 +717,6 @@ end
 
     Change the current Cairo matrix to match matrix `a`.
 
-
 """
 
 function setmatrix(m::Array)
@@ -735,7 +733,6 @@ function setmatrix(m::Array)
         Cairo.set_matrix(currentdrawing.cr, cm)
     end
 end
-
 
 """
     transform(a::Array)
