@@ -7,7 +7,8 @@ origin()
 background("black")
 
 # let's have two turtles
-raphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
+raphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
+michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
 
 setopacity(0.95)
 setline(6)

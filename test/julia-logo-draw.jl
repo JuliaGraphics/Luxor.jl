@@ -1,10 +1,6 @@
 using Luxor, Colors
 
-include("./julia-logo.jl")
-
-Drawing(1600,1600, "/tmp/test.png")
-origin()
-background("white")
+include("julia-logo.jl")
 
 function spiral()
     save()
@@ -39,7 +35,7 @@ end
 function dropshadow()
     steps=20
     # white-gray ramp
-    gramp = linspace(Color.color("white"), Color.color("gray60"), steps)
+    gramp = linspace(colorant"white", colorant"gray60", steps)
     save()
     r = 200
     setopacity(0.1)
@@ -60,28 +56,36 @@ function colorgrid()
     c = 0
     for row in 100:100:500
         for column in 100:100:500
-                save()
-                    setcolor(color(cols[c+=1]))
-                    translate(row, column)
-                    scale(0.3, 0.3)
-                    julialogo(false)
-                restore()
+            save()
+            setcolor(color(cols[c+=1]))
+            translate(row, column)
+            scale(0.3, 0.3)
+            julialogo(false)
+            restore()
         end
     end
     restore()
 end
 
-translate(-500,-200)
-spiral()
+function main()
+    Drawing(1600,1600, "/tmp/test.png")
+    origin()
+    background("white")
 
-translate(750,0)
-expandingspiral()
+    translate(-500,-200)
+    spiral()
 
-translate(-1000,500)
-dropshadow()
+    translate(750,0)
+    expandingspiral()
 
-translate(700, -100)
-colorgrid()
+    translate(-1000,500)
+    dropshadow()
 
-finish()
-preview()
+    translate(700, -100)
+    colorgrid()
+
+    finish()
+    preview()
+end
+
+main()

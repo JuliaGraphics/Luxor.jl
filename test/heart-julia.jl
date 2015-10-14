@@ -1,11 +1,5 @@
 using Luxor, Colors
 include("./julia-logo.jl")
-currentwidth = 1000 # pts
-currentheight = 1000 # pts
-Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
-
-origin()
-background("black")
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
@@ -81,12 +75,22 @@ function outlined_heart()
     restore()
 end
 
-const namelist = map(x->string(x), names(Base)) # list of names in Base.
+function main()
+    global currentwidth = 1000 # pts
+    global currentheight = 1000 # pts
+    Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
 
-background_text(namelist)
-for n in 1:5
-    rotate(2 * pi / 5)
-    outlined_heart()
+    origin()
+    background("black")
+    const namelist = map(x->string(x), names(Base)) # list of names in Base.
+
+    background_text(namelist)
+    for n in 1:5
+        rotate(2 * pi / 5)
+        outlined_heart()
+    end
+    finish()
+    preview()
 end
-finish()
-preview()
+
+main()

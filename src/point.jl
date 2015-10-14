@@ -50,7 +50,8 @@ end
 function randompointarray(lowx, lowy, highx, highy, n)
     array = Point{Float64}[]
     for i in 1:n
-         push!(array, randompoint(lowx, lowy, highx, highy))
+        push!(array, randompoint(lowx, lowy, highx, highy))
     end
     array
 end
+
