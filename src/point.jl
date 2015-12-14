@@ -2,9 +2,9 @@ import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=
 
 export Point, randompoint, randompointarray
 
-type Point{T}
-   x::T
-   y::T
+type Point
+   x::Float64
+   y::Float64
 end
 
 +(z::Number, p1::Point)              = Point(p1.x + z, p1.y + z)
@@ -21,8 +21,8 @@ end
 .*(p2::Point, k::Number)             = Point(k * p2.x, k * p2.y)
 .*(p1::Point, p2::Point)             = Point(p1.x * p2.x, p1.y * p2.y)
 ./(p2::Point, k::Number)             = Point(p2.x/k, p2.y/k)
-^{T<:Number}(p::Point{T},e::Integer) = Point(p.x^e, p.y^e)
-^{T<:Number}(p::Point{T},e::Real)    = Point(p.x^e, p.y^e)
+^(p::Point,e::Integer)               = Point(p.x^e, p.y^e)
+^(p::Point,e::Real)                  = Point(p.x^e, p.y^e)
 inner(p1::Point, p2::Point)          = p1.x * p2.x + p1.y * p2.y
 
 # comparisons (perform lexicographically)
@@ -44,11 +44,11 @@ function randomordinate(low, high)
 end
 
 function randompoint(lowx, lowy, highx, highy)
-    Point{Float64}(randomordinate(lowx, highx), randomordinate(lowy, highy))
+    Point(randomordinate(lowx, highx), randomordinate(lowy, highy))
 end
 
 function randompointarray(lowx, lowy, highx, highy, n)
-    array = Point{Float64}[]
+    array = Point[]
     for i in 1:n
         push!(array, randompoint(lowx, lowy, highx, highy))
     end

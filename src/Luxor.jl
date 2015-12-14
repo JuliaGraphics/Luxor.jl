@@ -341,9 +341,9 @@ scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
-# polygon is an Array of Point{Float64}s
+# polygon is an Array of Points
 
-function poly(list::Array{Point{Float64}}, action = :nothing; close=false)
+function poly(list::Array, action = :nothing; close=false)
     # where list is array of Points
     # by default doesn't close or fill, to allow for clipping.etc
     newpath()
@@ -368,7 +368,7 @@ function point_line_distance(p, a, b)
 end
 
 # use non-recursive Douglas-Peucker algorithm to simplify polygon
-function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index, epsilon)
+function douglas_peucker(points::Array, start_index, last_index, epsilon)
     temp_stack = Tuple{Int,Int}[] # version 0.4 only?
     push!(temp_stack, (start_index, last_index))
     global_start_index = start_index
@@ -400,7 +400,7 @@ function douglas_peucker(points::Array{Point{Float64}}, start_index, last_index,
     return points[keep_list]
 end
 
-function simplify(polygon::Array{Point{Float64}}, detail)
+function simplify(polygon::Array, detail)
     douglas_peucker(polygon, 1, length(polygon), detail)
 end
 
@@ -420,7 +420,7 @@ end
 
 # is a point inside a polygon?
 
-function isinside(p::Point, poly::Array{Point{Float64}})
+function isinside(p::Point, poly::Array)
     # An implementation of Hormann-Agathos (2001) Point in Polygon algorithm
     c = false
     detq(q1,q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)

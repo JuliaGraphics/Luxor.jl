@@ -1,4 +1,4 @@
-#!/Applications/Julia-0.4.0.app/Contents/Resources/julia/bin/julia
+#!/usr/bin/env julia
 
 using Luxor, Colors
 
