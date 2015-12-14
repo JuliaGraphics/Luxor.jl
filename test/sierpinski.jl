@@ -1,6 +1,6 @@
 using Luxor, Colors
 
-function draw_triangle(points::Array{Point{Float64}}, degree::Int64)
+function draw_triangle(points::Array{Point}, degree::Int64)
     global triangle_count, cols
     setcolor(cols[degree+1])
     poly(points, :fill)
@@ -9,7 +9,7 @@ end
 
 get_midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
 
-function sierpinski(points::Array{Point{Float64}}, degree::Int64)
+function sierpinski(points::Array{Point}, degree::Int64)
     draw_triangle(points, degree)
     if degree > 0
         p1,p2,p3 = points
@@ -29,7 +29,7 @@ end
     origin()
     setopacity(0.5)
     triangle_count = 0
-    my_points = [Point{Float64}(-100,-50), Point{Float64}(0,100), Point{Float64}(100.0,-50.0)]
+    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]
     sierpinski(my_points, depth)
     println("drew $triangle_count triangles")
 end
