@@ -334,8 +334,30 @@ line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
 
-save() = Cairo.save(currentdrawing.cr)
-restore() = Cairo.restore(currentdrawing.cr)
+# saved_colors = Tuple[]
+saved_colors = Tuple[]
+
+function save()
+    Cairo.save(currentdrawing.cr)
+    push!(saved_colors,
+        (currentdrawing.redvalue,
+         currentdrawing.greenvalue,
+         currentdrawing.bluevalue,
+         currentdrawing.alpha))
+end
+
+function restore()
+    Cairo.restore(currentdrawing.cr)
+    try
+    (currentdrawing.redvalue,
+     currentdrawing.greenvalue,
+     currentdrawing.bluevalue,
+     currentdrawing.alpha) = pop!(saved_colors)
+     catch err
+
+     println("$err Not enough colors on the stack")
+    end
+end
 
 scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
