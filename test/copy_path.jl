@@ -32,7 +32,7 @@ function show_beziers(path, dotsize = 5; labels=false)
     println("got to here")
     @show path
 
-    save()
+    gsave()
     setline(0.2)
     sethue(0, .4, 0.4)
     counter=1 # for labelling each point
@@ -59,16 +59,16 @@ function show_beziers(path, dotsize = 5; labels=false)
         elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO
             (x, y) = e.points
             # straight lines
-            save()
+            gsave()
                 sethue(0.4, 0.5, 0.3)
                 circle(x, y, dotsize, :fill)
                 labels && text(string(counter), x, y + 2)
-            restore()
+            grestore()
             counter += 1
         elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
             #bezier control lines
             (x1, y1, x2, y2, x3, y3) = e.points
-            save()
+            gsave()
                 sethue(0.6, 0.6, 0.6)
                 circle(x, y, dotsize, :fill)
                 move(x, y)
@@ -86,7 +86,7 @@ function show_beziers(path, dotsize = 5; labels=false)
                 circle(x2, y2, dotsize - 0.25, :fill)
                 circle(x3, y3, dotsize, :fill)
                 labels && text(string(counter), x3, y3 + 2)
-            restore()
+            grestore()
             counter += 1
             (x, y) = (x3, y3) # update current point
         elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
@@ -96,12 +96,12 @@ function show_beziers(path, dotsize = 5; labels=false)
             error("unknown CairoPathEntry " * repr(e.points))
         end
     end
-    restore()
+    grestore()
 end
 
 function show_glyph(s::AbstractString, x, y)
 # draw glyph s anchored at position x/y
-    save()
+    gsave()
         setopacity(0.5)
         sethue(1, 0, .5)
         translate(x, y)
@@ -112,10 +112,10 @@ function show_glyph(s::AbstractString, x, y)
 
         x1,y1= opath[1].points
 
-        save()
+        gsave()
             sethue(1, 0.5, 1)
             circle(x1, y1, 1, :fill)
-        restore()
+        grestore()
 
         sethue(0.7, .7, .7)
         draw_path(opath)
@@ -148,7 +148,7 @@ function show_glyph(s::AbstractString, x, y)
         # next location for text
         sethue(0, 0, 0.75)
         circle(xadvance, yadvance, 1, :fill)
-    restore()
+    grestore()
 end
 
 tic()

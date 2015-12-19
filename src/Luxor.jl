@@ -57,7 +57,7 @@ export Drawing, currentdrawing,
     line, rline, curve, arc, carc, ngon, sector,
     do_action, stroke, fill, paint, fillstroke, poly, simplify,
     strokepreserve, fillpreserve,
-    save, restore,
+    gsave, grestore,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
 
@@ -126,7 +126,7 @@ end
 
 function axes()
     # draw axes
-    save()
+    gsave()
     setline(1)
     fontsize(20)
     sethue("gray")
@@ -138,7 +138,7 @@ function axes()
     line(0, currentdrawing.height/2 - 20)
     stroke()
     text("y", 0, currentdrawing.height/2 - 20)
-    restore()
+    grestore()
 end
 
 
@@ -337,7 +337,8 @@ curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2
 # saved_colors = Tuple[]
 saved_colors = Tuple[]
 
-function save()
+# originally used simple Cairo save() but somehow the colors/opacity thing didn't save/restore properly
+function gsave()
     Cairo.save(currentdrawing.cr)
     push!(saved_colors,
         (currentdrawing.redvalue,
@@ -346,7 +347,7 @@ function save()
          currentdrawing.alpha))
 end
 
-function restore()
+function grestore()
     Cairo.restore(currentdrawing.cr)
     try
     (currentdrawing.redvalue,
@@ -535,10 +536,10 @@ textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
 """
 
 function text(t, x=0, y=0)
-    save()
+    gsave()
     Cairo.move_to(currentdrawing.cr, x, y)
     Cairo.show_text(currentdrawing.cr, t)
-    restore()
+    grestore()
 end
 
 
@@ -587,19 +588,19 @@ function textcurve(str, x, y, xc, yc, r)
         #        y_advance = extents[6]
         push!(widths, x_advance )
     end
-    save()
+    gsave()
     arclength = r * atan2(y, x) # starting on line passing through x/y but using radius
     for i in 1:length(str)
-        save()
+        gsave()
         theta = arclength/r  # angle for this character
         delta = widths[i]/r  # amount of turn created by width of this char
         translate(r * cos(theta), r * sin(theta)) # move the origin to this point
         rotate(theta + pi/2 + delta/2) # rotate so text baseline perp to center
         text(str[i:i])
         arclength += widths[i] # move on by the width of this character
-        restore()
+        grestore()
     end
-    restore()
+    grestore()
 end
 
 """
