@@ -47,11 +47,11 @@ function Forward(t::Turtle, d)
     t.xpos = t.xpos + (d * cos(t.orientation))
     t.ypos = t.ypos + (d * sin(t.orientation))
     if t.pendown
-        save()
+        gsave()
         line(t.xpos, t.ypos)
         sethue(t.pencolor...)
         stroke()
-        restore()
+        grestore()
     else
         move(t.xpos, t.ypos)
     end
@@ -80,17 +80,17 @@ function Penup(t::Turtle)
 end
 
 function Circle(t::Turtle, radius)
-    save()
+    gsave()
     sethue(t.pencolor...)
     circle(t.xpos, t.ypos, radius, :fill)
-    restore()
+    grestore()
 end
 
 function Rectangle(t::Turtle, width, height)
-    save()
+    gsave()
     sethue(t.pencolor...)
     rect(t.xpos-width/2, t.ypos-height/2, width, height, :fill)
-    restore()
+    grestore()
 end
 
 function Push(t::Turtle)
@@ -111,10 +111,10 @@ function Pop(t::Turtle)
 end
 
 function Message(t::Turtle, txt)
-    save()
+    gsave()
     sethue(t.pencolor...)
     text(txt, t.xpos, t.ypos)
-    restore()
+    grestore()
 end
 
 """

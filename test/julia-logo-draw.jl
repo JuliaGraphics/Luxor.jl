@@ -3,40 +3,40 @@ using Luxor, Colors
 include("julia-logo.jl")
 
 function spiral()
-    save()
+    gsave()
     scale(.3, .3)
     r = 200
     setcolor("gray")
     for i in 0:pi/8:(2*pi)
-        save()
+        gsave()
         translate(r * cos(i), r * sin(i))
         rotate(i)
         julialogo()
-        restore()
+        grestore()
     end
-    restore()
+    grestore()
 end
 
 function expandingspiral()
-    save()
+    gsave()
     scale(.3, .3)
     r = 200
     for i in pi:pi/12:(6*pi)
-        save()
+        gsave()
         translate(i/3 * r * cos(i), i/3 * r * sin(i))
         scale(0.8, 0.8)
         rotate(i)
         julialogo()
-        restore()
+        grestore()
     end
-    restore()
+    grestore()
 end
 
 function dropshadow()
     steps=20
     # white-gray ramp
     gramp = linspace(colorant"white", colorant"gray60", steps)
-    save()
+    gsave()
     r = 200
     setopacity(0.1)
     for i in 1:steps
@@ -45,26 +45,26 @@ function dropshadow()
         julialogo(false)
     end
     julialogo()
-    restore()
+    grestore()
 end
 
 function colorgrid()
     #cols = colormap("RdBu", 5; mid=0.5, logscale=false)
     #cols = sequential_palette(rand(10:360), 5, b=0.1)
     cols = distinguishable_colors(25)
-    save()
+    gsave()
     c = 0
     for row in 100:100:500
         for column in 100:100:500
-            save()
+            gsave()
             setcolor(color(cols[c+=1]))
             translate(row, column)
             scale(0.3, 0.3)
             julialogo(false)
-            restore()
+            grestore()
         end
     end
-    restore()
+    grestore()
 end
 
 function main()

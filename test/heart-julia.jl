@@ -3,7 +3,7 @@ include("./julia-logo.jl")
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
-    save()
+    gsave()
     setopacity(0.5)
     x = -currentwidth/2
     y = -currentheight/2
@@ -19,7 +19,7 @@ function background_text(str_array)
            y += 10
         end
     end
-    restore()
+    grestore()
 end
 
 function heart()
@@ -40,7 +40,7 @@ function heart()
 end
 
 function heart_with_julias(x=0, y=0)
-    save()
+    gsave()
     translate(x,y)
     setcolor("lavenderblush")
     heart()
@@ -48,23 +48,23 @@ function heart_with_julias(x=0, y=0)
     clip()
     translate(-50,-300)
     for y in 0:30:500
-        save()
+        gsave()
         for x in 0:30:250
             translate(30,0)
-            save()
+            gsave()
                 scale(0.1, 0.1)
                 julialogo()
-            restore()
+            grestore()
         end
-        restore()
+        grestore()
         translate(0,20)
     end
     clipreset()
-    restore()
+    grestore()
 end
 
 function outlined_heart()
-    save()
+    gsave()
     scale(1.2, 1.2)
     translate(-127, -30) # must fix that x-offset one day
     heart_with_julias()
@@ -72,7 +72,7 @@ function outlined_heart()
     setline(4)
     setcolor(1,0,0)
     stroke()
-    restore()
+    grestore()
 end
 
 function main()

@@ -3,16 +3,16 @@
 using Luxor, Colors
 
 function draw_circles(points)
-    save()
+    gsave()
     sethue(1.0,0,0)
     for p in points
         circle(p.x, p.y, .4, :fill) # show vertex locations
     end
-    restore()
+    grestore()
 end
 
 function draw_sine_curves()
-    save()
+    gsave()
     translate(100, 100)
     setline(0.25)
     sethue(0,0,0)
@@ -29,11 +29,11 @@ function draw_sine_curves()
         draw_circles(simplified)
         text("detail  $(detail), " * string(length(simplified)) * " vertices" , 0, -15)
     end
-    restore()
+    grestore()
 end
 
 function test(pagewidth, pageheight)
-    save()
+    gsave()
     translate(100, pageheight/2)
     setline(0.25)
     sethue(0,0,0)
@@ -49,7 +49,7 @@ function test(pagewidth, pageheight)
         draw_circles(polysimple)
         text(" detail ($detail), " * string(length(polysimple)) * " vertices" , 0, -30)
     end
-    restore()
+    grestore()
 end
 
 

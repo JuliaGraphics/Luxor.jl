@@ -1,4 +1,4 @@
-#!/Applications/Julia-0.3.2.app/Contents/Resources/julia/bin/julia
+#!usr/bin/env julia
 
 # random sin/cos curves
 
@@ -22,7 +22,7 @@ function main()
         setdash(["solid", "dotted", "dot", "dotdashed", "longdashed",
         "shortdashed", "dash", "dashed",
         "dotdotdashed", "dotdotdotdashed"][rand(1:end)])
-        save()
+        gsave()
         translate(rand(-1000:1000), rand(-1000:1000))
         scale(0.1 + rand() * 2, 0.1 + rand() * 2)
         randomhue()
@@ -33,7 +33,7 @@ function main()
         rand(4:20),                                # random length
         [:fill, :stroke, :fillstroke][rand(1:end)] # random drawing style
         )
-        restore()
+        grestore()
 
     end
     finish()

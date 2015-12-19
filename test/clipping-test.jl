@@ -6,7 +6,7 @@ tic()
 
 function draw_logo_clip(x, y)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
-    save()
+    gsave()
     translate(x-100, y)
     julialogomask() # use julia logo as clipping mask
     clip()
@@ -15,7 +15,7 @@ function draw_logo_clip(x, y)
         circle(rand(-50:350), rand(0:300), 15, :fill)
     end
     clipreset()
-    restore()
+    grestore()
 end
 
 function main()

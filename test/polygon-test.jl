@@ -1,7 +1,7 @@
 using Luxor, Colors
 
 function simple_polys()
-    save()
+    gsave()
     sethue(0,0,0)
     vstep = 50
     hstep = 50
@@ -27,11 +27,11 @@ function simple_polys()
         end
     end
 
-    restore()
+    grestore()
 end
 
 function hex_mixtures()
-    save()
+    gsave()
     vstep = 50
     hstep = 50
     for y in -currentheight:vstep:currentheight
@@ -39,7 +39,7 @@ function hex_mixtures()
             setopacity(0.2)
             setline(rand()*10)
             sethue(backgroundcolors[rand(1:end)])
-            save()
+            gsave()
                  translate(x,y)
                  rotate(rand() * pi)
                  # point version
@@ -54,9 +54,9 @@ function hex_mixtures()
                         Point(rand() * -100,rand() * 100),
                         Point(rand() * -100,rand() * 100)
                      ], :fill)
-            restore()
+            grestore()
             sethue(backgroundcolors[rand(1:end)])
-            save()
+            gsave()
                  translate(x,y)
                  ngon(x, y, 50, rand(3:13), 0, :stroke)
                  rotate(rand() * pi)
@@ -64,10 +64,10 @@ function hex_mixtures()
                  ngon(x, y, 50, rand(3:13), 0, :fill)
                  rect(0, 0, hstep-5, vstep-5, :stroke)
                  ngon(x, y, 50, rand(3:13), 0, :none)
-            restore()
+            grestore()
         end
     end
-    restore()
+    grestore()
 end
 
 hexagon(x, y, size) = [Point(x + size * cos(2 * pi/6 * i), y + size * sin(2 * pi/6 * i)) for i in 1:6]
