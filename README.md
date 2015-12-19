@@ -203,7 +203,7 @@ Some simple "turtle graphics" commands are included:
 
     function draw_logo_clip(x, y)
         foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
-        save()
+        gsave()
         translate(x-100, y)
         julialogomask() # use julia logo as clipping mask
         clip()
@@ -211,7 +211,7 @@ Some simple "turtle graphics" commands are included:
             sethue(foregroundcolors[rand(1:end)])
             circle(rand(-50:350), rand(0:300), 15, :fill)
         end
-        restore()
+        grestore()
     end
 
     origin()
@@ -408,11 +408,11 @@ Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive ve
 
 - `fillpreserve()` fill the path but keep it current
 
-`save()` and `restore()` should always be balanced in pairs. `save()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `restore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `save()`.
+`gsave()` and `grestore()` should always be balanced in pairs. `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `gsave()`.
 
-- `save()` save the graphics state
+- `gsave()` save the graphics state
 
-- `restore()` restore the graphics state
+- `grestore()` restore the graphics state
 
 #### Transforms
 
