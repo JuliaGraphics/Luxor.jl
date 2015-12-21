@@ -197,6 +197,7 @@ function do_action(action)
         fillpreserve()
     elseif action == :strokepreserve
         strokepreserve()
+    elseif action == :none
     end
     return true
 end
@@ -366,10 +367,16 @@ translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
 # polygon is an Array of Points
 
-function poly(list::Array, action = :nothing; close=false)
+function poly(list::Array, action = :nothing; close=false, reversepath=false)
     # where list is array of Points
     # by default doesn't close or fill, to allow for clipping.etc
-    newpath()
+    if action != :path
+        println("making new path")
+        newpath()
+    end
+    if reversepath
+        reverse!(list)
+    end
     move(list[1].x, list[1].y)
     for p in list[2:end]
         line(p.x, p.y)
@@ -430,12 +437,12 @@ end
 # regular polygons
 
 # draw a poly
-function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
+function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
     poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
-           y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action)
+           y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action, reversepath=reversepath)
 end
 
-# if no action supplied, return a poly
+# if no action supplied, return a poly as a set of points
 function ngon(x, y, radius, sides::Int64, orientation=0)
     [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides]

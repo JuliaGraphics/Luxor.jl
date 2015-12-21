@@ -23,4 +23,6 @@ println("sierpinski-svg")      ; include("sierpinski-svg.jl")
 
 println("simplify-polygons")   ; include("simplify-polygons.jl")
 
+println("holes")               ; include("test-holes.jl")
+
 println("turtle")              ; include("turtle.jl")
