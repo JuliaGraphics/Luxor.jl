@@ -2,7 +2,6 @@ using Base.Test
 
 println("clipping")            ; include("clipping-test.jl")
 
-# this test doesn't fail on its own but fails when run as part of a batch of tests
 #println("copy_path")           ; include("copy_path.jl")
 
 println("luxor-test1")         ; include("luxor-test1.jl")

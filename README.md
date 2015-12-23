@@ -122,38 +122,36 @@ Some simple "turtle graphics" commands are included:
 
     using Luxor, Colors
 
-    function draw_triangle(points::Array{Point{Float64}}, degree::Int64)
+    function draw_triangle(points::Array{Point}, degree::Int64)
         global triangle_count, cols
         setcolor(cols[degree+1])
         poly(points, :fill)
         triangle_count += 1
     end
 
-    get_midpoint(p1::Point,p2::Point) = Point((p1.x+p2.x) / 2, (p1.y + p2.y) / 2)
+    get_midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
 
-    function sierpinski(points::Array{Point{Float64}}, degree::Int64)
+    function sierpinski(points::Array{Point}, degree::Int64)
         draw_triangle(points, degree)
         if degree > 0
-            sierpinski([points[1],
-                get_midpoint(points[1], points[2]),
-                get_midpoint(points[1], points[3])], degree-1)
-            sierpinski([points[2],
-                get_midpoint(points[1], points[2]),
-                get_midpoint(points[2], points[3])], degree-1)
-            sierpinski([points[3],
-                get_midpoint(points[3], points[2]),
-                get_midpoint(points[1], points[3])], degree-1)
+            p1,p2,p3 = points
+            sierpinski([p1, get_midpoint(p1, p2),
+                            get_midpoint(p1, p3)], degree-1)
+            sierpinski([p2, get_midpoint(p1, p2),
+                            get_midpoint(p2, p3)], degree-1)
+            sierpinski([p3, get_midpoint(p3, p2),
+                            get_midpoint(p1, p3)], degree-1)
         end
     end
 
     @time begin
         depth = 8 # 12 is ok, 20 is right out
         cols = distinguishable_colors(depth+1)
-        Drawing(400, 400, "/tmp/sierpinski.pdf") # or PNG filename for PNG
+        Drawing(400, 400, "/tmp/sierpinski.svg")
         origin()
         setopacity(0.5)
         triangle_count = 0
-        my_points = [Point{Float64}(-100,-50), Point{Float64}(0,100), Point{Float64}(100.0,-50.0)]
+        my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]
         sierpinski(my_points, depth)
         println("drew $triangle_count triangles")
     end
@@ -349,11 +347,12 @@ There is a 'current position':
 
 There is a Point type (the only main type, apart from `Drawing`):
 
-   `Point{Float64}(12.0, 13.0)`
+   `Point(12.0, 13.0)`
 
 Polygons are arrays of points.
 
-- `poly(list::Array{Point{Float64}}, action = :nothing; close=false)` draws a polygon using array of Points. For example:
+- `poly(list::Array, action = :nothing; close=false, reversepath=false)` draws a polygon using array of Points. For example:
+
 
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
 
@@ -373,14 +372,22 @@ Without an action, returns a poly (array of points) instead:
 
 Compare:
 
-    ngon(0, 0, 4, 4, 0) # returns polygon
-     4-element Array{Point{Float64},1}:
-     Point{Float64}(2.4492935982947064e-16,4.0)
-     Point{Float64}(-4.0,4.898587196589413e-16)
-     Point{Float64}(-7.347880794884119e-16,-4.0)
-     Point{Float64}(4.0,-9.797174393178826e-16)
+    ngon(0, 0, 4, 4, 0) # returns the polygon's points
 
-    ngon(0, 0, 4, 4, 0, :close) # draws polygon
+        4-element Array{Luxor.Point,1}:
+         Luxor.Point(2.4492935982947064e-16,4.0)
+         Luxor.Point(-4.0,4.898587196589413e-16)
+         Luxor.Point(-7.347880794884119e-16,-4.0)
+         Luxor.Point(4.0,-9.797174393178826e-16)
+
+    ngon(0, 0, 4, 4, 0, :close) # draws a polygon
+
+Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. This draws an hexagonal bolt shape:
+
+    ngon(0, 0, 60, 6, 0, :path)
+    newsubpath()
+    ngon(0, 0, 40, 6, 0, :path, reversepath=true)
+    fillstroke()
 
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version):
 
@@ -458,7 +465,7 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `sethue(color)` like `setcolor`
 
-- `sethue(r, g, b)` like `setcolor` but doesn't change opacity
+- `sethue(r, g, b)` like `setcolor()` but doesn't change opacity
 
 - `setopacity(alpha)` change the alpha opacity (`alpha` is between 0 and 1)
 
