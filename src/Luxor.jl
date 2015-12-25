@@ -141,7 +141,6 @@ function axes()
     grestore()
 end
 
-
 """
     background(color)
 
@@ -184,6 +183,12 @@ function fillstroke()
     stroke()
 end
 
+"""
+actions for graphics commands include :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve
+and :path.
+
+"""
+
 function do_action(action)
     if action == :fill
         fill()
@@ -213,63 +218,53 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
 """
     circle(x, y, r, action)
 
-    Draw a circle. `action` can be one of:
-
-       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
+    Draw a circle.
 
 """
 function circle(x, y, r, action=:nothing) # action is a symbol or nothing
-    newpath()
+    if action != :path
+        newpath()
+    end
     Cairo.circle(currentdrawing.cr, x, y, r)
     do_action(action)
 end
 
 """
-    arc(xc, yc, radius, angle1, angle2, action)
+    arc(xc, yc, radius, angle1, angle2, action=:nothing)
 
     Add an arc to the current path from `angle1` to `angle2` going clockwise.
     Angles are defined relative to the x-axis, positive clockwise.
-    `action` can be one of:
-
-       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
 
 """
 
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
-    #newpath()
     Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
 """
-    carc(xc, yc, radius, angle1, angle2, action)
+    carc(xc, yc, radius, angle1, angle2, action=:nothing)
 
     Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
     Angles are defined relative to the x-axis, positive clockwise.
-    `action` can be one of:
-
-       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
 
 """
 
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
-    #newpath()
     Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
-
 """
     rect(xmin, ymin, w, h, action)
 
-    Draw a rectangle. `action` can be one of:
-
-       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`
-
+    Draw a rectangle.
 """
 
 function rect(xmin, ymin, w, h, action=:nothing)
-    newpath()
+    if action != :path
+        newpath()
+    end
     Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
     do_action(action)
 end
@@ -277,9 +272,7 @@ end
 """
     sector(innerradius, outerradius, startangle, endangle, action=:none)
 
-    Draw a track/sector. `action` can be one of:
-
-       `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`
+    Draw a track/sector.
 
 """
 
@@ -328,17 +321,17 @@ function setdash(dashing)
     Cairo.set_line_type(currentdrawing.cr, dashing)
 end
 
-
 move(x, y)      = Cairo.move_to(currentdrawing.cr,x, y)
 rmove(x, y)     = Cairo.rel_move(currentdrawing.cr,x, y)
 line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
 
-# saved_colors = Tuple[]
 saved_colors = Tuple[]
 
-# originally used simple Cairo save() but somehow the colors/opacity thing didn't save/restore properly
+# I originally used simple Cairo save() but somehow the colors/opacity
+# thing didn't save/restore properly, hence the stack
+
 function gsave()
     Cairo.save(currentdrawing.cr)
     push!(saved_colors,
@@ -356,8 +349,7 @@ function grestore()
      currentdrawing.bluevalue,
      currentdrawing.alpha) = pop!(saved_colors)
      catch err
-
-     println("$err Not enough colors on the stack")
+         println("$err Not enough colors on the stack")
     end
 end
 
@@ -371,7 +363,6 @@ function poly(list::Array, action = :nothing; close=false, reversepath=false)
     # where list is array of Points
     # by default doesn't close or fill, to allow for clipping.etc
     if action != :path
-        println("making new path")
         newpath()
     end
     if reversepath
@@ -420,7 +411,7 @@ function douglas_peucker(points::Array, start_index, last_index, epsilon)
         end
         if dmax > epsilon
             push!(temp_stack, (start_index, index))
-            push!(temp_stack, (index,       last_index))
+            push!(temp_stack, (index, last_index))
         else
             for i in start_index + 2:last_index - 1 # 2 seems to keep the starting point...
                 keep_list[i - global_start_index] = false
@@ -480,7 +471,7 @@ function isinside(p::Point, poly::Array)
                     c = !c
                 end
             elseif q2.x > p.x
-                if ((detq(q1,q2) > 0) == (q2.y > q1.y)) # right crossing
+                if ((detq(q1,q2) > 0) == (q2.y > q1.y))     # right crossing
                     c = !c
                 end
             end
@@ -628,11 +619,11 @@ end
 """
     setcolor(col::ColorTypes.Colorant)
 
-        setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
-        for i in 1:15:360
-           setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
-           ...
-        end
+    setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
+    for i in 1:15:360
+       setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
+       ...
+    end
 
 """
 
@@ -644,7 +635,7 @@ end
 """
    setcolor(r, g, b, a=1)
 
-    Set the color to r, g, b, a.
+   Set the color to r, g, b, a.
 
 """
 function setcolor(r, g, b, a=1)
@@ -653,7 +644,6 @@ function setcolor(r, g, b, a=1)
 end
 
 """
-
     setcolor_str(ex)
 
     Macro to set color:
@@ -725,7 +715,7 @@ end
 
     Return current Cairo matrix as an array.
 
-    In Luxor, a matrix is an array of 6 float64 numbers.
+    In Luxor, a matrix is an array of 6 float64 numbers:
 
         xx component of the affine transformation
         yx component of the affine transformation
