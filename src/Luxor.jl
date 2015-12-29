@@ -104,7 +104,7 @@ end
 function preview()
     @osx_only      run(`open $(currentdrawing.filename)`)
     @windows_only  run(`open $(currentdrawing.filename)`)
-    @linux_only    run(`open $(currentdrawing.filename)`)
+    @linux_only    run(`xdg-open $(currentdrawing.filename)`)
 end
 
 """
