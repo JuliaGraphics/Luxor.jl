@@ -7,18 +7,16 @@ function draw_triangle(points::Array{Point}, degree::Int64)
     triangle_count += 1
 end
 
-get_midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
-
 function sierpinski(points::Array{Point}, degree::Int64)
     draw_triangle(points, degree)
     if degree > 0
         p1,p2,p3 = points
-        sierpinski([p1, get_midpoint(p1, p2),
-                        get_midpoint(p1, p3)], degree-1)
-        sierpinski([p2, get_midpoint(p1, p2),
-                        get_midpoint(p2, p3)], degree-1)
-        sierpinski([p3, get_midpoint(p3, p2),
-                        get_midpoint(p1, p3)], degree-1)
+        sierpinski([p1, midpoint(p1, p2),
+                        midpoint(p1, p3)], degree-1)
+        sierpinski([p2, midpoint(p1, p2),
+                        midpoint(p2, p3)], degree-1)
+        sierpinski([p3, midpoint(p3, p2),
+                        midpoint(p1, p3)], degree-1)
     end
 end
 

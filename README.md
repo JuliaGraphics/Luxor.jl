@@ -317,6 +317,7 @@ The origin (0/0) is at the top left, x axis runs left to right, y axis runs top 
 For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`.
 
 - `circle(x, y, r, action)`
+- `circle(center, r, action)`
 
 - `arc(xc, yc, radius, angle1, angle2, action)` add arc to current path centered at `xc/yc` starting at `angle1` and ending at `angle2` drawing arc clockwise
 
@@ -326,33 +327,38 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 Angles are measured from the positive x-axis to the positive y-axis in radians, clockwise.
 
+There is a Point type (the only main type, apart from `Drawing`).
+
+   `Point(12.0, 13.0)`
+
 - `rect(xmin, ymin, w, h, action)`
+- `rect(cornerpoint, w, h, action)`
 
 There is a 'current position':
 
 - `move(x, y)`
+- `move(pt)`
 	move to this position
 
 - `rmove(x, y)`
+- `rmove(pt)`
 	move relative to current position by `x` and `y`
 
 - `line(x, y)`
+- `line(pt)`
 	draw line from current position to the `x/y` position
 
 - `rline(x, y)`
+- `rline(pt)`
 	draw line from current position by `x` and `y`
 
 - `curve(x1, y1, x2, y2, x3, y3)`
+- `curve(p1, p2, p3)`
     a cubic Bézier spline, starting at the current position, finishing at `x3/y3`, following two control points `x1/y1` and `x2/y2`
-
-There is a Point type (the only main type, apart from `Drawing`):
-
-   `Point(12.0, 13.0)`
 
 Polygons are arrays of points.
 
 - `poly(list::Array, action = :nothing; close=false, reversepath=false)` draws a polygon using array of Points. For example:
-
 
     `poly(randompointarray(0,0,200,200, 85), :stroke)`
 
