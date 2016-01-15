@@ -52,10 +52,13 @@ export Drawing, currentdrawing,
     finish, preview,
     origin, axes, background,
     newpath, closepath, newsubpath,
-    circle, rect, setantialias, setline, setlinecap, setlinejoin, setdash,
+    circle, rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, carc, ngon, sector,
-    do_action, stroke, fill, paint, fillstroke, poly, simplify,
+    do_action, stroke, fill, paint, fillstroke,
+
+    poly, simplify, polybbox, polycentroid, polysort, midpoint,
+
     strokepreserve, fillpreserve,
     gsave, grestore,
     scale, rotate, translate,
@@ -95,7 +98,7 @@ end
 
     On OS X, opens the file, probably using the default app, Preview.app
     On Windows, ?
-    On Unix, ?
+    On Unix, open the file with xdg-open.
 
 """
 
@@ -221,6 +224,7 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
     Draw a circle.
 
 """
+
 function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     if action != :path
         newpath()
@@ -228,6 +232,19 @@ function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     Cairo.circle(currentdrawing.cr, x, y, r)
     do_action(action)
 end
+
+"""
+
+    circle(pt, r, action)
+
+    Draw a circle.
+
+"""
+
+function circle(centerpoint::Point, r, action=:nothing)
+    circle(centerpoint.x, centerpoint.y, r, action)
+end
+
 
 """
     arc(xc, yc, radius, angle1, angle2, action=:nothing)
@@ -269,10 +286,36 @@ function rect(xmin, ymin, w, h, action=:nothing)
     do_action(action)
 end
 
+function rect(cornerpoint, w, h, action)
+    rect(cornerpoint.x, cornerpoint.y, w, h, action)
+end
+
+"""
+    box(cornerpoint1, cornerpoint2, action=:nothing)
+
+    Draw a box between two points.
+
+"""
+
+function box(corner1::Point, corner2::Point, action=:nothing)
+    rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
+end
+
+"""
+    box(points::Array, action=:nothing)
+
+    Draw a box between first two points of array of points.
+
+"""
+
+function box(bbox::Array, action=:nothing)
+    box(bbox[1], bbox[2], action)
+end
+
 """
     sector(innerradius, outerradius, startangle, endangle, action=:none)
 
-    Draw a track/sector.
+    Draw a track/sector based at 0/0.
 
 """
 
@@ -322,10 +365,19 @@ function setdash(dashing)
 end
 
 move(x, y)      = Cairo.move_to(currentdrawing.cr,x, y)
+move(pt)        = move(pt.x, pt.y)
+
 rmove(x, y)     = Cairo.rel_move(currentdrawing.cr,x, y)
+rmove(pt)       = rmove(pt.x, pt.y)
+
 line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
+line(pt)        = line(pt.x, pt.y)
+
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
+rline(pt)       = rline(pt.x, pt.y)
+
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
+curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 saved_colors = Tuple[]
 
@@ -357,7 +409,9 @@ scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
 
-# polygon is an Array of Points
+# polygons
+
+# a polygon is an Array of Points
 
 function poly(list::Array, action = :nothing; close=false, reversepath=false)
     # where list is array of Points
@@ -378,7 +432,7 @@ function poly(list::Array, action = :nothing; close=false, reversepath=false)
     do_action(action)
 end
 
-function point_line_distance(p, a, b)
+function point_line_distance(p::Point, a, b)
     # area of triangle
     area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
     # length of the bottom edge
@@ -387,6 +441,82 @@ function point_line_distance(p, a, b)
     bottom = sqrt(dx * dx + dy * dy)
     return area / bottom
 end
+
+"""
+
+    Bounding box of polygon (array of points).
+
+    Return two points of opposite corners.
+
+"""
+
+function polybbox(polyarray::Array)
+    lowx, lowy = polyarray[1].x, polyarray[1].y
+    highx, highy = polyarray[end].x, polyarray[end].y
+    for p in polyarray
+        p.x < lowx  && (lowx  = p.x)
+        p.y < lowy  && (lowy  = p.y)
+        p.x > highx && (highx = p.x)
+        p.y > highy && (highy = p.y)
+    end
+    return [Point(lowx, lowy), Point(highx, highy)]
+end
+
+"""
+    Find centroid of simple polygon.
+
+    Only works for simple (non-intersecting) polygons.
+
+    This isn't a CAD system... :)
+
+    polycentroid(pointarray)
+
+    Returns a point.
+"""
+
+function polycentroid(pointarray::Array)
+    area = 0.0
+    Cx = 0.0
+    Cy = 0.0
+    n = length(pointarray)
+    # needs to be closed temporarily
+    push!(pointarray, pointarray[1])
+    for i=1:n-1
+        tmp = (pointarray[i].x * pointarray[i+1].y) -
+              (pointarray[i+1].x * pointarray[i].y)
+        area += tmp
+        Cx += (pointarray[i].x + pointarray[i+1].x) * tmp
+        Cy += (pointarray[i].y + pointarray[i+1].y) * tmp
+    end
+    area *= 0.5
+    Cx *= 1.0 / (6.0 * area)
+    Cy *= 1.0 / (6.0 * area)
+    # drop temporary close point from end
+    pop!(pointarray)
+    return Point(Cx, Cy)
+end
+
+"""
+    Sort the points of a polygon into order, using point as reference.
+
+        polysort(parray, parray[1])
+
+    `refpoint` can be chosen, minimum point is usually OK:
+
+        polysort(parray, polycentroid(parray))
+
+"""
+
+function polysort(p::Array, refpoint=minimum(p))
+    angles = []
+    for pt in p
+        push!(angles, atan2(refpoint.y - pt.y, refpoint.x - pt.x))
+    end
+    return p[sortperm(angles)]
+end
+
+midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
+midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 # use non-recursive Douglas-Peucker algorithm to simplify polygon
 function douglas_peucker(points::Array, start_index, last_index, epsilon)
@@ -425,21 +555,40 @@ function simplify(polygon::Array, detail)
     douglas_peucker(polygon, 1, length(polygon), detail)
 end
 
-# regular polygons
+"""
+    Regular polygons.
 
-# draw a poly
+    Draw a poly centred at x,y:
+
+        ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)
+
+    If no action supplied, return a poly as a set of points
+
+        ngon(x, y, radius, sides, orientation; close=true, reversepath=false)
+
+"""
+
 function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
     poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action, reversepath=reversepath)
 end
 
-# if no action supplied, return a poly as a set of points
+ngon(centrepoint::Point, radius, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
+
 function ngon(x, y, radius, sides::Int64, orientation=0)
     [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides]
 end
 
-# is a point inside a polygon?
+ngon(centrepoint::Point, radius, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
+
+"""
+    Is a point inside a polygon?
+
+        isinside(p, poly)
+
+    Return true or false
+"""
 
 function isinside(p::Point, poly::Array)
     # An implementation of Hormann-Agathos (2001) Point in Polygon algorithm

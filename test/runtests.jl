@@ -14,6 +14,8 @@ println("point inside polygon"); include("point-inside-polygon.jl")
 
 println("polygon")             ; include("polygon-test.jl")
 
+println("random sines")        ; include("randomsinecurves.jl")
+
 println("sierpinski")          ; include("sierpinski.jl")
 
 println("sectors")             ; include("sector-test.jl")
