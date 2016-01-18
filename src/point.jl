@@ -1,4 +1,4 @@
-import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=
+import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
 
 export Point, randompoint, randompointarray
 
@@ -21,8 +21,8 @@ end
 .*(p2::Point, k::Number)             = Point(k * p2.x, k * p2.y)
 .*(p1::Point, p2::Point)             = Point(p1.x * p2.x, p1.y * p2.y)
 ./(p2::Point, k::Number)             = Point(p2.x/k, p2.y/k)
-^(p::Point,e::Integer)               = Point(p.x^e, p.y^e)
-^(p::Point,e::Real)                  = Point(p.x^e, p.y^e)
+^(p::Point, e::Integer)               = Point(p.x^e, p.y^e)
+^(p::Point, e::Real)                  = Point(p.x^e, p.y^e)
 inner(p1::Point, p2::Point)          = p1.x * p2.x + p1.y * p2.y
 
 # comparisons (perform lexicographically)
@@ -55,3 +55,7 @@ function randompointarray(lowx, lowy, highx, highy, n)
     array
 end
 
+# note the two argument form
+function norm(p1::Point, p2::Point)
+    norm([p1.x, p1.y] - [p2.x, p2.y])
+end

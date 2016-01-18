@@ -19,7 +19,7 @@ function drawpoly(p, x, y, counter)
     gsave()
     translate(x, y)
     sethue("purple")
-    psort = polysort(p)
+    psort = polysortbyangle(p)
     drawbbox(psort)
     poly(psort, close=true, :stroke)
 
