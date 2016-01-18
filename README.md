@@ -122,25 +122,23 @@ Some simple "turtle graphics" commands are included:
 
     using Luxor, Colors
 
-    function draw_triangle(points::Array{Point}, degree::Int64)
-        global triangle_count, cols
+    function triangle(points::Array{Point}, degree::Int64)
+        global counter, cols
         setcolor(cols[degree+1])
         poly(points, :fill)
-        triangle_count += 1
+        counter += 1
     end
 
-    get_midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
-
     function sierpinski(points::Array{Point}, degree::Int64)
-        draw_triangle(points, degree)
+        triangle(points, degree)
         if degree > 0
-            p1,p2,p3 = points
-            sierpinski([p1, get_midpoint(p1, p2),
-                            get_midpoint(p1, p3)], degree-1)
-            sierpinski([p2, get_midpoint(p1, p2),
-                            get_midpoint(p2, p3)], degree-1)
-            sierpinski([p3, get_midpoint(p3, p2),
-                            get_midpoint(p1, p3)], degree-1)
+            p1, p2, p3 = points
+            sierpinski([p1, midpoint(p1, p2),
+                            midpoint(p1, p3)], degree-1)
+            sierpinski([p2, midpoint(p1, p2),
+                            midpoint(p2, p3)], degree-1)
+            sierpinski([p3, midpoint(p3, p2),
+                            midpoint(p1, p3)], degree-1)
         end
     end
 
@@ -150,10 +148,10 @@ Some simple "turtle graphics" commands are included:
         Drawing(400, 400, "/tmp/sierpinski.svg")
         origin()
         setopacity(0.5)
-        triangle_count = 0
+        counter = 0
         my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]
         sierpinski(my_points, depth)
-        println("drew $triangle_count triangles")
+        println("drew $counter triangles")
     end
 
     finish()
@@ -199,7 +197,7 @@ Some simple "turtle graphics" commands are included:
     currentheight = 500 # pts
     Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
 
-    function draw_logo_clip(x, y)
+    function draw(x, y)
         foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
         gsave()
         translate(x-100, y)
@@ -215,7 +213,7 @@ Some simple "turtle graphics" commands are included:
     origin()
     background("white")
     setopacity(.4)
-    draw_logo_clip(0,0)
+    draw(0,0)
 
     finish()
     preview()
@@ -336,25 +334,22 @@ There is a Point type (the only main type, apart from `Drawing`).
 
 There is a 'current position':
 
-- `move(x, y)`
+- `move(x, y)` move to this position
 - `move(pt)`
-	move to this position
 
-- `rmove(x, y)`
+- `rmove(x, y)` move relative to current position by `x` and `y`
 - `rmove(pt)`
-	move relative to current position by `x` and `y`
 
-- `line(x, y)`
+- `line(x, y)` draw line from current position to the `x/y` position
 - `line(pt)`
-	draw line from current position to the `x/y` position
 
-- `rline(x, y)`
+- `rline(x, y)` draw line from current position by `x` and `y`
 - `rline(pt)`
-	draw line from current position by `x` and `y`
 
-- `curve(x1, y1, x2, y2, x3, y3)`
+- `curve(x1, y1, x2, y2, x3, y3)` a cubic Bézier spline
 - `curve(p1, p2, p3)`
-    a cubic Bézier spline, starting at the current position, finishing at `x3/y3`, following two control points `x1/y1` and `x2/y2`
+
+   spline starts at the current position, finishing at `x3/y3` (`p3`), following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
 
 Polygons are arrays of points.
 
@@ -378,7 +373,7 @@ Without an action, returns a poly (array of points) instead:
 
 Compare:
 
-    ngon(0, 0, 4, 4, 0) # returns the polygon's points
+   ngon(0, 0, 4, 4, 0) # returns the polygon's points
 
         4-element Array{Luxor.Point,1}:
          Luxor.Point(2.4492935982947064e-16,4.0)
