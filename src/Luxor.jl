@@ -59,6 +59,8 @@ export Drawing, currentdrawing,
 
     poly, simplify, polybbox, polycentroid, polysort, midpoint,
 
+    intersection,
+
     strokepreserve, fillpreserve,
     gsave, grestore,
     scale, rotate, translate,
@@ -102,7 +104,7 @@ end
 
 """
 
-# TODO what will these do on non-OSX?
+# TODO what will this do on Windows?
 
 function preview()
     @osx_only      run(`open $(currentdrawing.filename)`)
@@ -241,10 +243,7 @@ end
 
 """
 
-function circle(centerpoint::Point, r, action=:nothing)
-    circle(centerpoint.x, centerpoint.y, r, action)
-end
-
+circle(centerpoint::Point, r, action=:nothing)  = circle(centerpoint.x, centerpoint.y, r, action)
 
 """
     arc(xc, yc, radius, angle1, angle2, action=:nothing)
@@ -274,8 +273,10 @@ end
 
 """
     rect(xmin, ymin, w, h, action)
+    rect(cornerpoint, w, h, action)
 
-    Draw a rectangle.
+    Create a rectangle and do an action.
+
 """
 
 function rect(xmin, ymin, w, h, action=:nothing)
@@ -293,7 +294,7 @@ end
 """
     box(cornerpoint1, cornerpoint2, action=:nothing)
 
-    Draw a box between two points.
+    Create a box between two points and do an action.
 
 """
 
@@ -405,9 +406,38 @@ function grestore()
     end
 end
 
+"""
+    Scale in x and y
+
+    Example:
+
+        scale(0.2, 0.3)
+
+"""
+
 scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
+
+"""
+    Rotate by `a` radians.
+
+        rotate(a)
+
+"""
+
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
-translate(tx, ty) = Cairo.translate(currentdrawing.cr, tx, ty)
+
+"""
+    Translate to new location.
+
+        translate(x, y)
+
+    or
+
+        translate(point)
+"""
+
+translate(tx, ty)        = Cairo.translate(currentdrawing.cr, tx, ty)
+translate(pt::Point)     = translate(pt.x, pt.y)
 
 # polygons
 
@@ -465,35 +495,52 @@ end
 """
     Find centroid of simple polygon.
 
+        polycentroid(pointarray)
+
     Only works for simple (non-intersecting) polygons.
-
     This isn't a CAD system... :)
-
-    polycentroid(pointarray)
 
     Returns a point.
 """
 
-function polycentroid(pointarray::Array)
-    area = 0.0
-    Cx = 0.0
-    Cy = 0.0
-    n = length(pointarray)
-    # needs to be closed temporarily
-    push!(pointarray, pointarray[1])
-    for i=1:n-1
-        tmp = (pointarray[i].x * pointarray[i+1].y) -
-              (pointarray[i+1].x * pointarray[i].y)
-        area += tmp
-        Cx += (pointarray[i].x + pointarray[i+1].x) * tmp
-        Cy += (pointarray[i].y + pointarray[i+1].y) * tmp
-    end
-    area *= 0.5
-    Cx *= 1.0 / (6.0 * area)
-    Cy *= 1.0 / (6.0 * area)
-    # drop temporary close point from end
-    pop!(pointarray)
-    return Point(Cx, Cy)
+function polycentroid(vertices)
+    centroid = Point(0, 0)
+    signedArea = 0.0
+    vertexCount = length(vertices)
+    x0 = 0.0 # Current vertex X
+    y0 = 0.0 # Current vertex Y
+    x1 = 0.0 # Next vertex X
+    y1 = 0.0 # Next vertex Y
+    a = 0.0  # Partial signed area
+
+    # For all vertices except last
+    i = 1
+    for i in 1:vertexCount-1
+        x0 = vertices[i].x
+        y0 = vertices[i].y
+        x1 = vertices[i+1].x
+        y1 = vertices[i+1].y
+        a = x0*y1 - x1*y0
+        signedArea += a
+        centroid.x += (x0 + x1)*a
+        centroid.y += (y0 + y1)*a
+   end
+    # Do last vertex separately to avoid performing an expensive
+    # modulus operation in each iteration.
+    x0 = vertices[vertexCount].x
+    y0 = vertices[vertexCount].y
+    x1 = vertices[1].x
+    y1 = vertices[1].y
+    a = x0*y1 - x1*y0
+    signedArea += a
+    centroid.x += (x0 + x1)*a
+    centroid.y += (y0 + y1)*a
+
+    signedArea *= 0.5
+    centroid.x /= (6.0*signedArea)
+    centroid.y /= (6.0*signedArea)
+
+    return centroid
 end
 
 """
@@ -515,8 +562,43 @@ function polysort(p::Array, refpoint=minimum(p))
     return p[sortperm(angles)]
 end
 
+"""
+    Find midpoint between two points.
+
+    midpoint(p1, p2)
+
+"""
+
 midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
+
+"""
+    Find intersection of two lines p1-p2 and p3-p4
+
+        intersection(p1, p2, p3, p4)
+
+    returns (false, 0)
+         or (true, Point)
+
+"""
+
+function intersection(p1, p2, p3, p4)
+    flag = false
+    ip = 0
+    s1 = p2 - p1
+    s2 = p4 - p3
+    u = p1 - p3
+    ip = 1 / (-s2.x * s1.y + s1.x * s2.y)
+    s = (-s1.y * u.x + s1.x * u.y) * ip
+    t = ( s2.x * u.y - s2.y * u.x) * ip
+    if (s >= 0) && (s <= 1) && (t >= 0) && (t <= 1)
+        if isapprox(ip, 0, atol=0.1)
+            ip = p1 + (s1 * t)
+            flag = true
+        end
+    end
+    return (flag, ip)
+end
 
 # use non-recursive Douglas-Peucker algorithm to simplify polygon
 function douglas_peucker(points::Array, start_index, last_index, epsilon)
@@ -568,19 +650,19 @@ end
 
 """
 
-function ngon(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
+function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
     poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action, reversepath=reversepath)
 end
 
-ngon(centrepoint::Point, radius, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
+ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
 
-function ngon(x, y, radius, sides::Int64, orientation=0)
+function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
     [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
            y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides]
 end
 
-ngon(centrepoint::Point, radius, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
+ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
 
 """
     Is a point inside a polygon?
@@ -676,8 +758,9 @@ textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
 
 """
     text(str, x, y)
+    text(str, pt)
 
-    Draw text in string `str` at `x`/`y`.
+    Draw text in string `str` at `x`/`y` or `pt`.
 
     Text doesn't affect the current point!
 """
@@ -689,11 +772,13 @@ function text(t, x=0, y=0)
     grestore()
 end
 
+text(t, pt::Point) = text(t, pt.x, pt.y)
 
 """
     textcentred(str, x, y)
+    textcentred(str, pt)
 
-    Draw text in string `str` centered at `x`/`y`.
+    Draw text in string `str` centered at `x`/`y` or `pt`.
 
     Text doesn't affect the current point!
 """
@@ -702,6 +787,8 @@ function textcentred(t, x=0, y=0)
     textwidth = textextents(t)[5]
     text(t, x - textwidth/2, y)
 end
+
+textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
 
 """
     textpath(t)
@@ -749,6 +836,8 @@ function textcurve(str, x, y, xc, yc, r)
     end
     grestore()
 end
+
+textcurve(str, pt::Point, centre::Point, r) = textcurve(str, pt.x, pt.y, centre.x, centre.y, r)
 
 """
     setcolor(col::AbstractString)
