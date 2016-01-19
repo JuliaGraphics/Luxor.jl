@@ -1,15 +1,26 @@
 # the current julia logo
 
-#= typical usage:
-using Luxor, Colors
-include(joinpath(Pkg.dir(), "Luxor", "Examples", "julia-logo.jl"))
-Drawing(1000, 1000, "/tmp/heart-julia.pdf")
-origin()
-background("white")
-julialogo()
-finish()
-preview()
-=#
+"""
+    Draw the logo:
+
+        julialogo(colored=true)
+
+    Create paths for the logo:
+
+        julialogomask()
+
+  Typical usage:
+
+    using Luxor, Colors
+    include(joinpath(Pkg.dir(), "Luxor", "test", "julia-logo.jl"))
+    Drawing(1000, 1000, "/tmp/heart-julia.pdf")
+    origin()
+    background("white")
+    julialogo()
+    finish()
+    preview()
+
+"""
 
 function julialogo(colored=true)
     # draw colors if colored is true

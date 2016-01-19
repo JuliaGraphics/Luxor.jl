@@ -18,9 +18,15 @@ SVG rendering currently seems unreliable — text placement generates segmentati
 
 To install:
 
-    Pkg.clone(...)
+    Pkg.clone("https://github.com/cormullion/Luxor.jl")
+
+and to use:
+
+    using Luxor
 
 #### "Hello World"
+
+Here's a simple "Hello world":
 
 !["Hello world"](examples/hello-world.png)
 
@@ -33,6 +39,8 @@ To install:
     finish()
     preview()
 
+The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the image and the location of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using `Colors.jl`, we can specify colors by name. `text()` places text at 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
+
 #### General Graphics
 
 ![Luxor test](examples/basic-test.png)
@@ -40,18 +48,18 @@ To install:
     using Luxor, Colors
     Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
 
-    origin() # move 0/0 to center
+    origin()
     background("purple")
 
-    setopacity(0.7)     # opacity from 0 to 1
-    sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
-    setline(20) # line width
+    setopacity(0.7)                      # opacity from 0 to 1
+    sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
+    setline(20)                          # line width
 
-    rect(-400,-400,800,800, :fill) # or :stroke, :fillstroke, :clip
+    rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
     randomhue()
     circle(0, 0, 460, :stroke)
 
-    circle(0,-200,400,:clip)     # set a circular mask above the x axis
+    circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
     sethue("gold")
     setopacity(0.7)
     setline(10)
@@ -62,19 +70,21 @@ To install:
         stroke()
     end
 
-    clipreset()     # finish clipping
+    clipreset()                           # finish masking
 
     fontsize(60)
     setcolor("turquoise")
-    fontface("Optima-ExtraBlack")     # a Mac OS X font
+    fontface("Optima-ExtraBlack")
     textwidth = textextents("Luxor")[5]
+
     # move the text by half the width
-    text("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
+    textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
 
     fontsize(18)
     fontface("Avenir-Black")
+
     # text on curve starting on an arc
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 0, 0, -10, 550)
+    textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
     finish()
     preview() # on Mac OS X, opens in Preview
 
@@ -117,6 +127,8 @@ Some simple "turtle graphics" commands are included:
     preview()
 
 #### Sierpinski triangle
+
+The main defined type is the `Point`.
 
 ![Sierpinski](examples/sierpinski.png)
 
@@ -189,9 +201,12 @@ Some simple "turtle graphics" commands are included:
 
 #### clipping masks
 
+This example loads a file containing functions that draw the Julia logo. One of the functions creates paths but doesn't action them. The paths can be used for clipping subsequent graphics:
+
 ![julia logo mask](examples/julia-logo-mask.png)
 
-    include("../examples/julia-logo.jl") # the julia logo coordinates
+    # load functions to draw the Julia logo
+    include("../test/julia-logo.jl")
 
     currentwidth = 500 # pts
     currentheight = 500 # pts
@@ -201,8 +216,8 @@ Some simple "turtle graphics" commands are included:
         foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
         gsave()
         translate(x-100, y)
-        julialogomask() # use julia logo as clipping mask
-        clip()
+        julialogomask()                 # add paths for logo
+        clip()                          # use paths for clipping
         for i in 1:500
             sethue(foregroundcolors[rand(1:end)])
             circle(rand(-50:350), rand(0:300), 15, :fill)
@@ -213,14 +228,14 @@ Some simple "turtle graphics" commands are included:
     origin()
     background("white")
     setopacity(.4)
-    draw(0,0)
+    draw(0, 0)
 
     finish()
     preview()
 
 #### text clipping
 
-Using a text path as a clipping region - here filled with names of Julia functions.
+You can use text paths as a clipping region - here the paths are filled with names of Julia functions.
 
 ![text clipping](examples/text-path-clipping.png)
 
@@ -233,22 +248,22 @@ Using a text path as a clipping region - here filled with names of Julia functio
     origin()
     background("darkslategray3")
 
-    fontsize(600) # big fontsize to use for clipping
+    fontsize(600)                             # big fontsize to use for clipping
     fontface("Agenda-Black")
-    str = "julia" # string to be clipped
-    w, h = textextents(str)[3:4] # get width and height
+    str = "julia"                             # string to be clipped
+    w, h = textextents(str)[3:4]              # get width and height
 
     translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
 
-    textpath(str) # make text into a path
+    textpath(str)                             # make text into a path
     setline(3)
     setcolor("black")
-    fillpreserve() # fill but keep
-    clip()  # clip
+    fillpreserve()                            # fill but keep
+    clip()                                    # and use for clipping region
 
     fontface("Monaco")
     fontsize(10)
-    namelist = map(x->string(x), names(Base)) # list of names in Base.
+    namelist = map(x->string(x), names(Base)) # get list of function names in Base.
 
     x = -20
     y = -h
@@ -257,9 +272,9 @@ Using a text path as a clipping region - here filled with names of Julia functio
         s = namelist[rand(1:end)]
         text(s, x, y)
         se = textextents(s)
-        x += se[5] # move to the right
+        x += se[5]                            # move to the right
         if x > w
-           x = -20 # next row
+           x = -20                            # next row
            y += 10
         end
     end
@@ -267,24 +282,29 @@ Using a text path as a clipping region - here filled with names of Julia functio
     finish()
     preview()
 
+#### Polygons
+
+
 ### Functions
 
 #### Files
 
 - `Drawing()`
- 	create a drawing, defaulting to PNG format, file called "/tmp/luxor-drawing.png", 800 pixels square
+ 	create a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png", default size 800 pixels square
 - `Drawing(300,300)`
- 	create a drawing 300 by 300 pixels, defaulting to PNG format, file called "/tmp/luxor-drawing.png",
+ 	create a drawing 300 by 300 pixels, defaulting to PNG format, default filename "/tmp/luxor-drawing.png",
 - `Drawing(300,300, "/tmp/my-drawing.pdf")`
  	create a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels
 - `Drawing(800,800, "/tmp/my-drawing.svg")`
  	create an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels
+- `Drawing(800,800, "/tmp/my-drawing.eps")`
+ 	create an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels
 - `finish()`
  	finish the drawing
 - `preview()`
- 	open the file in Preview (MacOS X only)
+ 	tell the OS to open the file
 
-The global variable `currentdrawing` keeps a few parameters:
+The global variable `currentdrawing` holds a few parameters:
 
     julia> fieldnames(currentdrawing)
     10-element Array{Symbol,1}:
@@ -306,13 +326,19 @@ The origin (0/0) is at the top left, x axis runs left to right, y axis runs top 
 - `origin()`
 	move the 0/0 origin to the centre of the image
 - `axes()`
-	draw axes at current 0/0
+	draw coordinate axes at current 0/0
 - `background(color)`
 	fill background with a colored rectangle
 
 #### Shapes and lines
 
-For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, or `:clip`, defaulting to `:nothing`.
+For many functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `fillpreserve`, `strokepreserve`, `:clip`. The default is `:nothing`.
+
+There is a Point type (the only main type, apart from `Drawing`).
+
+   `Point(12.0, 13.0)`
+
+Positions are often specified by both x and y coordinates or a Point(x, y).
 
 - `circle(x, y, r, action)`
 - `circle(center, r, action)`
@@ -321,13 +347,9 @@ For these functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`
 
 - `carc(xc, yc, radius, angle1, angle2, action)` add arc to current path centered at `xc/yc` starting at `angle1` and ending at `angle2`, drawing arc counterclockwise.
 
-- `sector(innerradius, outerradius, startangle, endangle, action)` draw a sector/track
+- `sector(innerradius, outerradius, startangle, endangle, action)` draw a sector/track relative to the current 0/0 point.
 
-Angles are measured from the positive x-axis to the positive y-axis in radians, clockwise.
-
-There is a Point type (the only main type, apart from `Drawing`).
-
-   `Point(12.0, 13.0)`
+Angles are measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, clockwise.
 
 - `rect(xmin, ymin, w, h, action)`
 - `rect(cornerpoint, w, h, action)`
@@ -349,27 +371,21 @@ There is a 'current position':
 - `curve(x1, y1, x2, y2, x3, y3)` a cubic Bézier spline
 - `curve(p1, p2, p3)`
 
-   spline starts at the current position, finishing at `x3/y3` (`p3`), following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
+The spline starts at the current position, finishing at `x3/y3` (`p3`), following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
 
 Polygons are arrays of points.
 
-- `poly(list::Array, action = :nothing; close=false, reversepath=false)` draws a polygon using array of Points. For example:
-
-    `poly(randompointarray(0,0,200,200, 85), :stroke)`
-
-- `randompoint(lowx, lowy, highx, highy)` returns a random point
-
-- `randompointarray(lowx, lowy, highx, highy, n)` returns an array of random points. For example:
-
-    `poly(randompointarray(0,0,200,200, 85), :stroke)`
-
 Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons, with:
 
-- `ngon(xc, yc, radius, sides, angle, action=:nothing)` draws a `sides`-sided polygon
+- `ngon(xc, yc, radius, sides, orientation, action=:nothing)` draws a `sides`-sided polygon
 
-Without an action, returns a poly (array of points) instead:
+Ngons are closed by default.
 
-- `ngon(xc, yc, radius, sides, angle)`
+- `ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)
+
+Without an action, returns an array of points instead:
+
+- `ngon(xc, yc, radius, sides, orientation)`
 
 Compare:
 
@@ -382,6 +398,18 @@ Compare:
          Luxor.Point(4.0,-9.797174393178826e-16)
 
     ngon(0, 0, 4, 4, 0, :close) # draws a polygon
+
+A polygon is an array of Points.
+
+- `poly(list::Array, action = :nothing; close=false, reversepath=false)`:
+
+    `poly(randompointarray(0, 0, 200, 200, 85), :stroke)`
+
+- `randompoint(lowx, lowy, highx, highy)` returns a random point
+
+- `randompointarray(lowx, lowy, highx, highy, n)` returns an array of random points. For example:
+
+    `poly(randompointarray(0,0,200,200, 85), :stroke)`
 
 Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. This draws an hexagonal bolt shape:
 
@@ -396,15 +424,35 @@ Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive ve
 
 - `isinside(point, polygon)` returns true if the point is inside the polygon
 
+There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.
+
+- `polysplit(p, point1, point2)`
+
+returns two polygons if a line from point1 to point2 divides the polygon
+
+- `polysortbydistance(p, startingpoint)`
+
+returns the points sorted by finding the nearest point to the start point, then the nearest point to that, and so on.
+
+- `polysortbyangle(p, startingpoint)`
+
+returns the points sorted by the angle that each point makes with a starting point.
+
+- `polycentroid(p)` returns `Point(centerx, centery)
+
+- `polybbox(p)`
+
+returns `[Point(lowx, lowy), Point(highx, highy)]`, opposite corners of a bounding box.
+
 #### Styles
 
 - `setline(n)` set line width
 
-- `setlinecap(s)` set line ends to "butt", "round", or "square"
+- `setlinecap(str)` set line ends to "butt", "round", or "square"
 
-- `setlinejoin(s)` set line joins to "miter", "round", or "bevel"
+- `setlinejoin(str)` set line joins to "miter", "round", or "bevel"
 
-- `setdash(dashing)` set line dashing to "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", or "dotdotdotdashed"
+- `setdash(str)` set line dashing to "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", or "dotdotdotdashed"
 
 - `fillstroke()` fill and stroke the current path
 
@@ -428,7 +476,8 @@ Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive ve
 
 - `rotate(a)` rotate clockwise (positive x-axis to positive y-axis) by `a` radians around current 0/0
 
-- `translate(tx, ty)` translate by tx/ty
+- `translate(tx, ty)` translate to `tx/ty` or `pt`
+- `translate(pt)`
 
 The current matrix is a six number array, perhaps like this:
 
@@ -482,7 +531,7 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 - `closepath()`
 
-- `getpath()`     get the current path as an array of element types and points
+- `getpath()` get the current path as an array of element types and points
 
 - `getpathflat()` get the current path as an array of type/points with curves flattened to lines
 
@@ -496,23 +545,32 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 #### Text and fonts
 
-- `text(t, x, y)` draw string `t` at `x`/`y`, or at 0/0 if `x`/`y` omitted
+- `text(t, x, y)` draw string `t` at `x`/`y`, or at `0/0` if `x`/`y` omitted
+- `text(t, pt)` draw string `t` at `pt`
 
-- `textcentred(t, x, y)` draw string `t` centred at `x`/`y` or 0/0
+- `textcentred(t, x, y)` draw string `t` centred at `x`/`y` or `0/0`
+- `textcentred(t, pt)
 
 - `textpath(t)`
-	make the string `t` into a graphic path suitable for `fill()`, `stroke()`...
+
+make the string `t` into a graphic path suitable for `fill()`, `stroke()`...
 
 - `textcurve(str, x, y, xc, yc, r)`
-	draw string `str` on a circular arc of radius `r` centered at `xc/yc` starting on a line passing from `xc/yc` through `x/y`
+- `textcurve(str, pt, ptcentre, r)`
+
+draw string `str` on a circular arc of radius `r` centered at `xc/yc` (`ptcentre`) starting on a line passing from `xc/yc` through `x/y` (`pt`)
 
 - `fontface(fontname)`
-	choose font `fontname`
+
+choose font `fontname`
 
 - `fontsize(n)`
-	set font size in points
+
+set font size in points
 
 - `textextents(str)`
-	get array of dimensions of the string `str`, given current font:
+
+get array of dimensions of the string `str`, given current font:
 
 	`[xb, yb, width, height, xadvance, yadvance]`
+

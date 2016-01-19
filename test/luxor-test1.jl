@@ -36,12 +36,12 @@ function main()
     fontface("Optima-ExtraBlack")
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
-    text("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
+    textcentred("Luxor", 0, currentdrawing.height/2 - 400)
 
     # text on curve starting on an arc: arc starts at a line through (0,-10) radius 550, centered at 0,0
     fontsize(18)
     fontface("Avenir-Black")
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 0, 0, -10, 550)
+    textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
     finish()
     preview() # Mac OS X only, opens in Preview
 end
