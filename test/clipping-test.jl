@@ -2,8 +2,6 @@ using Luxor, Colors
 
 include("julia-logo.jl") # the julia logo coordinates
 
-tic()
-
 function draw_logo_clip(x, y)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     gsave()
@@ -30,4 +28,3 @@ function main()
 end
 
 main()
-toc()

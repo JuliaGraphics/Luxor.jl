@@ -7,7 +7,7 @@ function randompoly(rad, n)
     for i in 1:n
         push!(result, Point(rand(-rad:rad), rand(-rad:rad)))
     end
-    return polysort(result)
+    return polysortbyangle(result)
 end
 
 function testapoly(x, y)
@@ -20,7 +20,7 @@ function testapoly(x, y)
     if rand(Bool)
         p1 = ngon(0, 0, 80, rand(3:8), rand(0:pi/10:2*pi))
     else
-        p1 = polysort(randompoly(80, rand(3:12)))
+        p1 = polysortbyangle(randompoly(80, rand(3:12)))
     end
     setline(0.5)
 
@@ -48,7 +48,7 @@ function testapoly(x, y)
             randomhue()
             gsave()
             setopacity(0.5)
-            poly(polysort(ply), close=true, :fill)
+            poly(polysortbyangle(ply), close=true, :fill)
             grestore()
         end
     end
