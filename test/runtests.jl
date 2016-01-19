@@ -4,6 +4,8 @@ println("clipping")              ; include("clipping-test.jl")
 
 #println("copy_path")            ; include("copy_path.jl")
 
+println("julia logo eps")        ; include("julia-logo-draw-eps.jl")
+
 println("luxor-test1")           ; include("luxor-test1.jl")
 
 println("matrix-tests")          ; include("matrix-tests.jl")
