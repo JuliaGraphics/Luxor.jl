@@ -30,14 +30,16 @@ Here's a simple "Hello world":
 
 !["Hello world"](examples/hello-world.png)
 
-    using Luxor, Colors
-    Drawing(1000, 1000, "/tmp/hello-world.png")
-    origin()
-    sethue("red")
-    fontsize(50)
-    text("hello world")
-    finish()
-    preview()
+```julia
+using Luxor, Colors
+Drawing(1000, 1000, "/tmp/hello-world.png")
+origin()
+sethue("red")
+fontsize(50)
+text("hello world")
+finish()
+preview()
+```
 
 The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the image and the location of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using `Colors.jl`, we can specify colors by name. `text()` places text at 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
@@ -45,48 +47,50 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
 
 ![Luxor test](examples/basic-test.png)
 
-    using Luxor, Colors
-    Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
+```julia
+using Luxor, Colors
+Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
 
-    origin()
-    background("purple")
+origin()
+background("purple")
 
-    setopacity(0.7)                      # opacity from 0 to 1
-    sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
-    setline(20)                          # line width
+setopacity(0.7)                      # opacity from 0 to 1
+sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
+setline(20)                          # line width
 
-    rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
-    randomhue()
-    circle(0, 0, 460, :stroke)
+rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
+randomhue()
+circle(0, 0, 460, :stroke)
 
-    circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
-    sethue("gold")
-    setopacity(0.7)
-    setline(10)
+circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
+sethue("gold")
+setopacity(0.7)
+setline(10)
 
-    for i in 0:pi/36:2*pi - pi/36
-        move(0, 0)
-        line(cos(i) * 600, sin(i) * 600 )
-        stroke()
-    end
+for i in 0:pi/36:2*pi - pi/36
+    move(0, 0)
+    line(cos(i) * 600, sin(i) * 600 )
+    stroke()
+end
 
-    clipreset()                           # finish masking
+clipreset()                           # finish masking
 
-    fontsize(60)
-    setcolor("turquoise")
-    fontface("Optima-ExtraBlack")
-    textwidth = textextents("Luxor")[5]
+fontsize(60)
+setcolor("turquoise")
+fontface("Optima-ExtraBlack")
+textwidth = textextents("Luxor")[5]
 
-    # move the text by half the width
-    textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
+# move the text by half the width
+textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
 
-    fontsize(18)
-    fontface("Avenir-Black")
+fontsize(18)
+fontface("Avenir-Black")
 
-    # text on curve starting on an arc
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
-    finish()
-    preview() # on Mac OS X, opens in Preview
+# text on curve starting on an arc
+textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
+finish()
+preview() # on Mac OS X, opens in Preview
+```
 
 #### Turtle graphics
 
@@ -94,6 +98,7 @@ Some simple "turtle graphics" commands are included:
 
 ![Turtle](examples/turtles.png)
 
+```julia
     using Luxor, Colors
 
     Drawing(1200, 1200, "/tmp/turtles.png")
@@ -125,6 +130,7 @@ Some simple "turtle graphics" commands are included:
 
     finish()
     preview()
+```
 
 #### Sierpinski triangle
 
@@ -132,6 +138,7 @@ The main defined type is the `Point`.
 
 ![Sierpinski](examples/sierpinski.png)
 
+```julia
     using Luxor, Colors
 
     function triangle(points::Array{Point}, degree::Int64)
@@ -171,11 +178,13 @@ The main defined type is the `Point`.
 
     # drew 9841 triangles
     # elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)
+```
 
 #### n-gons
 
 ![n-gons](examples/n-gon.png)
 
+```julia
     using Luxor, Colors
     Drawing(1200, 1400)
 
@@ -198,6 +207,7 @@ The main defined type is the `Point`.
 
     finish()
     preview()
+```
 
 #### clipping masks
 
@@ -205,6 +215,7 @@ This example loads a file containing functions that draw the Julia logo. One of 
 
 ![julia logo mask](examples/julia-logo-mask.png)
 
+```julia
     # load functions to draw the Julia logo
     include("../test/julia-logo.jl")
 
@@ -232,6 +243,7 @@ This example loads a file containing functions that draw the Julia logo. One of 
 
     finish()
     preview()
+```
 
 #### text clipping
 
@@ -239,6 +251,7 @@ You can use text paths as a clipping region - here the paths are filled with nam
 
 ![text clipping](examples/text-path-clipping.png)
 
+```julia
     using Luxor, Colors
 
     currentwidth = 1250 # pts
@@ -281,9 +294,7 @@ You can use text paths as a clipping region - here the paths are filled with nam
 
     finish()
     preview()
-
-#### Polygons
-
+```
 
 ### Functions
 
@@ -381,7 +392,7 @@ Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, oct
 
 Ngons are closed by default.
 
-- `ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)
+- `ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)`
 
 Without an action, returns an array of points instead:
 
@@ -389,7 +400,8 @@ Without an action, returns an array of points instead:
 
 Compare:
 
-   ngon(0, 0, 4, 4, 0) # returns the polygon's points
+```julia
+    ngon(0, 0, 4, 4, 0) # returns the polygon's points
 
         4-element Array{Luxor.Point,1}:
          Luxor.Point(2.4492935982947064e-16,4.0)
@@ -398,6 +410,7 @@ Compare:
          Luxor.Point(4.0,-9.797174393178826e-16)
 
     ngon(0, 0, 4, 4, 0, :close) # draws a polygon
+```
 
 A polygon is an array of Points.
 
@@ -428,7 +441,7 @@ There are some experimental polygon functions. These don't work well for polygon
 
 - `polysplit(p, point1, point2)`
 
-returns two polygons if a line from point1 to point2 divides the polygon
+returns two polygons if a line from point1 to point2 divides the polygon.
 
 - `polysortbydistance(p, startingpoint)`
 
@@ -549,7 +562,7 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 - `text(t, pt)` draw string `t` at `pt`
 
 - `textcentred(t, x, y)` draw string `t` centred at `x`/`y` or `0/0`
-- `textcentred(t, pt)
+- `textcentred(t, pt)`
 
 - `textpath(t)`
 
@@ -572,5 +585,5 @@ set font size in points
 
 get array of dimensions of the string `str`, given current font:
 
-	`[xb, yb, width, height, xadvance, yadvance]`
+	[xb, yb, width, height, xadvance, yadvance]
 
