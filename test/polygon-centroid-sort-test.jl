@@ -1,10 +1,10 @@
 #!/usr/bin/env julia
 
-using ColorSchemes, Luxor,  Colors
+using Luxor, Colors
 
 width, height = 3000, 3000
 
-Drawing(width, height, "/tmp/polysort.pdf")
+Drawing(width, height, "/tmp/polycentroidsort.pdf")
 origin()
 
 function drawbbox(apoly)
