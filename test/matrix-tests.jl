@@ -1,5 +1,8 @@
 using Luxor
 
+# some of these tests produce errors on Linux versions of Cairo
+# but no errors on MacOS X Cairo.
+
 function main()
     # matrix tests
 
