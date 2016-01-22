@@ -296,6 +296,53 @@ You can use text paths as a clipping region - here the paths are filled with nam
     preview()
 ```
 
+#### Images ####
+
+There is some limited support for placing PNG images on the drawing.
+
+```julia
+    using Luxor
+
+    width, height = 4000, 4000
+    margin = 500
+
+    Drawing(width, height, "/tmp/cairo-image.pdf")
+    origin()
+    background("grey25")
+
+    setline(5)
+    sethue("green")
+
+    image = readpng("../examples/julia-logo-mask.png")
+    w = image.width
+    h = image.height
+
+    x = (-width/2) + margin
+    y = (-height/2) + margin
+
+    for i in 1:36
+        circle(x, y, 250, :stroke)
+        circle(x, y, 250, :clip)
+        gsave()
+        translate(x, y)
+        scale(.95, .95)
+        rotate(rand(0.0:pi/8:2*pi))
+        placeimage(image, -w/2, -h/2)
+        grestore()
+        clipreset()
+        x += 600
+        if x > width/2
+            x = (-width/2) + margin
+            y += 600
+        end
+    end
+
+    finish()
+    preview()
+```
+
+!["Images"](examples/test-image.png)
+
 ### Functions
 
 #### Files
@@ -589,15 +636,15 @@ get array of dimensions of the string `str`, given current font:
 
 #### Images ####
 
-There is some limited support for placing PNG images on the drawing.
+Load a PNG image with `readpng()`. Place it using `placeimage()`.
 
 ```julia
+
     image = readpng("../examples/julia-logo-mask.png")
     w = image.width
     h = image.height
 
-    translate(100, 200)
-    scale(.95, .95)
-    rotate(rand(0.0:pi/8:2*pi))
-    placeimage(image, -w/2, -h/2)
+    placeimage(image, -w/2, -h/2) # centered
+
 ```
+

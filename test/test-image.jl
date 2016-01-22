@@ -7,7 +7,7 @@ margin = 500
 
 Drawing(width, height, "/tmp/cairo-image.pdf")
 origin()
-background("lightcyan")
+background("grey25")
 
 setline(5)
 sethue("green")
@@ -19,7 +19,7 @@ h = image.height
 x = (-width/2) + margin
 y = (-height/2) + margin
 
-for i in 1:35
+for i in 1:36
     circle(x, y, 250, :stroke)
     circle(x, y, 250, :clip)
     gsave()
