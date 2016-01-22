@@ -587,3 +587,17 @@ get array of dimensions of the string `str`, given current font:
 
 	[xb, yb, width, height, xadvance, yadvance]
 
+#### Images ####
+
+There is some limited support for placing PNG images on the drawing.
+
+```julia
+    image = readpng("../examples/julia-logo-mask.png")
+    w = image.width
+    h = image.height
+
+    translate(100, 200)
+    scale(.95, .95)
+    rotate(rand(0.0:pi/8:2*pi))
+    placeimage(image, -w/2, -h/2)
+```

@@ -78,7 +78,9 @@ export Drawing, currentdrawing,
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
-    getmatrix, setmatrix, transform
+    getmatrix, setmatrix, transform,
+
+    readpng, placeimage
 
 """
     finish()
@@ -756,5 +758,42 @@ function transform(a::Array)
         (a[5] * b.yx)  + (a[6] * b.yy) + b.y0      # y0
     ])
 end
+
+
+# images
+
+"""
+    Read a PNG into Cairo.
+
+        readpng(pathname)
+
+    Returns a Cairo.CairoSurface, suitable for placing
+    on the current drawing with `placeimage()`.
+
+        image = readpng("/tmp/test-image.png")
+        w = image.width
+        h = image.height
+
+"""
+
+function readpng(pathname)
+    return Cairo.read_from_png(pathname)
+end
+
+"""
+    Place a PNG image on the drawing.
+
+        placeimage(img, xpos, ypos)
+
+    Place an image previously loaded using readpng().
+
+"""
+
+function placeimage(img::Cairo.CairoSurface, xpos, ypos)
+    Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
+    Cairo.paint(currentdrawing.cr)
+end
+
+placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
 
 end # module
