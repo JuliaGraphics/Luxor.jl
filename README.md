@@ -2,6 +2,8 @@
 
 Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, and turtle graphics.
 
+![](examples/tiled-images-1.png)
+
 The idea of Luxor is that it's slightly easier to use than Cairo, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org). Also worth looking at is Andrew Cooke's Drawing.jl package.
 
 [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
@@ -636,7 +638,7 @@ get array of dimensions of the string `str`, given current font:
 
 #### Images ####
 
-Load a PNG image with `readpng()`. Place it using `placeimage()`.
+Load a PNG image with `readpng()`. Place it by its top left corner at the specified position using `placeimage()`.
 
 ```julia
 
