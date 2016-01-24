@@ -35,3 +35,5 @@ println("holes")                 ; include("test-holes.jl")
 println("turtle")                ; include("turtle.jl")
 
 println("images")                ; include("test-image.jl")
+
+println("tiling images")         ; include("tiling-images.jl")
