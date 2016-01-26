@@ -50,6 +50,9 @@ type Drawing
 end
 
 export Drawing, currentdrawing,
+
+    rescale, @rescale,
+
     finish, preview,
     origin, axes, background,
     newpath, closepath, newsubpath,
@@ -102,8 +105,8 @@ end
     preview()
 
     On OS X, opens the file, probably using the default app, Preview.app
-    On Windows, ?
     On Unix, open the file with xdg-open.
+    On Windows, ?
 
 """
 
@@ -127,6 +130,25 @@ function origin()
     # set the origin at the center
     Cairo.translate(currentdrawing.cr, currentdrawing.width/2, currentdrawing.height/2)
 end
+
+"""
+    Convert or rescale a value between oldmin/oldmax to equivalent value between newmin/newmax.
+
+    For example, to convert 42 that used to lie between 0 and 100 to the equivalent number between
+    1 and 0 (inverting the direction):
+
+        rescale(42, 0, 100, 1, 0)
+
+        returns 0.5800000000000001
+
+"""
+
+    rescale(value, oldmin, oldmax, newmin, newmax) = ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
+
+    macro rescale(value, oldmin, oldmax, newmin, newmax)
+           quote (($(esc(value)) - $(esc(oldmin))) / ($(esc(oldmax)) - $(esc(oldmin)))) * ($(esc(newmax)) - $(esc(newmin))) + $(esc(newmin))
+           end
+    end
 
 """
     Draw two axes lines centered at 0/0.
@@ -787,6 +809,10 @@ end
 
     Place an image previously loaded using readpng().
 
+    You can use an alpha value with `placeimagealpha()`:
+
+        placeimagealpha(img, xpos, ypos, alpha)
+
 """
 
 function placeimage(img::Cairo.CairoSurface, xpos, ypos)
@@ -795,5 +821,19 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos)
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
+
+function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
+          ccall((:cairo_paint_with_alpha, Cairo._jl_libcairo),
+                   Void,
+                   (Ptr{Void}, Float64),
+                   ctx.ptr, a)
+       end
+
+function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha = 1.0)
+    Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
+    paint_with_alpha(currentdrawing.cr, alpha)
+end
+
+placeimage(img::Cairo.CairoSurface, pt::Point, alpha) = placeimagealpha(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
 end # module
