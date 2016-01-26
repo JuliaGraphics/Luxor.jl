@@ -4,7 +4,9 @@ Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics packa
 
 ![](examples/tiled-images-1.png)
 
-The idea of Luxor is that it's slightly easier to use than Cairo, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. For a much more powerful graphics environment, try [Compose.jl](http://composejl.org). Also worth looking at is Andrew Cooke's Drawing.jl package.
+The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
+
+For a much more powerful graphics environment, try [Compose.jl](http://composejl.org). Also worth looking at is Andrew Cooke's [Drawing.jl](https://github.com/andrewcooke/Drawing.jl) package.
 
 [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
@@ -12,7 +14,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ### Current status ###
 
-It's been updated for Julia version 0.4 and for the modified Colors.jl.
+It's been updated for Julia version 0.4 and for the new Colors.jl.
 
 SVG rendering currently seems unreliable — text placement generates segmentation faults.
 
@@ -50,48 +52,48 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
 ![Luxor test](examples/basic-test.png)
 
 ```julia
-using Luxor, Colors
-Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
+    using Luxor, Colors
+    Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
 
-origin()
-background("purple")
+    origin()
+    background("purple")
 
-setopacity(0.7)                      # opacity from 0 to 1
-sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
-setline(20)                          # line width
+    setopacity(0.7)                      # opacity from 0 to 1
+    sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
+    setline(20)                          # line width
 
-rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
-randomhue()
-circle(0, 0, 460, :stroke)
+    rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
+    randomhue()
+    circle(0, 0, 460, :stroke)
 
-circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
-sethue("gold")
-setopacity(0.7)
-setline(10)
+    circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
+    sethue("gold")
+    setopacity(0.7)
+    setline(10)
 
-for i in 0:pi/36:2*pi - pi/36
-    move(0, 0)
-    line(cos(i) * 600, sin(i) * 600 )
-    stroke()
-end
+    for i in 0:pi/36:2*pi - pi/36
+        move(0, 0)
+        line(cos(i) * 600, sin(i) * 600 )
+        stroke()
+    end
 
-clipreset()                           # finish masking
+    clipreset()                           # finish masking
 
-fontsize(60)
-setcolor("turquoise")
-fontface("Optima-ExtraBlack")
-textwidth = textextents("Luxor")[5]
+    fontsize(60)
+    setcolor("turquoise")
+    fontface("Optima-ExtraBlack")
+    textwidth = textextents("Luxor")[5]
 
-# move the text by half the width
-textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
+    # move the text by half the width
+    textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
 
-fontsize(18)
-fontface("Avenir-Black")
+    fontsize(18)
+    fontface("Avenir-Black")
 
-# text on curve starting on an arc
-textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
-finish()
-preview() # on Mac OS X, opens in Preview
+    # text on curve starting on an arc
+    textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
+    finish()
+    preview() # on Mac OS X, opens in Preview
 ```
 
 #### Turtle graphics
@@ -213,7 +215,7 @@ The main defined type is the `Point`.
 
 #### clipping masks
 
-This example loads a file containing functions that draw the Julia logo. One of the functions creates paths but doesn't action them. The paths can be used for clipping subsequent graphics:
+This example loads a file containing functions that draw the Julia logo. One of the functions creates paths but doesn't apply an action them; they can therefore be used as a mask for clipping subsequent graphics:
 
 ![julia logo mask](examples/julia-logo-mask.png)
 
@@ -249,7 +251,7 @@ This example loads a file containing functions that draw the Julia logo. One of 
 
 #### text clipping
 
-You can use text paths as a clipping region - here the paths are filled with names of Julia functions.
+You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions.
 
 ![text clipping](examples/text-path-clipping.png)
 
@@ -378,6 +380,8 @@ The global variable `currentdrawing` holds a few parameters:
      :greenvalue
      :bluevalue
      :alpha
+
+There's a `rescale()` function which is just a utility function for converting a number from one range to another.
 
 #### Axes and backgrounds
 
