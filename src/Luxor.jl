@@ -51,7 +51,7 @@ end
 
 export Drawing, currentdrawing,
 
-    rescale, @rescale,
+    rescale,
 
     finish, preview,
     origin, axes, background,
@@ -144,11 +144,6 @@ end
 """
 
     rescale(value, oldmin, oldmax, newmin, newmax) = ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
-
-    macro rescale(value, oldmin, oldmax, newmin, newmax)
-           quote (($(esc(value)) - $(esc(oldmin))) / ($(esc(oldmax)) - $(esc(oldmin)))) * ($(esc(newmax)) - $(esc(newmin))) + $(esc(newmin))
-           end
-    end
 
 """
     Draw two axes lines centered at 0/0.
