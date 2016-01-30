@@ -304,6 +304,18 @@ You can use newly-created text paths as a clipping region - here the text paths 
 
 There is some limited support for placing PNG images on the drawing.
 
+Load a PNG image using `readpng(filename)`.
+
+Place a PNG image by its top left corner at point `x/y` or `pt`:
+
+    placeimage(img, x, y)
+
+    placeimage(img, pt)
+
+    placeimage(image, x, y, alpha)
+
+    placeimage(image, pt, alpha)
+
 ```julia
     using Luxor
 
@@ -331,7 +343,9 @@ There is some limited support for placing PNG images on the drawing.
         translate(x, y)
         scale(.95, .95)
         rotate(rand(0.0:pi/8:2*pi))
+
         placeimage(image, -w/2, -h/2)
+
         grestore()
         clipreset()
         x += 600
@@ -346,6 +360,8 @@ There is some limited support for placing PNG images on the drawing.
 ```
 
 !["Images"](examples/test-image.png)
+
+There's also `paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)`.
 
 ### Functions
 
@@ -644,7 +660,15 @@ get array of dimensions of the string `str`, given current font:
 
 Load a PNG image with `readpng()`. Place it by its top left corner at the specified position using `placeimage()`.
 
+Place a PNG image by its top left corner at point `x/y` or `pt`.
+
 ```julia
+
+    image = readpng(filename)
+    placeimage(img, xpos, ypos)
+    placeimage(img, pt::Point)
+    placeimage(img, xpos, ypos, alpha = 1.0)
+    placeimage(img, pt::Point, alpha = 1.0)
 
     image = readpng("../examples/julia-logo-mask.png")
     w = image.width
@@ -653,4 +677,3 @@ Load a PNG image with `readpng()`. Place it by its top left corner at the specif
     placeimage(image, -w/2, -h/2) # centered
 
 ```
-

@@ -59,7 +59,7 @@ export Drawing, currentdrawing,
     circle, rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, carc, ngon, sector,
-    do_action, stroke, fill, paint, fillstroke,
+    do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
 
@@ -776,7 +776,6 @@ function transform(a::Array)
     ])
 end
 
-
 # images
 
 """
@@ -810,6 +809,10 @@ end
 
 """
 
+function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
+    Cairo.paint_with_alpha(currentdrawing.cr, a)
+end
+
 function placeimage(img::Cairo.CairoSurface, xpos, ypos)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     Cairo.paint(currentdrawing.cr)
@@ -817,18 +820,11 @@ end
 
 placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
 
-function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
-          ccall((:cairo_paint_with_alpha, Cairo._jl_libcairo),
-                   Void,
-                   (Ptr{Void}, Float64),
-                   ctx.ptr, a)
-       end
-
 function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha = 1.0)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     paint_with_alpha(currentdrawing.cr, alpha)
 end
 
-placeimage(img::Cairo.CairoSurface, pt::Point, alpha) = placeimagealpha(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
+placeimage(img::Cairo.CairoSurface, pt::Point, alpha) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
 end # module
