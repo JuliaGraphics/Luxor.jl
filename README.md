@@ -71,7 +71,7 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
     setopacity(0.7)
     setline(10)
 
-    for i in 0:pi/36:2*pi - pi/36
+    for i in 0:pi/36:2pi - pi/36
         move(0, 0)
         line(cos(i) * 600, sin(i) * 600 )
         stroke()
@@ -342,7 +342,7 @@ Place a PNG image by its top left corner at point `x/y` or `pt`:
         gsave()
         translate(x, y)
         scale(.95, .95)
-        rotate(rand(0.0:pi/8:2*pi))
+        rotate(rand(0.0:pi/8:2pi))
 
         placeimage(image, -w/2, -h/2)
 

@@ -70,7 +70,7 @@ function hex_mixtures()
     grestore()
 end
 
-hexagon(x, y, size) = [Point(x + size * cos(2 * pi/6 * i), y + size * sin(2 * pi/6 * i)) for i in 1:6]
+hexagon(x, y, size) = [Point(x + size * cos(2pi/6 * i), y + size * sin(2pi/6 * i)) for i in 1:6]
 
 function main()
     global currentwidth = 595 # pts

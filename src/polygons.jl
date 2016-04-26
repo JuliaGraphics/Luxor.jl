@@ -235,15 +235,15 @@ end
 """
 
 function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
-    poly([Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
-           y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides], close=close, action, reversepath=reversepath)
+    poly([Point(x+cos(orientation + n * 2pi/sides) * radius,
+           y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides], close=close, action, reversepath=reversepath)
 end
 
 ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
 
 function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
-    [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
-           y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides]
+    [Point(x+cos(orientation + n * 2pi/sides) * radius,
+           y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end
 
 ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
@@ -343,4 +343,3 @@ function polysplit(pointlist, p1, p2)
 
     return(poly1, poly2)
 end
-

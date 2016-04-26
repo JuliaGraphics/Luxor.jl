@@ -65,7 +65,7 @@ function main()
     fontsize(20)
     sethue("cyan")
     n = 10
-    angle = (2 * pi)/n
+    angle = 2pi/n
     for i in 1:n
         # rotate another 'angle' radians
         transform([cos(angle), sin(angle), -sin(angle), cos(angle), 0, 0])

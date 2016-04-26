@@ -21,7 +21,7 @@ function main()
     setline(10)
 
     # simple line drawing
-    for i in 0:pi/36:2*pi - pi/36
+    for i in 0:pi/36:2pi - pi/36
         move(0, 0)
         line(cos(i) * 600, sin(i) * 600 )
         stroke()

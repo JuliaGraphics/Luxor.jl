@@ -10,7 +10,7 @@ origin()
 background("black")
 
 for inner in 0:20:600
-    for a in 0:pi/12:2*pi
+    for a in 0:pi/12:2pi
         randomhue()
         sector(inner, inner + 20, a, a + pi/12, :fill)
         sethue("black")
