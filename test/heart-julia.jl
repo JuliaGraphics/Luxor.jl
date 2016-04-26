@@ -86,7 +86,7 @@ function main()
 
     background_text(namelist)
     for n in 1:5
-        rotate(2 * pi / 5)
+        rotate(2pi/5)
         outlined_heart()
     end
     finish()

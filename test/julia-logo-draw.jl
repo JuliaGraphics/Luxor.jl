@@ -7,7 +7,7 @@ function spiral()
     scale(.3, .3)
     r = 200
     setcolor("gray")
-    for i in 0:pi/8:(2*pi)
+    for i in 0:pi/8:2pi
         gsave()
         translate(r * cos(i), r * sin(i))
         rotate(i)
@@ -21,7 +21,7 @@ function expandingspiral()
     gsave()
     scale(.3, .3)
     r = 200
-    for i in pi:pi/12:(6*pi)
+    for i in pi:pi/12:6pi
         gsave()
         translate(i/3 * r * cos(i), i/3 * r * sin(i))
         scale(0.8, 0.8)

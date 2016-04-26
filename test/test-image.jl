@@ -13,6 +13,7 @@ setline(5)
 sethue("green")
 
 image = readpng("../examples/julia-logo-mask.png")
+
 w = image.width
 h = image.height
 
@@ -25,7 +26,7 @@ for i in 1:36
     gsave()
     translate(x, y)
     scale(.95, .95)
-    rotate(rand(0.0:pi/8:2*pi))
+    rotate(rand(0.0:pi/8:2pi))
     placeimage(image, -w/2, -h/2)
     grestore()
     clipreset()

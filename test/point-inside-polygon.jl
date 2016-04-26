@@ -4,8 +4,8 @@
 using Luxor, Colors
 
 function ngon_poly(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
-    [Point(x+cos(orientation + n * (2 * pi)/sides) * radius,
-    y+sin(orientation + n * (2 * pi)/sides) * radius) for n in 1:sides]
+    [Point(x+cos(orientation + n * 2pi/sides) * radius,
+    y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end
 
 function bounding_b(x, y, o)
