@@ -628,37 +628,41 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 #### Text and fonts
 
+##### Placing text
+
 - `text(t, x, y)` draw string `t` at `x`/`y`, or at `0/0` if `x`/`y` omitted
 - `text(t, pt)` draw string `t` at `pt`
 
 - `textcentred(t, x, y)` draw string `t` centred at `x`/`y` or `0/0`
 - `textcentred(t, pt)`
 
-- `textpath(t)`
+- `textpath(t)` makes the string `t` into a graphic path suitable for `fill()`, `stroke()`...
 
-make the string `t` into a graphic path suitable for `fill()`, `stroke()`...
+- `textcurve(str, startangle, startradius, xcentre, ycentre)`
+- `textcurve(str, startangle, startradius, centerpt)`
 
-- `textcurve(str, startangle, radius, xcentre, ycentre)`
-- `textcurve(str, startangle, radius, centerpt)`
+draws string `str` on an arc of radius `startradius` centered at `xcenter/ycenter` (or `centrept`) starting on angle `start_angle`,
+which is relative to the +ve x-axis.
 
-draw string `str` on an arc of radius `r` centered at `xcenter/ycenter` (or `centrept`) starting on angle start_angle.
 You can change the letter spacing, and/or spiral in or out, using these optional keywords:
 
 -  `spiral_ring_step = 0`,   step out or in by this amount
 -  `letter_spacing = 0`,     tracking/space between chars, tighter is (-), looser is (+)
 -  `spiral_in_out_shift = 0` + values go outwards, - values spiral inwards 
 
+##### Fonts
+
 - `fontface(fontname)`
 
-choose font `fontname`
+chooses font `fontname`
 
 - `fontsize(n)`
 
-set font size in points
+sets font size in points
 
 - `textextents(str)`
 
-get array of dimensions of the string `str`, given current font:
+gets array of dimensions of the string `str`, given current font:
 
 	[xb, yb, width, height, xadvance, yadvance]
 
