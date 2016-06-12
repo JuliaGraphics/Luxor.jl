@@ -90,8 +90,9 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
     fontsize(18)
     fontface("Avenir-Black")
 
-    # text on curve starting on an arc
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
+    # text on curve
+    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
+
     finish()
     preview() # on Mac OS X, opens in Preview
 ```
@@ -637,10 +638,15 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 
 make the string `t` into a graphic path suitable for `fill()`, `stroke()`...
 
-- `textcurve(str, x, y, xc, yc, r)`
-- `textcurve(str, pt, ptcentre, r)`
+- `textcurve(str, startangle, radius, xcentre, ycentre)`
+- `textcurve(str, startangle, radius, centerpt)`
 
-draw string `str` on a circular arc of radius `r` centered at `xc/yc` (`ptcentre`) starting on a line passing from `xc/yc` through `x/y` (`pt`)
+draw string `str` on an arc of radius `r` centered at `xcenter/ycenter` (or `centrept`) starting on angle start_angle.
+You can change the letter spacing, and/or spiral in or out, using these optional keywords:
+
+-  `spiral_ring_step = 0`,   step out or in by this amount
+-  `letter_spacing = 0`,     tracking/space between chars, tighter is (-), looser is (+)
+-  `spiral_in_out_shift = 0` + values go outwards, - values spiral inwards 
 
 - `fontface(fontname)`
 
