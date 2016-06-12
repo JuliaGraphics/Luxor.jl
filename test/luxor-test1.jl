@@ -8,7 +8,7 @@ function main()
 
     setopacity(0.7)     # opacity from 0 to 1
     sethue(0.3,0.7,0.9) # sethue sets the color but doesn't change the opacity
-    setline(20) # line width
+    setline(20)         # line width
     # graphics functions use :fill, :stroke, :fillstroke, :clip, or leave blank
     rect(-400,-400,800,800, :fill)
     randomhue()
@@ -38,10 +38,11 @@ function main()
     # move the text by half the width
     textcentred("Luxor", 0, currentdrawing.height/2 - 400)
 
-    # text on curve starting on an arc: arc starts at a line through (0,-10) radius 550, centered at 0,0
+    # text on curve
     fontsize(18)
     fontface("Avenir-Black")
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, Point(0, 0), Point(0, -10), 550)
+
+    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
     finish()
     preview() # Mac OS X only, opens in Preview
 end

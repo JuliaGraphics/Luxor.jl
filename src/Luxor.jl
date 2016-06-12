@@ -249,7 +249,7 @@ clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
 function circle(x, y, r, action=:nothing) # action is a symbol or nothing
     if action != :path
-        newpath()
+      newpath()
     end
     Cairo.circle(currentdrawing.cr, x, y, r)
     do_action(action)
@@ -274,8 +274,8 @@ circle(centerpoint::Point, r, action=:nothing)  = circle(centerpoint.x, centerpo
 """
 
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
-    Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-    do_action(action)
+  Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+  do_action(action)
 end
 
 """
@@ -287,8 +287,8 @@ end
 """
 
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
-    Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-    do_action(action)
+  Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+  do_action(action)
 end
 
 """
@@ -562,43 +562,60 @@ function textpath(t)
 end
 
 """
-    textcurve(str, x, y, xc, yc, r)
 
-    Put string of text on a circular arc
-    Starting on line passing through (x,y), on arc/circle centred (xc,yc) on circle with radius r
-    The radius is used to define the circle, the x/y are just used to define the start position...
+  Put string of text on a curve. Can spiral in or out.
+  `start_angle` relative to x-axis, on arc/circle centred on `(x_pos,y_pos)` with radius `start_radius`.
+
+    textcurve(the_text,
+      start_angle,
+      start_radius,
+      x_pos,
+      y_pos;
+      # optional keyword arguments
+      spiral_ring_step = 0,   # step out or in by this amount
+      letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)
+      spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards 
+      )
 
 """
 
-function textcurve(str, x, y, xc, yc, r)
-    # first get widths of every character:
-    widths = Float64[]
-    for i in 1:length(str)
-        extents = textextents(str[i:i])
-        #        x_bearing = extents[1]
-        #        y_bearing = extents[2]
-        #        w = extents[3]
-        #        h = extents[4]
-        x_advance = extents[5]
-        #        y_advance = extents[6]
-        push!(widths, x_advance )
-    end
+function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
+  # keyword optional arguments
+  spiral_ring_step = 0,
+  letter_spacing = 0, # tracking/space between chars, tighter is (-), looser is (+)
+  spiral_in_out_shift = 0 # makes spiral outwards (+) or inwards (-)
+  )
+
+  angle = start_angle
+  current_radius = start_radius
+  spiral_space_step = 0
+  xx = 0
+  yy = 0
+  angle_step = 0
+  radius_step = 0
+  for i in 1:length(the_text)
+    glyph = string(the_text[i])
+    glyph_x_bearing, glyph_y_bearing, glyph_width,
+      glyph_height, glyph_x_advance, glyph_y_advance = textextents(glyph)
+    spiral_space_step = glyph_x_advance + letter_spacing
+    cnter = (2pi * current_radius) / spiral_space_step
+    radius_step = (spiral_ring_step + spiral_in_out_shift) / cnter
+    current_radius += radius_step
+    angle_step += (glyph_x_advance / 2) + letter_spacing/2
+    angle += angle_step / current_radius
+    angle_step = (glyph_x_advance / 2) + letter_spacing/2
+    xx = cos(angle) * current_radius + x_pos
+    yy = sin(angle) * current_radius + y_pos
     gsave()
-    arclength = r * atan2(y, x) # starting on line passing through x/y but using radius
-    for i in 1:length(str)
-        gsave()
-        theta = arclength/r  # angle for this character
-        delta = widths[i]/r  # amount of turn created by width of this char
-        translate(r * cos(theta), r * sin(theta)) # move the origin to this point
-        rotate(theta + pi/2 + delta/2) # rotate so text baseline perp to center
-        text(str[i:i])
-        arclength += widths[i] # move on by the width of this character
-        grestore()
-    end
+    translate(xx, yy)
+    rotate(pi/2 + angle)
+    textcentred(glyph, 0, 0)
     grestore()
+    current_radius < 10 && break
+  end
 end
 
-textcurve(str, pt::Point, centre::Point, r) = textcurve(str, pt.x, pt.y, centre.x, centre.y, r)
+textcurve(the_text, start_angle, start_radius, centre::Point) = textcurve(the_text, start_angle, start_radius, centre.x, centre.y)
 
 """
     setcolor(col::AbstractString)
