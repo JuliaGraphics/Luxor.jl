@@ -14,9 +14,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ### Current status ###
 
-It's been updated for Julia version 0.4 and for the new Colors.jl.
-
-SVG rendering currently seems unreliable — text placement generates segmentation faults.
+It's been updated for Julia version 0.4 and for the new Colors.jl. SVG rendering currently seems unreliable — text placement generates segmentation faults.
 
 ### Example usage
 
@@ -90,7 +88,7 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
     fontsize(18)
     fontface("Avenir-Black")
 
-    # text on curve
+    # text on curve starting at angle 0 rads centered on origin with radius 550
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
 
     finish()
@@ -110,7 +108,7 @@ Some simple "turtle graphics" commands are included:
     origin()
     background("black")
 
-    # let's have two turtles
+    # let's have two turtles
     raphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
 
     setopacity(0.95)
@@ -250,7 +248,7 @@ This example loads a file containing functions that draw the Julia logo. One of 
     preview()
 ```
 
-#### text clipping
+#### Text clipping
 
 You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions.
 
@@ -313,6 +311,8 @@ Place a PNG image by its top left corner at point `x/y` or `pt`:
 
     placeimage(img, pt)
 
+You can specify an alpha value:
+
     placeimage(image, x, y, alpha)
 
     placeimage(image, pt, alpha)
@@ -361,8 +361,6 @@ Place a PNG image by its top left corner at point `x/y` or `pt`:
 ```
 
 !["Images"](examples/test-image.png)
-
-There's also `paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)`.
 
 ### Functions
 
@@ -413,13 +411,13 @@ The origin (0/0) is at the top left, x axis runs left to right, y axis runs top 
 
 #### Shapes and lines
 
-For many functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `fillpreserve`, `strokepreserve`, `:clip`. The default is `:nothing`.
+For many functions, the *action* argument can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
 There is a Point type (the only main type, apart from `Drawing`).
 
    `Point(12.0, 13.0)`
 
-Positions are often specified by both x and y coordinates or a Point(x, y).
+Positions are specified either by x and y coordinates or a `Point(x, y)`.
 
 - `circle(x, y, r, action)`
 - `circle(center, r, action)`
@@ -454,9 +452,7 @@ There is a 'current position':
 
 The spline starts at the current position, finishing at `x3/y3` (`p3`), following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
 
-Polygons are arrays of points.
-
-Regular polygons, from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons, with:
+Polygons are arrays of points. You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with:
 
 - `ngon(xc, yc, radius, sides, orientation, action=:nothing)` draws a `sides`-sided polygon
 
@@ -464,7 +460,7 @@ Ngons are closed by default.
 
 - `ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)`
 
-Without an action, returns an array of points instead:
+Without an action, `ngon` returns an array of points instead:
 
 - `ngon(xc, yc, radius, sides, orientation)`
 
@@ -511,7 +507,7 @@ There are some experimental polygon functions. These don't work well for polygon
 
 - `polysplit(p, point1, point2)`
 
-returns two polygons if a line from point1 to point2 divides the polygon.
+returns two polygons if a line from `point1` to `point2` divides the polygon.
 
 - `polysortbydistance(p, startingpoint)`
 
@@ -557,7 +553,7 @@ returns `[Point(lowx, lowy), Point(highx, highy)]`, opposite corners of a boundi
 
 - `scale(sx, sy)` scale by sx and sy
 
-- `rotate(a)` rotate clockwise (positive x-axis to positive y-axis) by `a` radians around current 0/0
+- `rotate(a)` rotate clockwise (positive x-axis to positive/down y-axis) by `a` radians around current 0/0
 
 - `translate(tx, ty)` translate to `tx/ty` or `pt`
 - `translate(pt)`
@@ -677,13 +673,12 @@ Place a PNG image by its top left corner at point `x/y` or `pt`.
     image = readpng(filename)
     placeimage(img, xpos, ypos)
     placeimage(img, pt::Point)
-    placeimage(img, xpos, ypos, alpha = 1.0)
-    placeimage(img, pt::Point, alpha = 1.0)
+    placeimage(img, xpos, ypos, 0.5) # alpha transparency of 0.5
+    placeimage(img, pt::Point, 0.5) 
 
     image = readpng("../examples/julia-logo-mask.png")
     w = image.width
     h = image.height
-
-    placeimage(image, -w/2, -h/2) # centered
+    placeimage(image, -w/2, -h/2) # centered
 
 ```
