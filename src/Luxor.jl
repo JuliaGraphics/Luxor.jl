@@ -593,8 +593,9 @@ function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
   yy = 0
   angle_step = 0
   radius_step = 0
-  for i in 1:length(the_text)
-    glyph = string(the_text[i])
+  counter = 1
+  for i in the_text
+    glyph = string(i)
     glyph_x_bearing, glyph_y_bearing, glyph_width,
       glyph_height, glyph_x_advance, glyph_y_advance = textextents(glyph)
     spiral_space_step = glyph_x_advance + letter_spacing
@@ -612,6 +613,7 @@ function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
     textcentred(glyph, 0, 0)
     grestore()
     current_radius < 10 && break
+    counter += 1
   end
 end
 
