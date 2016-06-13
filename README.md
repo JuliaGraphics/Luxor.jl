@@ -249,7 +249,6 @@ This example loads a file containing functions that draw the Julia logo. One of 
 ```
 ### Text on a curve or spiral
 
-<<<<<<< .merge_file_CQbiiU
 ![text on a curve or spiral](examples/text-spiral.png)
 
 ```julia
@@ -273,8 +272,6 @@ This example loads a file containing functions that draw the Julia logo. One of 
   preview()
 ```
 
-=======
->>>>>>> .merge_file_ayxId6
 #### Text clipping
 
 You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions.
@@ -706,7 +703,7 @@ Place a PNG image by its top left corner at point `x/y` or `pt`.
     placeimage(img, xpos, ypos)
     placeimage(img, pt::Point)
     placeimage(img, xpos, ypos, 0.5) # alpha transparency of 0.5
-    placeimage(img, pt::Point, 0.5) 
+    placeimage(img, pt::Point, 0.5)
 
     image = readpng("../examples/julia-logo-mask.png")
     w = image.width
