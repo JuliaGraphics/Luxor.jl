@@ -249,8 +249,32 @@ This example loads a file containing functions that draw the Julia logo. One of 
     finish()
     preview()
 ```
+### Text on a curve or spiral
 
-#### text clipping
+![text on a curve or spiral](examples/text-spiral.png)
+
+```julia
+  using Luxor, Colors
+  Drawing("A0", "/tmp/text-spiral.pdf")
+  fontsize(12)
+  fontface("InputMono-Medium")
+  origin()
+  background("ivory")
+  sethue("royalblue4")
+  textstring = join(names(Base), " ")
+  textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2, 700, 0, 0,
+    spiral_in_out_shift = -16.0,
+    letter_spacing = 0,
+    spiral_ring_step = 0)
+
+  fontsize(25)
+  fontface("Agenda-Black")
+  textcentred("julia names(Base)", 0, 0)
+  finish()
+  preview()
+```
+
+#### Text clipping
 
 You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions.
 
@@ -378,6 +402,11 @@ There's also `paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)`.
  	create an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels
 - `Drawing(800,800, "/tmp/my-drawing.eps")`
  	create an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels
+- `Drawing("A4")`
+  create the drawing in ISO A4 size  
+- `Drawing("A4landscape")`
+    create the drawing A4 landscape size. Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A",
+"B", "C", "D", "E". Add "landscape" to get the landscape version.
 - `finish()`
  	finish the drawing
 - `preview()`

@@ -13,8 +13,8 @@ include("polygons.jl")
 import Base: fill, scale
 
 type Drawing
-    width::Float64
-    height::Float64
+    width::Real
+    height::Real
     filename::AbstractString
     surface::CairoSurface
     cr::CairoContext
@@ -47,6 +47,33 @@ type Drawing
         const currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
         return "drawing '$f' ($w w x $h h) created"
     end
+end
+
+# builtin paper sizes, all with width first, so default is Portrait
+paper_sizes = Dict{AbstractString, Tuple}(
+  "A0" => (841, 1189),
+  "A1" => (594, 841),
+  "A2" => (420, 594),
+  "A3" => (841, 1189),
+  "A4" => (594, 841),
+  "A5" => (420, 594),
+  "A6" => (297, 420),
+  "Letter" => (210, 297),
+  "Legal" => (148, 210),
+  "A" => (105, 148),
+  "B" => (216, 279),
+  "C" => (216, 356),
+  "D" => (105, 148),
+  "E" => (279, 432))
+
+function Drawing(paper_size::AbstractString, f="/tmp/luxor-drawing.png")
+  if contains(paper_size, "landscape")
+    psize = replace(paper_size, "landscape", "")
+    h, w = paper_sizes[psize]
+  else
+    w, h = paper_sizes[paper_size]
+  end
+  Drawing(w, h, f)
 end
 
 export Drawing, currentdrawing,
