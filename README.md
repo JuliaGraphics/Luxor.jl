@@ -2,7 +2,7 @@
 
 Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
 
-![](examples/tiled-images-1.png)
+![](examples/tiled-images.png)
 
 The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
@@ -401,7 +401,7 @@ You can specify an alpha value:
 - `Drawing(800,800, "/tmp/my-drawing.eps")`
  	create an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels
 - `Drawing("A4")`
-  create the drawing in ISO A4 size  
+  create the drawing in ISO A4 size
 - `Drawing("A4landscape")`
     create the drawing A4 landscape size. Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A",
 "B", "C", "D", "E". Add "landscape" to get the landscape version.
