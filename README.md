@@ -699,15 +699,15 @@ Place a PNG image by its top left corner at point `x/y` or `pt`.
 
 ```julia
 
-    image = readpng(filename)
+    img = readpng(filename)
     placeimage(img, xpos, ypos)
     placeimage(img, pt::Point)
     placeimage(img, xpos, ypos, 0.5) # alpha transparency of 0.5
     placeimage(img, pt::Point, 0.5)
 
-    image = readpng("../examples/julia-logo-mask.png")
-    w = image.width
-    h = image.height
-    placeimage(image, -w/2, -h/2) # centered
+    img = readpng("../examples/julia-logo-mask.png")
+    w = img.width
+    h = img.height
+    placeimage(img, -w/2, -h/2) # centered
 
 ```
