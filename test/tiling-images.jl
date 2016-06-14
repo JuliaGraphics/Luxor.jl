@@ -17,6 +17,7 @@ end
 function get_png_files(folder)
     cd(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
+    imagelist = filter(f -> !startswith(f, "tiled-images"), imagelist) # don't recurse... :)
     return map(realpath, imagelist)
 end
 
@@ -52,7 +53,7 @@ imagelist = get_png_files(Pkg.dir("Luxor") * "/examples")
 shuffle!(imagelist)
 
 width, height = 1600, 1000
-Drawing(width, height, "/tmp/tiled-images.pdf")
+Drawing(width, height, "/tmp/tiled-images.png")
 origin()
 background("grey50")
 
