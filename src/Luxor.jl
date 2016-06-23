@@ -51,20 +51,18 @@ end
 
 # builtin paper sizes, all with width first, so default is Portrait
 paper_sizes = Dict{AbstractString, Tuple}(
-  "A0" => (841, 1189),
-  "A1" => (594, 841),
-  "A2" => (420, 594),
-  "A3" => (841, 1189),
-  "A4" => (594, 841),
-  "A5" => (420, 594),
-  "A6" => (297, 420),
-  "Letter" => (210, 297),
-  "Legal" => (148, 210),
-  "A" => (105, 148),
-  "B" => (216, 279),
-  "C" => (216, 356),
-  "D" => (105, 148),
-  "E" => (279, 432))
+  "A0" => (2384, 3370),
+  "A1" => (1684, 2384),
+  "A2" => (1191, 1684),
+  "A3" => (842, 1191),
+  "A4" => (595, 842),
+  "A5" => (420, 595),
+  "A6" => (298, 420),
+  "Letter" => (612, 792),
+  "Legal" => (612, 1008),
+  "C" => (1584, 1224),
+  "D" => (2448, 1584),
+  "E" => (3168, 2448))
 
 function Drawing(paper_size::AbstractString, f="/tmp/luxor-drawing.png")
   if contains(paper_size, "landscape")
