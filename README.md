@@ -253,19 +253,20 @@ This example loads a file containing functions that draw the Julia logo. One of 
 
 ```julia
   using Luxor, Colors
-  Drawing("A0", "/tmp/text-spiral.pdf")
-  fontsize(12)
-  fontface("InputMono-Medium")
+  Drawing(1800, 1800, "/tmp/text-spiral.png")
+  fontsize(18)
+  fontface("LucidaSansUnicode")
   origin()
   background("ivory")
   sethue("royalblue4")
   textstring = join(names(Base), " ")
-  textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2, 700, 0, 0,
-    spiral_in_out_shift = -16.0,
+  textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2,
+    800, 0, 0,
+    spiral_in_out_shift = -18.0,
     letter_spacing = 0,
     spiral_ring_step = 0)
 
-  fontsize(25)
+  fontsize(35)
   fontface("Agenda-Black")
   textcentred("julia names(Base)", 0, 0)
   finish()
