@@ -13,8 +13,8 @@ include("polygons.jl")
 import Base: fill, scale
 
 type Drawing
-    width::Real
-    height::Real
+    width::Float64
+    height::Float64
     filename::AbstractString
     surface::CairoSurface
     cr::CairoContext
@@ -58,8 +58,11 @@ paper_sizes = Dict{AbstractString, Tuple}(
   "A4" => (595, 842),
   "A5" => (420, 595),
   "A6" => (298, 420),
+  "A" => (612, 792),
   "Letter" => (612, 792),
   "Legal" => (612, 1008),
+  "Ledger" => (792, 1224),
+  "B" => (612, 1008),
   "C" => (1584, 1224),
   "D" => (2448, 1584),
   "E" => (3168, 2448))
@@ -153,7 +156,7 @@ end
 
 function origin()
     # set the origin at the center
-    Cairo.translate(currentdrawing.cr, currentdrawing.width/2, currentdrawing.height/2)
+    Cairo.translate(currentdrawing.cr, currentdrawing.width/2., currentdrawing.height/2.)
 end
 
 """
@@ -181,13 +184,13 @@ function axes()
     fontsize(20)
     sethue("gray")
     move(0,0)
-    line(currentdrawing.width/2 - 20,0)
+    line(currentdrawing.width/2. - 20, 0)
     stroke()
-    text("x", currentdrawing.width/2 - 20, 0)
-    move(0,0)
-    line(0, currentdrawing.height/2 - 20)
+    text("x", currentdrawing.width/2. - 20, 0)
+    move(0, 0)
+    line(0, currentdrawing.height/2. - 20)
     stroke()
-    text("y", 0, currentdrawing.height/2 - 20)
+    text("y", 0, currentdrawing.height/2. - 20)
     grestore()
 end
 
@@ -202,13 +205,13 @@ function background(col::AbstractString)
 # TODO: at present this only works properly after you call origin() to put 0/0 in the center
 # but how can it tell whether you've used origin() first?
    setcolor(col)
-   rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
+   rect(-currentdrawing.width/2., -currentdrawing.height/2., currentdrawing.width, currentdrawing.height, :fill)
 end
 
 function background(col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
     setcolor(temp.r, temp.g, temp.b)
-    rect(-currentdrawing.width/2, -currentdrawing.height/2, currentdrawing.width, currentdrawing.height, :fill)
+    rect(-currentdrawing.width/2., -currentdrawing.height/2., currentdrawing.width, currentdrawing.height, :fill)
 end
 
 # does this do anything in Cairo?
@@ -438,7 +441,7 @@ rline(pt)       = rline(pt.x, pt.y)
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
-saved_colors = Tuple[]
+saved_colors = Tuple{Float64,Float64,Float64,Float64}[]
 
 # I originally used simple Cairo save() but somehow the colors/opacity
 # thing didn't save/restore properly, hence the stack
@@ -571,7 +574,7 @@ text(t, pt::Point) = text(t, pt.x, pt.y)
 
 function textcentred(t, x=0, y=0)
     textwidth = textextents(t)[5]
-    text(t, x - textwidth/2, y)
+    text(t, x - textwidth/2., y)
 end
 
 textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
@@ -627,17 +630,17 @@ function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
     cnter = (2pi * current_radius) / spiral_space_step
     radius_step = (spiral_ring_step + spiral_in_out_shift) / cnter
     current_radius += radius_step
-    angle_step += (glyph_x_advance / 2) + letter_spacing/2
+    angle_step += (glyph_x_advance / 2.) + letter_spacing/2.
     angle += angle_step / current_radius
-    angle_step = (glyph_x_advance / 2) + letter_spacing/2
+    angle_step = (glyph_x_advance / 2.) + letter_spacing/2.
     xx = cos(angle) * current_radius + x_pos
     yy = sin(angle) * current_radius + y_pos
     gsave()
     translate(xx, yy)
-    rotate(pi/2 + angle)
-    textcentred(glyph, 0, 0)
+    rotate(pi/2. + angle)
+    textcentred(glyph, 0., 0.)
     grestore()
-    current_radius < 10 && break
+    current_radius < 10. && break
     counter += 1
   end
 end
@@ -655,7 +658,7 @@ textcurve(the_text, start_angle, start_radius, centre::Point) = textcurve(the_te
 
 function setcolor(col::AbstractString)
     temp = parse(RGBA, col)
-    (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) = (temp.r, temp.g, temp.b, temp.alpha)
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
 end
 

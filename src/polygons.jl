@@ -38,7 +38,7 @@ end
 
 """
 
-midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
+midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 """
@@ -134,8 +134,8 @@ function polycentroid(pointlist)
     centroid.y += (y0 + y1)*a
 
     signedArea *= 0.5
-    centroid.x /= (6.0*signedArea)
-    centroid.y /= (6.0*signedArea)
+    centroid.x /= (6.0 * signedArea)
+    centroid.y /= (6.0 * signedArea)
 
     return centroid
 end

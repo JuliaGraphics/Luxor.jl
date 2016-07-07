@@ -405,7 +405,7 @@ You can specify an alpha value:
   create the drawing in ISO A4 size
 - `Drawing("A4landscape")`
     create the drawing A4 landscape size. Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A",
-"B", "C", "D", "E". Add "landscape" to get the landscape version.
+"B", "C", "D", "E". Append "landscape" to get the landscape version.
 - `finish()`
  	finish the drawing
 - `preview()`
