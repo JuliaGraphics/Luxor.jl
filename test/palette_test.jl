@@ -19,7 +19,7 @@ function draw_color_bars(x, y, n, colmap, label)
 end
 
 
-function main()
+function palette_test()
     global currentwidth = 1000 # pts
     global currentheight = 1000 # pts
     Drawing(currentwidth, currentheight, "/tmp/color-palette.pdf")
@@ -45,4 +45,4 @@ function main()
     preview()
 end
 
-main()
+palette_test()
