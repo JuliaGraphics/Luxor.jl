@@ -16,7 +16,7 @@ function draw_logo_clip(x, y)
     grestore()
 end
 
-function main()
+function clipping_test()
     Drawing(500, 500, "/tmp/clipping-tests.png")
     origin()
     background("white")
@@ -27,4 +27,4 @@ function main()
     preview()
 end
 
-main()
+clipping_test()

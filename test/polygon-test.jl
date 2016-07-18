@@ -72,7 +72,7 @@ end
 
 hexagon(x, y, size) = [Point(x + size * cos(2pi/6 * i), y + size * sin(2pi/6 * i)) for i in 1:6]
 
-function main()
+function polygon_test()
     global currentwidth = 595 # pts
     global currentheight = 842 # pts
     Drawing(currentwidth, currentheight, "/tmp/polygon-test.pdf")
@@ -101,4 +101,4 @@ function main()
     preview()
 end
 
-main()
+polygon_test()

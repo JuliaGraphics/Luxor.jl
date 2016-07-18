@@ -15,10 +15,10 @@ import Base: fill, scale
 type Drawing
     width::Float64
     height::Float64
-    filename::AbstractString
+    filename::String
     surface::CairoSurface
     cr::CairoContext
-    surfacetype::AbstractString
+    surfacetype::String
     redvalue::Float64
     greenvalue::Float64
     bluevalue::Float64
@@ -44,13 +44,13 @@ type Drawing
             the_cr          = Cairo.CairoContext(the_surface)
 
         end
-        const currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
+        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
         return "drawing '$f' ($w w x $h h) created"
     end
 end
 
 # builtin paper sizes, all with width first, so default is Portrait
-paper_sizes = Dict{AbstractString, Tuple}(
+paper_sizes = Dict{String, Tuple}(
   "A0" => (2384, 3370),
   "A1" => (1684, 2384),
   "A2" => (1191, 1684),
@@ -67,7 +67,7 @@ paper_sizes = Dict{AbstractString, Tuple}(
   "D" => (2448, 1584),
   "E" => (3168, 2448))
 
-function Drawing(paper_size::AbstractString, f="/tmp/luxor-drawing.png")
+function Drawing(paper_size::String, f="/tmp/luxor-drawing.png")
   if contains(paper_size, "landscape")
     psize = replace(paper_size, "landscape", "")
     h, w = paper_sizes[psize]
@@ -86,7 +86,7 @@ export Drawing, currentdrawing,
     newpath, closepath, newsubpath,
     circle, rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc, carc, ngon, sector,
+    line, rline, curve, arc, carc, ngon, ngonv, sector,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
@@ -141,9 +141,13 @@ end
 # TODO what will this do on Windows?
 
 function preview()
-    @osx_only      run(`open $(currentdrawing.filename)`)
-    @windows_only  run(`open $(currentdrawing.filename)`)
-    @linux_only    run(`xdg-open $(currentdrawing.filename)`)
+    if is_apple()
+        run(`open $(currentdrawing.filename)`)
+    elseif is_windows()
+        run(`open $(currentdrawing.filename)`)
+    elseif is_unix()
+        run(`xdg-open $(currentdrawing.filename)`)
+    end
 end
 
 """
@@ -201,7 +205,7 @@ end
     works best after `axes()`.
 
 """
-function background(col::AbstractString)
+function background(col::String)
 # TODO: at present this only works properly after you call origin() to put 0/0 in the center
 # but how can it tell whether you've used origin() first?
    setcolor(col)
@@ -335,7 +339,7 @@ function rect(xmin, ymin, w, h, action=:nothing)
     do_action(action)
 end
 
-function rect(cornerpoint, w, h, action)
+function rect(cornerpoint::Point, w, h, action)
     rect(cornerpoint.x, cornerpoint.y, w, h, action)
 end
 
@@ -602,7 +606,7 @@ end
       # optional keyword arguments
       spiral_ring_step = 0,   # step out or in by this amount
       letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)
-      spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards 
+      spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards
       )
 
 """
@@ -648,7 +652,7 @@ end
 textcurve(the_text, start_angle, start_radius, centre::Point) = textcurve(the_text, start_angle, start_radius, centre.x, centre.y)
 
 """
-    setcolor(col::AbstractString)
+    setcolor(col::String)
 
     Set the color to a string. Relying on Colors.jl to convert anything to RGBA
     eg setcolor("gold") # or "green", "darkturquoise", "lavender" or what have you
@@ -656,7 +660,7 @@ textcurve(the_text, start_angle, start_radius, centre::Point) = textcurve(the_te
 
 """
 
-function setcolor(col::AbstractString)
+function setcolor(col::String)
     temp = parse(RGBA, col)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
@@ -699,7 +703,7 @@ end
 """
 
 macro setcolor_str(ex)
-    isa(ex, AbstractString) || error("colorant requires literal strings")
+    isa(ex, String) || error("colorant requires literal strings")
     col = parse(RGBA, ex)
     quote
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
@@ -713,7 +717,7 @@ end
     opacity.
 """
 
-function sethue(col::AbstractString)
+function sethue(col::String)
     temp = parse(RGBA,  col)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = temp.r, temp.g, temp.b
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) # use current alpha, not incoming one
@@ -748,12 +752,12 @@ end
 
 function randomhue()
     # don't touch current alpha
-    sethue(rand(), rand(),rand())
+    sethue(rand(), rand(), rand())
 end
 
 function randomcolor()
     # can change alpha transparency
-    setcolor(rand(), rand(),rand(), rand())
+    setcolor(rand(), rand(), rand(), rand())
 end
 
 """
@@ -843,35 +847,32 @@ function readpng(pathname)
     return Cairo.read_from_png(pathname)
 end
 
-"""
-    Place a PNG image on the drawing.
-
-        placeimage(img, xpos, ypos)
-
-    Place an image previously loaded using readpng().
-
-    You can use an alpha value with `placeimagealpha()`:
-
-        placeimagealpha(img, xpos, ypos, alpha)
-
-"""
-
 function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
     Cairo.paint_with_alpha(currentdrawing.cr, a)
 end
 
+"""
+    Place a PNG image on the drawing.
+
+        placeimage(img, xpos, ypos)
+        placeimage(img, xpos, ypos, 0.5) # alpha
+
+    Place an image previously loaded using readpng().
+
+"""
+
 function placeimage(img::Cairo.CairoSurface, xpos, ypos)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
+    # no alpha
     Cairo.paint(currentdrawing.cr)
 end
 
-placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
-
-function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha = 1.0)
+function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     paint_with_alpha(currentdrawing.cr, alpha)
 end
 
+placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
 end # module

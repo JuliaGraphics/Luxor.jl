@@ -52,7 +52,7 @@ function test(pagewidth, pageheight)
     grestore()
 end
 
-function main()
+function simplify_poly()
     pagewidth  = 1190.0 # points
     pageheight = 1684.0 # points
     Drawing(pagewidth, pageheight, "/tmp/simplify-poly.pdf")
@@ -62,4 +62,4 @@ function main()
     preview()
 end
 
-@time main()
+@time simplify_poly()

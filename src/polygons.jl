@@ -222,31 +222,31 @@ function simplify(pointlist::Array, detail)
 end
 
 """
-    Regular polygons.
+    Return the vertices of a regular polygon centred at x, y:
 
-    Draw a poly centred at x,y:
-
-        ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)
-
-    If no action supplied, return a poly as a set of points
-
-        ngon(x, y, radius, sides, orientation; close=true, reversepath=false)
+        ngonv(x, y, radius, sides, orientation, action; close=true, reversepath=false)
 
 """
 
-function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
-    poly([Point(x+cos(orientation + n * 2pi/sides) * radius,
-           y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides], close=close, action, reversepath=reversepath)
-end
-
-ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
-
-function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
+function ngonv(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,
            y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end
 
-ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
+ngonv(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
+
+"""
+    Draw a regular polygon centred at x,y:
+
+        ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)
+
+"""
+
+function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
+    poly(ngonv(x, y, radius, sides, orientation), close=close, action, reversepath=reversepath)
+end
+
+ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
 
 """
     Is a point inside a polygon?

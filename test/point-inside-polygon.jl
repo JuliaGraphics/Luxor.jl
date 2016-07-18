@@ -12,7 +12,7 @@ function bounding_b(x, y, o)
     return [Point(x-o, y-o), Point(x-o, y+o), Point(x+o, y+o), Point(x+o, y-o)]
 end
 
-function main()
+function point_inside_polygon()
     Drawing(1200, 1200, "/tmp/point-inside-polygon.pdf")
 
     origin()
@@ -45,4 +45,4 @@ function main()
     preview()
 end
 
-main()
+point_inside_polygon()
