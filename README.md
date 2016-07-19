@@ -14,7 +14,7 @@ I've only tried this on MacOS X. It will need some changes to work on Windows (b
 
 ### Current status ###
 
-It's been updated for Julia version 0.4 and for the new Colors.jl. SVG rendering currently seems unreliable — text placement generates segmentation faults.
+It's been updated for Julia version 0.5 and for the new Colors.jl. SVG rendering currently seems unreliable — text placement generates segmentation faults.
 
 ### Example usage
 
@@ -485,19 +485,22 @@ The spline starts at the current position, finishing at `x3/y3` (`p3`), followin
 Polygons are arrays of points. You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with:
 
 - `ngon(xc, yc, radius, sides, orientation, action=:nothing)` draws a `sides`-sided polygon
+- `ngon(point, radius, sides, orientation, action=:nothing)`  draws a `sides`-sided polygon
 
 Ngons are closed by default.
 
 - `ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)`
+- `ngon(point, radius, sides, orientation, action; close=true, reversepath=false)`
 
-Without an action, `ngon` returns an array of points instead:
+If you just want the points, use `ngonv`, which returns an array of points instead:
 
-- `ngon(xc, yc, radius, sides, orientation)`
+- `ngonv(xc, yc, radius, sides, orientation)`
+- `ngonv(point, radius, sides, orientation)`
 
 Compare:
 
 ```julia
-    ngon(0, 0, 4, 4, 0) # returns the polygon's points
+    ngonv(0, 0, 4, 4, 0) # returns the polygon's points
 
         4-element Array{Luxor.Point,1}:
          Luxor.Point(2.4492935982947064e-16,4.0)
@@ -667,14 +670,13 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 - `textcurve(str, startangle, startradius, xcentre, ycentre)`
 - `textcurve(str, startangle, startradius, centerpt)`
 
-draws string `str` on an arc of radius `startradius` centered at `xcenter/ycenter` (or `centrept`) starting on angle `start_angle`,
-which is relative to the +ve x-axis.
+draws string `str` on an arc of radius `startradius` centered at `xcenter/ycenter` (or `centrept`) starting on angle `start_angle`, which is relative to the +ve x-axis.
 
 You can change the letter spacing, and/or spiral in or out, using these optional keywords:
 
 -  `spiral_ring_step = 0`,   step out or in by this amount
 -  `letter_spacing = 0`,     tracking/space between chars, tighter is (-), looser is (+)
--  `spiral_in_out_shift = 0` + values go outwards, - values spiral inwards 
+-  `spiral_in_out_shift = 0` + values go outwards, - values spiral inwards
 
 ##### Fonts
 
@@ -694,21 +696,21 @@ gets array of dimensions of the string `str`, given current font:
 
 #### Images ####
 
-Load a PNG image with `readpng()`. Place it by its top left corner at the specified position using `placeimage()`.
+Load a PNG image with `readpng()`.
 
-Place a PNG image by its top left corner at point `x/y` or `pt`.
+Use `placeimage()` to place a PNG image by its top left corner at point `x/y` or `pt`.
 
 ```julia
 
     img = readpng(filename)
     placeimage(img, xpos, ypos)
     placeimage(img, pt::Point)
-    placeimage(img, xpos, ypos, 0.5) # alpha transparency of 0.5
+    placeimage(img, xpos, ypos, 0.5) # use alpha transparency of 0.5
     placeimage(img, pt::Point, 0.5)
 
     img = readpng("../examples/julia-logo-mask.png")
     w = img.width
     h = img.height
-    placeimage(img, -w/2, -h/2) # centered
+    placeimage(img, -w/2, -h/2) # centered at point
 
 ```
