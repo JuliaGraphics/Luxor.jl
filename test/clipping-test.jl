@@ -30,7 +30,11 @@ function clipping_test()
 end
 
 clipping_test()
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 
 =======
 >>>>>>> 027e70f2e6e6d9b533538c603c1105a63e2f6154
+=======
+
+>>>>>>> Stashed changes

@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using Luxor, Colors
 
 function draw_triangle(points::Array{Point}, degree::Int64)
@@ -34,3 +36,4 @@ end
 
 finish()
 preview()
+

@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using Luxor
 
 # some of these tests produce errors on Linux versions of Cairo
@@ -111,3 +113,5 @@ function matrix_tests()
 end
 
 matrix_tests()
+
+

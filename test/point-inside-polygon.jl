@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 # testing isinside(), is point inside polygon
 # all the random points are drawn only if they're inside one of the polygons
 
@@ -14,18 +16,13 @@ end
 
 function point_inside_polygon()
     Drawing(1200, 1200, "/tmp/point-inside-polygon.pdf")
-
     origin()
-
     background("grey20")
-
     polys = [ngon_poly(x, y, 60, 5, pi/2) for x in -500:150:500, y in -500:150:500]
-
     for pol in polys
         randomhue()
         poly(pol, :fill)
     end
-
     # test whether random points are inside any of the polygons
     for i in 1:5000
         pt = randompoint(-600, -600, 600, 600)
@@ -46,3 +43,4 @@ function point_inside_polygon()
 end
 
 point_inside_polygon()
+

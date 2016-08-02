@@ -89,7 +89,7 @@ export Drawing, currentdrawing,
     line, rline, curve, arc, carc, ngon, ngonv, sector,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
-    poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
+    poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint, prettypoly,
 
     intersection, polysplit,
 

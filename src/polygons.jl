@@ -169,6 +169,7 @@ end
     You can end up with convex (self-intersecting) polygons, unfortunately.
 
 """
+
 function polysortbydistance(pointlist, starting::Point)
     route = [starting]
     # start with the first point in pointlist
@@ -182,7 +183,6 @@ function polysortbydistance(pointlist, starting::Point)
     end
     return route
 end
-
 
 # use non-recursive Douglas-Peucker algorithm to simplify polygon
 function douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
@@ -342,4 +342,43 @@ function polysplit(pointlist, p1, p2)
     end
 
     return(poly1, poly2)
+end
+
+"""
+  Draw the polygon with pointlist, possibly closing and reversing it, using the current parameters,
+  and then evaluate the expression at every vertex of the polygon. For example, you can mark each
+  vertex of a polygon with a circle scaled to 0.1.
+
+    prettypoly(pl, :fill, :(scale(0.1, 0.1);
+                            circle(0, 0, 10, :fill)
+                           ),
+               close=false)
+
+  The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
+  function and expect this function to know about it. I don't think I like this, but...
+
+"""
+
+function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
+    # by default doesn't close or fill, to allow for clipping etc
+    if action != :path
+        newpath()
+    end
+    if reversepath
+        reverse!(pointlist)
+    end
+    move(pointlist[1].x, pointlist[1].y)
+    for p in pointlist[2:end]
+        line(p.x, p.y)
+    end
+    if close
+        closepath()
+    end
+    do_action(action)
+    for p in pointlist
+        gsave()
+        translate(p.x, p.y)
+        eval(vertex_action)
+        grestore()
+    end
 end

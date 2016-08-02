@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using Luxor, Colors
 
 function draw_color_bars(x, y, n, colmap, label)
@@ -46,3 +48,4 @@ function palette_test()
 end
 
 palette_test()
+

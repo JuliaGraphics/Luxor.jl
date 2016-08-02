@@ -1,5 +1,8 @@
+#!/usr/bin/env julia
+
 using Luxor, Colors
-include("./julia-logo.jl")
+
+include(dirname(@__FILE__) * "/julia-logo.jl")
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
@@ -75,7 +78,7 @@ function outlined_heart()
     grestore()
 end
 
-function main()
+function julia_heart()
     global currentwidth = 1000 # pts
     global currentheight = 1000 # pts
     Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
@@ -93,4 +96,5 @@ function main()
     preview()
 end
 
-main()
+julia_heart()
+
