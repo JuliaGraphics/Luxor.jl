@@ -1,39 +1,19 @@
-using Base.Test
-
-println("clipping")              ; include("clipping-test.jl")
-
-#println("copy_path")            ; include("copy_path.jl")
-
-println("julia logo eps")        ; include("julia-logo-draw-eps.jl")
-
-println("luxor-test1")           ; include("luxor-test1.jl")
-
-println("matrix-tests")          ; include("matrix-tests.jl")
-
-println("palette")               ; include("palette_test.jl")
-
-println("point inside polygon")  ; include("point-inside-polygon.jl")
-
-println("polygon")               ; include("polygon-test.jl")
-
-println("polygon centroids")     ; include("polygon-centroid-sort-test.jl")
-
-println("intersection points")   ; include("point-intersection.jl")
-
-println("random sines")          ; include("randomsinecurves.jl")
-
-println("sierpinski")            ; include("sierpinski.jl")
-
-println("sectors")               ; include("sector-test.jl")
-
-println("sierpinski-svg")        ; include("sierpinski-svg.jl")
-
-println("simplify-polygons")     ; include("simplify-polygons.jl")
-
-println("holes")                 ; include("test-holes.jl")
-
-println("turtle")                ; include("turtle.jl")
-
-println("images")                ; include("test-image.jl")
-
-println("tiling images")         ; include("tiling-images.jl")
+include("clipping-test.jl")
+include("copy_path.jl")
+include("julia-logo-draw-eps.jl")
+include("luxor-test1.jl")
+include("matrix-tests.jl")
+include("palette_test.jl")
+include("point-inside-polygon.jl")
+include("polygon-test.jl")
+include("polygon-centroid-sort-test.jl")
+include("point-intersection.jl")
+include("randomsinecurves.jl")
+include("sierpinski.jl")
+include("sector-test.jl")
+include("sierpinski-svg.jl")
+include("simplify-polygons.jl")
+include("test-holes.jl")
+include("turtle.jl")
+include("test-image.jl")
+include("tiling-images.jl")
