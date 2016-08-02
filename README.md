@@ -556,6 +556,20 @@ returns the points sorted by the angle that each point makes with a starting poi
 
 returns `[Point(lowx, lowy), Point(highx, highy)]`, opposite corners of a bounding box.
 
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the poly action, the `vertex_action` is evaluated at each vertex.
+
+- prettypoly(`pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false))`
+
+For example, to mark each vertex of a polygon with a circle scaled to 0.1.
+
+    prettypoly(pl, :fill, :(
+                            scale(0.1, 0.1);
+                            circle(0, 0, 10, :fill)
+                           ),
+               close=false)
+
+The `vertex_action` expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect the polygon-drawing function to know about it.
+
 #### Styles
 
 - `setline(n)` set line width
