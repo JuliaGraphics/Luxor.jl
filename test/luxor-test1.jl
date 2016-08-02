@@ -1,6 +1,10 @@
 using Luxor, Colors
 
+<<<<<<< HEAD
 function draw_luxor_demo()
+=======
+function draw_demo()
+>>>>>>> 027e70f2e6e6d9b533538c603c1105a63e2f6154
     Drawing(1200, 1400, "/tmp/luxor-test1.png") # or PDF filename for PDF
 
     origin() # move 0/0 to center
@@ -47,4 +51,8 @@ function draw_luxor_demo()
     preview() # Mac OS X only, opens in Preview
 end
 
+<<<<<<< HEAD
 draw_luxor_demo()
+=======
+draw_demo()
+>>>>>>> 027e70f2e6e6d9b533538c603c1105a63e2f6154

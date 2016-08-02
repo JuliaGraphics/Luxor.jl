@@ -47,7 +47,7 @@ function drawpoly(p, x, y, counter)
     grestore()
 end
 
-function main()
+function polycentroidsort()
     x = -width/2 + 200
     y = -height/2 + 300
     counter = 1
@@ -55,7 +55,7 @@ function main()
         if rand(Bool)
             p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))
         else
-            p = ngon(0, 0, rand(50:100), rand(3:12))
+            p = ngonv(0, 0, rand(50:100), rand(3:12))
         end
         drawpoly(p, x, y, counter)
         x += 200
@@ -67,6 +67,6 @@ function main()
     end
 end
 
-main()
+polycentroidsort()
 finish()
 preview()
