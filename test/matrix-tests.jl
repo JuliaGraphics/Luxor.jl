@@ -3,7 +3,7 @@ using Luxor
 # some of these tests produce errors on Linux versions of Cairo
 # but no errors on MacOS X Cairo.
 
-function main()
+function matrix_tests()
     # matrix tests
 
     # translate(dx,dy) =	transform([1,  0, 0,  1, dx, dy])                shift by
@@ -110,4 +110,4 @@ function main()
     preview()
 end
 
-main()
+matrix_tests()
