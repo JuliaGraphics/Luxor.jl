@@ -68,7 +68,7 @@ function colorgrid()
 end
 
 function main()
-    Drawing(1600,1600, "/tmp/julia-logo-draw-eps.eps")
+    Drawing(1600, 1600, "/tmp/julia-logo-draw-eps.eps")
     origin()
     background("white")
 

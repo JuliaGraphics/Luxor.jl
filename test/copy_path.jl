@@ -1,6 +1,6 @@
-using Luxor
+#!/usr/bin/env julia
 
-#using Cairo: convert_cairo_path_data, copy_path
+using Luxor
 
 function draw_path(path::Array)
     # path is array of CairoPathEntry Array{CairoPathEntry,1}
@@ -29,9 +29,6 @@ end
 # draw the bezier handles and control points
 # todo: control colors and line thicknesses
 function show_beziers(path, dotsize = 5; labels=false)
-    println("got to here")
-    @show path
-
     gsave()
     setline(0.2)
     sethue(0, .4, 0.4)
@@ -40,13 +37,9 @@ function show_beziers(path, dotsize = 5; labels=false)
     fontface("Menlo")
     # last point of path might be a moveto, presumably the advance values for the next text
 
-
-    # crashes in the following call:
-
     if path[end].element_type == 0
         pop!(path)
     end
-
 
     for e in path
         if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
@@ -70,8 +63,8 @@ function show_beziers(path, dotsize = 5; labels=false)
             (x1, y1, x2, y2, x3, y3) = e.points
             gsave()
                 sethue(0.6, 0.6, 0.6)
-                circle(x, y, dotsize, :fill)
-                move(x, y)
+                circle(x1, y1, dotsize, :fill)
+                move(x1, y1)
                 line(x1, y1)
                 stroke()
                 labels && text(string(counter), x1, y1 + 2)
@@ -137,8 +130,7 @@ function show_glyph(s::AbstractString, x, y)
         stroke()
         # extents: width & height
         sethue(0.2, 0.6, 0.8)
-        rect(xbearing, ybearing, width, height)
-        stroke()
+        rect(xbearing, ybearing, width, height, :stroke)
 
         # bearings
         move(0, 0)
@@ -167,3 +159,4 @@ show_glyph("G", 300, 500)
 finish()
 preview()
 toc()
+
