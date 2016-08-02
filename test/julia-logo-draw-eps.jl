@@ -69,13 +69,8 @@ function colorgrid()
     grestore()
 end
 
-<<<<<<< Updated upstream
-function main()
-    Drawing(1600, 1600, "/tmp/julia-logo-draw-eps.eps")
-=======
 function draw_logo()
     Drawing(1600,1600, "/tmp/julia-logo-draw-eps.eps")
->>>>>>> Stashed changes
     origin()
     background("white")
 
