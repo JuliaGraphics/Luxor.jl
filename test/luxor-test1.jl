@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using Luxor, Colors
 
 <<<<<<< HEAD
@@ -55,4 +57,8 @@ end
 draw_luxor_demo()
 =======
 draw_demo()
+<<<<<<< Updated upstream
 >>>>>>> 027e70f2e6e6d9b533538c603c1105a63e2f6154
+=======
+
+>>>>>>> Stashed changes

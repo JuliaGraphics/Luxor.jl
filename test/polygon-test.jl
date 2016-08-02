@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using Luxor, Colors
 
 function simple_polys()
@@ -102,3 +104,4 @@ function polygon_test()
 end
 
 polygon_test()
+

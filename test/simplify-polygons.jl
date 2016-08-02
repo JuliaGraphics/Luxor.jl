@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 # test polygon simplification
 
 using Luxor, Colors
@@ -63,3 +65,4 @@ function simplify_poly()
 end
 
 @time simplify_poly()
+

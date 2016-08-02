@@ -59,3 +59,5 @@ function random_sines(w, h)
 end
 
 random_sines(2000, 2000)
+
+

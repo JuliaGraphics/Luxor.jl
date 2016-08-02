@@ -1,3 +1,5 @@
+#!/usr/bin/env julia
+
 using Luxor, Colors
 
 include("julia-logo.jl")
@@ -67,7 +69,7 @@ function colorgrid()
     grestore()
 end
 
-function main()
+function draw_julia_logos()
     Drawing(1600,1600, "/tmp/test.png")
     origin()
     background("white")
@@ -88,4 +90,5 @@ function main()
     preview()
 end
 
-main()
+draw_julia_logos()
+
