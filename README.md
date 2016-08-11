@@ -487,7 +487,7 @@ Polygons are arrays of points. You can make regular polygons — from triangles,
 - `ngon(xc, yc, radius, sides, orientation, action=:nothing)` draws a `sides`-sided polygon
 - `ngon(point, radius, sides, orientation, action=:nothing)`  draws a `sides`-sided polygon
 
-Ngons are closed by default.
+These ngons are closed by default.
 
 - `ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)`
 - `ngon(point, radius, sides, orientation, action; close=true, reversepath=false)`
@@ -569,6 +569,33 @@ For example, to mark each vertex of a polygon with a circle scaled to 0.1.
                close=false)
 
 The `vertex_action` expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect the polygon-drawing function to know about it.
+
+- `starv()` makes a star, returning its vertices:
+
+    starv(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+
+- `star()` draws a star:
+
+    star(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+
+```julia
+using Luxor, Colors
+w, h = 600, 600
+Drawing(w, h, "/tmp/stars.png")
+origin()
+cols = [RGB(rand(3)...) for i in 1:50]
+background("grey20")
+x = -w/2
+for y in 100 * randn(h, 1)
+    setcolor(cols[rand(1:end)])
+    star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)
+    x += 2
+end
+finish()
+preview()
+```
+
+![n-gons](examples/stars.png)
 
 #### Styles
 

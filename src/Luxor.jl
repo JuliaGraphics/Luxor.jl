@@ -91,6 +91,8 @@ export Drawing, currentdrawing,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint, prettypoly,
 
+    star, starv,
+
     intersection, polysplit,
 
     strokepreserve, fillpreserve,
