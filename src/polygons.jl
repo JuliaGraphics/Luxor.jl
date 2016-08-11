@@ -224,7 +224,7 @@ end
 """
     Return the vertices of a regular polygon centred at x, y:
 
-        ngonv(x, y, radius, sides, orientation, action; close=true, reversepath=false)
+        ngonv(x, y, radius, sides, orientation)
 
 """
 
@@ -238,7 +238,8 @@ ngonv(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngon(cent
 """
     Draw a regular polygon centred at x,y:
 
-        ngon(x, y, radius, sides, orientation, action; close=true, reversepath=false)
+        ngon(x, y,      radius, sides, orientation, action; close=true, reversepath=false)
+        ngon(centerpos, radius, sides, orientation, action; close=true, reversepath=false)
 
 """
 
@@ -247,6 +248,47 @@ function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, actio
 end
 
 ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
+
+"""
+    Make a star, returning its vertices:
+
+        starv(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, close=true, reversepath=false)
+
+
+    Use `star()` to draw a star.
+
+"""
+
+function starv(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0; reversepath=false)
+    outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
+                    y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
+    innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
+                    y+sin(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio)) for n in 1:npoints]
+    result = []
+    for i in eachindex(outerpoints)
+        push!(result, outerpoints[i])
+        push!(result, innerpoints[i])
+    end
+    if reversepath
+        return reverse(result)
+    else
+        return result
+    end
+end
+
+"""
+    Draw a star:
+
+        star(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+        star(centerpos,        radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+
+"""
+
+function star(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false)
+    poly(starv(x, y, radius, npoints, ratio, orientation), close=close, action, reversepath=reversepath)
+end
+
+star(centrepoint::Point, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=closee, reversepath=reversepath)
 
 """
     Is a point inside a polygon?
