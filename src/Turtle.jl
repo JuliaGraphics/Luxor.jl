@@ -17,8 +17,12 @@ export  Turtle,
         Reposition
 
 """
-simple turtle graphics needed for Lindenmayer systems
+Turtle lets you run a turtle doing turtle graphics.
 
+Once created, you can command it using the functions Forward, Turn,
+Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
+
+There are also some other functions. To see how they might be used, see Lindenmayer.jl.
 """
 
 type Turtle
@@ -36,12 +40,10 @@ end
 const queue = Array{Array{Float64,1},1}()
 
 """
-    the turtle moves forward by `d` units. The stored position is updated.
+Forward: the turtle moves forward by `d` units. The stored position is updated.
 
     Forward(t::Turtle, d)
-
 """
-
 function Forward(t::Turtle, d)
     move(t.xpos, t.ypos)
     t.xpos = t.xpos + (d * cos(t.orientation))
@@ -58,34 +60,54 @@ function Forward(t::Turtle, d)
 end
 
 """
-    increase rotation by r radians
+Turn: increase the turtle's rotation by `r` radians. See also `Orientation`.
 
     Turn(t::Turtle, r)
 """
-
 function Turn(t::Turtle, r)
     t.orientation = mod2pi(t.orientation + deg2rad(r))
 end
+"""
+Orientation: set the turtle's orientation to `r` radians. See also `Turn`.
 
+    Orientation(t::Turtle, r)
+"""
 function Orientation(t::Turtle, r)
     t.orientation = mod2pi(deg2rad(r))
 end
+"""
+Pendown. Put that pen down and start drawing.
 
+    Pendown(t::Turtle)
+"""
 function Pendown(t::Turtle)
     t.pendown = true
 end
+"""
+Penup. Pick that pen up and stop drawing.
 
+    Penup(t::Turtle)
+"""
 function Penup(t::Turtle)
     t.pendown = false
 end
+"""
+Circle: draw a filled circle centred at the current position with the given radius.
 
+    Circle(t::Turtle, radius)
+"""
 function Circle(t::Turtle, radius)
     gsave()
     sethue(t.pencolor...)
     circle(t.xpos, t.ypos, radius, :fill)
     grestore()
 end
+"""
+Rectangle: draw a filled rectangle centred at the current position with the given radius.
 
+    Rectangle(t::Turtle, width, height)
+
+"""
 function Rectangle(t::Turtle, width, height)
     gsave()
     sethue(t.pencolor...)
@@ -109,19 +131,21 @@ function Pop(t::Turtle)
         t.xpos, t.ypos, t.orientation = pop!(queue)
     end
 end
+"""
+Message: write some text at the current position.
 
+    Message(t::Turtle, txt)
+"""
 function Message(t::Turtle, txt)
     gsave()
     sethue(t.pencolor...)
     text(txt, t.xpos, t.ypos)
     grestore()
 end
-
 """
-    Shift the Hue of the turtle's pen forward by inc
+Shift the Hue of the turtle's pen forward by inc
 
     HueShift(t::Turtle, inc = 1)
-
 """
 function HueShift(t::Turtle, inc = 1)
     r, g, b = t.pencolor
@@ -133,10 +157,9 @@ function HueShift(t::Turtle, inc = 1)
 end
 
 """
-    Randomize saturation of the turtle's pen color
+Randomize saturation of the turtle's pen color
 
     Randomize_saturation(t::Turtle)
-
 """
 function Randomize_saturation(t::Turtle)
     r, g, b = t.pencolor
@@ -146,17 +169,31 @@ function Randomize_saturation(t::Turtle)
     sethue(newrgb)
     t.pencolor = (newrgb.r, newrgb.g, newrgb.b)
 end
+"""
+Pencolor: Set the Red, Green, and Blue colors of the turtle:
 
+    Pencolor(t::Turtle, r, g, b)
+"""
 function Pencolor(t::Turtle, r, g, b)
     sethue(r, g, b)
     t.pencolor = (r, g, b)
 end
 
+"""
+Reposition: pick the turtle up and place it at another position:
+
+    Reposition(t::Turtle, x, y)
+"""
 function Reposition(t::Turtle, x, y)
     t.xpos = x
     t.ypos = y
 end
 
+"""
+Penwidth: set the width of the line.
+
+    Penwidth(t::Turtle, w)
+"""
 Penwidth(t::Turtle, w) = setline(w)
 
 Pen_opacity_random(t::Turtle) = setopacity(rand())

@@ -1,7 +1,9 @@
 import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
 
 export Point, randompoint, randompointarray
-
+"""
+The Point type holds two coordinates.
+"""
 type Point
    x::Float64
    y::Float64
@@ -43,10 +45,29 @@ function randomordinate(low, high)
     low + rand() * abs(high - low)
 end
 
+"""
+Return a random point somewhere inside the rectangle defined by the four coordinates:
+
+    randompoint(lowx, lowy, highx, highy)
+
+"""
 function randompoint(lowx, lowy, highx, highy)
     Point(randomordinate(lowx, highx), randomordinate(lowy, highy))
 end
 
+"""
+Return a random point somewhere inside the rectangle defined by the two points:
+
+    randompoint(lowpt, highpt)
+"""
+function randompoint(lowpt, highpt)
+    Point(randomordinate(lowpt.x, highpt.x), randomordinate(lowpt.y, highpt.y))
+end
+"""
+Return an array of `n` random points somewhere inside the rectangle defined by the four coordinates:
+
+    randompointarray(lowx, lowy, highx, highy, n)
+"""
 function randompointarray(lowx, lowy, highx, highy, n)
     array = Point[]
     for i in 1:n
@@ -55,7 +76,25 @@ function randompointarray(lowx, lowy, highx, highy, n)
     array
 end
 
-# note the two argument form
+"""
+Return an array of `n` random points somewhere inside the rectangle defined by two points:
+
+    randompointarray(lowpt, highpt, n)
+"""
+function randompointarray(lowpt, highpt, n)
+    array = Point[]
+    for i in 1:n
+        push!(array, randompoint(lowpt, highpt))
+    end
+    array
+end
+"""
+norm of two points. Two argument form.
+
+    norm(p1::Point, p2::Point)
+"""
 function norm(p1::Point, p2::Point)
     norm([p1.x, p1.y] - [p2.x, p2.y])
 end
+
+# end

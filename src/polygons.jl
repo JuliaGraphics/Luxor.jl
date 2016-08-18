@@ -1,10 +1,16 @@
 # polygons
 
-# a polygon is an Array of Points
+"""
+Draw a polygon.
 
+    poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
+
+A polygon is an Array of Points
+
+By default doesn't close or fill, to allow for clipping.
+"""
 function poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
     # where pointlist is array of Points
-    # by default doesn't close or fill, to allow for clipping.etc
     if action != :path
         newpath()
     end
@@ -20,8 +26,13 @@ function poly(pointlist::Array, action = :nothing; close=false, reversepath=fals
     end
     do_action(action)
 end
+"""
+Find the distance between a point `p` and a line between two points `a` and `b`.
 
-function point_line_distance(p::Point, a, b)
+    point_line_distance(p::Point, a::Point, b::Point)
+
+"""
+function point_line_distance(p::Point, a::Point, b::Point)
     # area of triangle
     area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
     # length of the bottom edge
@@ -32,23 +43,27 @@ function point_line_distance(p::Point, a, b)
 end
 
 """
-    Find midpoint between two points.
+Find midpoint between two points.
 
     midpoint(p1, p2)
-
 """
 
 midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
+
+"""
+Find midpoint between the first two elements of an array of points.
+
+    midpoint(p1, p2)
+"""
+
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 """
-    Find intersection of two lines p1-p2 and p3-p4
+Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
-        intersection(p1, p2, p3, p4)
+    intersection(p1, p2, p3, p4)
 
-    returns (false, 0)
-         or (true, Point)
-
+returns (false, 0) or (true, Point)
 """
 
 function intersection(p1, p2, p3, p4)
@@ -70,11 +85,11 @@ function intersection(p1, p2, p3, p4)
 end
 
 """
+Find the bounding box of a polygon (array of points).
 
-    Bounding box of polygon (array of points).
+    polybbox(pointlist::Array)
 
-    Return two points of opposite corners.
-
+Return the two opposite corners (suitable for `box`, for example).
 """
 
 function polybbox(pointlist::Array)
@@ -90,14 +105,13 @@ function polybbox(pointlist::Array)
 end
 
 """
-    Find centroid of simple polygon.
+Find the centroid of simple polygon.
 
-        polycentroid(pointlist)
+    polycentroid(pointlist)
 
-    Only works for simple (non-intersecting) polygons.
-    This isn't a CAD system... :)
+Only works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)
 
-    Returns a point.
+Returns a point.
 """
 
 function polycentroid(pointlist)
@@ -141,14 +155,13 @@ function polycentroid(pointlist)
 end
 
 """
-    Sort the points of a polygon into order. Points
-    are sorted according to the angle they make with a specified point.
+Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.
 
-        polysortbyangle(parray, parray[1])
+    polysortbyangle(parray, parray[1])
 
-    `refpoint` can be chosen, minimum point is usually OK:
+The `refpoint` can be chosen, minimum point is usually OK:
 
-        polysortbyangle(parray, polycentroid(parray))
+    polysortbyangle(parray, polycentroid(parray))
 
 """
 
@@ -161,13 +174,12 @@ function polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
 end
 
 """
-    Sort polygon by finding the nearest point to the starting point, then
-    the nearest point to that, and so on.
+Sort a polygon by finding the nearest point to the starting point, then
+the nearest point to that, and so on.
 
-        polysortbydistance(p, starting::Point)
+    polysortbydistance(p, starting::Point)
 
-    You can end up with convex (self-intersecting) polygons, unfortunately.
-
+You can end up with convex (self-intersecting) polygons, unfortunately.
 """
 
 function polysortbydistance(pointlist, starting::Point)
@@ -184,7 +196,11 @@ function polysortbydistance(pointlist, starting::Point)
     return route
 end
 
-# use non-recursive Douglas-Peucker algorithm to simplify polygon
+"""
+Use a non-recursive Douglas-Peucker algorithm to simplify a polygon. Used by `simplify()`.
+
+    douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
+"""
 function douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
     temp_stack = Tuple{Int,Int}[] # version 0.4 only?
     push!(temp_stack, (start_index, last_index))
@@ -217,15 +233,22 @@ function douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
     return pointlist[keep_list]
 end
 
+"""
+Simplify a polygon:
+
+    simplify(pointlist::Array, detail)
+
+`detail` is probably the smallest permitted distance between two points.
+"""
+
 function simplify(pointlist::Array, detail)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
 
 """
-    Return the vertices of a regular polygon centred at x, y:
+Return the vertices of a regular polygon centred at `x`, `y`:
 
-        ngonv(x, y, radius, sides, orientation)
-
+    ngonv(x, y, radius, sides, orientation)
 """
 
 function ngonv(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
@@ -233,30 +256,40 @@ function ngonv(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
            y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end
 
-ngonv(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation)
-
 """
-    Draw a regular polygon centred at x,y:
+Return the vertices of a regular polygon centred at `p`:
 
-        ngon(x, y,      radius, sides, orientation, action; close=true, reversepath=false)
-        ngon(centerpos, radius, sides, orientation, action; close=true, reversepath=false)
-
+    ngonv(p, radius, sides, orientation)
 """
 
+ngonv(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngonv(centrepoint.x, centrepoint.y, radius, sides, orientation)
+
+"""
+Draw a regular polygon centred at `x`, `y`:
+
+    ngon(x, y,      radius, sides, orientation, action; close=true, reversepath=false)
+
+Use `ngonv()` to return the points of a polygon.
+"""
 function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
     poly(ngonv(x, y, radius, sides, orientation), close=close, action, reversepath=reversepath)
 end
 
+"""
+Draw a regular polygon centred at `p`:
+
+    ngon(centerpos, radius, sides, orientation, action; close=true, reversepath=false)
+
+"""
+
 ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
 
 """
-    Make a star, returning its vertices:
+Make a star, returning its vertices:
 
-        starv(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, close=true, reversepath=false)
+    starv(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, close=true, reversepath=false)
 
-
-    Use `star()` to draw a star.
-
+Use `star()` to draw a star.
 """
 
 function starv(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0; reversepath=false)
@@ -277,29 +310,36 @@ function starv(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, 
 end
 
 """
-    Draw a star:
+Draw a star:
 
-        star(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
-        star(centerpos,        radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+    star(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
 
+Use `starv()` to return the vertices of a star.
 """
-
 function star(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false)
     poly(starv(x, y, radius, npoints, ratio, orientation), close=close, action, reversepath=reversepath)
 end
 
+"""
+Draw a star:
+
+    star(centerpos, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+
+Use `starv()` to return the vertices of a star.
+"""
+
 star(centrepoint::Point, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=closee, reversepath=reversepath)
 
 """
-    Is a point inside a polygon?
+Is a point `p` inside a polygon `pl`?
 
-        isinside(p, poly)
+    isinside(p, pl)
 
-    Return true or false
+Returns true or false.
+
+This is an implementation of Hormann-Agathos (2001) Point in Polygon algorithm
 """
-
 function isinside(p::Point, pointlist::Array)
-    # An implementation of Hormann-Agathos (2001) Point in Polygon algorithm
     c = false
     detq(q1,q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
     for counter in 1:length(pointlist)
@@ -338,13 +378,12 @@ function isinside(p::Point, pointlist::Array)
 end
 
 """
-    Split a polygon into two where it intersects with a line
+Split a polygon into two where it intersects with a line:
 
     polysplit(p, p1, p2)
 
-    This doesn't always work, of course. For example, a polygon the shape of the
-    letter "E" might be divided into more than two parts...
-
+This doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon the shape of the
+letter "E" might end up being divided into more than two parts.
 """
 function polysplit(pointlist, p1, p2)
     poly1 = []
@@ -387,20 +426,22 @@ function polysplit(pointlist, p1, p2)
 end
 
 """
-  Draw the polygon with pointlist, possibly closing and reversing it, using the current parameters,
-  and then evaluate the expression at every vertex of the polygon. For example, you can mark each
-  vertex of a polygon with a circle scaled to 0.1.
+Draw the polygon defined by points in `pl`, possibly closing and reversing it, using the current parameters,
+and then evaluate the expression at every vertex of the polygon. For example, you can mark each
+vertex of a polygon with a circle scaled to 0.1.
 
-    prettypoly(pl, :fill, :(scale(0.1, 0.1);
-                            circle(0, 0, 10, :fill)
-                           ),
-               close=false)
+    prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
 
-  The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
-  function and expect this function to know about it. I don't think I like this, but...
+Example:
 
+  prettypoly(pl, :fill, :(scale(0.1, 0.1);
+                          circle(0, 0, 10, :fill)
+                         ),
+             close=false)
+
+The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
+function and expect this function to know about it. I don't think I like this, but...
 """
-
 function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
     # by default doesn't close or fill, to allow for clipping etc
     if action != :path
@@ -424,3 +465,5 @@ function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :
         grestore()
     end
 end
+
+# end
