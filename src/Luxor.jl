@@ -673,14 +673,28 @@ Cairo.set_source(dest::CairoContext, src::CairoPattern)
 =#
 
 # text, the 'toy' API... "Any serious application should avoid them." :)
+"""
 
+    fontface(fontname)
+
+Select a font to use. If the font is unavailable, it defaults to ... [?]
+
+"""
 fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
+
+"""
+
+    fontsize(n)
+
+Set the font size to n (points? pixels?).
+
+"""
 fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
 """
     textextents(str)
 
-Return the measurements of string `str`:
+Return the measurements of the string `str` when set using the current font settings:
 
     x_bearing
     y_bearing
@@ -703,9 +717,9 @@ textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
     text(str, x, y)
     text(str, pt)
 
-Draw text in string `str` at `x`/`y` or `pt`.
+Draw the text in the string `str` at `x`/`y` or `pt`.
 
-Text doesn't affect the current point!
+In Luxor, placing text doesn't affect the current point!
 """
 
 function text(t, x=0, y=0)
@@ -721,7 +735,7 @@ text(t, pt::Point) = text(t, pt.x, pt.y)
     textcentred(str, x, y)
     textcentred(str, pt)
 
-Draw text in string `str` centered at `x`/`y` or `pt`.
+Draw text in the string `str` centered at `x`/`y` or `pt`.
 
 Text doesn't affect the current point!
 """
@@ -736,27 +750,29 @@ textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
 """
     textpath(t)
 
-Convert the text in string `t` to a new path, for subsequent filling...
+Convert the text in string `t` to a new path, for subsequent filling/stroking etc...
 """
 function textpath(t)
     Cairo.text_path(currentdrawing.cr, t)
 end
 
 """
-Text on a curve. Place a string of text on a curve. It can spiral in or out.
+Place a string of text on a curve. It can spiral in or out.
+
+```
+textcurve(the_text,
+          start_angle,
+          start_radius,
+          x_pos,
+          y_pos;
+          # optional keyword arguments:
+          spiral_ring_step = 0,   # step out or in by this amount
+          letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)
+          spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards
+          )
+```
+
 `start_angle` is relative to +ve x-axis, arc/circle is centred on `(x_pos,y_pos)` with radius `start_radius`.
-
-    textcurve(the_text,
-      start_angle,
-      start_radius,
-      x_pos,
-      y_pos;
-      # optional keyword arguments
-      spiral_ring_step = 0,   # step out or in by this amount
-      letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)
-      spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards
-      )
-
 """
 
 function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
@@ -802,15 +818,14 @@ textcurve(the_text, start_angle, start_radius, centre::Point) = textcurve(the_te
 """
     setcolor(col::String)
 
-Set the current color. This relies on Colors.jl to convert a string to RGBA
+Set the current color to a named color. This relies on Colors.jl to convert a string to RGBA
 eg setcolor("gold") # or "green", "darkturquoise", "lavender" or what have you. The list is at `Colors.color_names`.
 
+    setcolor("gold")
+
+    setcolor("darkturquoise")
+
 Use `sethue()` for changing colors without changing current opacity level.
-
-
-	`setcolor("gold")`
-
-	`setcolor("darkturquoise")`
 """
 
 function setcolor(col::String)

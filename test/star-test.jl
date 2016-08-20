@@ -3,7 +3,9 @@
 using Luxor, Colors
 width, height = 2000, 2000
 
-Drawing(width, height, "/tmp/star.pdf")
+fname = "/tmp/star.pdf"
+
+Drawing(width, height, fname)
 
 origin()
 
@@ -58,6 +60,5 @@ for i in 1:50
 
 end
 
-
 finish()
-preview()
+println("finished test: output in $(fname)")

@@ -2,7 +2,8 @@
 
 using Luxor, Colors
 
-Drawing(1500, 1500, "/tmp/sector-test.pdf") # points/pixels, 2000 points is 70.56cm × 70.56cm
+fname = "/tmp/sector-test.pdf"
+Drawing(1500, 1500, fname) # points/pixels, 2000 points is 70.56cm × 70.56cm
 
 setline(1)
 setopacity(0.8)
@@ -19,6 +20,4 @@ for inner in 0:20:600
 end
 
 finish()
-preview()
-
-
+println("finished test: output in $(fname)"

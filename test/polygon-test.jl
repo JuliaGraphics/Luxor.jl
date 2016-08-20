@@ -74,10 +74,10 @@ end
 
 hexagon(x, y, size) = [Point(x + size * cos(2pi/6 * i), y + size * sin(2pi/6 * i)) for i in 1:6]
 
-function polygon_test()
+function polygon_test(fname)
     global currentwidth = 595 # pts
     global currentheight = 842 # pts
-    Drawing(currentwidth, currentheight, "/tmp/polygon-test.pdf")
+    Drawing(currentwidth, currentheight, fname)
 
     origin()
     background("antiquewhite")
@@ -100,8 +100,7 @@ function polygon_test()
     clipreset()
     simple_polys()
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-polygon_test()
-
+polygon_test("/tmp/polygon-test.pdf")

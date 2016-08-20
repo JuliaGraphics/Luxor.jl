@@ -11,7 +11,8 @@ end
 imagelist = get_png_files(Pkg.dir("Luxor") * "/examples")
 
 width, height = 2000, 2000
-Drawing(width, height, "/tmp/paint-images.pdf")
+fname = "/tmp/paint-images.pdf"
+Drawing(width, height, fname)
 origin()
 background("grey50")
 
@@ -21,5 +22,4 @@ for imgfile in imagelist
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)"

@@ -2,7 +2,9 @@
 
 using Luxor, Colors
 w, h = 600, 600
-Drawing(w, h, "/tmp/stars.png")
+
+fname = "/tmp/stars.png"
+Drawing(w, h, fname)
 origin()
 cols = [RGB(rand(3)...) for i in 1:50]
 background("grey20")
@@ -13,4 +15,4 @@ for y in 100 * randn(h, 1)
     x += 2
 end
 finish()
-preview()
+println("finished test: output in $(fname)"

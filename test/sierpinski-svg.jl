@@ -22,18 +22,18 @@ function sierpinski(points::Array{Point}, degree::Int64)
     end
 end
 
+fname = "/tmp/sierpinski.svg"
 @time begin
     depth = 8 # 12 is ok, 20 is right out
     cols = distinguishable_colors(depth+1)
-    Drawing(400, 400, "/tmp/sierpinski.svg")
+    Drawing(400, 400, fname)
     origin()
     setopacity(0.5)
     triangle_count = 0
-    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]
+    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]
     sierpinski(my_points, depth)
     println("drew $triangle_count triangles")
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)"

@@ -2,7 +2,8 @@
 
 using Luxor, Colors
 
-Drawing(1200, 1200, "/tmp/holes.pdf")
+fname = "/tmp/holes.pdf"
+Drawing(1200, 1200, fname)
 
 origin()
 background("black")
@@ -18,6 +19,4 @@ for i in 1:50
 end
 
 finish()
-
-preview()
-
+println("finished test: output in $(fname)")

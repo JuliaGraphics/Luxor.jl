@@ -5,7 +5,7 @@ using Luxor
 # some of these tests produce errors on Linux versions of Cairo
 # but no errors on MacOS X Cairo.
 
-function matrix_tests()
+function matrix_tests(fname)
     # matrix tests
 
     # translate(dx,dy) =	transform([1,  0, 0,  1, dx, dy])                shift by
@@ -15,7 +15,7 @@ function matrix_tests()
     # y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])               yskew by A
     # flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)]) flip
 
-    Drawing(1000,1000, "/tmp/matrix-tests.pdf")
+    Drawing(1000,1000, fname)
 
     # absolute position 200,250 relative to top left origin (0, 0)
     setmatrix([1, 0, 0, 1, 200, 250.0])
@@ -109,9 +109,7 @@ function matrix_tests()
     text("hello world")
 
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-matrix_tests()
-
-
+matrix_tests("/tmp/matrix-tests.pdf")

@@ -2,7 +2,8 @@ using Luxor, Colors
 
 currentwidth = 1250 # pts
 currentheight = 800 # pts
-Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
+fname = "/tmp/text-path-clipping.png"
+Drawing(currentwidth, currentheight, fname)
 
 origin()
 background("darkslategray3")
@@ -39,5 +40,4 @@ while y < currentheight
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)")

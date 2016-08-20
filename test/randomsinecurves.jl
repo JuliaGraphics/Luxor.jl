@@ -20,8 +20,8 @@ function randomsine(func, vertscale, horizontalscale, pagewidth, pageheight, sty
     poly(pl, close=false, style)
 end
 
-function random_sines(w, h)
-    Drawing(w, h, "/tmp/random-sines.pdf")
+function random_sines(w, h, fname)
+    Drawing(w, h, fname)
     origin()
     background("black")
     for i in 1:250
@@ -58,6 +58,6 @@ function random_sines(w, h)
     preview()
 end
 
-random_sines(2000, 2000)
-
-
+fname = "/tmp/random-sines.pdf"
+random_sines(2000, 2000, fname)
+println("finished test: output in $(fname)"

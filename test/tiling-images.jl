@@ -53,7 +53,8 @@ imagelist = get_png_files(Pkg.dir("Luxor") * "/examples")
 shuffle!(imagelist)
 
 width, height = 1600, 1000
-Drawing(width, height, "/tmp/tiled-images.png")
+fname = "/tmp/tiled-images.png"
+Drawing(width, height, fname)
 origin()
 background("grey50")
 
@@ -69,5 +70,4 @@ for y in centers[2], x in centers[1] # across first, then down
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)")

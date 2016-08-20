@@ -14,8 +14,8 @@ function bounding_b(x, y, o)
     return [Point(x-o, y-o), Point(x-o, y+o), Point(x+o, y+o), Point(x+o, y-o)]
 end
 
-function point_inside_polygon()
-    Drawing(1200, 1200, "/tmp/point-inside-polygon.pdf")
+function point_inside_polygon(fname)
+    Drawing(1200, 1200, fname)
     origin()
     background("grey20")
     polys = [ngon_poly(x, y, 60, 5, pi/2) for x in -500:150:500, y in -500:150:500]
@@ -39,8 +39,7 @@ function point_inside_polygon()
     end
 
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-point_inside_polygon()
-
+point_inside_polygon("/tmp/point-inside-polygon.pdf")

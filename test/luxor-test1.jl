@@ -2,8 +2,8 @@
 
 using Luxor, Colors
 
-function draw_luxor_demo()
-    Drawing(1200, 1400, "/tmp/luxor-test1.png") # or PDF filename for PDF
+function draw_luxor_demo(fname)
+    Drawing(1200, 1400, fname)
 
     origin() # move 0/0 to center
     background("purple")
@@ -46,7 +46,7 @@ function draw_luxor_demo()
 
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
     finish()
-    preview() # Mac OS X only, opens in Preview
+    println("finished test: output in $(fname)"
 end
 
-draw_luxor_demo()
+draw_luxor_demo("/tmp/luxor-test1.png") # PNG or PDF file name
