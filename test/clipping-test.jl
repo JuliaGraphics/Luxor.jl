@@ -8,7 +8,7 @@ function draw_logo_clip(x, y)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     gsave()
     translate(x-100, y)
-    julialogomask() # use julia logo as clipping mask
+    julialogo(false, true) # use julia logo as clipping mask
     clip()
     for i in 1:500
         sethue(foregroundcolors[rand(1:end)])

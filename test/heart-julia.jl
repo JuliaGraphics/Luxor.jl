@@ -26,7 +26,7 @@ function background_text(str_array)
 end
 
 function heart()
-    move(127,1) # damn, it's offset from 0/0 :/
+    move(127,1) # damn, it's offset from 0/0, who drew this :/
     curve(134.2, -6.5, 134.2, -6.5, 156.1, -29.6)
     curve(185.8, -60.5, 198.1, -74.3, 213.7, -95.3)
     curve(240.4, -131, 253.3, -163.7, 253.3, -194.9)
@@ -45,7 +45,7 @@ end
 function heart_with_julias(x=0, y=0)
     gsave()
     translate(x,y)
-    setcolor("lavenderblush")
+    setcolor("lavenderblush") # yes, it's a color
     heart()
     fillpreserve()
     clip()
@@ -79,8 +79,8 @@ function outlined_heart()
 end
 
 function julia_heart(fname)
-    global currentwidth = 1000 # pts
-    global currentheight = 1000 # pts
+    global currentwidth = 1928 # pts
+    global currentheight = 1064 # pts
     Drawing(currentwidth, currentheight, fname)
 
     origin()
