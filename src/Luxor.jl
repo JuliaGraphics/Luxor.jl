@@ -2,7 +2,7 @@ VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 module Luxor
 
-using Colors, Cairo
+using Colors, Cairo, Compat
 
 include("point.jl")
 include("Turtle.jl")
@@ -168,11 +168,11 @@ On Unix, open the file with xdg-open.
 On Windows, pass the filename to the shell.
 """
 function preview()
-    if is_apple()
+    if @compat is_apple()
         run(`open $(currentdrawing.filename)`)
-    elseif is_windows()
+    elseif @compat is_windows()
         run(`$(currentdrawing.filename)`)
-    elseif is_unix()
+    elseif @compat is_unix()
         run(`xdg-open $(currentdrawing.filename)`)
     end
 end
