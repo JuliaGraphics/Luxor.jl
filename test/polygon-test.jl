@@ -100,7 +100,7 @@ function polygon_test(fname)
     clipreset()
     simple_polys()
     finish()
-    println("finished test: output in $(fname)"
+    println("finished test: output in $(fname)")
 end
 
 polygon_test("/tmp/polygon-test.pdf")

@@ -102,4 +102,4 @@ origin()
 background("ivory")
 draw_lots_of_polys()
 finish()
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")

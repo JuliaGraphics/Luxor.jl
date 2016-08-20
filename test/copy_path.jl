@@ -158,5 +158,5 @@ show_glyph("G", 300, 500)
 #show_glyph("G", 700, 500)
 
 finish()
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")
 toc()

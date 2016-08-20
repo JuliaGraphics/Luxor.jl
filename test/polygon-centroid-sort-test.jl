@@ -68,4 +68,4 @@ Drawing(width, height, fname)
 origin()
 polycentroidsort()
 finish()
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")

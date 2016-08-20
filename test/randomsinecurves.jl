@@ -60,4 +60,4 @@ end
 
 fname = "/tmp/random-sines.pdf"
 random_sines(2000, 2000, fname)
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")
