@@ -48,7 +48,9 @@ export Drawing, currentdrawing,
 # as of version 0.4, it seems I've got to share fill() and scale() with Base.
 
 import Base: fill, scale
-
+"""
+A Drawing holds details about the location and type of drawing, and tracks the current color.
+"""
 type Drawing
     width::Float64
     height::Float64
@@ -86,7 +88,26 @@ type Drawing
     end
 end
 """
-The following paper sizes are built in, width is first, so default is Portrait.
+The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default is Portrait:
+
+```
+"A0"      => (2384, 3370),
+"A1"      => (1684, 2384),
+"A2"      => (1191, 1684),
+"A3"      => (842, 1191),
+"A4"      => (595, 842),
+"A5"      => (420, 595),
+"A6"      => (298, 420),
+"A"       => (612, 792),
+"Letter"  => (612, 792),
+"Legal"   => (612, 1008),
+"Ledger"  => (792, 1224),
+"B"       => (612, 1008),
+"C"       => (1584, 1224),
+"D"       => (2448, 1584),
+"E"       => (3168, 2448))
+```
+
 """
 paper_sizes = Dict{String, Tuple}(
   "A0" => (2384, 3370),
@@ -106,35 +127,36 @@ paper_sizes = Dict{String, Tuple}(
   "E" => (3168, 2448))
 
 """
-  Create a new drawing.
+Create a new drawing, optionally specify file type and dimensions.
 
-  - `Drawing()`
+    Drawing()
 
-create a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png", default size 800 pixels square
+Create a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png", default size 800 pixels square:
 
-  - `Drawing(300,300)`
+    Drawing(300,300)
 
-create a drawing 300 by 300 pixels, defaulting to PNG format, default filename "/tmp/luxor-drawing.png",
+Create a drawing 300 by 300 pixels, defaulting to PNG format, default filename "/tmp/luxor-drawing.png":
 
-  - `Drawing(300,300, "/tmp/my-drawing.pdf")`
+    Drawing(300,300, "/tmp/my-drawing.pdf")
 
-create a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels
+Create a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels:
 
-  - `Drawing(800,800, "/tmp/my-drawing.svg")`
+    Drawing(800,800, "/tmp/my-drawing.svg")`
 
-create an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels
+Create an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels:
 
-  - `Drawing(800,800, "/tmp/my-drawing.eps")`
+    Drawing(800,800, "/tmp/my-drawing.eps")
 
-create an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels
+create an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels:
 
-  - `Drawing("A4")`
+    Drawing("A4")
 
-create the drawing in ISO A4 size. Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
+Create the drawing in ISO A4 size. Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6",
+"Letter", "Legal", "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
-  - `Drawing("A4landscape")`
+    Drawing("A4landscape")
 
-create the drawing A4 landscape size.
+Create the drawing A4 landscape size.
 """
 function Drawing(paper_size::String, f="/tmp/luxor-drawing.png")
   if contains(paper_size, "landscape")
@@ -188,9 +210,9 @@ function origin()
 end
 
 """
-Convert or rescale a value between oldmin/oldmax to equivalent value between newmin/newmax.
+Convert or rescale a value between `oldmin`/`oldmax` to the equivalent value between `newmin`/`newmax`.
 
-For example, to convert 42 that used to lie between 0 and 100 to the equivalent number between 1 and 0 (inverting the direction):
+For example, to convert 42 that used to lie between 0 and 100 to the equivalent number between 1 and 0 and inverting the direction:
 
     rescale(42, 0, 100, 1, 0)
 
@@ -199,7 +221,7 @@ returns 0.5800000000000001
     rescale(value, oldmin, oldmax, newmin, newmax) = ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
 
 """
-Draw two axes lines centered at 0/0.
+Draw two axes lines starting at 0/0 and continuing out along the current positive x and y axes.
 """
 function axes()
     # draw axes
@@ -223,6 +245,12 @@ end
 
 Fill the canvas with color.
 
+Examples:
+
+    background("antiquewhite")
+    background("ivory")
+    background(Colors.RGB(0, 0, 0))
+    background(Colors.Luv(20, -20, 30))
 """
 function background(col::String)
    setcolor(col)
@@ -241,26 +269,26 @@ setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
 """
     newpath()
 
-This is Cairo's `new_path()` function.
+Create a new path. This is Cairo's `new_path()` function.
 """
 newpath() = Cairo.new_path(currentdrawing.cr)
 
 """
     newsubpath()
 
-This is Cairo's `new_sub_path()` function. It can be used, for example, to make holes in shapes:
+Create a new subpath of the current path. This is Cairo's `new_sub_path()` function. It can be used, for example, to make holes in shapes.
 """
 newsubpath() = Cairo.new_sub_path(currentdrawing.cr)
 
 """
     closepath()
 
-This is Cairo's `close_path()` function.
+Close the current path. This is Cairo's `close_path()` function.
 """
 closepath() = Cairo.close_path(currentdrawing.cr)
 
 """
-Stroke the current path with current line width, line join, line cap, and dash settings. The current path is then cleared.
+Stroke the current path with the current line width, line join, line cap, and dash settings. The current path is then cleared.
 
     stroke()
 
@@ -703,12 +731,14 @@ Return the measurements of the string `str` when set using the current font sett
     x_advance
     y_advance
 
-The bearing is the displacement from the reference point to the upper-left corner of the bounding box.
-It is often zero or a small positive value for x displacement, but can be negative x for characters like
-j as shown; it's almost always a negative value for y displacement. The width and height then describe the
-size of the bounding box. The advance takes you to the suggested reference point for the next letter.
-Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the
-advance is smaller than the width would suggest.
+The bearing is the displacement from the reference point to the upper-left
+corner of the bounding box. It is often zero or a small positive value for x
+displacement, but can be negative x for characters like j as shown; it's almost
+always a negative value for y displacement. The width and height then describe
+the size of the bounding box. The advance takes you to the suggested reference
+point for the next letter. Note that bounding boxes for subsequent blocks of
+text can overlap if the bearing is negative, or the advance is smaller than the
+width would suggest.
 """
 
 textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
@@ -717,7 +747,8 @@ textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
     text(str, x, y)
     text(str, pt)
 
-Draw the text in the string `str` at `x`/`y` or `pt`.
+Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
+the string at the point. If you omit the point, it's placed at 0/0.
 
 In Luxor, placing text doesn't affect the current point!
 """
@@ -736,6 +767,7 @@ text(t, pt::Point) = text(t, pt.x, pt.y)
     textcentred(str, pt)
 
 Draw text in the string `str` centered at `x`/`y` or `pt`.
+If you omit the point, it's placed at 0/0.
 
 Text doesn't affect the current point!
 """

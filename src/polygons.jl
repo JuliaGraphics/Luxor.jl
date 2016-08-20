@@ -246,11 +246,24 @@ function simplify(pointlist::Array, detail)
 end
 
 """
-Return the vertices of a regular polygon centred at `x`, `y`:
+Return the vertices of a regular n-sided polygon centred at `x`, `y`:
 
     ngonv(x, y, radius, sides, orientation)
-"""
 
+`ngon()` uses the shapes: if you just want the raw points, use `ngonv`, which returns an array of points instead. Compare:
+
+```julia
+ngonv(0, 0, 4, 4, 0) # returns the polygon's points
+
+4-element Array{Luxor.Point,1}:
+Luxor.Point(2.4492935982947064e-16,4.0)
+Luxor.Point(-4.0,4.898587196589413e-16)
+Luxor.Point(-7.347880794884119e-16,-4.0)
+Luxor.Point(4.0,-9.797174393178826e-16)
+
+ngon(0, 0, 4, 4, 0, :close) # draws a polygon
+```
+"""
 function ngonv(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,
            y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
