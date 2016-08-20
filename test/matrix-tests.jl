@@ -109,7 +109,7 @@ function matrix_tests(fname)
     text("hello world")
 
     finish()
-    println("finished test: output in $(fname)"
+    println("finished test: output in $(fname)")
 end
 
 matrix_tests("/tmp/matrix-tests.pdf")

@@ -46,7 +46,7 @@ function draw_luxor_demo(fname)
 
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
     finish()
-    println("finished test: output in $(fname)"
+    println("finished test: output in $(fname)")
 end
 
 draw_luxor_demo("/tmp/luxor-test1.png") # PNG or PDF file name

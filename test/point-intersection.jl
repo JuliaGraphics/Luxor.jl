@@ -25,7 +25,7 @@ function point_intersect(fname)
       end
   end
   finish()
-  println("finished test: output in $(fname)"
+  println("finished test: output in $(fname)")
 end
 
 point_intersect("/tmp/line_intersection.pdf")

@@ -87,7 +87,7 @@ function draw_julia_logos(fname)
     colorgrid()
 
     finish()
-    println("finished test: output in $(fname)"
+    println("finished test: output in $(fname)")
 end
 
 draw_julia_logos("/tmp/test.png")

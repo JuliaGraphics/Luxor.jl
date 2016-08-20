@@ -22,4 +22,4 @@ for imgfile in imagelist
 end
 
 finish()
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")

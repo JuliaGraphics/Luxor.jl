@@ -15,4 +15,4 @@ for y in 100 * randn(h, 1)
     x += 2
 end
 finish()
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")

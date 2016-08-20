@@ -20,4 +20,4 @@ for inner in 0:20:600
 end
 
 finish()
-println("finished test: output in $(fname)"
+println("finished test: output in $(fname)")
