@@ -54,15 +54,14 @@ function test(pagewidth, pageheight)
     grestore()
 end
 
-function simplify_poly()
+function simplify_poly(fname)
     pagewidth  = 1190.0 # points
     pageheight = 1684.0 # points
-    Drawing(pagewidth, pageheight, "/tmp/simplify-poly.pdf")
+    Drawing(pagewidth, pageheight, fname)
     sinecurves()
     test(pagewidth, pageheight)
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-@time simplify_poly()
-
+@time simplify_poly("/tmp/simplify-poly.pdf")

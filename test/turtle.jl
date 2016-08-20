@@ -2,7 +2,8 @@
 
 using Luxor, Colors
 
-Drawing(1200, 1200, "/tmp/turtles.png")
+fname = "/tmp/turtles-all-the-way-down.png"
+Drawing(1200, 1200, fname)
 origin()
 background("black")
 
@@ -31,5 +32,4 @@ for i in 1:5:400
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)")

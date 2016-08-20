@@ -144,7 +144,8 @@ function show_glyph(s::AbstractString, x, y)
 end
 
 tic()
-Drawing(1200, 1200, "/tmp/test-copy-path.pdf")
+fname = "/tmp/test-copy-path.pdf"
+Drawing(1200, 1200, fname)
 
 fontsize(200)
 fontface("GothamBook")
@@ -157,6 +158,5 @@ show_glyph("G", 300, 500)
 #show_glyph("G", 700, 500)
 
 finish()
-preview()
+println("finished test: output in $(fname)"
 toc()
-

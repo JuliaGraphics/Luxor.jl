@@ -21,10 +21,10 @@ function draw_color_bars(x, y, n, colmap, label)
 end
 
 
-function palette_test()
+function palette_test(fname)
     global currentwidth = 1000 # pts
     global currentheight = 1000 # pts
-    Drawing(currentwidth, currentheight, "/tmp/color-palette.pdf")
+    Drawing(currentwidth, currentheight, fname)
 
     # background
     setcolor("grey50")
@@ -44,8 +44,7 @@ function palette_test()
     draw_color_bars(720,  20, 50, diverging_palette(120, 140, 50, mid=1.0), "diverging 120 140 mid 1.0")
 
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-palette_test()
-
+palette_test("/tmp/color-palette.pdf")

@@ -18,15 +18,15 @@ function draw_logo_clip(x, y)
     grestore()
 end
 
-function clipping_test()
-    Drawing(500, 500, "/tmp/clipping-tests.png")
+function clipping_test(fname)
+    Drawing(500, 500, fname)
     origin()
     background("white")
     setopacity(.4)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     draw_logo_clip(0, 0)
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-clipping_test()
+clipping_test("/tmp/clipping-tests.png")

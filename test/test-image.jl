@@ -5,7 +5,8 @@ using Luxor
 width, height = 4000, 4000
 margin = 500
 
-Drawing(width, height, "/tmp/cairo-image.pdf")
+fname = "/tmp/cairo-image.pdf"
+Drawing(width, height, fname)
 origin()
 background("grey25")
 
@@ -38,5 +39,4 @@ for i in 1:36
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)")

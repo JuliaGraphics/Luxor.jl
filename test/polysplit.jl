@@ -56,8 +56,9 @@ function testapoly(x, y)
     grestore()
 end
 
+fname = "/tmp/polysplit.pdf"
 width, height = 2000, 2000
-Drawing(width, height, "/tmp/polysplit.pdf")
+Drawing(width, height, fname)
 origin()
 background("ivory")
 
@@ -73,5 +74,4 @@ for i in 1:50
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)"

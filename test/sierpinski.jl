@@ -22,10 +22,11 @@ function sierpinski(points::Array{Point}, degree::Int64)
     end
 end
 
+fname = "/tmp/sierpinski.pdf"
 @time begin
     depth = 8 # 12 is ok, 20 is right out
     cols = distinguishable_colors(depth+1)
-    Drawing(400, 400, "/tmp/sierpinski.pdf") # or PNG filename for PNG
+    Drawing(400, 400, fname) # or PNG filename for PNG
     origin()
     setopacity(0.5)
     triangle_count = 0
@@ -35,5 +36,4 @@ end
 end
 
 finish()
-preview()
-
+println("finished test: output in $(fname)"

@@ -2,7 +2,8 @@
 
 using Luxor, Colors
 width, height = 2000, 2000
-Drawing(width, height, "/tmp/subpath-clip-image.pdf")
+fname = "/tmp/subpath-clip-image.pdf"
+Drawing(width, height, fname)
 
 origin()
 
@@ -41,5 +42,4 @@ placeimage(image, -w/2, -h/2)
 clipreset()
 
 finish()
-preview()
-
+println("finished test: output in $(fname)")

@@ -69,8 +69,8 @@ function colorgrid()
     grestore()
 end
 
-function draw_logo()
-    Drawing(1600,1600, "/tmp/julia-logo-draw-eps.eps")
+function draw_logo(fname)
+    Drawing(1600,1600, fname)
     origin()
     background("white")
 
@@ -87,8 +87,7 @@ function draw_logo()
     colorgrid()
 
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-draw_logo()
-
+draw_logo("/tmp/julia-logo-draw-eps.eps")

@@ -78,10 +78,10 @@ function outlined_heart()
     grestore()
 end
 
-function julia_heart()
+function julia_heart(fname)
     global currentwidth = 1000 # pts
     global currentheight = 1000 # pts
-    Drawing(currentwidth, currentheight, "/tmp/heart-julia.pdf")
+    Drawing(currentwidth, currentheight, fname)
 
     origin()
     background("black")
@@ -93,8 +93,7 @@ function julia_heart()
         outlined_heart()
     end
     finish()
-    preview()
+    println("finished test: output in $(fname)"
 end
 
-julia_heart()
-
+julia_heart("/tmp/heart-julia.pdf")

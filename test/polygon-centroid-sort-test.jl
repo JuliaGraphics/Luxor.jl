@@ -2,11 +2,6 @@
 
 using Luxor, Colors
 
-width, height = 3000, 3000
-
-Drawing(width, height, "/tmp/polycentroidsort.pdf")
-origin()
-
 function drawbbox(apoly)
     gsave()
     setline(0.3)
@@ -67,7 +62,10 @@ function polycentroidsort()
     end
 end
 
+width, height = 3000, 3000
+fname = "/tmp/polycentroidsort.pdf"
+Drawing(width, height, fname)
+origin()
 polycentroidsort()
 finish()
-preview()
-
+println("finished test: output in $(fname)"

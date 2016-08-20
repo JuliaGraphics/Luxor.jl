@@ -2,12 +2,6 @@
 
 using Luxor, Colors
 
-width, height = 3000, 3000
-
-Drawing(width, height, "/tmp/pretty-poly-test.pdf")
-origin()
-background("ivory")
-
 function drawbbox(apoly)
     gsave()
     setline(0.3)
@@ -101,8 +95,11 @@ function draw_lots_of_polys()
     end
 end
 
+width, height = 3000, 3000
+fname = "/tmp/pretty-poly-test.pdf"
+Drawing(width, height, fname)
+origin()
+background("ivory")
 draw_lots_of_polys()
-
 finish()
-preview()
-
+println("finished test: output in $(fname)"
