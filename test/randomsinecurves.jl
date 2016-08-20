@@ -55,7 +55,6 @@ function random_sines(w, h, fname)
         grestore()
     end
     finish()
-    preview()
 end
 
 fname = "/tmp/random-sines.pdf"

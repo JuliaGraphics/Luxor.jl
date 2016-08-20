@@ -4,7 +4,7 @@ using Luxor, Colors
 
 include("julia-logo.jl")
 
-function spiral()
+function spiral_logo()
     gsave()
     scale(.3, .3)
     r = 200
@@ -75,7 +75,7 @@ function draw_logo(fname)
     background("white")
 
     translate(-500,-200)
-    spiral()
+    spiral_logo()
 
     translate(750,0)
     expandingspiral()
