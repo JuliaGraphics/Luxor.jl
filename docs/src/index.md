@@ -60,56 +60,54 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
 ![Luxor test](examples/basic-test.png)
 
 ```julia
-    using Luxor, Colors
-    Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
+using Luxor, Colors
+Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
 
-    origin()
-    background("purple")
+origin()
+background("purple")
 
-    setopacity(0.7)                      # opacity from 0 to 1
-    sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
-    setline(20)                          # line width
+setopacity(0.7)                      # opacity from 0 to 1
+sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
+setline(20)                          # line width
 
-    rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
-    randomhue()
-    circle(0, 0, 460, :stroke)
+rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
+randomhue()
+circle(0, 0, 460, :stroke)
 
-    circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
-    sethue("gold")
-    setopacity(0.7)
-    setline(10)
+circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
+sethue("gold")
+setopacity(0.7)
+setline(10)
 
-    for i in 0:pi/36:2pi - pi/36
-        move(0, 0)
-        line(cos(i) * 600, sin(i) * 600 )
-        stroke()
-    end
+for i in 0:pi/36:2pi - pi/36
+    move(0, 0)
+    line(cos(i) * 600, sin(i) * 600 )
+    stroke()
+end
 
-    clipreset()                           # finish masking
+clipreset()                           # finish masking
 
-    fontsize(60)
-    setcolor("turquoise")
-    fontface("Optima-ExtraBlack")
-    textwidth = textextents("Luxor")[5]
+fontsize(60)
+setcolor("turquoise")
+fontface("Optima-ExtraBlack")
+textwidth = textextents("Luxor")[5]
 
-    # move the text by half the width
-    textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
+# move the text by half the width
+textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
 
-    fontsize(18)
-    fontface("Avenir-Black")
+fontsize(18)
+fontface("Avenir-Black")
 
-    # text on curve starting at angle 0 rads centered on origin with radius 550
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
+# text on curve starting at angle 0 rads centered on origin with radius 550
+textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
 
-    finish()
-    preview() # on Mac OS X, opens in Preview
+finish()
+preview() # on Mac OS X, opens in Preview
 ```
 
 ## Types
 
-The two main defined types are the `Point` and the `Drawing`.
-
-The Point type holds two coordinates, the x and y:
+The two main defined types are the `Point` and the `Drawing`. The Point type holds two coordinates, the x and y:
 
 ```
 `Point(12.0, 13.0)`
@@ -151,7 +149,7 @@ julia> fieldnames(currentdrawing)
 
 The origin (0/0) is at the top left, x axis runs left to right, y axis runs top to bottom.
 
-The `origin()` function moves the c0/0 point. The `axes()` function draws a couple of lines to indicate the current axes. `background()` fills the entire image with a color.
+The `origin()` function moves the 0/0 point. The `axes()` function draws a couple of lines to indicate the current axes. `background()` fills the entire image with a color.
 
 ```@docs
 background
@@ -169,7 +167,7 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ### Simple shapes
 
-Functions for drawing shapes include circle(), arc(), carc(), curve(), sector(), rect(), and box().
+Functions for drawing shapes include `circle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, and `box()`.
 
 ```@docs
 circle

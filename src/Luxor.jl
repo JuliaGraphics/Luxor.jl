@@ -48,9 +48,7 @@ export Drawing, currentdrawing,
 # as of version 0.4, it seems I've got to share fill() and scale() with Base.
 
 import Base: fill, scale
-"""
-A Drawing holds details about the location and type of drawing, and tracks the current color.
-"""
+
 type Drawing
     width::Float64
     height::Float64
@@ -171,7 +169,7 @@ end
 """
     finish()
 
-Finish drawing, and close the file. The filename is still available in `currentdrawing.filename`, and you may be able to open it using `preview()`.
+Finish the drawing, and close the file. The filename is still available in `currentdrawing.filename`, and you may be able to open it using `preview()`.
 """
 function finish()
     if currentdrawing.surfacetype == "png"

@@ -1,18 +1,20 @@
-div.wy-menu-vertical ul.current li.toctree-l3 a {
-  font-weight: bold;
-}
+/*
+ * Part of Documenter.jl
+ *     https://github.com/JuliaDocs/Documenter.jl
+ *
+ * License: MIT
+ */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css");
 
-a.documenter-source {
-  float: right;
-}
+@import url("style.css");
 
-.documenter-methodtable pre {
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-top:  0px;
-    padding:     0px;
-}
-
-.documenter-methodtable pre.documenter-inline {
-    display: inline;
+/* Overriding the <code> block style of highligh.js.
+ * We have to override the padding and the background-color, since we style this
+ * part ourselves. Specifically, we style the <pre> surrounding the <code>, while
+ * highlight.js applies the .hljs style directly to the <code> tag.
+ */
+.hljs {
+    background-color: transparent;
+    padding: 0;
 }
