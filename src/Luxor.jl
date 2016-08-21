@@ -19,7 +19,8 @@ export Drawing, currentdrawing,
     line, rline, curve, arc, carc, ngon, ngonv, sector,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
-    poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint, prettypoly,
+    poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
+    prettypoly,
 
     star, starv,
 
@@ -79,7 +80,6 @@ type Drawing
             the_surface     = Cairo.CairoSVGSurface(f, w,h)
             the_surfacetype = "svg"
             the_cr          = Cairo.CairoContext(the_surface)
-
         end
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
         return "drawing '$f' ($w w x $h h) created"
@@ -129,32 +129,38 @@ Create a new drawing, optionally specify file type and dimensions.
 
     Drawing()
 
-Create a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png", default size 800 pixels square:
+creates a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png",
+default size 800 pixels square.
 
     Drawing(300,300)
 
-Create a drawing 300 by 300 pixels, defaulting to PNG format, default filename "/tmp/luxor-drawing.png":
+creates a drawing 300 by 300 pixels, defaulting to PNG format, default filename
+"/tmp/luxor-drawing.png".
 
     Drawing(300,300, "/tmp/my-drawing.pdf")
 
-Create a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels:
+creates a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels.
 
     Drawing(800,800, "/tmp/my-drawing.svg")`
 
-Create an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels:
+creates an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels.
 
     Drawing(800,800, "/tmp/my-drawing.eps")
 
-create an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels:
+creates an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels.
 
-    Drawing("A4")
+    Drawing("A4", "/tmp/my-drawing.pdf")
 
-Create the drawing in ISO A4 size. Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6",
-"Letter", "Legal", "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
+creates a drawing in ISO A4 size in the file "/tmp/my-drawing.pdf". Other sizes available
+are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A", "B", "C", "D", "E".
+Append "landscape" to get the landscape version.
 
     Drawing("A4landscape")
 
 Create the drawing A4 landscape size.
+
+Note that PDF files seem to default to a white background, but PNG defaults to black.
+Might be a bug here somewhere...
 """
 function Drawing(paper_size::String, f="/tmp/luxor-drawing.png")
   if contains(paper_size, "landscape")
@@ -169,7 +175,8 @@ end
 """
     finish()
 
-Finish the drawing, and close the file. The filename is still available in `currentdrawing.filename`, and you may be able to open it using `preview()`.
+Finish the drawing, and close the file. The filename is still available in
+`currentdrawing.filename`, and you may be able to open it using `preview()`.
 """
 function finish()
     if currentdrawing.surfacetype == "png"
@@ -183,7 +190,7 @@ end
 """
     preview()
 
-On macOS, opens the file, which probably uses the default app, Preview.app
+On macOS, opens the file, which probably uses the default, Preview.app.
 On Unix, open the file with xdg-open.
 On Windows, pass the filename to the shell.
 """
@@ -200,7 +207,8 @@ end
 """
     origin()
 
-Set the 0/0 origin at the center of the drawing (otherwise it will stay at the top left corner).
+Set the 0/0 origin at the center of the drawing (otherwise it will stay at the top left
+corner).
 """
 function origin()
     # set the origin at the center
@@ -208,15 +216,18 @@ function origin()
 end
 
 """
-Convert or rescale a value between `oldmin`/`oldmax` to the equivalent value between `newmin`/`newmax`.
+Convert or rescale a value between `oldmin`/`oldmax` to the equivalent value between
+`newmin`/`newmax`.
 
-For example, to convert 42 that used to lie between 0 and 100 to the equivalent number between 1 and 0 and inverting the direction:
+For example, to convert 42 that used to lie between 0 and 100 to the equivalent number
+between 1 and 0, inverting the direction:
 
     rescale(42, 0, 100, 1, 0)
 
 returns 0.5800000000000001
 """
-    rescale(value, oldmin, oldmax, newmin, newmax) = ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
+rescale(value, oldmin, oldmax, newmin, newmax) =
+   ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
 
 """
 Draw two axes lines starting at 0/0 and continuing out along the current positive x and y axes.
@@ -241,7 +252,7 @@ end
 """
     background(color)
 
-Fill the canvas with color.
+Fill the canvas with color. It's useful to have Colors.jl installed.
 
 Examples:
 
@@ -274,7 +285,8 @@ newpath() = Cairo.new_path(currentdrawing.cr)
 """
     newsubpath()
 
-Create a new subpath of the current path. This is Cairo's `new_sub_path()` function. It can be used, for example, to make holes in shapes.
+Create a new subpath of the current path. This is Cairo's `new_sub_path()` function. It can
+be used, for example, to make holes in shapes.
 """
 newsubpath() = Cairo.new_sub_path(currentdrawing.cr)
 
@@ -286,7 +298,8 @@ Close the current path. This is Cairo's `close_path()` function.
 closepath() = Cairo.close_path(currentdrawing.cr)
 
 """
-Stroke the current path with the current line width, line join, line cap, and dash settings. The current path is then cleared.
+Stroke the current path with the current line width, line join, line cap, and dash settings.
+The current path is then cleared.
 
     stroke()
 
@@ -310,7 +323,8 @@ Paint the current clip region with the current settings.
 paint()             = Cairo.paint(currentdrawing.cr)
 
 """
-Stroke the current path with current line width, line join, line cap, and dash settings, but then keep the path current.
+Stroke the current path with current line width, line join, line cap, and dash
+settings, but then keep the path current.
 
     strokepreserve()
 
@@ -336,10 +350,10 @@ end
 """
     do_action(action)
 
-This is usually called by other graphics functions, actions for graphics commands include :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve and :path.
+This is usually called by other graphics functions, actions for graphics commands include
+:fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve and :path.
 
 """
-
 function do_action(action)
     if action == :fill
         fill()
@@ -359,14 +373,16 @@ function do_action(action)
 end
 
 """
-Establish a new clip region by intersecting the current clip region with the current path and then clearing the current path.
+Establish a new clip region by intersecting the current clip region with the current path
+and then clearing the current path.
 
     clip()
 """
 clip() = Cairo.clip(currentdrawing.cr)
 
 """
-Establishes a new clip region by intersecting the current clip region with the current path, but keep the current path.
+Establishes a new clip region by intersecting the current clip region with the current path,
+but keep the current path.
 
     clippreserve()
 """
@@ -400,7 +416,8 @@ Draw a circle centred at `pt`.
     circle(pt, r, action)
 
 """
-circle(centerpoint::Point, r, action=:nothing)  = circle(centerpoint.x, centerpoint.y, r, action)
+circle(centerpoint::Point, r, action=:nothing) =
+  circle(centerpoint.x, centerpoint.y, r, action)
 
 """
 Add an arc to the current path from `angle1` to `angle2` going clockwise.
@@ -428,7 +445,8 @@ function carc(xc, yc, radius, angle1, angle2, action=:nothing)
 end
 
 """
-Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and do an action.
+Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and do
+an action.
 
     rect(xmin, ymin, w, h, action)
 """
@@ -442,7 +460,8 @@ function rect(xmin, ymin, w, h, action=:nothing)
 end
 
 """
-Create a rectangle with one corner at `cornerpoint` with width `w` and height `h` and do an action.
+Create a rectangle with one corner at `cornerpoint` with width `w` and height `h` and do an
+action.
 
     rect(cornerpoint, w, h, action)
 """
@@ -511,7 +530,7 @@ function setlinecap(str="butt")
 end
 
 """
-Set the line join, ie how to render the junction of two lines when stroking.
+Set the line join, i.e. how to render the junction of two lines when stroking.
 
     setlinejoin("round")
     setlinejoin("miter")
@@ -528,7 +547,8 @@ function setlinejoin(str="miter")
 end
 
 """
-Set the dash pattern to one of: "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
+Set the dash pattern to one of: "solid", "dotted", "dot", "dotdashed", "longdashed",
+"shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
 
     setlinedash("dot")
 """
@@ -548,11 +568,11 @@ move(pt)        = move(pt.x, pt.y)
 """
 Move by an amount from the current point. Move relative to current position by `x` and `y`:
 
-    - `rmove(x, y)`
+    rmove(x, y)
 
 Move relative to current position by the `pt`'s x and y:
 
-    - `rmove(pt)`
+    rmove(pt)
 """
 rmove(x, y)     = Cairo.rel_move(currentdrawing.cr,x, y)
 rmove(pt)       = rmove(pt.x, pt.y)
@@ -560,11 +580,11 @@ rmove(pt)       = rmove(pt.x, pt.y)
 """
 Create a line from the current position to the `x/y` position and optionally apply an action:
 
-    - `line(x, y)`
+    line(x, y)
 
-    - `line(x, y, :action)`
+    line(x, y, :action)
 
-    - `line(pt)`
+    line(pt)
 
 """
 line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
@@ -585,11 +605,11 @@ end
 """
 Create a line relative to the current position to the `x/y` position and optionally apply an action:
 
-    - `rline(x, y)`
+    rline(x, y)
 
-    - `rline(x, y, :action)`
+    rline(x, y, :action)
 
-    - `rline(pt)`
+    rline(pt)
 """
 
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
@@ -598,11 +618,12 @@ rline(pt)       = rline(pt.x, pt.y)
 """
 Create a cubic Bézier spline curve.
 
-    - `curve(x1, y1, x2, y2, x3, y3)`
+    curve(x1, y1, x2, y2, x3, y3)
 
-    - `curve(p1, p2, p3)`
+    curve(p1, p2, p3)
 
-The spline starts at the current position, finishing at `x3/y3` (`p3`), following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
+The spline starts at the current position, finishing at `x3/y3` (`p3`), following two
+control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
 
 """
 
@@ -635,12 +656,12 @@ function grestore()
      currentdrawing.bluevalue,
      currentdrawing.alpha) = pop!(saved_colors)
      catch err
-         println("$err Not enough colors on the stack")
+         println("$err Not enough colors on the stack to restore.")
     end
 end
 
 """
-Scale in x and y
+Scale subsequent drawing in x and y.
 
 Example:
 
@@ -651,7 +672,7 @@ Example:
 scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
 
 """
-Rotate by `a` radians.
+Rotate subsequent drawing by `a` radians clockwise.
 
     rotate(a)
 
@@ -703,7 +724,7 @@ Cairo.set_source(dest::CairoContext, src::CairoPattern)
 
     fontface(fontname)
 
-Select a font to use. If the font is unavailable, it defaults to ... [?]
+Select a font to use. If the font is unavailable, it defaults to Helvetica/San Francisco (on macOS).
 
 """
 fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
@@ -712,7 +733,7 @@ fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORM
 
     fontsize(n)
 
-Set the font size to n (points? pixels?).
+Set the font size to `n` points. Default is 10pt.
 
 """
 fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
@@ -722,21 +743,29 @@ fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
 Return the measurements of the string `str` when set using the current font settings:
 
-    x_bearing
-    y_bearing
-    width
-    height
-    x_advance
-    y_advance
+-    x_bearing
+-    y_bearing
+-    width
+-    height
+-    x_advance
+-    y_advance
 
-The bearing is the displacement from the reference point to the upper-left
-corner of the bounding box. It is often zero or a small positive value for x
-displacement, but can be negative x for characters like j as shown; it's almost
-always a negative value for y displacement. The width and height then describe
-the size of the bounding box. The advance takes you to the suggested reference
-point for the next letter. Note that bounding boxes for subsequent blocks of
-text can overlap if the bearing is negative, or the advance is smaller than the
+The bearing is the displacement from the reference point to the upper-left corner of the
+bounding box. It is often zero or a small positive value for x displacement, but can be
+negative x for characters like j; it's almost always a negative value for y displacement.
+
+The width and height then describe the size of the bounding box. The advance takes you to
+the suggested reference point for the next letter. Note that bounding boxes for subsequent
+blocks of text can overlap if the bearing is negative, or the advance is smaller than the
 width would suggest.
+
+Example:
+
+    textextents("R")
+
+returns
+
+    [1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]
 """
 
 textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
@@ -867,19 +896,16 @@ end
 """
 Set the current color.
 
-- `setcolor(color)`
+    setcolor(r, g, b)
+    setcolor(r, g, b, alpha)
+    setcolor(color)
+    setcolor(col::ColorTypes.Colorant)
 
-- `setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))`
+Examples:
 
-- `setcolor(r, g, b, alpha)`
-
-- `setcolor(.2, .3, .4, .5)`
-
-- `setcolor(r, g, b)`
-
-- `setcolor(col::ColorTypes.Colorant)`
-
-- `setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))`
+    setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))
+    setcolor(.2, .3, .4, .5)
+    setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
 
     for i in 1:15:360
        setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
@@ -891,20 +917,14 @@ function setcolor(col::ColorTypes.Colorant)
   setcolor(temp.r, temp.g, temp.b)
 end
 
-"""
-Set the current color and transparency.
-
-   setcolor(r, g, b, a=1)
-
-Set the color to r, g, b, a.
-"""
 function setcolor(r, g, b, a=1)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = r, g, b, a
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
+      currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
 end
 
 """
-Set the current color to a string, using a macro.
+Set the current color to a string.
 
 For example:
 
@@ -915,20 +935,21 @@ macro setcolor_str(ex)
     isa(ex, String) || error("colorant requires literal strings")
     col = parse(RGBA, ex)
     quote
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, $col.alpha)
+    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
+      currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
+    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
+      currentdrawing.greenvalue, currentdrawing.bluevalue, $col.alpha)
     end
 end
 
 """
-Set the color. `sethue()` is like `setcolor()`, but (like Mathematica) we sometimes want to change the current 'color' without changing alpha/opacity. Using `sethue()` rather than `setcolor()` doesn't change the current alpha opacity.
+Set the color. `sethue()` is like `setcolor()`, but (like Mathematica) we sometimes want to
+change the current 'color' without changing alpha/opacity. Using `sethue()` rather than
+`setcolor()` doesn't change the current alpha opacity.
 
     sethue("black")
     sethue(0.3,0.7,0.9)
 
-- `sethue(color)` like `setcolor()`
-
-- `sethue(r, g, b)` like `setcolor()` but doesn't change opacity
 """
 function sethue(col::String)
     temp = parse(RGBA,  col)
@@ -936,6 +957,10 @@ function sethue(col::String)
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) # use current alpha, not incoming one
 end
 
+"""
+    sethue("red")
+
+"""
 function sethue(col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = temp.r, temp.g, temp.b
@@ -943,6 +968,11 @@ function sethue(col::ColorTypes.Colorant)
     Cairo.set_source_rgba(currentdrawing.cr, temp.r, temp.g, temp.b, currentdrawing.alpha)
 end
 
+"""
+    sethue(0.3, 0.7, 0.9)
+
+Use `setcolor(r,g,b,a)` to set transparent colors.
+"""
 function sethue(r, g, b)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
     # use current alpha
@@ -965,7 +995,7 @@ end
 """
 Set a random hue.
 
-- `randomhue()`
+    randomhue()
 
 Choose a random color without changing the current alpha opacity.
 """
@@ -975,9 +1005,9 @@ end
 """
 Set a random color.
 
-- `randomcolor()` choose a random color
+    randomcolor()
 
-This may change the current alpha opacity too.
+This probably changes the current alpha opacity too.
 
 """
 function randomcolor()
@@ -989,16 +1019,36 @@ Get the current matrix.
 
     getmatrix()
 
-Return current Cairo matrix as an array.
+Return current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:
 
-In Cairo and Luxor, a matrix is an array of 6 float64 numbers:
+- xx component of the affine transformation
+- yx component of the affine transformation
+- xy component of the affine transformation
+- yy component of the affine transformation
+- x0 translation component of the affine transformation
+- y0 translation component of the affine transformation
 
--    xx component of the affine transformation
--    yx component of the affine transformation
--    xy component of the affine transformation
--    yy component of the affine transformation
--    x0 translation component of the affine transformation
--    y0 translation component of the affine transformation
+Some basic matrix transforms:
+
+translate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by
+scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by
+rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians
+x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A
+y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A
+flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)])  flip
+
+WHen a drawing is first created, the matrix looks like this:
+
+    getmatrix() = [1.0,0.0,0.0,1.0,0.0,0.0]
+
+When the origin is moved to 400/400, it looks like this:
+
+    getmatrix() = [1.0,0.0,0.0,1.0,400.0,400.0]
+
+To reset the matrix to the original:
+
+    setmatrix([1.0,0.0,0.0,1.0,0.0,0.0])
+
 """
 
 function getmatrix()
@@ -1010,6 +1060,8 @@ end
 Change the current Cairo matrix to matrix `m`.
 
     setmatrix(m::Array)
+
+Use `getmatrix()` to get the current matrix.
 """
 
 function setmatrix(m::Array)
@@ -1035,6 +1087,8 @@ Modify the current matrix by multiplying it by matrix `a`.
 For example, to skew the current state by 45 degrees in x and move by 20 in y direction:
 
     transform([1, 0, tand(45), 1, 0, 20])
+
+Use `getmatrix()` to get the current matrix.
 """
 function transform(a::Array)
     b = Cairo.get_matrix(currentdrawing.cr)
@@ -1053,7 +1107,8 @@ Read a PNG file into Cairo.
 
     readpng(pathname)
 
-This returns a Cairo.CairoSurface, suitable for placing on the current drawing with `placeimage()`. You can access its width and height properties.
+This returns a Cairo.CairoSurface, suitable for placing on the current drawing with
+`placeimage()`. You can access its width and height properties.
 
     image = readpng("/tmp/test-image.png")
     w = image.width
@@ -1083,7 +1138,7 @@ end
 """
 Place a PNG image on the drawing using alpha transparency.
 
-    placeimage(img, xpos, ypos, 0.5) # alpha
+    placeimage(img, xpos, ypos, a)
 
 Place an image previously loaded using `readpng()`.
 """
@@ -1092,8 +1147,10 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
     paint_with_alpha(currentdrawing.cr, alpha)
 end
 
-placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
-placeimage(img::Cairo.CairoSurface, pt::Point, alpha) = placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
+placeimage(img::Cairo.CairoSurface, pt::Point) =
+  placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
+placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
+  placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
 end
 # module

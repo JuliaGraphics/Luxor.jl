@@ -6,15 +6,12 @@ Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics packa
 
 The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
-For a much more powerful graphics environment, try [Compose.jl](http://composejl.org). Also worth looking at is Andrew Cooke's [Drawing.jl](https://github.com/andrewcooke/Drawing.jl) package.
-
-[Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
-
-I've only tried this on MacOS X. It will need some changes to work on Windows (but I can't test it).
+For a much more powerful (and harder to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
 # Current status #
 
-It's been updated for Julia version 0.5 and for the new Colors.jl. SVG rendering currently seems unreliable — text placement generates segmentation faults.
+It's been updated for Julia version 0.5 and for the new Colors.jl.
+Needs more testing on Unix and Windows platforms.
 
 # Installation and basic usage
 
@@ -102,7 +99,7 @@ fontface("Avenir-Black")
 textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
 
 finish()
-preview() # on Mac OS X, opens in Preview
+preview() # on macOS, opens in Preview
 ```
 
 ## Types
@@ -115,7 +112,7 @@ The two main defined types are the `Point` and the `Drawing`. The Point type hol
 
 ## Drawings and files
 
-To create a drawing, and optionally specify the file name and type, and dimensions, use the `Drawing` function.
+To create a drawing, and optionally specify the filename and type, and dimensions, use the `Drawing` function.
 
 ```@docs
 Drawing
@@ -208,7 +205,7 @@ For color definitions and conversions, we use Colors.jl. The difference between 
 
 ## Styles
 
-The set- commands control the width, end shapes, join behaviour and dash pattern:
+The `set-` commands control the width, end shapes, join behaviour and dash pattern:
 
 ```@docs
 setline
@@ -222,18 +219,18 @@ strokepreserve
 fillpreserve
 ```
 
-`gsave()` and `grestore()` should always be balanced in pairs. `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `gsave()`.
+`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
 
 ```@docs
 gsave
 grestore
 ```
 
-## Polygons and such
+## Polygons and shapes
 
 ### Regular polygons ("ngons")
 
-You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()` and `ngonv()`. `ngon()` uses the shapes: if you just want the raw points, use `ngonv`, which returns an array of points instead:
+You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()` and `ngonv()`. `ngon()` makes the shapes: if you just want the raw points, use `ngonv`, which returns an array of points instead:
 
 ![n-gons](examples/n-gon.png)
 
@@ -268,8 +265,11 @@ ngonv
 ```
 ### Polygons
 
-A polygon is an array of Points. Use poly() to add them, or randompointarray()
-to create a random list of Points. Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. This uses `ngon()` to make two polygons, one forming a hole in another to make a hexagonal bolt shape:
+A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.
+
+Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon.
+
+The following piece of code uses `ngon()` to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```
 ngon(0, 0, 60, 6, 0, :path)
@@ -278,7 +278,7 @@ ngon(0, 0, 40, 6, 0, :path, reversepath=true)
 fillstroke()
 ```
 
-Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), using `simplify()`.
+Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
 
 ```@docs
 simplify
@@ -293,7 +293,8 @@ polysortbyangle
 polycentroid
 polybbox
 ```
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the poly action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1.
+
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:
 
 ```
 prettypoly(pl, :fill, :(
@@ -310,7 +311,6 @@ The `vertex_action` expression can't use definitions that are not in scope, eg y
 Use `starv()` to return the vertices of a star, and `star()` to make a star.
 
 ![stars](examples/stars.png)
-
 
 ```julia
 using Luxor, Colors
@@ -360,7 +360,7 @@ textextents
 
 ### Text on a curve
 
-Use `textcurve(str)` to draw a string `str` on an arc.
+Use `textcurve(str)` to draw a string `str` on a circular arc.
 
 ![text on a curve or spiral](examples/text-spiral.png)
 
