@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: )The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful graphics environment, try Compose.jl. Also worth looking at is Andrew Cooke's Drawing.jl package.Colors.jl provides excellent color definitions and is also required.I've only tried this on MacOS X. It will need some changes to work on Windows (but I can't test it)."
+    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: )The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful (and harder to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
 },
 
 {
@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Current status",
     "category": "section",
-    "text": "It's been updated for Julia version 0.5 and for the new Colors.jl. SVG rendering currently seems unreliable — text placement generates segmentation faults."
+    "text": "It's been updated for Julia version 0.5 and for the new Colors.jl. Needs more testing on Unix and Windows platforms."
 },
 
 {
@@ -45,7 +45,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "A slightly more interesting image",
     "category": "section",
-    "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\n\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\n\nfor i in 0:pi/36:2pi - pi/36\n    move(0, 0)\n    line(cos(i) * 600, sin(i) * 600 )\n    stroke()\nend\n\nclipreset()                           # finish masking\n\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\n\n# move the text by half the width\ntextcentred(\"Luxor\", -textwidth/2, currentdrawing.height/2 - 400)\n\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\n\nfinish()\npreview() # on Mac OS X, opens in Preview"
+    "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\n\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\n\nfor i in 0:pi/36:2pi - pi/36\n    move(0, 0)\n    line(cos(i) * 600, sin(i) * 600 )\n    stroke()\nend\n\nclipreset()                           # finish masking\n\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\n\n# move the text by half the width\ntextcentred(\"Luxor\", -textwidth/2, currentdrawing.height/2 - 400)\n\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\n\nfinish()\npreview() # on macOS, opens in Preview"
 },
 
 {
@@ -85,7 +85,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the file name and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
 },
 
 {
@@ -365,13 +365,13 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Styles",
     "category": "section",
-    "text": "The set- commands control the width, end shapes, join behaviour and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() and grestore() should always be balanced in pairs. gsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave().gsave\ngrestore"
+    "text": "The set- commands control the width, end shapes, join behaviour and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
 },
 
 {
-    "location": "index.html#Polygons-and-such-1",
+    "location": "index.html#Polygons-and-shapes-1",
     "page": "Current status",
-    "title": "Polygons and such",
+    "title": "Polygons and shapes",
     "category": "section",
     "text": ""
 },
@@ -397,7 +397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Regular polygons (\"ngons\")",
     "category": "section",
-    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon() and ngonv(). ngon() uses the shapes: if you just want the raw points, use ngonv, which returns an array of points instead:(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60,120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n  for x in -500:50:500\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n  end\nend\n\nfinish()\npreview()ngon\nngonv"
+    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon() and ngonv(). ngon() makes the shapes: if you just want the raw points, use ngonv, which returns an array of points instead:(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60,120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n  for x in -500:50:500\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n  end\nend\n\nfinish()\npreview()ngon\nngonv"
 },
 
 {
@@ -453,7 +453,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Polygons",
     "category": "section",
-    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points. Polygons can contain holes. The reversepath keyword changes the direction of the polygon. This uses ngon() to make two polygons, one forming a hole in another to make a hexagonal bolt shape:ngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), using simplify().simplifyThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybboxThe prettypoly() function can place graphics at each vertex of a polygon. After the poly action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1.prettypoly(pl, :fill, :(\n                        scale(0.1, 0.1);\n                        circle(0, 0, 10, :fill)\n                       ),\n           close=false)The vertex_action expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect the polygon-drawing function to know about it."
+    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon.The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:ngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().simplifyThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybboxThe prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:prettypoly(pl, :fill, :(\n                        scale(0.1, 0.1);\n                        circle(0, 0, 10, :fill)\n                       ),\n           close=false)The vertex_action expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect the polygon-drawing function to know about it."
 },
 
 {
@@ -565,7 +565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Text on a curve",
     "category": "section",
-    "text": "Use textcurve(str) to draw a string str on an arc.(Image: text on a curve or spiral)  using Luxor, Colors\n  Drawing(1800, 1800, \"/tmp/text-spiral.png\")\n  fontsize(18)\n  fontface(\"LucidaSansUnicode\")\n  origin()\n  background(\"ivory\")\n  sethue(\"royalblue4\")\n  textstring = join(names(Base), \" \")\n  textcurve(\"this spiral contains every word in julia names(Base): \" * textstring, -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\n\n  fontsize(35)\n  fontface(\"Agenda-Black\")\n  textcentred(\"julia names(Base)\", 0, 0)\n  finish()\n  preview()textcurve"
+    "text": "Use textcurve(str) to draw a string str on a circular arc.(Image: text on a curve or spiral)  using Luxor, Colors\n  Drawing(1800, 1800, \"/tmp/text-spiral.png\")\n  fontsize(18)\n  fontface(\"LucidaSansUnicode\")\n  origin()\n  background(\"ivory\")\n  sethue(\"royalblue4\")\n  textstring = join(names(Base), \" \")\n  textcurve(\"this spiral contains every word in julia names(Base): \" * textstring, -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\n\n  fontsize(35)\n  fontface(\"Agenda-Black\")\n  textcentred(\"julia names(Base)\", 0, 0)\n  finish()\n  preview()textcurve"
 },
 
 {
@@ -605,7 +605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A flip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\n\n\n"
+    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A flip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\nWHen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0,0.0,0.0,1.0,0.0,0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0,0.0,0.0,1.0,400.0,400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0,0.0,0.0,1.0,0.0,0.0])\n\n\n\n"
 },
 
 {
@@ -677,7 +677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.placeimage",
     "category": "Function",
-    "text": "Place a PNG image on the drawing.\n\nplaceimage(img, xpos, ypos)\n\nPlace an image previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\nplaceimage(img, xpos, ypos, 0.5) # alpha\n\nPlace an image previously loaded using readpng().\n\n\n\n"
+    "text": "Place a PNG image on the drawing.\n\nplaceimage(img, xpos, ypos)\n\nPlace an image previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\nplaceimage(img, xpos, ypos, a)\n\nPlace an image previously loaded using readpng().\n\n\n\n"
 },
 
 {
