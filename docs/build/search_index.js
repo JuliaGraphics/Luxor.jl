@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.Drawing",
     "category": "Type",
-    "text": "Create a new drawing, optionally specify file type and dimensions.\n\nDrawing()\n\nCreate a drawing, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\", default size 800 pixels square:\n\nDrawing(300,300)\n\nCreate a drawing 300 by 300 pixels, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\":\n\nDrawing(300,300, \"/tmp/my-drawing.pdf\")\n\nCreate a PDF drawing in the file \"/tmp/my-drawing.pdf\", 300 by 300 pixels:\n\nDrawing(800,800, \"/tmp/my-drawing.svg\")`\n\nCreate an SVG drawing in the file \"/tmp/my-drawing.svg\", 800 by 800 pixels:\n\nDrawing(800,800, \"/tmp/my-drawing.eps\")\n\ncreate an EPS drawing in the file \"/tmp/my-drawing.eps\", 800 by 800 pixels:\n\nDrawing(\"A4\")\n\nCreate the drawing in ISO A4 size. Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\nCreate the drawing A4 landscape size.\n\n\n\n"
+    "text": "Create a new drawing, optionally specify file type and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\", default size 800 pixels square.\n\nDrawing(300,300)\n\ncreates a drawing 300 by 300 pixels, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\".\n\nDrawing(300,300, \"/tmp/my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"/tmp/my-drawing.pdf\", 300 by 300 pixels.\n\nDrawing(800,800, \"/tmp/my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"/tmp/my-drawing.svg\", 800 by 800 pixels.\n\nDrawing(800,800, \"/tmp/my-drawing.eps\")\n\ncreates an EPS drawing in the file \"/tmp/my-drawing.eps\", 800 by 800 pixels.\n\nDrawing(\"A4\", \"/tmp/my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size in the file \"/tmp/my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\nCreate the drawing A4 landscape size.\n\nNote that PDF files seem to default to a white background, but PNG defaults to black. Might be a bug here somewhere...\n\n\n\n"
 },
 
 {
@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.preview",
     "category": "Function",
-    "text": "preview()\n\nOn macOS, opens the file, which probably uses the default app, Preview.app On Unix, open the file with xdg-open. On Windows, pass the filename to the shell.\n\n\n\n"
+    "text": "preview()\n\nOn macOS, opens the file, which probably uses the default, Preview.app. On Unix, open the file with xdg-open. On Windows, pass the filename to the shell.\n\n\n\n"
 },
 
 {
@@ -93,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.background",
     "category": "Function",
-    "text": "background(color)\n\nFill the canvas with color.\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(Colors.RGB(0, 0, 0))\nbackground(Colors.Luv(20, -20, 30))\n\n\n\n"
+    "text": "background(color)\n\nFill the canvas with color. It's useful to have Colors.jl installed.\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(Colors.RGB(0, 0, 0))\nbackground(Colors.Luv(20, -20, 30))\n\n\n\n"
 },
 
 {
@@ -157,7 +157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.curve",
     "category": "Function",
-    "text": "Create a cubic Bézier spline curve.\n\n- `curve(x1, y1, x2, y2, x3, y3)`\n\n- `curve(p1, p2, p3)`\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
+    "text": "Create a cubic Bézier spline curve.\n\ncurve(x1, y1, x2, y2, x3, y3)\n\ncurve(p1, p2, p3)\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
 },
 
 {
@@ -205,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.rmove",
     "category": "Function",
-    "text": "Move by an amount from the current point. Move relative to current position by x and y:\n\n- `rmove(x, y)`\n\nMove relative to current position by the pt's x and y:\n\n- `rmove(pt)`\n\n\n\n"
+    "text": "Move by an amount from the current point. Move relative to current position by x and y:\n\nrmove(x, y)\n\nMove relative to current position by the pt's x and y:\n\nrmove(pt)\n\n\n\n"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.line",
     "category": "Function",
-    "text": "Create a line from the current position to the x/y position and optionally apply an action:\n\n- `line(x, y)`\n\n- `line(x, y, :action)`\n\n- `line(pt)`\n\n\n\nMake a line between two points, pt1 and pt2.\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
+    "text": "Create a line from the current position to the x/y position and optionally apply an action:\n\nline(x, y)\n\nline(x, y, :action)\n\nline(pt)\n\n\n\nMake a line between two points, pt1 and pt2.\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
 },
 
 {
@@ -221,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.rline",
     "category": "Function",
-    "text": "Create a line relative to the current position to the x/y position and optionally apply an action:\n\n- `rline(x, y)`\n\n- `rline(x, y, :action)`\n\n- `rline(pt)`\n\n\n\n"
+    "text": "Create a line relative to the current position to the x/y position and optionally apply an action:\n\nrline(x, y)\n\nrline(x, y, :action)\n\nrline(pt)\n\n\n\n"
 },
 
 {
@@ -293,7 +293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.setlinejoin",
     "category": "Function",
-    "text": "Set the line join, ie how to render the junction of two lines when stroking.\n\nsetlinejoin(\"round\")\nsetlinejoin(\"miter\")\nsetlinejoin(\"bevel\")\n\n\n\n"
+    "text": "Set the line join, i.e. how to render the junction of two lines when stroking.\n\nsetlinejoin(\"round\")\nsetlinejoin(\"miter\")\nsetlinejoin(\"bevel\")\n\n\n\n"
 },
 
 {
@@ -525,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.fontface",
     "category": "Function",
-    "text": "fontface(fontname)\n\nSelect a font to use. If the font is unavailable, it defaults to ... [?]\n\n\n\n"
+    "text": "fontface(fontname)\n\nSelect a font to use. If the font is unavailable, it defaults to Helvetica/San Francisco (on macOS).\n\n\n\n"
 },
 
 {
@@ -533,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.fontsize",
     "category": "Function",
-    "text": "fontsize(n)\n\nSet the font size to n (points? pixels?).\n\n\n\n"
+    "text": "fontsize(n)\n\nSet the font size to n points. Default is 10pt.\n\n\n\n"
 },
 
 {
@@ -541,7 +541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.textextents",
     "category": "Function",
-    "text": "textextents(str)\n\nReturn the measurements of the string str when set using the current font settings:\n\nx_bearing\ny_bearing\nwidth\nheight\nx_advance\ny_advance\n\nThe bearing is the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like j as shown; it's almost always a negative value for y displacement. The width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\n\n\n"
+    "text": "textextents(str)\n\nReturn the measurements of the string str when set using the current font settings:\n\nx_bearing\ny_bearing\nwidth\nheight\nx_advance\ny_advance\n\nThe bearing is the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like j; it's almost always a negative value for y displacement.\n\nThe width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\nExample:\n\ntextextents(\"R\")\n\nreturns\n\n[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]\n\n\n\n"
 },
 
 {
@@ -581,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Base.scale",
     "category": "Function",
-    "text": "Scale in x and y\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\n"
+    "text": "Scale subsequent drawing in x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\n"
 },
 
 {
@@ -589,7 +589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.rotate",
     "category": "Function",
-    "text": "Rotate by a radians.\n\nrotate(a)\n\n\n\n"
+    "text": "Rotate subsequent drawing by a radians clockwise.\n\nrotate(a)\n\n\n\n"
 },
 
 {
@@ -605,7 +605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array.\n\nIn Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\n\n\n"
+    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A flip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\n\n\n"
 },
 
 {
@@ -613,7 +613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.setmatrix",
     "category": "Function",
-    "text": "Change the current Cairo matrix to matrix m.\n\nsetmatrix(m::Array)\n\n\n\n"
+    "text": "Change the current Cairo matrix to matrix m.\n\nsetmatrix(m::Array)\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
@@ -621,7 +621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor.transform",
     "category": "Function",
-    "text": "Modify the current matrix by multiplying it by matrix a.\n\ntransform(a::Array)\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\n\n\n"
+    "text": "Modify the current matrix by multiplying it by matrix a.\n\ntransform(a::Array)\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
