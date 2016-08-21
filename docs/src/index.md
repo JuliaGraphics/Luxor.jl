@@ -2,7 +2,7 @@
 
 Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
 
-![](examples/tiled-images.png)
+!["tiled images"](examples/tiled-images.png)
 
 The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
@@ -27,7 +27,7 @@ and to use:
 using Luxor
 ```
 
-## The basic "Hello World"
+# The basic "Hello World"
 
 Here's a simple "Hello world":
 
@@ -52,7 +52,7 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
 
 `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
-## A slightly more interesting image
+# A slightly more interesting image
 
 ![Luxor test](examples/basic-test.png)
 
@@ -101,6 +101,8 @@ textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
 finish()
 preview() # on macOS, opens in Preview
 ```
+
+# Overview
 
 ## Types
 
@@ -154,7 +156,7 @@ axes
 origin
 ```
 
-## Basic drawing
+# Basic drawing
 
 The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity.
 
@@ -162,7 +164,7 @@ Many drawing functions have an *action* argument. This can be `:nothing`, `:fill
 
 Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, clockwise.
 
-### Simple shapes
+## Simple shapes
 
 Functions for drawing shapes include `circle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, and `box()`.
 
@@ -176,7 +178,7 @@ rect
 box
 ```
 
-### Lines and arcs
+## Lines and arcs
 
 There is a 'current position' which you can set with `move()`, and use implicitly in functions like `line()` and `text()`.
 
@@ -441,7 +443,7 @@ You can use newly-created text paths as a clipping region - here the text paths 
     preview()
 ```
 
-## Transforms and matrices
+# Transforms and matrices
 
 For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`.
 
@@ -465,7 +467,7 @@ setmatrix
 transform
 ```
 
-## Clipping
+# Clipping
 
 Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keep the current path, but also use it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing commands like `circle()`.
 
@@ -509,7 +511,7 @@ finish()
 preview()
 ```
 
-## Images ##
+# Images ##
 
 There is some limited support for placing PNG images on the drawing. First, load a PNG image using `readpng(filename)`.
 
@@ -582,7 +584,7 @@ finish()
 preview()
 ```
 
-## Turtle graphics
+# Turtle graphics
 
 Some simple "turtle graphics" commands are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
 
@@ -636,9 +638,9 @@ Penwidth
 Reposition
 ```
 
-## More examples
+# More examples
 
-### Sierpinski triangle
+## Sierpinski triangle
 
 ![Sierpinski](examples/sierpinski.png)
 

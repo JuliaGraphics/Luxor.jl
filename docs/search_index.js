@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: )The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful (and harder to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
+    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful (and harder to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
 },
 
 {
@@ -46,6 +46,14 @@ var documenterSearchIndex = {"docs": [
     "title": "A slightly more interesting image",
     "category": "section",
     "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\n\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\n\nfor i in 0:pi/36:2pi - pi/36\n    move(0, 0)\n    line(cos(i) * 600, sin(i) * 600 )\n    stroke()\nend\n\nclipreset()                           # finish masking\n\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\n\n# move the text by half the width\ntextcentred(\"Luxor\", -textwidth/2, currentdrawing.height/2 - 400)\n\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\n\nfinish()\npreview() # on macOS, opens in Preview"
+},
+
+{
+    "location": "index.html#Overview-1",
+    "page": "Current status",
+    "title": "Overview",
+    "category": "section",
+    "text": ""
 },
 
 {
