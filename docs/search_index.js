@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful (and harder to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
+    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
 },
 
 {
@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Current status",
     "category": "section",
-    "text": "It's been updated for Julia version 0.5 and for the new Colors.jl. Needs more testing on Unix and Windows platforms."
+    "text": "It's been updated for Julia version 0.5 and for the new Colors.jl. It needs more testing on Unix and Windows platforms."
 },
 
 {
@@ -37,15 +37,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "The basic \"Hello World\"",
     "category": "section",
-    "text": "Here's a simple \"Hello world\":(Image: \"Hello world\")using Luxor, Colors\nDrawing(1000, 1000, \"/tmp/hello-world.png\")\norigin()\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()The Drawing(1000, 1000, \"/tmp/hello-world.png\") line defines the size of the image and the location of the finished image when it's saved.origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using Colors.jl, we can specify colors by name.text() places text. It's placed at 0/0 if you don't specify otherwise.finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg on MacOS X, Preview)."
+    "text": "Here's a simple \"Hello world\":(Image: \"Hello world\")using Luxor, Colors\nDrawing(1000, 1000, \"/tmp/hello-world.png\")\norigin()\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()The Drawing(1000, 1000, \"/tmp/hello-world.png\") line defines the size of the image and the location of the finished image when it's saved.origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using Colors.jl, we can specify colors by name.text() places text. It's placed at the current 0/0 if you don't specify otherwise.finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg on MacOS X, Preview)."
 },
 
 {
-    "location": "index.html#A-slightly-more-interesting-image-1",
+    "location": "index.html#A-slightly-more-interesting-example-1",
     "page": "Current status",
-    "title": "A slightly more interesting image",
+    "title": "A slightly more interesting example",
     "category": "section",
-    "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\n\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\n\nfor i in 0:pi/36:2pi - pi/36\n    move(0, 0)\n    line(cos(i) * 600, sin(i) * 600 )\n    stroke()\nend\n\nclipreset()                           # finish masking\n\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\n\n# move the text by half the width\ntextcentred(\"Luxor\", -textwidth/2, currentdrawing.height/2 - 400)\n\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\n\nfinish()\npreview() # on macOS, opens in Preview"
+    "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\nfor i in 0:pi/36:2pi - pi/36\n    move(0, 0)\n    line(cos(i) * 600, sin(i) * 600 )\n    stroke()\nend\nclipreset()                           # finish clipping/masking\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\ntextcentred(\"Luxor\", 0, currentdrawing.height/2 - 400)\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\nfinish()\npreview() # on macOS, opens in Preview"
 },
 
 {
@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Types",
     "category": "section",
-    "text": "The two main defined types are the Point and the Drawing. The Point type holds two coordinates, the x and y:`Point(12.0, 13.0)`"
+    "text": "The two main defined types are the Point and the Drawing. The Point type holds two coordinates, the x and y:Point(12.0, 13.0)"
 },
 
 {
@@ -93,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
 },
 
 {
@@ -133,7 +133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Basic drawing",
     "category": "section",
-    "text": "The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity.Many drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.Positions are usually specified either by x and y coordinates or a Point(x, y). Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, clockwise."
+    "text": "The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You modify the drawing space by transforming/rotating/scaling it.Many drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.Positions are usually specified either by x and y coordinates or a Point(x, y). Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, so clockwise."
 },
 
 {
@@ -277,7 +277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Color and opacity",
     "category": "section",
-    "text": "For color definitions and conversions, we use Colors.jl. The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica)."
+    "text": "For color definitions and conversions, use Colors.jl. The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica)."
 },
 
 {
@@ -405,7 +405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Regular polygons (\"ngons\")",
     "category": "section",
-    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon() and ngonv(). ngon() makes the shapes: if you just want the raw points, use ngonv, which returns an array of points instead:(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60,120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n  for x in -500:50:500\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n  end\nend\n\nfinish()\npreview()ngon\nngonv"
+    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon() and ngonv(). ngon() makes the shapes: if you just want the raw points, use ngonv, which returns an array of points instead:(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n  for x in -500:50:500\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n  end\nend\n\nfinish()\npreview()ngon\nngonv"
 },
 
 {
@@ -693,7 +693,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Current status",
     "title": "Images",
     "category": "section",
-    "text": "There is some limited support for placing PNG images on the drawing. First, load a PNG image using readpng(filename).readpngThen use placeimage() to place a loaded PNG image by its top left corner at point x/y or pt.placeimage(Image: \"Images\")img = readpng(filename)\nplaceimage(img, xpos, ypos)\nplaceimage(img, pt::Point)\nplaceimage(img, xpos, ypos, 0.5) # use alpha transparency of 0.5\nplaceimage(img, pt::Point, 0.5)\n\nimg = readpng(\"examples/julia-logo-mask.png\")\nw = img.width\nh = img.height\nplaceimage(img, -w/2, -h/2) # centered at pointImage clipping is possible:using Luxor\n\nwidth, height = 4000, 4000\nmargin = 500\n\nDrawing(width, height, \"/tmp/cairo-image.pdf\")\norigin()\nbackground(\"grey25\")\n\nsetline(5)\nsethue(\"green\")\n\nimage = readpng(\"examples/julia-logo-mask.png\")\nw = image.width\nh = image.height\n\nx = (-width/2) + margin\ny = (-height/2) + margin\n\nfor i in 1:36\n    circle(x, y, 250, :stroke)\n    circle(x, y, 250, :clip)\n    gsave()\n    translate(x, y)\n    scale(.95, .95)\n    rotate(rand(0.0:pi/8:2pi))\n\n    placeimage(image, -w/2, -h/2)\n\n    grestore()\n    clipreset()\n    x += 600\n    if x > width/2\n        x = (-width/2) + margin\n        y += 600\n    end\nend\n\nfinish()\npreview()"
+    "text": "There is some limited support for placing PNG images on the drawing. First, load a PNG image using readpng(filename).readpngThen use placeimage() to place a loaded PNG image by its top left corner at point x/y or pt.placeimageimg = readpng(filename)\nplaceimage(img, xpos, ypos)\nplaceimage(img, pt::Point)\nplaceimage(img, xpos, ypos, 0.5) # use alpha transparency of 0.5\nplaceimage(img, pt::Point, 0.5)\n\nimg = readpng(\"examples/julia-logo-mask.png\")\nw = img.width\nh = img.height\nplaceimage(img, -w/2, -h/2) # centered at pointYou can clip images. The following script repeatedly places an image after first using a circle to define a clipping path:(Image: \"Images\")using Luxor\n\nwidth, height = 4000, 4000\nmargin = 500\n\nDrawing(width, height, \"/tmp/cairo-image.pdf\")\norigin()\nbackground(\"grey25\")\n\nsetline(5)\nsethue(\"green\")\n\nimage = readpng(\"examples/julia-logo-mask.png\")\nw = image.width\nh = image.height\n\nx = (-width/2) + margin\ny = (-height/2) + margin\n\nfor i in 1:36\n    circle(x, y, 250, :stroke)\n    circle(x, y, 250, :clip)\n    gsave()\n    translate(x, y)\n    scale(.95, .95)\n    rotate(rand(0.0:pi/8:2pi))\n\n    placeimage(image, -w/2, -h/2)\n\n    grestore()\n    clipreset()\n    x += 600\n    if x > width/2\n        x = (-width/2) + margin\n        y += 600\n    end\nend\n\nfinish()\npreview()"
 },
 
 {

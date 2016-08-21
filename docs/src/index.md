@@ -6,12 +6,12 @@ Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics packa
 
 The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
-For a much more powerful (and harder to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
+For a much more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
 # Current status #
 
 It's been updated for Julia version 0.5 and for the new Colors.jl.
-Needs more testing on Unix and Windows platforms.
+It needs more testing on Unix and Windows platforms.
 
 # Installation and basic usage
 
@@ -48,11 +48,11 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
 
 `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using `Colors.jl`, we can specify colors by name.
 
-`text()` places text. It's placed at 0/0 if you don't specify otherwise.
+`text()` places text. It's placed at the current 0/0 if you don't specify otherwise.
 
 `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
-# A slightly more interesting image
+# A slightly more interesting example
 
 ![Luxor test](examples/basic-test.png)
 
@@ -70,34 +70,26 @@ setline(20)                          # line width
 rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
 randomhue()
 circle(0, 0, 460, :stroke)
-
 circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
 sethue("gold")
 setopacity(0.7)
 setline(10)
-
 for i in 0:pi/36:2pi - pi/36
     move(0, 0)
     line(cos(i) * 600, sin(i) * 600 )
     stroke()
 end
-
-clipreset()                           # finish masking
-
+clipreset()                           # finish clipping/masking
 fontsize(60)
 setcolor("turquoise")
 fontface("Optima-ExtraBlack")
 textwidth = textextents("Luxor")[5]
-
-# move the text by half the width
-textcentred("Luxor", -textwidth/2, currentdrawing.height/2 - 400)
-
+textcentred("Luxor", 0, currentdrawing.height/2 - 400)
 fontsize(18)
 fontface("Avenir-Black")
 
 # text on curve starting at angle 0 rads centered on origin with radius 550
 textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
-
 finish()
 preview() # on macOS, opens in Preview
 ```
@@ -109,7 +101,7 @@ preview() # on macOS, opens in Preview
 The two main defined types are the `Point` and the `Drawing`. The Point type holds two coordinates, the x and y:
 
 ```
-`Point(12.0, 13.0)`
+Point(12.0, 13.0)
 ```
 
 ## Drawings and files
@@ -127,7 +119,7 @@ finish
 preview
 ```
 
-The global variable `currentdrawing` holds a few parameters:
+The global variable `currentdrawing` of type Drawing holds a few parameters:
 
 ```
 julia> fieldnames(currentdrawing)
@@ -158,11 +150,11 @@ origin
 
 # Basic drawing
 
-The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity.
+The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You modify the drawing space by transforming/rotating/scaling it.
 
 Many drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
-Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, clockwise.
+Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, so clockwise.
 
 ## Simple shapes
 
@@ -203,7 +195,7 @@ The `getpath()` function get the current Cairo path as an array of element types
 
 ## Color and opacity
 
-For color definitions and conversions, we use Colors.jl. The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica).
+For color definitions and conversions, use Colors.jl. The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica).
 
 ## Styles
 
@@ -241,7 +233,7 @@ using Luxor, Colors
 Drawing(1200, 1400)
 
 origin()
-cols = diverging_palette(60,120, 20) # hue 60 to hue 120
+cols = diverging_palette(60, 120, 20) # hue 60 to hue 120
 background(cols[1])
 setopacity(0.7)
 setline(2)
@@ -524,7 +516,6 @@ Then use `placeimage()` to place a loaded PNG image by its top left corner at po
 ```@docs
 placeimage
 ```
-!["Images"](examples/test-image.png)
 
 ```julia
 img = readpng(filename)
@@ -539,7 +530,9 @@ h = img.height
 placeimage(img, -w/2, -h/2) # centered at point
 ```
 
-Image clipping is possible:
+You can clip images. The following script repeatedly places an image after first using a circle to define a clipping path:
+
+!["Images"](examples/test-image.png)
 
 ```julia
 using Luxor
