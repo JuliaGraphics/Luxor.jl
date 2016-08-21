@@ -131,6 +131,7 @@ function Pop(t::Turtle)
         t.xpos, t.ypos, t.orientation = pop!(queue)
     end
 end
+
 """
 Message: write some text at the current position.
 
@@ -142,6 +143,7 @@ function Message(t::Turtle, txt)
     text(txt, t.xpos, t.ypos)
     grestore()
 end
+
 """
 Shift the Hue of the turtle's pen forward by inc
 
@@ -169,6 +171,7 @@ function Randomize_saturation(t::Turtle)
     sethue(newrgb)
     t.pencolor = (newrgb.r, newrgb.g, newrgb.b)
 end
+
 """
 Pencolor: Set the Red, Green, and Blue colors of the turtle:
 
@@ -196,4 +199,8 @@ Penwidth: set the width of the line.
 """
 Penwidth(t::Turtle, w) = setline(w)
 
+"""
+Pen_opacity_random: change the opacity of the pen to something.
+
+"""
 Pen_opacity_random(t::Turtle) = setopacity(rand())
