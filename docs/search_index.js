@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's slightly easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a much more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
+    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and some utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required.Look in the test directory for some examples of the various functions in use."
 },
 
 {
@@ -205,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.move",
     "category": "Function",
-    "text": "Move to a point.\n\n- `move(x, y)`\n- `move(pt)`\n\n\n\n"
+    "text": "Move to a point.\n\nmove(x, y)\nmove(pt)\n\n\n\n"
 },
 
 {
@@ -373,7 +373,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Styles",
     "category": "section",
-    "text": "The set- commands control the width, end shapes, join behaviour and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
+    "text": "The set- functions control the width, end shapes, join behaviour and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
 },
 
 {
@@ -437,7 +437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.polysortbyangle",
     "category": "Function",
-    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(parray, parray[1])\n\nThe refpoint can be chosen, minimum point is usually OK:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
+    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::Array, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
 },
 
 {
@@ -445,7 +445,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.polycentroid",
     "category": "Function",
-    "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nOnly works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)\n\nReturns a point.\n\n\n\n"
+    "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)\n\nYou could test the point using isinside().\n\n\n\n"
 },
 
 {
@@ -453,7 +453,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.polybbox",
     "category": "Function",
-    "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::Array)\n\nReturn the two opposite corners (suitable for box, for example).\n\n\n\n"
+    "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::Array)\n\nReturn the two opposite corners (suitable for box(), for example).\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.prettypoly",
+    "page": "Luxor",
+    "title": "Luxor.prettypoly",
+    "category": "Function",
+    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);                           circle(0, 0, 10, :fill)                          ),              close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.isinside",
+    "page": "Luxor",
+    "title": "Luxor.isinside",
+    "category": "Function",
+    "text": "Is a point p inside a polygon pol?\n\nisinside(p, pol)\n\nReturns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm\n\n\n\n"
 },
 
 {
@@ -461,7 +477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Polygons",
     "category": "section",
-    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon.The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:ngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().simplifyThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybboxThe prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:prettypoly(pl, :fill, :(\n                        scale(0.1, 0.1);\n                        circle(0, 0, 10, :fill)\n                       ),\n           close=false)The vertex_action expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect the polygon-drawing function to know about it."
+    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:ngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().simplifyThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybboxThe prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:prettypoly(pl, :fill, :(\n                        scale(0.1, 0.1);\n                        circle(0, 0, 10, :fill)\n                       ),\n           close=false)prettypolyThe isinside() returns true if a point is inside a polygon.isinside"
 },
 
 {
@@ -669,7 +685,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Clipping",
     "category": "section",
-    "text": "Use clip() to turn the current path into a clipping region, masking any graphics outside the path. clippreserve() keep the current path, but also use it as a clipping region. clipreset() resets it. :clip is also an action for drawing commands like circle().clip\nclippreserve\nclipresetThis example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action them; they can therefore be used as a mask for clipping subsequent graphics:(Image: julia logo mask)# load functions to draw the Julia logo\ninclude(\"../test/julia-logo.jl\")\n\ncurrentwidth = 500 # pts\ncurrentheight = 500 # pts\nDrawing(currentwidth, currentheight, \"/tmp/clipping-tests.pdf\")\n\nfunction draw(x, y)\n    foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)\n    gsave()\n    translate(x-100, y)\n    julialogo(false, true)      # add paths for logo\n    clip()                      # use paths for clipping\n    for i in 1:500\n        sethue(foregroundcolors[rand(1:end)])\n        circle(rand(-50:350), rand(0:300), 15, :fill)\n    end\n    grestore()\nend\n\norigin()\nbackground(\"white\")\nsetopacity(.4)\ndraw(0, 0)\n\nfinish()\npreview()"
+    "text": "Use clip() to turn the current path into a clipping region, masking any graphics outside the path. clippreserve() keep the current path, but also use it as a clipping region. clipreset() resets it. :clip is also an action for drawing functions like circle().clip\nclippreserve\nclipresetThis example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action them; they can therefore be used as a mask for clipping subsequent graphics:(Image: julia logo mask)# load functions to draw the Julia logo\ninclude(\"../test/julia-logo.jl\")\n\ncurrentwidth = 500 # pts\ncurrentheight = 500 # pts\nDrawing(currentwidth, currentheight, \"/tmp/clipping-tests.pdf\")\n\nfunction draw(x, y)\n    foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)\n    gsave()\n    translate(x-100, y)\n    julialogo(false, true)      # add paths for logo\n    clip()                      # use paths for clipping\n    for i in 1:500\n        sethue(foregroundcolors[rand(1:end)])\n        circle(rand(-50:350), rand(0:300), 15, :fill)\n    end\n    grestore()\nend\n\norigin()\nbackground(\"white\")\nsetopacity(.4)\ndraw(0, 0)\n\nfinish()\npreview()"
 },
 
 {
@@ -789,7 +805,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Turtle graphics",
     "category": "section",
-    "text": "Some simple \"turtle graphics\" commands are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.(Image: Turtle)using Luxor, Colors\n\nDrawing(1200, 1200, \"/tmp/turtles.png\")\norigin()\nbackground(\"black\")\n\n# let's have two turtles\nraphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))\n\nsetopacity(0.95)\nsetline(6)\n\nPencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)\nReposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)\nMessage(raphael, \"Raphael\");            Message(michaelangelo, \"Michaelangelo\")\nReposition(raphael, 0, -200);           Reposition(michaelangelo, 0, 200)\n\npace = 10\nfor i in 1:5:400\n    for turtle in [raphael, michaelangelo]\n        Circle(turtle, 3)\n        HueShift(turtle, rand())\n        Forward(turtle, pace)\n        Turn(turtle, 30 - rand())\n        Message(turtle, string(i))\n        pace += 1\n    end\nend\n\nfinish()\npreview()Turtle\nForward\nTurn\nCircle\nOrientation\nRectangle\nPendown\nPenup\nPencolor\nPenwidth\nReposition"
+    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.(Image: Turtle)using Luxor, Colors\n\nDrawing(1200, 1200, \"/tmp/turtles.png\")\norigin()\nbackground(\"black\")\n\n# let's have two turtles\nraphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))\n\nsetopacity(0.95)\nsetline(6)\n\nPencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)\nReposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)\nMessage(raphael, \"Raphael\");            Message(michaelangelo, \"Michaelangelo\")\nReposition(raphael, 0, -200);           Reposition(michaelangelo, 0, 200)\n\npace = 10\nfor i in 1:5:400\n    for turtle in [raphael, michaelangelo]\n        Circle(turtle, 3)\n        HueShift(turtle, rand())\n        Forward(turtle, pace)\n        Turn(turtle, 30 - rand())\n        Message(turtle, string(i))\n        pace += 1\n    end\nend\n\nfinish()\npreview()Turtle\nForward\nTurn\nCircle\nOrientation\nRectangle\nPendown\nPenup\nPencolor\nPenwidth\nReposition"
 },
 
 {
