@@ -1,13 +1,13 @@
-# polygons
+# polygons, part of Luxor module
 
 """
 Draw a polygon.
 
     poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
 
-A polygon is an Array of Points
+A polygon is an Array of Points.
 
-By default doesn't close or fill, to allow for clipping.
+By default it doesn't close or fill the polygon, to allow for clipping.
 """
 function poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
     # where pointlist is array of Points
@@ -43,17 +43,16 @@ function point_line_distance(p::Point, a::Point, b::Point)
 end
 
 """
-Find midpoint between two points.
+Find the midpoint between two points.
 
     midpoint(p1, p2)
 """
-
 midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
 
 """
 Find midpoint between the first two elements of an array of points.
 
-    midpoint(p1, p2)
+    midpoint(a)
 """
 
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
@@ -63,7 +62,7 @@ Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
     intersection(p1, p2, p3, p4)
 
-returns (false, 0) or (true, Point)
+This returns a tuple: `(false, 0)` or `(true, Point)`.
 """
 
 function intersection(p1, p2, p3, p4)
@@ -89,7 +88,7 @@ Find the bounding box of a polygon (array of points).
 
     polybbox(pointlist::Array)
 
-Return the two opposite corners (suitable for `box`, for example).
+Return the two opposite corners (suitable for `box()`, for example).
 """
 
 function polybbox(pointlist::Array)
@@ -109,9 +108,9 @@ Find the centroid of simple polygon.
 
     polycentroid(pointlist)
 
-Only works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)
+Returns a point. This only works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)
 
-Returns a point.
+You could test the point using `isinside()`.
 """
 
 function polycentroid(pointlist)
@@ -157,14 +156,12 @@ end
 """
 Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.
 
-    polysortbyangle(parray, parray[1])
+    polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
 
-The `refpoint` can be chosen, minimum point is usually OK:
+The `refpoint` can be chosen, but the minimum point is usually OK too:
 
     polysortbyangle(parray, polycentroid(parray))
-
 """
-
 function polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
     angles = []
     for pt in pointlist
@@ -344,13 +341,13 @@ Use `starv()` to return the vertices of a star.
 star(centrepoint::Point, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=closee, reversepath=reversepath)
 
 """
-Is a point `p` inside a polygon `pl`?
+Is a point `p` inside a polygon `pol`?
 
-    isinside(p, pl)
+    isinside(p, pol)
 
 Returns true or false.
 
-This is an implementation of Hormann-Agathos (2001) Point in Polygon algorithm
+This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm
 """
 function isinside(p::Point, pointlist::Array)
     c = false
@@ -440,7 +437,7 @@ end
 
 """
 Draw the polygon defined by points in `pl`, possibly closing and reversing it, using the current parameters,
-and then evaluate the expression at every vertex of the polygon. For example, you can mark each
+and then evaluate (using `eval`, *shudder*) the expression at every vertex of the polygon. For example, you can mark each
 vertex of a polygon with a circle scaled to 0.1.
 
     prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
@@ -453,7 +450,7 @@ Example:
              close=false)
 
 The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
-function and expect this function to know about it. I don't think I like this, but...
+function and expect this function to know about it. Yes, not tidy...
 """
 function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
     # by default doesn't close or fill, to allow for clipping etc
