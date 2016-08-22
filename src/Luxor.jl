@@ -559,8 +559,8 @@ end
 """
 Move to a point.
 
-    - `move(x, y)`
-    - `move(pt)`
+    move(x, y)
+    move(pt)
 """
 move(x, y)      = Cairo.move_to(currentdrawing.cr,x, y)
 move(pt)        = move(pt.x, pt.y)

@@ -1,6 +1,6 @@
 # Luxor
 
-Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
+Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
 
 !["tiled images"](examples/tiled-images.png)
 
@@ -8,10 +8,11 @@ The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://gi
 
 For a much more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
+Look in the `test` directory for some examples of the various functions in use.
+
 ## Current status #
 
-It's been updated for Julia version 0.5 and for the new Colors.jl.
-It needs more testing on Unix and Windows platforms.
+It's been updated for Julia version 0.5 and for the new Colors.jl. It needs more testing on Unix and Windows platforms.
 
 ## Installation and basic usage
 
@@ -199,7 +200,7 @@ For color definitions and conversions, use Colors.jl. The difference between the
 
 ## Styles
 
-The `set-` commands control the width, end shapes, join behaviour and dash pattern:
+The `set-` functions control the width, end shapes, join behaviour and dash pattern:
 
 ```@docs
 setline
@@ -261,9 +262,7 @@ ngonv
 
 A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.
 
-Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon.
-
-The following piece of code uses `ngon()` to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:
+Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```
 ngon(0, 0, 60, 6, 0, :path)
@@ -298,7 +297,15 @@ prettypoly(pl, :fill, :(
            close=false)
 ```
 
-The `vertex_action` expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect the polygon-drawing function to know about it.
+```@docs
+prettypoly
+```
+
+The `isinside()` returns true if a point is inside a polygon.
+
+```@docs
+isinside
+```
 
 ### Stars
 
@@ -461,7 +468,7 @@ transform
 
 # Clipping
 
-Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keep the current path, but also use it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing commands like `circle()`.
+Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keep the current path, but also use it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing functions like `circle()`.
 
 ```@docs
 clip
@@ -579,7 +586,7 @@ preview()
 
 # Turtle graphics
 
-Some simple "turtle graphics" commands are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
+Some simple "turtle graphics" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
 
 ![Turtle](examples/turtles.png)
 
