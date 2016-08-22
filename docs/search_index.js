@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and some utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required.Look in the test directory for some examples of the various functions in use."
+    "text": "Depth = 4Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and some utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required.Look in the test directory for some examples of the various functions in use."
 },
 
 {
@@ -822,6 +822,14 @@ var documenterSearchIndex = {"docs": [
     "title": "Sierpinski triangle",
     "category": "section",
     "text": "(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth+1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
+},
+
+{
+    "location": "index.html#Index-1",
+    "page": "Luxor",
+    "title": "Index",
+    "category": "section",
+    "text": ""
 },
 
 ]}

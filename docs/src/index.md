@@ -1,5 +1,9 @@
 # Luxor
 
+```@contents
+Depth = 4
+```
+
 Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and some utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
 
 !["tiled images"](examples/tiled-images.png)
@@ -684,4 +688,9 @@ preview()
 
 # drew 9841 triangles
 # elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)
+```
+
+## Index
+
+```@index
 ```
