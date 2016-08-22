@@ -7,7 +7,7 @@ makedocs(
   )
 
 #=
-after this has built the source files, most of them
+after this has built the source files, some of them
 need to be moved up from build/ into docs/ so
 that they're served at http://cormullion.github.io/Luxor.jl/:
 
