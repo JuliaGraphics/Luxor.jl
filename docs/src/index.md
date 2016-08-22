@@ -1,4 +1,4 @@
-## Luxor
+# Luxor
 
 Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
 
@@ -8,12 +8,12 @@ The idea of Luxor is that it's slightly easier to use than [Cairo.jl](https://gi
 
 For a much more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
 
-# Current status #
+## Current status #
 
 It's been updated for Julia version 0.5 and for the new Colors.jl.
 It needs more testing on Unix and Windows platforms.
 
-# Installation and basic usage
+## Installation and basic usage
 
 To install:
 
@@ -27,7 +27,7 @@ and to use:
 using Luxor
 ```
 
-# The basic "Hello World"
+## The basic "Hello World"
 
 Here's a simple "Hello world":
 
@@ -52,7 +52,7 @@ The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the i
 
 `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
-# A slightly more interesting example
+## A slightly more interesting example
 
 ![Luxor test](examples/basic-test.png)
 
