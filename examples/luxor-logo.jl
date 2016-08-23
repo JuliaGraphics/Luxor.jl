@@ -2,9 +2,9 @@
 
 using Luxor, Colors, ColorSchemes
 
-width = 400  # pts
-height = 400 # pts
-Drawing(width, height, "/tmp/luxor-logo.pdf")
+width = 300  # pts
+height = 300 # pts
+Drawing(width, height, "/tmp/luxor-logo.png")
 
 function spiral(colscheme)
   circle(0, 0, 90, :clip)
@@ -23,11 +23,8 @@ end
 
 origin()
 background("white")
+scale(1.3, 1.3)
 colscheme = loadcolorscheme("solarcolors")
 spiral(colscheme)
-fontsize(40)
-sethue("black")
-fontface("Elephant-Regular")
-textcentred("Luxor", 0, 130)
 finish()
 preview()
