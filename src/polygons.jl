@@ -338,7 +338,7 @@ Draw a star:
 Use `starv()` to return the vertices of a star.
 """
 
-star(centrepoint::Point, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=closee, reversepath=reversepath)
+star(centerpoint::Point, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=close, reversepath=reversepath)
 
 """
 Is a point `p` inside a polygon `pol`?

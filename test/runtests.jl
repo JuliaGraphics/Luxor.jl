@@ -1,6 +1,5 @@
 include("clipping-test.jl")
-# include("copy_path.jl") # still gives
-# julia(92954,0x7fff7d0e6000) malloc: *** error for object 0x7fde1c3b1800: pointer being freed was not allocated
+include("get_path.jl")
 include("heart-julia.jl")
 include("images-with-alpha.jl")
 include("julia-logo-draw-eps.jl")
