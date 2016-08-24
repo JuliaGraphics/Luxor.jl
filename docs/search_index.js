@@ -145,6 +145,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Luxor.ellipse",
+    "page": "Luxor",
+    "title": "Luxor.ellipse",
+    "category": "Function",
+    "text": "Draw an ellipse, centered at xc/yc, with width w, and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nDraw an ellipse, centered at c, with width w, and height h.\n\nellipse(c, w, h, action=:none)\n\n\n\n"
+},
+
+{
     "location": "index.html#Luxor.arc",
     "page": "Luxor",
     "title": "Luxor.arc",
@@ -197,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Simple shapes",
     "category": "section",
-    "text": "Functions for drawing shapes include circle(), arc(), carc(), curve(), sector(), rect(), and box().circle\narc\ncarc\ncurve\nsector\nrect\nbox"
+    "text": "Functions for drawing shapes include circle(), ellipse(), arc(), carc(), curve(), sector(), rect(), and box().circle\nellipse\narc\ncarc\ncurve\nsector\nrect\nbox"
 },
 
 {

@@ -125,7 +125,6 @@ Find midpoint between the first two elements of an array of points.
 
     midpoint(a)
 """
-
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 """
@@ -135,7 +134,6 @@ Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
 This returns a tuple: `(false, 0)` or `(true, Point)`.
 """
-
 function intersection(p1, p2, p3, p4)
     flag = false
     ip = 0

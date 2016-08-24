@@ -105,7 +105,6 @@ The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default
 "D"       => (2448, 1584),
 "E"       => (3168, 2448))
 ```
-
 """
 paper_sizes = Dict{String, Tuple}(
   "A0" => (2384, 3370),
@@ -1034,6 +1033,7 @@ Choose a random color without changing the current alpha opacity.
 function randomhue()
     sethue(rand(), rand(), rand())
 end
+
 """
 Set a random color.
 
