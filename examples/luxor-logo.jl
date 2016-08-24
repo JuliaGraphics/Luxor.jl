@@ -2,8 +2,8 @@
 
 using Luxor, Colors, ColorSchemes
 
-width = 300  # pts
-height = 300 # pts
+width = 600  # pts
+height = 600 # pts
 Drawing(width, height, "/tmp/luxor-logo.png")
 
 function spiral(colscheme)

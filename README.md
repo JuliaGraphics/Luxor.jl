@@ -1,11 +1,13 @@
 
 <a id='Luxor-1'></a>
 
+![](examples/luxor-logo.png)
+
 ## Luxor
 
 Documentation: http://cormullion.github.io/Luxor.jl/
 
-Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing commands, and a few utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
+Luxor provides basic vector drawing commands, and a few utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.
 
 ![](examples/tiled-images.png)
 

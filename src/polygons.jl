@@ -26,62 +26,6 @@ function poly(pointlist::Array, action = :nothing; close=false, reversepath=fals
     end
     do_action(action)
 end
-"""
-Find the distance between a point `p` and a line between two points `a` and `b`.
-
-    point_line_distance(p::Point, a::Point, b::Point)
-
-"""
-function point_line_distance(p::Point, a::Point, b::Point)
-    # area of triangle
-    area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
-    # length of the bottom edge
-    dx = a.x - b.x
-    dy = a.y - b.y
-    bottom = sqrt(dx * dx + dy * dy)
-    return area / bottom
-end
-
-"""
-Find the midpoint between two points.
-
-    midpoint(p1, p2)
-"""
-midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
-
-"""
-Find midpoint between the first two elements of an array of points.
-
-    midpoint(a)
-"""
-
-midpoint(pt::Array) = midpoint(pt[1], pt[2])
-
-"""
-Find intersection of two lines `p1`-`p2` and `p3`-`p4`
-
-    intersection(p1, p2, p3, p4)
-
-This returns a tuple: `(false, 0)` or `(true, Point)`.
-"""
-
-function intersection(p1, p2, p3, p4)
-    flag = false
-    ip = 0
-    s1 = p2 - p1
-    s2 = p4 - p3
-    u = p1 - p3
-    ip = 1 / (-s2.x * s1.y + s1.x * s2.y)
-    s = (-s1.y * u.x + s1.x * u.y) * ip
-    t = ( s2.x * u.y - s2.y * u.x) * ip
-    if (s >= 0) && (s <= 1) && (t >= 0) && (t <= 1)
-        if isapprox(ip, 0, atol=0.1)
-            ip = p1 + (s1 * t)
-            flag = true
-        end
-    end
-    return (flag, ip)
-end
 
 """
 Find the bounding box of a polygon (array of points).
@@ -250,59 +194,59 @@ Return the vertices of a regular n-sided polygon centred at `x`, `y`:
 `ngon()` uses the shapes: if you just want the raw points, use `ngonv`, which returns an array of points instead. Compare:
 
 ```julia
-ngonv(0, 0, 4, 4, 0) # returns the polygon's points
+ngonv(0, 0, 4, 4, 0) # returns the polygon's points:
 
-4-element Array{Luxor.Point,1}:
-Luxor.Point(2.4492935982947064e-16,4.0)
-Luxor.Point(-4.0,4.898587196589413e-16)
-Luxor.Point(-7.347880794884119e-16,-4.0)
-Luxor.Point(4.0,-9.797174393178826e-16)
+    4-element Array{Luxor.Point,1}:
+    Luxor.Point(2.4492935982947064e-16,4.0)
+    Luxor.Point(-4.0,4.898587196589413e-16)
+    Luxor.Point(-7.347880794884119e-16,-4.0)
+    Luxor.Point(4.0,-9.797174393178826e-16)
 
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-function ngonv(x::Real, y::Real, radius::Real, sides::Int64, orientation=0)
+function ngonv(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,
            y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end
 
 """
-Return the vertices of a regular polygon centred at `p`:
+Return the vertices of a regular polygon centred at point `p`:
 
-    ngonv(p, radius, sides, orientation)
+    ngonv(pt, radius, sides=5, orientation=0)
 """
 
-ngonv(centrepoint::Point, radius::Real, sides::Int64, orientation=0) = ngonv(centrepoint.x, centrepoint.y, radius, sides, orientation)
+ngonv(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0) = ngonv(centrepoint.x, centrepoint.y, radius, sides, orientation)
 
 """
 Draw a regular polygon centred at `x`, `y`:
 
-    ngon(x, y,      radius, sides, orientation, action; close=true, reversepath=false)
+    ngon(x, y, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)
 
 Use `ngonv()` to return the points of a polygon.
 """
-function ngon(x::Real, y::Real, radius::Real, sides::Int64, orientation=0, action=:nothing; close=true, reversepath=false)
+function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing; close=true, reversepath=false)
     poly(ngonv(x, y, radius, sides, orientation), close=close, action, reversepath=reversepath)
 end
 
 """
 Draw a regular polygon centred at `p`:
 
-    ngon(centerpos, radius, sides, orientation, action; close=true, reversepath=false)
+    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)
 
 """
 
-ngon(centrepoint::Point, radius::Real, sides::Int64, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
+ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
 
 """
 Make a star, returning its vertices:
 
-    starv(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, close=true, reversepath=false)
+    starv(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, close=true, reversepath=false)
 
 Use `star()` to draw a star.
 """
 
-function starv(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0; reversepath=false)
+function starv(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0; reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
                     y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
@@ -326,19 +270,19 @@ Draw a star:
 
 Use `starv()` to return the vertices of a star.
 """
-function star(x::Real, y::Real, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false)
+function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false)
     poly(starv(x, y, radius, npoints, ratio, orientation), close=close, action, reversepath=reversepath)
 end
 
 """
 Draw a star:
 
-    star(centerpos, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
+    star(centerpos, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
 
 Use `starv()` to return the vertices of a star.
 """
 
-star(centerpoint::Point, radius::Real, npoints::Int64, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=close, reversepath=reversepath)
+star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=close, reversepath=reversepath)
 
 """
 Is a point `p` inside a polygon `pol`?

@@ -4,15 +4,13 @@
 Depth = 4
 ```
 
-Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and some utilities for working with polygons, clipping masks, PNG images, and turtle graphics.
+Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's jsut a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
 
 !["tiled images"](examples/tiled-images.png)
 
 The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
 For a more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
-
-Look in the `test` directory for some examples of the various functions in use.
 
 ## Current status
 
