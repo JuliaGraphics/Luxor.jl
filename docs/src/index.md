@@ -161,10 +161,11 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ## Simple shapes
 
-Functions for drawing shapes include `circle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, and `box()`.
+Functions for drawing shapes include `circle()`, `ellipse()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, and `box()`.
 
 ```@docs
 circle
+ellipse
 arc
 carc
 curve
