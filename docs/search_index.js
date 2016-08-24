@@ -85,7 +85,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.preview",
     "category": "Function",
-    "text": "preview()\n\nOn macOS, opens the file, which probably uses the default, Preview.app. On Unix, open the file with xdg-open. On Windows, pass the filename to the shell.\n\n\n\n"
+    "text": "preview()\n\nOn macOS, open the file, which probably uses the default, Preview.app. On Unix, open the file with xdg-open. On Windows, pass the filename to the shell.\n\n\n\n"
 },
 
 {
@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.background",
     "category": "Function",
-    "text": "background(color)\n\nFill the canvas with color. It's useful to have Colors.jl installed.\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(Colors.RGB(0, 0, 0))\nbackground(Colors.Luv(20, -20, 30))\n\n\n\n"
+    "text": "background(color)\n\nFill the canvas with color. (if Colors.jl is installed).\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(Colors.RGB(0, 0, 0))\nbackground(Colors.Luv(20, -20, 30))\n\n\n\n"
 },
 
 {
