@@ -44,7 +44,7 @@ function dropshadow()
     for i in 1:steps
         sethue(gramp[i])
         translate(-0.6,-0.5)
-        julialogo(false)
+        julialogo(false, true)
     end
     julialogo()
     grestore()
