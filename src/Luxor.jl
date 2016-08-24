@@ -46,7 +46,7 @@ export Drawing, currentdrawing,
 
     readpng, placeimage
 
-# as of version 0.4, it seems I've got to share fill() and scale() with Base.
+# as of version 0.4, we still share fill() and scale() with Base.
 
 import Base: fill, scale
 
@@ -182,15 +182,17 @@ function finish()
     if currentdrawing.surfacetype == "png"
         Cairo.write_to_png(currentdrawing.surface, currentdrawing.filename)
         Cairo.finish(currentdrawing.surface)
+        Cairo.destroy(currentdrawing.surface)
     else
         Cairo.finish(currentdrawing.surface)
+        Cairo.destroy(currentdrawing.surface)
     end
 end
 
 """
     preview()
 
-On macOS, opens the file, which probably uses the default, Preview.app.
+On macOS, open the file, which probably uses the default, Preview.app.
 On Unix, open the file with xdg-open.
 On Windows, pass the filename to the shell.
 """
@@ -252,7 +254,7 @@ end
 """
     background(color)
 
-Fill the canvas with color. It's useful to have Colors.jl installed.
+Fill the canvas with color. (if Colors.jl is installed).
 
 Examples:
 

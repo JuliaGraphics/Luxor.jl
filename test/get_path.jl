@@ -5,8 +5,7 @@ using Luxor, Colors
 function get_path(str)
   p = textpath(str)
   o = getpathflat()
-  sethue("grey70")
-  text(str)
+  stroke()
   sethue("red")
   x, y = 0, 0
   for e in o
@@ -36,7 +35,6 @@ function get_path(str)
             error("unknown CairoPathEntry " * repr(e.points))
         end
     end
-    stroke()
 end
 
 function get_path_test(fname)
