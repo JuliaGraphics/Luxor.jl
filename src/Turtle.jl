@@ -17,9 +17,9 @@ export  Turtle,
         Reposition
 
 """
-Turtle lets you run a turtle doing turtle graphics.
+With a Turtle you can command a turtle to move and draw: turtle graphics.
 
-Once created, you can command it using the functions Forward, Turn,
+The functions that start with a capital letter are: Forward, Turn,
 Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
 
 There are also some other functions. To see how they might be used, see Lindenmayer.jl.
@@ -40,7 +40,7 @@ end
 const queue = Array{Array{Float64,1},1}()
 
 """
-Forward: the turtle moves forward by `d` units. The stored position is updated.
+Move the turtle forward by `d` units. The stored position is updated.
 
     Forward(t::Turtle, d)
 """
@@ -60,7 +60,7 @@ function Forward(t::Turtle, d)
 end
 
 """
-Turn: increase the turtle's rotation by `r` radians. See also `Orientation`.
+Increase the turtle's rotation by `r` radians. See also `Orientation`.
 
     Turn(t::Turtle, r)
 """
@@ -68,7 +68,7 @@ function Turn(t::Turtle, r)
     t.orientation = mod2pi(t.orientation + deg2rad(r))
 end
 """
-Orientation: set the turtle's orientation to `r` radians. See also `Turn`.
+Set the turtle's orientation to `r` radians. See also `Turn`.
 
     Orientation(t::Turtle, r)
 """
@@ -76,7 +76,7 @@ function Orientation(t::Turtle, r)
     t.orientation = mod2pi(deg2rad(r))
 end
 """
-Pendown. Put that pen down and start drawing.
+Put that pen down and start drawing.
 
     Pendown(t::Turtle)
 """
@@ -84,7 +84,7 @@ function Pendown(t::Turtle)
     t.pendown = true
 end
 """
-Penup. Pick that pen up and stop drawing.
+Pick that pen up and stop drawing.
 
     Penup(t::Turtle)
 """
@@ -92,7 +92,7 @@ function Penup(t::Turtle)
     t.pendown = false
 end
 """
-Circle: draw a filled circle centred at the current position with the given radius.
+Draw a filled circle centred at the current position with the given radius.
 
     Circle(t::Turtle, radius)
 """
@@ -103,7 +103,7 @@ function Circle(t::Turtle, radius)
     grestore()
 end
 """
-Rectangle: draw a filled rectangle centred at the current position with the given radius.
+Draw a filled rectangle centred at the current position with the given radius.
 
     Rectangle(t::Turtle, width, height)
 
@@ -115,12 +115,18 @@ function Rectangle(t::Turtle, width, height)
     grestore()
 end
 
+"""
+Save the turtle's position and orientation on a stack.
+"""
 function Push(t::Turtle)
 # save xpos, ypos, turn in a queue
     global queue
     push!(queue, [t.xpos, t.ypos, t.orientation])
 end
 
+"""
+Lift the turtle's position and orientation off a stack.
+"""
 function Pop(t::Turtle)
 # restore xpos, ypos, turn from queue
     global queue
@@ -133,7 +139,7 @@ function Pop(t::Turtle)
 end
 
 """
-Message: write some text at the current position.
+Write some text at the current position.
 
     Message(t::Turtle, txt)
 """
@@ -173,7 +179,7 @@ function Randomize_saturation(t::Turtle)
 end
 
 """
-Pencolor: Set the Red, Green, and Blue colors of the turtle:
+Set the Red, Green, and Blue colors of the turtle:
 
     Pencolor(t::Turtle, r, g, b)
 """
@@ -193,14 +199,14 @@ function Reposition(t::Turtle, x, y)
 end
 
 """
-Penwidth: set the width of the line.
+Set the width of the line drawn.
 
     Penwidth(t::Turtle, w)
 """
 Penwidth(t::Turtle, w) = setline(w)
 
 """
-Pen_opacity_random: change the opacity of the pen to something.
+Change the opacity of the pen to some value at random.
 
 """
 Pen_opacity_random(t::Turtle) = setopacity(rand())

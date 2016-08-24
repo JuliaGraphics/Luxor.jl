@@ -36,6 +36,7 @@ function get_path(str)
             error("unknown CairoPathEntry " * repr(e.points))
         end
     end
+    stroke()
 end
 
 function get_path_test(fname)

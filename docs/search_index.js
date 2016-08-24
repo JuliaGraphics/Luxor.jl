@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Depth = 4Luxor is the lightest dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed). It provides some basic vector drawing functions, and some utilities for working with polygons, clipping masks, PNG images, and turtle graphics.(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required.Look in the test directory for some examples of the various functions in use."
+    "text": "Depth = 4Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's jsut a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
 },
 
 {
@@ -389,7 +389,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.ngon",
     "category": "Function",
-    "text": "Draw a regular polygon centred at x, y:\n\nngon(x, y,      radius, sides, orientation, action; close=true, reversepath=false)\n\nUse ngonv() to return the points of a polygon.\n\n\n\nDraw a regular polygon centred at p:\n\nngon(centerpos, radius, sides, orientation, action; close=true, reversepath=false)\n\n\n\n"
+    "text": "Draw a regular polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)\n\nUse ngonv() to return the points of a polygon.\n\n\n\nDraw a regular polygon centred at p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)\n\n\n\n"
 },
 
 {
@@ -397,7 +397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.ngonv",
     "category": "Function",
-    "text": "Return the vertices of a regular n-sided polygon centred at x, y:\n\nngonv(x, y, radius, sides, orientation)\n\nngon() uses the shapes: if you just want the raw points, use ngonv, which returns an array of points instead. Compare:\n\nngonv(0, 0, 4, 4, 0) # returns the polygon's points\n\n4-element Array{Luxor.Point,1}:\nLuxor.Point(2.4492935982947064e-16,4.0)\nLuxor.Point(-4.0,4.898587196589413e-16)\nLuxor.Point(-7.347880794884119e-16,-4.0)\nLuxor.Point(4.0,-9.797174393178826e-16)\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nReturn the vertices of a regular polygon centred at p:\n\nngonv(p, radius, sides, orientation)\n\n\n\n"
+    "text": "Return the vertices of a regular n-sided polygon centred at x, y:\n\nngonv(x, y, radius, sides, orientation)\n\nngon() uses the shapes: if you just want the raw points, use ngonv, which returns an array of points instead. Compare:\n\nngonv(0, 0, 4, 4, 0) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nReturn the vertices of a regular polygon centred at point p:\n\nngonv(pt, radius, sides=5, orientation=0)\n\n\n\n"
 },
 
 {
@@ -485,7 +485,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.starv",
     "category": "Function",
-    "text": "Make a star, returning its vertices:\n\nstarv(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, close=true, reversepath=false)\n\nUse star() to draw a star.\n\n\n\n"
+    "text": "Make a star, returning its vertices:\n\nstarv(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, close=true, reversepath=false)\n\nUse star() to draw a star.\n\n\n\n"
 },
 
 {
@@ -493,7 +493,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.star",
     "category": "Function",
-    "text": "Draw a star:\n\nstar(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)\n\nUse starv() to return the vertices of a star.\n\n\n\nDraw a star:\n\nstar(centerpos, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)\n\nUse starv() to return the vertices of a star.\n\n\n\n"
+    "text": "Draw a star:\n\nstar(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)\n\nUse starv() to return the vertices of a star.\n\n\n\nDraw a star:\n\nstar(centerpos, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)\n\nUse starv() to return the vertices of a star.\n\n\n\n"
 },
 
 {
@@ -717,7 +717,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Turtle",
     "category": "Type",
-    "text": "Turtle lets you run a turtle doing turtle graphics.\n\nOnce created, you can command it using the functions Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.\n\nThere are also some other functions. To see how they might be used, see Lindenmayer.jl.\n\n\n\n"
+    "text": "With a Turtle you can command a turtle to move and draw: turtle graphics.\n\nThe functions that start with a capital letter are: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.\n\nThere are also some other functions. To see how they might be used, see Lindenmayer.jl.\n\n\n\n"
 },
 
 {
@@ -725,7 +725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Forward",
     "category": "Function",
-    "text": "Forward: the turtle moves forward by d units. The stored position is updated.\n\nForward(t::Turtle, d)\n\n\n\n"
+    "text": "Move the turtle forward by d units. The stored position is updated.\n\nForward(t::Turtle, d)\n\n\n\n"
 },
 
 {
@@ -733,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Turn",
     "category": "Function",
-    "text": "Turn: increase the turtle's rotation by r radians. See also Orientation.\n\nTurn(t::Turtle, r)\n\n\n\n"
+    "text": "Increase the turtle's rotation by r radians. See also Orientation.\n\nTurn(t::Turtle, r)\n\n\n\n"
 },
 
 {
@@ -741,7 +741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Circle",
     "category": "Function",
-    "text": "Circle: draw a filled circle centred at the current position with the given radius.\n\nCircle(t::Turtle, radius)\n\n\n\n"
+    "text": "Draw a filled circle centred at the current position with the given radius.\n\nCircle(t::Turtle, radius)\n\n\n\n"
 },
 
 {
@@ -749,7 +749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Orientation",
     "category": "Function",
-    "text": "Orientation: set the turtle's orientation to r radians. See also Turn.\n\nOrientation(t::Turtle, r)\n\n\n\n"
+    "text": "Set the turtle's orientation to r radians. See also Turn.\n\nOrientation(t::Turtle, r)\n\n\n\n"
 },
 
 {
@@ -757,7 +757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Rectangle",
     "category": "Function",
-    "text": "Rectangle: draw a filled rectangle centred at the current position with the given radius.\n\nRectangle(t::Turtle, width, height)\n\n\n\n"
+    "text": "Draw a filled rectangle centred at the current position with the given radius.\n\nRectangle(t::Turtle, width, height)\n\n\n\n"
 },
 
 {
@@ -765,7 +765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Pendown",
     "category": "Function",
-    "text": "Pendown. Put that pen down and start drawing.\n\nPendown(t::Turtle)\n\n\n\n"
+    "text": "Put that pen down and start drawing.\n\nPendown(t::Turtle)\n\n\n\n"
 },
 
 {
@@ -773,7 +773,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Penup",
     "category": "Function",
-    "text": "Penup. Pick that pen up and stop drawing.\n\nPenup(t::Turtle)\n\n\n\n"
+    "text": "Pick that pen up and stop drawing.\n\nPenup(t::Turtle)\n\n\n\n"
 },
 
 {
@@ -781,7 +781,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Pencolor",
     "category": "Function",
-    "text": "Pencolor: Set the Red, Green, and Blue colors of the turtle:\n\nPencolor(t::Turtle, r, g, b)\n\n\n\n"
+    "text": "Set the Red, Green, and Blue colors of the turtle:\n\nPencolor(t::Turtle, r, g, b)\n\n\n\n"
 },
 
 {
@@ -789,7 +789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Penwidth",
     "category": "Function",
-    "text": "Penwidth: set the width of the line.\n\nPenwidth(t::Turtle, w)\n\n\n\n"
+    "text": "Set the width of the line drawn.\n\nPenwidth(t::Turtle, w)\n\n\n\n"
 },
 
 {
@@ -822,6 +822,14 @@ var documenterSearchIndex = {"docs": [
     "title": "Sierpinski triangle",
     "category": "section",
     "text": "(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth+1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
+},
+
+{
+    "location": "index.html#Luxor-logo-1",
+    "page": "Luxor",
+    "title": "Luxor logo",
+    "category": "section",
+    "text": "(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 300  # pts\nheight = 300 # pts\nDrawing(width, height, \"/tmp/luxor-logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in 0:pi/6:2pi\n    sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(60, 70), Point(80, -70), Point(120, 70))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\nspiral(colscheme)\nfinish()\npreview()"
 },
 
 {

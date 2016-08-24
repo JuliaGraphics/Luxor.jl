@@ -224,5 +224,7 @@ function julialogo(colored=true, masking=false)
     curve(229.299, 39.681, 235.791, 46.172, 243.799, 46.172)
     curve(251.807, 46.172, 258.299, 39.681, 258.299, 31.672)
     curve(258.299, 23.664, 251.807, 17.172, 243.799, 17.172)
-    masking ? newsubpath() : fill()
+    if ! masking
+      fill()
+    end
 end
