@@ -1,5 +1,6 @@
 info("starting test clipping-test" ); include("clipping-test.jl")
 #info("starting test get_path" ); include("get_path.jl") # crashes Julia when other tests follow in the same julia session
+info("starting test ellipse test" ); include("ellipse-test.jl")
 info("starting test heart-julia" ); include("heart-julia.jl")
 info("starting test images_with_alpha" ); include("images-with-alpha.jl")
 info("starting test julia_logo_draw_eps" ); include("julia-logo-draw-eps.jl")
