@@ -167,7 +167,7 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ## Simple shapes
 
-Functions for drawing shapes include `circle()`, `ellipse()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, and `box()`.
+Functions for drawing shapes include `circle()`, `ellipse()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`.
 
 ```@docs
 circle
@@ -177,6 +177,7 @@ carc
 curve
 sector
 rect
+pie
 box
 ```
 
@@ -651,6 +652,8 @@ Reposition
 
 ## Sierpinski triangle
 
+The main type is the Point.
+
 ![Sierpinski](examples/sierpinski.png)
 
 ```julia
@@ -696,6 +699,10 @@ preview()
 ```
 
 ## Luxor logo
+
+A simple of example of clipping. The circle of radius 90 units sets a clipping
+mask or region, and subsequent curves are clipped by that circle, until the
+`clipreset()`  function clears the clipping mask.
 
 ![logo](examples/luxor-logo.png)
 

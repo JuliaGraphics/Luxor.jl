@@ -2,7 +2,6 @@
 
 using Luxor, Colors
 
-
 function test_ellipse(fname)
   pagewidth, pageheight = 1200, 1400
   Drawing(pagewidth, pageheight, fname)
