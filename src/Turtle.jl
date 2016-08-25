@@ -165,7 +165,7 @@ function HueShift(t::Turtle, inc = 1)
 end
 
 """
-Randomize saturation of the turtle's pen color
+Randomize saturation of the turtle's pen color.
 
     Randomize_saturation(t::Turtle)
 """

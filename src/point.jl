@@ -63,6 +63,7 @@ Return a random point somewhere inside the rectangle defined by the two points:
 function randompoint(lowpt, highpt)
     Point(randomordinate(lowpt.x, highpt.x), randomordinate(lowpt.y, highpt.y))
 end
+
 """
 Return an array of `n` random points somewhere inside the rectangle defined by the four coordinates:
 

@@ -353,7 +353,6 @@ end
 
 This is usually called by other graphics functions, actions for graphics commands include
 :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve and :path.
-
 """
 function do_action(action)
     if action == :fill
@@ -642,7 +641,6 @@ Create a line relative to the current position to the `x/y` position and optiona
 
     rline(pt)
 """
-
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
 rline(pt)       = rline(pt.x, pt.y)
 
@@ -1082,7 +1080,6 @@ To reset the matrix to the original:
     setmatrix([1.0,0.0,0.0,1.0,0.0,0.0])
 
 """
-
 function getmatrix()
     gm = Cairo.get_matrix(currentdrawing.cr)
     return([gm.xx, gm.yx, gm.xy, gm.yy, gm.x0, gm.y0])
@@ -1095,7 +1092,6 @@ Change the current Cairo matrix to matrix `m`.
 
 Use `getmatrix()` to get the current matrix.
 """
-
 function setmatrix(m::Array)
     if eltype(m) != Float64
         m = map(Float64,m)
@@ -1181,6 +1177,7 @@ end
 
 placeimage(img::Cairo.CairoSurface, pt::Point) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
+
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
