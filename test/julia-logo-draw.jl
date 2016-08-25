@@ -55,17 +55,17 @@ function colorgrid()
     #cols = sequential_palette(rand(10:360), 5, b=0.1)
     cols = distinguishable_colors(25)
     gsave()
-    c = 0
-    for row in 100:100:500
-        for column in 100:100:500
-            gsave()
-            setcolor(color(cols[c+=1]))
-            translate(row, column)
-            scale(0.3, 0.3)
-            julialogo(false)
-            grestore()
-        end
+
+    pagetiles = PageTiler(500, 400, 5, 5)
+    for (xpos, ypos, n) in pagetiles
+      gsave()
+      setcolor(color(cols[n]))
+      translate(xpos, ypos)
+      scale(0.3, 0.3)
+      julialogo(false)
+      grestore()
     end
+
     grestore()
 end
 
@@ -83,7 +83,7 @@ function draw_julia_logos(fname)
     translate(-1000,500)
     dropshadow()
 
-    translate(700, -100)
+    translate(800, 50)
     colorgrid()
 
     finish()

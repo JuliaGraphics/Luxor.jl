@@ -7,6 +7,7 @@ using Colors, Cairo, Compat
 include("point.jl")
 include("Turtle.jl")
 include("polygons.jl")
+include("PageTiler.jl")
 
 export Drawing, currentdrawing,
     rescale,
@@ -44,7 +45,8 @@ export Drawing, currentdrawing,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
-    readpng, placeimage
+    readpng, placeimage,
+    PageTiler
 
 # as of version 0.4, we still share fill() and scale() with Base.
 

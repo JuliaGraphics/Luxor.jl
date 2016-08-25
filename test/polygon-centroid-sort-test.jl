@@ -42,30 +42,24 @@ function drawpoly(p, x, y, counter)
     grestore()
 end
 
-function polycentroidsort()
-    x = -width/2 + 200
-    y = -height/2 + 300
-    counter = 1
-    while y < (height/2) - 50
-        if rand(Bool)
-            p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))
-        else
-            p = ngonv(0, 0, rand(50:100), rand(3:12))
-        end
-        drawpoly(p, x, y, counter)
-        x += 200
-        if x > (width/2) - 100
-            x = -width/2 + 200
-            y += 500
-        end
-        counter += 1
+function polycentroidsort(width, height)
+    pagetiles = PageTiler(width, height, 5, 5, margin=50)
+    tilesize = pagetiles.tilewidth/2
+    for (xpos, ypos, n) in pagetiles
+      if rand(Bool)
+        p = randompointarray(rand(-tilesize:-tilesize), rand(-tilesize:-tilesize), rand(tilesize:tilesize), rand(tilesize:tilesize), rand(5:12))
+      else
+        p = ngonv(0, 0, tilesize, rand(3:12))
+      end
+      drawpoly(p, xpos, ypos, n)
     end
 end
 
 width, height = 3000, 3000
 fname = "/tmp/polycentroidsort.pdf"
 Drawing(width, height, fname)
+fontsize(20)
 origin()
-polycentroidsort()
+polycentroidsort(width, height)
 finish()
 println("finished test: output in $(fname)")

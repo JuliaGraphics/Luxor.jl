@@ -139,6 +139,12 @@ julia> fieldnames(currentdrawing)
 :alpha
 ```
 
+The drawing area (or any other area) can be divided into tiles (rows and columns) using the `PageTiler` iterator.
+
+```@docs
+PageTiler
+```
+
 ## Axes and backgrounds
 
 The origin (0/0) is at the top left, x axis runs left to right, y axis runs top to bottom.
