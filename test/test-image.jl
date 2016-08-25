@@ -14,16 +14,14 @@ setline(5)
 sethue("green")
 
 image = readpng("../examples/julia-logo-mask.png")
-
 w = image.width
 h = image.height
 
-x = (-width/2) + margin
-y = (-height/2) + margin
-
-for i in 1:36
-    circle(x, y, 250, :stroke)
-    circle(x, y, 250, :clip)
+pagetiles = PageTiler(width, height, 7, 9)
+tw = pagetiles.tilewidth/2
+for (x, y, n) in pagetiles
+    circle(x, y, tw, :stroke)
+    circle(x, y, tw, :clip)
     gsave()
     translate(x, y)
     scale(.95, .95)
@@ -31,11 +29,6 @@ for i in 1:36
     placeimage(image, -w/2, -h/2)
     grestore()
     clipreset()
-    x += 600
-    if x > width/2
-        x = (-width/2) + margin
-        y += 600
-    end
 end
 
 finish()

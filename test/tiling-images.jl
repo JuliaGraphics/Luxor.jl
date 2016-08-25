@@ -57,17 +57,13 @@ fname = "/tmp/tiled-images.png"
 Drawing(width, height, fname)
 origin()
 background("grey50")
-
-centers, (tilewidth, tileheight) = tiling(width, height, 5, 5)
-counter = 1
-
-for y in centers[2], x in centers[1] # across first, then down
-    addimagetile(imagelist[counter], x, y, tilewidth, tileheight, cropping=true)
-    counter += 1
-    if counter > length(imagelist) # run out of images
-        break
-    end
+setopacity(0.5)
+pagetiles = PageTiler(width, height, 4, 5, margin=50)
+for (xpos, ypos, n) in pagetiles
+  addimagetile(imagelist[n], xpos, ypos, pagetiles.tilewidth, pagetiles.tileheight, cropping=true)
+  if n > length(imagelist) # run out of images
+    break
+  end
 end
-
 finish()
 println("finished test: output in $(fname)")

@@ -89,11 +89,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Luxor.PageTiler",
+    "page": "Luxor",
+    "title": "Luxor.PageTiler",
+    "category": "Type",
+    "text": "A PageTiler is an iterator that returns the x/y coordinates of a set of imaginary tiles that divide up a rectangular space into rows and columns.\n\npagetiles = PageTiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to area before the tile sizes are calculated.\n\nAccess the calculated tile width and height like this:\n\npagetiles = PageTiler(1000, 800, 4, 5, margin=20)\nfor (xpos, ypos, n) in pagetiles\n  ellipse(xpos, ypos, pagetiles.tilewidth, pagetiles.tileheight, :fill)\nend\n\n\n\n"
+},
+
+{
     "location": "index.html#Drawings-and-files-1",
     "page": "Luxor",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the PageTiler iterator.PageTiler"
 },
 
 {
