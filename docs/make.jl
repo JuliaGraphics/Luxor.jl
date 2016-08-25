@@ -26,9 +26,9 @@ docs
 
 info("moving files")
 
-mv("build/assets/documenter.js", "assets/documenter.js", remove_destination=true)
-mv("build/assets/search.js", "assets/search.js", remove_destination=true)
+#mv("build/assets/documenter.js", "assets/documenter.js", remove_destination=true)
+#mv("build/assets/search.js", "assets/search.js", remove_destination=true)
+#mv("build/assets/logo.png", "assets/logo.png", remove_destination=true)
+#mv("build/search_index.js", "search_index.js", remove_destination=true)
 mv("build/index.html", "index.html", remove_destination=true)
-mv("build/search_index.js", "search_index.js", remove_destination=true)
 mv("build/search.html", "search.html", remove_destination=true)
-mv("build/assets/logo.png", "assets/logo.png", remove_destination=true)
