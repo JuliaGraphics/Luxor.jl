@@ -5,9 +5,8 @@ Draw a polygon.
 
     poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
 
-A polygon is an Array of Points.
-
-By default it doesn't close or fill the polygon, to allow for clipping.
+A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
+to allow for clipping.
 """
 function poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
     # where pointlist is array of Points
@@ -34,7 +33,6 @@ Find the bounding box of a polygon (array of points).
 
 Return the two opposite corners (suitable for `box()`, for example).
 """
-
 function polybbox(pointlist::Array)
     lowx, lowy = pointlist[1].x, pointlist[1].y
     highx, highy = pointlist[end].x, pointlist[end].y
@@ -56,7 +54,6 @@ Returns a point. This only works for simple (non-intersecting) polygons. Come on
 
 You could test the point using `isinside()`.
 """
-
 function polycentroid(pointlist)
     centroid = Point(0, 0)
     signedArea = 0.0
@@ -122,7 +119,6 @@ the nearest point to that, and so on.
 
 You can end up with convex (self-intersecting) polygons, unfortunately.
 """
-
 function polysortbydistance(pointlist, starting::Point)
     route = [starting]
     # start with the first point in pointlist
