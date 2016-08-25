@@ -201,6 +201,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Luxor.pie",
+    "page": "Luxor",
+    "title": "Luxor.pie",
+    "category": "Function",
+    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie centered at current x/y.\n\nAngles start at the positive x-axis and are measure clockwise.\n\n\n\n"
+},
+
+{
     "location": "index.html#Luxor.box",
     "page": "Luxor",
     "title": "Luxor.box",
@@ -213,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Simple shapes",
     "category": "section",
-    "text": "Functions for drawing shapes include circle(), ellipse(), arc(), carc(), curve(), sector(), rect(), and box().circle\nellipse\narc\ncarc\ncurve\nsector\nrect\nbox"
+    "text": "Functions for drawing shapes include circle(), ellipse(), arc(), carc(), curve(), sector(), rect(), pie(), and box().circle\nellipse\narc\ncarc\ncurve\nsector\nrect\npie\nbox"
 },
 
 {
@@ -837,7 +845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Sierpinski triangle",
     "category": "section",
-    "text": "(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth+1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
+    "text": "The main type is the Point.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth+1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
 },
 
 {
@@ -845,7 +853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor logo",
     "category": "section",
-    "text": "(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 300  # pts\nheight = 300 # pts\nDrawing(width, height, \"/tmp/luxor-logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in 0:pi/6:2pi\n    sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(60, 70), Point(80, -70), Point(120, 70))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\nspiral(colscheme)\nfinish()\npreview()"
+    "text": "A simple of example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the clipreset()  function clears the clipping mask.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 300  # pts\nheight = 300 # pts\nDrawing(width, height, \"/tmp/luxor-logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in 0:pi/6:2pi\n    sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(60, 70), Point(80, -70), Point(120, 70))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\nspiral(colscheme)\nfinish()\npreview()"
 },
 
 {

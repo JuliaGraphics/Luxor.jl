@@ -1,5 +1,9 @@
 VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
+"""
+The Luxor package provides a set of vector drawing functions for creating scripts
+to generate visual documents.
+"""
 module Luxor
 
 using Colors, Cairo, Compat
@@ -17,7 +21,7 @@ export Drawing, currentdrawing,
     newpath, closepath, newsubpath,
     circle, ellipse, rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc, carc, ngon, ngonv, sector,
+    line, rline, curve, arc, carc, ngon, ngonv, sector, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
@@ -533,6 +537,26 @@ function sector(innerradius, outerradius, startangle, endangle, action=:none)
     line(innerradius * cos(endangle), innerradius * sin(endangle))
     carc(0, 0, innerradius, endangle, startangle, :none)
     closepath()
+    do_action(action)
+end
+
+"""
+    pie(x, y, radius, startangle, endangle, action=:none)
+
+Draw a pie centered at current `x`/`y`.
+
+Angles start at the positive x-axis and are measure clockwise.
+"""
+
+function pie(x, y, radius, startangle, endangle, action=:none)
+    gsave()
+    translate(x, y)
+    newpath()
+    move(0, 0)
+    line(radius * cos(startangle), radius * sin(startangle))
+    arc(0, 0, radius, startangle, endangle, :none)
+    closepath()
+    grestore()
     do_action(action)
 end
 
