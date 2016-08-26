@@ -265,6 +265,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Luxor.arrow",
+    "page": "Luxor",
+    "title": "Luxor.arrow",
+    "category": "Function",
+    "text": "Draw a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's tip, and arrow head angle is the angle between the side of the tip and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\nDraw a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
+},
+
+{
+    "location": "index.html#Arrows-1",
+    "page": "Luxor",
+    "title": "Arrows",
+    "category": "section",
+    "text": "You can draw lines with arrows at the end with arrow().arrow"
+},
+
+{
     "location": "index.html#Luxor.newpath",
     "page": "Luxor",
     "title": "Luxor.newpath",

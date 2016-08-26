@@ -192,6 +192,14 @@ line
 rline
 ```
 
+### Arrows
+
+You can draw lines with arrows at the end with `arrow()`.
+
+```@docs
+arrow
+```
+
 ## Paths
 
 A path is a group of points. A path can have subpaths (which can form holes).
