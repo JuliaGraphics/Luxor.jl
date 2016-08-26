@@ -35,12 +35,11 @@ function test2(p)
                   rotate(pi/2);
                   prettypoly($(p), :fill,
                     :(
-                    # all these commands are executed for each vertex of the polygon
+                    # and all these commands are executed for each vertex of that polygon
                     randomhue();
                     scale(0.25, 0.25);
                     rotate(pi/2);
                     prettypoly($($(p)), :fill)))))
-
 end
 
 function get_png_files(folder)
@@ -64,34 +63,22 @@ function test3(p)
                   ))
 end
 
-function draw_lots_of_polys()
-    x = -width/2 + 300
-    y = -height/2 + 300
-    counter = 1
+function draw_lots_of_polys(pagewidth, pageheight)
     setopacity(0.75)
-    while y < (height/2) - 50
+    pagetiles = PageTiler(width, height, 9, 9, margin=20)
+    for (x, y, n) in pagetiles
         if rand(Bool)
             p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))
         else
             p = ngonv(0, 0, rand(50:100), rand(3:12))
         end
-
         gsave()
         translate(x, y)
         setline(1)
         randomhue()
-
         @eval [test1($p, $x, $y), test2($p), test3($p)][rand(1:end)] # choose a test at random
-
         drawbbox(p)
         grestore()
-
-        x += 300
-        if x > (width/2) - 100
-            x = -width/2 + 300
-            y += 300
-        end
-        counter += 1
     end
 end
 
@@ -100,6 +87,6 @@ fname = "/tmp/pretty-poly-test.pdf"
 Drawing(width, height, fname)
 origin()
 background("ivory")
-draw_lots_of_polys()
+draw_lots_of_polys(width, height)
 finish()
 println("finished test: output in $(fname)")

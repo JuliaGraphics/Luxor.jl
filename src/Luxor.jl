@@ -12,6 +12,7 @@ include("point.jl")
 include("Turtle.jl")
 include("polygons.jl")
 include("PageTiler.jl")
+include("arrows.jl")
 
 export Drawing, currentdrawing,
     rescale,
@@ -50,7 +51,8 @@ export Drawing, currentdrawing,
     getmatrix, setmatrix, transform,
 
     readpng, placeimage,
-    PageTiler
+    PageTiler,
+    arrow
 
 # as of version 0.4, we still share fill() and scale() with Base.
 
