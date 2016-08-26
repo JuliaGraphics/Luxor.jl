@@ -1,9 +1,5 @@
 # Luxor
 
-```@contents
-Depth = 4
-```
-
 Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's jsut a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
 
 !["tiled images"](examples/tiled-images.png)
