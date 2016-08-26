@@ -95,7 +95,8 @@ function polycentroid(pointlist)
 end
 
 """
-Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.
+Sort the points of a polygon into order. Points are sorted according to the angle they make
+with a specified point.
 
     polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
 
