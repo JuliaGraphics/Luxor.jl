@@ -1,7 +1,7 @@
 
 <a id='Luxor-1'></a>
 
-![](examples/luxor-logo.png)
+![](examples/luxor-big-logo.png)
 
 ## Luxor
 

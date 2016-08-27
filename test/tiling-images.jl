@@ -2,18 +2,6 @@
 
 using Luxor
 
-"""
-return center positions as a range and also the calculated width/height for a tile
-"""
-function tiling(width, height, nrows, ncols)
-    w1 = width/ncols
-    h1 = height/nrows
-    return (
-    (-(width/2) + (w1 / 2) : w1 : (width/2) - (w1 / 2), -(height/2) + (h1 / 2): h1 : (height/2) - (h1 / 2)),
-    (w1, h1)
-    )
-end
-
 function get_png_files(folder)
     cd(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
@@ -23,7 +11,7 @@ end
 
 function addimagetile(imgfile, xcenter, ycenter, tilewidth, tileheight; cropping=true)
     gsave()
-    rect(xcenter-tilewidth/2, ycenter-tileheight/2, tilewidth, tileheight, :clip)
+    box(xcenter, ycenter, tilewidth, tileheight, :clip)
     img = readpng(imgfile)
     w = img.width
     h = img.height

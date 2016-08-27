@@ -1,8 +1,8 @@
 VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 """
-The Luxor package provides a set of vector drawing functions for creating scripts
-to generate visual documents.
+The Luxor package provides a set of vector drawing functions for creating graphical
+documents.
 """
 module Luxor
 
@@ -46,7 +46,7 @@ export Drawing, currentdrawing,
     pattern_set_filter, pattern_set_extend,
 
     fontface, fontsize, text, textpath,
-    textextents, textcurve, textcentred,
+    textextents, textcurve, textcentred, textcentered,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
@@ -93,6 +93,7 @@ type Drawing
         return "drawing '$f' ($w w x $h h) created"
     end
 end
+
 """
 The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default is Portrait:
 
@@ -132,12 +133,14 @@ paper_sizes = Dict{String, Tuple}(
   "E" => (3168, 2448))
 
 """
-Create a new drawing, optionally specify file type and dimensions.
+Create a new drawing, and optionally specify file type (PNG, PDF, SVG, etc) and dimensions.
 
     Drawing()
 
 creates a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png",
 default size 800 pixels square.
+
+You can specify dimensions, and use the default target filename:
 
     Drawing(300,300)
 
@@ -182,8 +185,8 @@ end
 """
     finish()
 
-Finish the drawing, and close the file. The filename is still available in
-`currentdrawing.filename`, and you may be able to open it using `preview()`.
+Finish the drawing, and close the file. You may be able to open it in an external viewer
+application with `preview()`.
 """
 function finish()
     if currentdrawing.surfacetype == "png"
@@ -200,7 +203,7 @@ end
     preview()
 
 On macOS, open the file, which probably uses the default, Preview.app.
-On Unix, open the file with xdg-open.
+On Unix, open the file with `xdg-open`.
 On Windows, pass the filename to the shell.
 """
 function preview()
@@ -216,8 +219,8 @@ end
 """
     origin()
 
-Set the 0/0 origin at the center of the drawing (otherwise it will stay at the top left
-corner).
+Set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left
+corner, the default).
 """
 function origin()
     # set the origin at the center
@@ -228,7 +231,7 @@ end
 Convert or rescale a value between `oldmin`/`oldmax` to the equivalent value between
 `newmin`/`newmax`.
 
-For example, to convert 42 that used to lie between 0 and 100 to the equivalent number
+For example, to convert 42 lying on a scale from 0 and 100 to the equivalent number
 between 1 and 0, inverting the direction:
 
     rescale(42, 0, 100, 1, 0)
@@ -239,7 +242,8 @@ rescale(value, oldmin, oldmax, newmin, newmax) =
    ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
 
 """
-Draw two axes lines starting at 0/0 and continuing out along the current positive x and y axes.
+Draw two axes lines starting at the current 0/0 and continuing out along the current
+positive x and y axes.
 """
 function axes()
     # draw axes
@@ -247,21 +251,19 @@ function axes()
     setline(1)
     fontsize(20)
     sethue("gray")
-    move(0,0)
-    line(currentdrawing.width/2. - 20, 0)
-    stroke()
-    text("x", currentdrawing.width/2. - 20, 0)
-    move(0, 0)
-    line(0, currentdrawing.height/2. - 20)
-    stroke()
-    text("y", 0, currentdrawing.height/2. - 20)
+    arrow(Point(0, 0), Point(currentdrawing.width/2. - 30, 0))
+    text("x", Point(currentdrawing.width/2. - 30, -15))
+    text("x", Point(30, -15))
+    arrow(Point(0, 0), Point(0, currentdrawing.height/2. - 30))
+    text("y", Point(5, currentdrawing.width/2. - 30))
+    text("y", Point(5, 30))
     grestore()
 end
 
 """
     background(color)
 
-Fill the canvas with color. (if Colors.jl is installed).
+Fill the canvas with color. (Colors.jl is useful for providing color names.)
 
 Examples:
 
@@ -294,8 +296,8 @@ newpath() = Cairo.new_path(currentdrawing.cr)
 """
     newsubpath()
 
-Create a new subpath of the current path. This is Cairo's `new_sub_path()` function. It can
-be used, for example, to make holes in shapes.
+Add a new subpath to the current path. This is Cairo's `new_sub_path()` function. It can
+be used for example to make holes in shapes.
 """
 newsubpath() = Cairo.new_sub_path(currentdrawing.cr)
 
@@ -313,7 +315,7 @@ The current path is then cleared.
     stroke()
 
 """
-stroke()            = Cairo.stroke(currentdrawing.cr)
+stroke() = Cairo.stroke(currentdrawing.cr)
 
 """
 Fill the current path with current settings. The current path is then cleared.
@@ -321,7 +323,7 @@ Fill the current path with current settings. The current path is then cleared.
     fill()
 
 """
-fill()              = Cairo.fill(currentdrawing.cr)
+fill() = Cairo.fill(currentdrawing.cr)
 
 """
 Paint the current clip region with the current settings.
@@ -329,7 +331,7 @@ Paint the current clip region with the current settings.
     paint()
 
 """
-paint()             = Cairo.paint(currentdrawing.cr)
+paint() = Cairo.paint(currentdrawing.cr)
 
 """
 Stroke the current path with current line width, line join, line cap, and dash
@@ -359,8 +361,8 @@ end
 """
     do_action(action)
 
-This is usually called by other graphics functions, actions for graphics commands include
-:fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve and :path.
+This is usually called by other graphics functions. Actions for graphics commands include
+`:fill`, `:stroke`, `:clip`, `:fillstroke`, `:fillpreserve`, `:strokepreserve` and `:path`.
 """
 function do_action(action)
     if action == :fill
@@ -381,34 +383,36 @@ function do_action(action)
 end
 
 """
-Establish a new clip region by intersecting the current clip region with the current path
-and then clearing the current path.
+Establish a new clipping region by intersecting the current clipping region with the
+current path and then clearing the current path.
 
     clip()
 """
 clip() = Cairo.clip(currentdrawing.cr)
 
 """
-Establishes a new clip region by intersecting the current clip region with the current path,
-but keep the current path.
+Establish a new clipping region by intersecting the current clipping region with the current
+path, but keep the current path.
 
     clippreserve()
 """
 clippreserve() = Cairo.clip_preserve(currentdrawing.cr)
 
 """
-Reset the clip region to the current drawing's extent.
+Reset the clipping region to the current drawing's extent.
 
     clipreset()
 """
 clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
 """
-Draw a circle centred at `x`/`y`.
+Draw a circle of radius `r` centred at `x`/`y`.
 
-    circle(x, y, r, action)
+    circle(x, y, r, action=:nothing)
 
 `action` is one of the actions applied by `do_action`.
+
+You can also use `ellipse()` to draw circles and place them by their centerpoint.
 """
 function circle(x, y, r, action=:nothing)
     if action != :path
@@ -428,7 +432,7 @@ circle(centerpoint::Point, r, action=:nothing) =
   circle(centerpoint.x, centerpoint.y, r, action)
 
 """
-Draw an ellipse, centered at xc/yc, with width w, and height h.
+Draw an ellipse, centered at `xc/yc`, with width `w`, and height `h`.
 
     ellipse(xc, yc, w, h, action=:none)
 """
@@ -451,11 +455,10 @@ function ellipse(xc, yc, w, h, action=:none)
 end
 
 """
-Draw an ellipse, centered at c, with width w, and height h.
+Draw an ellipse, centered at point `c`, with width `w`, and height `h`.
 
     ellipse(c, w, h, action=:none)
 """
-
 ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
 
 """
@@ -487,6 +490,9 @@ Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height 
 an action.
 
     rect(xmin, ymin, w, h, action)
+
+See `box()` for more ways to do similar things, such as supplying two opposite corners, or
+for placing by centerpoint and dimensions.
 """
 
 function rect(xmin, ymin, w, h, action=:nothing)
@@ -518,7 +524,8 @@ function box(corner1::Point, corner2::Point, action=:nothing)
 end
 
 """
-Create a rectangle between the first two points of an array of Points.
+Create a box/rectangle using the first two points of an array of Points to defined
+opposite corners.
 
     box(points::Array, action=:nothing)
 """
@@ -527,9 +534,27 @@ function box(bbox::Array, action=:nothing)
 end
 
 """
+Create a box/rectangle centered at point `pt` with width and height.
+
+    box(pt::Point, width, height, action=:nothing)
+"""
+function box(pt::Point, width, height, action=:nothing)
+    rect(pt.x - width/2, pt.y - height/2, width, height, action)
+end
+
+"""
+Create a box/rectangle centered at point `x/y` with width and height.
+
+    box(x, y, width, height, action=:nothing)
+"""
+function box(x, y, width, height, action=:nothing)
+    rect(x - width/2, y - height/2, width, height, action)
+end
+
+"""
     sector(innerradius, outerradius, startangle, endangle, action=:none)
 
-Draw a track/sector based at 0/0.
+Draw a track/sector centered at `0/0`.
 """
 function sector(innerradius, outerradius, startangle, endangle, action=:none)
     newpath()
@@ -547,7 +572,7 @@ end
 
 Draw a pie centered at current `x`/`y`.
 
-Angles start at the positive x-axis and are measure clockwise.
+Angles start at the positive x-axis and are measured clockwise.
 """
 
 function pie(x, y, radius, startangle, endangle, action=:none)
@@ -568,10 +593,10 @@ Set the line width.
     setline(n)
 
 """
-setline(n)      = Cairo.set_line_width(currentdrawing.cr, n)
+setline(n) = Cairo.set_line_width(currentdrawing.cr, n)
 
 """
-Set the line ends. `s` can be "butt" (default), "square", or "round".
+Set the line ends. `s` can be "butt" (the default), "square", or "round".
 
     setlinecap(s)
 
@@ -588,7 +613,7 @@ function setlinecap(str="butt")
 end
 
 """
-Set the line join, i.e. how to render the junction of two lines when stroking.
+Set the line join, or how to render the junction of two lines when stroking.
 
     setlinejoin("round")
     setlinejoin("miter")
@@ -639,9 +664,7 @@ rmove(pt)       = rmove(pt.x, pt.y)
 Create a line from the current position to the `x/y` position and optionally apply an action:
 
     line(x, y)
-
     line(x, y, :action)
-
     line(pt)
 
 """
@@ -664,9 +687,7 @@ end
 Create a line relative to the current position to the `x/y` position and optionally apply an action:
 
     rline(x, y)
-
     rline(x, y, :action)
-
     rline(pt)
 """
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
@@ -676,7 +697,6 @@ rline(pt)       = rline(pt.x, pt.y)
 Create a cubic Bézier spline curve.
 
     curve(x1, y1, x2, y2, x3, y3)
-
     curve(p1, p2, p3)
 
 The spline starts at the current position, finishing at `x3/y3` (`p3`), following two
@@ -690,7 +710,7 @@ curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 saved_colors = Tuple{Float64,Float64,Float64,Float64}[]
 
 # I originally used simple Cairo save() but the colors/opacity
-# thing didn't save/restore properly, hence the stack
+# thing I've got going didn't save/restore properly, hence the stack
 """
 Save the current graphics state on the stack.
 """
@@ -753,12 +773,44 @@ translate(pt::Point)     = translate(pt.x, pt.y)
 """
 Get the current path (thanks Andreas Lobinger!)
 
-Returns a CairoPath which is an array of .element_type and .points.
+Returns a CairoPath which is an array of .element_type and .points. With the results you
+could typically step through and examine each entry:
+
+```
+o = getpath()
+for e in o
+      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
+          (x, y) = e.points
+          move(x, y)
+      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO
+          (x, y) = e.points
+          # straight lines
+          line(x, y)
+          stroke()
+          circle(x, y, 1, :stroke)
+      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
+          (x1, y1, x2, y2, x3, y3) = e.points
+          # Bezier control lines
+          circle(x1, y1, 1, :stroke)
+          circle(x2, y2, 1, :stroke)
+          circle(x3, y3, 1, :stroke)
+          move(x, y)
+          curve(x1, y1, x2, y2, x3, y3)
+          stroke()
+          (x, y) = (x3, y3) # update current point
+      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
+          closepath()
+      else
+          error("unknown CairoPathEntry " * repr(e.element_type))
+          error("unknown CairoPathEntry " * repr(e.points))
+      end
+  end
+```
 """
 getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(currentdrawing.cr))
 
 """
-Get the current path but flattened.
+Get the current path, liek `getpath()` but flattened so that there are no Bezier curves.
 
 Returns a CairoPath which is an array of .element_type and .points.
 """
@@ -776,13 +828,14 @@ Cairo.pattern_set_extend(p::CairoPattern, val)
 Cairo.set_source(dest::CairoContext, src::CairoPattern)
 =#
 
-# text, the 'toy' API... "Any serious application should avoid them." :)
+# text
+# the 'toy' API... "Any serious application should avoid them." :)
 """
 
     fontface(fontname)
 
-Select a font to use. If the font is unavailable, it defaults to Helvetica/San Francisco (on macOS).
-
+Select a font to use. If the font is unavailable, it defaults to Helvetica/San Francisco
+(on macOS).
 """
 fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
 
@@ -800,12 +853,12 @@ fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
 Return the measurements of the string `str` when set using the current font settings:
 
--    x_bearing
--    y_bearing
--    width
--    height
--    x_advance
--    y_advance
+- x_bearing
+- y_bearing
+- width
+- height
+- x_advance
+- y_advance
 
 The bearing is the displacement from the reference point to the upper-left corner of the
 bounding box. It is often zero or a small positive value for x displacement, but can be
@@ -828,13 +881,14 @@ returns
 textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
 
 """
+    text(str)
     text(str, x, y)
     text(str, pt)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
-the string at the point. If you omit the point, it's placed at 0/0.
+the string at the point. If you omit the point, it's placed at `0/0`.
 
-In Luxor, placing text doesn't affect the current point!
+In Luxor, placing text doesn't affect the current point.
 """
 
 function text(t, x=0, y=0)
@@ -847,6 +901,7 @@ end
 text(t, pt::Point) = text(t, pt.x, pt.y)
 
 """
+    textcentred(str)
     textcentred(str, x, y)
     textcentred(str, pt)
 
@@ -862,6 +917,11 @@ function textcentred(t, x=0, y=0)
 end
 
 textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
+
+"""
+I spelt textcentred wrongly...
+"""
+textcentered = textcentred
 
 """
     textpath(t)
@@ -888,7 +948,8 @@ textcurve(the_text,
           )
 ```
 
-`start_angle` is relative to +ve x-axis, arc/circle is centred on `(x_pos,y_pos)` with radius `start_radius`.
+`start_angle` is relative to +ve x-axis, arc/circle is centred on `(x_pos,y_pos)` with
+radius `start_radius`.
 """
 
 function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
@@ -897,7 +958,6 @@ function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
   letter_spacing = 0, # tracking/space between chars, tighter is (-), looser is (+)
   spiral_in_out_shift = 0 # makes spiral outwards (+) or inwards (-)
   )
-
   angle = start_angle
   current_radius = start_radius
   spiral_space_step = 0
@@ -938,7 +998,6 @@ Set the current color to a named color. This relies on Colors.jl to convert a st
 eg setcolor("gold") # or "green", "darkturquoise", "lavender" or what have you. The list is at `Colors.color_names`.
 
     setcolor("gold")
-
     setcolor("darkturquoise")
 
 Use `sethue()` for changing colors without changing current opacity level.
@@ -1088,24 +1147,29 @@ Return current Cairo matrix as an array. In Cairo and Luxor, a matrix is an arra
 
 Some basic matrix transforms:
 
-translate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by
-scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by
-rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians
-x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A
-y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A
-flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)])  flip
+- translate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by
+
+- scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by
+
+- rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians
+
+- x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A
+
+- y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A
+
+- flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)])  flip
 
 WHen a drawing is first created, the matrix looks like this:
 
-    getmatrix() = [1.0,0.0,0.0,1.0,0.0,0.0]
+    getmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
 
 When the origin is moved to 400/400, it looks like this:
 
-    getmatrix() = [1.0,0.0,0.0,1.0,400.0,400.0]
+    getmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]
 
 To reset the matrix to the original:
 
-    setmatrix([1.0,0.0,0.0,1.0,0.0,0.0])
+    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
 
 """
 function getmatrix()
@@ -1163,7 +1227,7 @@ Read a PNG file into Cairo.
 
     readpng(pathname)
 
-This returns a Cairo.CairoSurface, suitable for placing on the current drawing with
+This returns a image object suitable for placing on the current drawing with
 `placeimage()`. You can access its width and height properties.
 
     image = readpng("/tmp/test-image.png")
