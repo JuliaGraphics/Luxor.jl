@@ -1,5 +1,11 @@
+info("starting test axes-test" ); include("axes-test.jl")
+
 info("starting test clipping-test" ); include("clipping-test.jl")
-#info("starting test get_path" ); include("get_path.jl") # crashes Julia when other tests follow in the same julia session
+
+# this test fails when followed by other tests in the same session, but not on its own.
+# Presumably there's some pointer or something which isn't released properly
+#info("starting test get_path" ); include("get_path.jl")
+
 info("starting test ellipse test" ); include("ellipse-test.jl")
 info("starting test heart-julia" ); include("heart-julia.jl")
 info("starting test images_with_alpha" ); include("images-with-alpha.jl")
@@ -26,4 +32,5 @@ info("starting test test-image" ); include("test-image.jl")
 info("starting test text-path-clipping" ); include("text-path-clipping.jl")
 info("starting test tiling-images" ); include("tiling-images.jl")
 info("starting test turtle" ); include("turtle.jl")
+
 info("all tests finished")

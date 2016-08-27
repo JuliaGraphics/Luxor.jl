@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's jsut a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions and is also required."
+    "text": "Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's just a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions."
 },
 
 {
@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Current status",
     "category": "section",
-    "text": "It's been updated for Julia version 0.5 and for the new Colors.jl. It needs more testing on Unix and Windows platforms."
+    "text": "It's been updated for Julia version 0.5 and Colors.jl. It needs more testing on Unix and Windows platforms."
 },
 
 {
@@ -45,7 +45,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "A slightly more interesting example",
     "category": "section",
-    "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\nfor i in 0:pi/36:2pi - pi/36\n    move(0, 0)\n    line(cos(i) * 600, sin(i) * 600 )\n    stroke()\nend\nclipreset()                           # finish clipping/masking\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\ntextcentred(\"Luxor\", 0, currentdrawing.height/2 - 400)\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\nfinish()\npreview() # on macOS, opens in Preview"
+    "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"/tmp/basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\nfor i in 0:pi/36:2pi - pi/36\n  move(0, 0)\n  line(cos(i) * 600, sin(i) * 600 )\n  stroke()\nend\nclipreset()                           # finish clipping/masking\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\ntextcentred(\"Luxor\", 0, currentdrawing.height/2 - 400)\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\nfinish()\npreview() # on macOS, opens in Preview"
 },
 
 {
@@ -69,7 +69,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.Drawing",
     "category": "Type",
-    "text": "Create a new drawing, optionally specify file type and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\", default size 800 pixels square.\n\nDrawing(300,300)\n\ncreates a drawing 300 by 300 pixels, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\".\n\nDrawing(300,300, \"/tmp/my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"/tmp/my-drawing.pdf\", 300 by 300 pixels.\n\nDrawing(800,800, \"/tmp/my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"/tmp/my-drawing.svg\", 800 by 800 pixels.\n\nDrawing(800,800, \"/tmp/my-drawing.eps\")\n\ncreates an EPS drawing in the file \"/tmp/my-drawing.eps\", 800 by 800 pixels.\n\nDrawing(\"A4\", \"/tmp/my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size in the file \"/tmp/my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\nCreate the drawing A4 landscape size.\n\nNote that PDF files seem to default to a white background, but PNG defaults to black. Might be a bug here somewhere...\n\n\n\n"
+    "text": "Create a new drawing, and optionally specify file type (PNG, PDF, SVG, etc) and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\", default size 800 pixels square.\n\nYou can specify dimensions, and use the default target filename:\n\nDrawing(300,300)\n\ncreates a drawing 300 by 300 pixels, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\".\n\nDrawing(300,300, \"/tmp/my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"/tmp/my-drawing.pdf\", 300 by 300 pixels.\n\nDrawing(800,800, \"/tmp/my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"/tmp/my-drawing.svg\", 800 by 800 pixels.\n\nDrawing(800,800, \"/tmp/my-drawing.eps\")\n\ncreates an EPS drawing in the file \"/tmp/my-drawing.eps\", 800 by 800 pixels.\n\nDrawing(\"A4\", \"/tmp/my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size in the file \"/tmp/my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\nCreate the drawing A4 landscape size.\n\nNote that PDF files seem to default to a white background, but PNG defaults to black. Might be a bug here somewhere...\n\n\n\n"
 },
 
 {
@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.finish",
     "category": "Function",
-    "text": "finish()\n\nFinish the drawing, and close the file. The filename is still available in currentdrawing.filename, and you may be able to open it using preview().\n\n\n\n"
+    "text": "finish()\n\nFinish the drawing, and close the file. You may be able to open it in an external viewer application with preview().\n\n\n\n"
 },
 
 {
@@ -109,7 +109,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.background",
     "category": "Function",
-    "text": "background(color)\n\nFill the canvas with color. (if Colors.jl is installed).\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(Colors.RGB(0, 0, 0))\nbackground(Colors.Luv(20, -20, 30))\n\n\n\n"
+    "text": "background(color)\n\nFill the canvas with color. (Colors.jl is useful for providing color names.)\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(Colors.RGB(0, 0, 0))\nbackground(Colors.Luv(20, -20, 30))\n\n\n\n"
 },
 
 {
@@ -117,7 +117,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.axes",
     "category": "Function",
-    "text": "Draw two axes lines starting at 0/0 and continuing out along the current positive x and y axes.\n\n\n\n"
+    "text": "Draw two axes lines starting at the current 0/0 and continuing out along the current positive x and y axes.\n\n\n\n"
 },
 
 {
@@ -125,7 +125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.origin",
     "category": "Function",
-    "text": "origin()\n\nSet the 0/0 origin at the center of the drawing (otherwise it will stay at the top left corner).\n\n\n\n"
+    "text": "origin()\n\nSet the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\n\n\n"
 },
 
 {
@@ -141,7 +141,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Basic drawing",
     "category": "section",
-    "text": "The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You modify the drawing space by transforming/rotating/scaling it.Many drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.Positions are usually specified either by x and y coordinates or a Point(x, y). Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, so clockwise."
+    "text": "The underlying Cairo drawing model is similar to PostScript: points are added to paths, paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You modify the drawing space by transforming/rotating/scaling it before you add graphics.Many drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.Positions are usually specified either by x and y coordinates or a Point(x, y). Angles are usually measured from the positive x-axis to the positive y-axis (which points 'down' the page or canvas) in radians, so clockwise."
 },
 
 {
@@ -149,7 +149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.circle",
     "category": "Function",
-    "text": "Draw a circle centred at x/y.\n\ncircle(x, y, r, action)\n\naction is one of the actions applied by do_action.\n\n\n\nDraw a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\n"
+    "text": "Draw a circle of radius r centred at x/y.\n\ncircle(x, y, r, action=:nothing)\n\naction is one of the actions applied by do_action.\n\nYou can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\nDraw a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\n"
 },
 
 {
@@ -157,7 +157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.ellipse",
     "category": "Function",
-    "text": "Draw an ellipse, centered at xc/yc, with width w, and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nDraw an ellipse, centered at c, with width w, and height h.\n\nellipse(c, w, h, action=:none)\n\n\n\n"
+    "text": "Draw an ellipse, centered at xc/yc, with width w, and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nDraw an ellipse, centered at point c, with width w, and height h.\n\nellipse(c, w, h, action=:none)\n\n\n\n"
 },
 
 {
@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.curve",
     "category": "Function",
-    "text": "Create a cubic Bézier spline curve.\n\ncurve(x1, y1, x2, y2, x3, y3)\n\ncurve(p1, p2, p3)\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
+    "text": "Create a cubic Bézier spline curve.\n\ncurve(x1, y1, x2, y2, x3, y3)\ncurve(p1, p2, p3)\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.sector",
     "category": "Function",
-    "text": "sector(innerradius, outerradius, startangle, endangle, action=:none)\n\nDraw a track/sector based at 0/0.\n\n\n\n"
+    "text": "sector(innerradius, outerradius, startangle, endangle, action=:none)\n\nDraw a track/sector centered at 0/0.\n\n\n\n"
 },
 
 {
@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.rect",
     "category": "Function",
-    "text": "Create a rectangle with one corner at (xmin/ymin) with width w and height h and do an action.\n\nrect(xmin, ymin, w, h, action)\n\n\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\nrect(cornerpoint, w, h, action)\n\n\n\n"
+    "text": "Create a rectangle with one corner at (xmin/ymin) with width w and height h and do an action.\n\nrect(xmin, ymin, w, h, action)\n\nSee box() for more ways to do similar things, such as supplying two opposite corners, or for placing by centerpoint and dimensions.\n\n\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\nrect(cornerpoint, w, h, action)\n\n\n\n"
 },
 
 {
@@ -205,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.pie",
     "category": "Function",
-    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie centered at current x/y.\n\nAngles start at the positive x-axis and are measure clockwise.\n\n\n\n"
+    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie centered at current x/y.\n\nAngles start at the positive x-axis and are measured clockwise.\n\n\n\n"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.box",
     "category": "Function",
-    "text": "Create a rectangle between two points and do an action.\n\nbox(cornerpoint1, cornerpoint2, action=:nothing)\n\n\n\nCreate a rectangle between the first two points of an array of Points.\n\nbox(points::Array, action=:nothing)\n\n\n\n"
+    "text": "Create a rectangle between two points and do an action.\n\nbox(cornerpoint1, cornerpoint2, action=:nothing)\n\n\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\nbox(points::Array, action=:nothing)\n\n\n\nCreate a box/rectangle centered at point pt with width and height.\n\nbox(pt::Point, width, height, action=:nothing)\n\n\n\nCreate a box/rectangle centered at point x/y with width and height.\n\nbox(x, y, width, height, action=:nothing)\n\n\n\n"
 },
 
 {
@@ -245,7 +245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.line",
     "category": "Function",
-    "text": "Create a line from the current position to the x/y position and optionally apply an action:\n\nline(x, y)\n\nline(x, y, :action)\n\nline(pt)\n\n\n\nMake a line between two points, pt1 and pt2.\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
+    "text": "Create a line from the current position to the x/y position and optionally apply an action:\n\nline(x, y)\nline(x, y, :action)\nline(pt)\n\n\n\nMake a line between two points, pt1 and pt2.\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
 },
 
 {
@@ -253,7 +253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.rline",
     "category": "Function",
-    "text": "Create a line relative to the current position to the x/y position and optionally apply an action:\n\nrline(x, y)\n\nrline(x, y, :action)\n\nrline(pt)\n\n\n\n"
+    "text": "Create a line relative to the current position to the x/y position and optionally apply an action:\n\nrline(x, y)\nrline(x, y, :action)\nrline(pt)\n\n\n\n"
 },
 
 {
@@ -261,7 +261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Lines and arcs",
     "category": "section",
-    "text": "There is a 'current position' which you can set with move(), and use implicitly in functions like line() and text().move\nrmove\nline\nrline"
+    "text": "There is a 'current position' which you can set with move(), and can use implicitly in functions like line() and text().move\nrmove\nline\nrline"
 },
 
 {
@@ -269,7 +269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.arrow",
     "category": "Function",
-    "text": "Draw a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's tip, and arrow head angle is the angle between the side of the tip and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\nDraw a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
+    "text": "Place a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's tip, and arrow head angle is the angle between the side of the tip and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\nIt doesn't need stroking/filling.\n\n\n\nPlace a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
 },
 
 {
@@ -277,7 +277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Arrows",
     "category": "section",
-    "text": "You can draw lines with arrows at the end with arrow().arrow"
+    "text": "You can draw lines or arcs with arrows at the end with arrow().arrow"
 },
 
 {
@@ -293,7 +293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.newsubpath",
     "category": "Function",
-    "text": "newsubpath()\n\nCreate a new subpath of the current path. This is Cairo's new_sub_path() function. It can be used, for example, to make holes in shapes.\n\n\n\n"
+    "text": "newsubpath()\n\nAdd a new subpath to the current path. This is Cairo's new_sub_path() function. It can be used for example to make holes in shapes.\n\n\n\n"
 },
 
 {
@@ -333,7 +333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.setlinecap",
     "category": "Function",
-    "text": "Set the line ends. s can be \"butt\" (default), \"square\", or \"round\".\n\nsetlinecap(s)\n\nsetlinecap(\"round\")\n\n\n\n"
+    "text": "Set the line ends. s can be \"butt\" (the default), \"square\", or \"round\".\n\nsetlinecap(s)\n\nsetlinecap(\"round\")\n\n\n\n"
 },
 
 {
@@ -341,7 +341,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.setlinejoin",
     "category": "Function",
-    "text": "Set the line join, i.e. how to render the junction of two lines when stroking.\n\nsetlinejoin(\"round\")\nsetlinejoin(\"miter\")\nsetlinejoin(\"bevel\")\n\n\n\n"
+    "text": "Set the line join, or how to render the junction of two lines when stroking.\n\nsetlinejoin(\"round\")\nsetlinejoin(\"miter\")\nsetlinejoin(\"bevel\")\n\n\n\n"
 },
 
 {
@@ -413,7 +413,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Styles",
     "category": "section",
-    "text": "The set- functions control the width, end shapes, join behaviour and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
+    "text": "The set- functions control the width, end shapes, join behavior and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
 },
 
 {
@@ -557,7 +557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.text",
     "category": "Function",
-    "text": "text(str, x, y)\ntext(str, pt)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at 0/0.\n\nIn Luxor, placing text doesn't affect the current point!\n\n\n\n"
+    "text": "text(str)\ntext(str, x, y)\ntext(str, pt)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at 0/0.\n\nIn Luxor, placing text doesn't affect the current point.\n\n\n\n"
 },
 
 {
@@ -565,7 +565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.textcentred",
     "category": "Function",
-    "text": "textcentred(str, x, y)\ntextcentred(str, pt)\n\nDraw text in the string str centered at x/y or pt. If you omit the point, it's placed at 0/0.\n\nText doesn't affect the current point!\n\n\n\n"
+    "text": "textcentred(str)\ntextcentred(str, x, y)\ntextcentred(str, pt)\n\nDraw text in the string str centered at x/y or pt. If you omit the point, it's placed at 0/0.\n\nText doesn't affect the current point!\n\n\n\n"
 },
 
 {
@@ -669,7 +669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A flip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\nWHen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0,0.0,0.0,1.0,0.0,0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0,0.0,0.0,1.0,400.0,400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0,0.0,0.0,1.0,0.0,0.0])\n\n\n\n"
+    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by\nscale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by\nrotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians\nx-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A\ny-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A\nflip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\nWHen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
 },
 
 {
@@ -701,7 +701,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.clip",
     "category": "Function",
-    "text": "Establish a new clip region by intersecting the current clip region with the current path and then clearing the current path.\n\nclip()\n\n\n\n"
+    "text": "Establish a new clipping region by intersecting the current clipping region with the current path and then clearing the current path.\n\nclip()\n\n\n\n"
 },
 
 {
@@ -709,7 +709,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.clippreserve",
     "category": "Function",
-    "text": "Establishes a new clip region by intersecting the current clip region with the current path, but keep the current path.\n\nclippreserve()\n\n\n\n"
+    "text": "Establish a new clipping region by intersecting the current clipping region with the current path, but keep the current path.\n\nclippreserve()\n\n\n\n"
 },
 
 {
@@ -717,7 +717,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.clipreset",
     "category": "Function",
-    "text": "Reset the clip region to the current drawing's extent.\n\nclipreset()\n\n\n\n"
+    "text": "Reset the clipping region to the current drawing's extent.\n\nclipreset()\n\n\n\n"
 },
 
 {
@@ -733,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.readpng",
     "category": "Function",
-    "text": "Read a PNG file into Cairo.\n\nreadpng(pathname)\n\nThis returns a Cairo.CairoSurface, suitable for placing on the current drawing with placeimage(). You can access its width and height properties.\n\nimage = readpng(\"/tmp/test-image.png\")\nw = image.width\nh = image.height\n\n\n\n"
+    "text": "Read a PNG file into Cairo.\n\nreadpng(pathname)\n\nThis returns a image object suitable for placing on the current drawing with placeimage(). You can access its width and height properties.\n\nimage = readpng(\"/tmp/test-image.png\")\nw = image.width\nh = image.height\n\n\n\n"
 },
 
 {
@@ -861,7 +861,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Sierpinski triangle",
     "category": "section",
-    "text": "The main type is the Point.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth+1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
+    "text": "The main type is the Point.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth + 1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
 },
 
 {

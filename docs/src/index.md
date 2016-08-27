@@ -1,16 +1,16 @@
 # Luxor
 
-Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's jsut a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
+Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's just a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
 
 !["tiled images"](examples/tiled-images.png)
 
-The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
+The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
-For a more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions and is also required.
+For a more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions.
 
 ## Current status
 
-It's been updated for Julia version 0.5 and for the new Colors.jl. It needs more testing on Unix and Windows platforms.
+It's been updated for Julia version 0.5 and Colors.jl. It needs more testing on Unix and Windows platforms.
 
 ## Installation and basic usage
 
@@ -45,7 +45,7 @@ preview()
 
 The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the image and the location of the finished image when it's saved.
 
-`origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using `Colors.jl`, we can specify colors by name.
+`origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name.
 
 `text()` places text. It's placed at the current 0/0 if you don't specify otherwise.
 
@@ -74,9 +74,9 @@ sethue("gold")
 setopacity(0.7)
 setline(10)
 for i in 0:pi/36:2pi - pi/36
-    move(0, 0)
-    line(cos(i) * 600, sin(i) * 600 )
-    stroke()
+  move(0, 0)
+  line(cos(i) * 600, sin(i) * 600 )
+  stroke()
 end
 clipreset()                           # finish clipping/masking
 fontsize(60)
@@ -155,7 +155,7 @@ origin
 
 # Basic drawing
 
-The underlying Cairo drawing model is similar to PostScript: paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You modify the drawing space by transforming/rotating/scaling it.
+The underlying Cairo drawing model is similar to PostScript: points are added to paths, paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You modify the drawing space by transforming/rotating/scaling it before you add graphics.
 
 Many drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
@@ -179,7 +179,7 @@ box
 
 ## Lines and arcs
 
-There is a 'current position' which you can set with `move()`, and use implicitly in functions like `line()` and `text()`.
+There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()` and `text()`.
 
 ```@docs
 move
@@ -190,7 +190,7 @@ rline
 
 ### Arrows
 
-You can draw lines with arrows at the end with `arrow()`.
+You can draw lines or arcs with arrows at the end with `arrow()`.
 
 ```@docs
 arrow
@@ -214,7 +214,7 @@ For color definitions and conversions, use Colors.jl. The difference between the
 
 ## Styles
 
-The `set-` functions control the width, end shapes, join behaviour and dash pattern:
+The `set-` functions control the width, end shapes, join behavior and dash pattern:
 
 ```@docs
 setline
@@ -685,12 +685,12 @@ end
 
 @time begin
     depth = 8 # 12 is ok, 20 is right out
-    cols = distinguishable_colors(depth+1)
+    cols = distinguishable_colors(depth + 1)
     Drawing(400, 400, "/tmp/sierpinski.svg")
     origin()
     setopacity(0.5)
     counter = 0
-    my_points = [Point(-100,-50), Point(0,100), Point(100.0,-50.0)]
+    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]
     sierpinski(my_points, depth)
     println("drew $counter triangles")
 end

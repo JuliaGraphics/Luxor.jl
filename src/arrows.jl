@@ -1,10 +1,11 @@
 """
-Draw a line between two points and add an arrowhead at the end. The arrowhead length is the
+Place a line between two points and add an arrowhead at the end. The arrowhead length is the
 length of the side of the arrow's tip, and arrow head angle is the angle between the side of
 the tip and the shaft of the arrow.
 
     arrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)
 
+It doesn't need stroking/filling.
 """
 function arrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)
   shaftlength = norm(startpoint, endpoint)
@@ -45,7 +46,7 @@ function arrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowhead
 end
 
 """
-Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and ending at
+Place a curved arrow, an arc centered at `centerpos` starting at `startangle` and ending at
 `endangle` with an arrowhead at the end. Angles are measured clockwise from the positive
 x-axis.
 
