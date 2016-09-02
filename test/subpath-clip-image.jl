@@ -16,7 +16,7 @@ h = image.height
 b = false
 for i in 3:15
     randomhue()
-    poly(ngonv(0, 0, 50 + (i * 30), i, pi/2), :path, reversepath=b)
+    poly(ngon(0, 0, 50 + (i * 30), i, pi/2, vertices=true), :path, reversepath=b)
     if i < 15
         newsubpath()
     end
