@@ -491,8 +491,8 @@ an action.
 
     rect(xmin, ymin, w, h, action)
 
-See `box()` for more ways to do similar things, such as supplying two opposite corners, or
-for placing by centerpoint and dimensions.
+See `box()` for more ways to do similar things, such as supplying two opposite corners,
+placing by centerpoint and dimensions.
 """
 
 function rect(xmin, ymin, w, h, action=:nothing)
@@ -570,7 +570,7 @@ end
 """
     pie(x, y, radius, startangle, endangle, action=:none)
 
-Draw a pie centered at current `x`/`y`.
+Draw a pie centered at `x`/`y`.
 
 Angles start at the positive x-axis and are measured clockwise.
 """
@@ -586,6 +586,17 @@ function pie(x, y, radius, startangle, endangle, action=:none)
     grestore()
     do_action(action)
 end
+
+"""
+    pie(centerpoint, radius, startangle, endangle, action=:none)
+
+Draw a pie centered at `centerpoint`.
+
+Angles start at the positive x-axis and are measured clockwise.
+"""
+
+pie(centerpoint::Point, radius, startangle, endangle, action) =
+ pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action=action)
 
 """
 Set the line width.
