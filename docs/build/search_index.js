@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's just a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions."
+    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions."
 },
 
 {
@@ -429,15 +429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.ngon",
     "category": "Function",
-    "text": "Draw a regular polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)\n\nUse ngonv() to return the points of a polygon.\n\n\n\nDraw a regular polygon centred at p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.ngonv",
-    "page": "Luxor",
-    "title": "Luxor.ngonv",
-    "category": "Function",
-    "text": "Return the vertices of a regular n-sided polygon centred at x, y:\n\nngonv(x, y, radius, sides, orientation)\n\nngon() uses the shapes: if you just want the raw points, use ngonv, which returns an array of points instead. Compare:\n\nngonv(0, 0, 4, 4, 0) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nReturn the vertices of a regular polygon centred at point p:\n\nngonv(pt, radius, sides=5, orientation=0)\n\n\n\n"
+    "text": "Find the vertices of a regular n-sided polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing, vertices=false; reversepath=false)\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=false, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=false) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nDraw a regular polygon centred at point p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)\n\n\n\n"
 },
 
 {
@@ -445,7 +437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Regular polygons (\"ngons\")",
     "category": "section",
-    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon() and ngonv(). ngon() makes the shapes: if you just want the raw points, use ngonv, which returns an array of points instead:(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n  for x in -500:50:500\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n  end\nend\n\nfinish()\npreview()ngon\nngonv"
+    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon().(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n  for x in -500:50:500\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n    setcolor(cols[rand(1:20)])\n    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n  end\nend\n\nfinish()\npreview()ngon"
 },
 
 {
@@ -485,7 +477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.polycentroid",
     "category": "Function",
-    "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)\n\nYou could test the point using isinside().\n\n\n\n"
+    "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons.\n\nYou could test the point using isinside().\n\n\n\n"
 },
 
 {
@@ -521,19 +513,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Luxor.starv",
-    "page": "Luxor",
-    "title": "Luxor.starv",
-    "category": "Function",
-    "text": "Make a star, returning its vertices:\n\nstarv(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, close=true, reversepath=false)\n\nUse star() to draw a star.\n\n\n\n"
-},
-
-{
     "location": "index.html#Luxor.star",
     "page": "Luxor",
     "title": "Luxor.star",
     "category": "Function",
-    "text": "Draw a star:\n\nstar(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)\n\nUse starv() to return the vertices of a star.\n\n\n\nDraw a star:\n\nstar(centerpos, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)\n\nUse starv() to return the vertices of a star.\n\n\n\n"
+    "text": "Make a star:\n\nstar(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nDraw a star centered at a position:\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)\n\n\n\n"
 },
 
 {
@@ -541,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Stars",
     "category": "section",
-    "text": "Use starv() to return the vertices of a star, and star() to make a star.(Image: stars)using Luxor, Colors\nw, h = 600, 600\nDrawing(w, h, \"/tmp/stars.png\")\norigin()\ncols = [RGB(rand(3)...) for i in 1:50]\nbackground(\"grey20\")\nx = -w/2\nfor y in 100 * randn(h, 1)\n    setcolor(cols[rand(1:end)])\n    star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)\n    x += 2\nend\nfinish()\npreview()starv\nstar"
+    "text": "Use star() to make a star.(Image: stars)using Luxor, Colors\nw, h = 600, 600\nDrawing(w, h, \"/tmp/stars.png\")\norigin()\ncols = [RGB(rand(3)...) for i in 1:50]\nbackground(\"grey20\")\nx = -w/2\nfor y in 100 * randn(h, 1)\n    setcolor(cols[rand(1:end)])\n    star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)\n    x += 2\nend\nfinish()\npreview()star"
 },
 
 {
@@ -861,7 +845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Sierpinski triangle",
     "category": "section",
-    "text": "The main type is the Point.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth + 1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
+    "text": "The main type is the Point, an immutable composite type containing x and y fields.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth + 1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
 },
 
 {

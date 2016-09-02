@@ -245,7 +245,7 @@ grestore
 
 ### Regular polygons ("ngons")
 
-You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()` and `ngonv()`. `ngon()` makes the shapes: if you just want the raw points, use `ngonv`, which returns an array of points instead:
+You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
 
 ![n-gons](examples/n-gon.png)
 
@@ -276,7 +276,6 @@ preview()
 
 ```@docs
 ngon
-ngonv
 ```
 ### Polygons
 
@@ -329,7 +328,7 @@ isinside
 
 ### Stars
 
-Use `starv()` to return the vertices of a star, and `star()` to make a star.
+Use `star()` to make a star.
 
 ![stars](examples/stars.png)
 
@@ -351,7 +350,6 @@ preview()
 ```
 
 ```@docs
-starv
 star
 ```
 

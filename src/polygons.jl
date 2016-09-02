@@ -50,7 +50,7 @@ Find the centroid of simple polygon.
 
     polycentroid(pointlist)
 
-Returns a point. This only works for simple (non-intersecting) polygons. Come on, this isn't a CAD system...! :)
+Returns a point. This only works for simple (non-intersecting) polygons.
 
 You could test the point using `isinside()`.
 """
@@ -185,14 +185,14 @@ function simplify(pointlist::Array, detail)
 end
 
 """
-Return the vertices of a regular n-sided polygon centred at `x`, `y`:
+Find the vertices of a regular n-sided polygon centred at `x`, `y`:
 
-    ngonv(x, y, radius, sides, orientation)
+    ngon(x, y, radius, sides=5, orientation=0, action=:nothing, vertices=false; reversepath=false)
 
-`ngon()` uses the shapes: if you just want the raw points, use `ngonv`, which returns an array of points instead. Compare:
+`ngon()` draws the shapes: if you just want the raw points, use keyword argument `vertices=false`, which returns the array of points instead. Compare:
 
 ```julia
-ngonv(0, 0, 4, 4, 0) # returns the polygon's points:
+ngon(0, 0, 4, 4, 0, vertices=false) # returns the polygon's points:
 
     4-element Array{Luxor.Point,1}:
     Luxor.Point(2.4492935982947064e-16,4.0)
@@ -200,51 +200,40 @@ ngonv(0, 0, 4, 4, 0) # returns the polygon's points:
     Luxor.Point(-7.347880794884119e-16,-4.0)
     Luxor.Point(4.0,-9.797174393178826e-16)
 
+whereas
+
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-function ngonv(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0)
-    [Point(x+cos(orientation + n * 2pi/sides) * radius,
-           y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
+
+function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
+  ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
+                  y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
+  if vertices
+    return ptlist
+  else
+    poly(ptlist, action, close=true, reversepath=reversepath)
+  end
 end
 
 """
-Return the vertices of a regular polygon centred at point `p`:
+Draw a regular polygon centred at point `p`:
 
-    ngonv(pt, radius, sides=5, orientation=0)
-"""
-
-ngonv(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0) = ngonv(centrepoint.x, centrepoint.y, radius, sides, orientation)
-
-"""
-Draw a regular polygon centred at `x`, `y`:
-
-    ngon(x, y, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)
-
-Use `ngonv()` to return the points of a polygon.
-"""
-function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing; close=true, reversepath=false)
-    poly(ngonv(x, y, radius, sides, orientation), close=close, action, reversepath=reversepath)
-end
-
-"""
-Draw a regular polygon centred at `p`:
-
-    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing; close=true, reversepath=false)
+    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
 
 """
 
 ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
 
 """
-Make a star, returning its vertices:
+Make a star:
 
-    starv(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, close=true, reversepath=false)
+    star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
 
-Use `star()` to draw a star.
+Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
 
-function starv(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0; reversepath=false)
+function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
                     y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
@@ -255,32 +244,22 @@ function starv(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5
         push!(result, innerpoints[i])
     end
     if reversepath
-        return reverse(result)
+        result = reverse(result)
+    end
+    if vertices
+      return result
     else
-        return result
+      poly(result, action, close=true)
     end
 end
 
 """
-Draw a star:
+Draw a star centered at a position:
 
-    star(xcenter, ycenter, radius, npoints, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
-
-Use `starv()` to return the vertices of a star.
-"""
-function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false)
-    poly(starv(x, y, radius, npoints, ratio, orientation), close=close, action, reversepath=reversepath)
-end
-
-"""
-Draw a star:
-
-    star(centerpos, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing, close=true, reversepath=false)
-
-Use `starv()` to return the vertices of a star.
+    star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
 """
 
-star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; close=true, reversepath=false) =  star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; close=close, reversepath=reversepath)
+star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; reversepath=reversepath)
 
 """
 Is a point `p` inside a polygon `pol`?

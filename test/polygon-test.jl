@@ -21,7 +21,7 @@ function simple_polys()
     translate(0, currentheight - 150)
     x = 0
     for sides in 3:12
-        ngon(x, y, 20, sides, 0, :fill, close=false)
+        ngon(x, y, 20, sides, 0, :fill)
         x += hstep
         if x > currentwidth
             x = 0

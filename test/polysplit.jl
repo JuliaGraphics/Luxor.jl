@@ -18,7 +18,7 @@ function testapoly(x, y)
 
     # try both regular and irregular polygons
     if rand(Bool)
-        p1 = ngonv(0, 0, 80, rand(3:8), rand(0:pi/10:2pi))
+        p1 = ngon(0, 0, 80, rand(3:8), rand(0:pi/10:2pi), vertices=true)
     else
         p1 = polysortbyangle(randompoly(80, rand(3:12)))
     end

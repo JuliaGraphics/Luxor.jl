@@ -49,7 +49,7 @@ function polycentroidsort(width, height)
       if rand(Bool)
         p = randompointarray(rand(-tilesize:-tilesize), rand(-tilesize:-tilesize), rand(tilesize:tilesize), rand(tilesize:tilesize), rand(5:12))
       else
-        p = ngonv(0, 0, tilesize, rand(3:12))
+        p = ngon(0, 0, tilesize, rand(3:12), vertices=true)
       end
       drawpoly(p, xpos, ypos, n)
     end

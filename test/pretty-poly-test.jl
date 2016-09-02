@@ -70,7 +70,7 @@ function draw_lots_of_polys(pagewidth, pageheight)
         if rand(Bool)
             p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))
         else
-            p = ngonv(0, 0, rand(50:100), rand(3:12))
+            p = ngon(0, 0, rand(50:100), rand(3:12), vertices=true)
         end
         gsave()
         translate(x, y)
