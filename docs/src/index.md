@@ -220,6 +220,13 @@ The `getpath()` function gets the current Cairo path as an array of element type
 
 For color definitions and conversions, use Colors.jl. The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica).
 
+```@docs
+sethue
+setcolor
+randomhue
+randomcolor
+```
+
 ## Styles
 
 The `set-` functions control the width, end shapes, join behavior and dash pattern:
