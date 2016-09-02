@@ -55,7 +55,9 @@ Returns a point. This only works for simple (non-intersecting) polygons. Come on
 You could test the point using `isinside()`.
 """
 function polycentroid(pointlist)
-    centroid = Point(0, 0)
+    # if Points are immutable, then use separate variables for these calculations
+    centroid_x = 0
+    centroid_y = 0
     signedArea = 0.0
     vertexCount = length(pointlist)
     x0 = 0.0 # Current vertex X
@@ -73,8 +75,8 @@ function polycentroid(pointlist)
         y1 = pointlist[i+1].y
         a = x0*y1 - x1*y0
         signedArea += a
-        centroid.x += (x0 + x1)*a
-        centroid.y += (y0 + y1)*a
+        centroid_x += (x0 + x1)*a
+        centroid_y += (y0 + y1)*a
    end
     # Do last vertex separately to avoid performing an expensive
     # modulus operation in each iteration.
@@ -84,14 +86,13 @@ function polycentroid(pointlist)
     y1 = pointlist[1].y
     a = x0*y1 - x1*y0
     signedArea += a
-    centroid.x += (x0 + x1)*a
-    centroid.y += (y0 + y1)*a
-
+    centroid_x += (x0 + x1)*a
+    centroid_y += (y0 + y1)*a
     signedArea *= 0.5
-    centroid.x /= (6.0 * signedArea)
-    centroid.y /= (6.0 * signedArea)
+    centroid_x /= (6.0 * signedArea)
+    centroid_y /= (6.0 * signedArea)
 
-    return centroid
+    return Point(centroid_x, centroid_y)
 end
 
 """

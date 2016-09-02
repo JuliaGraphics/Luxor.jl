@@ -2,9 +2,10 @@ import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
 
 export Point, randompoint, randompointarray
 """
-The Point type holds two coordinates.
+The Point type holds two coordinates. Currently it's immutable, so remember not try to
+change the values of the x and y values directly.
 """
-type Point
+immutable Point
    x::Float64
    y::Float64
 end
