@@ -210,9 +210,11 @@ A path is a group of points. A path can have subpaths (which can form holes).
 newpath
 newsubpath
 closepath
+getpath
+getpathflat
 ```
 
-The `getpath()` function get the current Cairo path as an array of element types and points. `getpathflat()` gets the current path as an array of type/points with curves flattened to line segments.
+The `getpath()` function gets the current Cairo path as an array of element types and points. `getpathflat()` gets the current path as an array of type/points with curves flattened to line segments.
 
 ## Color and opacity
 
