@@ -1,12 +1,12 @@
 """
-A PageTiler is an iterator that returns the `x`/`y` coordinates of a set of
-imaginary tiles that divide up a rectangular space into rows and columns.
+A PageTiler is an iterator that returns the `x`/`y` coordinates of the center of each tiles
+in a set of imaginary tiles that divide up a rectangular space into rows and columns.
 
     pagetiles = PageTiler(areawidth, areaheight, nrows, ncols, margin=20)
 
-where width, height is the dimensions of the area to be tiled, nrows/ncols
-is the number of rows and columns required, and margin is applied to area
-before the tile sizes are calculated.
+where `width`, `height` is the dimensions of the area to be tiled, `nrows`/`ncols`
+is the number of rows and columns required, and `margin` is applied to all four
+edges of the area before the function calculates the tile sizes required.
 
 Access the calculated tile width and height like this:
 
