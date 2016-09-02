@@ -1,10 +1,16 @@
 # Luxor
 
-Luxor provides some some basic vector drawing functions and some utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's just a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
+Luxor provides basic vector drawing functions and utilities for working with shapes,
+polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar
+on Julia's Cairo graphics package (which should also be installed).
 
 !["tiled images"](examples/tiled-images.png)
 
-The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
+The idea of Luxor is that it's easier to use than
+[Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores,
+default contexts, utilities, and simplified functions. It's for when you just want to draw
+something without too much ceremony. If you've ever hacked on a PostScript file, you should
+feel right at home (only without the reverse Polish notation, obviously).
 
 For a more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions.
 
@@ -656,7 +662,7 @@ Reposition
 
 ## Sierpinski triangle
 
-The main type is the Point.
+The main type is the Point, an immutable composite type containing `x` and `y` fields.
 
 ![Sierpinski](examples/sierpinski.png)
 
