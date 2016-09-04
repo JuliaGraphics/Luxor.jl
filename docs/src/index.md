@@ -169,21 +169,27 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ## Simple shapes
 
-Functions for drawing shapes include `circle()`, `ellipse()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`.
+Functions for making shapes include `circle()`, `ellipse()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`.
+
+## Rectangles and boxes
+
+```@docs
+rect
+box
+```
+
+## Circles
+
+There are various ways to make circles and ellipses. A sector has an inner and outer radius, as well as start and end angles. A pie has start and end angles.
 
 ```@docs
 circle
 ellipse
-arc
-carc
-curve
 sector
-rect
 pie
-box
 ```
 
-## Lines and arcs
+## Lines, arcs, and curves
 
 There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()` and `text()`.
 
@@ -192,6 +198,9 @@ move
 rmove
 line
 rline
+arc
+carc
+curve
 ```
 
 ### Arrows
@@ -251,6 +260,9 @@ grestore
 ```
 
 ## Polygons and shapes
+
+### Shapes
+
 
 ### Regular polygons ("ngons")
 

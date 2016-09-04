@@ -1,11 +1,12 @@
 """
 Place a line between two points and add an arrowhead at the end. The arrowhead length is the
-length of the side of the arrow's tip, and arrow head angle is the angle between the side of
-the tip and the shaft of the arrow.
+length of the side of the arrow's head, and arrow head angle is the angle between the side of
+the head and the shaft of the arrow.
 
     arrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)
 
-It doesn't need stroking/filling.
+It doesn't need stroking/filling, the shaft is `stroke()`d and the head `fill()`ed.
+Quiet at the back of the class.
 """
 function arrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)
   shaftlength = norm(startpoint, endpoint)
@@ -14,7 +15,7 @@ function arrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowhead
   gsave()
   # shorten the length so that lines
   # stop before we get to the arrow
-  # thus wide shafts won't stick out through the tip of the arrow.
+  # thus wide shafts won't stick out through the head of the arrow.
   ratio = (shaftlength - cos(arrowheadangle) * arrowheadlength) / shaftlength
   tox = startpoint.x + (endpoint.x - startpoint.x) * ratio
   toy = startpoint.y + (endpoint.y - startpoint.y) * ratio
@@ -56,7 +57,7 @@ x-axis.
 function arrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)
   # shorten the length so that lines
   # stop before we get to the arrow
-  # thus wide shafts won't stick out through the tip of the arrow.
+  # thus wide shafts won't stick out through the head of the arrow.
   # TODO this still has numerous small errors,so the algor and magic numbers need fixing
 
   if startangle > endangle
@@ -72,7 +73,7 @@ function arrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=1
   arrowheadlength1 = cos(arrowheadangle) * arrowheadlength
 
   ratio = arrowheadlength1/arclength
-  newendangle = endangle - (ratio/5 * endangle) # <--------------------
+  newendangle = endangle - (ratio/5 * endangle) # <-- what's this 5 doing? ------------------
   gsave()
   translate(centerpos)
   newpath()

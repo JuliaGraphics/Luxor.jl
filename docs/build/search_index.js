@@ -93,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.PageTiler",
     "category": "Type",
-    "text": "A PageTiler is an iterator that returns the x/y coordinates of a set of imaginary tiles that divide up a rectangular space into rows and columns.\n\npagetiles = PageTiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to area before the tile sizes are calculated.\n\nAccess the calculated tile width and height like this:\n\npagetiles = PageTiler(1000, 800, 4, 5, margin=20)\nfor (xpos, ypos, n) in pagetiles\n  ellipse(xpos, ypos, pagetiles.tilewidth, pagetiles.tileheight, :fill)\nend\n\n\n\n"
+    "text": "A PageTiler is an iterator that returns the x/y point of the center of each tile in a set of tiles that divide up a rectangular space into rows and columns.\n\npagetiles = PageTiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\npagetiles = PageTiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in pagetiles\n# the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\npagetiles = PageTiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in pagetiles\n  ellipse(pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, :fill)\nend\n\n\n\n"
 },
 
 {
@@ -145,51 +145,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Luxor.circle",
+    "location": "index.html#Simple-shapes-1",
     "page": "Luxor",
-    "title": "Luxor.circle",
-    "category": "Function",
-    "text": "Draw a circle of radius r centred at x/y.\n\ncircle(x, y, r, action=:nothing)\n\naction is one of the actions applied by do_action.\n\nYou can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\nDraw a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.ellipse",
-    "page": "Luxor",
-    "title": "Luxor.ellipse",
-    "category": "Function",
-    "text": "Draw an ellipse, centered at xc/yc, with width w, and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nDraw an ellipse, centered at point c, with width w, and height h.\n\nellipse(c, w, h, action=:none)\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.arc",
-    "page": "Luxor",
-    "title": "Luxor.arc",
-    "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.carc",
-    "page": "Luxor",
-    "title": "Luxor.carc",
-    "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.curve",
-    "page": "Luxor",
-    "title": "Luxor.curve",
-    "category": "Function",
-    "text": "Create a cubic Bézier spline curve.\n\ncurve(x1, y1, x2, y2, x3, y3)\ncurve(p1, p2, p3)\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.sector",
-    "page": "Luxor",
-    "title": "Luxor.sector",
-    "category": "Function",
-    "text": "sector(innerradius, outerradius, startangle, endangle, action=:none)\n\nDraw a track/sector centered at 0/0.\n\n\n\n"
+    "title": "Simple shapes",
+    "category": "section",
+    "text": "Functions for making shapes include circle(), ellipse(), arc(), carc(), curve(), sector(), rect(), pie(), and box()."
 },
 
 {
@@ -197,15 +157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.rect",
     "category": "Function",
-    "text": "Create a rectangle with one corner at (xmin/ymin) with width w and height h and do an action.\n\nrect(xmin, ymin, w, h, action)\n\nSee box() for more ways to do similar things, such as supplying two opposite corners, or for placing by centerpoint and dimensions.\n\n\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\nrect(cornerpoint, w, h, action)\n\n\n\n"
-},
-
-{
-    "location": "index.html#Luxor.pie",
-    "page": "Luxor",
-    "title": "Luxor.pie",
-    "category": "Function",
-    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie centered at current x/y.\n\nAngles start at the positive x-axis and are measured clockwise.\n\n\n\n"
+    "text": "Create a rectangle with one corner at (xmin/ymin) with width w and height h and do an action.\n\nrect(xmin, ymin, w, h, action)\n\nSee box() for more ways to do similar things, such as supplying two opposite corners, placing by centerpoint and dimensions.\n\n\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\nrect(cornerpoint, w, h, action)\n\n\n\n"
 },
 
 {
@@ -217,11 +169,51 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Simple-shapes-1",
+    "location": "index.html#Rectangles-and-boxes-1",
     "page": "Luxor",
-    "title": "Simple shapes",
+    "title": "Rectangles and boxes",
     "category": "section",
-    "text": "Functions for drawing shapes include circle(), ellipse(), arc(), carc(), curve(), sector(), rect(), pie(), and box().circle\nellipse\narc\ncarc\ncurve\nsector\nrect\npie\nbox"
+    "text": "rect\nbox"
+},
+
+{
+    "location": "index.html#Luxor.circle",
+    "page": "Luxor",
+    "title": "Luxor.circle",
+    "category": "Function",
+    "text": "Make a circle of radius r centred at x/y.\n\ncircle(x, y, r, action=:nothing)\n\naction is one of the actions applied by do_action.\n\nYou can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\nMake a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\nMake a circle that passes through two points that define the diameter.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.ellipse",
+    "page": "Luxor",
+    "title": "Luxor.ellipse",
+    "category": "Function",
+    "text": "Make an ellipse, centered at xc/yc, with width w, and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nMake an ellipse, centered at point c, with width w, and height h.\n\nellipse(c, w, h, action=:none)\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.sector",
+    "page": "Luxor",
+    "title": "Luxor.sector",
+    "category": "Function",
+    "text": "sector(innerradius, outerradius, startangle, endangle, action=:none)\n\nMake a track/sector centered at 0/0.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.pie",
+    "page": "Luxor",
+    "title": "Luxor.pie",
+    "category": "Function",
+    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nMake a pie shape centered at x/y. Angles start at the positive x-axis and are measured clockwise.\n\n\n\npie(centerpoint, radius, startangle, endangle, action=:none)\n\nMake a pie shape centered at centerpoint.\n\nAngles start at the positive x-axis and are measured clockwise.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Circles-1",
+    "page": "Luxor",
+    "title": "Circles",
+    "category": "section",
+    "text": "There are various ways to make circles and ellipses. A sector has an inner and outer radius, as well as start and end angles. A pie has start and end angles.circle\nellipse\nsector\npie"
 },
 
 {
@@ -257,11 +249,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Lines-and-arcs-1",
+    "location": "index.html#Luxor.arc",
     "page": "Luxor",
-    "title": "Lines and arcs",
+    "title": "Luxor.arc",
+    "category": "Function",
+    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.carc",
+    "page": "Luxor",
+    "title": "Luxor.carc",
+    "category": "Function",
+    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.curve",
+    "page": "Luxor",
+    "title": "Luxor.curve",
+    "category": "Function",
+    "text": "Create a cubic Bézier spline curve.\n\ncurve(x1, y1, x2, y2, x3, y3)\ncurve(p1, p2, p3)\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
+},
+
+{
+    "location": "index.html#Lines,-arcs,-and-curves-1",
+    "page": "Luxor",
+    "title": "Lines, arcs, and curves",
     "category": "section",
-    "text": "There is a 'current position' which you can set with move(), and can use implicitly in functions like line() and text().move\nrmove\nline\nrline"
+    "text": "There is a 'current position' which you can set with move(), and can use implicitly in functions like line() and text().move\nrmove\nline\nrline\narc\ncarc\ncurve"
 },
 
 {
@@ -269,7 +285,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.arrow",
     "category": "Function",
-    "text": "Place a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's tip, and arrow head angle is the angle between the side of the tip and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\nIt doesn't need stroking/filling.\n\n\n\nPlace a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
+    "text": "Place a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's head, and arrow head angle is the angle between the side of the head and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\nIt doesn't need stroking/filling, the shaft is stroke()d and the head fill()ed. Quiet at the back of the class.\n\n\n\nPlace a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
 },
 
 {
@@ -305,11 +321,59 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Luxor.getpath",
+    "page": "Luxor",
+    "title": "Luxor.getpath",
+    "category": "Function",
+    "text": "Get the current path (thanks Andreas Lobinger!)\n\nReturns a CairoPath which is an array of .element_type and .points. With the results you could typically step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          stroke()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          stroke()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.getpathflat",
+    "page": "Luxor",
+    "title": "Luxor.getpathflat",
+    "category": "Function",
+    "text": "Get the current path, liek getpath() but flattened so that there are no Bezier curves.\n\nReturns a CairoPath which is an array of .element_type and .points.\n\n\n\n"
+},
+
+{
     "location": "index.html#Paths-1",
     "page": "Luxor",
     "title": "Paths",
     "category": "section",
-    "text": "A path is a group of points. A path can have subpaths (which can form holes).newpath\nnewsubpath\nclosepathThe getpath() function get the current Cairo path as an array of element types and points. getpathflat() gets the current path as an array of type/points with curves flattened to line segments."
+    "text": "A path is a group of points. A path can have subpaths (which can form holes).newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflatThe getpath() function gets the current Cairo path as an array of element types and points. getpathflat() gets the current path as an array of type/points with curves flattened to line segments."
+},
+
+{
+    "location": "index.html#Luxor.sethue",
+    "page": "Luxor",
+    "title": "Luxor.sethue",
+    "category": "Function",
+    "text": "Set the color. sethue() is like setcolor(), but (like Mathematica) we sometimes want to change the current 'color' without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\nsethue(\"black\")\nsethue(0.3,0.7,0.9)\n\n\n\nsethue(\"red\")\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nUse setcolor(r,g,b,a) to set transparent colors.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.setcolor",
+    "page": "Luxor",
+    "title": "Luxor.setcolor",
+    "category": "Function",
+    "text": "setcolor(col::String)\n\nSet the current color to a named color. This relies on Colors.jl to convert a string to RGBA eg setcolor(\"gold\") # or \"green\", \"darkturquoise\", \"lavender\" or what have you. The list is at Colors.color_names.\n\nsetcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nUse sethue() for changing colors without changing current opacity level.\n\n\n\nSet the current color.\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))\n   ...\nend\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.randomhue",
+    "page": "Luxor",
+    "title": "Luxor.randomhue",
+    "category": "Function",
+    "text": "Set a random hue.\n\nrandomhue()\n\nChoose a random color without changing the current alpha opacity.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Luxor.randomcolor",
+    "page": "Luxor",
+    "title": "Luxor.randomcolor",
+    "category": "Function",
+    "text": "Set a random color.\n\nrandomcolor()\n\nThis probably changes the current alpha opacity too.\n\n\n\n"
 },
 
 {
@@ -317,7 +381,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Color and opacity",
     "category": "section",
-    "text": "For color definitions and conversions, use Colors.jl. The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica)."
+    "text": "For color definitions and conversions, use Colors.jl. The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value (this is similar to Mathematica).sethue\nsetcolor\nrandomhue\nrandomcolor"
 },
 
 {
@@ -425,11 +489,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Shapes-1",
+    "page": "Luxor",
+    "title": "Shapes",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "index.html#Luxor.ngon",
     "page": "Luxor",
     "title": "Luxor.ngon",
     "category": "Function",
-    "text": "Find the vertices of a regular n-sided polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing, vertices=false; reversepath=false)\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=false, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=false) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nDraw a regular polygon centred at point p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)\n\n\n\n"
+    "text": "Find the vertices of a regular n-sided polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=false, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=false) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nDraw a regular polygon centred at point p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)\n\n\n\n"
 },
 
 {
@@ -725,7 +797,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.placeimage",
     "category": "Function",
-    "text": "Place a PNG image on the drawing.\n\nplaceimage(img, xpos, ypos)\n\nPlace an image previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\nplaceimage(img, xpos, ypos, a)\n\nPlace an image previously loaded using readpng().\n\n\n\n"
+    "text": "Place a PNG image on the drawing.\n\nplaceimage(img, xpos, ypos)\n\nThe image img has been previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\nplaceimage(img, xpos, ypos, a)\n\nThe image img has been previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing.\n\nplaceimage(img, pos, a)\n\nThe image img has been previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\n  placeimage(img, pos, a)\n\nThe image img has been previously loaded using readpng().\n\n\n\n"
 },
 
 {

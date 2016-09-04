@@ -1,5 +1,5 @@
 info("starting test axes-test" ); include("axes-test.jl")
-
+info("starting test circletests" ); include("circletests.jl")
 info("starting test clipping-test" ); include("clipping-test.jl")
 
 # this test fails when followed by other tests in the same session, but not on its own.
@@ -14,7 +14,7 @@ info("starting test julia_logo_draw" ); include("julia-logo-draw.jl")
 info("starting test luxor-test1") ; include("luxor-test1.jl")
 info("starting test matrix-tests" ); include("matrix-tests.jl")
 info("starting test palette_test" ); include("palette_test.jl")
-info("starting test pie_test" ); include("pie_test.jl")
+info("starting test pie-test" ); include("pie-test.jl")
 info("starting test point-inside-polygon" ); include("point-inside-polygon.jl")
 info("starting test point-intersection" ); include("point-intersection.jl")
 info("starting test polygon-centroid-sort-test" ); include("polygon-centroid-sort-test.jl")

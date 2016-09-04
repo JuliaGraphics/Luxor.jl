@@ -11,18 +11,18 @@ function test_ellipse(fname)
   setline(0.3)
 
   pagetiles = PageTiler(pagewidth, pageheight, 4, 5, margin=50)
-  for (xpos, ypos, n) in pagetiles
+  for (pos, n) in pagetiles
     randomhue()
-    ellipse(xpos, ypos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :strokepreserve)
+    ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :strokepreserve)
     clip()
     for i in 1:10
-      ellipse(Point(xpos, ypos), rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :fill)
+      ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :fill)
       randomhue()
-      ellipse(xpos, ypos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :stroke)
+      ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :stroke)
     end
     fill()
     sethue("black")
-    ellipse(xpos, ypos, 5, 5, :fill)
+    ellipse(pos, 5, 5, :fill)
     clipreset()
   end
 

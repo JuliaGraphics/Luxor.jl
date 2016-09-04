@@ -187,7 +187,7 @@ end
 """
 Find the vertices of a regular n-sided polygon centred at `x`, `y`:
 
-    ngon(x, y, radius, sides=5, orientation=0, action=:nothing, vertices=false; reversepath=false)
+    ngon(x, y, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
 
 `ngon()` draws the shapes: if you just want the raw points, use keyword argument `vertices=false`, which returns the array of points instead. Compare:
 

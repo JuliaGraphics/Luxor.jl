@@ -62,8 +62,8 @@ origin()
 background("ivory")
 
 pagetiles = PageTiler(width, height, 6, 5, margin=50)
-for (xpos, ypos, n) in pagetiles
-  testapoly(xpos, ypos)
+for (pos, n) in pagetiles
+  testapoly(pos.x, pos.y)
 end
 
 finish()

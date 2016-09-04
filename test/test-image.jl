@@ -19,11 +19,11 @@ h = image.height
 
 pagetiles = PageTiler(width, height, 7, 9)
 tw = pagetiles.tilewidth/2
-for (x, y, n) in pagetiles
-    circle(x, y, tw, :stroke)
-    circle(x, y, tw, :clip)
+for (pos, n) in pagetiles
+    circle(pos, tw, :stroke)
+    circle(pos, tw, :clip)
     gsave()
-    translate(x, y)
+    translate(pos)
     scale(.95, .95)
     rotate(rand(0.0:pi/8:2pi))
     placeimage(image, -w/2, -h/2)

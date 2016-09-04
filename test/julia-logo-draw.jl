@@ -57,10 +57,10 @@ function colorgrid()
     gsave()
 
     pagetiles = PageTiler(500, 400, 5, 5)
-    for (xpos, ypos, n) in pagetiles
+    for (pos, n) in pagetiles
       gsave()
       setcolor(color(cols[n]))
-      translate(xpos, ypos)
+      translate(pos)
       scale(0.3, 0.3)
       julialogo(false)
       grestore()

@@ -11,12 +11,12 @@ setline(0.4)
 
 # stars with star-shaped holes in
 pagetiles = PageTiler(width, height, 4, 5, margin=50)
-for (x, y, n) in pagetiles
+for (pos, n) in pagetiles
     randomhue()
     # outer path
     star(
-        x,                    # xcenter
-        y,                    # ycenter
+        pos.x,                    # xcenter
+        pos.y,                    # ycenter
         pagetiles.tilewidth/2,  # outer radius
         rand(4:8),            # number of points
         rand(),               # ratio of inner to outer
@@ -25,8 +25,8 @@ for (x, y, n) in pagetiles
     newsubpath()
     # inner path
     star(
-        x,                    # xcenter
-        y,                    # ycenter
+        pos.x,                    # xcenter
+        pos.y,                    # ycenter
         pagetiles.tilewidth/2,  # outer radius
         rand(3:5),            # number of points
         rand(),               # ratio of inner to outer

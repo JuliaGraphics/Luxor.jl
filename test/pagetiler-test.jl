@@ -15,15 +15,15 @@ pagetiles = PageTiler(pagewidth, pageheight, 8, 2, margin=20)
 
 setopacity(0.5)
 
-for (xpos, ypos, n) in pagetiles
+for (pos, n) in pagetiles
   randomhue()
-  ellipse(xpos, ypos, pagetiles.tilewidth, pagetiles.tileheight, :fill)
+  ellipse(pos, pagetiles.tilewidth, pagetiles.tileheight, :fill)
 end
 
 pagetiles = PageTiler(200, 300, 4, 5, margin=20)
-for (xpos, ypos, n) in pagetiles
+for (pos, n) in pagetiles
   randomhue()
-  ellipse(xpos, ypos, pagetiles.tilewidth, pagetiles.tileheight, :fill)
+  ellipse(pos, pagetiles.tilewidth, pagetiles.tileheight, :fill)
 end
 
 finish()
