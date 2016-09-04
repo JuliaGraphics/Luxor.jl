@@ -58,13 +58,13 @@ function test_arrows(fname)
   setline(2)
 
   pagetiles = PageTiler(pagewidth, pageheight, 4, 4, margin=50)
-  for (xpos, ypos, n) in pagetiles
+  for (pos, n) in pagetiles
     sethue("black")
     for a in 50:10:pagetiles.tilewidth/2
       randomhue()
       s = rand(0:pi/12:2pi)
       p = rand(0:pi/12:2pi)
-      arrow(Point(xpos, ypos), a, s, p)
+      arrow(pos, a, s, p)
     end
   end
 

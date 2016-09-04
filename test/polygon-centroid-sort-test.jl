@@ -45,13 +45,13 @@ end
 function polycentroidsort(width, height)
     pagetiles = PageTiler(width, height, 5, 5, margin=50)
     tilesize = pagetiles.tilewidth/2
-    for (xpos, ypos, n) in pagetiles
+    for (pos, n) in pagetiles
       if rand(Bool)
         p = randompointarray(rand(-tilesize:-tilesize), rand(-tilesize:-tilesize), rand(tilesize:tilesize), rand(tilesize:tilesize), rand(5:12))
       else
         p = ngon(0, 0, tilesize, rand(3:12), vertices=true)
       end
-      drawpoly(p, xpos, ypos, n)
+      drawpoly(p, pos.x, pos.y, n)
     end
 end
 

@@ -12,19 +12,19 @@ function test_pie(fname)
 
   pagetiles = PageTiler(pagewidth, pageheight, 4, 5, margin=50)
   rad = 60
-  for (xpos, ypos, n) in pagetiles
+  for (pos, n) in pagetiles
     randomhue()
     fromA, toA = rand() * 2pi, rand() * 2pi
     fromA_str, toA_str = string(convert(Int, round(rad2deg(fromA), 0))),
                          string(convert(Int, round(rad2deg(toA), 0)))
-    pie(xpos, ypos, rad, fromA, toA, :fill)
+    pie(pos, rad, fromA, toA, :fill)
 
     #label
 
-    text(fromA_str, xpos + 1.1rad  * cos(fromA), ypos + 1.1rad  * sin(fromA))
-    text(toA_str, xpos + 1.1rad  * cos(toA), ypos + 1.1rad  * sin(toA))
+    text(fromA_str, pos.x + 1.1rad  * cos(fromA), pos.y + 1.1rad  * sin(fromA))
+    text(toA_str, pos.x + 1.1rad  * cos(toA), pos.y + 1.1rad  * sin(toA))
     sethue("black")
-    text(string(fromA_str, "°/", toA_str, "°"), xpos, ypos)
+    text(string(fromA_str, "°/", toA_str, "°"), pos.x, pos.y)
   end
   finish()
   println("pie-test saved in $(fname)")

@@ -18,8 +18,8 @@ Drawing(width, height, fname)
 origin()
 background("ivory")
 pagetiles = PageTiler(width, height, 5, 5, margin=50)
-for (xpos, ypos, n) in pagetiles
-  test_axes(xpos, ypos, rand() * 2pi, pagetiles.tilewidth)
+for (pos, n) in pagetiles
+  test_axes(pos.x, pos.y, rand() * 2pi, pagetiles.tilewidth)
 end
 
 finish()

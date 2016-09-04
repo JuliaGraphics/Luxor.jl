@@ -20,15 +20,16 @@ export Drawing, currentdrawing,
     finish, preview,
     origin, axes, background,
     newpath, closepath, newsubpath,
-    circle, ellipse, rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
+    circle, ellipse, center3pts,
+    rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc, carc, ngon, ngonv, sector, pie,
+    line, rline, curve, arc, carc, ngon, sector, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
     prettypoly,
 
-    star, starv,
+    star,
 
     intersection, polysplit,
 
@@ -406,7 +407,7 @@ Reset the clipping region to the current drawing's extent.
 clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
 """
-Draw a circle of radius `r` centred at `x`/`y`.
+Make a circle of radius `r` centred at `x`/`y`.
 
     circle(x, y, r, action=:nothing)
 
@@ -423,7 +424,7 @@ function circle(x, y, r, action=:nothing)
 end
 
 """
-Draw a circle centred at `pt`.
+Make a circle centred at `pt`.
 
     circle(pt, r, action)
 
@@ -432,7 +433,57 @@ circle(centerpoint::Point, r, action=:nothing) =
   circle(centerpoint.x, centerpoint.y, r, action)
 
 """
-Draw an ellipse, centered at `xc/yc`, with width `w`, and height `h`.
+Make a circle that passes through two points that define the diameter.
+"""
+function circle(pt1::Point, pt2::Point, action=:nothing)
+  center = midpoint(pt1, pt2)
+  radius = norm(pt1, pt2)/2
+  circle(center, radius, action)
+end
+
+"""
+Find the radius and center point for three points lying on a circle.
+
+    center3pts(a::Point, b::Point, c::Point)
+
+returns (centerpoint, radius) of a circle. Then you can use `circle()` or `arc()`.
+
+"""
+function center3pts(a::Point, b::Point, c::Point)
+# Find perpendicular bisectors of the segments connecting the first two and last two
+# points. If they bisectors intersect, that's the center of the circle. If they don't,
+# the points are colinear so they do not define a circle.
+
+  # Get the perpendicular bisector of (x1, y1) and (x2, y2).
+  x1 = (b.x + a.x) / 2
+  y1 = (b.y + a.y) / 2
+  dy1 = b.x - a.x
+  dx1 = -(b.y - a.y)
+
+  # Get the perpendicular bisector of (x2, y2) and (x3, y3).
+  x2 = (c.x + b.x) / 2
+  y2 = (c.y + b.y) / 2
+  dy2 = c.x - b.x
+  dx2 = -(c.y - b.y)
+
+  # See where the lines intersect.
+
+  dxy = (dx1 * dy2 - dy1 * dx2)
+  if isapprox(dxy, 0)
+    info("no circle passes through all three points")
+    return Point(0,0), 0
+  end
+
+  ox = (y1 * dx1 * dx2 + x2 * dx1 * dy2 - x1 * dy1 * dx2 - y2 * dx1 * dx2) / dxy
+  oy = (ox - x1) * dy1 / dx1 + y1
+  dx = ox - a.x
+  dy = oy - a.y
+  radius = sqrt(dx * dx + dy * dy)
+  return Point(ox, oy), radius
+end
+
+"""
+Make an ellipse, centered at `xc/yc`, with width `w`, and height `h`.
 
     ellipse(xc, yc, w, h, action=:none)
 """
@@ -455,7 +506,7 @@ function ellipse(xc, yc, w, h, action=:none)
 end
 
 """
-Draw an ellipse, centered at point `c`, with width `w`, and height `h`.
+Make an ellipse, centered at point `c`, with width `w`, and height `h`.
 
     ellipse(c, w, h, action=:none)
 """
@@ -554,7 +605,7 @@ end
 """
     sector(innerradius, outerradius, startangle, endangle, action=:none)
 
-Draw a track/sector centered at `0/0`.
+Make a track/sector centered at `0/0`.
 """
 function sector(innerradius, outerradius, startangle, endangle, action=:none)
     newpath()
@@ -570,9 +621,8 @@ end
 """
     pie(x, y, radius, startangle, endangle, action=:none)
 
-Draw a pie centered at `x`/`y`.
-
-Angles start at the positive x-axis and are measured clockwise.
+Make a pie shape centered at `x`/`y`. Angles start at the positive x-axis and are measured
+clockwise.
 """
 
 function pie(x, y, radius, startangle, endangle, action=:none)
@@ -590,13 +640,13 @@ end
 """
     pie(centerpoint, radius, startangle, endangle, action=:none)
 
-Draw a pie centered at `centerpoint`.
+Make a pie shape centered at `centerpoint`.
 
 Angles start at the positive x-axis and are measured clockwise.
 """
 
 pie(centerpoint::Point, radius, startangle, endangle, action) =
- pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action=action)
+ pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
 
 """
 Set the line width.
@@ -930,7 +980,7 @@ end
 textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
 
 """
-I spelt textcentred wrongly...
+Do I spell textcentred wrong...?
 """
 textcentered = textcentred
 
@@ -1000,7 +1050,8 @@ function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
   end
 end
 
-textcurve(the_text, start_angle, start_radius, centre::Point) = textcurve(the_text, start_angle, start_radius, centre.x, centre.y)
+textcurve(the_text, start_angle, start_radius, centre::Point) =
+  textcurve(the_text, start_angle, start_radius, centre.x, centre.y)
 
 """
     setcolor(col::String)
@@ -1057,7 +1108,6 @@ For example:
 
     @setcolor"red"
 """
-
 macro setcolor_str(ex)
     isa(ex, String) || error("colorant requires literal strings")
     col = parse(RGBA, ex)
@@ -1258,7 +1308,7 @@ Place a PNG image on the drawing.
 
     placeimage(img, xpos, ypos)
 
-Place an image previously loaded using `readpng()`.
+The image `img` has been previously loaded using `readpng()`.
 """
 function placeimage(img::Cairo.CairoSurface, xpos, ypos)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
@@ -1271,18 +1321,33 @@ Place a PNG image on the drawing using alpha transparency.
 
     placeimage(img, xpos, ypos, a)
 
-Place an image previously loaded using `readpng()`.
+The image `img` has been previously loaded using `readpng()`.
 """
 function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     paint_with_alpha(currentdrawing.cr, alpha)
 end
 
+"""
+Place a PNG image on the drawing.
+
+    placeimage(img, pos, a)
+
+The image `img` has been previously loaded using `readpng()`.
+"""
 placeimage(img::Cairo.CairoSurface, pt::Point) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
 
+"""
+  Place a PNG image on the drawing using alpha transparency.
+
+      placeimage(img, pos, a)
+
+The image `img` has been previously loaded using `readpng()`.
+"""
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
 end
+
 # module

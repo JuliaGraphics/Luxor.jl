@@ -66,17 +66,17 @@ end
 function draw_lots_of_polys(pagewidth, pageheight)
     setopacity(0.75)
     pagetiles = PageTiler(width, height, 9, 9, margin=20)
-    for (x, y, n) in pagetiles
+    for (pos, n) in pagetiles
         if rand(Bool)
             p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))
         else
             p = ngon(0, 0, rand(50:100), rand(3:12), vertices=true)
         end
         gsave()
-        translate(x, y)
+        translate(pos)
         setline(1)
         randomhue()
-        @eval [test1($p, $x, $y), test2($p), test3($p)][rand(1:end)] # choose a test at random
+        @eval [test1($p, $pos.x, $pos.y), test2($p), test3($p)][rand(1:end)] # choose a test at random
         drawbbox(p)
         grestore()
     end
