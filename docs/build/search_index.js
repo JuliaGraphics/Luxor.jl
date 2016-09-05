@@ -477,7 +477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Styles",
     "category": "section",
-    "text": "The set- functions control the width, end shapes, join behavior and dash pattern:using Luxor, Colors # hide\nDrawing(400, 250, \"../examples/line-ends.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntranslate(-100, -100) # hide\nsethue(\"black\") # hide\nsetline(15) # hide\nfontsize(20) # hide\nfor l in 1:3\n  setlinecap([\"butt\", \"square\", \"round\"][l])\n  text([\"butt\", \"square\", \"round\"][l], 80, 60l)\n  setlinejoin([\"round\", \"miter\", \"bevel\"][l])\n  text([\"round\", \"miter\", \"bevel\"][l], 160, 60l)\n  poly(ngon(Point(0, 60l), 20, 3, 0, vertices=true), :stroke, close=false)\nend\nfinish() # hide(Image: )setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
+    "text": "The set- functions control the width, end shapes, join behavior and dash pattern:using Luxor, Colors # hide\nDrawing(400, 250, \"../examples/line-ends.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntranslate(-100, -150) # hide\nfontsize(18) # hide\nfor l in 1:3\n  sethue(\"black\")\n  setline(20)\n  setlinecap([\"butt\", \"square\", \"round\"][l])\n  text([\"butt\", \"square\", \"round\"][l], 80, 80l)\n  setlinejoin([\"round\", \"miter\", \"bevel\"][l])\n  text([\"round\", \"miter\", \"bevel\"][l], 160, 80l)\n  poly(ngon(Point(0, 80l), 20, 3, 0, vertices=true), :strokepreserve, close=false)\n  sethue(\"white\")\n  setline(1)\n  stroke()\nend\nfinish() # hide(Image: )setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
 },
 
 {
@@ -909,7 +909,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "More examples",
     "category": "section",
-    "text": "(Image: \"tiled images\")"
+    "text": "A good place to look for examples (sometimes not very exciting or well-written examples, I'll admit), is in the Luxor/test directory.(Image: \"tiled images\")"
 },
 
 {
@@ -925,7 +925,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor logo",
     "category": "section",
-    "text": "A simple of example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the clipreset()  function clears the clipping mask.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 300  # pts\nheight = 300 # pts\nDrawing(width, height, \"/tmp/luxor-logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in 0:pi/6:2pi\n    sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(60, 70), Point(80, -70), Point(120, 70))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\nspiral(colscheme)\nfinish()\npreview()"
+    "text": "A simple of example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the clipreset()  function clears the clipping mask.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 300  # pts\nheight = 300 # pts\nDrawing(width, height, \"/tmp/luxor-logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in 0:pi/6:2pi-pi/6\n    sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(60, 70), Point(80, -70), Point(120, 70))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\nspiral(colscheme)\nfinish()\npreview()"
 },
 
 {
