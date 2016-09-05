@@ -605,7 +605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Stars",
     "category": "section",
-    "text": "Use star() to make a star.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/stars.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 6, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)\nend\nfinish() # hide(Image: stars)star"
+    "text": "Use star() to make a star.using Luxor, Colors # hide\nDrawing(500, 300, \"../examples/stars.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 6, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)\nend\nfinish() # hide(Image: stars)star"
 },
 
 {

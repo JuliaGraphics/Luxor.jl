@@ -547,7 +547,7 @@ Use `star()` to make a star.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 300, "../examples/stars.png") # hide
+Drawing(500, 300, "../examples/stars.png") # hide
 background("white") # hide
 origin() # hide
 tiles = Tiler(400, 300, 4, 6, margin=5)
