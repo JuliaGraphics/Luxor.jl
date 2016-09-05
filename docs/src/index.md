@@ -1,14 +1,8 @@
 # Luxor
 
-Luxor provides basic vector drawing functions and utilities for working with shapes,
-polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar
-on Julia's Cairo graphics package (which should also be installed).
+Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).
 
-The idea of Luxor is that it's easier to use than
-[Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores,
-default contexts, utilities, and simplified functions. It's for when you just want to draw
-something without too much ceremony. If you've ever hacked on a PostScript file, you should
-feel right at home (only without the reverse Polish notation, obviously).
+The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
 For a more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions.
 
@@ -384,6 +378,25 @@ finish() # hide
 
 ![](examples/line-ends.png)
 
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../examples/dashes.png") # hide
+background("white") # hide
+origin() # hide
+fontsize(14) # hide
+sethue("black") # hide
+setline(15)
+patterns = "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
+tiles =  Tiler(400, 250, 10, 1, margin=10)
+for (pos, n) in tiles
+  setdash(patterns[n])
+  textright(patterns[n], pos.x - 20, pos.y + 4) # hide looks too high otherwise
+  line(pos, Point(pos.x + 100, pos.y), :stroke)
+end
+finish() # hide
+```
+![](examples/line-ends.png)
+
 ```@docs
 setline
 setlinecap
@@ -461,7 +474,7 @@ finish() # hide
 ```
 ![](examples/holes.png)
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor, Colors
@@ -555,11 +568,12 @@ star
 
 ### Placing text
 
-Use `text()` and `textcentred()` to place text. `textpath()` converts the text into  a graphic path suitable for further manipulations.
+Use `text()`, `textcentred()`, and `textright()` to place text. `textpath()` converts the text into  a graphic path suitable for further manipulations.
 
 ```@docs
 text
 textcentred
+textright
 textpath
 ```
 
@@ -567,7 +581,7 @@ textpath
 
 Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set font size in points.
 
-The `textextents(str)` function gets array of dimensions of the string `str`, given current font.
+The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
 ```@example
 using Luxor, Colors # hide
@@ -590,7 +604,7 @@ textextents
 
 ### Text on a curve
 
-Use `textcurve(str)` to draw a string `str` on a circular arc.
+Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
 ![text on a curve or spiral](examples/text-spiral.png)
 
@@ -622,7 +636,7 @@ textcurve
 
 ### Text clipping
 
-You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions.
+You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions:
 
 ![text clipping](examples/text-path-clipping.png)
 
@@ -681,7 +695,7 @@ rotate
 translate
 ```
 
-The current matrix is a six number array, perhaps like this:
+The current matrix is a six element array, perhaps like this:
 
 ```
 [1, 0, 0, 1, 0, 0]
@@ -697,7 +711,7 @@ transform
 
 # Clipping
 
-Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keep the current path, but also use it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing functions like `circle()`.
+Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keeps the current path, but also uses it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing functions like `circle()`.
 
 ```@docs
 clip
@@ -705,7 +719,7 @@ clippreserve
 clipreset
 ```
 
-This example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action them; they can therefore be used as a mask for clipping subsequent graphics:
+This example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are mainly randomly-colored circles:
 
 ![julia logo mask](examples/julia-logo-mask.png)
 
@@ -766,7 +780,7 @@ h = img.height
 placeimage(img, -w/2, -h/2) # centered at point
 ```
 
-You can clip images. The following script repeatedly places an image after first using a circle to define a clipping path:
+You can clip images. The following script repeatedly places an image using a circle to define a clipping path:
 
 !["Images"](examples/test-image.png)
 
