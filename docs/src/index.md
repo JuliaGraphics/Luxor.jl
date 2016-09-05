@@ -333,16 +333,16 @@ using Luxor, Colors # hide
 Drawing(400, 250, "../examples/line-ends.png") # hide
 background("white") # hide
 origin() # hide
-translate(-100, -150) # hide
+translate(-100, -60) # hide
 fontsize(18) # hide
 for l in 1:3
   sethue("black")
   setline(20)
   setlinecap(["butt", "square", "round"][l])
-  text(["butt", "square", "round"][l], 80, 80l)
+  textcentred(["butt", "square", "round"][l], 80l, 80)
   setlinejoin(["round", "miter", "bevel"][l])
-  text(["round", "miter", "bevel"][l], 160, 80l)
-  poly(ngon(Point(0, 80l), 20, 3, 0, vertices=true), :strokepreserve, close=false)
+  textcentred(["round", "miter", "bevel"][l], 80l, 120)
+  poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)
   sethue("white")
   setline(1)
   stroke()
