@@ -20,7 +20,7 @@ export Drawing, currentdrawing,
     finish, preview,
     origin, axes, background,
     newpath, closepath, newsubpath,
-    circle, ellipse, center3pts,
+    circle, ellipse, squircle, center3pts,
     rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
     line, rline, curve, arc, carc, ngon, sector, pie,
@@ -512,6 +512,31 @@ Make an ellipse, centered at point `c`, with width `w`, and height `h`.
     ellipse(cpt, w, h, action=:none)
 """
 ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
+
+"""
+Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,
+
+    squircle(center::Point, width, height; rt = 0.5, vertices=false)
+
+The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.
+"""
+
+function squircle(center::Point, width, height, action=:none; rt = 0.5, vertices=false, reversepath=false)
+  gsave()
+  translate(center)
+  points = []
+  for theta in 0:pi/40:2pi
+      xpos = ^(abs(cos(theta)), rt) * width * sign(cos(theta))
+      ypos = ^(abs(sin(theta)), rt) * height * sign(sin(theta))
+      push!(points, Point(xpos, ypos))
+  end
+  if vertices
+    return points
+  else
+    poly(points, action, close=true, reversepath=reversepath)
+  end
+  grestore()
+end
 
 """
 Add an arc to the current path from `angle1` to `angle2` going clockwise.

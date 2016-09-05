@@ -197,7 +197,7 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ## Simple shapes
 
-Functions for making shapes include `circle()`, `ellipse()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`.
+Functions for making shapes include `circle()`, `ellipse()`, `squircle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`.
 
 ## Rectangles and boxes
 
@@ -206,7 +206,7 @@ rect
 box
 ```
 
-## Circles
+## Circles, ellipses, and the like
 
 There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.
 
@@ -228,6 +228,11 @@ finish() # hide
 
 ![](examples/center3.png)
 
+```@docs
+circle
+ellipse
+```
+
 A sector has an inner and outer radius, as well as start and end angles.
 
 ```@example
@@ -238,6 +243,9 @@ origin() # hide
 sethue("cyan") # hide
 sector(50, 90, pi/2, 0, :fill)
 finish() # hide
+```
+```@docs
+sector
 ```
 
 ![](examples/sector.png)
@@ -257,10 +265,34 @@ finish() # hide
 ![](examples/pie.png)
 
 ```@docs
-circle
-ellipse
-sector
 pie
+```
+
+A squircle is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:
+
+```@example
+using Luxor, Colors # hide
+Drawing(600, 400, "../examples/squircle.png") # hide
+background("white") # hide
+origin() # hide
+fontsize(20) # hide
+setline(2)
+tiles = Tiler(600, 400, 1, 3)
+for (pos, n) in tiles
+    sethue("lavender")
+    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)
+    sethue("grey20")
+    stroke()
+    textcentered("rt = $([0.3, 0.5, 0.7][n])", pos)
+end
+
+finish() # hide
+```
+
+![](examples/squircle.png)
+
+```@docs
+squircle
 ```
 
 ## Lines, arcs, and curves
