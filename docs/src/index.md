@@ -289,8 +289,8 @@ origin() # hide
 sethue("steelblue4") # hide
 setline(2)
 arrow(Point(0, 0), Point(0, -65))
-arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/8)
-arrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=20,   arrowheadangle=pi/8)
+arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
+arrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
 finish() # hide
 ```
 ![](examples/arrow.png)
@@ -344,6 +344,7 @@ for l in 1:3
   text(["round", "miter", "bevel"][l], 160, 60l)
   poly(ngon(Point(0, 60l), 20, 3, 0, vertices=true), :stroke, close=false)
 end
+finish() # hide
 ```
 
 ![](examples/line-ends.png)
