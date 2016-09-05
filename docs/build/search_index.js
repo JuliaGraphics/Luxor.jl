@@ -149,7 +149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Simple shapes",
     "category": "section",
-    "text": "Functions for making shapes include circle(), ellipse(), arc(), carc(), curve(), sector(), rect(), pie(), and box()."
+    "text": "Functions for making shapes include circle(), ellipse(), squircle(), arc(), carc(), curve(), sector(), rect(), pie(), and box()."
 },
 
 {
@@ -209,11 +209,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Circles-1",
+    "location": "index.html#Luxor.squircle",
     "page": "Luxor",
-    "title": "Circles",
+    "title": "Luxor.squircle",
+    "category": "Function",
+    "text": "Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,\n\nsquircle(center::Point, width, height; rt = 0.5, vertices=false)\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
+},
+
+{
+    "location": "index.html#Circles,-ellipses,-and-the-like-1",
+    "page": "Luxor",
+    "title": "Circles, ellipses, and the like",
     "category": "section",
-    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.using Luxor, Colors # hide\nDrawing(400, 200, \"../examples/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: )A sector has an inner and outer radius, as well as start and end angles.using Luxor, Colors # hide\nDrawing(400, 200, \"../examples/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hide(Image: )A pie has start and end angles.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, 0, :fill)\nfinish() # hide(Image: )circle\nellipse\nsector\npie"
+    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.using Luxor, Colors # hide\nDrawing(400, 200, \"../examples/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: )circle\nellipseA sector has an inner and outer radius, as well as start and end angles.using Luxor, Colors # hide\nDrawing(400, 200, \"../examples/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hidesector(Image: )A pie has start and end angles.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, 0, :fill)\nfinish() # hide(Image: )pieA squircle is a cross between a square and a circle.using Luxor, Colors # hide\nDrawing(600, 400, \"../examples/squircle.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(20) # hide\nsetline(2)\ntiles = Tiler(600, 400, 1, 3)\nfor (pos, n) in tiles\n    sethue(\"lavender\")\n    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)\n    sethue(\"grey20\")\n    textcentered(\"rt = $([0.3, 0.5, 0.7][n])\", pos)\n    stroke()\nend\n\nfinish() # hide(Image: )squircle"
 },
 
 {
@@ -517,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.prettypoly",
     "category": "Function",
-    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);                           circle(0, 0, 10, :fill)                          ),              close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
+    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array,\n  action = :nothing,\n  vertex_action::Expr = :(circle(0, 0, 1, :fill));\n  close=false,\n  reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);                           circle(0, 0, 10, :fill)                          ),              close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
 },
 
 {

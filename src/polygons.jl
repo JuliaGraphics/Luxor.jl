@@ -180,7 +180,7 @@ Simplify a polygon:
 `detail` is probably the smallest permitted distance between two points in pixels.
 """
 
-function simplify(pointlist::Array{Luxor.Point,1}, detail=0.1)
+function simplify(pointlist, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
 
@@ -361,7 +361,11 @@ Draw the polygon defined by points in `pl`, possibly closing and reversing it, u
 and then evaluate (using `eval`, *shudder*) the expression at every vertex of the polygon. For example, you can mark each
 vertex of a polygon with a circle scaled to 0.1.
 
-    prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
+    prettypoly(pointlist::Array,
+      action = :nothing,
+      vertex_action::Expr = :(circle(0, 0, 1, :fill));
+      close=false,
+      reversepath=false)
 
 Example:
 
@@ -373,7 +377,7 @@ Example:
 The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
 function and expect this function to know about it. Yes, not tidy...
 """
-function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)
+function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(circle(0, 0, 1, :fill)); close=false, reversepath=false)
     # by default doesn't close or fill, to allow for clipping etc
     if action != :path
         newpath()
