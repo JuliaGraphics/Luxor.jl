@@ -333,16 +333,19 @@ using Luxor, Colors # hide
 Drawing(400, 250, "../examples/line-ends.png") # hide
 background("white") # hide
 origin() # hide
-translate(-100, -100) # hide
-sethue("black") # hide
-setline(15) # hide
-fontsize(20) # hide
+translate(-100, -150) # hide
+fontsize(18) # hide
 for l in 1:3
+  sethue("black")
+  setline(20)
   setlinecap(["butt", "square", "round"][l])
-  text(["butt", "square", "round"][l], 80, 60l)
+  text(["butt", "square", "round"][l], 80, 80l)
   setlinejoin(["round", "miter", "bevel"][l])
-  text(["round", "miter", "bevel"][l], 160, 60l)
-  poly(ngon(Point(0, 60l), 20, 3, 0, vertices=true), :stroke, close=false)
+  text(["round", "miter", "bevel"][l], 160, 80l)
+  poly(ngon(Point(0, 80l), 20, 3, 0, vertices=true), :strokepreserve, close=false)
+  sethue("white")
+  setline(1)
+  stroke()
 end
 finish() # hide
 ```
@@ -834,6 +837,8 @@ Reposition
 
 # More examples
 
+A good place to look for examples (sometimes not very exciting or well-written examples, I'll admit), is in the `Luxor/test` directory.
+
 !["tiled images"](examples/tiled-images.png)
 
 ## Sierpinski triangle
@@ -901,7 +906,7 @@ Drawing(width, height, "/tmp/luxor-logo.png")
 
 function spiral(colscheme)
   circle(0, 0, 90, :clip)
-  for theta in 0:pi/6:2pi
+  for theta in 0:pi/6:2pi-pi/6
     sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))
     gsave()
     rotate(theta)
