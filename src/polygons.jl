@@ -175,12 +175,12 @@ end
 """
 Simplify a polygon:
 
-    simplify(pointlist::Array, detail)
+    simplify(pointlist::Array, detail=0.1)
 
-`detail` is probably the smallest permitted distance between two points.
+`detail` is probably the smallest permitted distance between two points in pixels.
 """
 
-function simplify(pointlist::Array, detail)
+function simplify(pointlist::Array{Luxor.Point,1}, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
 
@@ -223,7 +223,7 @@ Draw a regular polygon centred at point `p`:
 
 """
 
-ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation; kwargs...)
+ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation, action; kwargs...)
 
 """
 Make a star:

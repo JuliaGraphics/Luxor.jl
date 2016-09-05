@@ -10,7 +10,7 @@ setopacity(0.85)
 setline(0.4)
 
 # stars with star-shaped holes in
-pagetiles = PageTiler(width, height, 4, 5, margin=50)
+pagetiles = Tiler(width, height, 4, 5, margin=50)
 for (pos, n) in pagetiles
     randomhue()
     # outer path

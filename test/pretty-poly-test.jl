@@ -65,7 +65,7 @@ end
 
 function draw_lots_of_polys(pagewidth, pageheight)
     setopacity(0.75)
-    pagetiles = PageTiler(width, height, 9, 9, margin=20)
+    pagetiles = Tiler(width, height, 9, 9, margin=20)
     for (pos, n) in pagetiles
         if rand(Bool)
             p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))

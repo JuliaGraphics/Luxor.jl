@@ -12,7 +12,7 @@ function test_circles(fname)
 
   gsave()
   translate(0, -pageheight/2)
-  pagetiles = PageTiler(pagewidth, pageheight, 20, 20, margin=50)
+  pagetiles = Tiler(pagewidth, pageheight, 20, 20, margin=50)
   rad = 40
   for (pos, n) in pagetiles
     diameter = rand(10:50)
@@ -27,7 +27,7 @@ function test_circles(fname)
 
   gsave()
   translate(0, pageheight/2)
-  pagetiles = PageTiler(pagewidth, pageheight, 20, 20, margin=50)
+  pagetiles = Tiler(pagewidth, pageheight, 20, 20, margin=50)
   rad = 40
   for (p1, n) in pagetiles
     p2, p3 = Point(p1.x + rand(-15:15), p1.y + rand(-15:15)), Point(p1.x + rand(-15:15), p1.y + rand(-15:15))

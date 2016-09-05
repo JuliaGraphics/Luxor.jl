@@ -8,7 +8,7 @@ Drawing(1200, 1200, fname)
 origin()
 background("black")
 
-pagetiles = PageTiler(1200, 1200, 17, 19, margin=50)
+pagetiles = Tiler(1200, 1200, 17, 19, margin=50)
 for (pos, n) in pagetiles
   randomhue()
   rad = pagetiles.tilewidth

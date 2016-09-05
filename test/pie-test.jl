@@ -10,7 +10,7 @@ function test_pie(fname)
   setopacity(0.8)
   setline(0.4)
 
-  pagetiles = PageTiler(pagewidth, pageheight, 4, 5, margin=50)
+  pagetiles = Tiler(pagewidth, pageheight, 4, 5, margin=50)
   rad = 60
   for (pos, n) in pagetiles
     randomhue()

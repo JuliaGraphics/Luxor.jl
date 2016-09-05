@@ -43,7 +43,7 @@ function drawpoly(p, x, y, counter)
 end
 
 function polycentroidsort(width, height)
-    pagetiles = PageTiler(width, height, 5, 5, margin=50)
+    pagetiles = Tiler(width, height, 5, 5, margin=50)
     tilesize = pagetiles.tilewidth/2
     for (pos, n) in pagetiles
       if rand(Bool)
