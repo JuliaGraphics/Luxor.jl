@@ -47,7 +47,7 @@ export Drawing, currentdrawing,
     pattern_set_filter, pattern_set_extend,
 
     fontface, fontsize, text, textpath,
-    textextents, textcurve, textcentred, textcentered,
+    textextents, textcurve, textcentred, textcentered, textright,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
@@ -1014,6 +1014,24 @@ textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
 Do I spell textcentred wrong...?
 """
 textcentered = textcentred
+
+"""
+    textright(str)
+    textright(str, x, y)
+    textright(str, pt)
+
+Draw text in the string `str` right-aligned at `x`/`y` or `pt`.
+If you omit the point, it's placed at 0/0.
+
+Text doesn't affect the current point!
+"""
+
+function textright(t, x=0, y=0)
+    textwidth = textextents(t)[5]
+    text(t, x - textwidth, y)
+end
+
+textright(t, pt::Point) = textright(t, pt.x, pt.y)
 
 """
     textpath(t)
