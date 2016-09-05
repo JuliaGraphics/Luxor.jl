@@ -583,19 +583,6 @@ Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set font size in
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
-```@example
-using Luxor, Colors # hide
-Drawing(400, 300, "../examples/stars.png") # hide
-background("white") # hide
-origin() # hide
-tiles = Tiler(400, 300, 4, 4, margin=5)
-for (pos, n) in tiles
-  randomhue()
-  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
-end
-finish() # hide
-```
-
 ```@docs
 fontface
 fontsize
