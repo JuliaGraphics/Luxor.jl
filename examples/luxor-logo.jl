@@ -8,7 +8,7 @@ Drawing(width, height, "/tmp/luxor-logo.png")
 
 function spiral(colscheme)
   circle(0, 0, 90, :clip)
-  for theta in 0:pi/6:2pi
+  for theta in 0:pi/6:2pi-pi/6
     sethue(colorscheme(colscheme, rescale(theta, 0, 2pi, 0, 1)))
     gsave()
     rotate(theta)

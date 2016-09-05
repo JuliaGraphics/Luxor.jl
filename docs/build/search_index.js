@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).(Image: \"tiled images\")The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions."
+    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions."
 },
 
 {
@@ -89,11 +89,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Luxor.PageTiler",
+    "location": "index.html#Luxor.Tiler",
     "page": "Luxor",
-    "title": "Luxor.PageTiler",
+    "title": "Luxor.Tiler",
     "category": "Type",
-    "text": "A PageTiler is an iterator that returns the x/y point of the center of each tile in a set of tiles that divide up a rectangular space into rows and columns.\n\npagetiles = PageTiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\npagetiles = PageTiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in pagetiles\n# the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\npagetiles = PageTiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in pagetiles\n  ellipse(pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, :fill)\nend\n\n\n\n"
+    "text": "A Tiler is an iterator that returns the x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns.\n\ntiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n# the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n  ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\n\n\n"
 },
 
 {
@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the PageTiler iterator.PageTiler"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the Tiler iterator.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)\nend\nfinish() # hide(Image: )Tiler"
 },
 
 {
@@ -133,7 +133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Axes and backgrounds",
     "category": "section",
-    "text": "The origin (0/0) is at the top left, x axis runs left to right, y axis runs top to bottom.The origin() function moves the 0/0 point. The axes() function draws a couple of lines to indicate the current axes. background() fills the entire image with a color.background\naxes\norigin"
+    "text": "The origin (0/0) is at the top left, x axis runs left to right, y axis runs top to bottom.The origin() function moves the 0/0 point to the center of the drawing.The axes() function draws a couple of lines and text labels in light gray to indicate the current axes.background() fills the entire image with a color.using Luxor, Colors # hide\nDrawing(400, 400, \"../examples/axes.png\") # hide\nbackground(\"gray20\")\norigin()\naxes()\nfinish() # hide(Image: )background\naxes\norigin"
 },
 
 {
@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.circle",
     "category": "Function",
-    "text": "Make a circle of radius r centred at x/y.\n\ncircle(x, y, r, action=:nothing)\n\naction is one of the actions applied by do_action.\n\nYou can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\nMake a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\nMake a circle that passes through two points that define the diameter.\n\n\n\n"
+    "text": "Make a circle of radius r centred at x/y.\n\ncircle(x, y, r, action=:nothing)\n\naction is one of the actions applied by do_action, defaulting to :nothing. You can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\nMake a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\nMake a circle that passes through two points that define the diameter:\n\ncircle(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.ellipse",
     "category": "Function",
-    "text": "Make an ellipse, centered at xc/yc, with width w, and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nMake an ellipse, centered at point c, with width w, and height h.\n\nellipse(c, w, h, action=:none)\n\n\n\n"
+    "text": "Make an ellipse, centered at xc/yc, fitting in a box of width w and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nMake an ellipse, centered at point c, with width w, and height h.\n\nellipse(cpt, w, h, action=:none)\n\n\n\n"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Circles",
     "category": "section",
-    "text": "There are various ways to make circles and ellipses. A sector has an inner and outer radius, as well as start and end angles. A pie has start and end angles.circle\nellipse\nsector\npie"
+    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.using Luxor, Colors # hide\nDrawing(400, 200, \"../examples/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: )A sector has an inner and outer radius, as well as start and end angles.using Luxor, Colors # hide\nDrawing(400, 200, \"../examples/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hide(Image: )A pie has start and end angles.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, 0, :fill)\nfinish() # hide(Image: )circle\nellipse\nsector\npie"
 },
 
 {
@@ -253,7 +253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.arc",
     "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
+    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\nTODO: Point versions\n\n\n\n"
 },
 
 {
@@ -261,7 +261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.carc",
     "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
+    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\nTODO: Point versions\n\n\n\n"
 },
 
 {
@@ -293,7 +293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Arrows",
     "category": "section",
-    "text": "You can draw lines or arcs with arrows at the end with arrow().arrow"
+    "text": "You can draw lines or arcs with arrows at the end with arrow(). For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow.using Luxor, Colors # hide\nDrawing(400, 250, \"../examples/arrow.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(2)\narrow(Point(0, 0), Point(0, -65))\narrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/8)\narrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=20,   arrowheadangle=pi/8)\nfinish() # hide(Image: )arrow"
 },
 
 {
@@ -341,7 +341,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Paths",
     "category": "section",
-    "text": "A path is a group of points. A path can have subpaths (which can form holes).newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflatThe getpath() function gets the current Cairo path as an array of element types and points. getpathflat() gets the current path as an array of type/points with curves flattened to line segments."
+    "text": "A path is a group of points. A path can have subpaths (which can form holes).The getpath() function gets the current Cairo path as an array of element types and points. getpathflat() gets the current path as an array of type/points with curves flattened to line segments.newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflat"
 },
 
 {
@@ -477,7 +477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Styles",
     "category": "section",
-    "text": "The set- functions control the width, end shapes, join behavior and dash pattern:setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
+    "text": "The set- functions control the width, end shapes, join behavior and dash pattern:using Luxor, Colors # hide\nDrawing(400, 250, \"../examples/line-ends.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntranslate(-100, -100) # hide\nsethue(\"black\") # hide\nsetline(15) # hide\nfontsize(20) # hide\nfor l in 1:3\n  setlinecap([\"butt\", \"square\", \"round\"][l])\n  text([\"butt\", \"square\", \"round\"][l], 80, 60l)\n  setlinejoin([\"round\", \"miter\", \"bevel\"][l])\n  text([\"round\", \"miter\", \"bevel\"][l], 160, 60l)\n  poly(ngon(Point(0, 60l), 20, 3, 0, vertices=true), :stroke, close=false)\nend(Image: )setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreservegsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
 },
 
 {
@@ -513,11 +513,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "index.html#Luxor.prettypoly",
+    "page": "Luxor",
+    "title": "Luxor.prettypoly",
+    "category": "Function",
+    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);                           circle(0, 0, 10, :fill)                          ),              close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
+},
+
+{
     "location": "index.html#Luxor.simplify",
     "page": "Luxor",
     "title": "Luxor.simplify",
     "category": "Function",
-    "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail)\n\ndetail is probably the smallest permitted distance between two points.\n\n\n\n"
+    "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail=0.1)\n\ndetail is probably the smallest permitted distance between two points in pixels.\n\n\n\n"
 },
 
 {
@@ -561,14 +569,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Luxor.prettypoly",
-    "page": "Luxor",
-    "title": "Luxor.prettypoly",
-    "category": "Function",
-    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(); close=false, reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);                           circle(0, 0, 10, :fill)                          ),              close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
-},
-
-{
     "location": "index.html#Luxor.isinside",
     "page": "Luxor",
     "title": "Luxor.isinside",
@@ -581,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Polygons",
     "category": "section",
-    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:ngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().simplifyThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybboxThe prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:prettypoly(pl, :fill, :(\n                        scale(0.1, 0.1);\n                        circle(0, 0, 10, :fill)\n                       ),\n           close=false)prettypolyThe isinside() returns true if a point is inside a polygon.isinside"
+    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor, Colors # hide\nDrawing(400, 250, \"../examples/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"orchid4\") # hide\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide(Image: )The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:using Luxor, Colors\nDrawing(400, 250, \"../examples/prettypoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(4)\npoly1 = ngon(0, 0, 100, 6, 0, vertices=true)\nprettypoly(poly1, :stroke, :(\n  randomhue();\n  scale(0.5, 0.5);\n  circle(0, 0, 15, :stroke)\n  ),\nclose=true)\nfinish() # hide(Image: )prettypolyPolygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor, Colors # hide\nDrawing(600, 500, \"../examples/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)\nprettypoly(collect(sincurve), :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide(Image: )simplifyThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybboxThe isinside() returns true if a point is inside a polygon.isinside"
 },
 
 {
@@ -597,7 +597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Stars",
     "category": "section",
-    "text": "Use star() to make a star.(Image: stars)using Luxor, Colors\nw, h = 600, 600\nDrawing(w, h, \"/tmp/stars.png\")\norigin()\ncols = [RGB(rand(3)...) for i in 1:50]\nbackground(\"grey20\")\nx = -w/2\nfor y in 100 * randn(h, 1)\n    setcolor(cols[rand(1:end)])\n    star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)\n    x += 2\nend\nfinish()\npreview()star"
+    "text": "Use star() to make a star.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/stars.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 4, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)\nend\nfinish() # hide(Image: stars)star"
 },
 
 {
@@ -669,7 +669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Fonts",
     "category": "section",
-    "text": "Use fontface(fontname) to choose a font, and fontsize(n) to set font size in points.The textextents(str) function gets array of dimensions of the string str, given current font.fontface\nfontsize\ntextextents"
+    "text": "Use fontface(fontname) to choose a font, and fontsize(n) to set font size in points.The textextents(str) function gets array of dimensions of the string str, given current font.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/stars.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 4, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)\nend\nfinish() # hidefontface\nfontsize\ntextextents"
 },
 
 {
@@ -909,7 +909,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "More examples",
     "category": "section",
-    "text": ""
+    "text": "(Image: \"tiled images\")"
 },
 
 {

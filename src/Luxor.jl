@@ -11,7 +11,7 @@ using Colors, Cairo, Compat
 include("point.jl")
 include("Turtle.jl")
 include("polygons.jl")
-include("PageTiler.jl")
+include("Tiler.jl")
 include("arrows.jl")
 
 export Drawing, currentdrawing,
@@ -52,7 +52,7 @@ export Drawing, currentdrawing,
     getmatrix, setmatrix, transform,
 
     readpng, placeimage,
-    PageTiler,
+    Tiler,
     arrow
 
 # as of version 0.4, we still share fill() and scale() with Base.
@@ -411,9 +411,8 @@ Make a circle of radius `r` centred at `x`/`y`.
 
     circle(x, y, r, action=:nothing)
 
-`action` is one of the actions applied by `do_action`.
-
-You can also use `ellipse()` to draw circles and place them by their centerpoint.
+`action` is one of the actions applied by `do_action`, defaulting to `:nothing`. You can
+also use `ellipse()` to draw circles and place them by their centerpoint.
 """
 function circle(x, y, r, action=:nothing)
     if action != :path
@@ -433,7 +432,9 @@ circle(centerpoint::Point, r, action=:nothing) =
   circle(centerpoint.x, centerpoint.y, r, action)
 
 """
-Make a circle that passes through two points that define the diameter.
+Make a circle that passes through two points that define the diameter:
+
+    circle(pt1::Point, pt2::Point, action=:nothing)
 """
 function circle(pt1::Point, pt2::Point, action=:nothing)
   center = midpoint(pt1, pt2)
@@ -446,8 +447,8 @@ Find the radius and center point for three points lying on a circle.
 
     center3pts(a::Point, b::Point, c::Point)
 
-returns (centerpoint, radius) of a circle. Then you can use `circle()` or `arc()`.
-
+returns (centerpoint, radius) of a circle. Then you can use `circle()` to place a
+circle, or `arc()` to draw an arc passing through those points.
 """
 function center3pts(a::Point, b::Point, c::Point)
 # Find perpendicular bisectors of the segments connecting the first two and last two
@@ -483,7 +484,7 @@ function center3pts(a::Point, b::Point, c::Point)
 end
 
 """
-Make an ellipse, centered at `xc/yc`, with width `w`, and height `h`.
+Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `h`.
 
     ellipse(xc, yc, w, h, action=:none)
 """
@@ -508,7 +509,7 @@ end
 """
 Make an ellipse, centered at point `c`, with width `w`, and height `h`.
 
-    ellipse(c, w, h, action=:none)
+    ellipse(cpt, w, h, action=:none)
 """
 ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
 
@@ -518,6 +519,8 @@ Add an arc to the current path from `angle1` to `angle2` going clockwise.
     arc(xc, yc, radius, angle1, angle2, action=:nothing)
 
 Angles are defined relative to the x-axis, positive clockwise.
+
+TODO: Point versions
 """
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
@@ -530,6 +533,9 @@ Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
     carc(xc, yc, radius, angle1, angle2, action=:nothing)
 
 Angles are defined relative to the x-axis, positive clockwise.
+
+TODO: Point versions
+
 """
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)

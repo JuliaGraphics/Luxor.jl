@@ -61,7 +61,7 @@ Drawing(width, height, fname)
 origin()
 background("ivory")
 
-pagetiles = PageTiler(width, height, 6, 5, margin=50)
+pagetiles = Tiler(width, height, 6, 5, margin=50)
 for (pos, n) in pagetiles
   testapoly(pos.x, pos.y)
 end

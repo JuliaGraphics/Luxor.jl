@@ -46,7 +46,7 @@ Drawing(width, height, fname)
 origin()
 background("grey50")
 setopacity(0.5)
-pagetiles = PageTiler(width, height, 4, 5, margin=50)
+pagetiles = Tiler(width, height, 4, 5, margin=50)
 for (pos, n) in pagetiles
   addimagetile(imagelist[n], pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, cropping=true)
   if n > length(imagelist) # run out of images

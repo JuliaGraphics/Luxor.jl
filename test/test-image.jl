@@ -17,7 +17,7 @@ image = readpng("../examples/julia-logo-mask.png")
 w = image.width
 h = image.height
 
-pagetiles = PageTiler(width, height, 7, 9)
+pagetiles = Tiler(width, height, 7, 9)
 tw = pagetiles.tilewidth/2
 for (pos, n) in pagetiles
     circle(pos, tw, :stroke)

@@ -4,8 +4,6 @@ Luxor provides basic vector drawing functions and utilities for working with sha
 polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar
 on Julia's Cairo graphics package (which should also be installed).
 
-!["tiled images"](examples/tiled-images.png)
-
 The idea of Luxor is that it's easier to use than
 [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores,
 default contexts, utilities, and simplified functions. It's for when you just want to draw
@@ -141,17 +139,47 @@ julia> fieldnames(currentdrawing)
 :alpha
 ```
 
-The drawing area (or any other area) can be divided into tiles (rows and columns) using the `PageTiler` iterator.
+The drawing area (or any other area) can be divided into tiles (rows and columns) using the `Tiler` iterator.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 300, "../examples/tiler.png") # hide
+background("white") # hide
+origin() # hide
+tiles = Tiler(400, 300, 4, 5, margin=5)
+for (pos, n) in tiles
+  randomhue()
+  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+end
+finish() # hide
+```
+
+![](examples/tiler.png)
 
 ```@docs
-PageTiler
+Tiler
 ```
 
 ## Axes and backgrounds
 
 The origin (0/0) is at the top left, x axis runs left to right, y axis runs top to bottom.
 
-The `origin()` function moves the 0/0 point. The `axes()` function draws a couple of lines to indicate the current axes. `background()` fills the entire image with a color.
+The `origin()` function moves the 0/0 point to the center of the drawing.
+
+The `axes()` function draws a couple of lines and text labels in light gray to indicate the current axes.
+
+`background()` fills the entire image with a color.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 400, "../examples/axes.png") # hide
+background("gray20")
+origin()
+axes()
+finish() # hide
+```
+
+![](examples/axes.png)
 
 ```@docs
 background
@@ -180,7 +208,53 @@ box
 
 ## Circles
 
-There are various ways to make circles and ellipses. A sector has an inner and outer radius, as well as start and end angles. A pie has start and end angles.
+There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 200, "../examples/center3.png") # hide
+background("white") # hide
+origin() # hide
+setline(3) # hide
+sethue("black")
+p1 = Point(0, -50)
+p2 = Point(100, 0)
+p3 = Point(0, 65)
+map(p -> circle(p, 4, :fill), [p1, p2, p3])
+sethue("orange") # hide
+circle(center3pts(p1, p2, p3)..., :stroke)
+finish() # hide
+```
+
+![](examples/center3.png)
+
+A sector has an inner and outer radius, as well as start and end angles.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 200, "../examples/sector.png") # hide
+background("white") # hide
+origin() # hide
+sethue("cyan") # hide
+sector(50, 90, pi/2, 0, :fill)
+finish() # hide
+```
+
+![](examples/sector.png)
+
+A pie has start and end angles.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 300, "../examples/pie.png") # hide
+background("white") # hide
+origin() # hide
+sethue("magenta") # hide
+pie(0, 0, 100, pi/2, 0, :fill)
+finish() # hide
+```
+
+![](examples/pie.png)
 
 ```@docs
 circle
@@ -205,7 +279,21 @@ curve
 
 ### Arrows
 
-You can draw lines or arcs with arrows at the end with `arrow()`.
+You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../examples/arrow.png") # hide
+background("white") # hide
+origin() # hide
+sethue("steelblue4") # hide
+setline(2)
+arrow(Point(0, 0), Point(0, -65))
+arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/8)
+arrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=20,   arrowheadangle=pi/8)
+finish() # hide
+```
+![](examples/arrow.png)
 
 ```@docs
 arrow
@@ -215,6 +303,8 @@ arrow
 
 A path is a group of points. A path can have subpaths (which can form holes).
 
+The `getpath()` function gets the current Cairo path as an array of element types and points. `getpathflat()` gets the current path as an array of type/points with curves flattened to line segments.
+
 ```@docs
 newpath
 newsubpath
@@ -222,8 +312,6 @@ closepath
 getpath
 getpathflat
 ```
-
-The `getpath()` function gets the current Cairo path as an array of element types and points. `getpathflat()` gets the current path as an array of type/points with curves flattened to line segments.
 
 ## Color and opacity
 
@@ -239,6 +327,26 @@ randomcolor
 ## Styles
 
 The `set-` functions control the width, end shapes, join behavior and dash pattern:
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../examples/line-ends.png") # hide
+background("white") # hide
+origin() # hide
+translate(-100, -100) # hide
+sethue("black") # hide
+setline(15) # hide
+fontsize(20) # hide
+for l in 1:3
+  setlinecap(["butt", "square", "round"][l])
+  text(["butt", "square", "round"][l], 80, 60l)
+  setlinejoin(["round", "miter", "bevel"][l])
+  text(["round", "miter", "bevel"][l], 160, 60l)
+  poly(ngon(Point(0, 60l), 20, 3, 0, vertices=true), :stroke, close=false)
+end
+```
+
+![](examples/line-ends.png)
 
 ```@docs
 setline
@@ -262,7 +370,6 @@ grestore
 ## Polygons and shapes
 
 ### Shapes
-
 
 ### Regular polygons ("ngons")
 
@@ -300,18 +407,70 @@ ngon
 ```
 ### Polygons
 
-A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.
+A polygon is an array of Points. Use `poly()` to add them, or `randompointarray()` to create a random list of Points.
 
 Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:
 
-```
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../examples/holes.png") # hide
+background("white") # hide
+origin() # hide
+sethue("orchid4") # hide
 ngon(0, 0, 60, 6, 0, :path)
 newsubpath()
 ngon(0, 0, 40, 6, 0, :path, reversepath=true)
 fillstroke()
+finish() # hide
+```
+![](examples/holes.png)
+
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:
+
+```@example
+using Luxor, Colors
+Drawing(400, 250, "../examples/prettypoly.png") # hide
+background("white") # hide
+origin() # hide
+sethue("steelblue4") # hide
+setline(4)
+poly1 = ngon(0, 0, 100, 6, 0, vertices=true)
+prettypoly(poly1, :stroke, :(
+  randomhue();
+  scale(0.5, 0.5);
+  circle(0, 0, 15, :stroke)
+  ),
+close=true)
+finish() # hide
+```
+
+![](examples/prettypoly.png)
+
+```@docs
+prettypoly
 ```
 
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
+
+```@example
+using Luxor, Colors # hide
+Drawing(600, 500, "../examples/simplify.png") # hide
+background("white") # hide
+origin() # hide
+sethue("black") # hide
+setline(1) # hide
+fontsize(20) # hide
+translate(0, -120) # hide
+sincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)
+prettypoly(collect(sincurve), :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
+text(string("number of points: ", length(collect(sincurve))), 0, 100)
+translate(0, 200)
+simplercurve = simplify(collect(sincurve), 0.5)
+prettypoly(simplercurve, :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
+text(string("number of points: ", length(simplercurve)), 0, 100)
+finish() # hide
+```
+![](examples/simplify.png)
 
 ```@docs
 simplify
@@ -327,20 +486,6 @@ polycentroid
 polybbox
 ```
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a circle scaled to 0.1:
-
-```
-prettypoly(pl, :fill, :(
-                        scale(0.1, 0.1);
-                        circle(0, 0, 10, :fill)
-                       ),
-           close=false)
-```
-
-```@docs
-prettypoly
-```
-
 The `isinside()` returns true if a point is inside a polygon.
 
 ```@docs
@@ -351,24 +496,20 @@ isinside
 
 Use `star()` to make a star.
 
-![stars](examples/stars.png)
-
-```julia
-using Luxor, Colors
-w, h = 600, 600
-Drawing(w, h, "/tmp/stars.png")
-origin()
-cols = [RGB(rand(3)...) for i in 1:50]
-background("grey20")
-x = -w/2
-for y in 100 * randn(h, 1)
-    setcolor(cols[rand(1:end)])
-    star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)
-    x += 2
+```@example
+using Luxor, Colors # hide
+Drawing(400, 300, "../examples/stars.png") # hide
+background("white") # hide
+origin() # hide
+tiles = Tiler(400, 300, 4, 4, margin=5)
+for (pos, n) in tiles
+  randomhue()
+  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
 end
-finish()
-preview()
+finish() # hide
 ```
+
+![stars](examples/stars.png)
 
 ```@docs
 star
@@ -391,6 +532,19 @@ textpath
 Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set font size in points.
 
 The `textextents(str)` function gets array of dimensions of the string `str`, given current font.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 300, "../examples/stars.png") # hide
+background("white") # hide
+origin() # hide
+tiles = Tiler(400, 300, 4, 4, margin=5)
+for (pos, n) in tiles
+  randomhue()
+  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
+end
+finish() # hide
+```
 
 ```@docs
 fontface
@@ -678,6 +832,8 @@ Reposition
 ```
 
 # More examples
+
+!["tiled images"](examples/tiled-images.png)
 
 ## Sierpinski triangle
 

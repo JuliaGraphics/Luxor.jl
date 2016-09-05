@@ -56,7 +56,7 @@ function colorgrid()
     cols = distinguishable_colors(25)
     gsave()
 
-    pagetiles = PageTiler(500, 400, 5, 5)
+    pagetiles = Tiler(500, 400, 5, 5)
     for (pos, n) in pagetiles
       gsave()
       setcolor(color(cols[n]))
