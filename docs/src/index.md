@@ -385,17 +385,17 @@ background("white") # hide
 origin() # hide
 fontsize(14) # hide
 sethue("black") # hide
-setline(15)
+setline(12)
 patterns = "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
 tiles =  Tiler(400, 250, 10, 1, margin=10)
 for (pos, n) in tiles
   setdash(patterns[n])
-  textright(patterns[n], pos.x - 20, pos.y + 4) # hide looks too high otherwise
-  line(pos, Point(pos.x + 100, pos.y), :stroke)
+  textright(patterns[n], pos.x - 20, pos.y + 4)
+  line(pos, Point(pos.x + 250, pos.y), :stroke)
 end
 finish() # hide
 ```
-![](examples/line-ends.png)
+![](examples/dashes.png)
 
 ```@docs
 setline
@@ -550,7 +550,7 @@ using Luxor, Colors # hide
 Drawing(400, 300, "../examples/stars.png") # hide
 background("white") # hide
 origin() # hide
-tiles = Tiler(400, 300, 4, 4, margin=5)
+tiles = Tiler(400, 300, 4, 6, margin=5)
 for (pos, n) in tiles
   randomhue()
   star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
