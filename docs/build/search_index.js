@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor",
     "category": "section",
-    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).For a more powerful (but less easy to use) graphics environment, try Compose.jl. Colors.jl provides excellent color definitions."
+    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's a dusting of syntactic sugar on Julia's Cairo graphics package (which should also be installed).The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).Colors.jl provides excellent color definitions."
 },
 
 {
@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the Tiler iterator.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)\nend\nfinish() # hide(Image: )Tiler"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the Tiler iterator.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)\n  text(string(n), pos)\nend\nfinish() # hide(Image: )Tiler"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.squircle",
     "category": "Function",
-    "text": "Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,\n\nsquircle(center::Point, width, height; rt = 0.5, vertices=false)\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
+    "text": "Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,\n\nsquircle(center::Point, width, height, action=:none; rt = 0.5, vertices=false)\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
 },
 
 {
@@ -341,7 +341,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.getpathflat",
     "category": "Function",
-    "text": "Get the current path, liek getpath() but flattened so that there are no Bezier curves.\n\nReturns a CairoPath which is an array of .element_type and .points.\n\n\n\n"
+    "text": "Get the current path, like getpath() but flattened so that there are no Bezier curves.\n\nReturns a CairoPath which is an array of .element_type and .points.\n\n\n\n"
 },
 
 {
@@ -693,7 +693,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.textcurve",
     "category": "Function",
-    "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text,\n          start_angle,\n          start_radius,\n          x_pos,\n          y_pos;\n          # optional keyword arguments:\n          spiral_ring_step = 0,   # step out or in by this amount\n          letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centred on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
+    "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text,\n          start_angle,\n          start_radius,\n          x_pos = 0,\n          y_pos = 0;\n          # optional keyword arguments:\n          spiral_ring_step = 0,   # step out or in by this amount\n          letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centred on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
 },
 
 {
@@ -741,7 +741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by\nscale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by\nrotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians\nx-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A\ny-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A\nflip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\nWHen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
+    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturn current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by\nscale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by\nrotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians\nx-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A\ny-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A\nflip HV          =    transform([fx, 0, 0, fy, cx(1-fx), cy (fy-1)])  flip\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
 },
 
 {
@@ -941,7 +941,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor logo",
     "category": "section",
-    "text": "A simple of example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the clipreset()  function clears the clipping mask. The color scheme is mirrored so that the lighter colors are at the top of the circle.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 225  # pts\nheight = 225 # pts\nDrawing(width, height, \"/tmp/logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8\n    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(40, 40), Point(50, -40), Point(80, 30))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\ncolschememirror = vcat(colscheme, reverse(colscheme))\nspiral(colschememirror)\nfinish()\npreview()"
+    "text": "This is a simple example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the clipreset()  function clears the clipping mask. The color scheme is mirrored so that the lighter colors are at the top of the circle.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 225  # pts\nheight = 225 # pts\nDrawing(width, height, \"/tmp/logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom\n    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(40, 40), Point(50, -40), Point(80, 30))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\ncolschememirror = vcat(colscheme, reverse(colscheme))\nspiral(colschememirror)\nfinish()\npreview()"
 },
 
 {

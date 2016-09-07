@@ -516,7 +516,7 @@ ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
 """
 Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,
 
-    squircle(center::Point, width, height; rt = 0.5, vertices=false)
+    squircle(center::Point, width, height, action=:none; rt = 0.5, vertices=false)
 
 The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.
 """
@@ -902,7 +902,7 @@ for e in o
 getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(currentdrawing.cr))
 
 """
-Get the current path, liek `getpath()` but flattened so that there are no Bezier curves.
+Get the current path, like `getpath()` but flattened so that there are no Bezier curves.
 
 Returns a CairoPath which is an array of .element_type and .points.
 """
@@ -1049,8 +1049,8 @@ Place a string of text on a curve. It can spiral in or out.
 textcurve(the_text,
           start_angle,
           start_radius,
-          x_pos,
-          y_pos;
+          x_pos = 0,
+          y_pos = 0;
           # optional keyword arguments:
           spiral_ring_step = 0,   # step out or in by this amount
           letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)
@@ -1062,13 +1062,13 @@ textcurve(the_text,
 radius `start_radius`.
 """
 
-function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
+function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
   # keyword optional arguments
   spiral_ring_step = 0,
   letter_spacing = 0, # tracking/space between chars, tighter is (-), looser is (+)
   spiral_in_out_shift = 0 # makes spiral outwards (+) or inwards (-)
   )
-  angle = start_angle
+  refangle = start_angle
   current_radius = start_radius
   spiral_space_step = 0
   xx = 0
@@ -1085,13 +1085,13 @@ function textcurve(the_text, start_angle, start_radius, x_pos, y_pos;
     radius_step = (spiral_ring_step + spiral_in_out_shift) / cnter
     current_radius += radius_step
     angle_step += (glyph_x_advance / 2.) + letter_spacing/2.
-    angle += angle_step / current_radius
+    refangle += angle_step / current_radius
     angle_step = (glyph_x_advance / 2.) + letter_spacing/2.
-    xx = cos(angle) * current_radius + x_pos
-    yy = sin(angle) * current_radius + y_pos
+    xx = cos(refangle) * current_radius + x_pos
+    yy = sin(refangle) * current_radius + y_pos
     gsave()
     translate(xx, yy)
-    rotate(pi/2. + angle)
+    rotate(pi/2. + refangle)
     textcentred(glyph, 0., 0.)
     grestore()
     current_radius < 10. && break
@@ -1269,7 +1269,7 @@ Some basic matrix transforms:
 
 - flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)])  flip
 
-WHen a drawing is first created, the matrix looks like this:
+When a drawing is first created, the matrix looks like this:
 
     getmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
 
