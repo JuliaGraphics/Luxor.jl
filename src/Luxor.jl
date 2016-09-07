@@ -636,7 +636,7 @@ end
 """
     sector(innerradius, outerradius, startangle, endangle, action=:none)
 
-Make a track/sector centered at `0/0`.
+Make an annular sector centered at the current `0/0` point.
 """
 function sector(innerradius, outerradius, startangle, endangle, action=:none)
     newpath()

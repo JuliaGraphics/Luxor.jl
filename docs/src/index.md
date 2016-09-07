@@ -24,9 +24,9 @@ and to use:
 using Luxor
 ```
 
-## The basic "Hello World"
+## The obligatory "Hello World"
 
-Here's a simple "Hello world":
+Here's the "Hello world":
 
 !["Hello world"](examples/hello-world.png)
 
@@ -41,15 +41,33 @@ finish()
 preview()
 ```
 
-The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the image and the location of the finished image when it's saved.
+The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the image and the location of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name. `text()` places text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
-`origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name.
+## More examples
 
-`text()` places text. It's placed at the current 0/0 if you don't specify otherwise.
+### Sector chart
 
-`finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
+!["benchmark sector chart"](examples/sector-chart.png)
 
-## A slightly more interesting example
+Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and renders them literally as radiating sectors. The larger the sector, the slower the performance. It's therefore hard to see the Julia scores sometimes...
+
+[Link to PDF original](examples/sector-chart.pdf)
+
+### Star chart
+
+Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on [github](https://github.com/astronexus/HYG-Database) and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries.
+
+A small detail:
+
+!["benchmark sector chart"](examples/star-chart-detail.png)
+
+A more complete version:
+
+!["benchmark sector chart"](examples/star-chart.png)
+
+[Link to PDF original](examples/star-chart.pdf)
+
+### A slightly more interesting example
 
 ![Luxor test](examples/basic-test.png)
 
@@ -141,11 +159,13 @@ Drawing(400, 300, "../examples/tiler.png") # hide
 background("white") # hide
 origin() # hide
 srand(1) # hide
+fontsize(20)
 tiles = Tiler(400, 300, 4, 5, margin=5)
 for (pos, n) in tiles
   randomhue()
   box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
-  text(string(n), pos)
+  sethue("white")
+  textcentred(string(n), pos + Point(0, 5))
 end
 finish() # hide
 ```
@@ -926,7 +946,7 @@ preview()
 
 ## Luxor logo
 
-This is a simple example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the `clipreset()`  function clears the clipping mask. The color scheme is mirrored so that the lighter colors are at the top of the circle.
+In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.
 
 ![logo](examples/logo.png)
 
