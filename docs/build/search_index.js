@@ -33,11 +33,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#The-basic-\"Hello-World\"-1",
+    "location": "index.html#The-obligatory-\"Hello-World\"-1",
     "page": "Luxor",
-    "title": "The basic \"Hello World\"",
+    "title": "The obligatory \"Hello World\"",
     "category": "section",
-    "text": "Here's a simple \"Hello world\":(Image: \"Hello world\")using Luxor, Colors\nDrawing(1000, 1000, \"/tmp/hello-world.png\")\norigin()\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()The Drawing(1000, 1000, \"/tmp/hello-world.png\") line defines the size of the image and the location of the finished image when it's saved.origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using Colors.jl, we can specify colors by name.text() places text. It's placed at the current 0/0 if you don't specify otherwise.finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg on MacOS X, Preview)."
+    "text": "Here's the \"Hello world\":(Image: \"Hello world\")using Luxor, Colors\nDrawing(1000, 1000, \"/tmp/hello-world.png\")\norigin()\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()The Drawing(1000, 1000, \"/tmp/hello-world.png\") line defines the size of the image and the location of the finished image when it's saved. origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using Colors.jl, we can specify colors by name. text() places text. It's placed at the current 0/0 if you don't specify otherwise. finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg on MacOS X, Preview)."
+},
+
+{
+    "location": "index.html#More-examples-1",
+    "page": "Luxor",
+    "title": "More examples",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "index.html#Sector-chart-1",
+    "page": "Luxor",
+    "title": "Sector chart",
+    "category": "section",
+    "text": "(Image: \"benchmark sector chart\")Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the Julia website and renders them literally as radiating sectors. The larger the sector, the slower the performance. It's therefore hard to see the Julia scores sometimes...Link to PDF original"
+},
+
+{
+    "location": "index.html#Star-chart-1",
+    "page": "Luxor",
+    "title": "Star chart",
+    "category": "section",
+    "text": "Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on github and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries.A small detail:(Image: \"benchmark sector chart\")A more complete version:(Image: \"benchmark sector chart\")Link to PDF original"
 },
 
 {
@@ -101,7 +125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the Tiler iterator.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)\n  text(string(n), pos)\nend\nfinish() # hide(Image: )Tiler"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing of type Drawing holds a few parameters:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into tiles (rows and columns) using the Tiler iterator.using Luxor, Colors # hide\nDrawing(400, 300, \"../examples/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\nfontsize(20)\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)\n  sethue(\"white\")\n  textcentred(string(n), pos + Point(0, 5))\nend\nfinish() # hide(Image: )Tiler"
 },
 
 {
@@ -197,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor.sector",
     "category": "Function",
-    "text": "sector(innerradius, outerradius, startangle, endangle, action=:none)\n\nMake a track/sector centered at 0/0.\n\n\n\n"
+    "text": "sector(innerradius, outerradius, startangle, endangle, action=:none)\n\nMake an annular sector centered at the current 0/0 point.\n\n\n\n"
 },
 
 {
@@ -921,7 +945,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#More-examples-1",
+    "location": "index.html#More-examples-2",
     "page": "Luxor",
     "title": "More examples",
     "category": "section",
@@ -941,7 +965,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Luxor",
     "title": "Luxor logo",
     "category": "section",
-    "text": "This is a simple example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the clipreset()  function clears the clipping mask. The color scheme is mirrored so that the lighter colors are at the top of the circle.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 225  # pts\nheight = 225 # pts\nDrawing(width, height, \"/tmp/logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom\n    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(40, 40), Point(50, -40), Point(80, 30))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\ncolschememirror = vcat(colscheme, reverse(colscheme))\nspiral(colschememirror)\nfinish()\npreview()"
+    "text": "In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.(Image: logo)using Luxor, Colors, ColorSchemes\n\nwidth = 225  # pts\nheight = 225 # pts\nDrawing(width, height, \"/tmp/logo.png\")\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom\n    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(40, 40), Point(50, -40), Point(80, 30))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\ncolscheme = loadcolorscheme(\"solarcolors\")\ncolschememirror = vcat(colscheme, reverse(colscheme))\nspiral(colschememirror)\nfinish()\npreview()"
 },
 
 {

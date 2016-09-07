@@ -4,7 +4,7 @@ using Luxor, Colors
 
 """
 Work out how many rows and columns we need given the number of cells required.
-Favours squarer layouts.
+It favours squarer layouts.
 """
 function howmanyrowscolumns(n)
   numberofrows = convert(Int, floor(sqrt(n)))
@@ -13,7 +13,7 @@ function howmanyrowscolumns(n)
 end
 
 """
-Find area of annular sector.
+Find the area of an annular sector.
 """
 function areaofsector(innerradius, outerradius, startangle, endangle)
   theta = endangle - startangle
@@ -21,7 +21,7 @@ function areaofsector(innerradius, outerradius, startangle, endangle)
 end
 
 """
-find the outerradius of a sector if we already know what its area is
+Find the outerradius of a sector if we already know what its area and innerradius are.
 """
 
 function outerradiusgivenarea(area, innerradius, startangle, endangle)
@@ -39,7 +39,9 @@ The incoming values are rescaled to make nice pictures. But the original values 
         innerradius,
         tilewidth, tileheight,
         rawdatavalues, labels, colordict, title;
-        gap=deg2rad(2))
+        gap=deg2rad(1))
+
+The gap is applied to the left and right of the sector, to leave some white space.
 """
 
 function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalues, labels, coldict, title; gap=deg2rad(2))
@@ -67,7 +69,7 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
     gsave()
 
     # draw the labels for each sector
-    fontsize(4)
+    fontsize(6)
     sethue("black")
     textoffset = 5
     refpos = Point(
@@ -82,7 +84,8 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
 
     # show the original raw data value (not the rescaled value used for plotting)
     # refpos is for text placement
-    textoffset = 10
+    textoffset = 8
+    fontsize(10)
     refpos = Point(
         (outerradius + textoffset) * cos(startangle + (endangle - startangle)/2),
         (outerradius + textoffset) * sin(startangle + (endangle - startangle)/2))
@@ -97,10 +100,11 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
   fontsize(24)
   fontface("Impact")
   sethue("black")
-  textcentered(title, 0, min(tilewidth/2, tileheight/2) - 30)
+  textcentered(title, 0, min(tilewidth/2, tileheight/2) - 20)
   grestore()
   grestore()
 end
+
 
 function main()
   fname = "/tmp/sector-chart.pdf"
@@ -120,8 +124,8 @@ function main()
   benchmarknames = unique(d[:,2])
 
   # build a color dictionary for languages
-  # order: r, fortran, java, lua, javascript, mma, go, matlab, python, julia
-  cols   =  ["red3", "darkgreen", "blueviolet", "royalblue2", "orange3", "palegreen3", "cyan3", "rosybrown", "gray56", "chartreuse3", "burlywood3"]
+  #          "c",     "fortran",   "go",         "java",       "javascript", "julia",      "lua",   "mathematica",  "matlab",  "python",      "r"]
+  cols   =  ["gray20", "darkgreen", "blueviolet", "royalblue2",  "orange3",   "red",       "cyan3", "orangered3",   "gray56",  "chartreuse3", "aquamarine"]
   languagecolors = Dict(languages[i] => cols[i] for i in 1:length(languages))
 
   # how many charts are we plotting?
@@ -137,29 +141,27 @@ function main()
     benchmark = benchmarknames[counter]
     data = d[d[:, 2] .== benchmark, [3]]
     language = d[d[:, 2] .== benchmark, [1]]
-    length(data) < 2 && continue # don't bother with tests with only one value!
-    sectorchart(cpos, 50, pagetiles.tilewidth, pagetiles.tileheight, data, language, languagecolors, benchmark)
+    length(data) < 2 && continue # don't bother with tests that have only one value!
+    sectorchart(cpos, 60, pagetiles.tilewidth, pagetiles.tileheight, data, language, languagecolors, benchmark)
   end
 
-  # finally, decorate the chart
   # heading
   sethue("black")
   fontface("Impact")
   fontsize(40)
   gsave()
   translate(0, -height/2 + 100)
-  textcentred("Julia Benchmark Comparisons")
+  textcentred("Julia benchmarks")
   grestore()
 
   # footnotes
-
   gsave()
   fontface("Monaco")
-  fontsize(8)
+  fontsize(6)
   translate(0, height/2 - 50)
-  textcentred("$(Dates.format(now(), "e, dd u yyyy HH:MM")) Bigger sectors are slower. Humans are bad at comparing areas. Benchmarks are taken from the http://julialang.org web site.")
-  translate(0, 20)
-  textcentred("Terms and conditions apply. Objects appear smaller than they actually are. The value of investments may go up as well as down.")
+  textcentred("plotted $(Dates.format(now(), "e, dd u yyyy HH:MM")) Bigger areas mean slower. Humans are bad at comparing areas. Benchmarks are taken from the http://julialang.org web site.")
+  translate(0, 10)
+  textcentred("Terms and conditions apply. Objects may appear smaller than they actually are. The value of investments may go up as well as down.")
   grestore()
 
   # legend
@@ -168,9 +170,9 @@ function main()
   x, y = width/2-150, height/2 - 350
   for language in languages
     sethue("black")
-    textright(language, x - 55, y)
+    textright(language, x, y)
     sethue(languagecolors[language])
-    squircle(Point(x, y -5), 50, 10, :fill, rt = 0.3)
+    rect(Point(x+5, y), 40, -10, :fill)
     y += 25
   end
 
@@ -179,27 +181,4 @@ function main()
   preview()
 end
 
-function maintest()
-  fname = "/tmp/sector-test.pdf"
-  width, height = 1920, 1068
-  Drawing(width, height, fname)
-  origin()
-  background("ivory")
-  setline(1)
-  sectorchart(
-    Point(0, 0),
-    100,
-    600,
-    600,
-    [1, 2, 3, 4, 5, 6],
-    ["1", "2", "3", "4", "5", "6"],
-    Dict("1" => "red3", "2" => "darkgreen", "3" => "blueviolet", "4" => "mediumorchid1", "5" => "sienna1", "6" => "chartreuse3"),
-    "test")
-  finish()
-  println("finished test: output in $(fname)")
-  preview()
-end
-
 main()
-
-#maintest()
