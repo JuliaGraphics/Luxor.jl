@@ -4,7 +4,7 @@ Luxor provides basic vector drawing functions and utilities for working with sha
 
 The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony. If you've ever hacked on a PostScript file, you should feel right at home (only without the reverse Polish notation, obviously).
 
-For a more powerful (but less easy to use) graphics environment, try [Compose.jl](http://composejl.org). [Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions.
+[Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions.
 
 ## Current status
 
@@ -140,10 +140,12 @@ using Luxor, Colors # hide
 Drawing(400, 300, "../examples/tiler.png") # hide
 background("white") # hide
 origin() # hide
+srand(1) # hide
 tiles = Tiler(400, 300, 4, 5, margin=5)
 for (pos, n) in tiles
   randomhue()
   box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+  text(string(n), pos)
 end
 finish() # hide
 ```
@@ -924,9 +926,9 @@ preview()
 
 ## Luxor logo
 
-A simple of example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the `clipreset()`  function clears the clipping mask. The color scheme is mirrored so that the lighter colors are at the top of the circle.
+This is a simple example of clipping. The circle of radius 90 units sets a clipping mask or region, and subsequent curves are clipped by that circle, until the `clipreset()`  function clears the clipping mask. The color scheme is mirrored so that the lighter colors are at the top of the circle.
 
-![logo](examples/luxor-logo.png)
+![logo](examples/logo.png)
 
 ```
 using Luxor, Colors, ColorSchemes
@@ -937,7 +939,7 @@ Drawing(width, height, "/tmp/logo.png")
 
 function spiral(colscheme)
   circle(0, 0, 90, :clip)
-  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8
+  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
     sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
     gsave()
     rotate(theta)
