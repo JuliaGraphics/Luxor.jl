@@ -67,7 +67,7 @@ A more complete version:
 
 [Link to PDF original](examples/star-chart.pdf)
 
-### A slightly more interesting example
+### A slightly simpler example
 
 ![Luxor test](examples/basic-test.png)
 
