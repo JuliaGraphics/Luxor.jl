@@ -549,7 +549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.prettypoly",
     "category": "Function",
-    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array,\n  action = :nothing,\n  vertex_action::Expr = :(circle(0, 0, 1, :fill));\n  close=false,\n  reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);                           circle(0, 0, 10, :fill)                          ),              close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
+    "text": "Draw the polygon defined by points in pl, possibly closing and reversing it, using the current parameters, and then evaluate (using eval, shudder) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a circle scaled to 0.1.\n\nprettypoly(pointlist::Array,\n  action = :nothing,\n  vertex_action::Expr = :(circle(0, 0, 1, :fill));\n  close=false,\n  reversepath=false)\n\nExample:\n\nprettypoly(pl, :fill, :(scale(0.1, 0.1);\n                        circle(0, 0, 10, :fill)\n                       ),\n          close=false)\n\nThe expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling function and expect this function to know about it. Yes, not tidy...\n\n\n\n"
 },
 
 {
@@ -1017,8 +1017,16 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "moreexamples.html#Index-1",
-    "page": "More examples",
+    "location": "functionindex.html#",
+    "page": "Index",
+    "title": "Index",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "functionindex.html#Index-1",
+    "page": "Index",
     "title": "Index",
     "category": "section",
     "text": ""

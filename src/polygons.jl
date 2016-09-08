@@ -369,10 +369,10 @@ vertex of a polygon with a circle scaled to 0.1.
 
 Example:
 
-  prettypoly(pl, :fill, :(scale(0.1, 0.1);
-                          circle(0, 0, 10, :fill)
-                         ),
-             close=false)
+    prettypoly(pl, :fill, :(scale(0.1, 0.1);
+                            circle(0, 0, 10, :fill)
+                           ),
+              close=false)
 
 The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
 function and expect this function to know about it. Yes, not tidy...
