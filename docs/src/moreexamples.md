@@ -131,8 +131,3 @@ spiral(colschememirror)
 finish()
 preview()
 ```
-
-# Index
-
-```@index
-```

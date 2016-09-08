@@ -13,6 +13,7 @@ makedocs(
     "Images"                          => "images.md",
     "Turtle graphics"                 => "turtle.md",
     "More examples"                   => "moreexamples.md",
+    "Index"                           => "functionindex.md"  
     ]
   )
 
