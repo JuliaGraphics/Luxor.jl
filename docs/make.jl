@@ -39,7 +39,8 @@ info("moving files")
 #mv("build/assets/documenter.js", "assets/documenter.js", remove_destination=true)
 #mv("build/assets/search.js", "assets/search.js", remove_destination=true)
 #mv("build/assets/logo.png", "assets/logo.png", remove_destination=true)
-#mv("build/search_index.js", "search_index.js", remove_destination=true)
+
+mv("build/search_index.js", "search_index.js", remove_destination=true)
 
 for f in filter(f -> endswith(f, ".html"), readdir("build/"))
   info("moving $f")
