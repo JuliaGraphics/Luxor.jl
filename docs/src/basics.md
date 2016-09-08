@@ -14,6 +14,8 @@ The two main defined types are the `Point` and the `Drawing`. The Point type hol
 Point(12.0, 13.0)
 ```
 
+It's immutable, so you want to avoid trying to change the x or y coordinate directly.
+
 The other is `Drawing`, which is how you create new drawings.
 
 ## Drawings and files
@@ -440,7 +442,7 @@ simplify
 
 The `isinside()` returns true if a point is inside a polygon.
 
-```@docs
+```@example
 using Luxor, Colors # hide
 Drawing(400, 250, "../figures/isinside.png") # hide
 background("white") # hide

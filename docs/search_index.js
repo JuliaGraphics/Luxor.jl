@@ -2,15 +2,15 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "index.html#",
-    "page": "Introduction",
-    "title": "Introduction",
+    "page": "Introduction to Luxor",
+    "title": "Introduction to Luxor",
     "category": "page",
     "text": ""
 },
 
 {
     "location": "index.html#Luxor-1",
-    "page": "Introduction",
+    "page": "Introduction to Luxor",
     "title": "Luxor",
     "category": "section",
     "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony.Colors.jl provides excellent color definitions."
@@ -18,7 +18,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "index.html#Current-status-1",
-    "page": "Introduction",
+    "page": "Introduction to Luxor",
     "title": "Current status",
     "category": "section",
     "text": "Luxor currently runs on Julia version 0.5, using Cairo.jl and Colors.jl."
@@ -26,7 +26,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "index.html#Installation-and-basic-usage-1",
-    "page": "Introduction",
+    "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
     "category": "section",
     "text": "Since the package is currently unregistered, install it as follows:Pkg.clone(\"https://github.com/cormullion/Luxor.jl\")and to use it:using LuxorIn most of the examples in this documentation, it's assumed that you have added:using Luxor, Colorsbefore the graphics commands."
@@ -93,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Types",
     "category": "section",
-    "text": "The two main defined types are the Point and the Drawing. The Point type holds two coordinates, the x and y:Point(12.0, 13.0)The other is Drawing, which is how you create new drawings."
+    "text": "The two main defined types are the Point and the Drawing. The Point type holds two coordinates, the x and y:Point(12.0, 13.0)It's immutable, so you want to avoid trying to change the x or y coordinate directly.The other is Drawing, which is how you create new drawings."
 },
 
 {
