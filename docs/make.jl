@@ -5,7 +5,7 @@ makedocs(
   format = Documenter.Formats.HTML,
   sitename = "Luxor",
   pages    = Any[ # Compat: `Any` for 0.4 compat
-    "Introduction"                    => "index.md",
+    "Introduction to Luxor"           => "index.md",
     "A few examples"                  => "examples.md",
     "Basic graphics"                  => "basics.md",
     "Transforms and matrices"         => "transforms.md",

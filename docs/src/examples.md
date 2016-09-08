@@ -27,7 +27,7 @@ Here are a few more examples.
 
 Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and tries to render them literally as radiating sectors. The larger the sector, the slower the performance, so it's difficult to see the Julia scores sometimes...!
 
-[link to PDF original](figures/sector-chart.pdf) | [link to Julia source](examples/sector-chart.jl)
+[link to PDF original](figures/sector-chart.pdf) | [link to Julia source](../examples/sector-chart.jl)
 
 ### Star chart
 
@@ -41,4 +41,4 @@ A more complete version:
 
 !["benchmark sector chart"](figures/star-chart.png)
 
-[link to PDF original](figures/star-chart.pdf) | [link to Julia source](examples/star-chart.jl)
+[link to PDF original](figures/star-chart.pdf) | [link to Julia source](../examples/star-chart.jl)
