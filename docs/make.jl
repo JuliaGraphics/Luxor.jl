@@ -3,7 +3,17 @@ using Documenter, Luxor
 makedocs(
   modules = [Luxor],
   format = Documenter.Formats.HTML,
-  sitename = "Luxor"
+  sitename = "Luxor",
+  pages    = Any[ # Compat: `Any` for 0.4 compat
+    "Introduction"                    => "index.md",
+    "A few examples"                  => "examples.md",
+    "Basic graphics"                  => "basics.md",
+    "Transforms and matrices"         => "transforms.md",
+    "Clipping"                        => "clipping.md",
+    "Images"                          => "images.md",
+    "Turtle graphics"                 => "turtle.md",
+    "More examples"                   => "moreexamples.md",
+    ]
   )
 
 #=
@@ -30,5 +40,8 @@ info("moving files")
 #mv("build/assets/search.js", "assets/search.js", remove_destination=true)
 #mv("build/assets/logo.png", "assets/logo.png", remove_destination=true)
 #mv("build/search_index.js", "search_index.js", remove_destination=true)
-mv("build/index.html", "index.html", remove_destination=true)
-mv("build/search.html", "search.html", remove_destination=true)
+
+for f in filter(f -> endswith(f, ".html"), readdir("build/"))
+  info("moving $f")
+  mv(string("build/", f), f, remove_destination=true)
+end
