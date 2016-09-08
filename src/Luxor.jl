@@ -70,7 +70,7 @@ type Drawing
     greenvalue::Float64
     bluevalue::Float64
     alpha::Float64
-    function Drawing(w=800, h=800, f="/tmp/luxor-drawing.png") #TODO this is Unix only...
+    function Drawing(w=800, h=800, f="luxor-drawing.png")
         global currentdrawing
         (path, ext)         = splitext(f)
         if ext == ".pdf"
@@ -138,7 +138,7 @@ Create a new drawing, and optionally specify file type (PNG, PDF, SVG, etc) and 
 
     Drawing()
 
-creates a drawing, defaulting to PNG format, default filename "/tmp/luxor-drawing.png",
+creates a drawing, defaulting to PNG format, default filename "luxor-drawing.png",
 default size 800 pixels square.
 
 You can specify dimensions, and use the default target filename:
@@ -148,21 +148,21 @@ You can specify dimensions, and use the default target filename:
 creates a drawing 300 by 300 pixels, defaulting to PNG format, default filename
 "/tmp/luxor-drawing.png".
 
-    Drawing(300,300, "/tmp/my-drawing.pdf")
+    Drawing(300,300, "my-drawing.pdf")
 
-creates a PDF drawing in the file "/tmp/my-drawing.pdf", 300 by 300 pixels.
+creates a PDF drawing in the file "my-drawing.pdf", 300 by 300 pixels.
 
-    Drawing(800,800, "/tmp/my-drawing.svg")`
+    Drawing(800,800, "my-drawing.svg")`
 
-creates an SVG drawing in the file "/tmp/my-drawing.svg", 800 by 800 pixels.
+creates an SVG drawing in the file "my-drawing.svg", 800 by 800 pixels.
 
-    Drawing(800,800, "/tmp/my-drawing.eps")
+    Drawing(800,800, "my-drawing.eps")
 
-creates an EPS drawing in the file "/tmp/my-drawing.eps", 800 by 800 pixels.
+creates an EPS drawing in the file "my-drawing.eps", 800 by 800 pixels.
 
-    Drawing("A4", "/tmp/my-drawing.pdf")
+    Drawing("A4", "my-drawing.pdf")
 
-creates a drawing in ISO A4 size in the file "/tmp/my-drawing.pdf". Other sizes available
+creates a drawing in ISO A4 size in the file "my-drawing.pdf". Other sizes available
 are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A", "B", "C", "D", "E".
 Append "landscape" to get the landscape version.
 
@@ -173,7 +173,7 @@ Create the drawing A4 landscape size.
 Note that PDF files seem to default to a white background, but PNG defaults to black.
 Might be a bug here somewhere...
 """
-function Drawing(paper_size::String, f="/tmp/luxor-drawing.png")
+function Drawing(paper_size::String, f="luxor-drawing.png")
   if contains(paper_size, "landscape")
     psize = replace(paper_size, "landscape", "")
     h, w = paper_sizes[psize]
@@ -449,6 +449,9 @@ Find the radius and center point for three points lying on a circle.
 
 returns (centerpoint, radius) of a circle. Then you can use `circle()` to place a
 circle, or `arc()` to draw an arc passing through those points.
+
+If there's no such circle, then you'll see an error message in the console and the function
+returns `(Point(0,0), 0)`.
 """
 function center3pts(a::Point, b::Point, c::Point)
 # Find perpendicular bisectors of the segments connecting the first two and last two

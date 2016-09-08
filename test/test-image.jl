@@ -13,7 +13,7 @@ background("grey25")
 setline(5)
 sethue("green")
 
-image = readpng("../examples/julia-logo-mask.png")
+image = readpng("docs/figures/julia-logo-mask.png")
 w = image.width
 h = image.height
 

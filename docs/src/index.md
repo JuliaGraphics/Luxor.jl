@@ -28,11 +28,11 @@ using Luxor
 
 Here's the "Hello world":
 
-!["Hello world"](examples/hello-world.png)
+!["Hello world"](figures/hello-world.png)
 
 ```julia
 using Luxor, Colors
-Drawing(1000, 1000, "/tmp/hello-world.png")
+Drawing(1000, 1000, "hello-world.png")
 origin()
 sethue("red")
 fontsize(50)
@@ -41,73 +41,33 @@ finish()
 preview()
 ```
 
-The `Drawing(1000, 1000, "/tmp/hello-world.png")` line defines the size of the image and the location of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name. `text()` places text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
+The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the location of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name. `text()` places text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
 ## More examples
 
 ### Sector chart
 
-!["benchmark sector chart"](examples/sector-chart.png)
+!["benchmark sector chart"](figures/sector-chart.png)
 
 Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and renders them literally as radiating sectors. The larger the sector, the slower the performance. It's therefore hard to see the Julia scores sometimes...
 
-[Link to PDF original](examples/sector-chart.pdf)
+[Link to PDF original](figures/sector-chart.pdf) [link to Julia source](examples/sector-chart.jl)
 
 ### Star chart
 
-Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on [github](https://github.com/astronexus/HYG-Database) and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries.
+Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on [github](https://github.com/astronexus/HYG-Database) and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries. It takes about 4 seconds to load the data, and 7 seconds to draw it— about 120,000 stars.
 
 A small detail:
 
-!["benchmark sector chart"](examples/star-chart-detail.png)
+!["benchmark sector chart"](figures/star-chart-detail.png)
 
 A more complete version:
 
-!["benchmark sector chart"](examples/star-chart.png)
+!["benchmark sector chart"](figures/star-chart.png)
 
-[Link to PDF original](examples/star-chart.pdf)
+[Link to PDF original](figures/star-chart.pdf)
 
-### A slightly simpler example
 
-![Luxor test](examples/basic-test.png)
-
-```julia
-using Luxor, Colors
-Drawing(1200, 1400, "/tmp/basic-test.png") # or PDF/SVG filename for PDF or SVG
-
-origin()
-background("purple")
-
-setopacity(0.7)                      # opacity from 0 to 1
-sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
-setline(20)                          # line width
-
-rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
-randomhue()
-circle(0, 0, 460, :stroke)
-circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
-sethue("gold")
-setopacity(0.7)
-setline(10)
-for i in 0:pi/36:2pi - pi/36
-  move(0, 0)
-  line(cos(i) * 600, sin(i) * 600 )
-  stroke()
-end
-clipreset()                           # finish clipping/masking
-fontsize(60)
-setcolor("turquoise")
-fontface("Optima-ExtraBlack")
-textwidth = textextents("Luxor")[5]
-textcentred("Luxor", 0, currentdrawing.height/2 - 400)
-fontsize(18)
-fontface("Avenir-Black")
-
-# text on curve starting at angle 0 rads centered on origin with radius 550
-textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
-finish()
-preview() # on macOS, opens in Preview
-```
 
 # Overview
 
@@ -155,7 +115,7 @@ The drawing area (or any other area) can be divided into tiles (rows and columns
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 300, "../examples/tiler.png") # hide
+Drawing(400, 300, "../figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
 srand(1) # hide
@@ -170,7 +130,7 @@ end
 finish() # hide
 ```
 
-![](examples/tiler.png)
+![](figures/tiler.png)
 
 ```@docs
 Tiler
@@ -188,14 +148,14 @@ The `axes()` function draws a couple of lines and text labels in light gray to i
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 400, "../examples/axes.png") # hide
+Drawing(400, 400, "../figures/axes.png") # hide
 background("gray20")
 origin()
 axes()
 finish() # hide
 ```
 
-![](examples/axes.png)
+![](figures/axes.png)
 
 ```@docs
 background
@@ -228,7 +188,7 @@ There are various ways to make circles, including by center and radius, through 
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 200, "../examples/center3.png") # hide
+Drawing(400, 200, "../figures/center3.png") # hide
 background("white") # hide
 origin() # hide
 setline(3) # hide
@@ -242,7 +202,7 @@ circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
 ```
 
-![](examples/center3.png)
+![](figures/center3.png)
 
 ```@docs
 circle
@@ -253,7 +213,7 @@ A sector has an inner and outer radius, as well as start and end angles.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 200, "../examples/sector.png") # hide
+Drawing(400, 200, "../figures/sector.png") # hide
 background("white") # hide
 origin() # hide
 sethue("cyan") # hide
@@ -264,13 +224,13 @@ finish() # hide
 sector
 ```
 
-![](examples/sector.png)
+![](figures/sector.png)
 
 A pie has start and end angles.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 300, "../examples/pie.png") # hide
+Drawing(400, 300, "../figures/pie.png") # hide
 background("white") # hide
 origin() # hide
 sethue("magenta") # hide
@@ -278,7 +238,7 @@ pie(0, 0, 100, pi/2, 0, :fill)
 finish() # hide
 ```
 
-![](examples/pie.png)
+![](figures/pie.png)
 
 ```@docs
 pie
@@ -288,7 +248,7 @@ A squircle is a cross between a square and a circle. You can adjust the squarine
 
 ```@example
 using Luxor, Colors # hide
-Drawing(600, 400, "../examples/squircle.png") # hide
+Drawing(600, 400, "../figures/squircle.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(20) # hide
@@ -305,7 +265,7 @@ end
 finish() # hide
 ```
 
-![](examples/squircle.png)
+![](figures/squircle.png)
 
 ```@docs
 squircle
@@ -331,7 +291,7 @@ You can draw lines or arcs with arrows at the end with `arrow()`. For straight a
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 250, "../examples/arrow.png") # hide
+Drawing(400, 250, "../figures/arrow.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -341,7 +301,7 @@ arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
 arrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
 finish() # hide
 ```
-![](examples/arrow.png)
+![](figures/arrow.png)
 
 ```@docs
 arrow
@@ -378,7 +338,7 @@ The `set-` functions control the width, end shapes, join behavior and dash patte
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 250, "../examples/line-ends.png") # hide
+Drawing(400, 250, "../figures/line-ends.png") # hide
 background("white") # hide
 origin() # hide
 translate(-100, -60) # hide
@@ -398,11 +358,11 @@ end
 finish() # hide
 ```
 
-![](examples/line-ends.png)
+![](figures/line-ends.png)
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 250, "../examples/dashes.png") # hide
+Drawing(400, 250, "../figures/dashes.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(14) # hide
@@ -417,7 +377,7 @@ for (pos, n) in tiles
 end
 finish() # hide
 ```
-![](examples/dashes.png)
+![](figures/dashes.png)
 
 ```@docs
 setline
@@ -446,7 +406,7 @@ grestore
 
 You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
 
-![n-gons](examples/n-gon.png)
+![n-gons](figures/n-gon.png)
 
 ```julia
 using Luxor, Colors
@@ -484,7 +444,7 @@ Polygons can contain holes. The `reversepath` keyword changes the direction of t
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 250, "../examples/holes.png") # hide
+Drawing(400, 250, "../figures/holes.png") # hide
 background("white") # hide
 origin() # hide
 sethue("orchid4") # hide
@@ -494,13 +454,13 @@ ngon(0, 0, 40, 6, 0, :path, reversepath=true)
 fillstroke()
 finish() # hide
 ```
-![](examples/holes.png)
+![](figures/holes.png)
 
 The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor, Colors
-Drawing(400, 250, "../examples/prettypoly.png") # hide
+Drawing(400, 250, "../figures/prettypoly.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -515,7 +475,7 @@ close=true)
 finish() # hide
 ```
 
-![](examples/prettypoly.png)
+![](figures/prettypoly.png)
 
 ```@docs
 prettypoly
@@ -525,7 +485,7 @@ Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive ve
 
 ```@example
 using Luxor, Colors # hide
-Drawing(600, 500, "../examples/simplify.png") # hide
+Drawing(600, 500, "../figures/simplify.png") # hide
 background("white") # hide
 origin() # hide
 sethue("black") # hide
@@ -541,7 +501,7 @@ prettypoly(simplercurve, :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
 text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
 ```
-![](examples/simplify.png)
+![](figures/simplify.png)
 
 ```@docs
 simplify
@@ -569,7 +529,7 @@ Use `star()` to make a star.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(500, 300, "../examples/stars.png") # hide
+Drawing(500, 300, "../figures/stars.png") # hide
 background("white") # hide
 origin() # hide
 tiles = Tiler(400, 300, 4, 6, margin=5)
@@ -580,7 +540,7 @@ end
 finish() # hide
 ```
 
-![stars](examples/stars.png)
+![stars](figures/stars.png)
 
 ```@docs
 star
@@ -615,7 +575,7 @@ textextents
 
 Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
-![text on a curve or spiral](examples/text-spiral.png)
+![text on a curve or spiral](figures/text-spiral.png)
 
 ```julia
   using Luxor, Colors
@@ -647,7 +607,7 @@ textcurve
 
 You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions:
 
-![text clipping](examples/text-path-clipping.png)
+![text clipping](figures/text-path-clipping.png)
 
 ```julia
     using Luxor, Colors
@@ -730,7 +690,7 @@ clipreset
 
 This example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are mainly randomly-colored circles:
 
-![julia logo mask](examples/julia-logo-mask.png)
+![julia logo mask](figures/julia-logo-mask.png)
 
 ```julia
 # load functions to draw the Julia logo
@@ -783,7 +743,7 @@ placeimage(img, pt::Point)
 placeimage(img, xpos, ypos, 0.5) # use alpha transparency of 0.5
 placeimage(img, pt::Point, 0.5)
 
-img = readpng("examples/julia-logo-mask.png")
+img = readpng("figures/julia-logo-mask.png")
 w = img.width
 h = img.height
 placeimage(img, -w/2, -h/2) # centered at point
@@ -791,7 +751,7 @@ placeimage(img, -w/2, -h/2) # centered at point
 
 You can clip images. The following script repeatedly places an image using a circle to define a clipping path:
 
-!["Images"](examples/test-image.png)
+!["Images"](figures/test-image.png)
 
 ```julia
 using Luxor
@@ -806,7 +766,7 @@ background("grey25")
 setline(5)
 sethue("green")
 
-image = readpng("examples/julia-logo-mask.png")
+image = readpng("figures/julia-logo-mask.png")
 w = image.width
 h = image.height
 
@@ -840,7 +800,7 @@ preview()
 
 Some simple "turtle graphics" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
 
-![Turtle](examples/turtles.png)
+![Turtle](figures/turtles.png)
 
 ```julia
 using Luxor, Colors
@@ -894,13 +854,55 @@ Reposition
 
 A good place to look for examples (sometimes not very exciting or well-written examples, I'll admit), is in the `Luxor/test` directory.
 
-!["tiled images"](examples/tiled-images.png)
+!["tiled images"](figures/tiled-images.png)
+
+## An early test
+
+![Luxor test](figures/basic-test.png)
+
+```julia
+using Luxor, Colors
+Drawing(1200, 1400, "basic-test.png") # or PDF/SVG filename for PDF or SVG
+
+origin()
+background("purple")
+
+setopacity(0.7)                      # opacity from 0 to 1
+sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
+setline(20)                          # line width
+
+rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
+randomhue()
+circle(0, 0, 460, :stroke)
+circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
+sethue("gold")
+setopacity(0.7)
+setline(10)
+for i in 0:pi/36:2pi - pi/36
+  move(0, 0)
+  line(cos(i) * 600, sin(i) * 600 )
+  stroke()
+end
+clipreset()                           # finish clipping/masking
+fontsize(60)
+setcolor("turquoise")
+fontface("Optima-ExtraBlack")
+textwidth = textextents("Luxor")[5]
+textcentred("Luxor", 0, currentdrawing.height/2 - 400)
+fontsize(18)
+fontface("Avenir-Black")
+
+# text on curve starting at angle 0 rads centered on origin with radius 550
+textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
+finish()
+preview() # on macOS, opens in Preview
+```
 
 ## Sierpinski triangle
 
 The main type is the Point, an immutable composite type containing `x` and `y` fields.
 
-![Sierpinski](examples/sierpinski.png)
+![Sierpinski](figures/sierpinski.png)
 
 ```julia
 using Luxor, Colors
@@ -948,7 +950,7 @@ preview()
 
 In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.
 
-![logo](examples/logo.png)
+![logo](figures/logo.png)
 
 ```
 using Luxor, Colors, ColorSchemes
