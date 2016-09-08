@@ -91,7 +91,7 @@ type Drawing
             the_cr          = Cairo.CairoContext(the_surface)
         end
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
-        return "drawing '$f' ($w w x $h h) created"
+        return "drawing '$f' ($w w x $h h) created in $(pwd())"
     end
 end
 
@@ -264,7 +264,7 @@ end
 """
     background(color)
 
-Fill the canvas with color. (Colors.jl is useful for providing color names.)
+Fill the canvas (or the current clipping region, if there is one) with a single color.
 
 Examples:
 

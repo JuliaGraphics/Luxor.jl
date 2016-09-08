@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Clipping · Luxor documentation</title><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script></head><body><nav class="toc"><a href><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="overview.html">Overview</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li class="current"><a class="toctext" href="clipping.html">Clipping</a><ul class="internal"></ul></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li><a class="toctext" href="moreexamples.html">More examples</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="clipping.html">Clipping</a></li></ul><a class="edit-page" href="https://github.com/cormullion/Luxor.jl/tree/a19e85cdfee4e7d3243b701d9ec9bc61034ea4f5/docs/src/clipping.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="Clipping-1" href="#Clipping-1">Clipping</a></h1><p>Use <code>clip()</code> to turn the current path into a clipping region, masking any graphics outside the path. <code>clippreserve()</code> keeps the current path, but also uses it as a clipping region. <code>clipreset()</code> resets it. <code>:clip</code> is also an action for drawing functions like <code>circle()</code>.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.clip" href="#Luxor.clip"><code>Luxor.clip</code></a> — <span class="docstring-category">Function</span>.</div><div><p>Establish a new clipping region by intersecting the current clipping region with the current path and then clearing the current path.</p><pre><code class="language-none">clip()</code></pre></div><a class="source-link" target="_blank" href="https://github.com/cormullion/Luxor.jl/tree/a19e85cdfee4e7d3243b701d9ec9bc61034ea4f5/src/Luxor.jl#L386-L391">source</a><br/></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.clippreserve" href="#Luxor.clippreserve"><code>Luxor.clippreserve</code></a> — <span class="docstring-category">Function</span>.</div><div><p>Establish a new clipping region by intersecting the current clipping region with the current path, but keep the current path.</p><pre><code class="language-none">clippreserve()</code></pre></div><a class="source-link" target="_blank" href="https://github.com/cormullion/Luxor.jl/tree/a19e85cdfee4e7d3243b701d9ec9bc61034ea4f5/src/Luxor.jl#L394-L399">source</a><br/></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.clipreset" href="#Luxor.clipreset"><code>Luxor.clipreset</code></a> — <span class="docstring-category">Function</span>.</div><div><p>Reset the clipping region to the current drawing&#39;s extent.</p><pre><code class="language-none">clipreset()</code></pre></div><a class="source-link" target="_blank" href="https://github.com/cormullion/Luxor.jl/tree/a19e85cdfee4e7d3243b701d9ec9bc61034ea4f5/src/Luxor.jl#L402-L406">source</a><br/></section><p>This example loads a file containing a function that draws the Julia logo. It can create paths but doesn&#39;t necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are mainly randomly-colored circles:</p><p><img src="figures/julia-logo-mask.png" alt="julia logo mask"/></p><pre><code class="language-julia"># load functions to draw the Julia logo
+include(&quot;../test/julia-logo.jl&quot;)
+
+currentwidth = 500 # pts
+currentheight = 500 # pts
+Drawing(currentwidth, currentheight, &quot;/tmp/clipping-tests.pdf&quot;)
+
+function draw(x, y)
+    foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
+    gsave()
+    translate(x-100, y)
+    julialogo(false, true)      # add paths for logo
+    clip()                      # use paths for clipping
+    for i in 1:500
+        sethue(foregroundcolors[rand(1:end)])
+        circle(rand(-50:350), rand(0:300), 15, :fill)
+    end
+    grestore()
+end
+
+origin()
+background(&quot;white&quot;)
+setopacity(.4)
+draw(0, 0)
+
+finish()
+preview()</code></pre><footer><hr/><a class="previous" href="transforms.html"><span class="direction">Previous</span><span class="title">Transforms and matrices</span></a><a class="next" href="images.html"><span class="direction">Next</span><span class="title">Images</span></a></footer></article></body></html>

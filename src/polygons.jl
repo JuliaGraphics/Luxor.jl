@@ -259,7 +259,7 @@ Draw a star centered at a position:
     star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
 """
 
-star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; reversepath=reversepath)
+star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; vertices = vertices, reversepath=reversepath)
 
 """
 Is a point `p` inside a polygon `pol`?

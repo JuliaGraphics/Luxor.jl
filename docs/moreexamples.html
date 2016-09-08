@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor documentation</title><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script></head><body><nav class="toc"><a href><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="overview.html">Overview</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Sierpinski-triangle-1">Sierpinski triangle</a></li><li><a class="toctext" href="#Luxor-logo-1">Luxor logo</a></li><li class="toplevel"><a class="toctext" href="#Index-1">Index</a></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/cormullion/Luxor.jl/tree/a19e85cdfee4e7d3243b701d9ec9bc61034ea4f5/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>A good place to look for examples (sometimes not very exciting or well-written examples, I&#39;ll admit), is in the <code>Luxor/test</code> directory.</p><p><img src="figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor, Colors
+Drawing(1200, 1400, &quot;basic-test.png&quot;) # or PDF/SVG filename for PDF or SVG
+
+origin()
+background(&quot;purple&quot;)
+
+setopacity(0.7)                      # opacity from 0 to 1
+sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn&#39;t change the opacity
+setline(20)                          # line width
+
+rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
+randomhue()
+circle(0, 0, 460, :stroke)
+circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
+sethue(&quot;gold&quot;)
+setopacity(0.7)
+setline(10)
+for i in 0:pi/36:2pi - pi/36
+  move(0, 0)
+  line(cos(i) * 600, sin(i) * 600 )
+  stroke()
+end
+clipreset()                           # finish clipping/masking
+fontsize(60)
+setcolor(&quot;turquoise&quot;)
+fontface(&quot;Optima-ExtraBlack&quot;)
+textwidth = textextents(&quot;Luxor&quot;)[5]
+textcentred(&quot;Luxor&quot;, 0, currentdrawing.height/2 - 400)
+fontsize(18)
+fontface(&quot;Avenir-Black&quot;)
+
+# text on curve starting at angle 0 rads centered on origin with radius 550
+textcurve(&quot;THIS IS TEXT ON A CURVE &quot; ^ 14, 0, 550, Point(0, 0))
+finish()
+preview() # on macOS, opens in Preview</code></pre><h2><a class="nav-anchor" id="Sierpinski-triangle-1" href="#Sierpinski-triangle-1">Sierpinski triangle</a></h2><p>The main type is the Point, an immutable composite type containing <code>x</code> and <code>y</code> fields.</p><p><img src="figures/sierpinski.png" alt="Sierpinski"/></p><pre><code class="language-julia">using Luxor, Colors
+
+function triangle(points::Array{Point}, degree::Int64)
+    global counter, cols
+    setcolor(cols[degree+1])
+    poly(points, :fill)
+    counter += 1
+end
+
+function sierpinski(points::Array{Point}, degree::Int64)
+    triangle(points, degree)
+    if degree &gt; 0
+        p1, p2, p3 = points
+        sierpinski([p1, midpoint(p1, p2),
+                        midpoint(p1, p3)], degree-1)
+        sierpinski([p2, midpoint(p1, p2),
+                        midpoint(p2, p3)], degree-1)
+        sierpinski([p3, midpoint(p3, p2),
+                        midpoint(p1, p3)], degree-1)
+    end
+end
+
+@time begin
+    depth = 8 # 12 is ok, 20 is right out
+    cols = distinguishable_colors(depth + 1)
+    Drawing(400, 400, &quot;/tmp/sierpinski.svg&quot;)
+    origin()
+    setopacity(0.5)
+    counter = 0
+    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]
+    sierpinski(my_points, depth)
+    println(&quot;drew $counter triangles&quot;)
+end
+
+finish()
+preview()
+
+# drew 9841 triangles
+# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)</code></pre><h2><a class="nav-anchor" id="Luxor-logo-1" href="#Luxor-logo-1">Luxor logo</a></h2><p>In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.</p><p><img src="figures/logo.png" alt="logo"/></p><pre><code class="language-none">using Luxor, Colors, ColorSchemes
+
+width = 225  # pts
+height = 225 # pts
+Drawing(width, height, &quot;/tmp/logo.png&quot;)
+
+function spiral(colscheme)
+  circle(0, 0, 90, :clip)
+  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
+    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
+    gsave()
+    rotate(theta)
+    move(5,0)
+    curve(Point(40, 40), Point(50, -40), Point(80, 30))
+    closepath()
+    fill()
+    grestore()
+  end
+  clipreset()
+end
+
+origin()
+background(&quot;white&quot;)
+scale(1.3, 1.3)
+colscheme = loadcolorscheme(&quot;solarcolors&quot;)
+colschememirror = vcat(colscheme, reverse(colscheme))
+spiral(colschememirror)
+finish()
+preview()</code></pre><h1><a class="nav-anchor" id="Index-1" href="#Index-1">Index</a></h1><ul><li><a href="basics.html#Luxor.Drawing"><code>Luxor.Drawing</code></a></li><li><a href="basics.html#Luxor.Tiler"><code>Luxor.Tiler</code></a></li><li><a href="turtle.html#Luxor.Turtle"><code>Luxor.Turtle</code></a></li><li><a href="basics.html#Base.fill"><code>Base.fill</code></a></li><li><a href="transforms.html#Base.scale"><code>Base.scale</code></a></li><li><a href="turtle.html#Luxor.Circle"><code>Luxor.Circle</code></a></li><li><a href="turtle.html#Luxor.Forward"><code>Luxor.Forward</code></a></li><li><a href="turtle.html#Luxor.Orientation"><code>Luxor.Orientation</code></a></li><li><a href="turtle.html#Luxor.Pencolor"><code>Luxor.Pencolor</code></a></li><li><a href="turtle.html#Luxor.Pendown"><code>Luxor.Pendown</code></a></li><li><a href="turtle.html#Luxor.Penup"><code>Luxor.Penup</code></a></li><li><a href="turtle.html#Luxor.Penwidth"><code>Luxor.Penwidth</code></a></li><li><a href="turtle.html#Luxor.Rectangle"><code>Luxor.Rectangle</code></a></li><li><a href="turtle.html#Luxor.Reposition"><code>Luxor.Reposition</code></a></li><li><a href="turtle.html#Luxor.Turn"><code>Luxor.Turn</code></a></li><li><a href="basics.html#Luxor.arc"><code>Luxor.arc</code></a></li><li><a href="basics.html#Luxor.arrow"><code>Luxor.arrow</code></a></li><li><a href="basics.html#Luxor.axes"><code>Luxor.axes</code></a></li><li><a href="basics.html#Luxor.background"><code>Luxor.background</code></a></li><li><a href="basics.html#Luxor.box"><code>Luxor.box</code></a></li><li><a href="basics.html#Luxor.carc"><code>Luxor.carc</code></a></li><li><a href="basics.html#Luxor.circle"><code>Luxor.circle</code></a></li><li><a href="clipping.html#Luxor.clip"><code>Luxor.clip</code></a></li><li><a href="clipping.html#Luxor.clippreserve"><code>Luxor.clippreserve</code></a></li><li><a href="clipping.html#Luxor.clipreset"><code>Luxor.clipreset</code></a></li><li><a href="basics.html#Luxor.closepath"><code>Luxor.closepath</code></a></li><li><a href="basics.html#Luxor.curve"><code>Luxor.curve</code></a></li><li><a href="basics.html#Luxor.ellipse"><code>Luxor.ellipse</code></a></li><li><a href="basics.html#Luxor.fillpreserve"><code>Luxor.fillpreserve</code></a></li><li><a href="basics.html#Luxor.fillstroke"><code>Luxor.fillstroke</code></a></li><li><a href="basics.html#Luxor.finish"><code>Luxor.finish</code></a></li><li><a href="basics.html#Luxor.fontface"><code>Luxor.fontface</code></a></li><li><a href="basics.html#Luxor.fontsize"><code>Luxor.fontsize</code></a></li><li><a href="transforms.html#Luxor.getmatrix"><code>Luxor.getmatrix</code></a></li><li><a href="basics.html#Luxor.getpath"><code>Luxor.getpath</code></a></li><li><a href="basics.html#Luxor.getpathflat"><code>Luxor.getpathflat</code></a></li><li><a href="basics.html#Luxor.grestore"><code>Luxor.grestore</code></a></li><li><a href="basics.html#Luxor.gsave"><code>Luxor.gsave</code></a></li><li><a href="basics.html#Luxor.isinside"><code>Luxor.isinside</code></a></li><li><a href="basics.html#Luxor.line"><code>Luxor.line</code></a></li><li><a href="basics.html#Luxor.move"><code>Luxor.move</code></a></li><li><a href="basics.html#Luxor.newpath"><code>Luxor.newpath</code></a></li><li><a href="basics.html#Luxor.newsubpath"><code>Luxor.newsubpath</code></a></li><li><a href="basics.html#Luxor.ngon"><code>Luxor.ngon</code></a></li><li><a href="basics.html#Luxor.origin"><code>Luxor.origin</code></a></li><li><a href="basics.html#Luxor.pie"><code>Luxor.pie</code></a></li><li><a href="images.html#Luxor.placeimage"><code>Luxor.placeimage</code></a></li><li><a href="basics.html#Luxor.polybbox"><code>Luxor.polybbox</code></a></li><li><a href="basics.html#Luxor.polycentroid"><code>Luxor.polycentroid</code></a></li><li><a href="basics.html#Luxor.polysortbyangle"><code>Luxor.polysortbyangle</code></a></li><li><a href="basics.html#Luxor.polysortbydistance"><code>Luxor.polysortbydistance</code></a></li><li><a href="basics.html#Luxor.polysplit"><code>Luxor.polysplit</code></a></li><li><a href="basics.html#Luxor.prettypoly"><code>Luxor.prettypoly</code></a></li><li><a href="basics.html#Luxor.preview"><code>Luxor.preview</code></a></li><li><a href="basics.html#Luxor.randomcolor"><code>Luxor.randomcolor</code></a></li><li><a href="basics.html#Luxor.randomhue"><code>Luxor.randomhue</code></a></li><li><a href="images.html#Luxor.readpng"><code>Luxor.readpng</code></a></li><li><a href="basics.html#Luxor.rect"><code>Luxor.rect</code></a></li><li><a href="basics.html#Luxor.rline"><code>Luxor.rline</code></a></li><li><a href="basics.html#Luxor.rmove"><code>Luxor.rmove</code></a></li><li><a href="transforms.html#Luxor.rotate"><code>Luxor.rotate</code></a></li><li><a href="basics.html#Luxor.sector"><code>Luxor.sector</code></a></li><li><a href="basics.html#Luxor.setcolor"><code>Luxor.setcolor</code></a></li><li><a href="basics.html#Luxor.setdash"><code>Luxor.setdash</code></a></li><li><a href="basics.html#Luxor.sethue"><code>Luxor.sethue</code></a></li><li><a href="basics.html#Luxor.setline"><code>Luxor.setline</code></a></li><li><a href="basics.html#Luxor.setlinecap"><code>Luxor.setlinecap</code></a></li><li><a href="basics.html#Luxor.setlinejoin"><code>Luxor.setlinejoin</code></a></li><li><a href="transforms.html#Luxor.setmatrix"><code>Luxor.setmatrix</code></a></li><li><a href="basics.html#Luxor.simplify"><code>Luxor.simplify</code></a></li><li><a href="basics.html#Luxor.squircle"><code>Luxor.squircle</code></a></li><li><a href="basics.html#Luxor.star"><code>Luxor.star</code></a></li><li><a href="basics.html#Luxor.stroke"><code>Luxor.stroke</code></a></li><li><a href="basics.html#Luxor.strokepreserve"><code>Luxor.strokepreserve</code></a></li><li><a href="basics.html#Luxor.text"><code>Luxor.text</code></a></li><li><a href="basics.html#Luxor.textcentred"><code>Luxor.textcentred</code></a></li><li><a href="basics.html#Luxor.textcurve"><code>Luxor.textcurve</code></a></li><li><a href="basics.html#Luxor.textextents"><code>Luxor.textextents</code></a></li><li><a href="basics.html#Luxor.textpath"><code>Luxor.textpath</code></a></li><li><a href="basics.html#Luxor.textright"><code>Luxor.textright</code></a></li><li><a href="transforms.html#Luxor.transform"><code>Luxor.transform</code></a></li><li><a href="transforms.html#Luxor.translate"><code>Luxor.translate</code></a></li></ul><footer><hr/><a class="previous" href="turtle.html"><span class="direction">Previous</span><span class="title">Turtle graphics</span></a></footer></article></body></html>
