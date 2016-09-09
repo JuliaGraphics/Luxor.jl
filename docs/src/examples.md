@@ -43,9 +43,17 @@ A more complete version:
 
 [link to PDF original](figures/star-chart.pdf) | [link to Julia source](examples/star-chart.jl)
 
+### Ampersands
+
+Here are a few ampersands collected together, mainly of interest to typomaniacs and fontophiles. It was necessary to vary the font size of each font, since they're naturally different.
+
+!["iloveampersands"](figures/iloveampersands.png)
+
+[link to PDF original](figures/iloveampersands.pdf) | [link to Julia source](examples/iloveampersands.jl)
+
 ### Moon phases
 
-Still looking upwards, this moon phase chart shows the calculated phase of the moon for every day in a year.
+Looking upwards again, this moon phase chart shows the calculated phase of the moon for every day in a year.
 
 !["benchmark sector chart"](figures/2017-moon-phase-calendar.png)
 

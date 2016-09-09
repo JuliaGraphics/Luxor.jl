@@ -534,6 +534,10 @@ Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set font size in
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
+![textextents](figures/textextents.png)
+
+The green dot is the reference point for the font, the yellow circle shows the fonts x and y bearings, and the blue dot shows the advance point, where the next character should be placed.
+
 ```@docs
 fontface
 fontsize

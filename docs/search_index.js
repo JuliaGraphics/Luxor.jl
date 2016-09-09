@@ -73,11 +73,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples.html#Ampersands-1",
+    "page": "A few examples",
+    "title": "Ampersands",
+    "category": "section",
+    "text": "Here are a few ampersands collected together, mainly of interest to typomaniacs and fontophiles. It was necessary to vary the font size of each font, since they're naturally different.(Image: \"iloveampersands\")link to PDF original | link to Julia source"
+},
+
+{
     "location": "examples.html#Moon-phases-1",
     "page": "A few examples",
     "title": "Moon phases",
     "category": "section",
-    "text": "Still looking upwards, this moon phase chart shows the calculated phase of the moon for every day in a year.A more complete version:(Image: \"benchmark sector chart\")link to PDF original | link to github repository"
+    "text": "Looking upwards again, this moon phase chart shows the calculated phase of the moon for every day in a year.(Image: \"benchmark sector chart\")link to PDF original | link to github repository"
 },
 
 {
@@ -165,7 +173,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.origin",
     "category": "Function",
-    "text": "origin()\n\nSet the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\n\n\n"
+    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\n\n\n"
 },
 
 {
@@ -717,7 +725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Fonts",
     "category": "section",
-    "text": "Use fontface(fontname) to choose a font, and fontsize(n) to set font size in points.The textextents(str) function gets an array of dimensions of the string str, given the current font.fontface\nfontsize\ntextextents"
+    "text": "Use fontface(fontname) to choose a font, and fontsize(n) to set font size in points.The textextents(str) function gets an array of dimensions of the string str, given the current font.(Image: textextents)The green dot is the reference point for the font, the yellow circle shows the fonts x and y bearings, and the blue dot shows the advance point, where the next character should be placed.fontface\nfontsize\ntextextents"
 },
 
 {
