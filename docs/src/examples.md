@@ -47,8 +47,6 @@ A more complete version:
 
 Still looking upwards, this moon phase chart shows the calculated phase of the moon for every day in a year.
 
-A more complete version:
-
 !["benchmark sector chart"](figures/2017-moon-phase-calendar.png)
 
 [link to PDF original](figures/2017-moon-phase-calendar.pdf) | [link to github repository](https://github.com/cormullion/Spiral-moon-calendar)
