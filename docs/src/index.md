@@ -1,4 +1,4 @@
-# Luxor
+# Introduction to Luxor
 
 Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.
 
@@ -9,6 +9,8 @@ The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/
 ## Current status
 
 Luxor currently runs on Julia version 0.5, using Cairo.jl and Colors.jl.
+
+Please submit issues and pull requests on [github](https://github.com/cormullion/Luxor.jl)!
 
 ## Installation and basic usage
 

@@ -223,7 +223,7 @@ info("loading star data")
 
 # for convenience I copied this file from https://github.com/astronexus/HYG-Database
 
-astrodbfile = "hygdata_v3.csv"
+astrodbfile = "docs/examples/hygdata_v3.csv"
 
 tic()
 db = readtable(astrodbfile, header = true)

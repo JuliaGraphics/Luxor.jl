@@ -440,7 +440,7 @@ finish() # hide
 simplify
 ```
 
-The `isinside()` returns true if a point is inside a polygon.
+The `isinside()` function returns true if a point is inside a polygon.
 
 ```@example
 using Luxor, Colors # hide
@@ -463,7 +463,26 @@ preview() # hide
 isinside
 ```
 
-There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.
+There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do the job. For example, here's `polysplit()`:
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 150, "../figures/polysplit.pdf") # hide
+origin()
+setopacity(0.8)
+sethue("black")
+s = squircle(Point(0,0), 60, 60, vertices=true)
+pt1 = Point(0, -120)
+pt2 = Point(0, 120)
+line(pt1, pt2, :stroke)
+poly1, poly2 = polysplit(s, pt1, pt2)
+randomhue()
+poly(poly1, :fill)
+randomhue()
+poly(poly2, :fill)
+finish() # hide
+```
+![](figures/polysplit.png)
 
 ```@docs
 polysplit

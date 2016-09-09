@@ -517,20 +517,20 @@ Make an ellipse, centered at point `c`, with width `w`, and height `h`.
 ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
 
 """
-Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,
+Make a squircle (basically a rectangle with rounded corners). Specify the center position, horizontal radius (distance from center to a side), and vertical radius (distance from center to top or bottom):
 
-    squircle(center::Point, width, height, action=:none; rt = 0.5, vertices=false)
+    squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false)
 
 The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.
 """
 
-function squircle(center::Point, width, height, action=:none; rt = 0.5, vertices=false, reversepath=false)
+function squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false, reversepath=false)
   gsave()
   translate(center)
   points = []
   for theta in 0:pi/40:2pi
-      xpos = ^(abs(cos(theta)), rt) * width * sign(cos(theta))
-      ypos = ^(abs(sin(theta)), rt) * height * sign(sin(theta))
+      xpos = ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
+      ypos = ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
       push!(points, Point(xpos, ypos))
   end
   if vertices

@@ -4,6 +4,8 @@
 
 Documentation: http://cormullion.github.io/Luxor.jl/
 
+[![Build Status](https://travis-ci.org/cormullion/Luxor.jl.svg?branch=master)](https://travis-ci.org/cormullion/Luxor.jl)
+
 ## Luxor
 
 Luxor provides basic vector drawing functions, and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.
