@@ -9,9 +9,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Luxor-1",
+    "location": "index.html#Introduction-to-Luxor-1",
     "page": "Introduction to Luxor",
-    "title": "Luxor",
+    "title": "Introduction to Luxor",
     "category": "section",
     "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony.Colors.jl provides excellent color definitions."
 },
@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Current status",
     "category": "section",
-    "text": "Luxor currently runs on Julia version 0.5, using Cairo.jl and Colors.jl."
+    "text": "Luxor currently runs on Julia version 0.5, using Cairo.jl and Colors.jl.Please submit issues and pull requests on github!"
 },
 
 {
@@ -69,7 +69,7 @@ var documenterSearchIndex = {"docs": [
     "page": "A few examples",
     "title": "Star chart",
     "category": "section",
-    "text": "Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on github and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries. It takes about 4 seconds to load the data, and 7 seconds to draw it— about 120,000 stars.A small detail:(Image: \"benchmark sector chart\")A more complete version:(Image: \"benchmark sector chart\")link to PDF original | link to Julia source"
+    "text": "Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on github and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries. It takes about 4 seconds to load the data, and 7 seconds to draw it— about 120,000 stars, using still-to-be-optimized code.A small detail:(Image: \"benchmark sector chart\")A more complete version:(Image: \"benchmark sector chart\")link to PDF original | link to Julia source"
 },
 
 {
@@ -237,7 +237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.squircle",
     "category": "Function",
-    "text": "Make a squircle (basically a rectangle with rounded corners). Specify the center position, width, and height,\n\nsquircle(center::Point, width, height, action=:none; rt = 0.5, vertices=false)\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
+    "text": "Make a squircle (basically a rectangle with rounded corners). Specify the center position, horizontal radius (distance from center to a side), and vertical radius (distance from center to top or bottom):\n\nsquircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false)\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
 },
 
 {
@@ -613,7 +613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Polygons",
     "category": "section",
-    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"orchid4\") # hide\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide(Image: )The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor, Colors\nDrawing(400, 250, \"../figures/prettypoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(4)\npoly1 = ngon(0, 0, 100, 6, 0, vertices=true)\nprettypoly(poly1, :stroke, :(\n  randomhue();\n  scale(0.5, 0.5);\n  circle(0, 0, 15, :stroke)\n  ),\nclose=true)\nfinish() # hide(Image: )prettypolyPolygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor, Colors # hide\nDrawing(600, 500, \"../figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)\nprettypoly(collect(sincurve), :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide(Image: )simplifyThe isinside() returns true if a point is inside a polygon.using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetopacity(0.5)\napolygon = star(Point(0,0), 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n  apoint = randompoint(Point(-200, -150), Point(200, 150))\n  randomhue()\n  isinside(apoint, apolygon) && circle(apoint, 3, :fill)\nend\nfinish() # hide\npreview() # hide(Image: )isinsideThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other.polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybbox"
+    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"orchid4\") # hide\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide(Image: )The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor, Colors\nDrawing(400, 250, \"../figures/prettypoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(4)\npoly1 = ngon(0, 0, 100, 6, 0, vertices=true)\nprettypoly(poly1, :stroke, :(\n  randomhue();\n  scale(0.5, 0.5);\n  circle(0, 0, 15, :stroke)\n  ),\nclose=true)\nfinish() # hide(Image: )prettypolyPolygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor, Colors # hide\nDrawing(600, 500, \"../figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)\nprettypoly(collect(sincurve), :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide(Image: )simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetopacity(0.5)\napolygon = star(Point(0,0), 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n  apoint = randompoint(Point(-200, -150), Point(200, 150))\n  randomhue()\n  isinside(apoint, apolygon) && circle(apoint, 3, :fill)\nend\nfinish() # hide\npreview() # hide(Image: )isinsideThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do the job. For example, here's polysplit():using Luxor, Colors # hide\nDrawing(400, 150, \"../figures/polysplit.pdf\") # hide\norigin()\nsetopacity(0.8)\nsethue(\"black\")\ns = squircle(Point(0,0), 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide(Image: )polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybbox"
 },
 
 {
