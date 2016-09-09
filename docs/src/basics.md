@@ -467,7 +467,7 @@ There are some experimental polygon functions. These don't work well for polygon
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 150, "../figures/polysplit.pdf") # hide
+Drawing(400, 150, "../figures/polysplit.png") # hide
 origin()
 setopacity(0.8)
 sethue("black")

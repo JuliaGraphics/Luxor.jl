@@ -42,3 +42,13 @@ A more complete version:
 !["benchmark sector chart"](figures/star-chart.png)
 
 [link to PDF original](figures/star-chart.pdf) | [link to Julia source](examples/star-chart.jl)
+
+### Moon phases
+
+Still looking upwards, this moon phase chart shows the calculated phase of the moon for every day in a year.
+
+A more complete version:
+
+!["benchmark sector chart"](figures/2017-moon-phase-calendar.png)
+
+[link to PDF original](figures/2017-moon-phase-calendar.pdf) | [link to github repository](https://github.com/cormullion/Spiral-moon-calendar)
