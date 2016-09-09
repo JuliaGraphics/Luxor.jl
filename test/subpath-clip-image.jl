@@ -7,7 +7,7 @@ Drawing(width, height, fname)
 origin()
 background("ivory")
 sethue("black")
-image = readpng("../examples/sector-test.png")
+image = readpng("../figures/sector-test.png")
 w = image.width
 h = image.height
 

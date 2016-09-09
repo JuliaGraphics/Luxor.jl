@@ -8,7 +8,7 @@ function get_png_files(folder)
     return map(realpath, imagelist)
 end
 
-imagelist = get_png_files(Pkg.dir("Luxor") * "/examples")
+imagelist = get_png_files(Pkg.dir("Luxor") * "/docs/examples")
 
 width, height = 2000, 2000
 fname = "/tmp/paint-images.pdf"
