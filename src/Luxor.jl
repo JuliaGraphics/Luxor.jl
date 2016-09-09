@@ -220,11 +220,10 @@ end
 """
     origin()
 
-Set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left
-corner, the default).
+Reset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).
 """
 function origin()
-    # set the origin at the center
+    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
     Cairo.translate(currentdrawing.cr, currentdrawing.width/2., currentdrawing.height/2.)
 end
 
