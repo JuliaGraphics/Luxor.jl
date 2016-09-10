@@ -3,7 +3,7 @@
 using Luxor, Colors
 
 function randompoly(rad, n)
-    result = []
+    result = Point[]
     for i in 1:n
         push!(result, Point(rand(-rad:rad), rand(-rad:rad)))
     end
