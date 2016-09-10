@@ -106,7 +106,7 @@ The `refpoint` can be chosen, but the minimum point is usually OK too:
     polysortbyangle(parray, polycentroid(parray))
 """
 function polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
-    angles = []
+    angles = Float64[]
     for pt in pointlist
         push!(angles, atan2(refpoint.y - pt.y, refpoint.x - pt.x))
     end
@@ -238,7 +238,7 @@ function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5,
                     y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
                     y+sin(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio)) for n in 1:npoints]
-    result = []
+    result = Point[]
     for i in eachindex(outerpoints)
         push!(result, outerpoints[i])
         push!(result, innerpoints[i])

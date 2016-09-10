@@ -526,7 +526,7 @@ The `rt` option defaults to 0.5, and gives an intermediate shape. Values less th
 function squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false, reversepath=false)
   gsave()
   translate(center)
-  points = []
+  points = Point[]
   for theta in 0:pi/40:2pi
       xpos = ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
       ypos = ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
