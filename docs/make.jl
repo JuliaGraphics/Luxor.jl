@@ -4,7 +4,7 @@ makedocs(
   modules = [Luxor],
   format = Documenter.Formats.HTML,
   sitename = "Luxor",
-  pages    = Any[ # Compat: `Any` for 0.4 compat
+  pages    = Any[
     "Introduction to Luxor"           => "index.md",
     "A few examples"                  => "examples.md",
     "Basic graphics"                  => "basics.md",
@@ -13,7 +13,7 @@ makedocs(
     "Images"                          => "images.md",
     "Turtle graphics"                 => "turtle.md",
     "More examples"                   => "moreexamples.md",
-    "Index"                           => "functionindex.md"  
+    "Index"                           => "functionindex.md"
     ]
   )
 

@@ -69,7 +69,7 @@ end
 finish() # hide
 ```
 
-![](figures/tiler.png)
+![tiler](figures/tiler.png)
 
 ```@docs
 Tiler
@@ -94,7 +94,7 @@ axes()
 finish() # hide
 ```
 
-![](figures/axes.png)
+![axes](figures/axes.png)
 
 ```@docs
 background
@@ -133,7 +133,7 @@ circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
 ```
 
-![](figures/center3.png)
+![center and radius of 3 points](figures/center3.png)
 
 ```@docs
 circle
@@ -156,7 +156,7 @@ finish() # hide
 sector
 ```
 
-![](figures/sector.png)
+![sector](figures/sector.png)
 
 A pie (or wedge) has start and end angles.
 
@@ -170,7 +170,7 @@ pie(0, 0, 100, pi/2, pi, :fill)
 finish() # hide
 ```
 
-![](figures/pie.png)
+![pie](figures/pie.png)
 
 ```@docs
 pie
@@ -196,7 +196,7 @@ end
 finish() # hide
 ```
 
-![](figures/squircle.png)
+![squircles](figures/squircle.png)
 
 ```@docs
 squircle
@@ -232,7 +232,7 @@ arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
 arrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
 finish() # hide
 ```
-![](figures/arrow.png)
+![arrows](figures/arrow.png)
 
 ```@docs
 arrow
@@ -291,26 +291,27 @@ end
 finish() # hide
 ```
 
-![](figures/line-ends.png)
+![line endings](figures/line-ends.png)
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 250, "../figures/dashes.png") # hide
+Drawing(600, 250, "../figures/dashes.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(14) # hide
 sethue("black") # hide
 setline(12)
-patterns = "solid", "dotted", "dot", "dotdashed", "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
+patterns = ["solid", "dotted", "dot", "dotdashed", "longdashed",
+  "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"]
 tiles =  Tiler(400, 250, 10, 1, margin=10)
 for (pos, n) in tiles
   setdash(patterns[n])
   textright(patterns[n], pos.x - 20, pos.y + 4)
-  line(pos, Point(pos.x + 250, pos.y), :stroke)
+  line(pos, Point(400, pos.y), :stroke)
 end
 finish() # hide
 ```
-![](figures/dashes.png)
+![dashes](figures/dashes.png)
 
 ```@docs
 setline
@@ -387,7 +388,7 @@ ngon(0, 0, 40, 6, 0, :path, reversepath=true)
 fillstroke()
 finish() # hide
 ```
-![](figures/holes.png)
+![holes](figures/holes.png)
 
 The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
@@ -408,7 +409,7 @@ close=true)
 finish() # hide
 ```
 
-![](figures/prettypoly.png)
+![prettypoly](figures/prettypoly.png)
 
 ```@docs
 prettypoly
@@ -434,7 +435,7 @@ prettypoly(simplercurve, :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
 text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
 ```
-![](figures/simplify.png)
+![simplify](figures/simplify.png)
 
 ```@docs
 simplify
@@ -455,9 +456,8 @@ for n in 1:10000
   isinside(apoint, apolygon) && circle(apoint, 3, :fill)
 end
 finish() # hide
-preview() # hide
 ```
-![](figures/isinside.png)
+![isinside](figures/isinside.png)
 
 ```@docs
 isinside
@@ -482,7 +482,7 @@ randomhue()
 poly(poly2, :fill)
 finish() # hide
 ```
-![](figures/polysplit.png)
+![polysplit](figures/polysplit.png)
 
 ```@docs
 polysplit
@@ -536,7 +536,7 @@ The `textextents(str)` function gets an array of dimensions of the string `str`,
 
 ![textextents](figures/textextents.png)
 
-The green dot is the reference point for the font, the yellow circle shows the fonts x and y bearings, and the blue dot shows the advance point, where the next character should be placed.
+The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.
 
 ```@docs
 fontface
