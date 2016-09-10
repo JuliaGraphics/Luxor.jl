@@ -1134,10 +1134,10 @@ Examples:
 
     setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))
     setcolor(.2, .3, .4, .5)
-    setcolor(convert(Color.HSV, Color.RGB(0.5, 1, 1)))
+    setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))
 
     for i in 1:15:360
-       setcolor(convert(Color.RGB, Color.HSV(i, 1, 1)))
+       setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))
        ...
     end
 """
