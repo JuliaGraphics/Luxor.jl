@@ -37,7 +37,8 @@ function addimagetile(imgfile, xcenter, ycenter, tilewidth, tileheight; cropping
     grestore()
 end
 
-imagelist = get_png_files(Pkg.dir("Luxor") * "/docs/figures")
+imagelist = get_png_files(dirname(@__FILE__) * "/../docs/figures")
+
 shuffle!(imagelist)
 
 width, height = 1600, 1000

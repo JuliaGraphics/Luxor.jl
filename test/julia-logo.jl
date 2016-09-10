@@ -13,7 +13,8 @@ Typical usage:
 
 ```
 using Luxor, Colors
-include(joinpath(Pkg.dir(), "Luxor", "test", "julia-logo.jl"))
+# find this file, eg:
+include("~/.julia/v0.5/Luxor/test/julia-logo.jl"))
 Drawing(1000, 1000, "/tmp/heart-julia.pdf")
 origin()
 background("white")
