@@ -1,10 +1,6 @@
 # Introduction to Luxor
 
-Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.
-
-The idea of Luxor is that it's easier to use than [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony.
-
-[Colors.jl](https://github.com/JuliaGraphics/Colors.jl) provides excellent color definitions.
+Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to [Cairo.jl](https://github.com/JuliaLang/Cairo.jl).
 
 ## Current status
 
@@ -14,10 +10,10 @@ Please submit issues and pull requests on [github](https://github.com/cormullion
 
 ## Installation and basic usage
 
-Since the package is currently unregistered, install it as follows:
+Install the package as follows:
 
 ```
-Pkg.clone("https://github.com/cormullion/Luxor.jl")
+Pkg.add("Luxor.jl")
 ```
 
 and to use it:

@@ -15,11 +15,58 @@ finish()
 preview()
 ```
 
-The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the location of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name. `text()` places text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
+The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the location and type of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name. `text()` places text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
-## More examples
+## A slightly more complicated example: a Sierpinski triangle
 
-Here are a few more examples.
+The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
+
+![Sierpinski](figures/sierpinski.png)
+
+```julia
+using Luxor, Colors
+
+function triangle(points::Array{Point}, degree::Int64)
+    global counter, cols
+    setcolor(cols[degree+1])
+    poly(points, :fill)
+    counter += 1
+end
+
+function sierpinski(points::Array{Point}, degree::Int64)
+    triangle(points, degree)
+    if degree > 0
+        p1, p2, p3 = points
+        sierpinski([p1, midpoint(p1, p2),
+                        midpoint(p1, p3)], degree-1)
+        sierpinski([p2, midpoint(p1, p2),
+                        midpoint(p2, p3)], degree-1)
+        sierpinski([p3, midpoint(p3, p2),
+                        midpoint(p1, p3)], degree-1)
+    end
+end
+
+@time begin
+  depth = 8 # 12 is ok, 20 is right out
+  cols = distinguishable_colors(depth + 1)
+  Drawing(400, 400, "/tmp/sierpinski.svg")
+  origin()
+  setopacity(0.5)
+  counter = 0
+  my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]
+  sierpinski(my_points, depth)
+  println("drew $counter triangles")
+end
+
+finish()
+preview()
+```
+
+You can change "sierpinski.svg" to "sierpinski.pdf" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
+
+## How I use Luxor
+
+Here are some examples of how I use Luxor.
 
 ### Sector chart
 
