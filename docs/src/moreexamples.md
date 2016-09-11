@@ -46,54 +46,6 @@ finish()
 preview() # on macOS, opens in Preview
 ```
 
-## Sierpinski triangle
-
-The main type is the Point, an immutable composite type containing `x` and `y` fields.
-
-![Sierpinski](figures/sierpinski.png)
-
-```julia
-using Luxor, Colors
-
-function triangle(points::Array{Point}, degree::Int64)
-    global counter, cols
-    setcolor(cols[degree+1])
-    poly(points, :fill)
-    counter += 1
-end
-
-function sierpinski(points::Array{Point}, degree::Int64)
-    triangle(points, degree)
-    if degree > 0
-        p1, p2, p3 = points
-        sierpinski([p1, midpoint(p1, p2),
-                        midpoint(p1, p3)], degree-1)
-        sierpinski([p2, midpoint(p1, p2),
-                        midpoint(p2, p3)], degree-1)
-        sierpinski([p3, midpoint(p3, p2),
-                        midpoint(p1, p3)], degree-1)
-    end
-end
-
-@time begin
-    depth = 8 # 12 is ok, 20 is right out
-    cols = distinguishable_colors(depth + 1)
-    Drawing(400, 400, "/tmp/sierpinski.svg")
-    origin()
-    setopacity(0.5)
-    counter = 0
-    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]
-    sierpinski(my_points, depth)
-    println("drew $counter triangles")
-end
-
-finish()
-preview()
-
-# drew 9841 triangles
-# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)
-```
-
 ## Luxor logo
 
 In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.

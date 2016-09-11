@@ -108,14 +108,37 @@ Functions for making shapes include `circle()`, `ellipse()`, `squircle()`, `arc(
 
 ## Rectangles and boxes
 
+![rects](figures/rects.png)
+
 ```@docs
 rect
 box
+polybbox
 ```
 
 ## Circles, ellipses, and the like
 
 There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 200, "../figures/circles.png") # hide
+background("white") # hide
+origin() # hide
+setline(2) # hide
+p1 = Point(0, 0)
+p2 = Point(100, 0)
+sethue("red")
+circle(p1, 40, :fill)
+sethue("green")
+circle(p1, p2, :stroke)
+sethue("black")
+arrow(Point(0,0), Point(0, -40))
+map(p -> circle(p, 4, :fill), [p1, p2])
+finish() # hide
+```
+
+![circles](figures/circles.png)
 
 ```@example
 using Luxor, Colors # hide
@@ -132,8 +155,30 @@ sethue("orange") # hide
 circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
 ```
-
 ![center and radius of 3 points](figures/center3.png)
+
+```@example
+using Luxor, Colors # hide
+Drawing(500, 300, "../figures/ellipses.png") # hide
+background("white") # hide
+fontsize(11) # hide
+srand(1) # hide
+origin() # hide
+tiles = Tiler(500, 300, 5, 5)
+width = 20
+height = 25
+for (pos, n) in tiles
+  randomhue()
+  ellipse(pos, width, height, :fill)
+  sethue("black")
+  label = string(round(width/height, 2))
+  textcentered(label, pos.x, pos.y + 25)
+  width += 2
+end
+finish() # hide
+```
+
+![ellipses](figures/ellipses.png)
 
 ```@docs
 circle
@@ -489,7 +534,6 @@ polysplit
 polysortbydistance
 polysortbyangle
 polycentroid
-polybbox
 ```
 
 ### Stars

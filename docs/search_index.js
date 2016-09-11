@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Introduction to Luxor",
     "category": "section",
-    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics.The idea of Luxor is that it's easier to use than Cairo.jl, with shorter names, fewer underscores, default contexts, utilities, and simplified functions. It's for when you just want to draw something without too much ceremony.Colors.jl provides excellent color definitions."
+    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to Cairo.jl."
 },
 
 {
@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
     "category": "section",
-    "text": "Since the package is currently unregistered, install it as follows:Pkg.clone(\"https://github.com/cormullion/Luxor.jl\")and to use it:using LuxorIn most of the examples in this documentation, it's assumed that you have added:using Luxor, Colorsbefore the graphics commands."
+    "text": "Install the package as follows:Pkg.add(\"Luxor.jl\")and to use it:using LuxorIn most of the examples in this documentation, it's assumed that you have added:using Luxor, Colorsbefore the graphics commands."
 },
 
 {
@@ -45,15 +45,23 @@ var documenterSearchIndex = {"docs": [
     "page": "A few examples",
     "title": "The obligatory \"Hello World\"",
     "category": "section",
-    "text": "Here's the \"Hello world\":(Image: \"Hello world\")using Luxor, Colors\nDrawing(1000, 1000, \"hello-world.png\")\norigin()\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()The Drawing(1000, 1000, \"hello-world.png\") line defines the size of the image and the location of the finished image when it's saved. origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using Colors.jl, we can specify colors by name. text() places text. It's placed at the current 0/0 if you don't specify otherwise. finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg on MacOS X, Preview)."
+    "text": "Here's the \"Hello world\":(Image: \"Hello world\")using Luxor, Colors\nDrawing(1000, 1000, \"hello-world.png\")\norigin()\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()The Drawing(1000, 1000, \"hello-world.png\") line defines the size of the image and the location and type of the finished image when it's saved. origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're using Colors.jl, we can specify colors by name. text() places text. It's placed at the current 0/0 if you don't specify otherwise. finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg on MacOS X, Preview)."
 },
 
 {
-    "location": "examples.html#More-examples-1",
+    "location": "examples.html#A-slightly-more-complicated-example:-a-Sierpinski-triangle-1",
     "page": "A few examples",
-    "title": "More examples",
+    "title": "A slightly more complicated example: a Sierpinski triangle",
     "category": "section",
-    "text": "Here are a few more examples."
+    "text": "The main type (apart from the Drawing) is the Point, an immutable composite type containing x and y fields.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n  depth = 8 # 12 is ok, 20 is right out\n  cols = distinguishable_colors(depth + 1)\n  Drawing(400, 400, \"/tmp/sierpinski.svg\")\n  origin()\n  setopacity(0.5)\n  counter = 0\n  my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]\n  sierpinski(my_points, depth)\n  println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()You can change \"sierpinski.svg\" to \"sierpinski.pdf\" or \"sierpinski.png\" or \"sierpinski.eps\" to produce alternative formats."
+},
+
+{
+    "location": "examples.html#How-I-use-Luxor-1",
+    "page": "A few examples",
+    "title": "How I use Luxor",
+    "category": "section",
+    "text": "Here are some examples of how I use Luxor."
 },
 
 {
@@ -209,11 +217,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.polybbox",
+    "page": "Basic graphics",
+    "title": "Luxor.polybbox",
+    "category": "Function",
+    "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::Array)\n\nReturn the two opposite corners (suitable for box(), for example).\n\n\n\n"
+},
+
+{
     "location": "basics.html#Rectangles-and-boxes-1",
     "page": "Basic graphics",
     "title": "Rectangles and boxes",
     "category": "section",
-    "text": "rect\nbox"
+    "text": "(Image: rects)rect\nbox\npolybbox"
 },
 
 {
@@ -261,7 +277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Circles, ellipses, and the like",
     "category": "section",
-    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: center and radius of 3 points)circle\nellipseA sector (strictly an \"annular sector\") has an inner and outer radius, as well as start and end angles.using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hidesector(Image: sector)A pie (or wedge) has start and end angles.using Luxor, Colors # hide\nDrawing(400, 300, \"../figures/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, pi, :fill)\nfinish() # hide(Image: pie)pieA squircle is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:using Luxor, Colors # hide\nDrawing(600, 400, \"../figures/squircle.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(20) # hide\nsetline(2)\ntiles = Tiler(600, 300, 1, 3)\nfor (pos, n) in tiles\n    sethue(\"lavender\")\n    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)\n    sethue(\"grey20\")\n    stroke()\n    textcentered(\"rt = $([0.3, 0.5, 0.7][n])\", pos)\nend\nfinish() # hide(Image: squircles)squircle"
+    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = Point(0, 0)\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(Point(0,0), Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide(Image: circles)using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: center and radius of 3 points)using Luxor, Colors # hide\nDrawing(500, 300, \"../figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nsrand(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n  randomhue()\n  ellipse(pos, width, height, :fill)\n  sethue(\"black\")\n  label = string(round(width/height, 2))\n  textcentered(label, pos.x, pos.y + 25)\n  width += 2\nend\nfinish() # hide(Image: ellipses)circle\nellipseA sector (strictly an \"annular sector\") has an inner and outer radius, as well as start and end angles.using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hidesector(Image: sector)A pie (or wedge) has start and end angles.using Luxor, Colors # hide\nDrawing(400, 300, \"../figures/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, pi, :fill)\nfinish() # hide(Image: pie)pieA squircle is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:using Luxor, Colors # hide\nDrawing(600, 400, \"../figures/squircle.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(20) # hide\nsetline(2)\ntiles = Tiler(600, 300, 1, 3)\nfor (pos, n) in tiles\n    sethue(\"lavender\")\n    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)\n    sethue(\"grey20\")\n    stroke()\n    textcentered(\"rt = $([0.3, 0.5, 0.7][n])\", pos)\nend\nfinish() # hide(Image: squircles)squircle"
 },
 
 {
@@ -333,7 +349,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.arrow",
     "category": "Function",
-    "text": "Place a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's head, and arrow head angle is the angle between the side of the head and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\nIt doesn't need stroking/filling, the shaft is stroke()d and the head fill()ed. Quiet at the back of the class.\n\n\n\nPlace a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
+    "text": "Draw a line between two points and add an arrowhead at the end. The arrowhead length is the length of the side of the arrow's head, and arrow head angle is the angle between the side of the head and the shaft of the arrow.\n\narrow(startpoint::Point, endpoint::Point; arrowheadlength=10, arrowheadangle=pi/8)\n\nIt doesn't need stroking/filling, the shaft is stroke()d and the head fill()ed.\n\n\n\nDraw a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\narrow(centerpos::Point, radius, startangle, endangle; arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
 },
 
 {
@@ -582,46 +598,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Luxor.isinside",
     "category": "Function",
     "text": "Is a point p inside a polygon pol?\n\nisinside(p, pol)\n\nReturns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.polysplit",
-    "page": "Basic graphics",
-    "title": "Luxor.polysplit",
-    "category": "Function",
-    "text": "Split a polygon into two where it intersects with a line:\n\npolysplit(p, p1, p2)\n\nThis doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon the shape of the letter \"E\" might end up being divided into more than two parts.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.polysortbydistance",
-    "page": "Basic graphics",
-    "title": "Luxor.polysortbydistance",
-    "category": "Function",
-    "text": "Sort a polygon by finding the nearest point to the starting point, then the nearest point to that, and so on.\n\npolysortbydistance(p, starting::Point)\n\nYou can end up with convex (self-intersecting) polygons, unfortunately.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.polysortbyangle",
-    "page": "Basic graphics",
-    "title": "Luxor.polysortbyangle",
-    "category": "Function",
-    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::Array, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.polycentroid",
-    "page": "Basic graphics",
-    "title": "Luxor.polycentroid",
-    "category": "Function",
-    "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons.\n\nYou could test the point using isinside().\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.polybbox",
-    "page": "Basic graphics",
-    "title": "Luxor.polybbox",
-    "category": "Function",
-    "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::Array)\n\nReturn the two opposite corners (suitable for box(), for example).\n\n\n\n"
 },
 
 {
@@ -1014,14 +990,6 @@ var documenterSearchIndex = {"docs": [
     "title": "An early test",
     "category": "section",
     "text": "(Image: Luxor test)using Luxor, Colors\nDrawing(1200, 1400, \"basic-test.png\") # or PDF/SVG filename for PDF or SVG\n\norigin()\nbackground(\"purple\")\n\nsetopacity(0.7)                      # opacity from 0 to 1\nsethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity\nsetline(20)                          # line width\n\nrect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip\nrandomhue()\ncircle(0, 0, 460, :stroke)\ncircle(0,-200,400,:clip)             # a circular clipping mask above the x axis\nsethue(\"gold\")\nsetopacity(0.7)\nsetline(10)\nfor i in 0:pi/36:2pi - pi/36\n  move(0, 0)\n  line(cos(i) * 600, sin(i) * 600 )\n  stroke()\nend\nclipreset()                           # finish clipping/masking\nfontsize(60)\nsetcolor(\"turquoise\")\nfontface(\"Optima-ExtraBlack\")\ntextwidth = textextents(\"Luxor\")[5]\ntextcentred(\"Luxor\", 0, currentdrawing.height/2 - 400)\nfontsize(18)\nfontface(\"Avenir-Black\")\n\n# text on curve starting at angle 0 rads centered on origin with radius 550\ntextcurve(\"THIS IS TEXT ON A CURVE \" ^ 14, 0, 550, Point(0, 0))\nfinish()\npreview() # on macOS, opens in Preview"
-},
-
-{
-    "location": "moreexamples.html#Sierpinski-triangle-1",
-    "page": "More examples",
-    "title": "Sierpinski triangle",
-    "category": "section",
-    "text": "The main type is the Point, an immutable composite type containing x and y fields.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points::Array{Point}, degree::Int64)\n    global counter, cols\n    setcolor(cols[degree+1])\n    poly(points, :fill)\n    counter += 1\nend\n\nfunction sierpinski(points::Array{Point}, degree::Int64)\n    triangle(points, degree)\n    if degree > 0\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\n@time begin\n    depth = 8 # 12 is ok, 20 is right out\n    cols = distinguishable_colors(depth + 1)\n    Drawing(400, 400, \"/tmp/sierpinski.svg\")\n    origin()\n    setopacity(0.5)\n    counter = 0\n    my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]\n    sierpinski(my_points, depth)\n    println(\"drew $counter triangles\")\nend\n\nfinish()\npreview()\n\n# drew 9841 triangles\n# elapsed time: 1.738649452 seconds (118966484 bytes allocated, 2.20% gc time)"
 },
 
 {
