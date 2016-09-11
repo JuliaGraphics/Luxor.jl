@@ -417,7 +417,7 @@ ngon
 ```
 ### Polygons
 
-A polygon is an array of Points. Use `poly()` to add them, or `randompointarray()` to create a random list of Points.
+A polygon is an array of Points. Use `poly()` to draw them, or `randompointarray()` to create a random list of Points.
 
 Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:
 

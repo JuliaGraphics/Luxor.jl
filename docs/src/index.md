@@ -13,7 +13,7 @@ Please submit issues and pull requests on [github](https://github.com/cormullion
 Install the package as follows:
 
 ```
-Pkg.add("Luxor.jl")
+Pkg.add("Luxor")
 ```
 
 and to use it:
