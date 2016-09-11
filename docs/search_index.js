@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
     "category": "section",
-    "text": "Install the package as follows:Pkg.add(\"Luxor.jl\")and to use it:using LuxorIn most of the examples in this documentation, it's assumed that you have added:using Luxor, Colorsbefore the graphics commands."
+    "text": "Install the package as follows:Pkg.add(\"Luxor\")and to use it:using LuxorIn most of the examples in this documentation, it's assumed that you have added:using Luxor, Colorsbefore the graphics commands."
 },
 
 {
@@ -601,11 +601,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.polysplit",
+    "page": "Basic graphics",
+    "title": "Luxor.polysplit",
+    "category": "Function",
+    "text": "Split a polygon into two where it intersects with a line:\n\npolysplit(p, p1, p2)\n\nThis doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon the shape of the letter \"E\" might end up being divided into more than two parts.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.polysortbydistance",
+    "page": "Basic graphics",
+    "title": "Luxor.polysortbydistance",
+    "category": "Function",
+    "text": "Sort a polygon by finding the nearest point to the starting point, then the nearest point to that, and so on.\n\npolysortbydistance(p, starting::Point)\n\nYou can end up with convex (self-intersecting) polygons, unfortunately.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.polysortbyangle",
+    "page": "Basic graphics",
+    "title": "Luxor.polysortbyangle",
+    "category": "Function",
+    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::Array, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.polycentroid",
+    "page": "Basic graphics",
+    "title": "Luxor.polycentroid",
+    "category": "Function",
+    "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons.\n\nYou could test the point using isinside().\n\n\n\n"
+},
+
+{
     "location": "basics.html#Polygons-1",
     "page": "Basic graphics",
     "title": "Polygons",
     "category": "section",
-    "text": "A polygon is an array of Points. Use poly() to add them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"orchid4\") # hide\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor, Colors\nDrawing(400, 250, \"../figures/prettypoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(4)\npoly1 = ngon(0, 0, 100, 6, 0, vertices=true)\nprettypoly(poly1, :stroke, :(\n  randomhue();\n  scale(0.5, 0.5);\n  circle(0, 0, 15, :stroke)\n  ),\nclose=true)\nfinish() # hide(Image: prettypoly)prettypolyPolygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor, Colors # hide\nDrawing(600, 500, \"../figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)\nprettypoly(collect(sincurve), :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetopacity(0.5)\napolygon = star(Point(0,0), 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n  apoint = randompoint(Point(-200, -150), Point(200, 150))\n  randomhue()\n  isinside(apoint, apolygon) && circle(apoint, 3, :fill)\nend\nfinish() # hide(Image: isinside)isinsideThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do the job. For example, here's polysplit():using Luxor, Colors # hide\nDrawing(400, 150, \"../figures/polysplit.png\") # hide\norigin()\nsetopacity(0.8)\nsethue(\"black\")\ns = squircle(Point(0,0), 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid\npolybbox"
+    "text": "A polygon is an array of Points. Use poly() to draw them, or randompointarray() to create a random list of Points.Polygons can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"orchid4\") # hide\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the vertex_action is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor, Colors\nDrawing(400, 250, \"../figures/prettypoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(4)\npoly1 = ngon(0, 0, 100, 6, 0, vertices=true)\nprettypoly(poly1, :stroke, :(\n  randomhue();\n  scale(0.5, 0.5);\n  circle(0, 0, 15, :stroke)\n  ),\nclose=true)\nfinish() # hide(Image: prettypoly)prettypolyPolygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor, Colors # hide\nDrawing(600, 500, \"../figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)\nprettypoly(collect(sincurve), :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke, :(sethue(\"red\"); circle(0, 0, 3, :fill)))\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetopacity(0.5)\napolygon = star(Point(0,0), 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n  apoint = randompoint(Point(-200, -150), Point(200, 150))\n  randomhue()\n  isinside(apoint, apolygon) && circle(apoint, 3, :fill)\nend\nfinish() # hide(Image: isinside)isinsideThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do the job. For example, here's polysplit():using Luxor, Colors # hide\nDrawing(400, 150, \"../figures/polysplit.png\") # hide\norigin()\nsetopacity(0.8)\nsethue(\"black\")\ns = squircle(Point(0,0), 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid"
 },
 
 {
