@@ -4,7 +4,7 @@ Luxor provides basic vector drawing functions and utilities for working with sha
 
 ## Current status
 
-Luxor currently runs on Julia version 0.5, using Cairo.jl and Colors.jl.
+Luxor currently runs on Julia versions 0.4 and 0.5, and uses Cairo.jl and Colors.jl.
 
 Please submit issues and pull requests on [github](https://github.com/cormullion/Luxor.jl)!
 

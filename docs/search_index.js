@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Current status",
     "category": "section",
-    "text": "Luxor currently runs on Julia version 0.5, using Cairo.jl and Colors.jl.Please submit issues and pull requests on github!"
+    "text": "Luxor currently runs on Julia versions 0.4 and 0.5, and uses Cairo.jl and Colors.jl.Please submit issues and pull requests on github!"
 },
 
 {
