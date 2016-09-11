@@ -524,20 +524,16 @@ The `rt` option defaults to 0.5, and gives an intermediate shape. Values less th
 """
 
 function squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false, reversepath=false)
-  gsave()
-  translate(center)
   points = Point[]
   for theta in 0:pi/40:2pi
-      xpos = ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
-      ypos = ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
+      xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
+      ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
       push!(points, Point(xpos, ypos))
   end
   if vertices
     return points
-  else
-    poly(points, action, close=true, reversepath=reversepath)
   end
-  grestore()
+  poly(points, action, close=true, reversepath=reversepath)
 end
 
 """
