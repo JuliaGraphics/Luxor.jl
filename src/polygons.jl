@@ -272,7 +272,7 @@ This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorit
 """
 function isinside(p::Point, pointlist::Array)
     c = false
-    detq(q1,q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
+    detq(q1, q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
     for counter in 1:length(pointlist)
         q1 = pointlist[counter]
         # if reached last point, set "next point" to first point
@@ -357,9 +357,8 @@ function polysplit(pointlist, p1, p2)
 end
 
 """
-Draw the polygon defined by points in `pl`, possibly closing and reversing it, using the current parameters,
-and then evaluate (using `eval`, *shudder*) the expression at every vertex of the polygon. For example, you can mark each
-vertex of a polygon with a circle scaled to 0.1.
+Draw the polygon defined by points in `pointlist`, possibly closing and reversing it, using the current parameters,
+and then evaluate (using `eval`, *shudder*) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a filled circle.
 
     prettypoly(pointlist::Array,
       action = :nothing,
