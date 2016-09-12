@@ -105,3 +105,9 @@ Looking upwards again, this moon phase chart shows the calculated phase of the m
 !["benchmark sector chart"](figures/2017-moon-phase-calendar.png)
 
 [link to PDF original](figures/2017-moon-phase-calendar.pdf) | [link to github repository](https://github.com/cormullion/Spiral-moon-calendar)
+
+### Misc images
+
+Sometimes you just want to take a line for a walk:
+
+!["pointless"](figures/art.png)
