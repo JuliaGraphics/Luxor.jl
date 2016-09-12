@@ -97,6 +97,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples.html#Misc-images-1",
+    "page": "A few examples",
+    "title": "Misc images",
+    "category": "section",
+    "text": "Sometimes you just want to take a line for a walk:(Image: \"pointless\")"
+},
+
+{
     "location": "basics.html#",
     "page": "Basic graphics",
     "title": "Basic graphics",
