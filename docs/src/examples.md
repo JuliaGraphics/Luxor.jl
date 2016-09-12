@@ -19,23 +19,21 @@ The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image 
 
 ## A slightly more complicated example: a Sierpinski triangle
 
-The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
+Here's a version of the Sierpinski recursive triangle, clipped to a circle.
 
 ![Sierpinski](figures/sierpinski.png)
 
 ```julia
 using Luxor, Colors
 
-function triangle(points::Array{Point}, degree::Int64)
-    global counter, cols
-    setcolor(cols[degree+1])
+function triangle(points, degree)
+    sethue(cols[degree])
     poly(points, :fill)
-    counter += 1
 end
 
-function sierpinski(points::Array{Point}, degree::Int64)
+function sierpinski(points, degree)
     triangle(points, degree)
-    if degree > 0
+    if degree > 1
         p1, p2, p3 = points
         sierpinski([p1, midpoint(p1, p2),
                         midpoint(p1, p3)], degree-1)
@@ -46,23 +44,25 @@ function sierpinski(points::Array{Point}, degree::Int64)
     end
 end
 
-@time begin
-  depth = 8 # 12 is ok, 20 is right out
-  cols = distinguishable_colors(depth + 1)
-  Drawing(400, 400, "/tmp/sierpinski.svg")
+function draw(n)
+  Drawing(200, 200, "/tmp/sierpinski.pdf")
   origin()
-  setopacity(0.5)
-  counter = 0
-  my_points = [Point(-100, -50), Point(0, 100), Point(100.0, -50.0)]
-  sierpinski(my_points, depth)
-  println("drew $counter triangles")
+  background("ivory")
+  circle(Point(0, 0), 75, :clip)
+  my_points = ngon(Point(0, 0), 150, 3, -pi/2, vertices=true)
+  depth = 8 # 12 is ok, 20 is right out
+  sierpinski(my_points, n)
+  finish()
+  preview()
 end
 
-finish()
-preview()
+cols = distinguishable_colors(8)
+draw(8)
 ```
 
 You can change "sierpinski.svg" to "sierpinski.pdf" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
+
+The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
 
 ## How I use Luxor
 
