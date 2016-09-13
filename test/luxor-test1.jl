@@ -44,7 +44,7 @@ function draw_luxor_demo(fname)
     fontsize(18)
     fontface("Avenir-Black")
 
-    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
+    textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, O)
     finish()
     println("finished test: output in $(fname)")
 end

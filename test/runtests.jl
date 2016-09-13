@@ -1,10 +1,18 @@
+using Compat
+
+if @compat is_unix()
+  cd("/tmp")
+end
+
+info(" running tests in: $(pwd())")
+
 info("starting test axes-test" ); include("axes-test.jl")
 info("starting test circletests" ); include("circletests.jl")
 info("starting test clipping-test" ); include("clipping-test.jl")
 
 # this test fails when followed by other tests in the same session, but not on its own.
 # Presumably there's some pointer or something which isn't released properly
-#info("starting test get_path" ); include("get_path.jl")
+# info("starting test get_path" ); include("get_path.jl")
 
 info("starting test ellipse test" ); include("ellipse-test.jl")
 info("starting test heart-julia" ); include("heart-julia.jl")
@@ -34,4 +42,4 @@ info("starting test text-path-clipping" ); include("text-path-clipping.jl")
 info("starting test tiling-images" ); include("tiling-images.jl")
 info("starting test turtle" ); include("turtle.jl")
 
-info("all tests finished")
+info("all tests finished. Images were saved to $(pwd()).")

@@ -48,8 +48,8 @@ function draw(n)
   Drawing(200, 200, "/tmp/sierpinski.pdf")
   origin()
   background("ivory")
-  circle(Point(0, 0), 75, :clip)
-  my_points = ngon(Point(0, 0), 150, 3, -pi/2, vertices=true)
+  circle(O, 75, :clip)
+  my_points = ngon(O, 150, 3, -pi/2, vertices=true)
   depth = 8 # 12 is ok, 20 is right out
   sierpinski(my_points, n)
   finish()
@@ -60,7 +60,7 @@ cols = distinguishable_colors(8)
 draw(8)
 ```
 
-You can change "sierpinski.svg" to "sierpinski.pdf" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
+You can change "sierpinski.pdf" to "sierpinski.svg" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
 

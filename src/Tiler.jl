@@ -21,13 +21,13 @@ You can access the calculated tile width and height like this:
     end
 """
 type Tiler
-  width
-  height
-  tilewidth
-  tileheight
-  nrows
-  ncols
-  margin
+  width::Real
+  height::Real
+  tilewidth::Real
+  tileheight::Real
+  nrows::Int
+  ncols::Int
+  margin::Real
   function Tiler(pagewidth, pageheight, nrows::Int, ncols::Int; margin=10)
       tilewidth  = (pagewidth  - 2 * margin)/ncols
       tileheight = (pageheight - 2 * margin)/nrows
