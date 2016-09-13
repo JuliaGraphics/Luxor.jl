@@ -83,3 +83,22 @@ spiral(colschememirror)
 finish()
 preview()
 ```
+
+## Why turtles?
+
+An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here's an example of how a complex pattern can emerge from a simple set of rules, taken from [Lindenmayer.jl](https://github.com/cormullion/Lindenmayer.jl):
+
+![penrose](figures/penrose.png)
+
+The definition of this figure is:
+```
+penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
+                       "Y"  => "+PM--QM[---XM--YM]+t",
+                       "P"  => "-XM++YM[+++PM++QM]-t",
+                       "Q"  => "--PM++++XM[+QM++++YM]--YMt",
+                       "M"  => "F",
+                       "F"  => ""),
+                  "1[Y]++[Y]++[Y]++[Y]++[Y]")
+```
+
+where some of the characters—eg "F", "+", "-", and "t"—issue turtle control commands, and others—"X,", "Y", "P", and "Q"—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.

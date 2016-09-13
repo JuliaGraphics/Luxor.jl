@@ -1,8 +1,7 @@
 VERSION >= v"0.4.0-dev+6641" && __precompile__()
 
 """
-The Luxor package provides a set of vector drawing functions for creating graphical
-documents.
+The Luxor package provides a set of vector drawing functions for creating graphical documents.
 """
 module Luxor
 
@@ -251,10 +250,10 @@ function axes()
     setline(1)
     fontsize(20)
     sethue("gray")
-    arrow(Point(0, 0), Point(currentdrawing.width/2. - 30, 0))
+    arrow(O, Point(currentdrawing.width/2. - 30, 0))
     text("x", Point(currentdrawing.width/2. - 30, -15))
     text("x", Point(30, -15))
-    arrow(Point(0, 0), Point(0, currentdrawing.height/2. - 30))
+    arrow(O, Point(0, currentdrawing.height/2. - 30))
     text("y", Point(5, currentdrawing.width/2. - 30))
     text("y", Point(5, 30))
     grestore()
@@ -1182,6 +1181,8 @@ function sethue(col::String)
 end
 
 """
+Set the color to a named color:
+
     sethue("red")
 
 """
@@ -1193,10 +1194,13 @@ function sethue(col::ColorTypes.Colorant)
 end
 
 """
+Set the color's `r`, `g`, `b` values:
+
     sethue(0.3, 0.7, 0.9)
 
 Use `setcolor(r,g,b,a)` to set transparent colors.
 """
+
 function sethue(r, g, b)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
     # use current alpha
@@ -1335,8 +1339,8 @@ Read a PNG file into Cairo.
 
     readpng(pathname)
 
-This returns a image object suitable for placing on the current drawing with
-`placeimage()`. You can access its width and height properties.
+This returns a image object suitable for placing on the current drawing with `placeimage()`.
+You can access its width and height properties:
 
     image = readpng("/tmp/test-image.png")
     w = image.width
@@ -1364,6 +1368,16 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos)
 end
 
 """
+Place a PNG image on the drawing.
+
+placeimage(img, pos, a)
+
+The image `img` has been previously loaded using `readpng()`.
+"""
+placeimage(img::Cairo.CairoSurface, pt::Point) =
+placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
+
+"""
 Place a PNG image on the drawing using alpha transparency.
 
     placeimage(img, xpos, ypos, a)
@@ -1376,16 +1390,6 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
 end
 
 """
-Place a PNG image on the drawing.
-
-    placeimage(img, pos, a)
-
-The image `img` has been previously loaded using `readpng()`.
-"""
-placeimage(img::Cairo.CairoSurface, pt::Point) =
-  placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
-
-"""
   Place a PNG image on the drawing using alpha transparency.
 
       placeimage(img, pos, a)
@@ -1396,5 +1400,4 @@ placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
 
 end
-
 # module

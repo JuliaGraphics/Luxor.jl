@@ -5,7 +5,7 @@ using Luxor
 width, height = 4000, 4000
 margin = 500
 
-fname = "/tmp/cairo-image.pdf"
+fname = "/tmp/test-image.pdf"
 Drawing(width, height, fname)
 origin()
 background("grey25")
@@ -13,7 +13,8 @@ background("grey25")
 setline(5)
 sethue("green")
 
-image = readpng("docs/figures/julia-logo-mask.png")
+image = readpng(dirname(@__FILE__) * "/../docs/figures/julia-logo-mask.png")
+
 w = image.width
 h = image.height
 

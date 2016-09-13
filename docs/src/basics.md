@@ -126,7 +126,7 @@ Drawing(400, 200, "../figures/circles.png") # hide
 background("white") # hide
 origin() # hide
 setline(2) # hide
-p1 = Point(0, 0)
+p1 = O
 p2 = Point(100, 0)
 sethue("red")
 circle(p1, 40, :fill)
@@ -272,9 +272,9 @@ background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
 setline(2)
-arrow(Point(0, 0), Point(0, -65))
-arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
-arrow(Point(0, 0), 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
+arrow(O, Point(0, -65))
+arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
+arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
 finish() # hide
 ```
 ![arrows](figures/arrow.png)
