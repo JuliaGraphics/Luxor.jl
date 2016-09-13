@@ -29,7 +29,6 @@ function draw(fname, n)
   depth = 8 # 12 is ok, 20 is right out
   sierpinski(my_points, n)
   finish()
-  preview()
 end
 
 cols = distinguishable_colors(8)
