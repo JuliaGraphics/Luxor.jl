@@ -28,7 +28,6 @@ function simple_polys()
             y += vstep
         end
     end
-
     grestore()
 end
 
@@ -42,7 +41,7 @@ function hex_mixtures()
             setline(rand()*10)
             sethue(backgroundcolors[rand(1:end)])
             gsave()
-                 translate(x,y)
+                 translate(x, y)
                  rotate(rand() * pi)
                  # point version
                  poly(hexagon(rand() * 5, rand() * 5, 15 + rand() * 5), :fill, close=true)
@@ -84,11 +83,7 @@ function polygon_test(fname)
 
     global foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
     global backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
-
-    setopacity(0.6)
     setline(2)
-
-
     # fill, then clip to heptagon
     setcolor("lightcyan")
     setline(3)

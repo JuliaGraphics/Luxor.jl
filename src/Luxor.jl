@@ -77,7 +77,7 @@ type Drawing
             the_surfacetype = "pdf"
             the_cr          =  Cairo.CairoContext(the_surface)
         elseif ext == ".png" || ext == "" # default to PNG
-            the_surface     = Cairo.CairoRGBSurface(w,h)
+            the_surface     = Cairo.CairoARGBSurface(w,h)
             the_surfacetype = "png"
             the_cr          = Cairo.CairoContext(the_surface)
         elseif ext == ".eps"
@@ -230,14 +230,16 @@ end
 Convert or rescale a value between `oldmin`/`oldmax` to the equivalent value between
 `newmin`/`newmax`.
 
+    rescale(value, oldmin, oldmax, newmin, newmax)
+
 For example, to convert 42 lying on a scale from 0 and 100 to the equivalent number
-between 1 and 0, inverting the direction:
+between 1 and 0 (inverting the direction):
 
     rescale(42, 0, 100, 1, 0)
 
 returns 0.5800000000000001
 """
-rescale(value, oldmin, oldmax, newmin, newmax) =
+rescale(value, oldmin, oldmax, newmin=0, newmax=1) =
    ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
 
 """
@@ -262,7 +264,8 @@ end
 """
     background(color)
 
-Fill the canvas (or the current clipping region, if there is one) with a single color.
+Fill the canvas with a single color. Returns the (red, green, blue, alpha) values.
+
 
 Examples:
 
@@ -270,16 +273,35 @@ Examples:
     background("ivory")
     background(Colors.RGB(0, 0, 0))
     background(Colors.Luv(20, -20, 30))
+
+If you don't specify a background color for a PNG drawing, the background will be transparent. You can set a transparent background for PNG files by passing a color with an alpha value, such as this transparent black:
+
+    background(RGBA(0, 0, 0, 0))
+
 """
 function background(col::String)
    setcolor(col)
    paint()
+   return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
 function background(col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
-    setcolor(temp.r, temp.g, temp.b)
+    setcolor(temp.r, temp.g, temp.b, temp.alpha)
     paint()
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+end
+
+function background(r, g, b)
+    sethue(r, g, b)
+    paint()
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+end
+
+function background(r, g, b, a)
+    setcolor(r, g, b, a)
+    paint()
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
 # does this do anything in Cairo?
@@ -1115,6 +1137,7 @@ function setcolor(col::String)
     temp = parse(RGBA, col)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
+    return (temp.r, temp.g, temp.b, temp.alpha)
 end
 
 """
@@ -1139,12 +1162,14 @@ Examples:
 function setcolor(col::ColorTypes.Colorant)
   temp = convert(RGBA, col)
   setcolor(temp.r, temp.g, temp.b)
+  return (temp.r, temp.g, temp.b)
 end
 
 function setcolor(r, g, b, a=1)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
       currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
+    return (r, g, b, a)
 end
 
 """
@@ -1178,6 +1203,7 @@ function sethue(col::String)
     temp = parse(RGBA,  col)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = temp.r, temp.g, temp.b
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha) # use current alpha, not incoming one
+    return (temp.r, temp.g, temp.b)
 end
 
 """
@@ -1191,6 +1217,7 @@ function sethue(col::ColorTypes.Colorant)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = temp.r, temp.g, temp.b
     # use current alpha
     Cairo.set_source_rgba(currentdrawing.cr, temp.r, temp.g, temp.b, currentdrawing.alpha)
+    return (temp.r, temp.g, temp.b, currentdrawing.alpha)
 end
 
 """
@@ -1205,6 +1232,7 @@ function sethue(r, g, b)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
     # use current alpha
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, currentdrawing.alpha)
+    return (r, g, b, currentdrawing.alpha)
 end
 
 """
@@ -1218,6 +1246,7 @@ function setopacity(a)
     # use current RGB values
     currentdrawing.alpha = a
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+    return a
 end
 
 """
@@ -1227,8 +1256,11 @@ Set a random hue.
 
 Choose a random color without changing the current alpha opacity.
 """
+
 function randomhue()
-    sethue(rand(), rand(), rand())
+  rrand, grand, brand = rand(3)
+  sethue(rrand, grand, brand)
+  return (rrand, grand, brand)
 end
 
 """
@@ -1240,7 +1272,9 @@ This probably changes the current alpha opacity too.
 
 """
 function randomcolor()
-    setcolor(rand(), rand(), rand(), rand())
+  rrand, grand, brand, arand = rand(4)
+  setcolor(rrand, grand, brand, arand)
+  return (rrand, grand, brand, arand)
 end
 
 """

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor documentation</title><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script></head><body><nav class="toc"><a href><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Luxor-logo-1">Luxor logo</a></li><li><a class="toctext" href="#Why-turtles?-1">Why turtles?</a></li></ul></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/cormullion/Luxor.jl/tree/1b1ddeb4295c216f1e934a8c25da381556dcff80/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>A good place to look for examples (sometimes not very exciting or well-written examples, I&#39;ll admit), is in the <code>Luxor/test</code> directory.</p><p><img src="figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor, Colors
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor documentation</title><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script></head><body><nav class="toc"><a href><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Luxor-logo-1">Luxor logo</a></li><li><a class="toctext" href="#Why-turtles?-1">Why turtles?</a></li></ul></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/cormullion/Luxor.jl/tree/fbded8861b6eaed214431b0b87626791d7979ad3/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>A good place to look for examples (sometimes not very exciting or well-written examples, I&#39;ll admit), is in the <code>Luxor/test</code> directory.</p><p><img src="figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor, Colors
 Drawing(1200, 1400, &quot;basic-test.png&quot;) # or PDF/SVG filename for PDF or SVG
-
 origin()
 background(&quot;purple&quot;)
-
 setopacity(0.7)                      # opacity from 0 to 1
 sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn&#39;t change the opacity
 setline(20)                          # line width
@@ -35,25 +33,24 @@ textcurve(&quot;THIS IS TEXT ON A CURVE &quot; ^ 14, 0, 550, Point(0, 0))
 finish()
 preview() # on macOS, opens in Preview</code></pre><h2><a class="nav-anchor" id="Luxor-logo-1" href="#Luxor-logo-1">Luxor logo</a></h2><p>In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.</p><p><img src="figures/logo.png" alt="logo"/></p><pre><code class="language-none">using Luxor, Colors, ColorSchemes
 
+function spiral(colscheme)
+circle(0, 0, 90, :clip)
+for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
+sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
+gsave()
+rotate(theta)
+move(5,0)
+curve(Point(40, 40), Point(50, -40), Point(80, 30))
+closepath()
+fill()
+grestore()
+end
+clipreset()
+end
+
 width = 225  # pts
 height = 225 # pts
 Drawing(width, height, &quot;/tmp/logo.png&quot;)
-
-function spiral(colscheme)
-  circle(0, 0, 90, :clip)
-  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
-    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
-    gsave()
-    rotate(theta)
-    move(5,0)
-    curve(Point(40, 40), Point(50, -40), Point(80, 30))
-    closepath()
-    fill()
-    grestore()
-  end
-  clipreset()
-end
-
 origin()
 background(&quot;white&quot;)
 scale(1.3, 1.3)

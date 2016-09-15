@@ -5,7 +5,6 @@ using Luxor
 function get_png_files(folder)
     cd(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
-    imagelist = filter(f -> !startswith(f, "tiled-images"), imagelist) # don't recurse... :)
     return map(realpath, imagelist)
 end
 
@@ -47,12 +46,12 @@ Drawing(width, height, fname)
 origin()
 background("grey50")
 setopacity(0.5)
-pagetiles = Tiler(width, height, 4, 5, margin=50)
+pagetiles = Tiler(width, height, 8, 8, margin=50)
 for (pos, n) in pagetiles
-  addimagetile(imagelist[n], pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, cropping=true)
   if n > length(imagelist) # run out of images
     break
   end
+  addimagetile(imagelist[n], pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, cropping=true)
 end
 finish()
 println("finished test: output in $(fname)")

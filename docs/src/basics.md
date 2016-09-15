@@ -81,14 +81,31 @@ The origin (0/0) starts off at the top left: the x axis runs left to right, and 
 
 The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program.
 
-The `axes()` function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.
+`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications.
 
-`background()` fills the entire image with a color, covering any previous contents.
+If you have a clipping region, `background()` fills just that region:
+
+```@example
+using Luxor, Colors # hide
+Drawing(600, 400, "../figures/backgrounds.png") # hide
+origin() # hide
+tiles = Tiler(600, 400, 5, 5, margin=0)
+for (pos, n) in tiles
+  box(pos, tiles.tilewidth, tiles.tileheight, :clip)
+  background(randomhue()...)
+  clipreset()
+end
+finish() # hide
+```
+
+![background](figures/backgrounds.png)
+
+The `axes()` function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.
 
 ```@example
 using Luxor, Colors # hide
 Drawing(400, 400, "../figures/axes.png") # hide
-background("gray20")
+background("gray80")
 origin()
 axes()
 finish() # hide
@@ -225,12 +242,12 @@ A *squircle* is a cross between a square and a circle. You can adjust the squari
 
 ```@example
 using Luxor, Colors # hide
-Drawing(600, 400, "../figures/squircle.png") # hide
+Drawing(600, 250, "../figures/squircle.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(20) # hide
 setline(2)
-tiles = Tiler(600, 300, 1, 3)
+tiles = Tiler(600, 250, 1, 3)
 for (pos, n) in tiles
     sethue("lavender")
     squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)
@@ -597,10 +614,10 @@ Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 ```julia
   using Luxor, Colors
   Drawing(1800, 1800, "/tmp/text-spiral.png")
-  fontsize(18)
-  fontface("LucidaSansUnicode")
   origin()
   background("ivory")
+  fontsize(18)
+  fontface("LucidaSansUnicode")
   sethue("royalblue4")
   textstring = join(names(Base), " ")
   textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2,

@@ -85,3 +85,9 @@ getmatrix
 setmatrix
 transform
 ```
+
+Rescale gives a number rescaled to run  over the range `min` to `max`.
+
+```@docs
+rescale
+```

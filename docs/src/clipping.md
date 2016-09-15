@@ -16,10 +16,6 @@ This example loads a file containing a function that draws the Julia logo. It ca
 # load functions to draw the Julia logo
 include("../test/julia-logo.jl")
 
-currentwidth = 500 # pts
-currentheight = 500 # pts
-Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
-
 function draw(x, y)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     gsave()
@@ -33,6 +29,9 @@ function draw(x, y)
     grestore()
 end
 
+currentwidth = 500 # pts
+currentheight = 500 # pts
+Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
 origin()
 background("white")
 setopacity(.4)
