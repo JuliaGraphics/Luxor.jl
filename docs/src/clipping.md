@@ -2,6 +2,23 @@
 
 Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keeps the current path, but also uses it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing functions like `circle()`.
 
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../figures/simpleclip.png") # hide
+background("white") # hide
+origin() # hide
+sethue("grey50")
+setdash("dotted")
+circle(O, 50, :stroke)
+sethue("magenta")
+circle(O, 50, :clip)
+box(O, 50, 120, :fill)
+sethue("black")
+stroke()
+finish() # hide
+```
+![simple clip](figures/simpleclip.png)
+
 ```@docs
 clip
 clippreserve

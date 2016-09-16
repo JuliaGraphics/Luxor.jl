@@ -167,10 +167,10 @@ Append "landscape" to get the landscape version.
 
     Drawing("A4landscape")
 
-Create the drawing A4 landscape size.
+creates the drawing A4 landscape size.
 
-Note that PDF files seem to default to a white background, but PNG defaults to black.
-Might be a bug here somewhere...
+PDF files default to a white background, but PNG defaults to transparent, unless you specify
+one using `background()`.
 """
 function Drawing(paper_size::String, f="luxor-drawing.png")
   if contains(paper_size, "landscape")
@@ -219,7 +219,10 @@ end
 """
     origin()
 
-Reset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).
+Reset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise
+it will stay at the top left corner, the default).
+
+You can refer to the 0/0 point as `O`. (O = `Point(0, 0)`),
 """
 function origin()
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
@@ -243,7 +246,7 @@ rescale(value, oldmin, oldmax, newmin=0, newmax=1) =
    ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
 
 """
-Draw two axes lines starting at the current 0/0 and continuing out along the current
+Draw two axes lines starting at `O`, the current 0/0, and continuing out along the current
 positive x and y axes.
 """
 function axes()
@@ -266,7 +269,6 @@ end
 
 Fill the canvas with a single color. Returns the (red, green, blue, alpha) values.
 
-
 Examples:
 
     background("antiquewhite")
@@ -274,7 +276,9 @@ Examples:
     background(Colors.RGB(0, 0, 0))
     background(Colors.Luv(20, -20, 30))
 
-If you don't specify a background color for a PNG drawing, the background will be transparent. You can set a transparent background for PNG files by passing a color with an alpha value, such as this transparent black:
+If you don't specify a background color for a PNG drawing, the background will be
+transparent.  You can set a partial of completely transparent background for PNG files by
+passing a color with an alpha value, such as this transparent black:
 
     background(RGBA(0, 0, 0, 0))
 
@@ -1282,7 +1286,7 @@ Get the current matrix.
 
     getmatrix()
 
-Return current Cairo matrix as an array. In Cairo and Luxor, a matrix is an array of 6 float64 numbers:
+Returns the current Cairo matrix as an array. In Cairo/Luxor, a matrix is an array of six float64 numbers:
 
 - xx component of the affine transformation
 - yx component of the affine transformation
@@ -1293,17 +1297,29 @@ Return current Cairo matrix as an array. In Cairo and Luxor, a matrix is an arra
 
 Some basic matrix transforms:
 
-- translate(dx,dy) =	  transform([1,  0, 0,  1, dx, dy])                 shift by
+- translate
+  `transform([1,  0, 0,  1, dx, dy])`
+  => shift by `dx`, `dy`
 
-- scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                  scale by
+- scale
+  `transform([fx, 0, 0, fy,  0, 0])`
+  => scale by `fx`, `fy`
 
-- rotate(A)        =    transform([c, s, -c, c,   0, 0])                  rotate to A radians
+- rotate
+  `transform([cos(a), sin(a), -cos(a), cos(a), 0, 0])`
+  => rotate to `a` radians
 
-- x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])             xskew by A
+- x-skew
+  `transform([1,  0, tan(a), 1, 0, 0])`
+  => xskew by `a`
 
-- y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])                yskew by A
+- y-skew
+  `transform([1, tan(a), 0, 1, 0, 0])`
+  => yskew by `a`
 
-- flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)])  flip
+- flip
+  `transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])`
+  => flip with center at `centerx`/`centery`
 
 When a drawing is first created, the matrix looks like this:
 
@@ -1404,7 +1420,7 @@ end
 """
 Place a PNG image on the drawing.
 
-placeimage(img, pos, a)
+    placeimage(img, pos, a)
 
 The image `img` has been previously loaded using `readpng()`.
 """
@@ -1424,9 +1440,9 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
 end
 
 """
-  Place a PNG image on the drawing using alpha transparency.
+Place a PNG image on the drawing using alpha transparency.
 
-      placeimage(img, pos, a)
+    placeimage(img, pos, a)
 
 The image `img` has been previously loaded using `readpng()`.
 """

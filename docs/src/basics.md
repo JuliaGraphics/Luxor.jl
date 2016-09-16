@@ -8,19 +8,19 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ## Types
 
-The two main defined types are the `Point` and the `Drawing`. The Point type holds two coordinates, the x and y:
+The two main defined types are the `Point` and the `Drawing`. The Point type holds two coordinates, `x` and `y`:
 
 ```
 Point(12.0, 13.0)
 ```
 
-It's immutable, so you want to avoid trying to change the x or y coordinate directly.
+It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use `O` as a shortcut to refer to the origin, `Point(0, 0)`.
 
 The other is `Drawing`, which is how you create new drawings.
 
 ## Drawings and files
 
-To create a drawing, and optionally specify the filename and type, and dimensions, use the `Drawing` function to create a Drawing.
+To create a drawing, and optionally specify the filename and type, and dimensions, use the `Drawing` constructor function.
 
 ```@docs
 Drawing
@@ -33,7 +33,7 @@ finish
 preview
 ```
 
-The global variable `currentdrawing` of type Drawing holds a few parameters which are occasionaly useful:
+The global variable `currentdrawing` (of type Drawing) holds a few parameters which are occasionally useful:
 
 ```
 julia> fieldnames(currentdrawing)
@@ -50,7 +50,7 @@ julia> fieldnames(currentdrawing)
 :alpha
 ```
 
-The drawing area (or any other area) can be divided into tiles (rows and columns) using the `Tiler` iterator.
+The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator.
 
 ```@example
 using Luxor, Colors # hide
@@ -62,7 +62,7 @@ fontsize(20)
 tiles = Tiler(400, 300, 4, 5, margin=5)
 for (pos, n) in tiles
   randomhue()
-  box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+  box(pos, tiles.tilewidth, tiles.tileheight, :fill)
   sethue("white")
   textcentred(string(n), pos + Point(0, 5))
 end
@@ -79,11 +79,9 @@ Tiler
 
 The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.
 
-The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program.
+The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `translate()` to change the location of the origin.
 
-`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications.
-
-If you have a clipping region, `background()` fills just that region:
+`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region:
 
 ```@example
 using Luxor, Colors # hide
@@ -135,7 +133,7 @@ polybbox
 
 ## Circles, ellipses, and the like
 
-There are various ways to make circles, including by center and radius, through two points, or passing through three points. You can place ellipses (and circles) by defining centerpoint and width and height.
+There are various ways to make circles, including by center and radius, through two points, or passing through three points. With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
 ```@example
 using Luxor, Colors # hide
@@ -150,7 +148,7 @@ circle(p1, 40, :fill)
 sethue("green")
 circle(p1, p2, :stroke)
 sethue("black")
-arrow(Point(0,0), Point(0, -40))
+arrow(O, Point(0, -40))
 map(p -> circle(p, 4, :fill), [p1, p2])
 finish() # hide
 ```
@@ -280,7 +278,7 @@ curve
 
 ### Arrows
 
-You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow.
+You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. You can specify a line weight (equivalent to `setline()`), otherwise the default is 1.
 
 ```@example
 using Luxor, Colors # hide
@@ -329,7 +327,7 @@ randomcolor
 
 ## Styles
 
-The `set-` functions control the width, end shapes, join behavior and dash pattern:
+The `set-` functions control subsequent lines' width, end shapes, join behavior, and dash pattern:
 
 ```@example
 using Luxor, Colors # hide
@@ -436,7 +434,19 @@ ngon
 
 A polygon is an array of Points. Use `poly()` to draw them, or `randompointarray()` to create a random list of Points.
 
-Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two polygons, the second forming a hole in the first, to make a hexagonal bolt shape:
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../figures/simplepoly.png") # hide
+background("white") # hide
+origin() # hide
+sethue("orchid4")
+poly([Point(rand(-150:150), rand(-100:100)) for i in 1:20], :fill)
+finish() # hide
+```
+
+![simple poly](figures/simplepoly.png)
+
+Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```@example
 using Luxor, Colors # hide
@@ -511,7 +521,7 @@ Drawing(400, 250, "../figures/isinside.png") # hide
 background("white") # hide
 origin() # hide
 setopacity(0.5)
-apolygon = star(Point(0,0), 100, 5, 0.5, 0, vertices=true)
+apolygon = star(O, 100, 5, 0.5, 0, vertices=true)
 for n in 1:10000
   apoint = randompoint(Point(-200, -150), Point(200, 150))
   randomhue()
@@ -525,7 +535,7 @@ finish() # hide
 isinside
 ```
 
-There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do the job. For example, here's `polysplit()`:
+There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
 
 ```@example
 using Luxor, Colors # hide
@@ -533,7 +543,7 @@ Drawing(400, 150, "../figures/polysplit.png") # hide
 origin()
 setopacity(0.8)
 sethue("black")
-s = squircle(Point(0,0), 60, 60, vertices=true)
+s = squircle(O, 60, 60, vertices=true)
 pt1 = Point(0, -120)
 pt2 = Point(0, 120)
 line(pt1, pt2, :stroke)
@@ -580,7 +590,7 @@ star
 
 ### Placing text
 
-Use `text()`, `textcentred()`, and `textright()` to place text. `textpath()` converts the text into  a graphic path suitable for further manipulations.
+Use `text()`, `textcentred()`, and `textright()` to place text. `textpath()` converts the text into a graphic path suitable for further manipulations.
 
 ```@docs
 text
@@ -639,7 +649,7 @@ textcurve
 
 ### Text clipping
 
-You can use newly-created text paths as a clipping region - here the text paths are 'filled' with names of randomly chosen Julia functions:
+You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:
 
 ![text clipping](figures/text-path-clipping.png)
 
