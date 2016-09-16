@@ -78,7 +78,36 @@ The current matrix is a six element array, perhaps like this:
 [1, 0, 0, 1, 0, 0]
 ```
 
-`getmatrix()` gets the current matrix, `setmatrix(a)` sets the matrix to array `a`, and  `transform(a)` transforms the current matrix by 'multiplying' it with matrix `a`.
+`transform(a)` transforms the current workspace by 'multiplying' the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
+
+```@example
+using Luxor # hide
+fname = "../figures/transform.png" # hide
+pagewidth, pageheight = 450, 100 # hide
+Drawing(pagewidth, pageheight, fname) # hide
+origin() # hide
+background("white") # hide
+translate(-200, 0) # hide
+
+function boxtext(p, t)
+  sethue("grey30")
+  box(p, 30, 50, :fill)
+  sethue("white")
+  textcentred(t, p)
+end
+
+for i in 0:5
+  xskew = tand(i * 5.0)
+  transform([1, 0, xskew, 1, 50, 0])
+  boxtext(O, string(round(rad2deg(xskew), 1), "°"))
+end
+
+finish() # hide
+```
+
+![transform](figures/transform.png)
+
+`getmatrix()` gets the current matrix, `setmatrix(a)` sets the matrix to array `a`.
 
 ```@docs
 getmatrix

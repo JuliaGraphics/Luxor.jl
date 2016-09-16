@@ -39,7 +39,7 @@ fontsize(18)
 fontface("Avenir-Black")
 
 # text on curve starting at angle 0 rads centered on origin with radius 550
-textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, Point(0, 0))
+textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, O)
 finish()
 preview() # on macOS, opens in Preview
 ```
