@@ -37,8 +37,8 @@ function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlengt
   #    fromx = startpoint.x + (endpoint.x  - startpoint.x) * (1-ratio)
   #    fromy = startpoint.y + (endpoint.y - startpoint.y) *  (1-ratio)
 
-  fromx=startpoint.x
-  fromy=startpoint.y
+  fromx = startpoint.x
+  fromy = startpoint.y
 
   # draw the shaft of the arrow
   newpath()
@@ -56,6 +56,7 @@ function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlengt
   poly([Point(topx,topy), endpoint, Point(botx,boty)], :fill)
   grestore()
 end
+
 
 """
 Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and ending at
@@ -101,14 +102,15 @@ function arrow(centerpos::Point, radius, startangle, endangle; linewidth=1.0, ar
   closepath()
   # draw head
   # rotation of head should be based on end of shaft, not end of arrow
-  newendpoint = Point(radius * cos(newendangle), radius * sin(newendangle))
-  shaftangle = mod2pi(-pi/2 + atan2(0 - newendpoint.y, 0 - newendpoint.x))
-  arrowheadbottomsideangle = shaftangle + pi - arrowheadangle
-  arrowheadtopsideangle = shaftangle + pi + arrowheadangle
-  topx = endpoint.x + cos(arrowheadtopsideangle) * arrowheadlength
-  topy = endpoint.y + sin(arrowheadtopsideangle) * arrowheadlength
-  botx = endpoint.x + cos(arrowheadbottomsideangle) * arrowheadlength
-  boty = endpoint.y + sin(arrowheadbottomsideangle) * arrowheadlength
+  newendpoint =              Point(radius * cos(newendangle), radius * sin(newendangle))
+  shaftangle =               mod2pi(-pi/2 + atan2(0 - newendpoint.y, 0 - newendpoint.x))
+  #
+  arrowheadoutersideangle = shaftangle + pi - arrowheadangle
+  arrowheadinnersideangle    = shaftangle + pi + arrowheadangle
+  topx =                     endpoint.x + cos(arrowheadinnersideangle) * arrowheadlength
+  topy =                     endpoint.y + sin(arrowheadinnersideangle) * arrowheadlength
+  botx =                     endpoint.x + cos(arrowheadoutersideangle) * arrowheadlength
+  boty =                     endpoint.y + sin(arrowheadoutersideangle) * arrowheadlength
   poly([Point(topx,topy), Point(endpoint.x, endpoint.y), Point(botx,boty)], :fill)
   grestore()
 end

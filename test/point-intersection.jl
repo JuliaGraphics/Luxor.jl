@@ -8,8 +8,6 @@ function point_intersect(fname)
   setopacity(0.4)
 
   for i in 1:100
-    @show currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha
-
       randomhue()
       p1 = Point(rand(-300:300), rand(-300:300))
       p2 = Point(rand(-300:300), rand(-300:300))

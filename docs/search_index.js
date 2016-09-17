@@ -53,7 +53,7 @@ var documenterSearchIndex = {"docs": [
     "page": "A few examples",
     "title": "A slightly more complicated example: a Sierpinski triangle",
     "category": "section",
-    "text": "Here's a version of the Sierpinski recursive triangle, clipped to a circle.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points, degree)\n    sethue(cols[degree])\n    poly(points, :fill)\nend\n\nfunction sierpinski(points, degree)\n    triangle(points, degree)\n    if degree > 1\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\nfunction draw(n)\n  Drawing(200, 200, \"/tmp/sierpinski.pdf\")\n  origin()\n  background(\"ivory\")\n  circle(O, 75, :clip)\n  my_points = ngon(O, 150, 3, -pi/2, vertices=true)\n  depth = 8 # 12 is ok, 20 is right out\n  sierpinski(my_points, n)\n  finish()\n  preview()\nend\n\ncols = distinguishable_colors(8)\ndraw(8)You can change \"sierpinski.pdf\" to \"sierpinski.svg\" or \"sierpinski.png\" or \"sierpinski.eps\" to produce alternative formats.The main type (apart from the Drawing) is the Point, an immutable composite type containing x and y fields."
+    "text": "Here's a version of the Sierpinski recursive triangle, clipped to a circle.(Image: Sierpinski)using Luxor, Colors\n\nfunction triangle(points, degree)\n    sethue(cols[degree])\n    poly(points, :fill)\nend\n\nfunction sierpinski(points, degree)\n    triangle(points, degree)\n    if degree > 1\n        p1, p2, p3 = points\n        sierpinski([p1, midpoint(p1, p2),\n                        midpoint(p1, p3)], degree-1)\n        sierpinski([p2, midpoint(p1, p2),\n                        midpoint(p2, p3)], degree-1)\n        sierpinski([p3, midpoint(p3, p2),\n                        midpoint(p1, p3)], degree-1)\n    end\nend\n\nfunction draw(n)\n  Drawing(200, 200, \"/tmp/sierpinski.pdf\")\n  origin()\n  background(\"ivory\")\n  circle(O, 75, :clip)\n  my_points = ngon(O, 150, 3, -pi/2, vertices=true)\n  sierpinski(my_points, n)\n  finish()\n  preview()\nend\n\ndepth = 8 # 12 is ok, 20 is right out (on my computer, at least)\ncols = distinguishable_colors(depth)\ndraw(depth)You can change \"sierpinski.pdf\" to \"sierpinski.svg\" or \"sierpinski.png\" or \"sierpinski.eps\" to produce alternative formats.The main type (apart from the Drawing) is the Point, an immutable composite type containing x and y fields."
 },
 
 {
@@ -125,7 +125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Types",
     "category": "section",
-    "text": "The two main defined types are the Point and the Drawing. The Point type holds two coordinates, x and y:Point(12.0, 13.0)It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use O as a shortcut to refer to the origin, Point(0, 0).The other is Drawing, which is how you create new drawings."
+    "text": "The two main defined types are the Point and the Drawing. The Point type holds two coordinates, x and y:Point(12.0, 13.0)It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter O as a shortcut to refer to the current Origin, Point(0, 0).The other is Drawing, which is how you create new drawings."
 },
 
 {
@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Axes and backgrounds",
     "category": "section",
-    "text": "The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.The origin() function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like translate() to change the location of the origin.background() fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, background() fills just that region:using Luxor, Colors # hide\nDrawing(600, 400, \"../figures/backgrounds.png\") # hide\norigin() # hide\ntiles = Tiler(600, 400, 5, 5, margin=0)\nfor (pos, n) in tiles\n  box(pos, tiles.tilewidth, tiles.tileheight, :clip)\n  background(randomhue()...)\n  clipreset()\nend\nfinish() # hide(Image: background)The axes() function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.using Luxor, Colors # hide\nDrawing(400, 400, \"../figures/axes.png\") # hide\nbackground(\"gray80\")\norigin()\naxes()\nfinish() # hide(Image: axes)background\naxes\norigin"
+    "text": "The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.The origin() function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like scale(), rotate(), and translate() to change the coordinate system.background() fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, background() fills just that region:using Luxor, Colors # hide\nDrawing(600, 400, \"../figures/backgrounds.png\") # hide\norigin() # hide\ntiles = Tiler(600, 400, 5, 5, margin=0)\nfor (pos, n) in tiles\n  box(pos, tiles.tilewidth, tiles.tileheight, :clip)\n  background(randomhue()...)\n  clipreset()\nend\nfinish() # hide(Image: background)The axes() function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.using Luxor, Colors # hide\nDrawing(400, 400, \"../figures/axes.png\") # hide\nbackground(\"gray80\")\norigin()\naxes()\nfinish() # hide(Image: axes)background\naxes\norigin"
 },
 
 {
@@ -325,7 +325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.arc",
     "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\nTODO: Point versions\n\n\n\n"
+    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
 },
 
 {
@@ -333,7 +333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.carc",
     "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\nTODO: Point versions\n\n\n\n"
+    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\n"
 },
 
 {
@@ -749,7 +749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.textcurve",
     "category": "Function",
-    "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text,\n          start_angle,\n          start_radius,\n          x_pos = 0,\n          y_pos = 0;\n          # optional keyword arguments:\n          spiral_ring_step = 0,   # step out or in by this amount\n          letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centred on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
+    "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text,\n          start_angle,\n          start_radius,\n          x_pos = 0,\n          y_pos = 0;\n          # optional keyword arguments:\n          spiral_ring_step = 0,    # step out or in by this amount\n          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards\n          clockwise = true         #\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centred on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
 },
 
 {
@@ -877,7 +877,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Clipping",
     "title": "Clipping",
     "category": "section",
-    "text": "Use clip() to turn the current path into a clipping region, masking any graphics outside the path. clippreserve() keeps the current path, but also uses it as a clipping region. clipreset() resets it. :clip is also an action for drawing functions like circle().using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/simpleclip.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"grey50\")\nsetdash(\"dotted\")\ncircle(O, 50, :stroke)\nsethue(\"magenta\")\ncircle(O, 50, :clip)\nbox(O, 50, 120, :fill)\nsethue(\"black\")\nstroke()\nfinish() # hide(Image: simple clip)clip\nclippreserve\nclipresetThis example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are mainly randomly-colored circles:(Image: julia logo mask)# load functions to draw the Julia logo\ninclude(\"../test/julia-logo.jl\")\n\nfunction draw(x, y)\n    foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)\n    gsave()\n    translate(x-100, y)\n    julialogo(false, true)      # add paths for logo\n    clip()                      # use paths for clipping\n    for i in 1:500\n        sethue(foregroundcolors[rand(1:end)])\n        circle(rand(-50:350), rand(0:300), 15, :fill)\n    end\n    grestore()\nend\n\ncurrentwidth = 500 # pts\ncurrentheight = 500 # pts\nDrawing(currentwidth, currentheight, \"/tmp/clipping-tests.pdf\")\norigin()\nbackground(\"white\")\nsetopacity(.4)\ndraw(0, 0)\n\nfinish()\npreview()"
+    "text": "Use clip() to turn the current path into a clipping region, masking any graphics outside the path. clippreserve() keeps the current path, but also uses it as a clipping region. clipreset() resets it. :clip is also an action for drawing functions like circle().using Luxor, Colors # hide\nDrawing(400, 250, \"../figures/simpleclip.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"grey50\")\nsetdash(\"dotted\")\ncircle(O, 50, :stroke)\nsethue(\"magenta\")\ncircle(O, 50, :clip)\nbox(O, 50, 120, :fill)\nfinish() # hide(Image: simple clip)clip\nclippreserve\nclipresetThis example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are  randomly-colored circles:(Image: julia logo mask)# load functions to draw the Julia logo\ninclude(\"../test/julia-logo.jl\")\n\nfunction draw(x, y)\n    foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)\n    gsave()\n    translate(x-100, y)\n    julialogo(false, true)      # add paths for logo\n    clip()                      # use paths for clipping\n    for i in 1:500\n        sethue(foregroundcolors[rand(1:end)])\n        circle(rand(-50:350), rand(0:300), 15, :fill)\n    end\n    grestore()\nend\n\ncurrentwidth = 500 # pts\ncurrentheight = 500 # pts\nDrawing(currentwidth, currentheight, \"/tmp/clipping-tests.pdf\")\norigin()\nbackground(\"white\")\nsetopacity(.4)\ndraw(0, 0)\n\nfinish()\npreview()"
 },
 
 {

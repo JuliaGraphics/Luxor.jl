@@ -568,12 +568,14 @@ Add an arc to the current path from `angle1` to `angle2` going clockwise.
 
 Angles are defined relative to the x-axis, positive clockwise.
 
-TODO: Point versions
 """
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
   do_action(action)
 end
+
+arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
+  arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
 Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
@@ -582,13 +584,14 @@ Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
 
 Angles are defined relative to the x-axis, positive clockwise.
 
-TODO: Point versions
-
 """
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
   do_action(action)
 end
+
+carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
+  carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
 Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and do
@@ -1075,9 +1078,10 @@ textcurve(the_text,
           x_pos = 0,
           y_pos = 0;
           # optional keyword arguments:
-          spiral_ring_step = 0,   # step out or in by this amount
-          letter_spacing = 0,     # tracking/space between chars, tighter is (-), looser is (+)
-          spiral_in_out_shift = 0 # + values go outwards, - values spiral inwards
+          spiral_ring_step = 0,    # step out or in by this amount
+          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
+          spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards
+          clockwise = true         #
           )
 ```
 
@@ -1089,7 +1093,8 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
   # keyword optional arguments
   spiral_ring_step = 0,
   letter_spacing = 0, # tracking/space between chars, tighter is (-), looser is (+)
-  spiral_in_out_shift = 0 # makes spiral outwards (+) or inwards (-)
+  spiral_in_out_shift = 0, # makes spiral outwards (+) or inwards (-)
+  clockwise = true
   )
   refangle = start_angle
   current_radius = start_radius
@@ -1098,7 +1103,6 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
   yy = 0
   angle_step = 0
   radius_step = 0
-  counter = 1
   for i in the_text
     glyph = string(i)
     glyph_x_bearing, glyph_y_bearing, glyph_width,
@@ -1108,17 +1112,24 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
     radius_step = (spiral_ring_step + spiral_in_out_shift) / cnter
     current_radius += radius_step
     angle_step += (glyph_x_advance / 2.) + letter_spacing/2.
-    refangle += angle_step / current_radius
+    if clockwise
+      refangle += angle_step / current_radius
+    else
+      refangle -= angle_step / current_radius
+    end
     angle_step = (glyph_x_advance / 2.) + letter_spacing/2.
     xx = cos(refangle) * current_radius + x_pos
     yy = sin(refangle) * current_radius + y_pos
     gsave()
     translate(xx, yy)
-    rotate(pi/2. + refangle)
+    if clockwise
+      rotate(pi/2. + refangle)
+    else
+      rotate(-pi/2. + refangle)
+    end
     textcentred(glyph, 0., 0.)
     grestore()
     current_radius < 10. && break
-    counter += 1
   end
 end
 

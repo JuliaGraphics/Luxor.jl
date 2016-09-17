@@ -13,8 +13,6 @@ circle(O, 50, :stroke)
 sethue("magenta")
 circle(O, 50, :clip)
 box(O, 50, 120, :fill)
-sethue("black")
-stroke()
 finish() # hide
 ```
 ![simple clip](figures/simpleclip.png)
@@ -25,7 +23,7 @@ clippreserve
 clipreset
 ```
 
-This example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are mainly randomly-colored circles:
+This example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are  randomly-colored circles:
 
 ![julia logo mask](figures/julia-logo-mask.png)
 
