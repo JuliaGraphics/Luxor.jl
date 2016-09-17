@@ -14,7 +14,7 @@ The two main defined types are the `Point` and the `Drawing`. The Point type hol
 Point(12.0, 13.0)
 ```
 
-It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use `O` as a shortcut to refer to the origin, `Point(0, 0)`.
+It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter `O` as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
 The other is `Drawing`, which is how you create new drawings.
 
@@ -79,7 +79,7 @@ Tiler
 
 The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.
 
-The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `translate()` to change the location of the origin.
+The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
 `background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region:
 

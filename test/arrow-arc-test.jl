@@ -7,11 +7,11 @@ function test_circular_arrows_1(pos)
     froma = rescale(rand(1:100), 1, 100, 0, 2pi)
     toa =   rescale(rand(1:100), 1, 100, 0, 2pi)
     sethue("black")
-    arrow(pos, 100, froma, toa, linewidth=rand(1:6), arrowheadlength=rand(1:20))
+    arrow(pos, 100, froma, toa, linewidth=rand(1:6), arrowheadlength=rand(10:30))
     text(string("from: ", round(rad2deg(froma), 1)), pos)
     text(string("to: ", round(rad2deg(toa), 1)), pos.x, pos.y+10)
     sethue("magenta")
-    arrow(pos, 100, toa, froma; linewidth=rand(1:6), arrowheadlength=rand(1:20))
+    arrow(pos, 100, toa, froma; linewidth=rand(1:6), arrowheadlength=rand(10:30))
     text(string("from: ", round(rad2deg(toa), 1)), pos.x, pos.y+20)
     text(string("to: ", round(rad2deg(froma), 1)), pos.x, pos.y+30)
     grestore()
@@ -47,5 +47,5 @@ function arrow_test(fname)
 end
 
 srand(42)
-fname = "/tmp/arrow-test.pdf"
+fname = "/tmp/arrow-arctest.pdf"
 arrow_test(fname)
