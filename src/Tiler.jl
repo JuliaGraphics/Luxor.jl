@@ -1,6 +1,9 @@
 """
-A Tiler is an iterator that returns the `x`/`y` point of the center of each tile
-in a set of tiles that divide up a rectangular space such as a page into rows and columns.
+A Tiler is an iterator that, for each iteration, returns a tuple of:
+
+- the `x`/`y` point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)
+
+- the number of the tile
 
     tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)
 
@@ -28,10 +31,10 @@ type Tiler
   nrows::Int
   ncols::Int
   margin::Real
-  function Tiler(pagewidth, pageheight, nrows::Int, ncols::Int; margin=10)
-      tilewidth  = (pagewidth  - 2 * margin)/ncols
-      tileheight = (pageheight - 2 * margin)/nrows
-      new(pagewidth, pageheight, tilewidth, tileheight, nrows, ncols, margin)
+  function Tiler(areawidth, areaheight, nrows::Int, ncols::Int; margin=10)
+      tilewidth  = (areawidth - 2margin)/ncols
+      tileheight = (areaheight - 2margin)/nrows
+      new(areawidth, areaheight, tilewidth, tileheight, nrows, ncols, margin)
   end
 end
 

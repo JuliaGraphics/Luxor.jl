@@ -157,7 +157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.Tiler",
     "category": "Type",
-    "text": "A Tiler is an iterator that returns the x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns.\n\ntiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n# the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n  ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\n\n\n"
+    "text": "A Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\ntiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nwhere width, height is the dimensions of the area to be tiled, nrows/ncols is the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n# the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n  ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\n\n\n"
 },
 
 {
@@ -165,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing (of type Drawing) holds a few parameters which are occasionally useful:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the Tiler iterator.using Luxor, Colors # hide\nDrawing(400, 300, \"../figures/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\nfontsize(20)\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n  sethue(\"white\")\n  textcentred(string(n), pos + Point(0, 5))\nend\nfinish() # hide(Image: tiler)Tiler"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().finish\npreviewThe global variable currentdrawing (of type Drawing) holds a few parameters which are occasionally useful:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alphaThe drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the Tiler iterator, which returns the center point and tile number of each tile.using Luxor, Colors # hide\nDrawing(400, 300, \"../figures/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\nfontsize(20) # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n  randomhue()\n  box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n  if n % 3 == 0\n    gsave()\n    translate(pos)\n    subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)\n    sethue(\"black\")\n    for (pos1, n1) in subtiles\n      randomhue()\n      box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)\n    end\n     grestore()\n  end\n  sethue(\"white\")\n  textcentred(string(n), pos + Point(0, 5))\nend\nfinish() # hide(Image: tiler)Tiler"
 },
 
 {
@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Axes and backgrounds",
     "category": "section",
-    "text": "The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.The origin() function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like scale(), rotate(), and translate() to change the coordinate system.background() fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, background() fills just that region:using Luxor, Colors # hide\nDrawing(600, 400, \"../figures/backgrounds.png\") # hide\norigin() # hide\ntiles = Tiler(600, 400, 5, 5, margin=0)\nfor (pos, n) in tiles\n  box(pos, tiles.tilewidth, tiles.tileheight, :clip)\n  background(randomhue()...)\n  clipreset()\nend\nfinish() # hide(Image: background)The axes() function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.using Luxor, Colors # hide\nDrawing(400, 400, \"../figures/axes.png\") # hide\nbackground(\"gray80\")\norigin()\naxes()\nfinish() # hide(Image: axes)background\naxes\norigin"
+    "text": "The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.The origin() function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like scale(), rotate(), and translate() to change the coordinate system.background() fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, background() fills just that region. Here, the first background() filled the entire drawing; the calls in the loop fill only the active clipping region:using Luxor, Colors # hide\nDrawing(600, 400, \"../figures/backgrounds.png\") # hide\nbackground(\"magenta\")\norigin() # hide\ntiles = Tiler(600, 400, 5, 5, margin=30)\nfor (pos, n) in tiles\n  box(pos, tiles.tilewidth, tiles.tileheight, :clip)\n  background(randomhue()...)\n  clipreset()\nend\nfinish() # hide(Image: background)The axes() function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.using Luxor, Colors # hide\nDrawing(400, 400, \"../figures/axes.png\") # hide\nbackground(\"gray80\")\norigin()\naxes()\nfinish() # hide(Image: axes)background\naxes\norigin"
 },
 
 {
@@ -677,31 +677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.text",
     "category": "Function",
-    "text": "text(str)\ntext(str, x, y)\ntext(str, pt)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at 0/0.\n\nIn Luxor, placing text doesn't affect the current point.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.textcentred",
-    "page": "Basic graphics",
-    "title": "Luxor.textcentred",
-    "category": "Function",
-    "text": "textcentred(str)\ntextcentred(str, x, y)\ntextcentred(str, pt)\n\nDraw text in the string str centered at x/y or pt. If you omit the point, it's placed at 0/0.\n\nText doesn't affect the current point!\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.textright",
-    "page": "Basic graphics",
-    "title": "Luxor.textright",
-    "category": "Function",
-    "text": "textright(str)\ntextright(str, x, y)\ntextright(str, pt)\n\nDraw text in the string str right-aligned at x/y or pt. If you omit the point, it's placed at 0/0.\n\nText doesn't affect the current point!\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.textpath",
-    "page": "Basic graphics",
-    "title": "Luxor.textpath",
-    "category": "Function",
-    "text": "textpath(t)\n\nConvert the text in string t to a new path, for subsequent filling/stroking etc...\n\n\n\n"
+    "text": "text(str)\ntext(str, x, y)\ntext(str, pt)\ntext(str, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at 0/0.\n\n:halign can be :left, :center, or :right. :valign can be :baseline, :top, :middle, or :bottom. However, the :valign doesn't work properly because we're using the toy interface... :(\n\nIn Luxor, placing text doesn't affect the current point.\n\n\n\n"
 },
 
 {
@@ -709,7 +685,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Placing text",
     "category": "section",
-    "text": "Use text(), textcentred(), and textright() to place text. textpath() converts the text into a graphic path suitable for further manipulations.text\ntextcentred\ntextright\ntextpath"
+    "text": "Use text() to place text. textpath() converts the text into a graphic path suitable for further manipulations.using Luxor, Colors # hide\nDrawing(400, 150, \"../figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(24) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nsethue(\"black\")\ntext(\"text 1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"text 2\",  pt2, halign=:center, valign = :bottom)\ntext(\"text 3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"text 4\",  pt1, halign=:left,   valign = :top)\ntext(\"text 5 \", pt2, halign=:center, valign = :top)\ntext(\"text 6\",  pt3, halign=:right,  valign = :top)\nfinish() # hide(Image: polysplit)text"
 },
 
 {
