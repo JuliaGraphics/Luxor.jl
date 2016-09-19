@@ -50,7 +50,7 @@ julia> fieldnames(currentdrawing)
 :alpha
 ```
 
-The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator.
+The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile.
 
 ```@example
 using Luxor, Colors # hide
@@ -58,11 +58,22 @@ Drawing(400, 300, "../figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
 srand(1) # hide
-fontsize(20)
+fontsize(20) # hide
 tiles = Tiler(400, 300, 4, 5, margin=5)
 for (pos, n) in tiles
   randomhue()
   box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+  if n % 3 == 0
+    gsave()
+    translate(pos)
+    subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
+    sethue("black")
+    for (pos1, n1) in subtiles
+      randomhue()
+      box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
+    end
+     grestore()
+  end
   sethue("white")
   textcentred(string(n), pos + Point(0, 5))
 end
@@ -81,13 +92,14 @@ The origin (0/0) starts off at the top left: the x axis runs left to right, and 
 
 The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
-`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region:
+`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. Here, the first `background()` filled the entire drawing; the calls in the loop fill only the active clipping region:
 
 ```@example
 using Luxor, Colors # hide
 Drawing(600, 400, "../figures/backgrounds.png") # hide
+background("magenta")
 origin() # hide
-tiles = Tiler(600, 400, 5, 5, margin=0)
+tiles = Tiler(600, 400, 5, 5, margin=30)
 for (pos, n) in tiles
   box(pos, tiles.tilewidth, tiles.tileheight, :clip)
   background(randomhue()...)
@@ -276,7 +288,7 @@ carc
 curve
 ```
 
-### Arrows
+## Arrows
 
 You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. You can specify a line weight (equivalent to `setline()`), otherwise the default is 1.
 
@@ -590,13 +602,34 @@ star
 
 ### Placing text
 
-Use `text()`, `textcentred()`, and `textright()` to place text. `textpath()` converts the text into a graphic path suitable for further manipulations.
+Use `text()` to place text. `textpath()` converts the text into a graphic path suitable for further manipulations.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 150, "../figures/text-placement.png") # hide
+origin() # hide
+background("white") # hide
+fontsize(24) # hide
+sethue("black") # hide
+pt1 = Point(-100, 0)
+pt2 = Point(0, 0)
+pt3 = Point(100, 0)
+sethue("red")
+map(p -> circle(p, 4, :fill), [pt1, pt2, pt3])
+sethue("black")
+text("text 1",  pt1, halign=:left,   valign = :bottom)
+text("text 2",  pt2, halign=:center, valign = :bottom)
+text("text 3",  pt3, halign=:right,  valign = :bottom)
+text("text 4",  pt1, halign=:left,   valign = :top)
+text("text 5 ", pt2, halign=:center, valign = :top)
+text("text 6",  pt3, halign=:right,  valign = :top)
+finish() # hide
+```
+
+![polysplit](figures/text-placement.png)
 
 ```@docs
 text
-textcentred
-textright
-textpath
 ```
 
 ### Fonts
