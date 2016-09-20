@@ -483,7 +483,7 @@ The `prettypoly()` function can place graphics at each vertex of a polygon. Afte
 
 ```@example
 using Luxor, Colors
-Drawing(400, 250, "../figures/prettypoly.png") # hide
+Drawing(400, 250, "../figures/prettypolybasic.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -498,7 +498,7 @@ close=true)
 finish() # hide
 ```
 
-![prettypoly](figures/prettypolyrecursive.png)
+![prettypoly](figures/prettypolybasic.png)
 
 ```@docs
 prettypoly
@@ -508,7 +508,7 @@ Introducing recursion is possible, but some of the parameters have to be enclose
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 250, "../figures/prettypoly.png") # hide
+Drawing(400, 250, "../figures/prettypolyrecursive.png") # hide
 background("white") # hide
 srand(42) # hide
 origin() # hide
