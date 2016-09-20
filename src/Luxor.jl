@@ -1207,9 +1207,9 @@ function transform(a::Array)
 end
 
 """
-Read a PNG file into Cairo.
-
     readpng(pathname)
+
+Read a PNG file into Cairo.
 
 This returns a image object suitable for placing on the current drawing with `placeimage()`.
 You can access its width and height properties:
@@ -1242,9 +1242,7 @@ end
 """
 Place a PNG image on the drawing.
 
-    placeimage(img, pos, a)
-
-The image `img` has been previously loaded using `readpng()`.
+    placeimage(img, pos)
 """
 placeimage(img::Cairo.CairoSurface, pt::Point) =
 placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
@@ -1253,8 +1251,6 @@ placeimage(img::Cairo.CairoSurface, pt.x, pt.y)
 Place a PNG image on the drawing using alpha transparency.
 
     placeimage(img, xpos, ypos, a)
-
-The image `img` has been previously loaded using `readpng()`.
 """
 function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
@@ -1265,8 +1261,6 @@ end
 Place a PNG image on the drawing using alpha transparency.
 
     placeimage(img, pos, a)
-
-The image `img` has been previously loaded using `readpng()`.
 """
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)

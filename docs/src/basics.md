@@ -14,7 +14,7 @@ The two main defined types are the `Point` and the `Drawing`. The Point type hol
 Point(12.0, 13.0)
 ```
 
-It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter `O` as a shortcut to refer to the current Origin, `Point(0, 0)`.
+It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter *O* as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
 The other is `Drawing`, which is how you create new drawings.
 
@@ -52,6 +52,8 @@ julia> fieldnames(currentdrawing)
 
 The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile.
 
+In this example, every third tile is divided up into subtiles and colored:
+
 ```@example
 using Luxor, Colors # hide
 Drawing(400, 300, "../figures/tiler.png") # hide
@@ -67,7 +69,6 @@ for (pos, n) in tiles
     gsave()
     translate(pos)
     subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
-    sethue("black")
     for (pos1, n1) in subtiles
       randomhue()
       box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
@@ -224,11 +225,11 @@ sector(50, 90, pi/2, 0, :fill)
 finish() # hide
 ```
 
+![sector](figures/sector.png)
+
 ```@docs
 sector
 ```
-
-![sector](figures/sector.png)
 
 A pie (or wedge) has start and end angles.
 
@@ -298,7 +299,7 @@ Drawing(400, 250, "../figures/arrow.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
-setline(2)
+setline(2) # hide
 arrow(O, Point(0, -65))
 arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
 arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
@@ -444,7 +445,7 @@ ngon
 ```
 ### Polygons
 
-A polygon is an array of Points. Use `poly()` to draw them, or `randompointarray()` to create a random list of Points.
+A polygon is an array of Points. Use `poly()` to draw them:
 
 ```@example
 using Luxor, Colors # hide
@@ -457,6 +458,10 @@ finish() # hide
 ```
 
 ![simple poly](figures/simplepoly.png)
+
+```@docs
+poly
+```
 
 Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
 
@@ -474,7 +479,7 @@ finish() # hide
 ```
 ![holes](figures/holes.png)
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` expression is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor, Colors
@@ -493,11 +498,40 @@ close=true)
 finish() # hide
 ```
 
-![prettypoly](figures/prettypoly.png)
+![prettypoly](figures/prettypolyrecursive.png)
 
 ```@docs
 prettypoly
 ```
+
+Introducing recursion is possible, but some of the parameters have to be enclosed with `$()` to protect them on their journey through the evaluation process:
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../figures/prettypoly.png") # hide
+background("white") # hide
+srand(42) # hide
+origin() # hide
+sethue("magenta") # hide
+setopacity(0.5) # hide
+
+p = star(O, 80, 7, 0.3, 0, vertices=true)
+prettypoly(p, :fill,
+                  :(
+                  ## for each vertex of the mother polygon
+                  randomhue();
+                  scale(0.5, 0.5);
+                  prettypoly($(p), :fill,
+                    :(
+                    # for each vertex of each daughter polygon
+                    randomhue();
+                    scale(0.25, 0.25);
+                    prettypoly($($(p)), :fill)))))
+
+finish()
+```
+
+![prettypoly](figures/prettypolyrecursive.png)
 
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
 
@@ -547,14 +581,47 @@ finish() # hide
 isinside
 ```
 
+You can use `randompoint()` and `randompointarray()` to create a random Point or list of Points.
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "../figures/randompoints.png") # hide
+background("white") # hide
+srand(42) # hide
+origin() # hide
+
+pt1 = Point(-100, -100)
+pt2 = Point(100, 100)
+
+sethue("gray80")
+map(pt -> circle(pt, 6, :fill), (pt1, pt2))
+box(pt1, pt2, :stroke)
+
+sethue("red")
+circle(randompoint(pt1, pt2), 7, :fill)
+
+sethue("blue")
+map(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))
+
+finish() # hide
+```
+
+![isinside](figures/randompoints.png)
+
+```@docs
+randompoint
+randompointarray
+```
+
 There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
 
 ```@example
 using Luxor, Colors # hide
 Drawing(400, 150, "../figures/polysplit.png") # hide
-origin()
-setopacity(0.8)
-sethue("black")
+origin() # hide
+setopacity(0.7) # hide
+srand(42) # hide
+sethue("black") # hide
 s = squircle(O, 60, 60, vertices=true)
 pt1 = Point(0, -120)
 pt2 = Point(0, 120)
@@ -602,7 +669,7 @@ star
 
 ### Placing text
 
-Use `text()` to place text. `textpath()` converts the text into a graphic path suitable for further manipulations.
+Use `text()` to place text.
 
 ```@example
 using Luxor, Colors # hide
@@ -626,10 +693,16 @@ text("text 6",  pt3, halign=:right,  valign = :top)
 finish() # hide
 ```
 
-![polysplit](figures/text-placement.png)
+![text placement](figures/text-placement.png)
 
 ```@docs
 text
+```
+
+`textpath()` converts the text into a graphic path suitable for further styling.
+
+```@docs
+textpath
 ```
 
 ### Fonts
@@ -655,25 +728,25 @@ Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 ![text on a curve or spiral](figures/text-spiral.png)
 
 ```julia
-  using Luxor, Colors
-  Drawing(1800, 1800, "/tmp/text-spiral.png")
-  origin()
-  background("ivory")
-  fontsize(18)
-  fontface("LucidaSansUnicode")
-  sethue("royalblue4")
-  textstring = join(names(Base), " ")
-  textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2,
-    800, 0, 0,
-    spiral_in_out_shift = -18.0,
-    letter_spacing = 0,
-    spiral_ring_step = 0)
+using Luxor, Colors
+Drawing(1800, 1800, "/tmp/text-spiral.png")
+origin()
+background("ivory")
+fontsize(18)
+fontface("LucidaSansUnicode")
+sethue("royalblue4")
+textstring = join(names(Base), " ")
+textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2,
+  800, 0, 0,
+  spiral_in_out_shift = -18.0,
+  letter_spacing = 0,
+  spiral_ring_step = 0)
 
-  fontsize(35)
-  fontface("Agenda-Black")
-  textcentred("julia names(Base)", 0, 0)
-  finish()
-  preview()
+fontsize(35)
+fontface("Agenda-Black")
+textcentred("julia names(Base)", 0, 0)
+finish()
+preview()
 ```
 
 ```@docs
@@ -687,46 +760,46 @@ You can use newly-created text paths as a clipping region - here the text paths 
 ![text clipping](figures/text-path-clipping.png)
 
 ```julia
-    using Luxor, Colors
+using Luxor, Colors
 
-    currentwidth = 1250 # pts
-    currentheight = 800 # pts
-    Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
+currentwidth = 1250 # pts
+currentheight = 800 # pts
+Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
 
-    origin()
-    background("darkslategray3")
+origin()
+background("darkslategray3")
 
-    fontsize(600)                             # big fontsize to use for clipping
-    fontface("Agenda-Black")
-    str = "julia"                             # string to be clipped
-    w, h = textextents(str)[3:4]              # get width and height
+fontsize(600)                             # big fontsize to use for clipping
+fontface("Agenda-Black")
+str = "julia"                             # string to be clipped
+w, h = textextents(str)[3:4]              # get width and height
 
-    translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
+translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
 
-    textpath(str)                             # make text into a path
-    setline(3)
-    setcolor("black")
-    fillpreserve()                            # fill but keep
-    clip()                                    # and use for clipping region
+textpath(str)                             # make text into a path
+setline(3)
+setcolor("black")
+fillpreserve()                            # fill but keep
+clip()                                    # and use for clipping region
 
-    fontface("Monaco")
-    fontsize(10)
-    namelist = map(x->string(x), names(Base)) # get list of function names in Base.
+fontface("Monaco")
+fontsize(10)
+namelist = map(x->string(x), names(Base)) # get list of function names in Base.
 
-    x = -20
-    y = -h
-    while y < currentheight
-        sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
-        s = namelist[rand(1:end)]
-        text(s, x, y)
-        se = textextents(s)
-        x += se[5]                            # move to the right
-        if x > w
-           x = -20                            # next row
-           y += 10
-        end
+x = -20
+y = -h
+while y < currentheight
+    sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
+    s = namelist[rand(1:end)]
+    text(s, x, y)
+    se = textextents(s)
+    x += se[5]                            # move to the right
+    if x > w
+       x = -20                            # next row
+       y += 10
     end
+end
 
-    finish()
-    preview()
+finish()
+preview()
 ```
