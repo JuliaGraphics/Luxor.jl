@@ -25,9 +25,9 @@ sethue("gold")
 setopacity(0.7)
 setline(10)
 for i in 0:pi/36:2pi - pi/36
-  move(0, 0)
-  line(cos(i) * 600, sin(i) * 600 )
-  stroke()
+    move(0, 0)
+    line(cos(i) * 600, sin(i) * 600 )
+    stroke()
 end
 clipreset()                           # finish clipping/masking
 fontsize(60)
@@ -54,18 +54,18 @@ In this example, the color scheme is mirrored so that the lighter colors are at 
 using Luxor, Colors, ColorSchemes
 
 function spiral(colscheme)
-circle(0, 0, 90, :clip)
-for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
-sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
-gsave()
-rotate(theta)
-move(5,0)
-curve(Point(40, 40), Point(50, -40), Point(80, 30))
-closepath()
-fill()
-grestore()
-end
-clipreset()
+  circle(0, 0, 90, :clip)
+  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
+    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
+    gsave()
+    rotate(theta)
+    move(5,0)
+    curve(Point(40, 40), Point(50, -40), Point(80, 30))
+    closepath()
+    fill()
+    grestore()
+  end
+  clipreset()
 end
 
 width = 225  # pts
