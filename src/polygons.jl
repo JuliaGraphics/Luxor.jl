@@ -189,10 +189,10 @@ Find the vertices of a regular n-sided polygon centred at `x`, `y`:
 
     ngon(x, y, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
 
-`ngon()` draws the shapes: if you just want the raw points, use keyword argument `vertices=false`, which returns the array of points instead. Compare:
+`ngon()` draws the shapes: if you just want the raw points, use keyword argument `vertices=true`, which returns the array of points instead. Compare:
 
 ```julia
-ngon(0, 0, 4, 4, 0, vertices=false) # returns the polygon's points:
+ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
 
     4-element Array{Luxor.Point,1}:
     Luxor.Point(2.4492935982947064e-16,4.0)

@@ -22,7 +22,7 @@ You can clip images. The following script repeatedly places the image using a ci
 !["Images"](figures/test-image.png)
 
 ```julia
-using Luxor
+using Luxor, Colors
 
 width, height = 4000, 4000
 margin = 500
@@ -55,5 +55,4 @@ for (pos, n) in pagetiles
 end
 
 finish()
-
 ```

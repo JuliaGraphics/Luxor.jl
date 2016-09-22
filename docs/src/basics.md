@@ -277,7 +277,36 @@ squircle
 
 ## Lines, arcs, and curves
 
-There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()` and `text()`.
+There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
+
+`curve()` constructs Bèzier curves from control points:
+
+```@example
+using Luxor, Colors # hide
+Drawing(500, 175, "../figures/curve.png") # hide
+origin() # hide
+background("white") # hide
+
+setline(.1)
+pt1 = Point(0, -125)
+pt2 = Point(200, 125)
+pt3 = Point(200, -125)
+
+sethue("red")
+foreach(p -> circle(p, 2, :fill), [O, pt1, pt2, pt3])
+
+line(O, pt1, :stroke)
+line(pt2, pt3, :stroke)
+
+sethue("black")
+setline(3)
+
+move(O)
+curve(pt1, pt2, pt3)
+stroke()
+```
+
+![curve](figures/curve.png)
 
 ```@docs
 move
