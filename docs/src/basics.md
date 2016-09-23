@@ -132,7 +132,7 @@ origin
 
 ## Simple shapes
 
-Functions for making shapes include `circle()`, `ellipse()`, `squircle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`.
+Functions for making shapes include `circle()`, `ellipse()`, `squircle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`. There's also `ngon()` and `star()`, listed under Polygons, below.
 
 ## Rectangles and boxes
 
@@ -146,7 +146,7 @@ polybbox
 
 ## Circles, ellipses, and the like
 
-There are various ways to make circles, including by center and radius, through two points, or passing through three points. With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
+There are various ways to make circles, including by center and radius, through two points, or passing through three points.
 
 ```@example
 using Luxor, Colors # hide
@@ -184,6 +184,8 @@ circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
 ```
 ![center and radius of 3 points](figures/center3.png)
+
+With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
 ```@example
 using Luxor, Colors # hide
@@ -304,9 +306,32 @@ setline(3)
 move(O)
 curve(pt1, pt2, pt3)
 stroke()
+finish()
 ```
 
 ![curve](figures/curve.png)
+
+There are a few arc-drawing commands, such as `arc()`, `carc()`, and `arc2r()`. `arc2r()` draws a circular arc that joins two points:  
+
+```@example
+using Luxor, Colors # hide
+Drawing(500, 175, "../figures/arc2r.png") # hide
+origin() # hide
+background("white") # hide
+tiles = Tiler(500, 175, 1, 4)
+for (pos, n) in tiles
+    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
+    sethue("black")
+    map(pt -> circle(pt, 4, :fill), [c1, pt3])
+    sethue("red")
+    circle(pt2, 4, :fill)
+    randomhue()
+    arc2r(c1, pt2, pt3, :stroke)
+end
+finish() # hide
+```
+
+![arc](figures/arc2r.png)
 
 ```@docs
 move
@@ -314,13 +339,14 @@ rmove
 line
 rline
 arc
+arc2r
 carc
 curve
 ```
 
 ## Arrows
 
-You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. You can specify a line weight (equivalent to `setline()`), otherwise the default is 1.
+You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another with otherwise the default is 1.
 
 ```@example
 using Luxor, Colors # hide
@@ -330,8 +356,8 @@ origin() # hide
 sethue("steelblue4") # hide
 setline(2) # hide
 arrow(O, Point(0, -65))
-arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4)
-arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12)
+arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
+arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
 finish() # hide
 ```
 ![arrows](figures/arrow.png)
@@ -427,7 +453,7 @@ strokepreserve
 fillpreserve
 ```
 
-`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
+`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
 
 ```@docs
 gsave
@@ -474,7 +500,7 @@ ngon
 ```
 ### Polygons
 
-A polygon is an array of Points. Use `poly()` to draw them:
+A polygon is an array of Points. Use `poly()` to draw it:
 
 ```@example
 using Luxor, Colors # hide
@@ -492,7 +518,7 @@ finish() # hide
 poly
 ```
 
-Polygons can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
+A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```@example
 using Luxor, Colors # hide
@@ -554,7 +580,7 @@ prettypoly(p, :fill,
                     :(
                     # for each vertex of each daughter polygon
                     randomhue();
-                    scale(0.25, 0.25);
+                    scale(0.15, 0.15);
                     prettypoly($($(p)), :fill)))))
 
 finish()
@@ -736,7 +762,7 @@ textpath
 
 ### Fonts
 
-Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set font size in points.
+Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 

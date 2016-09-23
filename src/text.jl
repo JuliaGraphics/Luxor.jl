@@ -3,21 +3,23 @@
 
 """
     text(str)
+    text(str, pos)
     text(str, x, y)
-    text(str, pt)
-    text(str, halign=:left)
+    text(str, pos, halign=:left)
     text(str, valign=:baseline)
     text(str, valign=:baseline, halign=:left)
     text(str, pos, valign=:baseline, halign=:left)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
-the string at the point. If you omit the point, it's placed at `0/0`.
+the string at the point. If you omit the point, it's placed at the current `0/0`. In Luxor,
+placing text doesn't affect the current point.
 
 `:halign` can be `:left`, `:center`, or `:right`. `:valign` can be `:baseline`, `:top`,
-`:middle`, or `:bottom`. However, the `:valign` doesn't work properly because we're using
-the toy interface... :(
+`:middle`, or `:bottom`.
 
-In Luxor, placing text doesn't affect the current point.
+However, the `:valign` doesn't work properly because we're using
+Cairo's so-called "toy" interface... :(
+
 """
 
 function text(t, x=0, y=0; halign=:left, valign=:baseline)
@@ -208,5 +210,5 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
   end
 end
 
-textcurve(the_text, start_angle, start_radius, centre::Point) =
-  textcurve(the_text, start_angle, start_radius, centre.x, centre.y)
+textcurve(the_text, start_angle, start_radius, centre::Point; kwargs...) =
+  textcurve(the_text, start_angle, start_radius, centre.x, centre.y; kwargs...)

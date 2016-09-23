@@ -18,6 +18,7 @@ function showt(c, p, ha, va, n)
 end
 
 function text_alignment_tests(fname)
+    legend = String[]
     Drawing(1400,1400, fname)
     origin()
     setopacity(0.8)
@@ -35,6 +36,7 @@ function text_alignment_tests(fname)
       dot(Point(pos))
       showt("Å˰̀Ά", pos, h, v, n)
       grestore()
+      push!(legend, "$n h: $h v: $v")
       current_h += 1
       if current_h > 3
         current_v += 1
@@ -44,8 +46,10 @@ function text_alignment_tests(fname)
         break
       end
     end
+    fontsize(8)
+    text(join(legend, "; "), 0, 600, halign=:center)
     finish()
     println("finished test: output in $(fname)")
 end
 
-text_alignment_tests("/tmp/text-tests.pdf")
+text_alignment_tests("/tmp/text-alignment-tests.pdf")
