@@ -285,17 +285,17 @@ There is a 'current position' which you can set with `move()`, and can use impli
 
 ```@example
 using Luxor, Colors # hide
-Drawing(500, 175, "../figures/curve.png") # hide
+Drawing(500, 275, "../figures/curve.png") # hide
 origin() # hide
 background("white") # hide
 
-setline(.1)
+setline(.5)
 pt1 = Point(0, -125)
 pt2 = Point(200, 125)
 pt3 = Point(200, -125)
 
 sethue("red")
-foreach(p -> circle(p, 2, :fill), [O, pt1, pt2, pt3])
+foreach(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
 
 line(O, pt1, :stroke)
 line(pt2, pt3, :stroke)
@@ -315,10 +315,11 @@ There are a few arc-drawing commands, such as `arc()`, `carc()`, and `arc2r()`. 
 
 ```@example
 using Luxor, Colors # hide
-Drawing(500, 175, "../figures/arc2r.png") # hide
+Drawing(700, 200, "../figures/arc2r.png") # hide
 origin() # hide
+srand(42) # hide
 background("white") # hide
-tiles = Tiler(500, 175, 1, 4)
+tiles = Tiler(700, 200, 1, 6)
 for (pos, n) in tiles
     c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
     sethue("black")
