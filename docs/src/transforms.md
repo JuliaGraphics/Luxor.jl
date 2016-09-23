@@ -9,7 +9,7 @@ using Luxor, Colors # hide
 Drawing(400, 200, "../figures/translate.png") # hide
 background("white") # hide
 srand(1) # hide
-setline(0.1) # hide
+setline(1) # hide
 origin()
 for i in range(0, 30, 6)
   sethue(Colors.HSV(i, 1, 1))
@@ -30,7 +30,7 @@ using Luxor, Colors # hide
 Drawing(400, 200, "../figures/scale.png") # hide
 background("white") # hide
 srand(1) # hide
-setline(0.1) # hide
+setline(1) # hide
 origin()
 for i in range(0, 30, 6)
   sethue(Colors.HSV(i, 1, 1))

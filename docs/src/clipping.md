@@ -9,10 +9,10 @@ background("white") # hide
 origin() # hide
 sethue("grey50")
 setdash("dotted")
-circle(O, 50, :stroke)
+circle(O, 100, :stroke)
 sethue("magenta")
-circle(O, 50, :clip)
-box(O, 50, 120, :fill)
+circle(O, 100, :clip)
+box(O, 50, 200, :fill)
 finish() # hide
 ```
 ![simple clip](figures/simpleclip.png)
