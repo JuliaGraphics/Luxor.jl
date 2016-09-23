@@ -1,4 +1,4 @@
-VERSION >= v"0.4.0-dev+6641" && __precompile__()
+__precompile__()
 
 """
 The Luxor package provides a set of vector drawing functions for creating graphical documents.
@@ -23,7 +23,7 @@ export Drawing, currentdrawing,
     circle, ellipse, squircle, center3pts,
     rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc, carc, ngon, sector, pie,
+    line, rline, curve, arc, carc, arc2r, ngon, sector, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
@@ -575,6 +575,12 @@ function arc(xc, yc, radius, angle1, angle2, action=:nothing)
   do_action(action)
 end
 
+"""
+Add an arc to the current path from `angle1` to `angle2` going clockwise.
+
+    arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
+"""
+
 arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
   arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
@@ -593,6 +599,25 @@ end
 
 carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
   carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
+
+
+"""
+      arc2r(c1, p2, p3, action=:nothing)
+
+Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise.
+
+`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
+"""
+
+function arc2r(c1, p2, p3, action=:nothing)
+    r = norm(c1, p2)
+    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
+    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
+    if startangle < endangle
+      startangle = mod2pi(startangle + 2pi)
+    end
+    arc(c1, r, startangle, endangle, action)
+end
 
 """
 Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and do

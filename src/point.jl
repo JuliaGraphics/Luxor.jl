@@ -52,28 +52,27 @@ function randomordinate(low, high)
 end
 
 """
-Return a random point somewhere inside the rectangle defined by the two points:
+    randompoint(lowpt, highpt)
 
-randompoint(lowpt, highpt)
+Return a random point somewhere inside the rectangle defined by the two points.
 """
 function randompoint(lowpt, highpt)
   Point(randomordinate(lowpt.x, highpt.x), randomordinate(lowpt.y, highpt.y))
 end
 
 """
-Return a random point somewhere inside the rectangle defined by the four coordinates:
-
     randompoint(lowx, lowy, highx, highy)
 
+Return a random point somewhere inside a rectangle defined by the four values.
 """
 function randompoint(lowx, lowy, highx, highy)
     Point(randomordinate(lowx, highx), randomordinate(lowy, highy))
 end
 
 """
-Return an array of `n` random points somewhere inside the rectangle defined by two points:
+    randompointarray(lowpt, highpt, n)
 
-randompointarray(lowpt, highpt, n)
+Return an array of `n` random points somewhere inside the rectangle defined by two points.
 """
 function randompointarray(lowpt, highpt, n)
   array = Point[]
@@ -84,9 +83,10 @@ function randompointarray(lowpt, highpt, n)
 end
 
 """
-Return an array of `n` random points somewhere inside the rectangle defined by the four coordinates:
-
     randompointarray(lowx, lowy, highx, highy, n)
+
+Return an array of `n` random points somewhere inside the rectangle defined by the four coordinates.
+
 """
 function randompointarray(lowx, lowy, highx, highy, n)
     array = Point[]
@@ -97,7 +97,7 @@ function randompointarray(lowx, lowy, highx, highy, n)
 end
 
 """
-norm of two points. Two argument form.
+Find the norm of two points (two argument form).
 
     norm(p1::Point, p2::Point)
 """
@@ -122,9 +122,9 @@ function point_line_distance(p::Point, a::Point, b::Point)
 end
 
 """
-Find the midpoint between two points.
-
     midpoint(p1, p2)
+
+Find the midpoint between two points.
 """
 midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
 
