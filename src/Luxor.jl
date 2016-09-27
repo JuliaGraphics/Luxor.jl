@@ -27,7 +27,7 @@ export Drawing, currentdrawing,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
-    prettypoly,
+    prettypoly, polysmooth, 
 
     star,
 

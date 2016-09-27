@@ -499,9 +499,33 @@ preview()
 ```@docs
 ngon
 ```
+
+### Stars
+
+Use `star()` to make a star.
+
+```@example
+using Luxor, Colors # hide
+Drawing(500, 300, "../figures/stars.png") # hide
+background("white") # hide
+origin() # hide
+tiles = Tiler(400, 300, 4, 6, margin=5)
+for (pos, n) in tiles
+  randomhue()
+  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
+end
+finish() # hide
+```
+
+![stars](figures/stars.png)
+
+```@docs
+star
+```
+
 ### Polygons
 
-A polygon is an array of Points. Use `poly()` to draw it:
+A polygon is an array of Points. Use `poly()` to draw lines connecting the points:
 
 ```@example
 using Luxor, Colors # hide
@@ -697,28 +721,41 @@ polysortbydistance
 polysortbyangle
 polycentroid
 ```
+#### Smoothing polygons
 
-### Stars
+Because polygons can have sharp corners, the `polysmooth()` function can attempt to insert
+arcs at the corners.
 
-Use `star()` to make a star.
+The original polygon is shown in red; the smoothed polygon is drawn on top:
 
 ```@example
 using Luxor, Colors # hide
-Drawing(500, 300, "../figures/stars.png") # hide
-background("white") # hide
+Drawing(600, 250, "../figures/polysmooth.png") # hide
 origin() # hide
-tiles = Tiler(400, 300, 4, 6, margin=5)
+background("white") # hide
+setopacity(0.5) # hide
+srand(42) # hide
+setline(0.7) # hide
+tiles = Tiler(600, 250, 1, 5, margin=10)
 for (pos, n) in tiles
-  randomhue()
-  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
+    p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)
+    setdash("dot")
+    sethue("red")
+    prettypoly(p, close=true, :stroke)
+    setdash("solid")
+    sethue("black")
+    polysmooth(p, n * 2, :fill)
 end
+
 finish() # hide
 ```
 
-![stars](figures/stars.png)
+The final polygon shows what happens if you attempt to smooth corners more than you should:
+
+![polysmooth](figures/polysmooth.png)
 
 ```@docs
-star
+polysmooth
 ```
 
 ## Text and fonts
