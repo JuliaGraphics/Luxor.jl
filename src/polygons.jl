@@ -400,4 +400,123 @@ function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :
     end
 end
 
+function getproportionpoint(point::Point, segment, length, dx, dy)
+    factor = segment / length
+    return Point((point.x - dx * factor), (point.y - dy * factor))
+end
+
+function drawroundedcorner(cornerpoint, p1, p2, radius, path; debug=false)
+    dx1 = cornerpoint.x - p1.x     # vector 1
+    dy1 = cornerpoint.y - p1.y
+    dx2 = cornerpoint.x - p2.x     # vector 2
+    dy2 = cornerpoint.y - p2.y
+
+    # Angle between vector 1 and vector 2 divided by 2
+    angle2 = (atan2(dy1, dx1) - atan2(dy2, dx2)) / 2
+
+    #  length of segment between corner point and the
+    #  points of intersection with the circle of a given radius
+    t = abs(tan(angle2))
+    segment = radius / t
+
+    # Check the segment
+    length1 = hypot(dx1, dy1)
+    length2 = hypot(dx2, dy2)
+    length = min(length1, length2)
+    if segment > length
+        segment = length
+        radius = length * t
+    end
+
+    #  points of intersection are calculated by the proportion between
+    #  the coordinates of the vector, length of vector and the length of the segment.
+    p1_cross = getproportionpoint(cornerpoint, segment, length1, dx1, dy1)
+    p2_cross = getproportionpoint(cornerpoint, segment, length2, dx2, dy2)
+
+    #  calculation of the coordinates of the circle's center by the addition of angular vectors
+    dx = cornerpoint.x * 2 - p1_cross.x - p2_cross.x
+    dy = cornerpoint.y * 2 - p1_cross.y - p2_cross.y
+    L = hypot(dx, dy)
+    d = hypot(segment, radius)
+
+    # this prevents impossible constructions; Cairo will crash if L is 0
+    if isapprox(L, 0.0)
+        L= 0.01
+    end
+
+    circlepoint = getproportionpoint(cornerpoint, d, L, dx, dy)
+
+    # if "debugging" or you just like the circles:
+    debug && circle(circlepoint, radius, :stroke)
+
+    # start angle and end engle of arc
+    startangle = atan2(p1_cross.y - circlepoint.y, p1_cross.x - circlepoint.x)
+    endangle   = atan2(p2_cross.y - circlepoint.y, p2_cross.x - circlepoint.x)
+
+    # add first line segment, up to the start of the arc
+    push!(path, (:line, p1_cross)) # draw line to arc start
+
+    # adjust. Cairo also does this when you draw arc()s, btw
+    if endangle < 0
+        endangle = 2pi + endangle
+    end
+    if startangle < 0
+        startangle = 2pi + startangle
+    end
+    sweepangle = endangle - startangle
+
+    if abs(sweepangle) > pi
+        if startangle < endangle
+            push!(path, (:carc, [circlepoint, radius, startangle, endangle]))
+        else
+            push!(path, (:arc, [circlepoint, radius, startangle, endangle]))
+        end
+    else
+        if startangle < endangle
+            push!(path, (:arc, [circlepoint, radius, startangle, endangle]))
+        else
+            push!(path, (:carc, [circlepoint, radius, startangle, endangle]))
+        end
+    end
+    # line from end of arc to start of next side
+    push!(path, (:line,  p2_cross))
+end
+
+"""
+    polysmooth(points, radius, action=:action; debug=false)
+
+Make a polygon from `points`, but round any sharp corners by making them arcs with the given
+radius.
+
+In fact, the arcs are sometimes different sizes: if the given radius is bigger than the
+length of the shortest side, the arc can't be drawn at its full radius and is therefore
+drawn as large as possible (as large as the shortest side allows).
+
+The `debug` option draws the construction circles at each corner.
+"""
+function polysmooth(points, radius, action=:action; debug=false)
+    temppath = Tuple[]
+    l = length(points)
+    # perhaps should check that l >= 3?
+    for i in 1:l
+        p1 = points[mod1(i, l)]
+        p2 = points[mod1(i + 1, l)]
+        p3 = points[mod1(i + 2, l)]
+        drawroundedcorner(p2, p1, p3, radius, temppath, debug=debug)
+    end
+    # need to close by joining to first point
+    push!(temppath, temppath[1])
+    # draw the path
+    for (c, p) in temppath
+        if c == :line
+            line(p)    # add line segement
+        elseif c == :arc
+            arc(p...)  # add clockwise arc segment
+        elseif c == :carc
+            carc(p...) # add counterclockwise arc segment
+        end
+    end
+    do_action(action)
+end
+
 # end
