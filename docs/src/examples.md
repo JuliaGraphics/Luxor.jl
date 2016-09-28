@@ -5,7 +5,7 @@ Here's the "Hello world":
 !["Hello world"](figures/hello-world.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 Drawing(1000, 1000, "hello-world.png")
 origin()
 background("black")
@@ -25,7 +25,7 @@ Here's a version of the Sierpinski recursive triangle, clipped to a circle.
 ![Sierpinski](figures/sierpinski.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 
 function triangle(points, degree)
     sethue(cols[degree])

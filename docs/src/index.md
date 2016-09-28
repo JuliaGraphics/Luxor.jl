@@ -21,11 +21,3 @@ and to use it:
 ```
 using Luxor
 ```
-
-In most of the examples in this documentation, it's assumed that you have added:
-
-```
-using Luxor, Colors
-```
-
-before the graphics commands.

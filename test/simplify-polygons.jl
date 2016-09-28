@@ -2,7 +2,7 @@
 
 # test polygon simplification
 
-using Luxor, Colors
+using Luxor
 
 function circles(points)
     gsave()

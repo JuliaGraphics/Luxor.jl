@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 fname = "/tmp/Tiler-test1.pdf"
 pagewidth, pageheight = 600, 900

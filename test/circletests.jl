@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function test_circles(fname)
   pagewidth, pageheight = 1200, 1400

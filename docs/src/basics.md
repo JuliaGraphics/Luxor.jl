@@ -55,7 +55,7 @@ The drawing area (or any other area) can be divided into rectangular tiles (as r
 In this example, every third tile is divided up into subtiles and colored:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 300, "../figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
@@ -96,7 +96,7 @@ The `origin()` function moves the 0/0 point to the center of the drawing. It's o
 `background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. Here, the first `background()` filled the entire drawing; the calls in the loop fill only the active clipping region:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(600, 400, "../figures/backgrounds.png") # hide
 background("magenta")
 origin() # hide
@@ -114,7 +114,7 @@ finish() # hide
 The `axes()` function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 400, "../figures/axes.png") # hide
 background("gray80")
 origin()
@@ -149,7 +149,7 @@ polybbox
 There are various ways to make circles, including by center and radius, through two points, or passing through three points.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 200, "../figures/circles.png") # hide
 background("white") # hide
 origin() # hide
@@ -169,7 +169,7 @@ finish() # hide
 ![circles](figures/circles.png)
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 200, "../figures/center3.png") # hide
 background("white") # hide
 origin() # hide
@@ -188,7 +188,7 @@ finish() # hide
 With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(500, 300, "../figures/ellipses.png") # hide
 background("white") # hide
 fontsize(11) # hide
@@ -218,7 +218,7 @@ ellipse
 A sector (strictly an "annular sector") has an inner and outer radius, as well as start and end angles.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 200, "../figures/sector.png") # hide
 background("white") # hide
 origin() # hide
@@ -236,7 +236,7 @@ sector
 A pie (or wedge) has start and end angles.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 300, "../figures/pie.png") # hide
 background("white") # hide
 origin() # hide
@@ -254,7 +254,7 @@ pie
 A *squircle* is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(600, 250, "../figures/squircle.png") # hide
 background("white") # hide
 origin() # hide
@@ -284,7 +284,7 @@ There is a 'current position' which you can set with `move()`, and can use impli
 `curve()` constructs Bèzier curves from control points:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(500, 275, "../figures/curve.png") # hide
 origin() # hide
 background("white") # hide
@@ -314,7 +314,7 @@ finish()
 There are a few arc-drawing commands, such as `arc()`, `carc()`, and `arc2r()`. `arc2r()` draws a circular arc that joins two points:  
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(700, 200, "../figures/arc2r.png") # hide
 origin() # hide
 srand(42) # hide
@@ -345,12 +345,23 @@ carc
 curve
 ```
 
+### Geometry tools
+
+You can find the midpoint between two points using `midpoint()`. `intersection()` finds the intersection of two lines.
+`center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
+
+```@docs
+midpoint
+intersection
+center3pts
+```
+
 ## Arrows
 
 You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another with otherwise the default is 1.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/arrow.png") # hide
 background("white") # hide
 origin() # hide
@@ -390,6 +401,7 @@ The difference between the `setcolor()` and `sethue()` functions is that `sethue
 ```@docs
 sethue
 setcolor
+setopacity
 randomhue
 randomcolor
 ```
@@ -399,7 +411,7 @@ randomcolor
 The `set-` functions control subsequent lines' width, end shapes, join behavior, and dash pattern:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/line-ends.png") # hide
 background("white") # hide
 origin() # hide
@@ -423,7 +435,7 @@ finish() # hide
 ![line endings](figures/line-ends.png)
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(600, 250, "../figures/dashes.png") # hide
 background("white") # hide
 origin() # hide
@@ -452,6 +464,8 @@ stroke
 fill
 strokepreserve
 fillpreserve
+paint
+do_action
 ```
 
 `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
@@ -472,7 +486,7 @@ You can make regular polygons — from triangles, pentagons, hexagons, septagons
 ![n-gons](figures/n-gon.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 Drawing(1200, 1400)
 
 origin()
@@ -505,7 +519,7 @@ ngon
 Use `star()` to make a star.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(500, 300, "../figures/stars.png") # hide
 background("white") # hide
 origin() # hide
@@ -528,7 +542,7 @@ star
 A polygon is an array of Points. Use `poly()` to draw lines connecting the points:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/simplepoly.png") # hide
 background("white") # hide
 origin() # hide
@@ -546,7 +560,7 @@ poly
 A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/holes.png") # hide
 background("white") # hide
 origin() # hide
@@ -562,7 +576,7 @@ finish() # hide
 The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` expression is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
-using Luxor, Colors
+using Luxor
 Drawing(400, 250, "../figures/prettypolybasic.png") # hide
 background("white") # hide
 origin() # hide
@@ -587,7 +601,7 @@ prettypoly
 Introducing recursion is possible, but some of the parameters have to be enclosed with `$()` to protect them on their journey through the evaluation process:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/prettypolyrecursive.png") # hide
 background("white") # hide
 srand(42) # hide
@@ -616,7 +630,7 @@ finish()
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(600, 500, "../figures/simplify.png") # hide
 background("white") # hide
 origin() # hide
@@ -642,7 +656,7 @@ simplify
 The `isinside()` function returns true if a point is inside a polygon.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/isinside.png") # hide
 background("white") # hide
 origin() # hide
@@ -664,7 +678,7 @@ isinside
 You can use `randompoint()` and `randompointarray()` to create a random Point or list of Points.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/randompoints.png") # hide
 background("white") # hide
 srand(42) # hide
@@ -696,7 +710,7 @@ randompointarray
 There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 150, "../figures/polysplit.png") # hide
 origin() # hide
 setopacity(0.7) # hide
@@ -729,7 +743,7 @@ arcs at the corners.
 The original polygon is shown in red; the smoothed polygon is drawn on top:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(600, 250, "../figures/polysmooth.png") # hide
 origin() # hide
 background("white") # hide
@@ -750,9 +764,29 @@ end
 finish() # hide
 ```
 
-The final polygon shows what happens if you attempt to smooth corners more than you should:
-
 ![polysmooth](figures/polysmooth.png)
+
+The final polygon shows that  you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
+origin() # hide
+background("white") # hide
+setopacity(0.75) # hide
+srand(42) # hide
+setline(1) # hide
+p = star(O, 60, 5, 0.35, 0, vertices=true)
+setdash("dot")
+sethue("red")
+prettypoly(p, close=true, :stroke)
+setdash("solid")
+sethue("black")
+polysmooth(p, 40, :fill, debug=true)
+finish() # hide
+```
+
+![polysmooth](figures/polysmooth-pathological.png)
 
 ```@docs
 polysmooth
@@ -765,7 +799,7 @@ polysmooth
 Use `text()` to place text.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 150, "../figures/text-placement.png") # hide
 origin() # hide
 background("white") # hide
@@ -821,7 +855,7 @@ Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 ![text on a curve or spiral](figures/text-spiral.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 Drawing(1800, 1800, "/tmp/text-spiral.png")
 origin()
 background("ivory")
@@ -853,7 +887,7 @@ You can use newly-created text paths as a clipping region - here the text paths 
 ![text clipping](figures/text-path-clipping.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 
 currentwidth = 1250 # pts
 currentheight = 800 # pts

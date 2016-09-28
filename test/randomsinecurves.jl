@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function randomsine(func, vertscale, horizontalscale, pagewidth, pageheight, style, delta=0.1)
     # y is positive downwards...

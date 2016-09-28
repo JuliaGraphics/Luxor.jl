@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 fname = "/tmp/turtles-all-the-way-down.png"
 Drawing(1200, 1200, fname)

@@ -14,7 +14,7 @@ include("Tiler.jl")
 include("arrows.jl")
 include("text.jl")
 
-export Drawing, currentdrawing,
+export Drawing, currentdrawing, paper_sizes,
     rescale,
 
     finish, preview,
@@ -27,7 +27,7 @@ export Drawing, currentdrawing,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
-    prettypoly, polysmooth, 
+    prettypoly, polysmooth,
 
     star,
 
@@ -143,28 +143,26 @@ default size 800 pixels square.
 
 You can specify dimensions, and use the default target filename:
 
-    Drawing(300,300)
+    Drawing(400, 300)
 
-creates a drawing 300 by 300 pixels, defaulting to PNG format, default filename
+creates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename
 "/tmp/luxor-drawing.png".
 
-    Drawing(300,300, "my-drawing.pdf")
+    Drawing(400, 300, "my-drawing.pdf")
 
-creates a PDF drawing in the file "my-drawing.pdf", 300 by 300 pixels.
+creates a PDF drawing in the file "my-drawing.pdf", 400 by 300 pixels.
 
-    Drawing(800,800, "my-drawing.svg")`
+    Drawing(1200, 800, "my-drawing.svg")`
 
-creates an SVG drawing in the file "my-drawing.svg", 800 by 800 pixels.
+creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
-    Drawing(800,800, "my-drawing.eps")
+    Drawing(1200, 1200/golden, "my-drawing.eps")
 
-creates an EPS drawing in the file "my-drawing.eps", 800 by 800 pixels.
+creates an EPS drawing in the file "my-drawing.eps", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high.
 
     Drawing("A4", "my-drawing.pdf")
 
-creates a drawing in ISO A4 size in the file "my-drawing.pdf". Other sizes available
-are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A", "B", "C", "D", "E".
-Append "landscape" to get the landscape version.
+creates a drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf". Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
     Drawing("A4landscape")
 
@@ -274,12 +272,12 @@ Examples:
 
     background("antiquewhite")
     background("ivory")
-    background(Colors.RGB(0, 0, 0))
-    background(Colors.Luv(20, -20, 30))
+    background(RGB(0, 0, 0))       # if Colors.jl is installed
+    background(Luv(20, -20, 30))
 
 If you don't specify a background color for a PNG drawing, the background will be
-transparent.  You can set a partial of completely transparent background for PNG files by
-passing a color with an alpha value, such as this transparent black:
+transparent. You can set a partly or completely transparent background for PNG files by
+passing a color with an alpha value, such as this 'transparent black':
 
     background(RGBA(0, 0, 0, 0))
 

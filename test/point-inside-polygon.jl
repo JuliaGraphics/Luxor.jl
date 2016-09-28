@@ -3,7 +3,7 @@
 # testing isinside(), is point inside polygon
 # all the random points are drawn only if they're inside one of the polygons
 
-using Luxor, Colors
+using Luxor
 
 function ngon_poly(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,

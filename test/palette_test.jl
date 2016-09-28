@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function draw_color_bars(x, y, n, colmap, label)
     setcolor(1,1,1)

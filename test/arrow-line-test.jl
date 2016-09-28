@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function arrow_test(fname)
   pagewidth, pageheight = 2000, 2000

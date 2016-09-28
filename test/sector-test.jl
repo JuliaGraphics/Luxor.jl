@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 fname = "/tmp/sector-test.pdf"
 Drawing(1500, 1500, fname) # points/pixels, 2000 points is 70.56cm × 70.56cm
