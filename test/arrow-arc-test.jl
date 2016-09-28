@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function test_circular_arrows_1(pos)
     gsave()

@@ -1,4 +1,4 @@
-using Luxor, Colors
+using Luxor
 
 currentwidth = 1250 # pts
 currentheight = 800 # pts

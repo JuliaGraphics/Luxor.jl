@@ -12,7 +12,7 @@ Just create paths for the logo but don't apply :
 Typical usage:
 
 ```
-using Luxor, Colors
+using Luxor
 # find this file, eg:
 include("~/.julia/v0.5/Luxor/test/julia-logo.jl"))
 Drawing(1000, 1000, "/tmp/heart-julia.pdf")

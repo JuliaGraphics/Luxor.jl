@@ -3,7 +3,7 @@
 Use `clip()` to turn the current path into a clipping region, masking any graphics outside the path. `clippreserve()` keeps the current path, but also uses it as a clipping region. `clipreset()` resets it. `:clip` is also an action for drawing functions like `circle()`.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 250, "../figures/simpleclip.png") # hide
 background("white") # hide
 origin() # hide

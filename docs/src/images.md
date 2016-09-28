@@ -16,13 +16,12 @@ readpng
 placeimage
 ```
 
-
 You can clip images. The following script repeatedly places the image using a circle to define a clipping path:
 
 !["Images"](figures/test-image.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 
 width, height = 4000, 4000
 margin = 500

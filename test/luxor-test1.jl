@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function draw_luxor_demo(fname)
     Drawing(1200, 1400, fname)

@@ -9,7 +9,7 @@ A good place to look for examples (sometimes not very exciting or well-written e
 ![Luxor test](figures/basic-test.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 Drawing(1200, 1400, "basic-test.png") # or PDF/SVG filename for PDF or SVG
 origin()
 background("purple")
@@ -51,7 +51,7 @@ In this example, the color scheme is mirrored so that the lighter colors are at 
 ![logo](figures/logo.png)
 
 ```
-using Luxor, Colors, ColorSchemes
+using Luxor, ColorSchemes
 
 function spiral(colscheme)
   circle(0, 0, 90, :clip)
@@ -99,3 +99,53 @@ penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
 ```
 
 where some of the characters—eg "F", "+", "-", and "t"—issue turtle control commands, and others—"X,", "Y", "P", and "Q"—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.
+
+## Illustrating this document
+
+This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the documentation is generated, the source of the image being stored in the Markdown document and processed on the fly:
+
+The Markdown markup looks like this:
+
+```
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
+origin() # hide
+background("white") # hide
+setopacity(0.75) # hide
+srand(42) # hide
+setline(1) # hide
+p = star(O, 60, 5, 0.35, 0, vertices=true)
+setdash("dot")
+sethue("red")
+prettypoly(p, close=true, :stroke)
+setdash("solid")
+sethue("black")
+polysmooth(p, 40, :fill, debug=true)
+finish() # hide
+```
+
+![polysmooth](figures/polysmooth-pathological.png)
+```
+
+and it looks like this in the final document:
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polysmoothy.png") # hide
+origin() # hide
+background("white") # hide
+setopacity(0.75) # hide
+srand(42) # hide
+setline(1) # hide
+p = star(O, 60, 5, 0.35, 0, vertices=true)
+setdash("dot")
+sethue("red")
+prettypoly(p, close=true, :stroke)
+setdash("solid")
+sethue("black")
+polysmooth(p, 40, :fill, debug=true)
+finish() # hide
+```
+
+![polysmooth](figures/polysmoothy.png)

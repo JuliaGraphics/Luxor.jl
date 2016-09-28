@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 function get_path(str)
   p = textpath(str)

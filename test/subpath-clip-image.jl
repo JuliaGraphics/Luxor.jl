@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 width, height = 1000, 1000
 fname = "/tmp/subpath-clip-image.pdf"
 Drawing(width, height, fname)

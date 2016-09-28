@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 
 include(dirname(@__FILE__) * "/julia-logo.jl")
 

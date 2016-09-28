@@ -1,14 +1,14 @@
 """
+    tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)
+
 A Tiler is an iterator that, for each iteration, returns a tuple of:
 
 - the `x`/`y` point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)
 
 - the number of the tile
 
-    tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)
-
-where `width`, `height` is the dimensions of the area to be tiled, `nrows`/`ncols`
-is the number of rows and columns required, and `margin` is applied to all four
+`areawidth` and `areaheight` are the dimensions of the area to be tiled, `nrows`/`ncols`
+are the number of rows and columns required, and `margin` is applied to all four
 edges of the area before the function calculates the tile sizes required.
 
     tiles = Tiler(1000, 800, 4, 5, margin=20)

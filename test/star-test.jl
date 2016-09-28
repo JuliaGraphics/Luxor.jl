@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 width, height = 2000, 2000
 fname = "/tmp/star.pdf"
 Drawing(width, height, fname)

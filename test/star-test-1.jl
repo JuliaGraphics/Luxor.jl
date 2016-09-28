@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor
 w, h = 600, 600
 
 fname = "/tmp/stars.png"

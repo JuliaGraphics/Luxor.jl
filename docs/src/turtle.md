@@ -5,7 +5,7 @@ Some simple "turtle graphics" functions are included. Functions to control the t
 ![Turtle](figures/turtles.png)
 
 ```julia
-using Luxor, Colors
+using Luxor
 
 Drawing(1200, 1200, "/tmp/turtles.png")
 origin()
@@ -43,11 +43,18 @@ Turtle
 Forward
 Turn
 Circle
+HueShift
+Message
 Orientation
+Randomize_saturation
 Rectangle
+Pen_opacity_random
 Pendown
 Penup
 Pencolor
 Penwidth
+Point
+Pop
+Push
 Reposition
 ```

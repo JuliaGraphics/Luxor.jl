@@ -1,5 +1,5 @@
 #!/usr/bin/env julia
-using Luxor, Colors
+using Luxor
 fname = "/tmp/arc-twopoints.pdf"
 Drawing(1200, 1200, fname)
 origin()

@@ -12,7 +12,7 @@ srand(1) # hide
 setline(1) # hide
 origin()
 for i in range(0, 30, 6)
-  sethue(Colors.HSV(i, 1, 1))
+  sethue(HSV(i, 1, 1)) # from Colors
   setopacity(0.5)
   circle(0, 0, 20, :fillpreserve)
   setcolor("black")
@@ -33,7 +33,7 @@ srand(1) # hide
 setline(1) # hide
 origin()
 for i in range(0, 30, 6)
-  sethue(Colors.HSV(i, 1, 1))
+  sethue(HSV(i, 1, 1)) # from Colors
   circle(0, 0, 90, :fillpreserve)
   setcolor("black")
   stroke()
@@ -47,7 +47,7 @@ finish() # hide
 `rotate()` rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor # hide
 Drawing(400, 200, "../figures/rotate.png") # hide
 background("white") # hide
 srand(1) # hide
