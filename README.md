@@ -1,5 +1,9 @@
 <a id='Luxor-1'></a>
 
+[![Luxor](http://pkg.julialang.org/badges/Luxor_0.4.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.4)
+[![Luxor](http://pkg.julialang.org/badges/Luxor_0.5.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.5)
+[![Luxor](http://pkg.julialang.org/badges/Luxor_0.6.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.6)
+
 ![](docs/figures/luxor-big-logo.png)
 
 Documentation: http://cormullion.github.io/Luxor.jl/
