@@ -50,44 +50,7 @@ julia> fieldnames(currentdrawing)
 :alpha
 ```
 
-The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile.
-
-In this example, every third tile is divided up into subtiles and colored:
-
-```@example
-using Luxor # hide
-Drawing(400, 300, "../figures/tiler.png") # hide
-background("white") # hide
-origin() # hide
-srand(1) # hide
-fontsize(20) # hide
-tiles = Tiler(400, 300, 4, 5, margin=5)
-for (pos, n) in tiles
-  randomhue()
-  box(pos, tiles.tilewidth, tiles.tileheight, :fill)
-  if n % 3 == 0
-    gsave()
-    translate(pos)
-    subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
-    for (pos1, n1) in subtiles
-      randomhue()
-      box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
-    end
-     grestore()
-  end
-  sethue("white")
-  textcentred(string(n), pos + Point(0, 5))
-end
-finish() # hide
-```
-
-![tiler](figures/tiler.png)
-
-```@docs
-Tiler
-```
-
-## Axes and backgrounds
+## The drawing area
 
 The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.
 
@@ -128,6 +91,54 @@ finish() # hide
 background
 axes
 origin
+```
+
+### Tiles
+
+The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile.
+
+In this example, every third tile is divided up into subtiles and colored:
+
+```@example
+using Luxor # hide
+Drawing(400, 300, "../figures/tiler.png") # hide
+background("white") # hide
+origin() # hide
+srand(1) # hide
+fontsize(20) # hide
+tiles = Tiler(400, 300, 4, 5, margin=5)
+for (pos, n) in tiles
+randomhue()
+box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+if n % 3 == 0
+gsave()
+translate(pos)
+subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
+for (pos1, n1) in subtiles
+randomhue()
+box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
+end
+grestore()
+end
+sethue("white")
+textcentred(string(n), pos + Point(0, 5))
+end
+finish() # hide
+```
+
+![tiler](figures/tiler.png)
+
+```@docs
+Tiler
+```
+
+### Save and restore
+
+`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
+
+```@docs
+gsave
+grestore
 ```
 
 ## Simple shapes
@@ -390,543 +401,4 @@ newsubpath
 closepath
 getpath
 getpathflat
-```
-
-## Color and opacity
-
-For color definitions and conversions, use Colors.jl.
-
-The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
-
-```@docs
-sethue
-setcolor
-setopacity
-randomhue
-randomcolor
-```
-
-## Styles
-
-The `set-` functions control subsequent lines' width, end shapes, join behavior, and dash pattern:
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "../figures/line-ends.png") # hide
-background("white") # hide
-origin() # hide
-translate(-100, -60) # hide
-fontsize(18) # hide
-for l in 1:3
-  sethue("black")
-  setline(20)
-  setlinecap(["butt", "square", "round"][l])
-  textcentred(["butt", "square", "round"][l], 80l, 80)
-  setlinejoin(["round", "miter", "bevel"][l])
-  textcentred(["round", "miter", "bevel"][l], 80l, 120)
-  poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)
-  sethue("white")
-  setline(1)
-  stroke()
-end
-finish() # hide
-```
-
-![line endings](figures/line-ends.png)
-
-```@example
-using Luxor # hide
-Drawing(600, 250, "../figures/dashes.png") # hide
-background("white") # hide
-origin() # hide
-fontsize(14) # hide
-sethue("black") # hide
-setline(12)
-patterns = ["solid", "dotted", "dot", "dotdashed", "longdashed",
-  "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"]
-tiles =  Tiler(400, 250, 10, 1, margin=10)
-for (pos, n) in tiles
-  setdash(patterns[n])
-  textright(patterns[n], pos.x - 20, pos.y + 4)
-  line(pos, Point(400, pos.y), :stroke)
-end
-finish() # hide
-```
-![dashes](figures/dashes.png)
-
-```@docs
-setline
-setlinecap
-setlinejoin
-setdash
-fillstroke
-stroke
-fill
-strokepreserve
-fillpreserve
-paint
-do_action
-```
-
-`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
-
-```@docs
-gsave
-grestore
-```
-
-## Polygons and shapes
-
-### Shapes
-
-### Regular polygons ("ngons")
-
-You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
-
-![n-gons](figures/n-gon.png)
-
-```julia
-using Luxor
-Drawing(1200, 1400)
-
-origin()
-cols = diverging_palette(60, 120, 20) # hue 60 to hue 120
-background(cols[1])
-setopacity(0.7)
-setline(2)
-
-ngon(0, 0, 500, 8, 0, :clip)
-
-for y in -500:50:500
-  for x in -500:50:500
-    setcolor(cols[rand(1:20)])
-    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)
-    setcolor(cols[rand(1:20)])
-    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)
-  end
-end
-
-finish()
-preview()
-```
-
-```@docs
-ngon
-```
-
-### Stars
-
-Use `star()` to make a star.
-
-```@example
-using Luxor # hide
-Drawing(500, 300, "../figures/stars.png") # hide
-background("white") # hide
-origin() # hide
-tiles = Tiler(400, 300, 4, 6, margin=5)
-for (pos, n) in tiles
-  randomhue()
-  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
-end
-finish() # hide
-```
-
-![stars](figures/stars.png)
-
-```@docs
-star
-```
-
-### Polygons
-
-A polygon is an array of Points. Use `poly()` to draw lines connecting the points:
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "../figures/simplepoly.png") # hide
-background("white") # hide
-origin() # hide
-sethue("orchid4")
-poly([Point(rand(-150:150), rand(-100:100)) for i in 1:20], :fill)
-finish() # hide
-```
-
-![simple poly](figures/simplepoly.png)
-
-```@docs
-poly
-```
-
-A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "../figures/holes.png") # hide
-background("white") # hide
-origin() # hide
-sethue("orchid4") # hide
-ngon(0, 0, 60, 6, 0, :path)
-newsubpath()
-ngon(0, 0, 40, 6, 0, :path, reversepath=true)
-fillstroke()
-finish() # hide
-```
-![holes](figures/holes.png)
-
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` expression is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
-
-```@example
-using Luxor
-Drawing(400, 250, "../figures/prettypolybasic.png") # hide
-background("white") # hide
-origin() # hide
-sethue("steelblue4") # hide
-setline(4)
-poly1 = ngon(0, 0, 100, 6, 0, vertices=true)
-prettypoly(poly1, :stroke, :(
-  randomhue();
-  scale(0.5, 0.5);
-  circle(0, 0, 15, :stroke)
-  ),
-close=true)
-finish() # hide
-```
-
-![prettypoly](figures/prettypolybasic.png)
-
-```@docs
-prettypoly
-```
-
-Introducing recursion is possible, but some of the parameters have to be enclosed with `$()` to protect them on their journey through the evaluation process:
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "../figures/prettypolyrecursive.png") # hide
-background("white") # hide
-srand(42) # hide
-origin() # hide
-sethue("magenta") # hide
-setopacity(0.5) # hide
-
-p = star(O, 80, 7, 0.3, 0, vertices=true)
-prettypoly(p, :fill,
-                  :(
-                  ## for each vertex of the mother polygon
-                  randomhue();
-                  scale(0.5, 0.5);
-                  prettypoly($(p), :fill,
-                    :(
-                    # for each vertex of each daughter polygon
-                    randomhue();
-                    scale(0.15, 0.15);
-                    prettypoly($($(p)), :fill)))))
-
-finish()
-```
-
-![prettypoly](figures/prettypolyrecursive.png)
-
-Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
-
-```@example
-using Luxor # hide
-Drawing(600, 500, "../figures/simplify.png") # hide
-background("white") # hide
-origin() # hide
-sethue("black") # hide
-setline(1) # hide
-fontsize(20) # hide
-translate(0, -120) # hide
-sincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)
-prettypoly(collect(sincurve), :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
-text(string("number of points: ", length(collect(sincurve))), 0, 100)
-translate(0, 200)
-simplercurve = simplify(collect(sincurve), 0.5)
-prettypoly(simplercurve, :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
-text(string("number of points: ", length(simplercurve)), 0, 100)
-finish() # hide
-```
-![simplify](figures/simplify.png)
-
-```@docs
-simplify
-```
-
-The `isinside()` function returns true if a point is inside a polygon.
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "../figures/isinside.png") # hide
-background("white") # hide
-origin() # hide
-setopacity(0.5)
-apolygon = star(O, 100, 5, 0.5, 0, vertices=true)
-for n in 1:10000
-  apoint = randompoint(Point(-200, -150), Point(200, 150))
-  randomhue()
-  isinside(apoint, apolygon) && circle(apoint, 3, :fill)
-end
-finish() # hide
-```
-![isinside](figures/isinside.png)
-
-```@docs
-isinside
-```
-
-You can use `randompoint()` and `randompointarray()` to create a random Point or list of Points.
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "../figures/randompoints.png") # hide
-background("white") # hide
-srand(42) # hide
-origin() # hide
-
-pt1 = Point(-100, -100)
-pt2 = Point(100, 100)
-
-sethue("gray80")
-map(pt -> circle(pt, 6, :fill), (pt1, pt2))
-box(pt1, pt2, :stroke)
-
-sethue("red")
-circle(randompoint(pt1, pt2), 7, :fill)
-
-sethue("blue")
-map(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))
-
-finish() # hide
-```
-
-![isinside](figures/randompoints.png)
-
-```@docs
-randompoint
-randompointarray
-```
-
-There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
-
-```@example
-using Luxor # hide
-Drawing(400, 150, "../figures/polysplit.png") # hide
-origin() # hide
-setopacity(0.7) # hide
-srand(42) # hide
-sethue("black") # hide
-s = squircle(O, 60, 60, vertices=true)
-pt1 = Point(0, -120)
-pt2 = Point(0, 120)
-line(pt1, pt2, :stroke)
-poly1, poly2 = polysplit(s, pt1, pt2)
-randomhue()
-poly(poly1, :fill)
-randomhue()
-poly(poly2, :fill)
-finish() # hide
-```
-![polysplit](figures/polysplit.png)
-
-```@docs
-polysplit
-polysortbydistance
-polysortbyangle
-polycentroid
-```
-#### Smoothing polygons
-
-Because polygons can have sharp corners, the `polysmooth()` function can attempt to insert
-arcs at the corners.
-
-The original polygon is shown in red; the smoothed polygon is drawn on top:
-
-```@example
-using Luxor # hide
-Drawing(600, 250, "../figures/polysmooth.png") # hide
-origin() # hide
-background("white") # hide
-setopacity(0.5) # hide
-srand(42) # hide
-setline(0.7) # hide
-tiles = Tiler(600, 250, 1, 5, margin=10)
-for (pos, n) in tiles
-    p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)
-    setdash("dot")
-    sethue("red")
-    prettypoly(p, close=true, :stroke)
-    setdash("solid")
-    sethue("black")
-    polysmooth(p, n * 2, :fill)
-end
-
-finish() # hide
-```
-
-![polysmooth](figures/polysmooth.png)
-
-The final polygon shows that  you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
-
-```@example
-using Luxor # hide
-Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
-origin() # hide
-background("white") # hide
-setopacity(0.75) # hide
-srand(42) # hide
-setline(1) # hide
-p = star(O, 60, 5, 0.35, 0, vertices=true)
-setdash("dot")
-sethue("red")
-prettypoly(p, close=true, :stroke)
-setdash("solid")
-sethue("black")
-polysmooth(p, 40, :fill, debug=true)
-finish() # hide
-```
-
-![polysmooth](figures/polysmooth-pathological.png)
-
-```@docs
-polysmooth
-```
-
-## Text and fonts
-
-### Placing text
-
-Use `text()` to place text.
-
-```@example
-using Luxor # hide
-Drawing(400, 150, "../figures/text-placement.png") # hide
-origin() # hide
-background("white") # hide
-fontsize(24) # hide
-sethue("black") # hide
-pt1 = Point(-100, 0)
-pt2 = Point(0, 0)
-pt3 = Point(100, 0)
-sethue("red")
-map(p -> circle(p, 4, :fill), [pt1, pt2, pt3])
-sethue("black")
-text("text 1",  pt1, halign=:left,   valign = :bottom)
-text("text 2",  pt2, halign=:center, valign = :bottom)
-text("text 3",  pt3, halign=:right,  valign = :bottom)
-text("text 4",  pt1, halign=:left,   valign = :top)
-text("text 5 ", pt2, halign=:center, valign = :top)
-text("text 6",  pt3, halign=:right,  valign = :top)
-finish() # hide
-```
-
-![text placement](figures/text-placement.png)
-
-```@docs
-text
-```
-
-`textpath()` converts the text into a graphic path suitable for further styling.
-
-```@docs
-textpath
-```
-
-### Fonts
-
-Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.
-
-The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
-
-![textextents](figures/textextents.png)
-
-The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.
-
-```@docs
-fontface
-fontsize
-textextents
-```
-
-### Text on a curve
-
-Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
-
-![text on a curve or spiral](figures/text-spiral.png)
-
-```julia
-using Luxor
-Drawing(1800, 1800, "/tmp/text-spiral.png")
-origin()
-background("ivory")
-fontsize(18)
-fontface("LucidaSansUnicode")
-sethue("royalblue4")
-textstring = join(names(Base), " ")
-textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2,
-  800, 0, 0,
-  spiral_in_out_shift = -18.0,
-  letter_spacing = 0,
-  spiral_ring_step = 0)
-
-fontsize(35)
-fontface("Agenda-Black")
-textcentred("julia names(Base)", 0, 0)
-finish()
-preview()
-```
-
-```@docs
-textcurve
-```
-
-### Text clipping
-
-You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:
-
-![text clipping](figures/text-path-clipping.png)
-
-```julia
-using Luxor
-
-currentwidth = 1250 # pts
-currentheight = 800 # pts
-Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
-
-origin()
-background("darkslategray3")
-
-fontsize(600)                             # big fontsize to use for clipping
-fontface("Agenda-Black")
-str = "julia"                             # string to be clipped
-w, h = textextents(str)[3:4]              # get width and height
-
-translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
-
-textpath(str)                             # make text into a path
-setline(3)
-setcolor("black")
-fillpreserve()                            # fill but keep
-clip()                                    # and use for clipping region
-
-fontface("Monaco")
-fontsize(10)
-namelist = map(x->string(x), names(Base)) # get list of function names in Base.
-
-x = -20
-y = -h
-while y < currentheight
-    sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
-    s = namelist[rand(1:end)]
-    text(s, x, y)
-    se = textextents(s)
-    x += se[5]                            # move to the right
-    if x > w
-       x = -20                            # next row
-       y += 10
-    end
-end
-
-finish()
-preview()
 ```
