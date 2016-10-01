@@ -9,10 +9,10 @@ function point_intersect(fname)
 
   for i in 1:100
       randomhue()
-      p1 = Point(rand(-300:300), rand(-300:300))
-      p2 = Point(rand(-300:300), rand(-300:300))
-      p3 = Point(rand(-300:300), rand(-300:300))
-      p4 = Point(rand(-300:300), rand(-300:300))
+      p1 = Point(rand(-450:450), rand(-450:450))
+      p2 = Point(rand(-450:450), rand(-450:450))
+      p3 = Point(rand(-450:450), rand(-450:450))
+      p4 = Point(rand(-450:450), rand(-450:450))
       flag, intersection_point = intersection(p1, p2, p3, p4)
       if flag
           circle(intersection_point, 5, :fill)

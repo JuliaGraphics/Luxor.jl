@@ -1,6 +1,6 @@
 # Transforms and matrices
 
-For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`.
+For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`. You can use `axes()` to return to the document's original state, with the axes in the center.
 
 `translate()` shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:
 

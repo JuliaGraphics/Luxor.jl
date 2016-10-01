@@ -17,7 +17,7 @@ randomhue
 randomcolor
 ```
 
-## Styles
+## Line styles
 
 The `set-` functions control subsequent lines' width, end shapes, join behavior, and dash pattern:
 
@@ -63,6 +63,7 @@ for (pos, n) in tiles
 end
 finish() # hide
 ```
+
 ![dashes](figures/dashes.png)
 
 ```@docs
@@ -81,7 +82,7 @@ do_action
 
 ## Blends
 
-A blend is a color gradient. Use `setblend()` to select a blend like you'd use `setcolor()` and `sethue()` to select a solid color.
+A blend is a color gradient. Use `setblend()` to select a blend in the same way that you'd use `setcolor()` and `sethue()` to select a solid color.
 
 You can make linear or radial blends. Use `blend()` in either case.
 
@@ -96,12 +97,11 @@ orangeblue = blend(Point(-200, 0), Point(200, 0), "orange", "blue")
 setblend(orangeblue)
 box(O, 400, 100, :fill)
 finish() # hide
-finish() # hide
 ```
 
 ![linear blend](figures/color-blends-basic.png)
 
-And for a radial blend, provide a two point/radius pairs, and two colors:
+And for a radial blend, provide two point/radius pairs, and two colors:
 
 ```@example
 using Luxor # hide
@@ -127,14 +127,15 @@ addstop(goldblend, 0.0,   "gold4")
 addstop(goldblend, 0.25,  "gold1")
 addstop(goldblend, 0.5,   "gold3")
 addstop(goldblend, 0.75,  "darkgoldenrod4")
-addstop(goldblend, 0.75,  "gold2")
+addstop(goldblend, 1.0,   "gold2")
 setblend(goldblend)
 box(O, 400, 200, :fill)
 finish() # hide
 ```
+
 ![blends from scratch](figures/color-blends-scratch.png)
 
-When you define blends, the location of the axes (eg the current workspace as defined by `translate()`, etc.), is important. In the first example, the blend is selected before the axes are moved with `translate(pos)`.
+When you define blends, the location of the axes (eg the current workspace as defined by `translate()`, etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with `translate(pos)`. The blend 'samples' the original location of the blend's definition.
 
 ```@example
 using Luxor # hide
@@ -146,7 +147,7 @@ addstop(goldblend, 0.0,   "gold4")
 addstop(goldblend, 0.25,  "gold1")
 addstop(goldblend, 0.5,   "gold3")
 addstop(goldblend, 0.75,  "darkgoldenrod4")
-addstop(goldblend, 0.75,  "gold2")
+addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
 tiles = Tiler(600, 200, 1, 5, margin=10)
 for (pos, n) in tiles
@@ -156,10 +157,11 @@ for (pos, n) in tiles
     ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)
     grestore()
 end
+finish() # hide
 ```
 ![blends 1](figures/color-blends-translate-1.png)
 
-But in this example, the blend is relocated to the current axes, which have just been moved to the center of the shape:
+Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
 
 ```@example
 using Luxor # hide
@@ -171,7 +173,7 @@ addstop(goldblend, 0.0,   "gold4")
 addstop(goldblend, 0.25,  "gold1")
 addstop(goldblend, 0.5,   "gold3")
 addstop(goldblend, 0.75,  "darkgoldenrod4")
-addstop(goldblend, 0.75,  "gold2")
+addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
 tiles = Tiler(600, 200, 1, 5, margin=10)
 for (pos, n) in tiles
@@ -181,6 +183,7 @@ for (pos, n) in tiles
     ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)
     grestore()
 end
+finish() # hide
 ```
 ![blends 2](figures/color-blends-translate-2.png)
 

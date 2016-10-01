@@ -12,7 +12,7 @@ setdash("dotted")
 circle(O, 100, :stroke)
 sethue("magenta")
 circle(O, 100, :clip)
-box(O, 50, 200, :fill)
+box(O, 125, 200, :fill)
 finish() # hide
 ```
 ![simple clip](figures/simpleclip.png)

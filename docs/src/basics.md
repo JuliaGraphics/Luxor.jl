@@ -288,6 +288,20 @@ finish() # hide
 squircle
 ```
 
+For a simple rounded rectangle, smooth the corners of a box, like so:
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/round-rect.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(4)
+polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
+finish() # hide
+```
+![rounded rect](figures/round-rect.png)
+
 ## Lines, arcs, and curves
 
 There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
@@ -317,7 +331,7 @@ setline(3)
 move(O)
 curve(pt1, pt2, pt3)
 stroke()
-finish()
+finish()  # hide
 ```
 
 ![curve](figures/curve.png)
@@ -369,7 +383,7 @@ center3pts
 
 ## Arrows
 
-You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another with otherwise the default is 1.
+You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
 
 ```@example
 using Luxor # hide

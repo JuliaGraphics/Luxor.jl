@@ -230,6 +230,8 @@ Make a star:
 
     star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
 
+`ratio` specifies the height of the smaller radius of the star relative to the larger.
+
 Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
 
@@ -357,27 +359,22 @@ function polysplit(pointlist, p1, p2)
 end
 
 """
-Draw the polygon defined by points in `pointlist`, possibly closing and reversing it, using the current parameters,
-and then evaluate (using `eval`, *shudder*) the expression at every vertex of the polygon. For example, you can mark each vertex of a polygon with a filled circle.
+    prettypoly(points, action=:nothing, vertex_action=() -> circle(O, 1, :fill); close=false, reversepath=false)
 
-    prettypoly(pointlist::Array,
-      action = :nothing,
-      vertex_action::Expr = :(circle(0, 0, 1, :fill));
-      close=false,
-      reversepath=false)
+Draw the polygon defined by `points`, possibly closing and reversing it, using the current
+parameters, and then evaluate the `vertex_action` function at every vertex of the polygon. For example, you
+can mark each vertex of a polygon with a randomly colored filled circle.
 
-Example:
-
-    prettypoly(pl, :fill, :(scale(0.1, 0.1);
-                            circle(0, 0, 10, :fill)
-                           ),
-              close=false)
-
-The expression can't use definitions that are not in scope, eg you can't pass a variable in from the calling
-function and expect this function to know about it. Yes, not tidy...
+    p = star(O, 70, 7, 0.6, 0, vertices=true)
+    prettypoly(p, :fill, () ->
+        begin
+            randomhue()
+            circle(O, 10, :fill)
+        end,
+        close=true)
 """
-function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :(circle(0, 0, 1, :fill)); close=false, reversepath=false)
-    # by default doesn't close or fill, to allow for clipping etc
+
+function prettypoly(pointlist::Array, action=:nothing, vertex_action=() -> circle(O, 1, :fill); close=false, reversepath=false)
     if action != :path
         newpath()
     end
@@ -395,7 +392,7 @@ function prettypoly(pointlist::Array, action = :nothing, vertex_action::Expr = :
     for p in pointlist
         gsave()
         translate(p.x, p.y)
-        eval(vertex_action)
+        vertex_action()
         grestore()
     end
 end

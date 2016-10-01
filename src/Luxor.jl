@@ -663,11 +663,18 @@ function box(bbox::Array, action=:nothing)
 end
 
 """
-Create a box/rectangle centered at point `pt` with width and height.
+Create a box/rectangle centered at point `pt` with width and height. Use `vertices=true` to
+return an array of the four corner points rather than draw the box.
 
-    box(pt::Point, width, height, action=:nothing)
+    box(pt::Point, width, height, action=:nothing; vertices=false)
 """
-function box(pt::Point, width, height, action=:nothing)
+function box(pt::Point, width, height, action=:nothing; vertices=false)
+    if vertices
+        return [Point(pt.x - width/2, pt.y + height/2),
+                Point(pt.x - width/2, pt.y - height/2),
+                Point(pt.x + width/2, pt.y - height/2),
+                Point(pt.x + width/2, pt.y + height/2)]
+    end
     rect(pt.x - width/2, pt.y - height/2, width, height, action)
 end
 
