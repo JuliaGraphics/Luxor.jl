@@ -51,8 +51,23 @@ for (pos, n) in tiles
 end
 finish() # hide
 ```
-
 ![stars](figures/stars.png)
+
+The `ratio` determines the length of the inner radius compared with the outer.
+```@example
+using Luxor # hide
+Drawing(500, 250, "../figures/star-ratios.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(2) # hide
+tiles = Tiler(500, 250, 1, 6, margin=10)
+for (pos, n) in tiles
+    star(pos, tiles.tilewidth/2, 5, rescale(n, 1, 6, 1, 0), 0, :stroke)
+end
+finish() # hide
+```
+![stars](figures/star-ratios.png)
 
 ```@docs
 star
@@ -94,7 +109,7 @@ finish() # hide
 ```
 ![holes](figures/holes.png)
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` expression is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor
@@ -102,14 +117,14 @@ Drawing(400, 250, "../figures/prettypolybasic.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
-setline(4)
-poly1 = ngon(0, 0, 100, 6, 0, vertices=true)
-prettypoly(poly1, :stroke, :(
-  randomhue();
-  scale(0.5, 0.5);
-  circle(0, 0, 15, :stroke)
-  ),
-close=true)
+
+apoly = star(O, 70, 7, 0.6, 0, vertices=true)
+prettypoly(apoly, :fill, () ->
+        begin
+            randomhue()
+            circle(O, 10, :fill)
+        end,
+    close=true)
 finish() # hide
 ```
 
@@ -119,31 +134,32 @@ finish() # hide
 prettypoly
 ```
 
-Introducing recursion is possible, but some of the parameters have to be enclosed with `$()` to protect them on their journey through the evaluation process:
+Recursive decoration is possible:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../figures/prettypolyrecursive.png") # hide
+Drawing(400, 260, "../figures/prettypolyrecursive.png") # hide
 background("white") # hide
 srand(42) # hide
 origin() # hide
 sethue("magenta") # hide
 setopacity(0.5) # hide
 
-p = star(O, 80, 7, 0.3, 0, vertices=true)
-prettypoly(p, :fill,
-                  :(
-                  ## for each vertex of the mother polygon
-                  randomhue();
-                  scale(0.5, 0.5);
-                  prettypoly($(p), :fill,
-                    :(
-                    # for each vertex of each daughter polygon
-                    randomhue();
-                    scale(0.15, 0.15);
-                    prettypoly($($(p)), :fill)))))
+decorate(pos, p, level) = begin
+    if level < 4
+        randomhue();
+        scale(0.25, 0.25)
+        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)
+    end
+end
 
-finish()
+apoly = star(O, 100, 7, 0.6, 0, vertices=true)
+prettypoly(apoly, :fill, () ->
+        begin
+            decorate(O, apoly, 1)
+        end,
+    close=true)
+finish() # hide
 ```
 
 ![prettypoly](figures/prettypolyrecursive.png)
@@ -160,11 +176,19 @@ setline(1) # hide
 fontsize(20) # hide
 translate(0, -120) # hide
 sincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)
-prettypoly(collect(sincurve), :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
+prettypoly(collect(sincurve), :stroke,
+    () -> begin
+            sethue("red")
+            circle(O, 3, :fill)
+          end)
 text(string("number of points: ", length(collect(sincurve))), 0, 100)
 translate(0, 200)
 simplercurve = simplify(collect(sincurve), 0.5)
-prettypoly(simplercurve, :stroke, :(sethue("red"); circle(0, 0, 3, :fill)))
+prettypoly(simplercurve, :stroke,     
+    () -> begin
+            sethue("red")
+            circle(O, 3, :fill)
+          end)
 text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
 ```

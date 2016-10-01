@@ -13,33 +13,39 @@ end
 function test1(p, x, y)
     prettypoly(p, :fill,
               # all these commands are executed for each vertex of the polygon
-              :(
-              scale(0.5, 0.5);
-              randomhue();
-              opacity = currentdrawing.alpha;
-              setopacity(rand(5:10)/10);
-              ngon(0, 0, 15, rand(3:12), 0, :fill);
-              setopacity(opacity);
-              sethue("black");
-              # we can pass the origin for the whole polygon into the expression like this
-              # but the current vertex is 0/0
-              textcentred(string($(x)) * "/" *  string($(y)))))
+              () ->
+              begin
+              scale(0.5, 0.5)
+              randomhue()
+              opacity = currentdrawing.alpha
+              setopacity(rand(5:10)/10)
+              ngon(0, 0, 15, rand(3:12), 0, :fill)
+              setopacity(opacity)
+              sethue("black")
+          end
+    )
 end
 
 function test2(p)
     prettypoly(p, :fill,
-                  :(
+                  () ->
+                begin
                   ## all these commands are executed for each vertex of the polygon
-                  randomhue();
-                  scale(0.5, 0.5);
-                  rotate(pi/2);
-                  prettypoly($(p), :fill,
-                    :(
+                  randomhue()
+                  scale(0.5, 0.5)
+                  rotate(pi/2)
+                  prettypoly(p, :fill,
+                    () ->
+                    begin
                     # and all these commands are executed for each vertex of that polygon
-                    randomhue();
-                    scale(0.25, 0.25);
-                    rotate(pi/2);
-                    prettypoly($($(p)), :fill)))))
+                    randomhue()
+                    scale(0.25, 0.25)
+                    rotate(pi/2)
+                    prettypoly(p, :fill)
+                    end
+                )
+        end
+        )
 end
 
 function get_png_files(folder)
@@ -56,11 +62,12 @@ function test3(p)
     w = img.width
     h = img.height
     prettypoly(p, :fill,
-                  :(
+                  () ->
+                  begin
                   ## all these commands are executed for each vertex of the polygon
-                  # to make it "through" the expression to the base drawing functions, these have to be made literal using $
-                  placeimage($readpng($imagelist[rand(1:end)]), -$w/2, -$h/2)
-                  ))
+                  placeimage(readpng(imagelist[rand(1:end)]), -w/2, -h/2)
+                  end
+                  )
 end
 
 function draw_lots_of_polys(pagewidth, pageheight)
@@ -76,7 +83,13 @@ function draw_lots_of_polys(pagewidth, pageheight)
         translate(pos)
         setline(1)
         randomhue()
-        @eval [test1($p, $pos.x, $pos.y), test2($p), test3($p)][rand(1:end)] # choose a test at random
+        if n % 3  == 0
+            test1(p, pos.x, pos.y)
+        elseif n % 3 == 1
+            test2(p)
+        elseif n % 3 == 2
+            test3(p)
+        end
         drawbbox(p)
         grestore()
     end

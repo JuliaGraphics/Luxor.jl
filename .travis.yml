@@ -9,3 +9,5 @@ julia:
   - nightly
 notifications:
   email: false
+after_success:
+- julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'

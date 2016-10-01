@@ -16,7 +16,7 @@ function star_test(fname)
            randomratio = rand(2:8)/10
            randomsmoothing = rand(5:20)
            p = star(pos, tiles.tilewidth/2 - 10, randomsides, randomratio, 0, vertices=true)
-           prettypoly(p, close=true,  :stroke)
+           prettypoly(p, close=true, :stroke)
            polysmooth(p, randomsmoothing, :fill, debug=true)
      end
     finish()

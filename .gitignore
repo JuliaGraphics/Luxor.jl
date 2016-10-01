@@ -2,3 +2,4 @@
 luxor-test1.png
 
 test/sample_copy_path.png
+*.cov

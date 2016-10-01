@@ -140,10 +140,11 @@ Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
     intersection(p1, p2, p3, p4)
 
-This returns a tuple: `(false, 0)` or `(true, Point)`.
+This returns a tuple: `(false, Point(0, 0))` or `(true, intersectionoint)`.
 """
 function intersection(p1, p2, p3, p4)
     flag = false
+    intersectpoint = Point(0, 0)
     ip = 0
     s1 = p2 - p1
     s2 = p4 - p3
@@ -153,11 +154,11 @@ function intersection(p1, p2, p3, p4)
     t = ( s2.x * u.y - s2.y * u.x) * ip
     if (s >= 0) && (s <= 1) && (t >= 0) && (t <= 1)
         if isapprox(ip, 0, atol=0.1)
-            ip = p1 + (s1 * t)
+            intersectpoint = p1 + (s1 * t)
             flag = true
         end
     end
-    return (flag, ip)
+    return (flag, intersectpoint)
 end
 
 # end
