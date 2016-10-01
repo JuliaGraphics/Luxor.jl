@@ -13,6 +13,7 @@ include("polygons.jl")
 include("Tiler.jl")
 include("arrows.jl")
 include("text.jl")
+include("blends.jl")
 
 export Drawing, currentdrawing, paper_sizes,
     rescale,
@@ -41,10 +42,6 @@ export Drawing, currentdrawing, paper_sizes,
     isinside,
 
     getpath, getpathflat,
-
-    pattern_create_radial, pattern_create_linear,
-    pattern_add_color_stop_rgb, pattern_add_color_stop_rgba,
-    pattern_set_filter, pattern_set_extend,
 
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred, textcentered, textright,
@@ -958,18 +955,6 @@ Returns a CairoPath which is an array of .element_type and .points.
 """
 getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
 
-# patterns not yet looked at these
-
-#=
-Cairo.pattern_create_radial(cx0::Real, cy0::Real, radius0::Real, cx1::Real, cy1::Real, radius1::Real)
-Cairo.pattern_create_linear(x0::Real, y0::Real, x1::Real, y1::Real)
-Cairo.pattern_add_color_stop_rgb(pat::CairoPattern, offset::Real, red::Real, green::Real, blue::Real)
-Cairo.pattern_add_color_stop_rgba(pat::CairoPattern, offset::Real, red::Real, green::Real, blue::Real, alpha::Real)
-Cairo.pattern_set_filter(p::CairoPattern, f)
-Cairo.pattern_set_extend(p::CairoPattern, val)
-Cairo.set_source(dest::CairoContext, src::CairoPattern)
-=#
-
 """
     setcolor(col::String)
 
@@ -1143,7 +1128,7 @@ Returns the current Cairo matrix as an array. In Cairo/Luxor, a matrix is an arr
 Some basic matrix transforms:
 
 - translate
-  `transform([1,  0, 0,  1, dx, dy])`
+  `transform([1, 0, 0, 1, dx, dy])`
   => shift by `dx`, `dy`
 
 - scale
@@ -1151,11 +1136,11 @@ Some basic matrix transforms:
   => scale by `fx`, `fy`
 
 - rotate
-  `transform([cos(a), sin(a), -cos(a), cos(a), 0, 0])`
+  `transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])`
   => rotate to `a` radians
 
 - x-skew
-  `transform([1,  0, tan(a), 1, 0, 0])`
+  `transform([1, 0, tan(a), 1, 0, 0])`
   => xskew by `a`
 
 - y-skew
@@ -1178,6 +1163,14 @@ To reset the matrix to the original:
 
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
 
+translate:      [1  0 0  1 X Y]
+scale O:        [W  0 0  H 0 0]
+rotate O:       [c -s s  c 0 0]
+shear in x:     [1  0 A  1 0 0]
+shear in y:     [1  B 0  1 0 0]
+reflect O:      [-1 0 0 -1 0 0]
+reflect xaxis:  [1  0 0 -1 0 0]
+reflect yaxis:  [-1 0 0  1 0 0]
 """
 function getmatrix()
     gm = Cairo.get_matrix(currentdrawing.cr)
