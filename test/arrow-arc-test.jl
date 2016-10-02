@@ -31,7 +31,7 @@ function arrow_test(fname)
   pagewidth, pageheight = 2000, 2000
   Drawing(pagewidth, pageheight, fname)
   origin() # move 0/0 to center
-  background("ivory")
+  background(1, 1, 0.9, 1)
   setopacity(0.5)
   setline(2)
   pagetiles = Tiler(pagewidth, pageheight, 4, 4, margin=50)

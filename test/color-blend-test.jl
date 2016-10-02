@@ -39,4 +39,3 @@ for (pos, n) in tiles
 end
 
 finish()
-preview()

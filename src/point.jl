@@ -1,10 +1,11 @@
 import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
+import Base: isequal, isless, cmp
 
-export Point, O, randompoint, randompointarray
 """
 The Point type holds two coordinates. Currently it's immutable, so remember not try to
 change the values of the x and y values directly.
 """
+
 immutable Point
    x::Float64
    y::Float64
@@ -31,7 +32,6 @@ const O = Point(0, 0)
 ./(p2::Point, k::Number)             = Point(p2.x/k,      p2.y/k)
 ^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
 ^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
-inner(p1::Point, p2::Point)          = p1.x * p2.x + p1.y * p2.y
 
 # comparisons (perform lexicographically)
 

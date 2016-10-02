@@ -31,8 +31,8 @@ function test_circles(fname)
   rad = 40
   for (p1, n) in pagetiles
     p2, p3 = Point(p1.x + rand(-15:15), p1.y + rand(-15:15)), Point(p1.x + rand(-15:15), p1.y + rand(-15:15))
-    cpoint, rad = center3pts(p1, p2, p3) # returns (0/0, 0) if points are collinear 
-    randomhue()
+    cpoint, rad = center3pts(p1, p2, p3) # returns (0/0, 0) if points are collinear
+    randomcolor()
     if rad > 0
       circle(cpoint, rad, :stroke)
       sethue("black")
@@ -40,6 +40,7 @@ function test_circles(fname)
       circle(p2,  1, :fill)
       circle(p3,  1, :fill)
     end
+    setopacity(0.8)
   end
   grestore()
 
