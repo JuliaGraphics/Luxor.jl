@@ -3,7 +3,7 @@ using Luxor
 fname = "/tmp/arc-twopoints.pdf"
 Drawing(1200, 1200, fname)
 origin()
-background("white")
+background(1, 1, 1)
 sethue("magenta")
 setopacity(0.6)
 setline(2)

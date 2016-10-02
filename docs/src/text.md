@@ -38,6 +38,8 @@ text
 textpath
 ```
 
+Luxor uses what's called the "toy" text interface in Cairo.
+
 ## Fonts
 
 Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.

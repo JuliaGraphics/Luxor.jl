@@ -67,9 +67,9 @@ You can change "sierpinski.pdf" to "sierpinski.svg" or "sierpinski.png" or "sier
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
 
-## How I use Luxor
+## More complex examples
 
-Here are some examples of how I use Luxor.
+These examples are more elaborate.
 
 ### Sector chart
 

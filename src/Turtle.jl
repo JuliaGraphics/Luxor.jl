@@ -60,7 +60,7 @@ function Forward(t::Turtle, d)
 end
 
 """
-Increase the turtle's rotation by `r` radians. See also `Orientation`.
+Increase the turtle's rotation by `r` degrees. See also `Orientation`.
 
     Turn(t::Turtle, r)
 """
@@ -68,7 +68,7 @@ function Turn(t::Turtle, r)
     t.orientation = mod2pi(t.orientation + deg2rad(r))
 end
 """
-Set the turtle's orientation to `r` radians. See also `Turn`.
+Set the turtle's orientation to `r` degrees. See also `Turn`.
 
     Orientation(t::Turtle, r)
 """

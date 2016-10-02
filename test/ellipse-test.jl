@@ -20,8 +20,10 @@ function test_ellipse(fname)
       randomhue()
       ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :stroke)
     end
-    fill()
+    setline(5)
     sethue("black")
+    stroke()
+    fill()
     ellipse(pos, 5, 5, :fill)
     clipreset()
   end

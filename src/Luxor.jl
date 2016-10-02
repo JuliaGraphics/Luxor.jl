@@ -27,19 +27,18 @@ export Drawing, currentdrawing, paper_sizes,
     line, rline, curve, arc, carc, arc2r, ngon, sector, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
-    poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance, midpoint,
-    prettypoly, polysmooth,
-
     star,
 
-    intersection, polysplit,
+    Point, O, randompoint, randompointarray, midpoint, intersection,
+    isinside,
+
+    prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
+    polysortbyangle, polysortbydistance,
 
     strokepreserve, fillpreserve,
     gsave, grestore,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
-
-    isinside,
 
     getpath, getpathflat,
 

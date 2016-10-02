@@ -14,6 +14,14 @@ function draw_logo_clip(x, y)
         sethue(foregroundcolors[rand(1:end)])
         circle(rand(-50:350), rand(0:300), 15, :fill)
     end
+    #  to test clippreserve(), draw a path, and it is intersected with clip region (julia logo)
+    # then filled with solid red
+    gsave()
+        circle(O, 200, :path)
+        clippreserve()
+        setcolor("red")
+        fill()
+    grestore()
     clipreset()
     grestore()
 end

@@ -17,6 +17,8 @@ function matrix_tests(fname)
 
     Drawing(1000,1000, fname)
 
+    original_matrix = getmatrix()
+
     # absolute position 200,250 relative to top left origin (0, 0)
     setmatrix([1, 0, 0, 1, 200, 250.0])
     sethue("red")
@@ -107,6 +109,9 @@ function matrix_tests(fname)
     cx = cy = 50
     transform([fx, 0, 0, fy, cx * (1-fx), cy * (fy-1)])
     text("hello world")
+
+    setmatrix(original_matrix)
+    text("0/0", O + 15)
 
     finish()
     println("finished test: output in $(fname)")
