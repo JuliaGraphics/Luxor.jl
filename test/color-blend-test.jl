@@ -5,6 +5,7 @@ using Luxor
 Drawing(1200, 1200, "/tmp/color-blends-2.pdf")
 origin()
 background("blue")
+fontsize(20)
 
 # a linear blend
 redbluelinearblend = blend(Point(-100, 0), Point(100, 0))
@@ -13,7 +14,6 @@ addstop(redbluelinearblend, 0.5, "white")
 addstop(redbluelinearblend, 1, Colors.RGBA(0, 0, 1, 0.15))
 
 # a radial blend
-redbluelinearblend =
 redblueradialblend = blend(Point(0, 0), 0, Point(0, 0), 100)
 addstop(redblueradialblend, 0, Colors.RGBA(1, 0, 0, 0.15))
 addstop(redblueradialblend, 0.5, "white")
@@ -34,7 +34,13 @@ for (pos, n) in tiles
     box(O, tiles.tilewidth/2, tiles.tilewidth/2, :fill)
     blendmatrix(redblueradialblend, As)
     setblend(redblueradialblend) # aligns pattern with current axes
-    ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)
+    ellipse(O, tiles.tilewidth-10, tiles.tileheight-10, :fill)
+    blendrad = blend(O, 1, O, 25, RGBA(0, 1, 1, 0.5), RGBA(0, 1, 0, 0.0))
+    blendlin = blend(O, Point(O.x + tiles.tilewidth/2, O.y), "orange", "magenta")
+    setblend(blendlin)
+    text("linear", O+5)
+    setblend(blendrad)
+    text("radial", O-5)
     grestore()
 end
 

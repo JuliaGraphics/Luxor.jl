@@ -44,6 +44,57 @@ finish()
 preview() # on macOS, opens in Preview
 ```
 
+## Illustrating this document
+
+This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the documentation is generated, the source of the image being stored in the Markdown document and processed on the fly:
+
+The Markdown markup looks like this:
+
+```
+    ```@example
+    using Luxor # hide
+    Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
+    origin() # hide
+    background("white") # hide
+    setopacity(0.75) # hide
+    srand(42) # hide
+    setline(1) # hide
+    p = star(O, 60, 5, 0.35, 0, vertices=true)
+    setdash("dot")
+    sethue("red")
+    prettypoly(p, close=true, :stroke)
+    setdash("solid")
+    sethue("black")
+    polysmooth(p, 40, :fill, debug=true)
+    finish() # hide
+    ```
+
+    ![polysmooth](figures/polysmooth-pathological.png)
+
+```
+
+and it looks like this in the final document:
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polysmoothy.png") # hide
+origin() # hide
+background("white") # hide
+setopacity(0.75) # hide
+srand(42) # hide
+setline(1) # hide
+p = star(O, 60, 5, 0.35, 0, vertices=true)
+setdash("dot")
+sethue("red")
+prettypoly(p, close=true, :stroke)
+setdash("solid")
+sethue("black")
+polysmooth(p, 40, :fill, debug=true)
+finish() # hide
+```
+
+![polysmooth](figures/polysmoothy.png)
+
 ## Luxor logo
 
 In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.
@@ -99,53 +150,3 @@ penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
 ```
 
 where some of the characters—eg "F", "+", "-", and "t"—issue turtle control commands, and others—"X,", "Y", "P", and "Q"—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.
-
-## Illustrating this document
-
-This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the documentation is generated, the source of the image being stored in the Markdown document and processed on the fly:
-
-The Markdown markup looks like this:
-
-```
-```@example
-using Luxor # hide
-Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
-origin() # hide
-background("white") # hide
-setopacity(0.75) # hide
-srand(42) # hide
-setline(1) # hide
-p = star(O, 60, 5, 0.35, 0, vertices=true)
-setdash("dot")
-sethue("red")
-prettypoly(p, close=true, :stroke)
-setdash("solid")
-sethue("black")
-polysmooth(p, 40, :fill, debug=true)
-finish() # hide
-```
-
-![polysmooth](figures/polysmooth-pathological.png)
-```
-
-and it looks like this in the final document:
-
-```@example
-using Luxor # hide
-Drawing(600, 250, "../figures/polysmoothy.png") # hide
-origin() # hide
-background("white") # hide
-setopacity(0.75) # hide
-srand(42) # hide
-setline(1) # hide
-p = star(O, 60, 5, 0.35, 0, vertices=true)
-setdash("dot")
-sethue("red")
-prettypoly(p, close=true, :stroke)
-setdash("solid")
-sethue("black")
-polysmooth(p, 40, :fill, debug=true)
-finish() # hide
-```
-
-![polysmooth](figures/polysmoothy.png)
