@@ -28,15 +28,17 @@ const O = Point(0, 0)
 /(p2::Point, k::Number)              = Point(p2.x/k,      p2.y/k)
 .*(k::Number, p2::Point)             = Point(k * p2.x,    k * p2.y)
 .*(p2::Point, k::Number)             = Point(k * p2.x,    k * p2.y)
-.*(p1::Point, p2::Point)             = Point(p1.x * p2.x, p1.y * p2.y)
+
+# .*(p1::Point, p2::Point)           = Point(p1.x * p2.x, p1.y * p2.y)
+
 ./(p2::Point, k::Number)             = Point(p2.x/k,      p2.y/k)
 ^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
 ^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
 
-# comparisons (perform lexicographically)
+# comparisons
 
-isequal(p1::Point, p2::Point)         = (p1.x == p2.x && p1.y == p2.y )
-isless(p1::Point, p2::Point)          = (p1.x < p2.x || (p1.x == p2.x && p1.y < p2.y) )
+isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x) && (isapprox(p1.x, p2.x))
+isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y) )
 !=(p1::Point, p2::Point)              = !isequal(p1, p2)
 <(p1::Point, p2::Point)               = isless(p1,p2)
 >(p1::Point, p2::Point)               = p2 < p1
@@ -45,7 +47,7 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (p1.x == p2.x && p1.y < 
 .>(p1::Point, p2::Point)              = p2 < p1
 .>=(p1::Point, p2::Point)             = p1 <= p2
 .<=(p1::Point, p2::Point)             = p2 <= p1
-cmp(p1::Point, p2::Point)             = p1<p2 ? -1 : p2  <p1 ? 1 : 0
+cmp(p1::Point, p2::Point)             = p1  <p2 ? -1 : p2 < p1 ? 1 : 0
 
 function randomordinate(low, high)
     low + rand() * abs(high - low)

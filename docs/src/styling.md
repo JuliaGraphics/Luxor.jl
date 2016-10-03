@@ -96,6 +96,7 @@ background("white") # hide
 orangeblue = blend(Point(-200, 0), Point(200, 0), "orange", "blue")
 setblend(orangeblue)
 box(O, 400, 100, :fill)
+axes()
 finish() # hide
 ```
 
@@ -111,6 +112,7 @@ background("white") # hide
 greenmagenta = blend(Point(0, 0), 5, Point(0, 0), 150, "green", "magenta")
 setblend(greenmagenta)
 box(O, 400, 200, :fill)
+axes()
 finish() # hide
 ```
 ![radial blends](figures/color-blends-radial.png)
@@ -123,13 +125,14 @@ Drawing(600, 200, "../figures/color-blends-scratch.png") # hide
 origin() # hide
 background("white") # hide
 goldblend = blend(Point(-200, 0), Point(200, 0))
-addstop(goldblend, 0.0,   "gold4")
-addstop(goldblend, 0.25,  "gold1")
-addstop(goldblend, 0.5,   "gold3")
-addstop(goldblend, 0.75,  "darkgoldenrod4")
-addstop(goldblend, 1.0,   "gold2")
+addstop(goldblend, 0.0,  "gold4")
+addstop(goldblend, 0.25, "gold1")
+addstop(goldblend, 0.5,  "gold3")
+addstop(goldblend, 0.75, "darkgoldenrod4")
+addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
 box(O, 400, 200, :fill)
+axes()
 finish() # hide
 ```
 
@@ -143,10 +146,10 @@ Drawing(600, 200, "../figures/color-blends-translate-1.png") # hide
 origin() # hide
 background("white") # hide
 goldblend = blend(Point(0, 0), Point(200, 0))
-addstop(goldblend, 0.0,   "gold4")
-addstop(goldblend, 0.25,  "gold1")
-addstop(goldblend, 0.5,   "gold3")
-addstop(goldblend, 0.75,  "darkgoldenrod4")
+addstop(goldblend, 0.0,  "gold4")
+addstop(goldblend, 0.25, "gold1")
+addstop(goldblend, 0.5,  "gold3")
+addstop(goldblend, 0.75, "darkgoldenrod4")
 addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
 tiles = Tiler(600, 200, 1, 5, margin=10)
@@ -169,10 +172,10 @@ Drawing(600, 200, "../figures/color-blends-translate-2.png") # hide
 origin() # hide
 background("white") # hide
 goldblend = blend(Point(0, 0), Point(200, 0))
-addstop(goldblend, 0.0,   "gold4")
-addstop(goldblend, 0.25,  "gold1")
-addstop(goldblend, 0.5,   "gold3")
-addstop(goldblend, 0.75,  "darkgoldenrod4")
+addstop(goldblend, 0.0,  "gold4")
+addstop(goldblend, 0.25, "gold1")
+addstop(goldblend, 0.5,  "gold3")
+addstop(goldblend, 0.75, "darkgoldenrod4")
 addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
 tiles = Tiler(600, 200, 1, 5, margin=10)
@@ -189,4 +192,5 @@ finish() # hide
 
 ```@docs
 blend
+addstop
 ```

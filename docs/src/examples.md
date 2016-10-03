@@ -20,7 +20,51 @@ preview()
 
 The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the location and type of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
-## A slightly more complicated example: a Sierpinski triangle
+## The Julia circles
+
+```@example
+
+using Luxor
+
+function draw_julia_circles(fname)
+    Drawing(500, 500, fname)
+    origin()
+    background("white")
+
+    darker_blue = (0.251, 0.388, 0.847)    # the darker blue not used
+    lighter_blue = (0.4, 0.51, 0.878)      # the lighter blue not used
+    darker_purple = (0.584, 0.345, 0.698)
+    lighter_purple  = (0.667, 0.475, 0.757)
+    darker_green  = (0.22, 0.596, 0.149)
+    lighter_green  = (0.376, 0.678, 0.318)
+    darker_red  = (0.796, 0.235, 0.2)
+    lighter_red  = (0.835, 0.388, 0.361)
+
+    purples = (darker_purple, lighter_purple)
+    greens = (darker_green, lighter_green)
+    reds = (darker_red, lighter_red)
+
+    # clockwise, from bottom left
+    color_sequence = [reds, greens, purples]
+
+    points = ngon(O, 100, 3, pi/6, vertices=true)
+
+    for (n, p) in enumerate(points)
+    setcolor(color_sequence[n][1]...)
+    circle(p, 75, :fill)
+    setcolor(color_sequence[n][2]...)
+    circle(p, 65, :fill)
+    end
+
+    finish()
+end
+
+draw_julia_circles("../figures/julia_logo.png")
+```
+
+![background](figures/julia_logo.png)
+
+## Something a bit more complicated: a Sierpinski triangle
 
 Here's a version of the Sierpinski recursive triangle, clipped to a circle.
 
@@ -66,6 +110,7 @@ draw(depth)
 You can change "sierpinski.pdf" to "sierpinski.svg" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
+
 
 ## More complex examples
 
