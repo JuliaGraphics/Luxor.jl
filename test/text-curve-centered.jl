@@ -1,7 +1,7 @@
 #!/usr/bin/env julia
 
 using Luxor # hide
-Drawing(400, 350, "/tmp/figures-text-curve-centered.png") # hide
+Drawing(400, 350, "/tmp/text-curve-centered.png") # hide
 origin() # hide
 background("ivory") # hide
 rotate(pi/8)
@@ -16,8 +16,8 @@ circle(O, 125, :fill)
 sethue("gray85")
 circle(O, 85, :fill)
 
-textcurvecentered("•LUXOR•", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)
-textcurvecentered("•VECTOR  GRAPHICS•", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
+textcurvecentered("• LUXOR •", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)
+textcurvecentered("• VECTOR GRAPHICS •", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
 
 sethue("gray50")
 map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
