@@ -47,7 +47,7 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 .>(p1::Point, p2::Point)              = p2 < p1
 .>=(p1::Point, p2::Point)             = p1 <= p2
 .<=(p1::Point, p2::Point)             = p2 <= p1
-cmp(p1::Point, p2::Point)             = p1  <p2 ? -1 : p2 < p1 ? 1 : 0
+cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 function randomordinate(low, high)
     low + rand() * abs(high - low)

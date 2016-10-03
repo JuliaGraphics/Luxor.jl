@@ -5,7 +5,8 @@ sloping side of the arrowhead and the arrow's shaft.
 
     arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
 
-Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
+Arrows don't use the current linewidth setting (`setline()`), and defaults to 1; you can
+specify another linewidth.
 
 It doesn't need stroking/filling, the shaft is `stroke()`d and the head `fill()`ed with the
 current color.

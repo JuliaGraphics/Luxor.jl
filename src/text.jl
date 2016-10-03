@@ -171,7 +171,8 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
   spiral_ring_step = 0,
   letter_spacing = 0, # tracking/space between chars, tighter is (-), looser is (+)
   spiral_in_out_shift = 0, # makes spiral outwards (+) or inwards (-)
-  clockwise = true
+  clockwise = true,
+  centered = false
   )
   refangle = start_angle
   current_radius = start_radius
@@ -212,3 +213,42 @@ end
 
 textcurve(the_text, start_angle, start_radius, centre::Point; kwargs...) =
   textcurve(the_text, start_angle, start_radius, centre.x, centre.y; kwargs...)
+
+"""
+    textcurvecentered(the_text, start_angle, start_radius, center::Point;
+          clockwise = true,
+          letter_spacing = 0,
+          baselineshift = 0
+
+This version of the `textcurve()` function is designed for shorter text strings that need
+positioning around a circle. (A cheesy effect much beloved of hipster brands and retronauts.)
+
+`letter_spacing` adjusts the tracking/space between chars, tighter is (-), looser is (+)). `baselineshift` moves the text up or down away from the baseline.
+
+If clockwise is true, the text is pushed upwards away from the baseline.
+
+
+"""
+
+function textcurvecentered(the_text, start_angle, start_radius, center::Point;
+      clockwise = true,
+      letter_spacing = 0,       baselineshift = 0
+      )
+    textbox = textextents(the_text)
+    textwidth = textbox[3]                         # width of text
+    if clockwise
+        baselineradius = start_radius + baselineshift  # could be adjusted if we knew font height
+    else
+        baselineradius = start_radius - baselineshift  # could be adjusted if we knew font height
+    end
+
+    theta = textwidth/baselineradius               # find angle
+    if clockwise
+        starttextangle = start_angle - (theta/2)
+    else
+        starttextangle = start_angle + (theta/2)
+    end
+    starttextxpos = baselineradius * cos(starttextangle)
+    starttextypos = baselineradius * sin(starttextangle)
+    textcurve(the_text, starttextangle, baselineradius, center, clockwise=clockwise, letter_spacing=letter_spacing)
+end

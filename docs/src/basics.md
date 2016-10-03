@@ -65,9 +65,9 @@ background("magenta")
 origin() # hide
 tiles = Tiler(600, 400, 5, 5, margin=30)
 for (pos, n) in tiles
-  box(pos, tiles.tilewidth, tiles.tileheight, :clip)
-  background(randomhue()...)
-  clipreset()
+    box(pos, tiles.tilewidth, tiles.tileheight, :clip)
+    background(randomhue()...)
+    clipreset()
 end
 finish() # hide
 ```
@@ -108,20 +108,20 @@ srand(1) # hide
 fontsize(20) # hide
 tiles = Tiler(400, 300, 4, 5, margin=5)
 for (pos, n) in tiles
-randomhue()
-box(pos, tiles.tilewidth, tiles.tileheight, :fill)
-if n % 3 == 0
-gsave()
-translate(pos)
-subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
-for (pos1, n1) in subtiles
-randomhue()
-box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
-end
-grestore()
-end
-sethue("white")
-textcentred(string(n), pos + Point(0, 5))
+    randomhue()
+    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+    if n % 3 == 0
+        gsave()
+        translate(pos)
+        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
+        for (pos1, n1) in subtiles
+            randomhue()
+            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
+        end
+        grestore()
+    end
+    sethue("white")
+    textcentred(string(n), pos + Point(0, 5))
 end
 finish() # hide
 ```
@@ -209,12 +209,12 @@ tiles = Tiler(500, 300, 5, 5)
 width = 20
 height = 25
 for (pos, n) in tiles
-  randomhue()
-  ellipse(pos, width, height, :fill)
-  sethue("black")
-  label = string(round(width/height, 2))
-  textcentered(label, pos.x, pos.y + 25)
-  width += 2
+    randomhue()
+    ellipse(pos, width, height, :fill)
+    sethue("black")
+    label = string(round(width/height, 2))
+    textcentered(label, pos.x, pos.y + 25)
+    width += 2
 end
 finish() # hide
 ```

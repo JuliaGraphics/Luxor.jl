@@ -12,12 +12,12 @@ srand(1) # hide
 setline(1) # hide
 origin()
 for i in range(0, 30, 6)
-  sethue(HSV(i, 1, 1)) # from Colors
-  setopacity(0.5)
-  circle(0, 0, 20, :fillpreserve)
-  setcolor("black")
-  stroke()
-  translate(25, 0)
+    sethue(HSV(i, 1, 1)) # from Colors
+    setopacity(0.5)
+    circle(0, 0, 20, :fillpreserve)
+    setcolor("black")
+    stroke()
+    translate(25, 0)
 end
 finish() # hide
 ```
@@ -33,11 +33,11 @@ srand(1) # hide
 setline(1) # hide
 origin()
 for i in range(0, 30, 6)
-  sethue(HSV(i, 1, 1)) # from Colors
-  circle(0, 0, 90, :fillpreserve)
-  setcolor("black")
-  stroke()
-  scale(0.8, 0.8)
+    sethue(HSV(i, 1, 1)) # from Colors
+    circle(0, 0, 90, :fillpreserve)
+    setcolor("black")
+    stroke()
+    scale(0.8, 0.8)
 end
 finish() # hide
 ```
@@ -55,11 +55,11 @@ setline(1) # hide
 origin()
 setopacity(0.7) # hide
 for i in 1:8
-  randomhue()
-  squircle(Point(40, 0), 20, 30, :fillpreserve)
-  sethue("black")
-  stroke()
-  rotate(pi/4)
+    randomhue()
+    squircle(Point(40, 0), 20, 30, :fillpreserve)
+    sethue("black")
+    stroke()
+    rotate(pi/4)
 end
 finish() # hide
 ```
@@ -90,16 +90,16 @@ background("white") # hide
 translate(-200, 0) # hide
 
 function boxtext(p, t)
-  sethue("grey30")
-  box(p, 30, 50, :fill)
-  sethue("white")
-  textcentred(t, p)
+    sethue("grey30")
+    box(p, 30, 50, :fill)
+    sethue("white")
+    textcentred(t, p)
 end
 
 for i in 0:5
-  xskew = tand(i * 5.0)
-  transform([1, 0, xskew, 1, 50, 0])
-  boxtext(O, string(round(rad2deg(xskew), 1), "°"))
+    xskew = tand(i * 5.0)
+    transform([1, 0, xskew, 1, 50, 0])
+    boxtext(O, string(round(rad2deg(xskew), 1), "°"))
 end
 
 finish() # hide
