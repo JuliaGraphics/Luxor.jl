@@ -19,12 +19,12 @@ setline(2)
 ngon(0, 0, 500, 8, 0, :clip)
 
 for y in -500:50:500
-  for x in -500:50:500
-    setcolor(cols[rand(1:20)])
-    ngon(x, y, rand(20:25), rand(3:12), 0, :fill)
-    setcolor(cols[rand(1:20)])
-    ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)
-  end
+    for x in -500:50:500
+        setcolor(cols[rand(1:20)])
+        ngon(x, y, rand(20:25), rand(3:12), 0, :fill)
+        setcolor(cols[rand(1:20)])
+        ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)
+    end
 end
 
 finish()
@@ -46,8 +46,8 @@ background("white") # hide
 origin() # hide
 tiles = Tiler(400, 300, 4, 6, margin=5)
 for (pos, n) in tiles
-  randomhue()
-  star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
+    randomhue()
+    star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
 end
 finish() # hide
 ```
@@ -208,9 +208,9 @@ origin() # hide
 setopacity(0.5)
 apolygon = star(O, 100, 5, 0.5, 0, vertices=true)
 for n in 1:10000
-  apoint = randompoint(Point(-200, -150), Point(200, 150))
-  randomhue()
-  isinside(apoint, apolygon) && circle(apoint, 3, :fill)
+    apoint = randompoint(Point(-200, -150), Point(200, 150))
+    randomhue()
+    isinside(apoint, apolygon) && circle(apoint, 3, :fill)
 end
 finish() # hide
 ```

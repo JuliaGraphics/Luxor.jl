@@ -50,10 +50,10 @@ function draw_julia_circles(fname)
     points = ngon(O, 100, 3, pi/6, vertices=true)
 
     for (n, p) in enumerate(points)
-    setcolor(color_sequence[n][1]...)
-    circle(p, 75, :fill)
-    setcolor(color_sequence[n][2]...)
-    circle(p, 65, :fill)
+        setcolor(color_sequence[n][1]...)
+        circle(p, 75, :fill)
+        setcolor(color_sequence[n][2]...)
+        circle(p, 65, :fill)
     end
 
     finish()
@@ -92,14 +92,14 @@ function sierpinski(points, degree)
 end
 
 function draw(n)
-  Drawing(200, 200, "/tmp/sierpinski.pdf")
-  origin()
-  background("ivory")
-  circle(O, 75, :clip)
-  my_points = ngon(O, 150, 3, -pi/2, vertices=true)
-  sierpinski(my_points, n)
-  finish()
-  preview()
+    Drawing(200, 200, "/tmp/sierpinski.pdf")
+    origin()
+    background("ivory")
+    circle(O, 75, :clip)
+    my_points = ngon(O, 150, 3, -pi/2, vertices=true)
+    sierpinski(my_points, n)
+    finish()
+    preview()
 end
 
 depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
@@ -110,7 +110,6 @@ draw(depth)
 You can change "sierpinski.pdf" to "sierpinski.svg" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
-
 
 ## More complex examples
 

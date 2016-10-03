@@ -29,16 +29,16 @@ origin() # hide
 translate(-100, -60) # hide
 fontsize(18) # hide
 for l in 1:3
-  sethue("black")
-  setline(20)
-  setlinecap(["butt", "square", "round"][l])
-  textcentred(["butt", "square", "round"][l], 80l, 80)
-  setlinejoin(["round", "miter", "bevel"][l])
-  textcentred(["round", "miter", "bevel"][l], 80l, 120)
-  poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)
-  sethue("white")
-  setline(1)
-  stroke()
+    sethue("black")
+    setline(20)
+    setlinecap(["butt", "square", "round"][l])
+    textcentred(["butt", "square", "round"][l], 80l, 80)
+    setlinejoin(["round", "miter", "bevel"][l])
+    textcentred(["round", "miter", "bevel"][l], 80l, 120)
+    poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)
+    sethue("white")
+    setline(1)
+    stroke()
 end
 finish() # hide
 ```
@@ -57,9 +57,9 @@ patterns = ["solid", "dotted", "dot", "dotdashed", "longdashed",
   "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"]
 tiles =  Tiler(400, 250, 10, 1, margin=10)
 for (pos, n) in tiles
-  setdash(patterns[n])
-  textright(patterns[n], pos.x - 20, pos.y + 4)
-  line(pos, Point(400, pos.y), :stroke)
+    setdash(patterns[n])
+    textright(patterns[n], pos.x - 20, pos.y + 4)
+    line(pos, Point(400, pos.y), :stroke)
 end
 finish() # hide
 ```

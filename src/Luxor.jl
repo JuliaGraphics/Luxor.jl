@@ -43,7 +43,7 @@ export Drawing, currentdrawing, paper_sizes,
     getpath, getpathflat,
 
     fontface, fontsize, text, textpath,
-    textextents, textcurve, textcentred, textcentered, textright,
+    textextents, textcurve, textcentred, textcentered, textright, textcurvecentered,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
