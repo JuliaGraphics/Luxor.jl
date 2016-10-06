@@ -152,27 +152,28 @@ where some of the characters—eg "F", "+", "-", and "t"—issue turtle control 
 
 ## Text on curves
 
+
 ```@example
 using Luxor # hide
 Drawing(400, 350, "../figures/textcurvecenteredexample.png") # hide
 origin() # hide
 background("ivory") # hide
-rotate(pi/8)
+rotate(pi/12)
 fontsize(24)
-fontface("Georgia")
+fontface("Futura-Bold")
 sethue("gray20")
 setline(3)
 
 circle(O, 130, :stroke)
 circle(O, 135, :stroke)
 circle(O, 125, :fill)
-sethue("gray85")
+sethue("gray90")
 circle(O, 85, :fill)
 
 textcurvecentered("• LUXOR •", -(pi/2), 100, O, clockwise=true, baselineshift = -4)
 textcurvecentered("- VECTOR GRAPHICS -", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
 
-sethue("gray50")
+sethue("gray20")
 map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
 
 sethue("gray95")

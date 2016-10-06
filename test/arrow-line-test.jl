@@ -11,6 +11,8 @@ function arrow_test(fname)
   setline(2)
   pagetiles = Tiler(pagewidth, pageheight, 40, 8, margin=50)
   for (pos, n) in pagetiles
+    setlinecap()
+    setlinejoin()
     randomhue()
     gsave()
     arrow(pos, Point(pos.x + 200, pos.y), linewidth=rand(1:4), arrowheadlength=rand(1:10), arrowheadangle=rand(pi/20:pi/12:pi/3))

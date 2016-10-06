@@ -86,6 +86,7 @@ preview()
 
 ```@docs
 textcurve
+textcurvecentered
 ```
 
 ## Text clipping

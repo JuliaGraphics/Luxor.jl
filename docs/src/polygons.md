@@ -37,7 +37,7 @@ ngon
 
 ## Stars
 
-Use `star()` to make a star.
+Use `star()` to make a star. You can draw it immediately, or use the points it can create.
 
 ```@example
 using Luxor # hide
@@ -93,7 +93,7 @@ finish() # hide
 poly
 ```
 
-A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
+A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```@example
 using Luxor # hide
@@ -282,10 +282,9 @@ polycentroid
 ```
 ### Smoothing polygons
 
-Because polygons can have sharp corners, the `polysmooth()` function can attempt to insert
-arcs at the corners.
+Because polygons can have sharp corners, the experimental `polysmooth()` function attempts to insert arcs at the corners and draw the result.
 
-The original polygon is shown in red; the smoothed polygon is drawn on top:
+The original polygon is shown in red; the smoothed polygon is shown on top:
 
 ```@example
 using Luxor # hide
@@ -311,7 +310,7 @@ finish() # hide
 
 ![polysmooth](figures/polysmooth.png)
 
-The final polygon shows that  you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
+The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
 
 ```@example
 using Luxor # hide
@@ -335,4 +334,46 @@ finish() # hide
 
 ```@docs
 polysmooth
+```
+
+### Offsetting polygons
+
+The experimental `offsetpoly()` function constructs an outline polygon outside or inside an existing polygon. In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use `poly()` to draw the result returned by `offsetpoly()`.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polyoffset-simple.png") # hide
+origin() # hide
+background("white") # hide
+srand(42) # hide
+setline(1.5) # hide
+
+p = star(O, 45, 5, 0.5, 0, vertices=true)
+sethue("red")
+setdash("dot")
+poly(p, :stroke, close=true)
+setdash("solid")
+sethue("black")
+
+poly(offsetpoly(p, 20), :stroke, close=true)
+poly(offsetpoly(p, 25), :stroke, close=true)
+poly(offsetpoly(p, 30), :stroke, close=true)
+poly(offsetpoly(p, 35), :stroke, close=true)
+
+sethue("darkcyan")
+
+poly(offsetpoly(p, -10), :stroke, close=true)
+poly(offsetpoly(p, -15), :stroke, close=true)
+poly(offsetpoly(p, -20), :stroke, close=true)
+finish() # hide
+```
+
+![offset poly](figures/polyoffset-simple.png)
+
+The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.
+
+![offset poly problem](figures/polygon-offset.gif)
+
+```@docs
+offsetpoly
 ```

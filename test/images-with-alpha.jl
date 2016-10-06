@@ -15,7 +15,6 @@ fname = "/tmp/paint-images.pdf"
 Drawing(width, height, fname)
 origin()
 background("grey50")
-
 for imgfile in imagelist
     img = readpng(imgfile)
     rand(Bool) ? placeimage(img, rand(-width/2:width/2), rand(-height/2:height/2), rand(0.25:0.1:0.75)) : placeimage(img, Point(rand(-width/2:width/2), rand(-height/2:height/2)), rand(0.25:0.1:0.75))

@@ -1,13 +1,34 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
+
+function general_tests()
+    pt1 = Point(rand() * 4, rand() * 4)
+    @test -pt1 == Point(-pt1.x, -pt1.y)
+
+    # is point/4 inside a box
+    @test isinside(pt1 ./ 4, box(O, 10, 10, vertices=true))
+
+    # is point not in every corner of box
+    @test all(Point(1, 1) .< box(O, 10, 10, vertices=true)) == false
+
+    # is point outside every corner of box
+    @test all(Point(10, 10)  .> box(O, 10, 10, vertices=true)) == true
+
+    @test .>=(Point(5, 5),  Point(5, 5))
+    @test .>=(Point(5, 5),  Point(5, 5))
+    @test perpendicular(Point(10, 5)) == Point(5.0, -10.0)
+    @test perpendicular(Point(-10, -5)) == Point(-5.0,10.0)
+    @test crossproduct(Point(2, 3), Point(3, 2)) == -5.0
+    @test crossproduct(Point(-20, 30), Point(60, 20)) < 2000
+end
 
 function point_arithmetic_test(fname, npoints=20)
     Drawing(1200, 1200, fname)
     origin()
     scale(0.5, 0.5)
     setline(2.5)
-    background("grey10")
+    background("white")
     setopacity(0.7)
     fontsize(25)
     randompoints = randompointarray(Point(-600, -600), Point(600, 600), npoints)
@@ -50,19 +71,19 @@ function point_arithmetic_test(fname, npoints=20)
 
     # comparisons
 
-    test = [isequal, isless, <, >, ==]
-    for f in test
+    testfunctions = [isequal, isless, <, >, ==]
+    for f in testfunctions
         randomhue()
         for i in 1:length(randompoints)-1
             if f(randompoints[i], randompoints[i+1])
-                circle(randompoints[i], i * 2, :stroke)
-                circle(randompoints[i+1], i * 3, :stroke)
+                circle(randompoints[i], i * 1.2, :stroke)
+                circle(randompoints[i+1], i * 1.3, :stroke)
             end
         end
     end
 
-    test = [.<, .>, .>=, .<=]
-    for f in test
+    testfunctions = [.<, .>, .>=, .<=]
+    for f in testfunctions
         randomhue()
             if f(randompoints[1:npoints], randompoints[npoints:-1:1]) == true
                 ellipse(randompoints[i], i * 2, i * 4, :stroke)
@@ -79,7 +100,7 @@ function point_arithmetic_test(fname, npoints=20)
         text(string(n), randompoints[i])
     end
 
-    map(pt -> circle(pt, 50, :fill), [midpoint(randompoints), randompoints[1], randompoints[2]])
+    map(pt -> circle(pt, 6, :stroke), [midpoint(randompoints), randompoints[1], randompoints[2]])
 
     if all(randompoints .== randompoints)
         text("the points compare elementwise")
@@ -98,4 +119,5 @@ function point_arithmetic_test(fname, npoints=20)
     println("finished test: output in $(fname)")
 end
 
+general_tests()
 point_arithmetic_test("/tmp/point-arithmetic.pdf", 100)

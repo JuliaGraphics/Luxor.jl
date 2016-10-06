@@ -24,16 +24,13 @@ export Drawing, currentdrawing, paper_sizes,
     circle, ellipse, squircle, center3pts,
     rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
     move, rmove,
-    line, rline, curve, arc, carc, arc2r, ngon, sector, pie,
+    line, rline, curve, arc, carc, arc2r, ngon, sector, star, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
-    star,
-
     Point, O, randompoint, randompointarray, midpoint, intersection,
-    isinside,
-
-    prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
-    polysortbyangle, polysortbydistance,
+    isinside, perpendicular, crossproduct, prettypoly, polysmooth, polysplit,
+    poly, simplify, polybbox, polycentroid,
+    polysortbyangle, polysortbydistance, offsetpoly,
 
     strokepreserve, fillpreserve,
     gsave, grestore,
@@ -46,6 +43,10 @@ export Drawing, currentdrawing, paper_sizes,
     textextents, textcurve, textcentred, textcentered, textright, textcurvecentered,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
+
+    Blend, setblend, blend, addstop,
+    blendmatrix, rotation_matrix, scaling_matrix, translation_matrix,
+    cairotojuliamatrix, juliatocairomatrix,
 
     readpng, placeimage,
     Tiler,
@@ -303,7 +304,17 @@ function background(r, g, b, a)
     return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
-# does this do anything in Cairo?
+# I don't think this does anything in Cairo
+
+# const ANTIALIAS_DEFAULT = 0
+# const ANTIALIAS_NONE = 1
+# const ANTIALIAS_GRAY = 2
+# const ANTIALIAS_SUBPIXEL = 3
+# # next 3 are not available on all Cairo installations (only since 1.12)
+# const ANTIALIAS_FAST = 4
+# const ANTIALIAS_GOOD = 5
+# const ANTIALIAS_BEST = 6
+
 setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
 
 """
@@ -1134,28 +1145,52 @@ Returns the current Cairo matrix as an array. In Cairo/Luxor, a matrix is an arr
 Some basic matrix transforms:
 
 - translate
+
   `transform([1, 0, 0, 1, dx, dy])`
+
   => shift by `dx`, `dy`
 
 - scale
-  `transform([fx, 0, 0, fy,  0, 0])`
-  => scale by `fx`, `fy`
+
+    => scale by `fx`, `fy`
+
+    scale O:        [W  0 0  H 0 0]
 
 - rotate
-  `transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])`
-  => rotate to `a` radians
+
+    `transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])`
+
+    => rotate to `a` radians
+
+    rotate O:       [c -s s  c 0 0]
+
+ - shear in x:     [1  0 A  1 0 0]
 
 - x-skew
-  `transform([1, 0, tan(a), 1, 0, 0])`
-  => xskew by `a`
+
+    `transform([1, 0, tan(a), 1, 0, 0])`
+
+    => xskew by `a`
 
 - y-skew
-  `transform([1, tan(a), 0, 1, 0, 0])`
-  => yskew by `a`
+
+    `transform([1, tan(a), 0, 1, 0, 0])`
+
+    => yskew by `a`
 
 - flip
-  `transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])`
+
+    `transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])`
+
   => flip with center at `centerx`/`centery`
+
+-  shear in y:     [1  B 0  1 0 0]
+
+-  reflect O:      [-1 0 0 -1 0 0]
+
+-  reflect xaxis:  [1  0 0 -1 0 0]
+
+-  reflect yaxis:  [-1 0 0  1 0 0]
 
 When a drawing is first created, the matrix looks like this:
 
@@ -1169,14 +1204,6 @@ To reset the matrix to the original:
 
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
 
-translate:      [1  0 0  1 X Y]
-scale O:        [W  0 0  H 0 0]
-rotate O:       [c -s s  c 0 0]
-shear in x:     [1  0 A  1 0 0]
-shear in y:     [1  B 0  1 0 0]
-reflect O:      [-1 0 0 -1 0 0]
-reflect xaxis:  [1  0 0 -1 0 0]
-reflect yaxis:  [-1 0 0  1 0 0]
 """
 function getmatrix()
     gm = Cairo.get_matrix(currentdrawing.cr)

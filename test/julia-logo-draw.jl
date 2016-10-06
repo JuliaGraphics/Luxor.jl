@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Colors
 
 include("julia-logo.jl")
 
@@ -40,6 +40,8 @@ function dropshadow()
     gramp = linspace(colorant"white", colorant"gray60", steps)
     gsave()
     r = 200
+    sethue("purple")
+    rect(O, 5, 10, :stroke)
     setopacity(0.1)
     for i in 1:steps
         sethue(gramp[i])
@@ -69,6 +71,18 @@ function colorgrid()
     grestore()
 end
 
+function boxes_and_rectangles(pt::Point)
+    for i in 1:20
+        randomhue()
+        poly(box(pt + i, 10i, 10i, vertices=true), :stroke, close=true)
+    end
+    for i in 40:10:150
+        randomhue()
+        translate(i, 0)
+        poly(squircle(O, 30, 30, vertices=true), :stroke)
+    end
+end
+
 function draw_julia_logos(fname)
     Drawing(1600,1600, fname)
     origin()
@@ -86,8 +100,11 @@ function draw_julia_logos(fname)
     translate(800, 50)
     colorgrid()
 
+    translate(-700, 300)
+    boxes_and_rectangles(O)
+
     finish()
     println("finished test: output in $(fname)")
 end
 
-draw_julia_logos("/tmp/test.png")
+draw_julia_logos("/tmp/julia-logo-draw.png")
