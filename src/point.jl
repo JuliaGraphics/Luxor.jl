@@ -1,5 +1,5 @@
 import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
-import Base: isequal, isless, cmp
+import Base: isequal, isless, cmp, dot
 
 """
 The Point type holds two coordinates. Currently it's immutable, so remember not try to
@@ -29,24 +29,31 @@ const O = Point(0, 0)
 .*(k::Number, p2::Point)             = Point(k * p2.x,    k * p2.y)
 .*(p2::Point, k::Number)             = Point(k * p2.x,    k * p2.y)
 
-# .*(p1::Point, p2::Point)           = Point(p1.x * p2.x, p1.y * p2.y)
+*(p1::Point, p2::Point)              = Point(p1.x * p2.x, p1.y * p2.y)
 
 ./(p2::Point, k::Number)             = Point(p2.x/k,      p2.y/k)
 ^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
 ^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
 
+function dot(a::Point, b::Point)
+    return dot([a.x, a.y], [b.x, b.y])
+end
+
 # comparisons
 
-isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x) && (isapprox(p1.x, p2.x))
+isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x) && (isapprox(p1.y, p2.y))
 isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y) )
 !=(p1::Point, p2::Point)              = !isequal(p1, p2)
 <(p1::Point, p2::Point)               = isless(p1,p2)
 >(p1::Point, p2::Point)               = p2 < p1
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
+
 .<(p1::Point, p2::Point)              = p1 < p2
 .>(p1::Point, p2::Point)              = p2 < p1
-.>=(p1::Point, p2::Point)             = p1 <= p2
-.<=(p1::Point, p2::Point)             = p2 <= p1
+
+.<=(p1::Point, p2::Point)             = p1 <= p2
+.>=(p1::Point, p2::Point)             = p2 <= p1
+
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 function randomordinate(low, high)
@@ -99,19 +106,18 @@ function randompointarray(lowx, lowy, highx, highy, n)
 end
 
 """
-Find the norm of two points (two argument form).
-
     norm(p1::Point, p2::Point)
+
+Find the norm of two points (two argument form).
 """
 function norm(p1::Point, p2::Point)
     norm([p1.x, p1.y] - [p2.x, p2.y])
 end
 
 """
-Find the distance between a point `p` and a line between two points `a` and `b`.
-
     point_line_distance(p::Point, a::Point, b::Point)
 
+Find the distance between a point `p` and a line between two points `a` and `b`.
 """
 function point_line_distance(p::Point, a::Point, b::Point)
     # area of triangle
@@ -131,36 +137,110 @@ Find the midpoint between two points.
 midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
 
 """
-Find midpoint between the first two elements of an array of points.
-
     midpoint(a)
+
+Find midpoint between the first two elements of an array of points.
 """
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 """
+    perpendicular(p::Point)
+
+`Point(p.y, -p.x)`
+"""
+
+function perpendicular(p::Point)
+    return Point(p.y, -p.x)
+end
+
+"""
+    crossproduct(p1::Point, p2::Point)
+
+`dot(p1, perpendicular(p2))`
+"""
+
+function crossproduct(p1::Point, p2::Point)
+    return dot(p1, perpendicular(p2))
+end
+
+"""
+    intersection(p1::Point, p2::Point, p3::Point, p4::Point)
+
 Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
-    intersection(p1, p2, p3, p4)
+This returns a tuple: `(boolean, point(0, 0))`.
 
-This returns a tuple: `(false, Point(0, 0))` or `(true, intersectionoint)`.
+Keyword options and default values:
+
+    crossingonly = false
+
+If `crossingonly = true`, returns `(false, intersectionpoint)` if the lines don't cross, but
+would intersect at `intersectionpoint` if continued beyond their current endpoints.
+
+    commonendpoints = false
+
+If `commonendpoints= true`, will return `(false, Point(0, 0))` if the lines share a common
+end point (because that's not so much an intersection, more a meeting).
+
+Function returns `(false, Point(0, 0))` if the lines are undefined,
 """
-function intersection(p1, p2, p3, p4)
-    flag = false
-    intersectpoint = Point(0, 0)
-    ip = 0
-    s1 = p2 - p1
-    s2 = p4 - p3
-    u = p1 - p3
-    ip = 1 / (-s2.x * s1.y + s1.x * s2.y)
-    s = (-s1.y * u.x + s1.x * u.y) * ip
-    t = ( s2.x * u.y - s2.y * u.x) * ip
-    if (s >= 0) && (s <= 1) && (t >= 0) && (t <= 1)
-        if isapprox(ip, 0, atol=0.1)
-            intersectpoint = p1 + (s1 * t)
-            flag = true
+
+function intersection(A::Point, B::Point, C::Point, D::Point;
+        commonendpoints = false,
+        crossingonly = false
+        )
+    # will fail if either line is undefined
+    if (A == B) || (C == D)
+        return (false, Point(0, 0))
+    end
+
+    # can fail if the lines share a common end point
+    if commonendpoints
+        if (A == C) || (B == C) || (A == D) || (B == D)
+            return (false, Point(0, 0))
         end
     end
-    return (flag, intersectpoint)
+
+    # (1) Translate the system so that point A is on the origin.
+    # since points are immutable, do it with temps
+    Bx = B.x - A.x
+    By = B.y - A.y
+    Cx = C.x - A.x
+    Cy = C.y - A.y
+    Dx = D.x - A.x
+    Dy = D.y - A.y
+
+    # length of segment A-B.
+    distAB = hypot(Bx, By)
+
+    # (2) Rotate the system so that point B is on the positive X axis.
+    the_cos = Bx / distAB
+    the_sin = By / distAB
+    newX = (Cx * the_cos) + (Cy * the_sin)
+    Cy = (Cy * the_cos) - (Cx * the_sin)
+    Cx = newX
+    newX = (Dx * the_cos) + (Dy * the_sin)
+    Dy = (Dy * the_cos) - (Dx * the_sin)
+    Dx = newX
+
+    # will fail if the lines are parallel
+    if isapprox(Cy, Dy)
+        return (false, Point(0, 0))
+    end
+
+    # (3) discover the position of the intersection point along line A-B.
+    ABpos = Dx + (Cx - Dx) * Dy / (Dy - Cy)
+
+    # (4) apply the discovered position to line A-B in the original coordinate system.
+    intersectionpoint = Point(A.x + (ABpos * the_cos), A.y + (ABpos * the_sin))
+
+    #  (5) return false + ip if segments A-B and C-D don't cross.
+    if crossingonly
+        if (Cy < 0.0 && Dy < 0.0) || (Cy >= 0.0 && Dy >= 0.0)
+            return (false, intersectionpoint)
+        end
+    end
+    return (true, intersectionpoint)
 end
 
 # end

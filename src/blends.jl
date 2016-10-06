@@ -1,7 +1,3 @@
-export Blend, setblend, blend, addstop,
-    blendmatrix, rotation_matrix, scaling_matrix, translation_matrix,
-    cairotojuliamatrix, juliatocairomatrix
-
 typealias Blend CairoPattern
 
 """
@@ -119,7 +115,9 @@ function blendmatrix(b::Blend, m)
 end
 
 """
-These matrix functions are me experimenting. I don't know whether they're right or not.
+    rotation_matrix(a)
+
+Return a 3 by 3 Julia matrix that will apply a rotation through `a` radians.
 """
 
 function rotation_matrix(a)
@@ -128,11 +126,23 @@ function rotation_matrix(a)
              0            0   1.0 ])
 end
 
+"""
+    translation_matrix(x, y)
+
+Return a 3 by 3 Julia matrix that will apply a translation in `x` and `y`.
+"""
+
 function translation_matrix(x, y)
     return ([1.0     0     x ;
                0     1.0   y ;
                0     0     1.0 ])
 end
+
+"""
+    scaling_matrix(sx, sy)
+
+Return a 3 by 3 Julia matrix that will apply a scaling by `sx` and `sy`.
+"""
 
 function scaling_matrix(sx, sy)
     return ([sx   0   0 ;
@@ -140,9 +150,21 @@ function scaling_matrix(sx, sy)
              0    0   1.0])
 end
 
+"""
+    cairotojuliamatrix(c)
+
+Return a 3 by 3 Julia matrix that's the equivalent of the six-element Cairo matrix in `c`.
+"""
+
 function cairotojuliamatrix(c::Array)
     return [c[1] c[3] c[5] ; c[2] c[4] c[6] ; 0 0 1]
 end
+
+"""
+    juliatocairomatrix(c)
+
+Return a six-element Cairo matrix 3 that's the equivalent of the 3 by 3 Julia matrix in `c`.
+"""
 
 function juliatocairomatrix(c::Matrix)
     return [c[1] c[2] c[4] c[5] c[7] c[8]]

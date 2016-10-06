@@ -65,7 +65,7 @@ setlinecap("round")
 pagetiles = Tiler(width, height, 6, 5, margin=50)
 for (pos, n) in pagetiles
     sethue("green")
-    squircle(pos, pagetiles.tilewidth/2, pagetiles.tileheight/2, :stroke)
+    squircle(pos, pagetiles.tilewidth/2 - 2, pagetiles.tileheight/2 - 2, :stroke)
     testapoly(pos.x, pos.y)
 end
 

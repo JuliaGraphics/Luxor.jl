@@ -315,8 +315,8 @@ Split a polygon into two where it intersects with a line:
 
     polysplit(p, p1, p2)
 
-This doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon the shape of the
-letter "E" might end up being divided into more than two parts.
+This doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon
+the shape of the letter "E" might end up being divided into more than two parts.
 """
 function polysplit(pointlist, p1, p2)
     poly1 = []
@@ -324,7 +324,7 @@ function polysplit(pointlist, p1, p2)
     i = 1
     for i in 1:length(pointlist)-1
         s = ((p2.x - p1.x) * (pointlist[i].y - p1.y)) - ((p2.y - p1.y) * (pointlist[i].x - p1.x))
-        flag, intersectpoint = intersection(pointlist[i], pointlist[i+1], p1, p2)
+        flag, intersectpoint = intersection(pointlist[i], pointlist[i+1], p1, p2, crossingonly=true)
         if flag
             push!(poly1, intersectpoint)
             push!(poly2, intersectpoint)
@@ -341,7 +341,7 @@ function polysplit(pointlist, p1, p2)
     # don't forget last point to first
     i += 1
     s = ((p2.x - p1.x) * (pointlist[i].y - p1.y)) - ((p2.y - p1.y) * (pointlist[i].x - p1.x))
-    flag, intersectpoint = intersection(pointlist[i], pointlist[1], p1, p2)
+    flag, intersectpoint = intersection(pointlist[i], pointlist[1], p1, p2, crossingonly=true)
     if flag
         push!(poly1, intersectpoint)
         push!(poly2, intersectpoint)
@@ -359,11 +359,13 @@ function polysplit(pointlist, p1, p2)
 end
 
 """
-    prettypoly(points, action=:nothing, vertex_action=() -> circle(O, 1, :fill); close=false, reversepath=false)
+    prettypoly(points, action=:nothing, vertex_action=() -> circle(O, 1, :fill);
+        close=false,
+        reversepath=false)
 
 Draw the polygon defined by `points`, possibly closing and reversing it, using the current
-parameters, and then evaluate the `vertex_action` function at every vertex of the polygon. For example, you
-can mark each vertex of a polygon with a randomly colored filled circle.
+parameters, and then evaluate the `vertex_action` function at every vertex of the polygon.
+For example, you can mark each vertex of a polygon with a randomly colored filled circle.
 
     p = star(O, 70, 7, 0.6, 0, vertices=true)
     prettypoly(p, :fill, () ->
@@ -374,7 +376,10 @@ can mark each vertex of a polygon with a randomly colored filled circle.
         close=true)
 """
 
-function prettypoly(pointlist::Array, action=:nothing, vertex_action=() -> circle(O, 1, :fill); close=false, reversepath=false)
+function prettypoly(pointlist::Array, action=:nothing, vertex_action=() -> circle(O, 1, :fill);
+    close=false,
+    reversepath=false)
+
     if action != :path
         newpath()
     end
@@ -514,6 +519,62 @@ function polysmooth(points, radius, action=:action; debug=false)
         end
     end
     do_action(action)
+end
+
+"""
+Return a polygon that is offset from a polygon by `d` units.
+
+    offsetpoly(path::Array, d)
+
+The incoming set of points `path` is treated as a polygon, and another set of points is
+created, which form a polygon lying `d` units away from the source poly.
+
+Polygon offsetting is a topic on which people have written PhD theses and published academic
+papers, so this short brain-dead routine will give good results for simple polygons up to a
+point (!). There are a number of issues to be aware of:
+
+- very short lines tend to make the algorithm 'flip' and produce larger lines
+
+- small polygons that are counterclockwise and larger offsets may make the new polygon
+appear the wrong side of the original
+
+- very sharp vertices will produce even sharper offsets, as the calculated intersection point
+veers off to infinity
+"""
+
+function offsetpoly(path::Array, d)
+    l = length(path)
+    offsetpoly = Array{Point}(l)
+    for i in 1:l
+        p1 = path[mod1(i, l)]
+        p2 = path[mod1(i + 1, l)]
+        p3 = path[mod1(i + 2, l)]
+        L12 = norm(p1, p2)
+        L23 = norm(p2, p3)
+        # the offset line of p1 - p2
+        x1p = p1.x + (d * (p2.y - p1.y))/ L12
+        y1p = p1.y + (d * (p1.x - p2.x))/ L12
+        x2p = p2.x + (d * (p2.y - p1.y))/ L12
+        y2p = p2.y + (d * (p1.x - p2.x))/ L12
+
+        # the offset line of p2 - p3
+        x3p = p2.x + (d * (p3.y - p2.y))/ L23
+        y3p = p2.y + (d * (p2.x - p3.x))/ L23
+        x4p = p3.x + (d * (p3.y - p2.y))/ L23
+        y4p = p3.y + (d * (p2.x - p3.x))/ L23
+
+        intersectionpoint = intersection(
+            Point(x1p, y1p),
+            Point(x2p, y2p),
+            Point(x3p, y3p),
+            Point(x4p, y4p), crossingonly=false)
+
+        if intersectionpoint[1]
+            offsetpoly[i] = intersectionpoint[2]
+        end
+
+    end
+    return offsetpoly
 end
 
 # end

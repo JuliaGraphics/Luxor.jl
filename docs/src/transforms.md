@@ -113,4 +113,11 @@ finish() # hide
 getmatrix
 setmatrix
 transform
+crossproduct
+blendmatrix
+rotation_matrix
+scaling_matrix
+translation_matrix
+cairotojuliamatrix
+juliatocairomatrix
 ```

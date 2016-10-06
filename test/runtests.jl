@@ -16,13 +16,15 @@ info("starting test color-blend-test" );            include("color-blend-test.jl
 info("starting test ellipse test" );               include("ellipse-test.jl")
 
 # this test fails when followed by other tests in the same session, but not on its own.
-# Presumably there's some pointer or something which isn't released properly
+# Presumably there's some pointer or something in Cairo which isn't released properly
+# When Cairo is updated the test can be included.
 # info("starting test get_path" ); include("get_path.jl")
 
 info("starting test heart-julia" );                include("heart-julia.jl")
 info("starting test images_with_alpha" );          include("images-with-alpha.jl")
 info("starting test julia_logo_draw_eps" );        include("julia-logo-draw-eps.jl")
 info("starting test julia_logo_draw" );            include("julia-logo-draw.jl")
+info("starting test line-intersection-options." );            include("line-intersection-options.jl")
 info("starting test luxor-test1") ;                include("luxor-test1.jl")
 info("starting test matrix-tests" );               include("matrix-tests.jl")
 info("starting test palette_test" );               include("palette_test.jl")
