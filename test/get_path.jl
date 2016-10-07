@@ -3,12 +3,15 @@
 using Luxor
 
 function get_path(str)
-  p = textpath(str)
-  o = getpathflat()
-  stroke()
-  sethue("red")
-  x, y = 0, 0
-  for e in o
+    sethue("blue")
+    setopacity(.7)
+    setline(0.5)
+    p = textpath(str)
+    o = getpathflat()
+    stroke()
+    sethue("red")
+    x, y = 0, 0
+    for e in o
         if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
             (x, y) = e.points
             move(x, y)
@@ -20,7 +23,7 @@ function get_path(str)
             circle(x, y, 1, :stroke)
         elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
             (x1, y1, x2, y2, x3, y3) = e.points
-            #bezier control lines
+            # show bezier control lines
             circle(x1, y1, 1, :stroke)
             circle(x2, y2, 1, :stroke)
             circle(x3, y3, 1, :stroke)
@@ -40,11 +43,7 @@ end
 function get_path_test(fname)
     Drawing(500, 500, fname)
     origin()
-    sethue("blue")
-    fontface("Aachen")
     fontsize(80)
-    setline(0.5)
-    setopacity(.7)
     get_path("Luxor")
     finish()
     println("finished test: output in $(fname)")

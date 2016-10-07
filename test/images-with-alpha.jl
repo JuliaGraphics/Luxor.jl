@@ -3,9 +3,8 @@
 using Luxor
 
 function get_png_files(folder)
-    cd(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
-    return map(realpath, imagelist)
+    return map(f -> string(folder, f), imagelist)
 end
 
 imagelist = get_png_files(dirname(@__FILE__) * "/../docs/figures")

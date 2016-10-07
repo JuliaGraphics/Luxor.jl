@@ -329,11 +329,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.circlepath",
+    "page": "Basic graphics",
+    "title": "Luxor.circlepath",
+    "category": "Function",
+    "text": " circlepath(center::Point, radius, action=:none;\n     reversepath=false,\n     clockwise=true,\n     kappa = 0.5522847)\n\nConstruct a circle around current point out of Bezier arcs.\n\n\n\n"
+},
+
+{
     "location": "basics.html#Circles,-ellipses,-and-the-like-1",
     "page": "Basic graphics",
     "title": "Circles, ellipses, and the like",
     "category": "section",
-    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points.using Luxor # hide\nDrawing(400, 200, \"../figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = O\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(O, Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide(Image: circles)using Luxor # hide\nDrawing(400, 200, \"../figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: center and radius of 3 points)With ellipse() you can place ellipses (and circles) by defining the center point and the width and height.using Luxor # hide\nDrawing(500, 300, \"../figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nsrand(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n    randomhue()\n    ellipse(pos, width, height, :fill)\n    sethue(\"black\")\n    label = string(round(width/height, 2))\n    textcentered(label, pos.x, pos.y + 25)\n    width += 2\nend\nfinish() # hide(Image: ellipses)circle\nellipseA sector (strictly an \"annular sector\") has an inner and outer radius, as well as start and end angles.using Luxor # hide\nDrawing(400, 200, \"../figures/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hide(Image: sector)sectorA pie (or wedge) has start and end angles.using Luxor # hide\nDrawing(400, 300, \"../figures/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, pi, :fill)\nfinish() # hide(Image: pie)pieA squircle is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:using Luxor # hide\nDrawing(600, 250, \"../figures/squircle.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(20) # hide\nsetline(2)\ntiles = Tiler(600, 250, 1, 3)\nfor (pos, n) in tiles\n    sethue(\"lavender\")\n    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)\n    sethue(\"grey20\")\n    stroke()\n    textcentered(\"rt = $([0.3, 0.5, 0.7][n])\", pos)\nend\nfinish() # hide(Image: squircles)squircleFor a simple rounded rectangle, smooth the corners of a box, like so:using Luxor # hide\nDrawing(600, 250, \"../figures/round-rect.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\npolysmooth(box(O, 200, 150, vertices=true), 10, :stroke)\nfinish() # hide(Image: rounded rect)"
+    "text": "There are various ways to make circles, including by center and radius, through two points, or passing through three points.using Luxor # hide\nDrawing(400, 200, \"../figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = O\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(O, Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide(Image: circles)using Luxor # hide\nDrawing(400, 200, \"../figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide(Image: center and radius of 3 points)With ellipse() you can place ellipses (and circles) by defining the center point and the width and height.using Luxor # hide\nDrawing(500, 300, \"../figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nsrand(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n    randomhue()\n    ellipse(pos, width, height, :fill)\n    sethue(\"black\")\n    label = string(round(width/height, 2))\n    textcentered(label, pos.x, pos.y + 25)\n    width += 2\nend\nfinish() # hide(Image: ellipses)circle\nellipseA sector (strictly an \"annular sector\") has an inner and outer radius, as well as start and end angles.using Luxor # hide\nDrawing(400, 200, \"../figures/sector.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"cyan\") # hide\nsector(50, 90, pi/2, 0, :fill)\nfinish() # hide(Image: sector)sectorA pie (or wedge) has start and end angles.using Luxor # hide\nDrawing(400, 300, \"../figures/pie.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"magenta\") # hide\npie(0, 0, 100, pi/2, pi, :fill)\nfinish() # hide(Image: pie)pieA squircle is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:using Luxor # hide\nDrawing(600, 250, \"../figures/squircle.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(20) # hide\nsetline(2)\ntiles = Tiler(600, 250, 1, 3)\nfor (pos, n) in tiles\n    sethue(\"lavender\")\n    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)\n    sethue(\"grey20\")\n    stroke()\n    textcentered(\"rt = $([0.3, 0.5, 0.7][n])\", pos)\nend\nfinish() # hide(Image: squircles)squircleFor a simple rounded rectangle, smooth the corners of a box, like so:using Luxor # hide\nDrawing(600, 250, \"../figures/round-rect.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\npolysmooth(box(O, 200, 150, vertices=true), 10, :stroke)\nfinish() # hide(Image: rounded rect)circlepath constructs a circular path from Bèzier curves, which allows you to use circles as paths.using Luxor # hide\nDrawing(600, 250, \"../figures/circle-path.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\ntiles = Tiler(600, 250, 1, 5)\nfor (pos, n) in tiles\n    randomhue()\n    circlepath(pos, tiles.tilewidth/2, :path)\n    newsubpath()\n    circlepath(pos, rand(5:tiles.tilewidth/2), :fill, clockwise=false, reversepath=true)\nend\nfinish() # hide(Image: circles as paths)circlepath"
 },
 
 {
@@ -501,7 +509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Paths",
     "category": "section",
-    "text": "A path is a group of points. A path can have subpaths (which can form holes).The getpath() function gets the current Cairo path as an array of element types and points. getpathflat() gets the current path as an array of type/points with curves flattened to line segments.newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflat"
+    "text": "A path is a group of points. A path can have subpaths (which can form holes).The getpath() function gets the current Cairo path as an array of element types and points. getpathflat() gets the current path as an array of type/points with curves flattened to line segments.using Luxor # hide\nDrawing(400, 250, \"../figures/get-path\") # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.75) # hide\nsethue(\"black\") # hide\n\nfontsize(220) # hide\nt = \"N\" # hide\ntranslate(-textextents(t)[3]/2, textextents(t)[4]/2) # hide\ntextpath(t)\npathdata = getpathflat()\noutline = Point[]\nfor i in pathdata[1:end-1]\n    if length(i.points) == 2\n        x = i.points[1]\n        y = i.points[2]\n        push!(outline, Point(x, y))\n    end\nend\npoly(outline, :stroke, close=true)\nfor i in 5:5:35\n    poly(offsetpoly(outline, i), :stroke, close=true)\nend\nfinish() # hide(Image: get path)newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflat"
 },
 
 {
@@ -717,7 +725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.ngon",
     "category": "Function",
-    "text": "Find the vertices of a regular n-sided polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nDraw a regular polygon centred at point p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)\n\n\n\n"
+    "text": "Find the vertices of a regular n-sided polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nDraw a regular polygon centred at point p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\n\n\n"
 },
 
 {
@@ -733,7 +741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.star",
     "category": "Function",
-    "text": "Make a star:\n\nstar(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)\n\nratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nDraw a star centered at a position:\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)\n\n\n\n"
+    "text": "Make a star:\n\nstar(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nDraw a star centered at a position:\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\n\n\n"
 },
 
 {
@@ -853,7 +861,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.offsetpoly",
     "category": "Function",
-    "text": "Return a polygon that is offset from a polygon by d units.\n\noffsetpoly(path::Array, d)\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon\n\nappear the wrong side of the original\n\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point\n\nveers off to infinity\n\n\n\n"
+    "text": "Return a polygon that is offset from a polygon by d units.\n\noffsetpoly(path::Array, d)\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\n\n\n\n"
 },
 
 {
@@ -1005,7 +1013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturns the current Cairo matrix as an array. In Cairo/Luxor, a matrix is an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate transform([1, 0, 0, 1, dx, dy]) => shift by dx, dy\nscale transform([fx, 0, 0, fy,  0, 0]) => scale by fx, fy\nrotate transform([cos(a), -sin(a), sin(a), cos(a), 0, 0]) => rotate to a radians\nx-skew transform([1, 0, tan(a), 1, 0, 0]) => xskew by a\ny-skew transform([1, tan(a), 0, 1, 0, 0]) => yskew by a\nflip transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)]) => flip with center at centerx/centery\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\ntranslate:      [1  0 0  1 X Y] scale O:        [W  0 0  H 0 0] rotate O:       [c -s s  c 0 0] shear in x:     [1  0 A  1 0 0] shear in y:     [1  B 0  1 0 0] reflect O:      [-1 0 0 -1 0 0] reflect xaxis:  [1  0 0 -1 0 0] reflect yaxis:  [-1 0 0  1 0 0]\n\n\n\n"
+    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturns the current Cairo matrix as an array. In Cairo/Luxor, a matrix is an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate\ntransform([1, 0, 0, 1, dx, dy])\n=> shift by dx, dy\nscale\n=> scale by fx, fy\nscale O:        [W  0 0  H 0 0]\nrotate\ntransform([cos(a), -sin(a), sin(a), cos(a), 0, 0])\n=> rotate to a radians\nrotate O:       [c -s s  c 0 0]\nshear in x:     [1  0 A  1 0 0]\nx-skew\ntransform([1, 0, tan(a), 1, 0, 0])\n=> xskew by a\ny-skew\ntransform([1, tan(a), 0, 1, 0, 0])\n=> yskew by a\nflip\ntransform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])\n=> flip with center at centerx/centery\nshear in y:     [1  B 0  1 0 0]\nreflect O:      [-1 0 0 -1 0 0]\nreflect xaxis:  [1  0 0 -1 0 0]\nreflect yaxis:  [-1 0 0  1 0 0]\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
 },
 
 {
@@ -1025,6 +1033,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "transforms.html#Luxor.crossproduct",
+    "page": "Transforms and matrices",
+    "title": "Luxor.crossproduct",
+    "category": "Function",
+    "text": "crossproduct(p1::Point, p2::Point)\n\ndot(p1, perpendicular(p2))\n\n\n\n"
+},
+
+{
     "location": "transforms.html#Luxor.blendmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.blendmatrix",
@@ -1041,11 +1057,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "transforms.html#Luxor.scaling_matrix",
+    "page": "Transforms and matrices",
+    "title": "Luxor.scaling_matrix",
+    "category": "Function",
+    "text": "scaling_matrix(sx, sy)\n\nReturn a 3 by 3 Julia matrix that will apply a scaling by sx and sy.\n\n\n\n"
+},
+
+{
+    "location": "transforms.html#Luxor.translation_matrix",
+    "page": "Transforms and matrices",
+    "title": "Luxor.translation_matrix",
+    "category": "Function",
+    "text": "translation_matrix(x, y)\n\nReturn a 3 by 3 Julia matrix that will apply a translation in x and y.\n\n\n\n"
+},
+
+{
+    "location": "transforms.html#Luxor.cairotojuliamatrix",
+    "page": "Transforms and matrices",
+    "title": "Luxor.cairotojuliamatrix",
+    "category": "Function",
+    "text": "cairotojuliamatrix(c)\n\nReturn a 3 by 3 Julia matrix that's the equivalent of the six-element Cairo matrix in c.\n\n\n\n"
+},
+
+{
+    "location": "transforms.html#Luxor.juliatocairomatrix",
+    "page": "Transforms and matrices",
+    "title": "Luxor.juliatocairomatrix",
+    "category": "Function",
+    "text": "juliatocairomatrix(c)\n\nReturn a six-element Cairo matrix 3 that's the equivalent of the 3 by 3 Julia matrix in c.\n\n\n\n"
+},
+
+{
     "location": "transforms.html#Transforms-and-matrices-1",
     "page": "Transforms and matrices",
     "title": "Transforms and matrices",
     "category": "section",
-    "text": "For basic transformations of the drawing space, use scale(sx, sy), rotate(a), and translate(tx, ty). You can use origin() to return to the document's original state, with the axes in the center.translate() shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/translate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    setopacity(0.5)\n    circle(0, 0, 20, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    translate(25, 0)\nend\nfinish() # hide(Image: translate)scale() scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/scale.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    circle(0, 0, 90, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    scale(0.8, 0.8)\nend\nfinish() # hide(Image: scale)rotate() rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.using Luxor # hide\nDrawing(400, 200, \"../figures/rotate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nsetopacity(0.7) # hide\nfor i in 1:8\n    randomhue()\n    squircle(Point(40, 0), 20, 30, :fillpreserve)\n    sethue(\"black\")\n    stroke()\n    rotate(pi/4)\nend\nfinish() # hide(Image: rotate)scale\nrotate\ntranslateThe current matrix is a six element array, perhaps like this:[1, 0, 0, 1, 0, 0]transform(a) transforms the current workspace by 'multiplying' the current matrix with matrix a. For example, transform([1, 0, xskew, 1, 50, 0]) skews the current matrix by xskew radians and moves it 50 in x and 0 in y.using Luxor # hide\nfname = \"../figures/transform.png\" # hide\npagewidth, pageheight = 450, 100 # hide\nDrawing(pagewidth, pageheight, fname) # hide\norigin() # hide\nbackground(\"white\") # hide\ntranslate(-200, 0) # hide\n\nfunction boxtext(p, t)\n    sethue(\"grey30\")\n    box(p, 30, 50, :fill)\n    sethue(\"white\")\n    textcentred(t, p)\nend\n\nfor i in 0:5\n    xskew = tand(i * 5.0)\n    transform([1, 0, xskew, 1, 50, 0])\n    boxtext(O, string(round(rad2deg(xskew), 1), \"°\"))\nend\n\nfinish() # hide(Image: transform)getmatrix() gets the current matrix, setmatrix(a) sets the matrix to array a.getmatrix\nsetmatrix\ntransform\nblendmatrix\nrotation_matrix"
+    "text": "For basic transformations of the drawing space, use scale(sx, sy), rotate(a), and translate(tx, ty). You can use origin() to return to the document's original state, with the axes in the center.translate() shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/translate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    setopacity(0.5)\n    circle(0, 0, 20, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    translate(25, 0)\nend\nfinish() # hide(Image: translate)scale() scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.using Luxor, Colors # hide\nDrawing(400, 200, \"../figures/scale.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    circle(0, 0, 90, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    scale(0.8, 0.8)\nend\nfinish() # hide(Image: scale)rotate() rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.using Luxor # hide\nDrawing(400, 200, \"../figures/rotate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nsetopacity(0.7) # hide\nfor i in 1:8\n    randomhue()\n    squircle(Point(40, 0), 20, 30, :fillpreserve)\n    sethue(\"black\")\n    stroke()\n    rotate(pi/4)\nend\nfinish() # hide(Image: rotate)scale\nrotate\ntranslateThe current matrix is a six element array, perhaps like this:[1, 0, 0, 1, 0, 0]transform(a) transforms the current workspace by 'multiplying' the current matrix with matrix a. For example, transform([1, 0, xskew, 1, 50, 0]) skews the current matrix by xskew radians and moves it 50 in x and 0 in y.using Luxor # hide\nfname = \"../figures/transform.png\" # hide\npagewidth, pageheight = 450, 100 # hide\nDrawing(pagewidth, pageheight, fname) # hide\norigin() # hide\nbackground(\"white\") # hide\ntranslate(-200, 0) # hide\n\nfunction boxtext(p, t)\n    sethue(\"grey30\")\n    box(p, 30, 50, :fill)\n    sethue(\"white\")\n    textcentred(t, p)\nend\n\nfor i in 0:5\n    xskew = tand(i * 5.0)\n    transform([1, 0, xskew, 1, 50, 0])\n    boxtext(O, string(round(rad2deg(xskew), 1), \"°\"))\nend\n\nfinish() # hide(Image: transform)getmatrix() gets the current matrix, setmatrix(a) sets the matrix to array a.getmatrix\nsetmatrix\ntransform\ncrossproduct\nblendmatrix\nrotation_matrix\nscaling_matrix\ntranslation_matrix\ncairotojuliamatrix\njuliatocairomatrix"
 },
 
 {
