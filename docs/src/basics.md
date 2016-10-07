@@ -302,6 +302,31 @@ finish() # hide
 ```
 ![rounded rect](figures/round-rect.png)
 
+`circlepath` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/circle-path.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(4)
+tiles = Tiler(600, 250, 1, 5)
+for (pos, n) in tiles
+    randomhue()
+    circlepath(pos, tiles.tilewidth/2, :path)
+    newsubpath()
+    circlepath(pos, rand(5:tiles.tilewidth/2), :fill, clockwise=false, reversepath=true)
+end
+finish() # hide
+```
+
+![circles as paths](figures/circle-path.png)
+
+```@docs
+circlepath
+```
+
 ## Lines, arcs, and curves
 
 There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
@@ -408,6 +433,36 @@ arrow
 A path is a group of points. A path can have subpaths (which can form holes).
 
 The `getpath()` function gets the current Cairo path as an array of element types and points. `getpathflat()` gets the current path as an array of type/points with curves flattened to line segments.
+
+```@example
+using Luxor # hide
+Drawing(400, 250, "../figures/get-path") # hide
+background("white") # hide
+background("white") # hide
+origin() # hide
+setline(0.75) # hide
+sethue("black") # hide
+
+fontsize(220) # hide
+t = "N" # hide
+translate(-textextents(t)[3]/2, textextents(t)[4]/2) # hide
+textpath(t)
+pathdata = getpathflat()
+outline = Point[]
+for i in pathdata[1:end-1]
+    if length(i.points) == 2
+        x = i.points[1]
+        y = i.points[2]
+        push!(outline, Point(x, y))
+    end
+end
+poly(outline, :stroke, close=true)
+for i in 5:5:35
+    poly(offsetpoly(outline, i), :stroke, close=true)
+end
+finish() # hide
+```
+![get path](figures/get-path)
 
 ```@docs
 newpath

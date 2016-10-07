@@ -187,7 +187,8 @@ end
 """
 Find the vertices of a regular n-sided polygon centred at `x`, `y`:
 
-    ngon(x, y, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
+    ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
+        vertices=false, reversepath=false)
 
 `ngon()` draws the shapes: if you just want the raw points, use keyword argument `vertices=true`, which returns the array of points instead. Compare:
 
@@ -219,7 +220,8 @@ end
 """
 Draw a regular polygon centred at point `p`:
 
-    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
+    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing;
+        vertices=false, reversepath=false)
 
 """
 
@@ -228,14 +230,16 @@ ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:no
 """
 Make a star:
 
-    star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
+    star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
+        vertices = false, reversepath=false)
 
 `ratio` specifies the height of the smaller radius of the star relative to the larger.
 
 Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
 
-function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
+function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing;
+    vertices = false, reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
                     y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
@@ -258,7 +262,8 @@ end
 """
 Draw a star centered at a position:
 
-    star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
+    star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
+        vertices = false, reversepath=false)
 """
 
 star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; vertices = vertices, reversepath=reversepath)
@@ -535,16 +540,14 @@ point (!). There are a number of issues to be aware of:
 
 - very short lines tend to make the algorithm 'flip' and produce larger lines
 
-- small polygons that are counterclockwise and larger offsets may make the new polygon
-appear the wrong side of the original
+- small polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original
 
-- very sharp vertices will produce even sharper offsets, as the calculated intersection point
-veers off to infinity
+- very sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity
 """
 
 function offsetpoly(path::Array, d)
     l = length(path)
-    offsetpoly = Array{Point}(l)
+    resultpoly = Array{Point}(l)
     for i in 1:l
         p1 = path[mod1(i, l)]
         p2 = path[mod1(i + 1, l)]
@@ -570,11 +573,11 @@ function offsetpoly(path::Array, d)
             Point(x4p, y4p), crossingonly=false)
 
         if intersectionpoint[1]
-            offsetpoly[i] = intersectionpoint[2]
+            resultpoly[i] = intersectionpoint[2]
         end
 
     end
-    return offsetpoly
+    return resultpoly
 end
 
 # end

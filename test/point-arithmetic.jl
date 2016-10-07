@@ -21,6 +21,38 @@ function general_tests()
     @test perpendicular(Point(-10, -5)) == Point(-5.0,10.0)
     @test crossproduct(Point(2, 3), Point(3, 2)) == -5.0
     @test crossproduct(Point(-20, 30), Point(60, 20)) < 2000
+
+    # shared end points
+    # intersection of (A == C) || (B == C) || (A == D) || (B == D)
+    pt1 = Point(5, 5)
+    pt2 = Point(6, 5)
+    @test intersection(pt1, pt1, pt1, pt1)[1] == false
+    @test intersection(pt1, pt2, pt1, pt2, crossingonly=true)[1] == false
+    @test intersection(pt1, pt2, pt2, pt1)[1] == false
+    pt3 = Point(6, 6)
+    pt4 = Point(5, 6)
+    @test intersection(pt1, pt2, pt3, pt4)[1] == false
+
+    # not crossing
+    pt1 = Point(5, 5)
+    pt2 = Point(5, 5)
+    pt3 = Point(5, 5)
+    pt4 = Point(5, 5)
+    @test intersection(shuffle([pt1, pt2, pt3, pt4])...)[1] == false
+
+    # parallel
+    pt1 = Point(5, 5)
+    pt2 = Point(5, 6)
+    pt3 = Point(6, 5)
+    pt4 = Point(6, 6)
+    @test intersection(pt1, pt2, pt3, pt4)[1] == false
+
+    @test pt1 * pt2 == Luxor.Point(25.0, 30.0)
+    @test pt1 ^ 2 == Luxor.Point(25.0, 25.0)
+    @test pt1 ^ 3 == Luxor.Point(125.0,125.0)
+
+    @test pt1 ^ 1.5 < pt1 ^ 1.6
+    @test pt1 ^ 1.6 > pt1 ^ 1.5
 end
 
 function point_arithmetic_test(fname, npoints=20)
@@ -86,18 +118,18 @@ function point_arithmetic_test(fname, npoints=20)
     for f in testfunctions
         randomhue()
             if f(randompoints[1:npoints], randompoints[npoints:-1:1]) == true
-                ellipse(randompoints[i], i * 2, i * 4, :stroke)
+                ellipse(randompoints[i], i * 1.2, i * 1.3, :stroke)
             end
     end
 
     for i in 1:length(randompoints)-1
         v = cmp(randompoints[i], randompoints[i+1])
-        text(string(v), randompoints[i])
+        text(string(round(v, 1)), randompoints[i] + 15)
     end
 
     for i in 1:length(randompoints)-1
         n = norm(randompoints[i], randompoints[i+1])
-        text(string(n), randompoints[i])
+        text(string(round(n, 1)), randompoints[i])
     end
 
     map(pt -> circle(pt, 6, :stroke), [midpoint(randompoints), randompoints[1], randompoints[2]])

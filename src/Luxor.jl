@@ -10,21 +10,28 @@ using Colors, Cairo, Compat
 include("point.jl")
 include("Turtle.jl")
 include("polygons.jl")
+include("curves.jl")
 include("Tiler.jl")
 include("arrows.jl")
 include("text.jl")
 include("blends.jl")
 
 export Drawing, currentdrawing, paper_sizes,
+    Tiler,
     rescale,
 
     finish, preview,
     origin, axes, background,
+
     newpath, closepath, newsubpath,
-    circle, ellipse, squircle, center3pts,
+
     rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
-    move, rmove,
-    line, rline, curve, arc, carc, arc2r, ngon, sector, star, pie,
+
+    move, rmove, line, rline, arrow,
+
+    circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, sector,
+
+    ngon, star, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
     Point, O, randompoint, randompointarray, midpoint, intersection,
@@ -48,9 +55,7 @@ export Drawing, currentdrawing, paper_sizes,
     blendmatrix, rotation_matrix, scaling_matrix, translation_matrix,
     cairotojuliamatrix, juliatocairomatrix,
 
-    readpng, placeimage,
-    Tiler,
-    arrow
+    readpng, placeimage
 
 # as of version 0.4, we still share fill() and scale() with Base.
 
@@ -436,193 +441,6 @@ Reset the clipping region to the current drawing's extent.
 """
 clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
-"""
-Make a circle of radius `r` centred at `x`/`y`.
-
-    circle(x, y, r, action=:nothing)
-
-`action` is one of the actions applied by `do_action`, defaulting to `:nothing`. You can
-also use `ellipse()` to draw circles and place them by their centerpoint.
-"""
-function circle(x, y, r, action=:nothing)
-    if action != :path
-      newpath()
-    end
-    Cairo.circle(currentdrawing.cr, x, y, r)
-    do_action(action)
-end
-
-"""
-Make a circle centred at `pt`.
-
-    circle(pt, r, action)
-
-"""
-circle(centerpoint::Point, r, action=:nothing) =
-  circle(centerpoint.x, centerpoint.y, r, action)
-
-"""
-Make a circle that passes through two points that define the diameter:
-
-    circle(pt1::Point, pt2::Point, action=:nothing)
-"""
-function circle(pt1::Point, pt2::Point, action=:nothing)
-  center = midpoint(pt1, pt2)
-  radius = norm(pt1, pt2)/2
-  circle(center, radius, action)
-end
-
-"""
-Find the radius and center point for three points lying on a circle.
-
-    center3pts(a::Point, b::Point, c::Point)
-
-returns (centerpoint, radius) of a circle. Then you can use `circle()` to place a
-circle, or `arc()` to draw an arc passing through those points.
-
-If there's no such circle, then you'll see an error message in the console and the function
-returns `(Point(0,0), 0)`.
-"""
-function center3pts(a::Point, b::Point, c::Point)
-# Find perpendicular bisectors of the segments connecting the first two and last two
-# points. If they bisectors intersect, that's the center of the circle. If they don't,
-# the points are colinear so they do not define a circle.
-
-  # Get the perpendicular bisector of (x1, y1) and (x2, y2).
-  x1 = (b.x + a.x) / 2
-  y1 = (b.y + a.y) / 2
-  dy1 = b.x - a.x
-  dx1 = -(b.y - a.y)
-
-  # Get the perpendicular bisector of (x2, y2) and (x3, y3).
-  x2 = (c.x + b.x) / 2
-  y2 = (c.y + b.y) / 2
-  dy2 = c.x - b.x
-  dx2 = -(c.y - b.y)
-
-  # See where the lines intersect.
-
-  dxy = (dx1 * dy2 - dy1 * dx2)
-  if isapprox(dxy, 0)
-    info("no circle passes through all three points")
-    return Point(0,0), 0
-  end
-
-  ox = (y1 * dx1 * dx2 + x2 * dx1 * dy2 - x1 * dy1 * dx2 - y2 * dx1 * dx2) / dxy
-  oy = (ox - x1) * dy1 / dx1 + y1
-  dx = ox - a.x
-  dy = oy - a.y
-  radius = sqrt(dx * dx + dy * dy)
-  return Point(ox, oy), radius
-end
-
-"""
-Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `h`.
-
-    ellipse(xc, yc, w, h, action=:none)
-"""
-function ellipse(xc, yc, w, h, action=:none)
-    x  = xc - w/2
-    y  = yc - h/2
-    kappa = .5522848 # ??? http://www.whizkidtech.redprince.net/bezier/circle/kappa/
-    ox = (w / 2) * kappa  # control point offset horizontal
-    oy = (h / 2) * kappa  # control point offset vertical
-    xe = x + w            # x-end
-    ye = y + h            # y-end
-    xm = x + w / 2        # x-middle
-    ym = y + h / 2        # y-middle
-    move(x, ym)
-    curve(x, ym - oy, xm - ox, y, xm, y)
-    curve(xm + ox, y, xe, ym - oy, xe, ym)
-    curve(xe, ym + oy, xm + ox, ye, xm, ye)
-    curve(xm - ox, ye, x, ym + oy, x, ym)
-    do_action(action)
-end
-
-"""
-Make an ellipse, centered at point `c`, with width `w`, and height `h`.
-
-    ellipse(cpt, w, h, action=:none)
-"""
-ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
-
-"""
-Make a squircle (basically a rectangle with rounded corners). Specify the center position, horizontal radius (distance from center to a side), and vertical radius (distance from center to top or bottom):
-
-    squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false)
-
-The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.
-"""
-
-function squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false, reversepath=false)
-  points = Point[]
-  for theta in 0:pi/40:2pi
-      xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
-      ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
-      push!(points, Point(xpos, ypos))
-  end
-  if vertices
-    return points
-  end
-  poly(points, action, close=true, reversepath=reversepath)
-end
-
-"""
-Add an arc to the current path from `angle1` to `angle2` going clockwise.
-
-    arc(xc, yc, radius, angle1, angle2, action=:nothing)
-
-Angles are defined relative to the x-axis, positive clockwise.
-
-"""
-function arc(xc, yc, radius, angle1, angle2, action=:nothing)
-  Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-  do_action(action)
-end
-
-"""
-Add an arc to the current path from `angle1` to `angle2` going clockwise.
-
-    arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
-"""
-
-arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
-  arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
-
-"""
-Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
-
-    carc(xc, yc, radius, angle1, angle2, action=:nothing)
-
-Angles are defined relative to the x-axis, positive clockwise.
-
-"""
-function carc(xc, yc, radius, angle1, angle2, action=:nothing)
-  Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-  do_action(action)
-end
-
-carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
-  carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
-
-
-"""
-      arc2r(c1, p2, p3, action=:nothing)
-
-Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise.
-
-`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
-"""
-
-function arc2r(c1, p2, p3, action=:nothing)
-    r = norm(c1, p2)
-    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
-    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
-    if startangle < endangle
-      startangle = mod2pi(startangle + 2pi)
-    end
-    arc(c1, r, startangle, endangle, action)
-end
 
 """
 Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and do
@@ -697,51 +515,6 @@ function box(x, y, width, height, action=:nothing)
     rect(x - width/2, y - height/2, width, height, action)
 end
 
-"""
-    sector(innerradius, outerradius, startangle, endangle, action=:none)
-
-Make an annular sector centered at the current `0/0` point.
-"""
-function sector(innerradius, outerradius, startangle, endangle, action=:none)
-    newpath()
-    move(innerradius * cos(startangle), innerradius * sin(startangle))
-    line(outerradius * cos(startangle), outerradius * sin(startangle))
-    arc(0, 0, outerradius, startangle, endangle,:none)
-    line(innerradius * cos(endangle), innerradius * sin(endangle))
-    carc(0, 0, innerradius, endangle, startangle, :none)
-    closepath()
-    do_action(action)
-end
-
-"""
-    pie(x, y, radius, startangle, endangle, action=:none)
-
-Make a pie shape centered at `x`/`y`. Angles start at the positive x-axis and are measured
-clockwise.
-"""
-
-function pie(x, y, radius, startangle, endangle, action=:none)
-    gsave()
-    translate(x, y)
-    newpath()
-    move(0, 0)
-    line(radius * cos(startangle), radius * sin(startangle))
-    arc(0, 0, radius, startangle, endangle, :none)
-    closepath()
-    grestore()
-    do_action(action)
-end
-
-"""
-    pie(centerpoint, radius, startangle, endangle, action=:none)
-
-Make a pie shape centered at `centerpoint`.
-
-Angles start at the positive x-axis and are measured clockwise.
-"""
-
-pie(centerpoint::Point, radius, startangle, endangle, action) =
- pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
 
 """
 Set the line width.
@@ -849,19 +622,6 @@ Create a line relative to the current position to the `x/y` position and optiona
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
 rline(pt)       = rline(pt.x, pt.y)
 
-"""
-Create a cubic Bézier spline curve.
-
-    curve(x1, y1, x2, y2, x3, y3)
-    curve(p1, p2, p3)
-
-The spline starts at the current position, finishing at `x3/y3` (`p3`), following two
-control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
-
-"""
-
-curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
-curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 saved_colors = Tuple{Float64,Float64,Float64,Float64}[]
 
