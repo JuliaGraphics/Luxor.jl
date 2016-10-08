@@ -10,34 +10,31 @@ function randompoly(rad, n)
     return polysortbyangle(result)
 end
 
-function testapoly(x, y)
+function testapoly(pos)
     gsave()
-    translate(x, y)
+    translate(pos)
 
     sethue("white")
 
     # try both regular and irregular polygons
     if rand(Bool)
-        p1 = ngon(0, 0, 80, rand(3:8), rand(0:pi/10:2pi), vertices=true)
+        p1 = ngon(O, 80, rand(3:8), rand(0:pi/10:2pi), vertices=true)
     else
-        p1 = polysortbyangle(randompoly(80, rand(3:12)))
+        p1 = star(O, 90, rand(3:12), 0.5, 0, vertices=true)
     end
     setline(1.5)
 
-    poly(p1, close=true, :fillstroke)
-    for p in p1
-        gsave()
-        sethue("black")
-        circle(p, 1, :fill)
-        grestore()
-    end
+    # poly(p1, close=true, :fillstroke)
+    # for p in p1
+    #     gsave()
+    #     sethue("black")
+    #     circle(p, 1, :fill)
+    #     grestore()
+    # end
 
-    gsave()
-    randomline = [Point(rand(-100:100), -100), Point(rand(-100:100), 100)]
-    sethue("red")
-    setdash("dotted")
-    line(randomline[1], randomline[2], :stroke)
-    grestore()
+
+    randomline = [Point(rand(-50:50), -170), Point(rand(-50:50), 170)]
+
 
     # split the polygon
     twopolys = polysplit(p1, randomline[1], randomline[2])
@@ -45,12 +42,18 @@ function testapoly(x, y)
     # draw each poly
     for ply in twopolys
         if length(ply) > 1
-            randomhue()
             gsave()
-            poly(polysortbyangle(ply), close=true, :fill)
+            randomhue()
+            poly(ply, close=true, :fill)
             grestore()
         end
     end
+
+    gsave()
+    sethue("red")
+    setdash("dotted")
+    line(randomline[1], randomline[2], :stroke)
+    grestore()
 
     grestore()
 end
@@ -61,12 +64,13 @@ Drawing(width, height, fname)
 origin()
 background("ivory")
 setlinecap("round")
+setopacity(0.6)
 
 pagetiles = Tiler(width, height, 6, 5, margin=50)
 for (pos, n) in pagetiles
     sethue("green")
     squircle(pos, pagetiles.tilewidth/2 - 2, pagetiles.tileheight/2 - 2, :stroke)
-    testapoly(pos.x, pos.y)
+    testapoly(pos)
 end
 
 finish()

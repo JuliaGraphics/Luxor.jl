@@ -23,7 +23,13 @@ function run_line_intersection_test(fname)
         d = randompoint(topleft, bottomright)
         line(a, b, :stroke)
         line(c, d, :stroke)
-        (flag, ip) = intersection(a, b, c, d, crossingonly=true)
+        if n % 2 == 0
+            (flag, ip) = intersection(a, b, c, d, crossingonly=true)
+            text("crossingonly", O)
+        else
+            (flag, ip) = intersection(a, b, c, d, crossingonly=false)
+            text("any intersection", O)
+        end
         if flag
             gsave()
             setline(.5)

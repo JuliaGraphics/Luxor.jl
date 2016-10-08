@@ -320,48 +320,50 @@ Split a polygon into two where it intersects with a line:
 
     polysplit(p, p1, p2)
 
+Returns:
+
+    (poly1, poly2)
+
 This doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon
 the shape of the letter "E" might end up being divided into more than two parts.
 """
 function polysplit(pointlist, p1, p2)
+    # the two-pass version
+    # TODO should be one-pass
+    newpointlist = []
+    l = length(pointlist)
+    vertex1 = Point(0, 0)
+    vertex2 = Point(0, 0)
+    for i in 1:l
+        vertex1 = pointlist[mod1(i, l)]
+        vertex2 = pointlist[mod1(i + 1, l)]
+        flag, intersectpoint = intersection(vertex1, vertex2, p1, p2, crossingonly=true)
+        push!(newpointlist, vertex1)
+        if flag
+            push!(newpointlist, intersectpoint)
+        end
+    end
+    # close?
+    # push!(newpointlist, vertex2)
+    # now sort points
     poly1 = []
     poly2 = []
-    i = 1
-    for i in 1:length(pointlist)-1
-        s = ((p2.x - p1.x) * (pointlist[i].y - p1.y)) - ((p2.y - p1.y) * (pointlist[i].x - p1.x))
-        flag, intersectpoint = intersection(pointlist[i], pointlist[i+1], p1, p2, crossingonly=true)
-        if flag
-            push!(poly1, intersectpoint)
-            push!(poly2, intersectpoint)
-        end
-        if s > 0
-            push!(poly1, pointlist[i])
-        elseif isapprox(s, 0.0)
-            push!(poly1, pointlist[i])
-            push!(poly2, pointlist[i])
+    l = length(newpointlist)
+    for i in 1:l
+        vertex1 = newpointlist[mod1(i, l)]
+        d = point_line_distance(vertex1, p1, p2)
+        cp = (p2.x - p1.x) * (vertex1.y - p1.y) > (p2.y - p1.y) * (vertex1.x - p1.x)
+        if cp
+            push!(poly1, vertex1)
+            abs(d) < 0.1 && push!(poly2, vertex1)
         else
-            push!(poly2, pointlist[i])
+            push!(poly2, vertex1)
+            abs(d) < 0.1 && push!(poly1, vertex1)
         end
     end
-    # don't forget last point to first
-    i += 1
-    s = ((p2.x - p1.x) * (pointlist[i].y - p1.y)) - ((p2.y - p1.y) * (pointlist[i].x - p1.x))
-    flag, intersectpoint = intersection(pointlist[i], pointlist[1], p1, p2, crossingonly=true)
-    if flag
-        push!(poly1, intersectpoint)
-        push!(poly2, intersectpoint)
-    end
-    if s > 0
-        push!(poly1, pointlist[i])
-    elseif isapprox(s, 0.0)
-        push!(poly1, pointlist[i])
-        push!(poly2, pointlist[i])
-    else
-        push!(poly2, pointlist[i])
-    end
-
     return(poly1, poly2)
 end
+
 
 """
     prettypoly(points, action=:nothing, vertex_action=() -> circle(O, 1, :fill);

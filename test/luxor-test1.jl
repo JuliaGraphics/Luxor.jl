@@ -3,7 +3,7 @@
 using Luxor
 
 function draw_luxor_demo(fname)
-    Drawing("A3landscape", fname)
+    Drawing("A2landscape", fname)
 
     origin() # move 0/0 to center
     background("purple")

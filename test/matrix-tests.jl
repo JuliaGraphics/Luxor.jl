@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 # some of these tests produce errors on Linux versions of Cairo
 # but no errors on MacOS X Cairo.
