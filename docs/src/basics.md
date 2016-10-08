@@ -14,7 +14,7 @@ The two main defined types are the `Point` and the `Drawing`. The Point type hol
 Point(12.0, 13.0)
 ```
 
-It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter *O* as a shortcut to refer to the current Origin, `Point(0, 0)`.
+It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
 The other is `Drawing`, which is how you create new drawings.
 
@@ -194,6 +194,7 @@ sethue("orange") # hide
 circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
 ```
+
 ![center and radius of 3 points](figures/center3.png)
 
 With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
@@ -302,7 +303,7 @@ finish() # hide
 ```
 ![rounded rect](figures/round-rect.png)
 
-`circlepath` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
+`circlepath()` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
 
 ```@example
 using Luxor # hide
@@ -316,7 +317,7 @@ for (pos, n) in tiles
     randomhue()
     circlepath(pos, tiles.tilewidth/2, :path)
     newsubpath()
-    circlepath(pos, rand(5:tiles.tilewidth/2), :fill, clockwise=false, reversepath=true)
+    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
 end
 finish() # hide
 ```
@@ -398,6 +399,7 @@ curve
 ### Geometry tools
 
 You can find the midpoint between two points using `midpoint()`. `intersection()` finds the intersection of two lines.
+
 `center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
 
 ```@docs
@@ -408,7 +410,7 @@ center3pts
 
 ## Arrows
 
-You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and angle of the tip of the arrow. The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
+You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
 
 ```@example
 using Luxor # hide
@@ -442,11 +444,9 @@ background("white") # hide
 origin() # hide
 setline(0.75) # hide
 sethue("black") # hide
-
 fontsize(220) # hide
-t = "N" # hide
-translate(-textextents(t)[3]/2, textextents(t)[4]/2) # hide
-textpath(t)
+translate(-textextents("N")[3]/2, textextents("N")[4]/2) # hide
+textpath("N")
 pathdata = getpathflat()
 outline = Point[]
 for i in pathdata[1:end-1]

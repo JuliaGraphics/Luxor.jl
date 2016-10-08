@@ -41,6 +41,7 @@ info("starting test point-intersection" );         include("point-intersection.j
 info("starting test polygon-centroid-sort-test" ); include("polygon-centroid-sort-test.jl")
 info("starting test polygon-test" );               include("polygon-test.jl")
 info("starting test polysplit" );                  include("polysplit.jl")
+info("starting test polysplit-2" );                include("polysplit-2.jl")
 info("starting test polysmooth-tests" );           include("polysmooth-tests.jl")
 info("starting test pretty-poly-test" );           include("pretty-poly-test.jl")
 info("starting test randomsinecurves" );           include("randomsinecurves.jl")

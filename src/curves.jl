@@ -143,7 +143,7 @@ function arc(xc, yc, radius, angle1, angle2, action=:nothing)
 end
 
 """
-Add an arc to the current path from `angle1` to `angle2` going clockwise.
+Arc with centerpoint.
 
     arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
 """
@@ -233,7 +233,7 @@ pie(centerpoint::Point, radius, startangle, endangle, action) =
  pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
 
  """
- Create a cubic Bézier spline curve.
+Draw a Bézier curve.
 
      curve(x1, y1, x2, y2, x3, y3)
      curve(p1, p2, p3)
@@ -249,64 +249,63 @@ curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 """
      circlepath(center::Point, radius, action=:none;
          reversepath=false,
-         clockwise=true,
          kappa = 0.5522847)
 
- Construct a circle around current point out of Bezier arcs.
+Draw a circle using Bézier curves.
 """
 
- function circlepath(center::Point, radius, action=:none; reversepath=false, clockwise=true, kappa = 0.5522847)
+function circlepath(center::Point, radius, action=:none; reversepath=false, kappa = 0.5522847)
     function northtoeast(center::Point, radius, kappa)
-     curve(center.x + (radius * kappa), center.y + radius, center.x + radius,
-     center.y + (radius * kappa), center.x + radius, center.y )
-   end
+        curve(center.x + (radius * kappa), center.y + radius, center.x + radius,
+        center.y + (radius * kappa), center.x + radius, center.y )
+    end
 
-   function easttosouth(center::Point, radius, kappa)
-     curve(center.x + radius, center.y - (radius * kappa), center.x + (radius * kappa),
-     center.y - radius, center.x, center.y - radius)
-   end
+    function easttosouth(center::Point, radius, kappa)
+        curve(center.x + radius, center.y - (radius * kappa), center.x + (radius * kappa),
+        center.y - radius, center.x, center.y - radius)
+    end
 
-   function southtowest(center::Point, radius, kappa)
-     curve(center.x - (radius * kappa), center.y - radius, center.x - radius,
-     center.y - (radius * kappa), center.x - radius, center.y)
-   end
+    function southtowest(center::Point, radius, kappa)
+        curve(center.x - (radius * kappa), center.y - radius, center.x - radius,
+        center.y - (radius * kappa), center.x - radius, center.y)
+    end
 
-   function westtonorth(center::Point, radius, kappa)
-     curve(center.x - radius, center.y + (radius * kappa), center.x - (radius * kappa),
-     center.y + radius, center.x, center.y + radius)
-   end
+    function westtonorth(center::Point, radius, kappa)
+        curve(center.x - radius, center.y + (radius * kappa), center.x - (radius * kappa),
+        center.y + radius, center.x, center.y + radius)
+    end
 
-   function northtowest(center::Point, radius, kappa)
-     curve(center.x - (radius * kappa), center.y + radius, center.x - radius,
-     center.y + (radius * kappa), center.x - radius, center.y )
-   end
+    function northtowest(center::Point, radius, kappa)
+        curve(center.x - (radius * kappa), center.y + radius, center.x - radius,
+        center.y + (radius * kappa), center.x - radius, center.y )
+    end
 
-   function westtosouth(center::Point, radius, kappa)
-     curve(center.x - radius, center.y - (radius * kappa), center.x - (radius * kappa),
-     center.y - radius, center.x, center.y - radius )
-   end
+    function westtosouth(center::Point, radius, kappa)
+        curve(center.x - radius, center.y - (radius * kappa), center.x - (radius * kappa),
+        center.y - radius, center.x, center.y - radius )
+    end
 
-   function southtoeast(center::Point, radius, kappa)
-     curve(center.x + (radius * kappa), center.y - radius, center.x + radius,
-     center.y - (radius * kappa), center.x + radius, center.y)
-   end
+    function southtoeast(center::Point, radius, kappa)
+        curve(center.x + (radius * kappa), center.y - radius, center.x + radius,
+        center.y - (radius * kappa), center.x + radius, center.y)
+    end
 
-   function easttonorth(center::Point, radius, kappa)
-     curve(center.x + radius, center.y + (radius * kappa), center.x + (radius * kappa),
-     center.y + radius, center.x, center.y + radius )
-   end
+    function easttonorth(center::Point, radius, kappa)
+        curve(center.x + radius, center.y + (radius * kappa), center.x + (radius * kappa),
+        center.y + radius, center.x, center.y + radius )
+    end
 
-   move(center.x, center.y + radius)
-   if clockwise
+    move(center.x, center.y + radius)
+    if !reversepath
      northtoeast(center, radius, kappa)
      easttosouth(center, radius, kappa)
      southtowest(center, radius, kappa)
      westtonorth(center, radius, kappa)
-   else
+    else
      northtowest(center, radius, kappa)
      westtosouth(center, radius, kappa)
      southtoeast(center, radius, kappa)
      easttonorth(center, radius, kappa)
-   end
-   do_action(action)
- end
+    end
+    do_action(action)
+end

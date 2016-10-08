@@ -56,6 +56,65 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
+"""
+norm(p1::Point, p2::Point)
+
+Find the norm of two points (two argument form).
+"""
+function norm(p1::Point, p2::Point)
+    norm([p1.x, p1.y] - [p2.x, p2.y])
+end
+
+"""
+point_line_distance(p::Point, a::Point, b::Point)
+
+Find the distance between a point `p` and a line between two points `a` and `b`.
+"""
+function point_line_distance(p::Point, a::Point, b::Point)
+    # area of triangle
+    area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
+    # length of the bottom edge
+    dx = a.x - b.x
+    dy = a.y - b.y
+    bottom = sqrt(dx * dx + dy * dy)
+    return area / bottom
+end
+
+"""
+    midpoint(p1, p2)
+
+Find the midpoint between two points.
+"""
+midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
+
+"""
+    midpoint(a)
+
+Find midpoint between the first two elements of an array of points.
+"""
+
+midpoint(pt::Array) = midpoint(pt[1], pt[2])
+
+"""
+    perpendicular(p::Point)
+
+`Point(p.y, -p.x)`
+"""
+
+function perpendicular(p::Point)
+    return Point(p.y, -p.x)
+end
+
+"""
+    crossproduct(p1::Point, p2::Point)
+
+`dot(p1, perpendicular(p2))`
+"""
+
+function crossproduct(p1::Point, p2::Point)
+    return dot(p1, perpendicular(p2))
+end
+
 function randomordinate(low, high)
     low + rand() * abs(high - low)
 end
@@ -95,7 +154,6 @@ end
     randompointarray(lowx, lowy, highx, highy, n)
 
 Return an array of `n` random points somewhere inside the rectangle defined by the four coordinates.
-
 """
 function randompointarray(lowx, lowy, highx, highy, n)
     array = Point[]
@@ -103,64 +161,6 @@ function randompointarray(lowx, lowy, highx, highy, n)
         push!(array, randompoint(lowx, lowy, highx, highy))
     end
     array
-end
-
-"""
-    norm(p1::Point, p2::Point)
-
-Find the norm of two points (two argument form).
-"""
-function norm(p1::Point, p2::Point)
-    norm([p1.x, p1.y] - [p2.x, p2.y])
-end
-
-"""
-    point_line_distance(p::Point, a::Point, b::Point)
-
-Find the distance between a point `p` and a line between two points `a` and `b`.
-"""
-function point_line_distance(p::Point, a::Point, b::Point)
-    # area of triangle
-    area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
-    # length of the bottom edge
-    dx = a.x - b.x
-    dy = a.y - b.y
-    bottom = sqrt(dx * dx + dy * dy)
-    return area / bottom
-end
-
-"""
-    midpoint(p1, p2)
-
-Find the midpoint between two points.
-"""
-midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
-
-"""
-    midpoint(a)
-
-Find midpoint between the first two elements of an array of points.
-"""
-midpoint(pt::Array) = midpoint(pt[1], pt[2])
-
-"""
-    perpendicular(p::Point)
-
-`Point(p.y, -p.x)`
-"""
-
-function perpendicular(p::Point)
-    return Point(p.y, -p.x)
-end
-
-"""
-    crossproduct(p1::Point, p2::Point)
-
-`dot(p1, perpendicular(p2))`
-"""
-
-function crossproduct(p1::Point, p2::Point)
-    return dot(p1, perpendicular(p2))
 end
 
 """
@@ -236,8 +236,8 @@ function intersection(A::Point, B::Point, C::Point, D::Point;
 
     #  (5) return false + ip if segments A-B and C-D don't cross.
     if crossingonly
-        if (Cy < 0.0 && Dy < 0.0) || (Cy >= 0.0 && Dy >= 0.0)
-            return (false, intersectionpoint)
+        if (ABpos < 0.0) || (ABpos > distAB)
+            return (false, Point(0, 0))
         end
     end
     return (true, intersectionpoint)
