@@ -11,7 +11,7 @@ function general_tests()
 
     # is point not in every corner of box
     @test all(Point(1, 1) .< box(O, 10, 10, vertices=true)) == false
-
+    @test any(Point(0, 0) .< [Point(1, 1), Point(1, 2), Point(2, 3)]) == true
     # is point outside every corner of box
     @test all(Point(10, 10)  .> box(O, 10, 10, vertices=true)) == true
 
@@ -26,12 +26,16 @@ function general_tests()
     # intersection of (A == C) || (B == C) || (A == D) || (B == D)
     pt1 = Point(5, 5)
     pt2 = Point(6, 5)
+    @test pt1 + pt2 == Point(11.0,10.0)
     @test intersection(pt1, pt1, pt1, pt1)[1] == false
     @test intersection(pt1, pt2, pt1, pt2, crossingonly=true)[1] == false
     @test intersection(pt1, pt2, pt2, pt1)[1] == false
     pt3 = Point(6, 6)
     pt4 = Point(5, 6)
     @test intersection(pt1, pt2, pt3, pt4)[1] == false
+
+    @test intersection(pt1, pt2, pt3, pt2, commonendpoints = false) == (true,Luxor.Point(6.0,5.0))
+    @test intersection(pt1, pt2, pt3, pt2, commonendpoints = true) == (false,Luxor.Point(0.0,0.0))
 
     # not crossing
     pt1 = Point(5, 5)
