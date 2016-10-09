@@ -25,7 +25,13 @@ function draw_luxor_demo(fname)
     # simple line drawing
     for i in 0:pi/36:2pi - pi/36
         move(0, 0)
-        line(cos(i) * 600, sin(i) * 600 )
+        line(cos(i) * 600, sin(i) * 600)
+        stroke()
+        move(cos(i) * 300, sin(i) * 300)
+        rline(0, 1)
+        rline(1, 0)
+        rline(0, -1)
+        rline(-1, 0)
         stroke()
     end
 
@@ -38,7 +44,7 @@ function draw_luxor_demo(fname)
     fontface("Optima-ExtraBlack")
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
-    textcentred("Luxor", 0, currentdrawing.height/2 - 400)
+    textcentred("Luxor", 0, 300)
 
     # text on curve
     fontsize(18)

@@ -2,12 +2,12 @@
 
 using Luxor
 
-function get_path(str)
+function get_path_flat(str)
     sethue("blue")
     setopacity(.7)
     setline(0.5)
     p = textpath(str)
-    o = getpath()
+    o = getpathflat()
     stroke()
     sethue("red")
     x, y = 0, 0
@@ -40,7 +40,7 @@ function get_path(str)
     end
 end
 
-function get_path_test(fname)
+function get_path_flat_test(fname)
     Drawing(500, 500, fname)
     origin()
     fontsize(80)
@@ -49,4 +49,4 @@ function get_path_test(fname)
     println("finished test: output in $(fname)")
 end
 
-get_path_test("/tmp/get-path-test.pdf")
+get_path_flat_test("/tmp/get-path-flat-test.pdf")
