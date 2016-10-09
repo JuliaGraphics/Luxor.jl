@@ -65,3 +65,7 @@ function Base.done(pt::Tiler, state)
   # Tests if there are any items remaining
   state[2] > (pt.nrows * pt.ncols)
 end
+
+function Base.length(pt::Tiler)
+  pt.nrows * pt.ncols
+end

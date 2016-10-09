@@ -75,15 +75,30 @@ star
 
 ## Polygons
 
-A polygon is an array of Points. Use `poly()` to draw lines connecting the points:
+A polygon is an array of Points. Use `poly()` to draw lines connecting the points or fill the area:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../figures/simplepoly.png") # hide
+Drawing(600, 250, "../figures/simplepoly.png") # hide
 background("white") # hide
+srand(42) # hide
 origin() # hide
-sethue("orchid4")
-poly([Point(rand(-150:150), rand(-100:100)) for i in 1:20], :fill)
+sethue("orchid4") # hide
+tiles = Tiler(600, 250, 1, 2, margin=20)
+tile1, tile2 = collect(tiles)
+
+randompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]
+
+gsave()
+translate(tile1[1])
+poly(randompoints, :stroke)
+grestore()
+
+gsave()
+translate(tile2[1])
+poly(randompoints, :fill)
+grestore()
+
 finish() # hide
 ```
 
@@ -100,7 +115,10 @@ using Luxor # hide
 Drawing(400, 250, "../figures/holes.png") # hide
 background("white") # hide
 origin() # hide
-sethue("orchid4") # hide
+setline(5)
+sethue("gold")
+line(Point(-200, 0), Point(200, 0), :stroke)
+sethue("orchid4")
 ngon(0, 0, 60, 6, 0, :path)
 newsubpath()
 ngon(0, 0, 40, 6, 0, :path, reversepath=true)
@@ -109,7 +127,7 @@ finish() # hide
 ```
 ![holes](figures/holes.png)
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the `vertex_action` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertex_function` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor
@@ -154,11 +172,7 @@ decorate(pos, p, level) = begin
 end
 
 apoly = star(O, 100, 7, 0.6, 0, vertices=true)
-prettypoly(apoly, :fill, () ->
-        begin
-            decorate(O, apoly, 1)
-        end,
-    close=true)
+prettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)
 finish() # hide
 ```
 
@@ -202,15 +216,15 @@ The `isinside()` function returns true if a point is inside a polygon.
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../figures/isinside.png") # hide
+Drawing(600, 250, "../figures/isinside.png") # hide
 background("white") # hide
 origin() # hide
-setopacity(0.5)
+setline(0.5)
 apolygon = star(O, 100, 5, 0.5, 0, vertices=true)
 for n in 1:10000
     apoint = randompoint(Point(-200, -150), Point(200, 150))
     randomhue()
-    isinside(apoint, apolygon) && circle(apoint, 3, :fill)
+    isinside(apoint, apolygon) ? circle(apoint, 3, :fill) : circle(apoint, .5, :stroke)
 end
 finish() # hide
 ```

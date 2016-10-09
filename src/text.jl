@@ -225,9 +225,7 @@ positioning around a circle. (A cheesy effect much beloved of hipster brands and
 
 `letter_spacing` adjusts the tracking/space between chars, tighter is (-), looser is (+)). `baselineshift` moves the text up or down away from the baseline.
 
-If clockwise is true, the text is pushed upwards away from the baseline.
-
-
+The letter spacing is not taken into account when first positioning the text.
 """
 
 function textcurvecentered(the_text, start_angle, start_radius, center::Point;

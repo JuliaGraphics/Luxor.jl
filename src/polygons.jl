@@ -366,12 +366,12 @@ end
 
 
 """
-    prettypoly(points, action=:nothing, vertex_action=() -> circle(O, 1, :fill);
+    prettypoly(points, action=:nothing, vertex_function=() -> circle(O, 1, :fill);
         close=false,
         reversepath=false)
 
 Draw the polygon defined by `points`, possibly closing and reversing it, using the current
-parameters, and then evaluate the `vertex_action` function at every vertex of the polygon.
+parameters, and then evaluate the `vertex_function` function at every vertex of the polygon.
 For example, you can mark each vertex of a polygon with a randomly colored filled circle.
 
     p = star(O, 70, 7, 0.6, 0, vertices=true)
@@ -383,7 +383,7 @@ For example, you can mark each vertex of a polygon with a randomly colored fille
         close=true)
 """
 
-function prettypoly(pointlist::Array, action=:nothing, vertex_action=() -> circle(O, 1, :fill);
+function prettypoly(pointlist::Array, action=:nothing, vertex_function=() -> circle(O, 1, :fill);
     close=false,
     reversepath=false)
 
@@ -404,7 +404,7 @@ function prettypoly(pointlist::Array, action=:nothing, vertex_action=() -> circl
     for p in pointlist
         gsave()
         translate(p.x, p.y)
-        vertex_action()
+        vertex_function()
         grestore()
     end
 end

@@ -84,6 +84,35 @@ finish()
 preview()
 ```
 
+For shorter strings, `textcurvecentered()` tries to place the text on a circular arc by its center point.
+
+```@example
+using Luxor # hide
+Drawing(400, 250, "../figures/text-centered.png") # hide
+origin() # hide
+background("white") # hide
+background("white") # hide
+fontface("GothamBlack")
+fontsize(24) # hide
+sethue("black") # hide
+setdash("dot") # hide
+setline(0.25) # hide
+circle(O, 100, :stroke)
+textcurvecentered("hello world", -pi/2, 100, O;
+        clockwise = true,
+        letter_spacing = 0,
+        baselineshift = -20
+        )
+textcurvecentered("hello world", pi/2, 100, O;
+        clockwise = false,
+        letter_spacing = 0,
+        baselineshift = 10
+        )
+finish() # hide
+```
+
+![text centered on curve](figures/text-centered.png)
+
 ```@docs
 textcurve
 textcurvecentered
