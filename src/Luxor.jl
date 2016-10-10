@@ -37,7 +37,7 @@ export Drawing, currentdrawing, paper_sizes,
     Point, O, randompoint, randompointarray, midpoint, intersection,
     isinside, perpendicular, crossproduct, prettypoly, polysmooth, polysplit,
     poly, simplify, polybbox, polycentroid,
-    polysortbyangle, polysortbydistance, offsetpoly,
+    polysortbyangle, polysortbydistance, offsetpoly, polyfit, 
 
     strokepreserve, fillpreserve,
     gsave, grestore,

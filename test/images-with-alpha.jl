@@ -4,13 +4,14 @@ using Luxor
 
 function get_png_files(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
+    @show map(f -> string(folder, f), imagelist)
     return map(f -> string(folder, f), imagelist)
 end
 
-imagelist = get_png_files(dirname(@__FILE__) * "/../docs/figures")
+imagelist = get_png_files(dirname(@__FILE__) * "/../docs/figures/")
 
 width, height = 2000, 2000
-fname = "/tmp/paint-images.pdf"
+fname = "/tmp/images-with-alpha.pdf"
 Drawing(width, height, fname)
 origin()
 background("grey50")
