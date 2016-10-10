@@ -494,14 +494,14 @@ end
 """
     polysmooth(points, radius, action=:action; debug=false)
 
-Make a polygon from `points`, but round any sharp corners by making them arcs with the given
-radius.
+Make a closed path from the `points` and round the corners by making them arcs with the given
+radius. Execute the action when finished.
 
-In fact, the arcs are sometimes different sizes: if the given radius is bigger than the
+The arcs are sometimes different sizes: if the given radius is bigger than the
 length of the shortest side, the arc can't be drawn at its full radius and is therefore
 drawn as large as possible (as large as the shortest side allows).
 
-The `debug` option draws the construction circles at each corner.
+The `debug` option also draws the construction circles at each corner.
 """
 function polysmooth(points, radius, action=:action; debug=false)
     temppath = Tuple[]
@@ -518,7 +518,7 @@ function polysmooth(points, radius, action=:action; debug=false)
     # draw the path
     for (c, p) in temppath
         if c == :line
-            line(p)    # add line segement
+            line(p)    # add line segment
         elseif c == :arc
             arc(p...)  # add clockwise arc segment
         elseif c == :carc
@@ -579,6 +579,43 @@ function offsetpoly(path::Array, d)
         end
 
     end
+    return resultpoly
+end
+
+"""
+    polyfit(plist::Array, npoints=30)
+
+Buld a polygon that constructs a B-spine approximation to it. The resulting list of points
+makes a smooth path that runs between the first and last points.
+"""
+function polyfit(plist::Array, npoints=30)
+    l = length(plist)
+    resultpoly = Array{Point}(0)
+    # start at first point
+    push!(resultpoly, plist[1])
+    # skip the first point
+    for i in 2:l-1
+        p1 = plist[mod1(i - 1,     l)]
+        p2 = plist[mod1(i, l)]
+        p3 = plist[mod1(i + 1, l)]
+        p4 = plist[mod1(i + 2, l)]
+        a3 = (-p1.x + 3 * (p2.x - p3.x) + p4.x) / 6
+        b3 = (-p1.y + 3 * (p2.y - p3.y) + p4.y) / 6
+        a2 = (p1.x - 2p2.x + p3.x) / 2
+        b2 = (p1.y - 2p2.y + p3.y) / 2
+        a1 = (p3.x - p1.x) / 2
+        b1 = (p3.y - p1.y) / 2
+        a0 = (p1.x + 4p2.x + p3.x) / 6
+        b0 = (p1.y + 4p2.y + p3.y) / 6
+        for i in 1:l-1
+            t = i/npoints
+            x = ((((a3 * t + a2) * t) + a1) * t) + a0
+            y = ((((b3 * t + b2) * t) + b1) * t) + b0
+            push!(resultpoly, Point(x, y))
+        end
+    end
+    # finish at last point
+    push!(resultpoly, plist[end])
     return resultpoly
 end
 
