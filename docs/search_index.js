@@ -149,7 +149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.Drawing",
     "category": "Type",
-    "text": "Create a new drawing, and optionally specify file type (PNG, PDF, SVG, etc) and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"luxor-drawing.png\", default size 800 pixels square.\n\nYou can specify dimensions, and use the default target filename:\n\nDrawing(400, 300)\n\ncreates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename \"/tmp/luxor-drawing.png\".\n\nDrawing(400, 300, \"my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"my-drawing.pdf\", 400 by 300 pixels.\n\nDrawing(1200, 800, \"my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"my-drawing.svg\", 1200 by 800 pixels.\n\nDrawing(1200, 1200/golden, \"my-drawing.eps\")\n\ncreates an EPS drawing in the file \"my-drawing.eps\", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high.\n\nDrawing(\"A4\", \"my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size (595 wide by 842 high) in the file \"my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\ncreates the drawing A4 landscape size.\n\nPDF files default to a white background, but PNG defaults to transparent, unless you specify one using background().\n\n\n\n"
+    "text": "Create a new drawing, and optionally specify file type (PNG, PDF, SVG, or EPS) and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"luxor-drawing.png\", default size 800 pixels square.\n\nYou can specify dimensions, and use the default target filename:\n\nDrawing(400, 300)\n\ncreates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename \"luxor-drawing.png\".\n\nDrawing(400, 300, \"my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"my-drawing.pdf\", 400 by 300 pixels.\n\nDrawing(1200, 800, \"my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"my-drawing.svg\", 1200 by 800 pixels.\n\nDrawing(1200, 1200/golden, \"my-drawing.eps\")\n\ncreates an EPS drawing in the file \"my-drawing.eps\", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high.\n\nDrawing(\"A4\", \"my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size (595 wide by 842 high) in the file \"my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\ncreates the drawing A4 landscape size.\n\nPDF files default to a white background, but PNG defaults to transparent, unless you specify one using background().\n\n\n\n"
 },
 
 {
@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.background",
     "category": "Function",
-    "text": "background(color)\n\nFill the canvas with a single color. Returns the (red, green, blue, alpha) values.\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\nbackground(RGB(0, 0, 0))       # if Colors.jl is installed\nbackground(Luv(20, -20, 30))\n\nIf you don't specify a background color for a PNG drawing, the background will be transparent. You can set a partly or completely transparent background for PNG files by passing a color with an alpha value, such as this 'transparent black':\n\nbackground(RGBA(0, 0, 0, 0))\n\n\n\n"
+    "text": "background(color)\n\nFill the canvas with a single color. Returns the (red, green, blue, alpha) values.\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\n\nIf Colors.jl is installed:\n\nbackground(RGB(0, 0, 0))\nbackground(Luv(20, -20, 30))\n\nIf you don't specify a background color for a PNG drawing, the background will be transparent. You can set a partly or completely transparent background for PNG files by passing a color with an alpha value, such as this 'transparent black':\n\nbackground(RGBA(0, 0, 0, 0))\n\n\n\n"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.axes",
     "category": "Function",
-    "text": "Draw two axes lines starting at O, the current 0/0, and continuing out along the current positive x and y axes.\n\n\n\n"
+    "text": "Draw and label two axes lines starting at O, the current 0/0, and continuing out along the current positive x and y axes.\n\n\n\n"
 },
 
 {
@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.gsave",
     "category": "Function",
-    "text": "Save the current graphics state on the stack.\n\n\n\n"
+    "text": "gsave()\n\nSave the current color settings on the stack.\n\n\n\n"
 },
 
 {
@@ -237,7 +237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.grestore",
     "category": "Function",
-    "text": "Replace the current graphics state with the one on top of the stack.\n\n\n\n"
+    "text": "grestore()\n\nReplace the current graphics state with the one on top of the stack.\n\n\n\n"
 },
 
 {
@@ -261,7 +261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.rect",
     "category": "Function",
-    "text": "Create a rectangle with one corner at (xmin/ymin) with width w and height h and do an action.\n\nrect(xmin, ymin, w, h, action)\n\nSee box() for more ways to do similar things, such as supplying two opposite corners, placing by centerpoint and dimensions.\n\n\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\nrect(cornerpoint, w, h, action)\n\n\n\n"
+    "text": "rect(xmin, ymin, w, h, action)\n\nCreate a rectangle with one corner at (xmin/ymin) with width w and height h and then do an action.\n\nSee box() for more ways to do similar things, such as supplying two opposite corners, placing by centerpoint and dimensions.\n\n\n\nrect(cornerpoint, w, h, action)\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\n\n\n"
 },
 
 {
@@ -269,7 +269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.box",
     "category": "Function",
-    "text": "Create a rectangle between two points and do an action.\n\nbox(cornerpoint1, cornerpoint2, action=:nothing)\n\n\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\nbox(points::Array, action=:nothing)\n\n\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\n\n\nCreate a box/rectangle centered at point x/y with width and height.\n\nbox(x, y, width, height, action=:nothing)\n\n\n\n"
+    "text": "box(cornerpoint1, cornerpoint2, action=:nothing)\n\nCreate a rectangle between two points and do an action.\n\n\n\nbox(points::Array, action=:nothing)\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\n\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\n\n\nbox(x, y, width, height, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height.\n\n\n\n"
 },
 
 {
@@ -293,7 +293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.circle",
     "category": "Function",
-    "text": "Make a circle of radius r centred at x/y.\n\ncircle(x, y, r, action=:nothing)\n\naction is one of the actions applied by do_action, defaulting to :nothing. You can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\nMake a circle centred at pt.\n\ncircle(pt, r, action)\n\n\n\nMake a circle that passes through two points that define the diameter:\n\ncircle(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
+    "text": "circle(x, y, r, action=:nothing)\n\nMake a circle of radius r centred at x/y.\n\naction is one of the actions applied by do_action, defaulting to :nothing. You can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\ncircle(pt, r, action)\n\nMake a circle centred at pt.\n\n\n\ncircle(pt1::Point, pt2::Point, action=:nothing)\n\nMake a circle that passes through two points that define the diameter:\n\n\n\n"
 },
 
 {
@@ -349,7 +349,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.move",
     "category": "Function",
-    "text": "Move to a point.\n\nmove(x, y)\nmove(pt)\n\n\n\n"
+    "text": "move(x, y)\nmove(pt)\n\nMove to a point.\n\n\n\n"
 },
 
 {
@@ -357,7 +357,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.rmove",
     "category": "Function",
-    "text": "Move by an amount from the current point. Move relative to current position by x and y:\n\nrmove(x, y)\n\nMove relative to current position by the pt's x and y:\n\nrmove(pt)\n\n\n\n"
+    "text": "rmove(x, y)\n\nMove by an amount from the current point. Move relative to current position by x and y:\n\nMove relative to current position by the pt's x and y:\n\nrmove(pt)\n\n\n\n"
 },
 
 {
@@ -365,7 +365,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.line",
     "category": "Function",
-    "text": "Create a line from the current position to the x/y position and optionally apply an action:\n\nline(x, y)\nline(x, y, :action)\nline(pt)\n\n\n\nMake a line between two points, pt1 and pt2.\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\n\n\n"
+    "text": "line(x, y)\nline(x, y, :action)\nline(pt)\n\nCreate a line from the current position to the x/y position and optionally apply an action:\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n"
 },
 
 {
@@ -373,7 +373,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.rline",
     "category": "Function",
-    "text": "Create a line relative to the current position to the x/y position and optionally apply an action:\n\nrline(x, y)\nrline(x, y, :action)\nrline(pt)\n\n\n\n"
+    "text": "rline(x, y)\nrline(x, y, :action)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position and optionally apply an action:\n\n\n\n"
 },
 
 {
@@ -429,7 +429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.intersection",
     "category": "Function",
-    "text": "intersection(p1::Point, p2::Point, p3::Point, p4::Point)\n\nFind intersection of two lines p1-p2 and p3-p4\n\nThis returns a tuple: (boolean, point(0, 0)).\n\nKeyword options and default values:\n\ncrossingonly = false\n\nIf crossingonly = true, returns (false, intersectionpoint) if the lines don't cross, but would intersect at intersectionpoint if continued beyond their current endpoints.\n\ncommonendpoints = false\n\nIf commonendpoints= true, will return (false, Point(0, 0)) if the lines share a common end point (because that's not so much an intersection, more a meeting).\n\nFunction returns (false, Point(0, 0)) if the lines are undefined,\n\n\n\n"
+    "text": "intersection(p1::Point, p2::Point, p3::Point, p4::Point)\n\nFind intersection of two lines p1-p2 and p3-p4\n\nThis returns a tuple: (boolean, point(x, y)).\n\nKeyword options and default values:\n\ncrossingonly = false\n\nreturns (true, Point(x, y)) if the lines intersect somewhere. If crossingonly = true, returns (false, intersectionpoint) if the lines don't cross, but would intersect at intersectionpoint if continued beyond their current endpoints.\n\ncommonendpoints = false\n\nIf commonendpoints= true, will return (false, Point(0, 0)) if the lines share a common end point (because that's not so much an intersection, more a meeting).\n\nFunction returns (false, Point(0, 0)) if the lines are undefined,\n\n\n\n"
 },
 
 {
@@ -437,7 +437,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.center3pts",
     "category": "Function",
-    "text": "Find the radius and center point for three points lying on a circle.\n\ncenter3pts(a::Point, b::Point, c::Point)\n\nreturns (centerpoint, radius) of a circle. Then you can use circle() to place a circle, or arc() to draw an arc passing through those points.\n\nIf there's no such circle, then you'll see an error message in the console and the function returns (Point(0,0), 0).\n\n\n\n"
+    "text": "center3pts(a::Point, b::Point, c::Point)\n\nFind the radius and center point for three points lying on a circle.\n\nreturns (centerpoint, radius) of a circle. Then you can use circle() to place a circle, or arc() to draw an arc passing through those points.\n\nIf there's no such circle, then you'll see an error message in the console and the function returns (Point(0,0), 0).\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.getnearestpointonline",
+    "page": "Basic graphics",
+    "title": "Luxor.getnearestpointonline",
+    "category": "Function",
+    "text": "getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)\n\nGiven a line from pt1 to pt2, and startpt is the start of a perpendicular heading to meet the line, at what point does it hit the line?\n\n\n\n"
 },
 
 {
@@ -445,7 +453,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Geometry tools",
     "category": "section",
-    "text": "You can find the midpoint between two points using midpoint(). intersection() finds the intersection of two lines.center3pts() finds the radius and center point of a circle passing through three points which you can then use with functions such as circle() or arc2r().midpoint\nintersection\ncenter3pts"
+    "text": "You can find the midpoint between two points using midpoint(). intersection() finds the intersection of two lines.center3pts() finds the radius and center point of a circle passing through three points which you can then use with functions such as circle() or arc2r().using Luxor # hide\nDrawing(700, 220, \"../figures/intersection.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\npt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)\nline(pt1, pt2, :stroke)\nline(pt3, pt4, :stroke)\nflag, ip =  intersection(pt1, pt2, pt3, pt4)\nif flag\n    circle(ip, 5, :fill)\nend\nfinish() # hide(Image: arc)getnearestpointonline() finds perpendiculars.using Luxor # hide\nDrawing(700, 200, \"../figures/perpendicular.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\nend1, end2, pt3 = ngon(O, 100, 3, vertices=true)\nmap(pt -> circle(pt, 5, :fill), [end1, end2, pt3])\nline(end1, end2, :stroke)\narrow(pt3, getnearestpointonline(end1, end2, pt3))\nfinish() # hide(Image: arc)midpoint\nintersection\ncenter3pts\ngetnearestpointonline"
 },
 
 {
@@ -453,7 +461,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.arrow",
     "category": "Function",
-    "text": "Draw a line between two points and add an arrowhead at the end. The arrowhead length will be the length of the side of the arrow's head, and the arrowhead angle is the angle between the sloping side of the arrowhead and the arrow's shaft.\n\narrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)\n\nArrows don't use the current linewidth setting (setline()), and defaults to 1; you can specify another linewidth.\n\nIt doesn't need stroking/filling, the shaft is stroke()d and the head fill()ed with the current color.\n\n\n\nDraw a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\nArrows don't use the current linewidth setting (setline()); you can specify the linewidth.\n\narrow(centerpos::Point, radius, startangle, endangle; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)\n\n\n\n"
+    "text": "arrow(startpoint::Point, endpoint::Point;\n    linewidth = 1.0,\n    arrowheadlength = 10,\n    arrowheadangle = pi/8)\n\nDraw a line between two points and add an arrowhead at the end. The arrowhead length will be the length of the side of the arrow's head, and the arrowhead angle is the angle between the sloping side of the arrowhead and the arrow's shaft.\n\nArrows don't use the current linewidth setting (setline()), and defaults to 1, but you can specify another value. It doesn't need stroking/filling, the shaft is stroke()d and the head fill()ed with the current color.\n\n\n\narrow(centerpos::Point, radius, startangle, endangle;\n    linewidth = 1.0,\n    arrowheadlength = 10,\n    arrowheadangle = pi/8)\n\nDraw a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\nArrows don't use the current linewidth setting (setline()); you can specify the linewidth.\n\n\n\n"
 },
 
 {
@@ -493,7 +501,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.getpath",
     "category": "Function",
-    "text": "Get the current path (thanks Andreas Lobinger!)\n\nReturns a CairoPath which is an array of .element_type and .points. With the results you could typically step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          stroke()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          stroke()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
+    "text": "getpath()\n\nGet the current path and return a CairoPath object, which is an array of element_type and points objects. With the results you can step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          stroke()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          stroke()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
 },
 
 {
@@ -501,7 +509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.getpathflat",
     "category": "Function",
-    "text": "Get the current path, like getpath() but flattened so that there are no Bezier curves.\n\nReturns a CairoPath which is an array of .element_type and .points.\n\n\n\n"
+    "text": "getpathflat()\n\nGet the current path, like getpath() but flattened so that there are no Bèzier curves.\n\nReturns a CairoPath which is an array of element_type and points objects.\n\n\n\n"
 },
 
 {
@@ -533,7 +541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.sethue",
     "category": "Function",
-    "text": "Set the color. sethue() is like setcolor(), but (like Mathematica) we sometimes want to change the current 'color' without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\nsethue(\"black\")\nsethue(0.3,0.7,0.9)\n\n\n\nSet the color to a named color:\n\nsethue(\"red\")\n\n\n\nSet the color's r, g, b values:\n\nsethue(0.3, 0.7, 0.9)\n\nUse setcolor(r,g,b,a) to set transparent colors.\n\n\n\n"
+    "text": "sethue(\"black\")\nsethue(0.3,0.7,0.9)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current 'color' without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing current opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color's r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\n"
 },
 
 {
@@ -541,7 +549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setcolor",
     "category": "Function",
-    "text": "setcolor(col::String)\n\nSet the current color to a named color. This relies on Colors.jl to convert a string to RGBA eg setcolor(\"gold\") # or \"green\", \"darkturquoise\", \"lavender\" or what have you. The list is at Colors.color_names.\n\nsetcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nUse sethue() for changing colors without changing current opacity level.\n\n\n\nSet the current color.\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))\n   ...\nend\n\n\n\n"
+    "text": "setcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nSet the current color to a named color. This use the definitions in Colors.jl to convert a string to RGBA eg setcolor(\"gold\") # or \"green\", \"darkturquoise\", \"lavender\", etc. The list is at Colors.color_names.\n\nUse sethue() for changing colors without changing current opacity level.\n\n\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\n\nSet the current color.\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))\n   ...\nend\n\n\n\n"
 },
 
 {
@@ -549,7 +557,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setblend",
     "category": "Function",
-    "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nI think this aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
+    "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
 },
 
 {
@@ -557,7 +565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setopacity",
     "category": "Function",
-    "text": "Set the current opacity to a value between 0 and 1.\n\nsetopacity(alpha)\n\nThis modifies the alpha value of the current color.\n\n\n\n"
+    "text": "setopacity(alpha)\n\nSet the current opacity to a value between 0 and 1. This modifies the alpha value of the current color.\n\n\n\n"
 },
 
 {
@@ -565,7 +573,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.randomhue",
     "category": "Function",
-    "text": "Set a random hue.\n\nrandomhue()\n\nChoose a random color without changing the current alpha opacity.\n\n\n\n"
+    "text": "randomhue()\n\nSet a random hue.\n\nChoose a random color without changing the current alpha opacity.\n\n\n\n"
 },
 
 {
@@ -573,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.randomcolor",
     "category": "Function",
-    "text": "Set a random color.\n\nrandomcolor()\n\nThis probably changes the current alpha opacity too.\n\n\n\n"
+    "text": "randomcolor()\n\nSet a random color. This may change the current alpha opacity too.\n\n\n\n"
 },
 
 {
@@ -581,7 +589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Color and opacity",
     "category": "section",
-    "text": "For color definitions and conversions, use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.sethue\nsetcolor\nsetblend\nsetopacity\nrandomhue\nrandomcolor"
+    "text": "For color definitions and conversions, you can use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.Named colors, sush as \"gold\", or \"lavender\", can be found in Colors.color_names. This code shows the first 600 colors.using Luxor, Colors # hide\nDrawing(800, 500, \"../figures/colors.png\") # hide\norigin()\nbackground(\"white\") # hide\nfontsize(4) # hide\ncols = collect(Colors.color_names)\ntiles = Tiler(800, 500, 30, 20)\nfor (pos, n) in tiles\n    sethue(cols[n][1])\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    sethue(\"black\")\n    text(string(cols[n][1]), pos, halign=:center)\nend\nfinish() # hide(Image: line endings)sethue\nsetcolor\nsetblend\nsetopacity\nrandomhue\nrandomcolor"
 },
 
 {
@@ -589,7 +597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setline",
     "category": "Function",
-    "text": "Set the line width.\n\nsetline(n)\n\n\n\n"
+    "text": "setline(n)\n\nSet the line width.\n\n\n\n"
 },
 
 {
@@ -597,7 +605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setlinecap",
     "category": "Function",
-    "text": "Set the line ends. s can be \"butt\" (the default), \"square\", or \"round\".\n\nsetlinecap(s)\n\nsetlinecap(\"round\")\n\n\n\n"
+    "text": "setlinecap(s)\n\nSet the line ends. s can be \"butt\" (the default), \"square\", or \"round\".\n\n\n\n"
 },
 
 {
@@ -605,7 +613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setlinejoin",
     "category": "Function",
-    "text": "Set the line join, or how to render the junction of two lines when stroking.\n\nsetlinejoin(\"round\")\nsetlinejoin(\"miter\")\nsetlinejoin(\"bevel\")\n\n\n\n"
+    "text": "setlinejoin(\"miter\")\nsetlinejoin(\"round\")\nsetlinejoin(\"bevel\")\n\nSet the line join style, or how to render the junction of two lines when stroking.\n\n\n\n"
 },
 
 {
@@ -613,7 +621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.setdash",
     "category": "Function",
-    "text": "Set the dash pattern to one of: \"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\", \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"\n\nsetlinedash(\"dot\")\n\n\n\n"
+    "text": "setlinedash(\"dot\")\n\nSet the dash pattern to one of: \"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\", \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"\n\n\n\n"
 },
 
 {
@@ -621,7 +629,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.fillstroke",
     "category": "Function",
-    "text": "Fill and stroke the current path.\n\n\n\n"
+    "text": "fillstroke()\n\nFill and stroke the current path.\n\n\n\n"
 },
 
 {
@@ -629,7 +637,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.stroke",
     "category": "Function",
-    "text": "Stroke the current path with the current line width, line join, line cap, and dash settings. The current path is then cleared.\n\nstroke()\n\n\n\n"
+    "text": "stroke()\n\nStroke the current path with the current line width, line join, line cap, and dash settings. The current path is then cleared.\n\n\n\n"
 },
 
 {
@@ -637,7 +645,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Base.fill",
     "category": "Function",
-    "text": "Fill the current path with current settings. The current path is then cleared.\n\nfill()\n\n\n\n"
+    "text": "fill()\n\nFill the current path with current settings. The current path is then cleared.\n\n\n\n"
 },
 
 {
@@ -645,7 +653,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.strokepreserve",
     "category": "Function",
-    "text": "Stroke the current path with current line width, line join, line cap, and dash settings, but then keep the path current.\n\nstrokepreserve()\n\n\n\n"
+    "text": "strokepreserve()\n\nStroke the current path with current line width, line join, line cap, and dash settings, but then keep the path current.\n\n\n\n"
 },
 
 {
@@ -653,7 +661,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.fillpreserve",
     "category": "Function",
-    "text": "Fill the current path with current settings, but then keep the path current.\n\nfillpreserve()\n\n\n\n"
+    "text": "fillpreserve()\n\nFill the current path with current settings, but then keep the path current.\n\n\n\n"
 },
 
 {
@@ -661,7 +669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.paint",
     "category": "Function",
-    "text": "Paint the current clip region with the current settings.\n\npaint()\n\n\n\n"
+    "text": "paint()\n\nPaint the current clip region with the current settings.\n\n\n\n"
 },
 
 {
@@ -669,7 +677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.do_action",
     "category": "Function",
-    "text": "do_action(action)\n\nThis is usually called by other graphics functions. Actions for graphics commands include :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve and :path.\n\n\n\n"
+    "text": "do_action(action)\n\nThis is usually called by other graphics functions. Actions for graphics commands include :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve, :none, and :path.\n\n\n\n"
 },
 
 {
@@ -685,7 +693,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.blend",
     "category": "Function",
-    "text": "blend(from::Point, to::Point)\n\nCreate a linear blend.\n\nA blend is a specification of how one color changes into another. Linear blends are defined by two points: parallel lines through these points define the start and stop locations of the blend. The blend is defined relative to the current axes origin. This means that you should be aware of the current axes when you define blends, and when you use them.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\nblend(centerpos1, rad1, centerpos2, rad2, color1, color2)\n\nCreate a radial blend.\n\nExample:\n\nredblue = blend(     pos, 0,     pos, tiles.tilewidth/2,     \"red\",     \"blue\"     )\n\n\n\nblend(from::Point, startradius, to::Point, endradius)\n\nCreate an empty radial blend.\n\nRadial blends are defined by two circles that define the start and stop locations. The first point is the center of the start circle, the first radius is the radius of the first circle.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\n"
+    "text": "blend(from::Point, to::Point)\n\nCreate a linear blend.\n\nA blend is a specification of how one color changes into another. Linear blends are defined by two points: parallel lines through these points define the start and stop locations of the blend. The blend is defined relative to the current axes origin. This means that you should be aware of the current axes when you define blends, and when you use them.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\nblend(centerpos1, rad1, centerpos2, rad2, color1, color2)\n\nCreate a radial blend.\n\nExample:\n\nredblue = blend(\n    pos, 0,                   # first circle center and radius\n    pos, tiles.tilewidth/2,   # second circle center and radius\n    \"red\",\n    \"blue\"\n    )\n\n\n\nblend(from::Point, startradius, to::Point, endradius)\n\nCreate an empty radial blend.\n\nRadial blends are defined by two circles that define the start and stop locations. The first point is the center of the start circle, the first radius is the radius of the first circle.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\n"
 },
 
 {
@@ -725,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.ngon",
     "category": "Function",
-    "text": "Find the vertices of a regular n-sided polygon centred at x, y:\n\nngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nDraw a regular polygon centred at point p:\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\n\n\n"
+    "text": "ngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nFind the vertices of a regular n-sided polygon centred at x, y:\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false,\n    reversepath=false)\n\nDraw a regular polygon centred at point p:\n\n\n\n"
 },
 
 {
@@ -741,7 +749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.star",
     "category": "Function",
-    "text": "Make a star:\n\nstar(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nDraw a star centered at a position:\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\n\n\n"
+    "text": "star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false,\n    reversepath=false)\n\nMake a star.  ratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nDraw a star centered at a position:\n\n\n\n"
 },
 
 {
@@ -757,7 +765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.poly",
     "category": "Function",
-    "text": "Draw a polygon.\n\npoly(pointlist::Array, action = :nothing; close=false, reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
+    "text": "Draw a polygon.\n\npoly(pointlist::Array, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
 },
 
 {
@@ -773,7 +781,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.simplify",
     "category": "Function",
-    "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail=0.1)\n\ndetail is probably the smallest permitted distance between two points in pixels.\n\n\n\n"
+    "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n"
 },
 
 {
@@ -781,7 +789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.isinside",
     "category": "Function",
-    "text": "Is a point p inside a polygon pol?\n\nisinside(p, pol)\n\nReturns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm\n\n\n\n"
+    "text": "isinside(p, pol)\n\nIs a point p inside a polygon pol? Returns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm\n\n\n\n"
 },
 
 {
@@ -805,7 +813,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.polysplit",
     "category": "Function",
-    "text": "Split a polygon into two where it intersects with a line:\n\npolysplit(p, p1, p2)\n\nReturns:\n\n(poly1, poly2)\n\nThis doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon the shape of the letter \"E\" might end up being divided into more than two parts.\n\n\n\n"
+    "text": "polysplit(p, p1, p2)\n\nSplit a polygon into two where it intersects with a line. It returns two polygons:\n\n(poly1, poly2)\n\nThis doesn't always work, of course. For example, a polygon the shape of the letter \"E\" might end up being divided into more than two parts.\n\n\n\n"
 },
 
 {
@@ -845,7 +853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.polysmooth",
     "category": "Function",
-    "text": "polysmooth(points, radius, action=:action; debug=false)\n\nMake a polygon from points, but round any sharp corners by making them arcs with the given radius.\n\nIn fact, the arcs are sometimes different sizes: if the given radius is bigger than the length of the shortest side, the arc can't be drawn at its full radius and is therefore drawn as large as possible (as large as the shortest side allows).\n\nThe debug option draws the construction circles at each corner.\n\n\n\n"
+    "text": "polysmooth(points, radius, action=:action; debug=false)\n\nMake a closed path from the points and round the corners by making them arcs with the given radius. Execute the action when finished.\n\nThe arcs are sometimes different sizes: if the given radius is bigger than the length of the shortest side, the arc can't be drawn at its full radius and is therefore drawn as large as possible (as large as the shortest side allows).\n\nThe debug option also draws the construction circles at each corner.\n\n\n\n"
 },
 
 {
@@ -861,7 +869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.offsetpoly",
     "category": "Function",
-    "text": "Return a polygon that is offset from a polygon by d units.\n\noffsetpoly(path::Array, d)\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\n\n\n\n"
+    "text": "offsetpoly(path::Array, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\n\n\n\n"
 },
 
 {
@@ -933,7 +941,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textextents",
     "category": "Function",
-    "text": "textextents(str)\n\nReturn the measurements of the string str when set using the current font settings:\n\nx_bearing\ny_bearing\nwidth\nheight\nx_advance\ny_advance\n\nThe bearing is the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like j; it's almost always a negative value for y displacement.\n\nThe width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\nExample:\n\ntextextents(\"R\")\n\nreturns\n\n[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]\n\n\n\n"
+    "text": "textextents(str)\n\nReturn the measurements of the string str when set using the current font settings:\n\n1 x_bearing 2 y_bearing 3 width 4 height 5 x_advance 6 y_advance\n\nThe bearing is the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like j; it's almost always a negative value for y displacement.\n\nThe width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\nExample:\n\ntextextents(\"R\")\n\nreturns\n\n[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]\n\n\n\n"
 },
 
 {
@@ -949,7 +957,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textcurve",
     "category": "Function",
-    "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text,\n          start_angle,\n          start_radius,\n          x_pos = 0,\n          y_pos = 0;\n          # optional keyword arguments:\n          spiral_ring_step = 0,    # step out or in by this amount\n          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards\n          clockwise = true         #\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centred on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
+    "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;\n          # optional keyword arguments:\n          spiral_ring_step = 0,    # step out or in by this amount\n          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards\n          clockwise = true\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centred on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
 },
 
 {
@@ -989,7 +997,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Base.scale",
     "category": "Function",
-    "text": "Scale subsequent drawing in x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\n"
+    "text": "scale(x, y)\n\nScale workspace by x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\n"
 },
 
 {
@@ -997,7 +1005,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.rotate",
     "category": "Function",
-    "text": "Rotate subsequent drawing by a radians clockwise.\n\nrotate(a)\n\n\n\n"
+    "text": "rotate(a)\n\nRotate workspace by a radians clockwise (from positive x-axis to positive y-axis).\n\n\n\n"
 },
 
 {
@@ -1005,7 +1013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.translate",
     "category": "Function",
-    "text": "Translate to new location.\n\ntranslate(x, y)\n\nor\n\ntranslate(point)\n\n\n\n"
+    "text": "translate(x, y)\ntranslate(point)\n\nTranslate the workspace by x and y or by moving the origin to pt.\n\n\n\n"
 },
 
 {
@@ -1013,7 +1021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "Get the current matrix.\n\ngetmatrix()\n\nReturns the current Cairo matrix as an array. In Cairo/Luxor, a matrix is an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate\ntransform([1, 0, 0, 1, dx, dy])\n=> shift by dx, dy\nscale\n=> scale by fx, fy\nscale O:        [W  0 0  H 0 0]\nrotate\ntransform([cos(a), -sin(a), sin(a), cos(a), 0, 0])\n=> rotate to a radians\nrotate O:       [c -s s  c 0 0]\nshear in x:     [1  0 A  1 0 0]\nx-skew\ntransform([1, 0, tan(a), 1, 0, 0])\n=> xskew by a\ny-skew\ntransform([1, tan(a), 0, 1, 0, 0])\n=> yskew by a\nflip\ntransform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])\n=> flip with center at centerx/centery\nshear in y:     [1  B 0  1 0 0]\nreflect O:      [-1 0 0 -1 0 0]\nreflect xaxis:  [1  0 0 -1 0 0]\nreflect yaxis:  [-1 0 0  1 0 0]\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
+    "text": "getmatrix()\n\nGet the current Cairo matrix. Returns an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate\ntransform([1, 0, 0, 1, dx, dy])\n=> shift by dx, dy\nscale\n=> scale by fx, fy\nscale around O: [W  0 0  H 0 0]\nrotate\ntransform([cos(a), -sin(a), sin(a), cos(a), 0, 0])\n=> rotate to a radians\nrotate around O: [c -s s  c 0 0]\nshear in x: [1  0 A  1 0 0]\nx-skew\ntransform([1, 0, tan(a), 1, 0, 0])\n=> xskew by a\ny-skew\ntransform([1, tan(a), 0, 1, 0, 0])\n=> yskew by a\nflip\ntransform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])\n=> flip with center at centerx/centery\nshear in y: [1  B 0  1 0 0]\nreflect in O:  [-1 0 0 -1 0 0]\nreflect in xaxis:  [1  0 0 -1 0 0]\nreflect in yaxis:  [-1 0 0  1 0 0]\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
 },
 
 {
@@ -1021,7 +1029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.setmatrix",
     "category": "Function",
-    "text": "Change the current Cairo matrix to matrix m.\n\nsetmatrix(m::Array)\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
+    "text": "setmatrix(m::Array)\n\nChange the current Cairo matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
@@ -1029,7 +1037,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.transform",
     "category": "Function",
-    "text": "Modify the current matrix by multiplying it by matrix a.\n\ntransform(a::Array)\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
+    "text": "transform(a::Array)\n\nModify the current matrix by multiplying it by matrix a.\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
@@ -1037,7 +1045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.crossproduct",
     "category": "Function",
-    "text": "crossproduct(p1::Point, p2::Point)\n\ndot(p1, perpendicular(p2))\n\n\n\n"
+    "text": "crossproduct(p1::Point, p2::Point)\n\nThis is the perp dot product, really, not the crossproduct. dot(p1, perpendicular(p2))\n\n\n\n"
 },
 
 {
@@ -1045,7 +1053,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.blendmatrix",
     "category": "Function",
-    "text": "blendmatrix(b::Blend, m)\n\nSet the matrix of a blend.\n\nTo apply a sequence of matrix transforms to a blend, this might work:\n\nA = [1 0 0 1 0 0]\nAj = cairotojuliamatrix(A)\nSj = scaling_matrix(2, .2) * Aj\nTj = translation_matrix(10, 0) * Sj\nA1 = juliatocairomatrix(Tj)\nblendmatrix(b, As)\n\n\n\n"
+    "text": "blendmatrix(b::Blend, m)\n\nSet the matrix of a blend.\n\nTo apply a sequence of matrix transforms to a blend:\n\nA = [1 0 0 1 0 0]\nAj = cairotojuliamatrix(A)\nSj = scaling_matrix(2, .2) * Aj\nTj = translation_matrix(10, 0) * Sj\nA1 = juliatocairomatrix(Tj)\nblendmatrix(b, As)\n\n\n\n"
 },
 
 {
@@ -1109,7 +1117,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Clipping",
     "title": "Luxor.clip",
     "category": "Function",
-    "text": "Establish a new clipping region by intersecting the current clipping region with the current path and then clearing the current path.\n\nclip()\n\n\n\n"
+    "text": "clip()\n\nEstablish a new clipping region by intersecting the current clipping region with the current path and then clearing the current path.\n\n\n\n"
 },
 
 {
@@ -1117,7 +1125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Clipping",
     "title": "Luxor.clippreserve",
     "category": "Function",
-    "text": "Establish a new clipping region by intersecting the current clipping region with the current path, but keep the current path.\n\nclippreserve()\n\n\n\n"
+    "text": "clippreserve()\n\nEstablish a new clipping region by intersecting the current clipping region with the current path, but keep the current path.\n\n\n\n"
 },
 
 {
@@ -1125,7 +1133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Clipping",
     "title": "Luxor.clipreset",
     "category": "Function",
-    "text": "Reset the clipping region to the current drawing's extent.\n\nclipreset()\n\n\n\n"
+    "text": "clipreset()\n\nReset the clipping region to the current drawing's extent.\n\n\n\n"
 },
 
 {
@@ -1149,7 +1157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Images",
     "title": "Luxor.readpng",
     "category": "Function",
-    "text": "readpng(pathname)\n\nRead a PNG file into Cairo.\n\nThis returns a image object suitable for placing on the current drawing with placeimage(). You can access its width and height properties:\n\nimage = readpng(\"/tmp/test-image.png\")\nw = image.width\nh = image.height\n\n\n\n"
+    "text": "readpng(pathname)\n\nRead a PNG file into Cairo.\n\nThis returns a image object suitable for placing on the current drawing with placeimage(). You can access its width and height fields:\n\nimage = readpng(\"/tmp/test-image.png\")\nw = image.width\nh = image.height\n\n\n\n"
 },
 
 {
@@ -1157,7 +1165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Images",
     "title": "Luxor.placeimage",
     "category": "Function",
-    "text": "Place a PNG image on the drawing.\n\nplaceimage(img, xpos, ypos)\n\nThe image img has been previously loaded using readpng().\n\n\n\nPlace a PNG image on the drawing.\n\nplaceimage(img, pos)\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\nplaceimage(img, xpos, ypos, a)\n\n\n\nPlace a PNG image on the drawing using alpha transparency.\n\nplaceimage(img, pos, a)\n\n\n\n"
+    "text": "placeimage(img, xpos, ypos)\n\nPlace a PNG image on the drawing at (xpos/ypos). The image img has been previously loaded using readpng().\n\n\n\nplaceimage(img, pos)\n\nPlace a PNG image on the drawing at pos.\n\n\n\nplaceimage(img, xpos, ypos, a)\n\nPlace a PNG image on the drawing at (xpos/ypos) with transparency a.\n\n\n\nplaceimage(img, pos, a)\n\nPlace a PNG image on the drawing at pos with transparency a.\n\n\n\n"
 },
 
 {
@@ -1189,7 +1197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Forward",
     "category": "Function",
-    "text": "Move the turtle forward by d units. The stored position is updated.\n\nForward(t::Turtle, d)\n\n\n\n"
+    "text": "Forward(t::Turtle, d)\n\nMove the turtle forward by d units. The stored position is updated.\n\n\n\n"
 },
 
 {
@@ -1197,7 +1205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Turn",
     "category": "Function",
-    "text": "Increase the turtle's rotation by r degrees. See also Orientation.\n\nTurn(t::Turtle, r)\n\n\n\n"
+    "text": "Turn(t::Turtle, r)\n\nIncrease the turtle's rotation by r degrees. See also Orientation.\n\n\n\n"
 },
 
 {
@@ -1205,7 +1213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Circle",
     "category": "Function",
-    "text": "Draw a filled circle centred at the current position with the given radius.\n\nCircle(t::Turtle, radius)\n\n\n\n"
+    "text": "Circle(t::Turtle, radius)\n\nDraw a filled circle centred at the current position with the given radius.\n\n\n\n"
 },
 
 {
@@ -1213,7 +1221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.HueShift",
     "category": "Function",
-    "text": "Shift the Hue of the turtle's pen forward by inc\n\nHueShift(t::Turtle, inc = 1)\n\n\n\n"
+    "text": "HueShift(t::Turtle, inc = 1)\n\nShift the Hue of the turtle's pen forward by inc.\n\n\n\n"
 },
 
 {
@@ -1221,7 +1229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Message",
     "category": "Function",
-    "text": "Write some text at the current position.\n\nMessage(t::Turtle, txt)\n\n\n\n"
+    "text": "Message(t::Turtle, txt)\n\nWrite some text at the current position.\n\n\n\n"
 },
 
 {
@@ -1229,7 +1237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Orientation",
     "category": "Function",
-    "text": "Set the turtle's orientation to r degrees. See also Turn.\n\nOrientation(t::Turtle, r)\n\n\n\n"
+    "text": "Orientation(t::Turtle, r)\n\nSet the turtle's orientation to r degrees. See also Turn.\n\n\n\n"
 },
 
 {
@@ -1237,7 +1245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Randomize_saturation",
     "category": "Function",
-    "text": "Randomize saturation of the turtle's pen color.\n\nRandomize_saturation(t::Turtle)\n\n\n\n"
+    "text": "Randomize_saturation(t::Turtle)\n\nRandomize saturation of the turtle's pen color.\n\n\n\n"
 },
 
 {
@@ -1245,7 +1253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Rectangle",
     "category": "Function",
-    "text": "Draw a filled rectangle centred at the current position with the given radius.\n\nRectangle(t::Turtle, width, height)\n\n\n\n"
+    "text": "Rectangle(t::Turtle, width, height)\n\nDraw a filled rectangle centred at the current position with the given radius.\n\n\n\n"
 },
 
 {
@@ -1253,7 +1261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Pen_opacity_random",
     "category": "Function",
-    "text": "Change the opacity of the pen to some value at random.\n\n\n\n"
+    "text": "Pen_opacity_random(t::Turtle)\n\nChange the opacity of the pen to some value at random.\n\n\n\n"
 },
 
 {
@@ -1261,7 +1269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Pendown",
     "category": "Function",
-    "text": "Put that pen down and start drawing.\n\nPendown(t::Turtle)\n\n\n\n"
+    "text": "Pendown(t::Turtle)\n\nPut that pen down and start drawing.\n\n\n\n"
 },
 
 {
@@ -1269,7 +1277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Penup",
     "category": "Function",
-    "text": "Pick that pen up and stop drawing.\n\nPenup(t::Turtle)\n\n\n\n"
+    "text": "Penup(t::Turtle)\n\nPick that pen up and stop drawing.\n\n\n\n"
 },
 
 {
@@ -1277,7 +1285,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Pencolor",
     "category": "Function",
-    "text": "Set the Red, Green, and Blue colors of the turtle:\n\nPencolor(t::Turtle, r, g, b)\n\n\n\n"
+    "text": "Pencolor(t::Turtle, r, g, b)\n\nSet the Red, Green, and Blue colors of the turtle.\n\n\n\n"
 },
 
 {
@@ -1285,7 +1293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Penwidth",
     "category": "Function",
-    "text": "Set the width of the line drawn.\n\nPenwidth(t::Turtle, w)\n\n\n\n"
+    "text": "Penwidth(t::Turtle, w)\n\nSet the width of the line drawn.\n\n\n\n"
 },
 
 {
@@ -1301,7 +1309,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Pop",
     "category": "Function",
-    "text": "Lift the turtle's position and orientation off a stack.\n\n\n\n"
+    "text": "Pop(t::Turtle)\n\nLift the turtle's position and orientation off a stack.\n\n\n\n"
 },
 
 {
@@ -1309,7 +1317,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Push",
     "category": "Function",
-    "text": "Save the turtle's position and orientation on a stack.\n\n\n\n"
+    "text": "Push(t::Turtle)\n\nSave the turtle's position and orientation on a stack.\n\n\n\n"
 },
 
 {
@@ -1317,7 +1325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Reposition",
     "category": "Function",
-    "text": "Reposition: pick the turtle up and place it at another position:\n\nReposition(t::Turtle, x, y)\n\n\n\n"
+    "text": "Reposition(t::Turtle, x, y)\n\nReposition: pick the turtle up and place it at another position.\n\n\n\n"
 },
 
 {

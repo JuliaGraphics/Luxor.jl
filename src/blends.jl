@@ -24,12 +24,12 @@ Create a radial blend.
 
 Example:
 
-redblue = blend(
-    pos, 0,
-    pos, tiles.tilewidth/2,
-    "red",
-    "blue"
-    )
+    redblue = blend(
+        pos, 0,                   # first circle center and radius
+        pos, tiles.tilewidth/2,   # second circle center and radius
+        "red",
+        "blue"
+        )
 """
 
 function blend(centerpos1::Point, rad1, centerpos2::Point, rad2, color1, color2)
@@ -87,7 +87,7 @@ end
 
 Start using the named blend for filling graphics.
 
-I think this aligns the original coordinates of the blend definition with the current axes.
+This aligns the original coordinates of the blend definition with the current axes.
 """
 
 function setblend(b::Blend)
@@ -99,14 +99,16 @@ end
 
 Set the matrix of a blend.
 
-To apply a sequence of matrix transforms to a blend, this might work:
+To apply a sequence of matrix transforms to a blend:
 
-    A = [1 0 0 1 0 0]
-    Aj = cairotojuliamatrix(A)
-    Sj = scaling_matrix(2, .2) * Aj
-    Tj = translation_matrix(10, 0) * Sj
-    A1 = juliatocairomatrix(Tj)
-    blendmatrix(b, As)
+```
+A = [1 0 0 1 0 0]
+Aj = cairotojuliamatrix(A)
+Sj = scaling_matrix(2, .2) * Aj
+Tj = translation_matrix(10, 0) * Sj
+A1 = juliatocairomatrix(Tj)
+blendmatrix(b, As)
+```
 """
 
 function blendmatrix(b::Blend, m)
@@ -169,3 +171,5 @@ Return a six-element Cairo matrix 3 that's the equivalent of the 3 by 3 Julia ma
 function juliatocairomatrix(c::Matrix)
     return [c[1] c[2] c[4] c[5] c[7] c[8]]
 end
+
+# end

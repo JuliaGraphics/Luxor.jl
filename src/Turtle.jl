@@ -40,9 +40,9 @@ end
 const queue = Array{Array{Float64,1},1}()
 
 """
-Move the turtle forward by `d` units. The stored position is updated.
-
     Forward(t::Turtle, d)
+
+Move the turtle forward by `d` units. The stored position is updated.
 """
 function Forward(t::Turtle, d)
     move(t.xpos, t.ypos)
@@ -60,41 +60,45 @@ function Forward(t::Turtle, d)
 end
 
 """
-Increase the turtle's rotation by `r` degrees. See also `Orientation`.
-
     Turn(t::Turtle, r)
+
+Increase the turtle's rotation by `r` degrees. See also `Orientation`.
 """
 function Turn(t::Turtle, r)
     t.orientation = mod2pi(t.orientation + deg2rad(r))
 end
-"""
-Set the turtle's orientation to `r` degrees. See also `Turn`.
 
+"""
     Orientation(t::Turtle, r)
+
+Set the turtle's orientation to `r` degrees. See also `Turn`.
 """
 function Orientation(t::Turtle, r)
     t.orientation = mod2pi(deg2rad(r))
 end
-"""
-Put that pen down and start drawing.
 
+"""
     Pendown(t::Turtle)
+
+Put that pen down and start drawing.
 """
 function Pendown(t::Turtle)
     t.pendown = true
 end
-"""
-Pick that pen up and stop drawing.
 
+"""
     Penup(t::Turtle)
+
+Pick that pen up and stop drawing.
 """
 function Penup(t::Turtle)
     t.pendown = false
 end
-"""
-Draw a filled circle centred at the current position with the given radius.
 
+"""
     Circle(t::Turtle, radius)
+
+Draw a filled circle centred at the current position with the given radius.
 """
 function Circle(t::Turtle, radius)
     gsave()
@@ -102,11 +106,11 @@ function Circle(t::Turtle, radius)
     circle(t.xpos, t.ypos, radius, :fill)
     grestore()
 end
-"""
-Draw a filled rectangle centred at the current position with the given radius.
 
+"""
     Rectangle(t::Turtle, width, height)
 
+Draw a filled rectangle centred at the current position with the given radius.
 """
 function Rectangle(t::Turtle, width, height)
     gsave()
@@ -116,6 +120,8 @@ function Rectangle(t::Turtle, width, height)
 end
 
 """
+    Push(t::Turtle)
+
 Save the turtle's position and orientation on a stack.
 """
 function Push(t::Turtle)
@@ -125,6 +131,8 @@ function Push(t::Turtle)
 end
 
 """
+    Pop(t::Turtle)
+
 Lift the turtle's position and orientation off a stack.
 """
 function Pop(t::Turtle)
@@ -139,9 +147,9 @@ function Pop(t::Turtle)
 end
 
 """
-Write some text at the current position.
-
     Message(t::Turtle, txt)
+
+Write some text at the current position.
 """
 function Message(t::Turtle, txt)
     gsave()
@@ -151,9 +159,9 @@ function Message(t::Turtle, txt)
 end
 
 """
-Shift the Hue of the turtle's pen forward by inc
-
     HueShift(t::Turtle, inc = 1)
+
+Shift the Hue of the turtle's pen forward by `inc`.
 """
 function HueShift(t::Turtle, inc = 1)
     r, g, b = t.pencolor
@@ -165,9 +173,9 @@ function HueShift(t::Turtle, inc = 1)
 end
 
 """
-Randomize saturation of the turtle's pen color.
-
     Randomize_saturation(t::Turtle)
+
+Randomize saturation of the turtle's pen color.
 """
 function Randomize_saturation(t::Turtle)
     r, g, b = t.pencolor
@@ -179,9 +187,9 @@ function Randomize_saturation(t::Turtle)
 end
 
 """
-Set the Red, Green, and Blue colors of the turtle:
-
     Pencolor(t::Turtle, r, g, b)
+
+Set the Red, Green, and Blue colors of the turtle.
 """
 function Pencolor(t::Turtle, r, g, b)
     sethue(r, g, b)
@@ -189,9 +197,9 @@ function Pencolor(t::Turtle, r, g, b)
 end
 
 """
-Reposition: pick the turtle up and place it at another position:
-
     Reposition(t::Turtle, x, y)
+
+Reposition: pick the turtle up and place it at another position.
 """
 function Reposition(t::Turtle, x, y)
     t.xpos = x
@@ -199,14 +207,17 @@ function Reposition(t::Turtle, x, y)
 end
 
 """
-Set the width of the line drawn.
-
     Penwidth(t::Turtle, w)
+
+Set the width of the line drawn.
 """
 Penwidth(t::Turtle, w) = setline(w)
 
 """
-Change the opacity of the pen to some value at random.
+    Pen_opacity_random(t::Turtle)
 
+Change the opacity of the pen to some value at random.
 """
 Pen_opacity_random(t::Turtle) = setopacity(rand())
+
+# end

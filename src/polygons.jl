@@ -1,15 +1,16 @@
-# polygons, part of Luxor module
+# polygons, part of Luxor
 
 """
 Draw a polygon.
 
-    poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
+    poly(pointlist::Array, action = :nothing;
+        close=false,
+        reversepath=false)
 
 A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
 to allow for clipping.
 """
 function poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
-    # where pointlist is array of Points
     if action != :path
         newpath()
     end
@@ -55,7 +56,7 @@ Returns a point. This only works for simple (non-intersecting) polygons.
 You could test the point using `isinside()`.
 """
 function polycentroid(pointlist)
-    # if Points are immutable, then use separate variables for these calculations
+    # Points are immutable, use separate variables for these calculations
     centroid_x = 0
     centroid_y = 0
     signedArea = 0.0
@@ -91,7 +92,6 @@ function polycentroid(pointlist)
     signedArea *= 0.5
     centroid_x /= (6.0 * signedArea)
     centroid_y /= (6.0 * signedArea)
-
     return Point(centroid_x, centroid_y)
 end
 
@@ -153,7 +153,7 @@ function douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
         index = start_index
         for i in index + 1:last_index - 1
             if (keep_list[i - global_start_index])
-                d = point_line_distance(pointlist[i], pointlist[start_index], pointlist[last_index])
+                d = pointlinedistance(pointlist[i], pointlist[start_index], pointlist[last_index])
                 if d > dmax
                     index = i
                     dmax = d
@@ -177,7 +177,7 @@ Simplify a polygon:
 
     simplify(pointlist::Array, detail=0.1)
 
-`detail` is probably the smallest permitted distance between two points in pixels.
+`detail` is the smallest permitted distance between two points in pixels.
 """
 
 function simplify(pointlist, detail=0.1)
@@ -185,12 +185,13 @@ function simplify(pointlist, detail=0.1)
 end
 
 """
-Find the vertices of a regular n-sided polygon centred at `x`, `y`:
-
     ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
         vertices=false, reversepath=false)
 
-`ngon()` draws the shapes: if you just want the raw points, use keyword argument `vertices=true`, which returns the array of points instead. Compare:
+Find the vertices of a regular n-sided polygon centred at `x`, `y`:
+
+`ngon()` draws the shapes: if you just want the raw points, use keyword argument
+`vertices=true`, which returns the array of points instead. Compare:
 
 ```julia
 ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
@@ -200,46 +201,52 @@ ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
     Luxor.Point(-4.0,4.898587196589413e-16)
     Luxor.Point(-7.347880794884119e-16,-4.0)
     Luxor.Point(4.0,-9.797174393178826e-16)
+```
 
 whereas
 
+```
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
 
-function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing; vertices=false, reversepath=false)
-  ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
+function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing;
+    vertices=false,
+    reversepath=false)
+    ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
                   y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
-  if vertices
-    return ptlist
-  else
-    poly(ptlist, action, close=true, reversepath=reversepath)
-  end
+    if vertices
+        return ptlist
+    else
+        poly(ptlist, action, close=true, reversepath=reversepath)
+    end
 end
 
 """
-Draw a regular polygon centred at point `p`:
-
     ngon(centerpos, radius, sides=5, orientation=0, action=:nothing;
-        vertices=false, reversepath=false)
+        vertices=false,
+        reversepath=false)
 
+Draw a regular polygon centred at point `p`:
 """
 
 ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation, action; kwargs...)
 
 """
-Make a star:
-
     star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
-        vertices = false, reversepath=false)
+        vertices = false,
+        reversepath=false)
 
-`ratio` specifies the height of the smaller radius of the star relative to the larger.
+Make a star.  `ratio` specifies the height of the smaller radius of the star relative to the
+larger.
 
 Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
 
-function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing;
-    vertices = false, reversepath=false)
+function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5,
+    orientation=0, action=:nothing;
+    vertices = false,
+    reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
                     y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
@@ -260,20 +267,22 @@ function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5,
 end
 
 """
-Draw a star centered at a position:
-
     star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
         vertices = false, reversepath=false)
+
+Draw a star centered at a position:
 """
 
-star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action; vertices = vertices, reversepath=reversepath)
+star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0,
+    action=:nothing;
+    vertices = false,
+    reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio,
+    orientation, action; vertices = vertices, reversepath=reversepath)
 
 """
-Is a point `p` inside a polygon `pol`?
-
     isinside(p, pol)
 
-Returns true or false.
+Is a point `p` inside a polygon `pol`? Returns true or false.
 
 This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm
 """
@@ -316,16 +325,14 @@ function isinside(p::Point, pointlist::Array)
 end
 
 """
-Split a polygon into two where it intersects with a line:
-
     polysplit(p, p1, p2)
 
-Returns:
+Split a polygon into two where it intersects with a line. It returns two polygons:
 
     (poly1, poly2)
 
-This doesn't always work, of course. (Tell me you're not surprised.) For example, a polygon
-the shape of the letter "E" might end up being divided into more than two parts.
+This doesn't always work, of course. For example, a polygon the shape of the letter "E"
+might end up being divided into more than two parts.
 """
 function polysplit(pointlist, p1, p2)
     # the two-pass version
@@ -351,7 +358,7 @@ function polysplit(pointlist, p1, p2)
     l = length(newpointlist)
     for i in 1:l
         vertex1 = newpointlist[mod1(i, l)]
-        d = point_line_distance(vertex1, p1, p2)
+        d = pointlinedistance(vertex1, p1, p2)
         cp = (p2.x - p1.x) * (vertex1.y - p1.y) > (p2.y - p1.y) * (vertex1.x - p1.x)
         if cp
             push!(poly1, vertex1)
@@ -494,12 +501,12 @@ end
 """
     polysmooth(points, radius, action=:action; debug=false)
 
-Make a closed path from the `points` and round the corners by making them arcs with the given
-radius. Execute the action when finished.
+Make a closed path from the `points` and round the corners by making them arcs with the
+given radius. Execute the action when finished.
 
-The arcs are sometimes different sizes: if the given radius is bigger than the
-length of the shortest side, the arc can't be drawn at its full radius and is therefore
-drawn as large as possible (as large as the shortest side allows).
+The arcs are sometimes different sizes: if the given radius is bigger than the length of the
+shortest side, the arc can't be drawn at its full radius and is therefore drawn as large as
+possible (as large as the shortest side allows).
 
 The `debug` option also draws the construction circles at each corner.
 """
@@ -529,9 +536,9 @@ function polysmooth(points, radius, action=:action; debug=false)
 end
 
 """
-Return a polygon that is offset from a polygon by `d` units.
-
     offsetpoly(path::Array, d)
+
+Return a polygon that is offset from a polygon by `d` units.
 
 The incoming set of points `path` is treated as a polygon, and another set of points is
 created, which form a polygon lying `d` units away from the source poly.

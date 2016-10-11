@@ -26,7 +26,7 @@ function drawpoly(p, x, y, counter)
 
     sethue("green")
     cp = polycentroid(psort)
-    circle(cp, 2, :fill)
+    circle(cp, 5, :fill)
     text(string(counter), cp.x, cp.y)
 
     # highlight cases where centroid isn't inside poly. Might be an error...
@@ -46,12 +46,8 @@ function polycentroidsort(width, height)
     pagetiles = Tiler(width, height, 5, 5, margin=50)
     tilesize = pagetiles.tilewidth/2
     for (pos, n) in pagetiles
-      if rand(Bool)
         p = randompointarray(rand(-tilesize:-tilesize), rand(-tilesize:-tilesize), rand(tilesize:tilesize), rand(tilesize:tilesize), rand(5:12))
-      else
-        p = ngon(0, 0, tilesize, rand(3:12), vertices=true)
-      end
-      drawpoly(p, pos.x, pos.y, n)
+        drawpoly(p, pos.x, pos.y, n)
     end
 end
 

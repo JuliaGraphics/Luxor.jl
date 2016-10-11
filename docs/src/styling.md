@@ -2,11 +2,32 @@
 
 ## Color and opacity
 
-For color definitions and conversions, use Colors.jl.
+For color definitions and conversions, you can use Colors.jl.
 
 `setcolor()` and `sethue()` apply a single solid or transparent color to shapes. `setblend()` applies a smooth transition between two or more colors.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
+
+Named colors, sush as "gold", or "lavender", can be found in Colors.color_names. This code shows the first 600 colors.
+
+```@example
+using Luxor, Colors # hide
+Drawing(800, 500, "../figures/colors.png") # hide
+origin()
+background("white") # hide
+fontsize(5) # hide
+cols = collect(Colors.color_names)
+tiles = Tiler(800, 500, 30, 20)
+for (pos, n) in tiles
+    sethue(cols[n][1])
+    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+    sethue("black")
+    text(string(cols[n][1]), pos, halign=:center)
+end
+finish() # hide
+```
+
+![line endings](figures/colors.png)
 
 ```@docs
 sethue
