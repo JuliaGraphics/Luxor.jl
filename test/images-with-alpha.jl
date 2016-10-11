@@ -4,7 +4,6 @@ using Luxor
 
 function get_png_files(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
-    @show map(f -> string(folder, f), imagelist)
     return map(f -> string(folder, f), imagelist)
 end
 

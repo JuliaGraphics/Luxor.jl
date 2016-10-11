@@ -1,15 +1,16 @@
 """
+    arrow(startpoint::Point, endpoint::Point;
+        linewidth = 1.0,
+        arrowheadlength = 10,
+        arrowheadangle = pi/8)
+
 Draw a line between two points and add an arrowhead at the end. The arrowhead length will be
 the length of the side of the arrow's head, and the arrowhead angle is the angle between the
 sloping side of the arrowhead and the arrow's shaft.
 
-    arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
-
-Arrows don't use the current linewidth setting (`setline()`), and defaults to 1; you can
-specify another linewidth.
-
-It doesn't need stroking/filling, the shaft is `stroke()`d and the head `fill()`ed with the
-current color.
+Arrows don't use the current linewidth setting (`setline()`), and defaults to 1, but you can
+specify another value. It doesn't need stroking/filling, the shaft is `stroke()`d and the
+head `fill()`ed with the current color.
 
 """
 function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
@@ -31,13 +32,6 @@ function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlengt
   end
   tox = startpoint.x + (endpoint.x - startpoint.x) * ratio
   toy = startpoint.y + (endpoint.y - startpoint.y) * ratio
-
-  #  in case we ever have to do  start arrows:
-  #    tox=endpoint.x
-  #    toy=endpoint.y
-  #    fromx = startpoint.x + (endpoint.x  - startpoint.x) * (1-ratio)
-  #    fromy = startpoint.y + (endpoint.y - startpoint.y) *  (1-ratio)
-
   fromx = startpoint.x
   fromy = startpoint.y
 
@@ -48,7 +42,6 @@ function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlengt
   stroke()
 
   # draw the arrowhead
-  # this is a bit boring, isn't it
   topx = endpoint.x + cos(arrowheadtopsideangle) * arrowheadlength
   topy = endpoint.y + sin(arrowheadtopsideangle) * arrowheadlength
   arrowheadbottomsideangle = shaftangle - arrowheadangle
@@ -58,16 +51,17 @@ function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlengt
   grestore()
 end
 
-
 """
+    arrow(centerpos::Point, radius, startangle, endangle;
+        linewidth = 1.0,
+        arrowheadlength = 10,
+        arrowheadangle = pi/8)
+
 Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and ending at
 `endangle` with an arrowhead at the end. Angles are measured clockwise from the positive
 x-axis.
 
 Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
-
-    arrow(centerpos::Point, radius, startangle, endangle; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
-
 """
 function arrow(centerpos::Point, radius, startangle, endangle; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
   gsave()

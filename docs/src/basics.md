@@ -400,12 +400,47 @@ curve
 
 You can find the midpoint between two points using `midpoint()`. `intersection()` finds the intersection of two lines.
 
-`center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
+`center3pts()` finds the radius and center point of a circle passing through three points
+which you can then use with functions such as `circle()` or `arc2r()`.
+
+```@example
+using Luxor # hide
+Drawing(700, 220, "../figures/intersection.png") # hide
+origin() # hide
+background("white") # hide
+sethue("darkmagenta") # hide
+pt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)
+line(pt1, pt2, :stroke)
+line(pt3, pt4, :stroke)
+flag, ip =  intersection(pt1, pt2, pt3, pt4)
+if flag
+    circle(ip, 5, :fill)
+end
+finish() # hide
+```
+![arc](figures/intersection.png)
+
+`getnearestpointonline()` finds perpendiculars.
+
+```@example
+using Luxor # hide
+Drawing(700, 200, "../figures/perpendicular.png") # hide
+origin() # hide
+background("white") # hide
+sethue("darkmagenta") # hide
+end1, end2, pt3 = ngon(O, 100, 3, vertices=true)
+map(pt -> circle(pt, 5, :fill), [end1, end2, pt3])
+line(end1, end2, :stroke)
+arrow(pt3, getnearestpointonline(end1, end2, pt3))
+finish() # hide
+```
+![arc](figures/perpendicular.png)
 
 ```@docs
 midpoint
 intersection
 center3pts
+getnearestpointonline
 ```
 
 ## Arrows

@@ -1,7 +1,7 @@
 """
-Make a circle of radius `r` centred at `x`/`y`.
-
     circle(x, y, r, action=:nothing)
+
+Make a circle of radius `r` centred at `x`/`y`.
 
 `action` is one of the actions applied by `do_action`, defaulting to `:nothing`. You can
 also use `ellipse()` to draw circles and place them by their centerpoint.
@@ -15,18 +15,17 @@ function circle(x, y, r, action=:nothing)
 end
 
 """
-Make a circle centred at `pt`.
-
     circle(pt, r, action)
 
+Make a circle centred at `pt`.
 """
 circle(centerpoint::Point, r, action=:nothing) =
   circle(centerpoint.x, centerpoint.y, r, action)
 
 """
-Make a circle that passes through two points that define the diameter:
-
     circle(pt1::Point, pt2::Point, action=:nothing)
+
+Make a circle that passes through two points that define the diameter:
 """
 function circle(pt1::Point, pt2::Point, action=:nothing)
   center = midpoint(pt1, pt2)
@@ -35,47 +34,34 @@ function circle(pt1::Point, pt2::Point, action=:nothing)
 end
 
 """
-Find the radius and center point for three points lying on a circle.
-
     center3pts(a::Point, b::Point, c::Point)
 
-returns (centerpoint, radius) of a circle. Then you can use `circle()` to place a
+Find the radius and center point for three points lying on a circle.
+
+returns `(centerpoint, radius)` of a circle. Then you can use `circle()` to place a
 circle, or `arc()` to draw an arc passing through those points.
 
 If there's no such circle, then you'll see an error message in the console and the function
 returns `(Point(0,0), 0)`.
 """
 function center3pts(a::Point, b::Point, c::Point)
-# Find perpendicular bisectors of the segments connecting the first two and last two
-# points. If they bisectors intersect, that's the center of the circle. If they don't,
-# the points are colinear so they do not define a circle.
-
-  # Get the perpendicular bisector of (x1, y1) and (x2, y2).
-  x1 = (b.x + a.x) / 2
-  y1 = (b.y + a.y) / 2
-  dy1 = b.x - a.x
-  dx1 = -(b.y - a.y)
-
-  # Get the perpendicular bisector of (x2, y2) and (x3, y3).
-  x2 = (c.x + b.x) / 2
-  y2 = (c.y + b.y) / 2
-  dy2 = c.x - b.x
-  dx2 = -(c.y - b.y)
-
-  # See where the lines intersect.
-
-  dxy = (dx1 * dy2 - dy1 * dx2)
-  if isapprox(dxy, 0)
-    info("no circle passes through all three points")
-    return Point(0,0), 0
-  end
-
-  ox = (y1 * dx1 * dx2 + x2 * dx1 * dy2 - x1 * dy1 * dx2 - y2 * dx1 * dx2) / dxy
-  oy = (ox - x1) * dy1 / dx1 + y1
-  dx = ox - a.x
-  dy = oy - a.y
-  radius = sqrt(dx * dx + dy * dy)
-  return Point(ox, oy), radius
+    midAB = midpoint(a, b)
+    perpAB = perpendicular(a - b)
+    midBC = midpoint(b, c)
+    perpBC = perpendicular(b - c)
+    # do the lines intersect?
+    cp = crossproduct(perpAB, perpBC)
+    if isapprox(cp, 0)
+        info("yes, no circle passes through all three points")
+        return Point(0,0), 0
+    end
+    centerX = ((midAB.y * perpAB.x * perpBC.x) +
+               (midBC.x * perpAB.x * perpBC.y) -
+               (midAB.x * perpAB.y * perpBC.x) -
+               (midBC.y * perpAB.x * perpBC.x)) / cp
+    centerY = ((centerX - midAB.x) * perpAB.y / perpAB.x)  + midAB.y
+    radius = hypot(centerX - a.x, centerY - a.y)
+    return Point(centerX, centerY), radius
 end
 
 """

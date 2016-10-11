@@ -57,7 +57,7 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 """
-norm(p1::Point, p2::Point)
+    norm(p1::Point, p2::Point)
 
 Find the norm of two points (two argument form).
 """
@@ -66,18 +66,37 @@ function norm(p1::Point, p2::Point)
 end
 
 """
-point_line_distance(p::Point, a::Point, b::Point)
+    pointlinedistance(p::Point, a::Point, b::Point)
 
 Find the distance between a point `p` and a line between two points `a` and `b`.
 """
-function point_line_distance(p::Point, a::Point, b::Point)
+function pointlinedistance(p::Point, a::Point, b::Point)
     # area of triangle
     area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
     # length of the bottom edge
     dx = a.x - b.x
     dy = a.y - b.y
-    bottom = sqrt(dx * dx + dy * dy)
+    bottom = hypot(dx, dy)
     return area / bottom
+end
+
+"""
+    getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)
+
+Given a line from `pt1` to `pt2`, and `startpt` is the start of a perpendicular heading
+to meet the line, at what point does it hit the line?
+"""
+function getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)
+    # first convert line to normalized unit vector
+    dx = pt2.x - pt1.x
+    dy = pt2.y - pt1.y
+    mag = hypot(dx, dy)
+    dx /= mag
+    dy /= mag
+
+    # translate the point and get the dot product
+    lambda = (dx * (startpt.x - pt1.x)) + (dy * (startpt.y - pt1.y))
+    return Point((dx * lambda) + pt1.x, (dy * lambda) + pt1.y)
 end
 
 """
@@ -98,7 +117,7 @@ midpoint(pt::Array) = midpoint(pt[1], pt[2])
 """
     perpendicular(p::Point)
 
-`Point(p.y, -p.x)`
+Returns point `Point(p.y, -p.x)`.
 """
 
 function perpendicular(p::Point)
@@ -108,6 +127,7 @@ end
 """
     crossproduct(p1::Point, p2::Point)
 
+This is the *perp dot product*, really, not the crossproduct.
 `dot(p1, perpendicular(p2))`
 """
 
@@ -168,14 +188,15 @@ end
 
 Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
-This returns a tuple: `(boolean, point(0, 0))`.
+This returns a tuple: `(boolean, point(x, y))`.
 
 Keyword options and default values:
 
     crossingonly = false
 
-If `crossingonly = true`, returns `(false, intersectionpoint)` if the lines don't cross, but
-would intersect at `intersectionpoint` if continued beyond their current endpoints.
+returns `(true, Point(x, y))` if the lines intersect somewhere. If `crossingonly = true`,
+returns `(false, intersectionpoint)` if the lines don't cross, but would intersect at
+`intersectionpoint` if continued beyond their current endpoints.
 
     commonendpoints = false
 
@@ -234,7 +255,7 @@ function intersection(A::Point, B::Point, C::Point, D::Point;
     # (4) apply the discovered position to line A-B in the original coordinate system.
     intersectionpoint = Point(A.x + (ABpos * the_cos), A.y + (ABpos * the_sin))
 
-    #  (5) return false + ip if segments A-B and C-D don't cross.
+    # (5) return false + ip if segments A-B and C-D don't cross.
     if crossingonly
         if (ABpos < 0.0) || (ABpos > distAB)
             return (false, Point(0, 0))
