@@ -19,17 +19,18 @@ info("starting test clipping-test" );               include("clipping-test.jl")
 info("starting test color-blend-test" );            include("color-blend-test.jl")
 info("starting test ellipse test" );                include("ellipse-test.jl")
 
-# this test fails when followed by other tests in the same session, but not on its own.
+# this next test fails when followed by other tests in the same session, but not on its own.
 # Presumably there's some pointer or something in Cairo which isn't released properly
 # When Cairo is updated the test can be included.
-# reenabled test for Cairo.jl 0.2.35
 
+# reenabled test for Cairo.jl 0.2.35
 info("starting test get_path" );                   include("get_path.jl")
 info("starting test get_path_flat");               include("get_path_flat.jl")
 info("starting test heart-julia" );                include("heart-julia.jl")
 info("starting test images_with_alpha" );          include("images-with-alpha.jl")
 info("starting test julia_logo_draw_eps" );        include("julia-logo-draw-eps.jl")
 info("starting test julia_logo_draw" );            include("julia-logo-draw.jl")
+info("starting test julia logo testing" );         include("julia-logo-testing.jl")
 info("starting test line-intersection-options." ); include("line-intersection-options.jl")
 info("starting test luxor-test1") ;                include("luxor-test1.jl")
 info("starting test matrix-tests" );               include("matrix-tests.jl")

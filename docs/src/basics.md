@@ -8,7 +8,7 @@ Positions are usually specified either by x and y coordinates or a `Point(x, y)`
 
 ## Types
 
-The two main defined types are the `Point` and the `Drawing`. The Point type holds two coordinates, `x` and `y`:
+The main defined types are `Point`, `Drawing`, and `Tiler`. The Point type holds two coordinates, `x` and `y`:
 
 ```
 Point(12.0, 13.0)
@@ -16,7 +16,7 @@ Point(12.0, 13.0)
 
 It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
-The other is `Drawing`, which is how you create new drawings.
+`Drawing` is how you create new drawings. And you can divide up the drawing area into tiles, using `Tiler`.
 
 ## Drawings and files
 
@@ -56,7 +56,7 @@ The origin (0/0) starts off at the top left: the x axis runs left to right, and 
 
 The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
-`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. Here, the first `background()` filled the entire drawing; the calls in the loop fill only the active clipping region:
+`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. Here, the first `background()` filled the entire drawing; the calls in the loop fill only the active clipping region, a tile defined by the `Tiler` iterator:
 
 ```@example
 using Luxor # hide
@@ -143,7 +143,7 @@ grestore
 
 ## Simple shapes
 
-Functions for making shapes include `circle()`, `ellipse()`, `squircle()`, `arc()`, `carc()`, `curve()`, `sector()`, `rect()`, `pie()`, and `box()`. There's also `ngon()` and `star()`, listed under Polygons, below.
+Functions for making shapes include `rect()`, `box()`, `circle()`, `ellipse()`, `squircle()`, `arc()`, `carc()`, `curve()`, `sector()`, and `pie()`. There's also `ngon()` and `star()`, listed under Polygons, below.
 
 ## Rectangles and boxes
 
@@ -157,7 +157,8 @@ polybbox
 
 ## Circles, ellipses, and the like
 
-There are various ways to make circles, including by center and radius, through two points, or passing through three points.
+There are various ways to make circles, including by center and radius, through two points:
+
 
 ```@example
 using Luxor # hide
@@ -178,6 +179,8 @@ finish() # hide
 ```
 
 ![circles](figures/circles.png)
+
+Or passing through three points:
 
 ```@example
 using Luxor # hide
@@ -225,6 +228,31 @@ finish() # hide
 ```@docs
 circle
 ellipse
+```
+
+`circlepath()` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/circle-path.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(4)
+tiles = Tiler(600, 250, 1, 5)
+for (pos, n) in tiles
+randomhue()
+circlepath(pos, tiles.tilewidth/2, :path)
+newsubpath()
+circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
+end
+finish() # hide
+```
+
+![circles as paths](figures/circle-path.png)
+
+```@docs
+circlepath
 ```
 
 A sector (strictly an "annular sector") has an inner and outer radius, as well as start and end angles.
@@ -289,7 +317,7 @@ finish() # hide
 squircle
 ```
 
-For a simple rounded rectangle, smooth the corners of a box, like so:
+Or for a simple rounded rectangle, smooth the corners of a box, like so:
 
 ```@example
 using Luxor # hide
@@ -303,34 +331,19 @@ finish() # hide
 ```
 ![rounded rect](figures/round-rect.png)
 
-`circlepath()` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
 
-```@example
-using Luxor # hide
-Drawing(600, 250, "../figures/circle-path.png") # hide
-origin() # hide
-background("white") # hide
-sethue("black") # hide
-setline(4)
-tiles = Tiler(600, 250, 1, 5)
-for (pos, n) in tiles
-    randomhue()
-    circlepath(pos, tiles.tilewidth/2, :path)
-    newsubpath()
-    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
-end
-finish() # hide
-```
-
-![circles as paths](figures/circle-path.png)
-
-```@docs
-circlepath
-```
-
-## Lines, arcs, and curves
+## Lines and positions
 
 There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
+
+```@docs
+move
+rmove
+line
+rline
+```
+
+## Arcs and curves
 
 `curve()` constructs Bèzier curves from control points:
 
@@ -386,10 +399,6 @@ finish() # hide
 ![arc](figures/arc2r.png)
 
 ```@docs
-move
-rmove
-line
-rline
 arc
 arc2r
 carc
@@ -398,10 +407,40 @@ curve
 
 ### Geometry tools
 
-You can find the midpoint between two points using `midpoint()`. `intersection()` finds the intersection of two lines.
+You can find the midpoint between two points using `midpoint()`. This places a small pentagon at the midpoint of each side of a larger pentagon.
 
-`center3pts()` finds the radius and center point of a circle passing through three points
-which you can then use with functions such as `circle()` or `arc2r()`.
+```@example
+using Luxor # hide
+Drawing(700, 220, "../figures/midpoint.png") # hide
+origin() # hide
+background("white") # hide
+sethue("red")
+ngon(O, 100, 5, 0, :stroke)
+
+sethue("darkgreen")
+p5 = ngon(O, 100, 5, 0, vertices=true)
+
+for i in eachindex(p5)
+    pt1 = p5[mod1(i, 5)]
+    pt2 = p5[mod1(i + 1, 5)]
+    midp = midpoint(pt1, pt2)
+    ngon(midp, 20, 5, 0, :fill)
+end
+finish() # hide
+```
+![arc](figures/midpoint.png)
+
+```@docs
+midpoint
+```
+
+`center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
+
+```@docs
+center3pts
+```
+
+`intersection()` finds the intersection of two lines.
 
 ```@example
 using Luxor # hide
@@ -420,6 +459,9 @@ finish() # hide
 ```
 ![arc](figures/intersection.png)
 
+```@docs
+intersection
+```
 `getnearestpointonline()` finds perpendiculars.
 
 ```@example
@@ -437,9 +479,6 @@ finish() # hide
 ![arc](figures/perpendicular.png)
 
 ```@docs
-midpoint
-intersection
-center3pts
 getnearestpointonline
 ```
 
@@ -473,7 +512,7 @@ The `getpath()` function gets the current Cairo path as an array of element type
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../figures/get-path") # hide
+Drawing(400, 250, "../figures/get-path.png") # hide
 background("white") # hide
 background("white") # hide
 origin() # hide
@@ -497,7 +536,7 @@ for i in 5:5:35
 end
 finish() # hide
 ```
-![get path](figures/get-path)
+![get path](figures/get-path.png)
 
 ```@docs
 newpath
@@ -505,4 +544,44 @@ newsubpath
 closepath
 getpath
 getpathflat
+```
+
+## Julia graphics
+
+A couple of functions in Luxor provide you with instant access to the Julia logo, and the
+three colored circles:
+
+```@example
+using Luxor # hide
+Drawing(750, 250, "../figures/julia-logo.png")  # hide
+
+origin()  # hide
+background("white") # hide
+
+for (pos, n) in Tiler(750, 250, 1, 2)
+    gsave()
+    translate(pos - Point(150, 100))
+    if n == 1
+        julialogo()
+        fill()
+    elseif n == 2
+        julialogo(action=:clip)
+        for i in 1:500
+            gsave()
+            translate(rand(0:400), rand(0:250))
+            juliacircles(10)
+            grestore()
+        end
+        clipreset()
+    end
+    grestore()
+end
+finish() # hide
+```
+
+![get path](figures/julia-logo.png)
+
+```@docs
+julialogo
+juliacircles
 ```

@@ -2,8 +2,6 @@
 
 using Luxor
 
-include(dirname(@__FILE__) * "/julia-logo.jl")
-
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
     gsave()
@@ -45,7 +43,7 @@ end
 function heart_with_julias(x=0, y=0)
     gsave()
     translate(x,y)
-    setcolor("lavenderblush") # yes, it's a color
+    setcolor("lavenderblush")
     heart()
     fillpreserve()
     clip()

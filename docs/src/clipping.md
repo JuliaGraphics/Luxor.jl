@@ -23,20 +23,16 @@ clippreserve
 clipreset
 ```
 
-This example loads a file containing a function that draws the Julia logo. It can create paths but doesn't necessarily apply an action to them; they can therefore be used as a mask for clipping subsequent graphics, which in this example are  randomly-colored circles:
+This example uses the built-in function that draws the Julia logo. The `clip` action lets you use the shapes as a mask for clipping subsequent graphics, which in this example are randomly-colored circles:
 
 ![julia logo mask](figures/julia-logo-mask.png)
 
 ```julia
-# load functions to draw the Julia logo
-include("../test/julia-logo.jl")
-
 function draw(x, y)
-    foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
+    foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     gsave()
     translate(x-100, y)
-    julialogo(false, true)      # add paths for logo
-    clip()                      # use paths for clipping
+    julialogo(action=:clip)
     for i in 1:500
         sethue(foregroundcolors[rand(1:end)])
         circle(rand(-50:350), rand(0:300), 15, :fill)

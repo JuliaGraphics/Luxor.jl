@@ -2,8 +2,6 @@
 
 using Luxor, Colors
 
-include("julia-logo.jl")
-
 function spiral()
     gsave()
     scale(.3, .3)
@@ -17,6 +15,7 @@ function spiral()
         grestore()
     end
     grestore()
+    juliacircles(20)
 end
 
 function expandingspiral()
@@ -46,7 +45,7 @@ function dropshadow()
     for i in 1:steps
         sethue(gramp[i])
         translate(-0.6,-0.5)
-        julialogo(false)
+        julialogo(color=false)
     end
     julialogo()
     grestore()
@@ -64,7 +63,7 @@ function colorgrid()
       setcolor(color(cols[n]))
       translate(pos)
       scale(0.3, 0.3)
-      julialogo(false)
+      julialogo(color=false)
       grestore()
     end
 
