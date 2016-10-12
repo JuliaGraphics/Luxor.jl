@@ -1,8 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
-
-include("julia-logo.jl")
+using Luxor, Colors
 
 function spiral_logo()
     gsave()
@@ -43,8 +41,8 @@ function dropshadow()
     setopacity(0.1)
     for i in 1:steps
         sethue(gramp[i])
-        translate(-0.6,-0.5)
-        julialogo(false)
+        translate(-0.6, -0.5)
+        julialogo(color=false)
     end
     julialogo()
     grestore()
@@ -62,7 +60,7 @@ function colorgrid()
             setcolor(color(cols[c+=1]))
             translate(row, column)
             scale(0.3, 0.3)
-            julialogo(false)
+            julialogo(color=false)
             grestore()
         end
     end

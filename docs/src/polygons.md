@@ -391,3 +391,30 @@ The function is intended for simple cases, and it can go wrong if pushed too far
 ```@docs
 offsetpoly
 ```
+
+### Fitting splines
+
+The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polyfit.png") # hide
+origin() # hide
+background("white") # hide
+srand(42) # hide
+
+pts = [Point(x, rand(-100:100)) for x in -280:30:280]
+setopacity(0.7)
+sethue("red")
+prettypoly(pts, :none, () -> circle(O, 5, :fill))
+sethue("darkmagenta")
+poly(polyfit(pts, 200), :stroke)
+
+finish() # hide
+```
+
+![offset poly](figures/polyfit.png)
+
+```@docs
+polyfit
+```

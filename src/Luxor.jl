@@ -15,6 +15,7 @@ include("Tiler.jl")
 include("arrows.jl")
 include("text.jl")
 include("blends.jl")
+include("juliagraphics.jl")
 
 export Drawing, currentdrawing, paper_sizes,
     Tiler,
@@ -55,7 +56,9 @@ export Drawing, currentdrawing, paper_sizes,
     blendmatrix, rotation_matrix, scaling_matrix, translation_matrix,
     cairotojuliamatrix, juliatocairomatrix,
 
-    readpng, placeimage
+    readpng, placeimage,
+
+    julialogo, juliacircles
 
 # as of version 0.4, we still share fill() and scale() with Base.
 

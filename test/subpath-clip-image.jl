@@ -27,7 +27,7 @@ end
 clippreserve()
 
 # draw image 'through' clipping mask
-placeimage(image, Point(-w/2, -h/2))
+placeimage(image, Point(-w/2, -h/2), 1)
 
 clipreset()
 
