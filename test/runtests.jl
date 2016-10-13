@@ -3,9 +3,6 @@ using Compat
 if @compat is_unix()
   cd("/tmp")
 end
-if @compat is_apple()
-  cd("/tmp")
-end
 
 info(" running tests in: $(pwd())")
 

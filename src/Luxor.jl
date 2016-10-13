@@ -17,6 +17,8 @@ include("text.jl")
 include("blends.jl")
 include("juliagraphics.jl")
 
+global currentdrawing
+
 export Drawing, currentdrawing, paper_sizes,
     Tiler,
     rescale,
@@ -52,7 +54,7 @@ export Drawing, currentdrawing, paper_sizes,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
-    Blend, setblend, blend, addstop,
+    Blend, setblend, blend, addstop, blend_adjust,
     blendmatrix, rotation_matrix, scaling_matrix, translation_matrix,
     cairotojuliamatrix, juliatocairomatrix,
 
@@ -95,8 +97,9 @@ type Drawing
             the_surfacetype = "svg"
             the_cr          = Cairo.CairoContext(the_surface)
         end
+        info("drawing '$f' ($w w x $h h) created in $(pwd())")
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
-        return "drawing '$f' ($w w x $h h) created in $(pwd())"
+        return currentdrawing
     end
 end
 

@@ -407,7 +407,9 @@ curve
 
 ### Geometry tools
 
-You can find the midpoint between two points using `midpoint()`. This places a small pentagon at the midpoint of each side of a larger pentagon.
+You can find the midpoint between two points using `midpoint()`.
+
+The following code places a small pentagon at the midpoint of each side of a larger pentagon:
 
 ```@example
 using Luxor # hide
@@ -508,7 +510,7 @@ arrow
 
 A path is a group of points. A path can have subpaths (which can form holes).
 
-The `getpath()` function gets the current Cairo path as an array of element types and points. `getpathflat()` gets the current path as an array of type/points with curves flattened to line segments.
+The `getpath()` function gets the current path as an array of elements, lines and curves. `getpathflat()` gets the current path as an array of lines with all curves flattened to line segments.
 
 ```@example
 using Luxor # hide
@@ -554,7 +556,7 @@ three colored circles:
 ```@example
 using Luxor # hide
 Drawing(750, 250, "../figures/julia-logo.png")  # hide
-
+srand(42) # hide
 origin()  # hide
 background("white") # hide
 
@@ -563,7 +565,6 @@ for (pos, n) in Tiler(750, 250, 1, 2)
     translate(pos - Point(150, 100))
     if n == 1
         julialogo()
-        fill()
     elseif n == 2
         julialogo(action=:clip)
         for i in 1:500

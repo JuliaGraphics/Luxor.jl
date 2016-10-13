@@ -20,17 +20,17 @@ placing text doesn't affect the current point.
 However, the `:valign` doesn't work properly because we're using
 Cairo's so-called "toy" interface... :(
 """
-function text(t, x=0, y=0; halign=:left, valign=:baseline)
-    wdfactor = 0
-    htfactor = 0
+function text(t, x=0.0, y=0.0; halign=:left, valign=:baseline)
+    wdfactor = 0.0
+    htfactor = 0.0
     textents = textextents(t)
-    halign == :left         && (wdfactor = 0  )
+    halign == :left         && (wdfactor = 0.0)
     halign == :center       && (wdfactor = 0.5)
-    halign == :right        && (wdfactor = 1  )
-    valign == :baseline     && (htfactor = 0  )
-    valign == :top          && (htfactor = -1)
+    halign == :right        && (wdfactor = 1.0)
+    valign == :baseline     && (htfactor = 0.0)
+    valign == :top          && (htfactor = -1.0)
     valign == :middle       && (htfactor = 0.5)
-    valign == :bottom       && (htfactor = 1  )
+    valign == :bottom       && (htfactor = 1.0)
     textpointx = x - (wdfactor * (textents[3]))
     textpointy = y - (htfactor * textents[4])
     gsave()
@@ -150,8 +150,7 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
     spiral_ring_step = 0,
     letter_spacing = 0,
     spiral_in_out_shift = 0,
-    clockwise = true,
-    centered = false
+    clockwise = true
     )
     refangle = start_angle
     current_radius = start_radius
@@ -213,15 +212,15 @@ function textcurvecentered(the_text, start_angle, start_radius, center::Point;
       letter_spacing = 0,
       baselineshift = 0
       )
-    textbox = textextents(the_text)
-    textwidth = textbox[3]                         # width of text
+    atextbox = textextents(the_text)
+    atextwidth = atextbox[3]                         # width of text
     if clockwise
         baselineradius = start_radius + baselineshift  # could be adjusted if we knew font height
     else
         baselineradius = start_radius - baselineshift  # could be adjusted if we knew font height
     end
 
-    theta = textwidth/baselineradius               # find angle
+    theta = atextwidth/baselineradius               # find angle
     if clockwise
         starttextangle = start_angle - (theta/2)
     else
