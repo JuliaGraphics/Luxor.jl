@@ -1,0 +1,65 @@
+        - #!/usr/bin/env julia
+        - 
+        - using Luxor
+        - 
+        - function run_line_intersection_test(fname)
+        -     Drawing(2000, 2000, "/tmp/line-intersection-options.pdf")
+      128     origin()
+        0     sethue("magenta")
+        0     setline(.3)
+        0     fontsize(4)
+        0     tiles = Tiler(1000, 1000, 10, 10)
+    64064     for (pos, n) in tiles
+    22400         gsave()
+        0         randomhue()
+        0         setlinecap(["butt", "round", "square"][rand(1:end)])
+        0         setlinejoin(["round", "miter", "bevel"][rand(1:end)])
+     6400         translate(pos)
+    19200         topleft = Point(-tiles.tilewidth/2, -tiles.tileheight/2)
+    12800         bottomright = Point(tiles.tilewidth/2, tiles.tileheight/2)
+        0         a = randompoint(topleft, bottomright)
+        0         b = randompoint(topleft, bottomright)
+        0         c = randompoint(topleft, bottomright)
+        0         d = randompoint(topleft, bottomright)
+     6400         line(a, b, :stroke)
+     6400         line(c, d, :stroke)
+        0         if n % 2 == 0
+     3200             (flag, ip) = intersection(a, b, c, d, crossingonly=true)
+        0             text("crossingonly", O)
+        -         else
+     3200             (flag, ip) = intersection(a, b, c, d, crossingonly=false)
+        0             text("any intersection", O)
+        -         end
+        0         if flag
+    15792             gsave()
+        0             setline(.5)
+        0             setdash("dot")
+   107008             if norm(a, ip) < norm(b, ip)
+     1280                 arrow(a, ip, arrowheadlength=1)
+        -             else
+        0                 arrow(b, ip, arrowheadlength=1)
+        -             end
+   107136             if norm(c, ip) < norm(d, ip)
+     1152                 arrow(c, ip, arrowheadlength=1)
+        -             else
+        0                 arrow(d, ip, arrowheadlength=1)
+        -             end
+        0             circle(ip, 2, :fill)
+        0             grestore()
+        -         else
+     5664             if ip != O
+        0                 circle(ip, 2, :stroke)
+        -             end
+    22656             dist = norm(O, ip)
+        0             if dist > 500
+        0                 text("intersection point is $(dist) units away", O)
+        -             end
+        -         end
+        0         grestore()
+        -     end
+        0     finish()
+      704     println("line-intersection-options-test saved in $(fname)")
+        - end
+        - 
+        - run_line_intersection_test("/tmp/line-intersection-options.pdf")
+        - 

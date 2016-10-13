@@ -95,6 +95,38 @@ function setblend(b::Blend)
 end
 
 """
+    blend_adjust(ablend, center::Point, xscale, yscale)
+
+Modify an existing blend by scaling and translating it so that it will fill a shape properly
+even if the position of the shape is nowhere near the original location of the blend's
+definition.
+
+For example, if your blend definition was this (notice the `1`)
+
+    blend_gold_magenta = blend(
+            Point(0, 0), 0,                   # first circle center and radius
+            Point(0, 0), 1,                   # second circle center and radius
+            "gold",
+            "magenta"
+            )
+
+you can use it in a shape that's 100 units across and centered at `pos`, by calling this:
+
+    blend_adjust(blend_gold_magenta, -Point(pos.x, pos.y), 100, 100)
+
+then use `setblend()`:
+
+    setblend(blend_gold_magenta)
+
+"""
+function blend_adjust(ablend, center::Point, xscale, yscale)
+    blendmatrix(ablend,
+        juliatocairomatrix(scaling_matrix(1/xscale, 1/yscale) *
+        translation_matrix(-center.x, -center.y) *
+        cairotojuliamatrix([1 0 0 1 0 0])))
+end
+
+"""
     blendmatrix(b::Blend, m)
 
 Set the matrix of a blend.

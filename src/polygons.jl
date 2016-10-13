@@ -359,8 +359,8 @@ function polysplit(pointlist, p1, p2)
     for i in 1:l
         vertex1 = newpointlist[mod1(i, l)]
         d = pointlinedistance(vertex1, p1, p2)
-        cp = (p2.x - p1.x) * (vertex1.y - p1.y) > (p2.y - p1.y) * (vertex1.x - p1.x)
-        if cp
+        centerpoint = (p2.x - p1.x) * (vertex1.y - p1.y) > (p2.y - p1.y) * (vertex1.x - p1.x)
+        if centerpoint
             push!(poly1, vertex1)
             abs(d) < 0.1 && push!(poly2, vertex1)
         else
@@ -417,8 +417,8 @@ function prettypoly(pointlist::Array, action=:nothing, vertex_function=() -> cir
 end
 
 function getproportionpoint(point::Point, segment, length, dx, dy)
-    factor = segment / length
-    return Point((point.x - dx * factor), (point.y - dy * factor))
+    scalefactor = segment / length
+    return Point((point.x - dx * scalefactor), (point.y - dy * scalefactor))
 end
 
 function drawroundedcorner(cornerpoint, p1, p2, radius, path; debug=false)
@@ -438,10 +438,10 @@ function drawroundedcorner(cornerpoint, p1, p2, radius, path; debug=false)
     # Check the segment
     length1 = hypot(dx1, dy1)
     length2 = hypot(dx2, dy2)
-    length = min(length1, length2)
-    if segment > length
-        segment = length
-        radius = length * t
+    seglength = min(length1, length2)
+    if segment > seglength
+        segment = seglength
+        radius = seglength * t
     end
 
     #  points of intersection are calculated by the proportion between

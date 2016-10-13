@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Colors
 
 Drawing(1200, 1200, "/tmp/color-blends-2.pdf")
 origin()
@@ -42,6 +42,22 @@ for (pos, n) in tiles
     setblend(blendrad)
     text("radial", O-5)
     grestore()
+end
+
+sethue("black")
+blend_gold_black = blend(
+        Point(0, 0), 0,                   # first circle center and radius
+        Point(0, 0), 1,                   # second circle center and radius
+        "gold", "black")
+
+translate(0, -550)
+
+tiles = Tiler(1000, 200, 1, 15, margin=20)
+
+for (pos, n) in tiles
+    blend_adjust(blend_gold_black, pos, tiles.tilewidth/2, tiles.tilewidth/2)
+    setblend(blend_gold_black)
+    ellipse(pos, tiles.tilewidth, tiles.tilewidth, :fill)
 end
 
 finish()

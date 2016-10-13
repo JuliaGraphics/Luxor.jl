@@ -8,7 +8,7 @@ For color definitions and conversions, you can use Colors.jl.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
 
-Named colors, sush as "gold", or "lavender", can be found in Colors.color_names. This code shows the first 600 colors.
+Named colors, such as "gold", or "lavender", can be found in Colors.color_names. This code shows the first 600 colors.
 
 ```@example
 using Luxor, Colors # hide
@@ -185,7 +185,7 @@ finish() # hide
 ```
 ![blends 1](figures/color-blends-translate-1.png)
 
-Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
+Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape. An alternative is to use `blend_adjust()`.
 
 ```@example
 using Luxor # hide
@@ -214,4 +214,5 @@ finish() # hide
 ```@docs
 blend
 addstop
+blend_adjust
 ```
