@@ -2,7 +2,7 @@ using Documenter, Luxor
 
 makedocs(
   modules = [Luxor],
-  format = Documenter.Formats.HTML,
+  format = :html,
   sitename = "Luxor",
   pages    = Any[
     "Introduction to Luxor"   => "index.md",

@@ -10,8 +10,8 @@ origin() # hide
 sethue("grey50")
 setdash("dotted")
 circle(O, 100, :stroke)
-sethue("magenta")
 circle(O, 100, :clip)
+sethue("magenta")
 box(O, 125, 200, :fill)
 finish() # hide
 ```

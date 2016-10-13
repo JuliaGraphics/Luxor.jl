@@ -97,7 +97,7 @@ type Drawing
             the_surfacetype = "svg"
             the_cr          = Cairo.CairoContext(the_surface)
         end
-        info("drawing '$f' ($w w x $h h) created in $(pwd())")
+        # info("drawing '$f' ($w w x $h h) created in $(pwd())")
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
         return currentdrawing
     end
@@ -595,7 +595,7 @@ Move relative to current position by the `pt`'s x and y:
 
     rmove(pt)
 """
-rmove(x, y)     = Cairo.rel_move(currentdrawing.cr,x, y)
+rmove(x, y)     = Cairo.rel_move_to(currentdrawing.cr,x, y)
 rmove(pt)       = rmove(pt.x, pt.y)
 
 """
