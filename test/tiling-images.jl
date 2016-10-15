@@ -54,4 +54,4 @@ for (pos, n) in pagetiles
   addimagetile(imagelist[n], pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, cropping=true)
 end
 finish()
-println("finished test: output in $(fname)")
+println("...finished test: output in $(fname)")

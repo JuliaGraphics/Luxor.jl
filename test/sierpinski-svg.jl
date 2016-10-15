@@ -34,4 +34,4 @@ end
 cols = distinguishable_colors(8)
 fname = "/tmp/sierpinski.svg"
 draw(fname, 8)
-println("finished test: output in $(fname)")
+println("...finished test: output in $(fname)")

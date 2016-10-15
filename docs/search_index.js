@@ -925,7 +925,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.polyfit",
     "category": "Function",
-    "text": "polyfit(plist::Array, npoints=30)\n\nBuld a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n"
+    "text": "polyfit(plist::Array, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n"
 },
 
 {
@@ -1197,7 +1197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Clipping",
     "title": "Clipping",
     "category": "section",
-    "text": "Use clip() to turn the current path into a clipping region, masking any graphics outside the path. clippreserve() keeps the current path, but also uses it as a clipping region. clipreset() resets it. :clip is also an action for drawing functions like circle().using Luxor # hide\nDrawing(400, 250, \"../figures/simpleclip.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"grey50\")\nsetdash(\"dotted\")\ncircle(O, 100, :stroke)\ncircle(O, 100, :clip)\nsethue(\"magenta\")\nbox(O, 125, 200, :fill)\nfinish() # hide(Image: simple clip)clip\nclippreserve\nclipresetThis example uses the built-in function that draws the Julia logo. The clip action lets you use the shapes as a mask for clipping subsequent graphics, which in this example are randomly-colored circles:(Image: julia logo mask)function draw(x, y)\n    foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)\n    gsave()\n    translate(x-100, y)\n    julialogo(action=:clip)\n    for i in 1:500\n        sethue(foregroundcolors[rand(1:end)])\n        circle(rand(-50:350), rand(0:300), 15, :fill)\n    end\n    grestore()\nend\n\ncurrentwidth = 500 # pts\ncurrentheight = 500 # pts\nDrawing(currentwidth, currentheight, \"/tmp/clipping-tests.pdf\")\norigin()\nbackground(\"white\")\nsetopacity(.4)\ndraw(0, 0)\n\nfinish()\npreview()"
+    "text": "Use clip() to turn the current path into a clipping region, masking any graphics outside the path. clippreserve() keeps the current path, but also uses it as a clipping region. clipreset() resets it. :clip is also an action for drawing functions like circle().using Luxor # hide\nDrawing(400, 250, \"../figures/simpleclip.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"grey50\")\nsetdash(\"dotted\")\ncircle(O, 100, :stroke)\ncircle(O, 100, :clip)\nsethue(\"magenta\")\nbox(O, 125, 200, :fill)\nfinish() # hide(Image: simple clip)clip\nclippreserve\nclipresetThis example uses the built-in function that draws the Julia logo. The clip action lets you use the shapes as a mask for clipping subsequent graphics, which in this example are randomly-colored circles:(Image: julia logo mask)function draw(x, y)\n    foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)\n    gsave()\n    translate(x-100, y)\n    julialogo(action=:clip)\n    for i in 1:500\n        sethue(foregroundcolors[rand(1:end)])\n        circle(rand(-50:350), rand(0:300), 15, :fill)\n    end\n    grestore()\nend\n\ncurrentwidth = 500 # pts\ncurrentheight = 500 # pts\nDrawing(currentwidth, currentheight, \"/tmp/clipping-tests.pdf\")\norigin()\nbackground(\"white\")\nsetopacity(.4)\ndraw(0, 0)\n\nfinish()\npreview()"
 },
 
 {
@@ -1390,6 +1390,62 @@ var documenterSearchIndex = {"docs": [
     "title": "Turtle graphics",
     "category": "section",
     "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.(Image: Turtle)using Luxor\n\nDrawing(1200, 1200, \"/tmp/turtles.png\")\norigin()\nbackground(\"black\")\n\n# let's have two turtles\nraphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))\n\nsetopacity(0.95)\nsetline(6)\n\nPencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)\nReposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)\nMessage(raphael, \"Raphael\");            Message(michaelangelo, \"Michaelangelo\")\nReposition(raphael, 0, -200);           Reposition(michaelangelo, 0, 200)\n\npace = 10\nfor i in 1:5:400\n    for turtle in [raphael, michaelangelo]\n        Circle(turtle, 3)\n        HueShift(turtle, rand())\n        Forward(turtle, pace)\n        Turn(turtle, 30 - rand())\n        Message(turtle, string(i))\n        pace += 1\n    end\nend\n\nfinish()\npreview()Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
+},
+
+{
+    "location": "animation.html#",
+    "page": "Animation",
+    "title": "Animation",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "animation.html#Animation-helper-functions-1",
+    "page": "Animation",
+    "title": "Animation helper functions",
+    "category": "section",
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can be stitched together to form a moving animation, such as a GIF.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define the background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of frame framenumber. framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates the frames in the given framerange and saves them in a temporary directory."
+},
+
+{
+    "location": "animation.html#Luxor.Sequence",
+    "page": "Animation",
+    "title": "Luxor.Sequence",
+    "category": "Type",
+    "text": "The Sequence type and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\nProvide width, height, and a title to the Sequence constructor:\n\ndemo = Sequence(400, 400, \"test\")\n\nThen define suitable backdrop and frame functions.\n\nFinally run the animate() function, calling those functions.\n\n\n\n"
+},
+
+{
+    "location": "animation.html#Luxor.animate",
+    "page": "Animation",
+    "title": "Luxor.animate",
+    "category": "Function",
+    "text": "animate(seq::Sequence, frames::Range, backdrop_func=(seq), frame_func=(seq, n, range);\n    createanimation = true)\n\nCreate frames in the range frames, using a backdrop function and a frame function.\n\nThe backdrop function is called for every frame.\n\nfunction backdrop_f(demo)\n...\nend\n\nThe frame generating function draws the graphics for a single frame.\n\nfunction frame_f(demo, framenumber, framerange)\n...\nend\n\nThen call animate() like this:\n\nanimate(demo, 1:100, backdrop_f, frame_f)\n\nIf createanimation is true, the function tries to call ffmpeg on the resulting frames to build the animation.\n\n\n\n"
+},
+
+{
+    "location": "animation.html#Example-1",
+    "page": "Animation",
+    "title": "Example",
+    "category": "section",
+    "text": "using Luxor\n\ndemo = Sequence(400, 400, \"test\")\n\nfunction backdrop_f(demo)\n    background(\"black\")\nend\n\nfunction frame_f(demo, framenumber, framerange)\n    xpos = 100 * cos(framenumber/100)\n    ypos = 100 * sin(framenumber/100)\n    sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))\n    circle(xpos, ypos, 90, :stroke)\n    gsave()\n    translate(xpos, ypos)\n    juliacircles(50)\n    grestore()\n    text(string(\"frame $framenumber of $(length(framerange))\"), O)\nend\n\nanimate(demo, 1:630, backdrop_f, frame_f, createanimation=true)(Image: animation example)Sequence\nanimate"
+},
+
+{
+    "location": "animation.html#Making-the-animation-1",
+    "page": "Animation",
+    "title": "Making the animation",
+    "category": "section",
+    "text": "Building an animation such as a GIF or MOV file is best done outside Julia, using something like ffmpeg, with its thousands of options, which include frame-rate adjustment and color palette tweaking. The animate function has a go at running it on Unix platforms, and assumes that ffmpeg is installed. Inside animate(), the first pass creates a color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen\n-y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png\n-i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)"
+},
+
+{
+    "location": "animation.html#Passing-information-to-later-frames-1",
+    "page": "Animation",
+    "title": "Passing information to later frames",
+    "category": "section",
+    "text": "Sometimes you want some information to be passed from frame to frame, such as the updated position of a graphical shape. Currently, the only way to do this is to store things in the sequence's parameters dictionary.For example, for a \"bouncing ball\" animation, you can store the current position and direction of the ball in the Sequence dictionary, then recall them at the start of the next frame.function frameF(seq::Sequence, framenumber, framerange)\n    pos          = seq.parameters[\"pos\"]\n    direction    = seq.parameters[\"direction\"]\n    spriteradius = seq.parameters[\"spriteradius\"]\n    ...\n    seq.parameters[\"pos\"]          = newpos\n    seq.parameters[\"direction\"]    = newdirection\n    seq.parameters[\"spriteradius\"] = spriteradius\nend(Image: bouncing ball)"
 },
 
 {

@@ -32,4 +32,4 @@ placeimage(image, Point(-w/2, -h/2), 1)
 clipreset()
 
 finish()
-println("finished test: output in $(fname)")
+println("...finished test: output in $(fname)")

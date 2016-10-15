@@ -152,7 +152,7 @@ function point_arithmetic_test(fname, npoints=20)
 
     finish()
 
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 general_tests()

@@ -20,7 +20,7 @@ function star_test(fname)
            polysmooth(p, randomsmoothing, :fill, debug=true)
      end
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 function random_test(fname)
@@ -46,7 +46,7 @@ function random_test(fname)
        sethue("red")
     end
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 star_test("/tmp/polysmooth-stars.pdf")

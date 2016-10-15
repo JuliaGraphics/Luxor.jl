@@ -52,4 +52,4 @@ Reposition(raphael, 500, -180);         Reposition(michaelangelo, 500, 180)
 Message(raphael, "Raphael");            Message(michaelangelo, "Michaelangelo")
 
 finish()
-println("finished test: output in $(fname)")
+println("...finished test: output in $(fname)")

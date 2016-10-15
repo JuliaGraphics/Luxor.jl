@@ -39,7 +39,7 @@ function point_inside_polygon(fname)
     end
 
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 point_inside_polygon("/tmp/point-inside-polygon.pdf")

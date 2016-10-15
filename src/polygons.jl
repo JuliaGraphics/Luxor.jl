@@ -592,7 +592,7 @@ end
 """
     polyfit(plist::Array, npoints=30)
 
-Buld a polygon that constructs a B-spine approximation to it. The resulting list of points
+Build a polygon that constructs a B-spine approximation to it. The resulting list of points
 makes a smooth path that runs between the first and last points.
 """
 function polyfit(plist::Array, npoints=30)

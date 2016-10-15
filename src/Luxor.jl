@@ -16,6 +16,7 @@ include("arrows.jl")
 include("text.jl")
 include("blends.jl")
 include("juliagraphics.jl")
+include("animate.jl")
 
 global currentdrawing
 
@@ -60,7 +61,9 @@ export Drawing, currentdrawing, paper_sizes,
 
     readpng, placeimage,
 
-    julialogo, juliacircles
+    julialogo, juliacircles,
+
+    Sequence, animate, backdrop, frame
 
 # as of version 0.4, we still share fill() and scale() with Base.
 

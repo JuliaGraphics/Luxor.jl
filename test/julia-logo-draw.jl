@@ -103,7 +103,7 @@ function draw_julia_logos(fname)
     boxes_and_rectangles(O)
 
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 draw_julia_logos("/tmp/julia-logo-draw.png")

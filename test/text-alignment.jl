@@ -49,7 +49,7 @@ function text_alignment_tests(fname)
     fontsize(8)
     text(join(legend, "; "), 0, 600, halign=:center)
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 text_alignment_tests("/tmp/text-alignment-tests.pdf")

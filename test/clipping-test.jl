@@ -31,7 +31,7 @@ function clipping_test(fname)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     drawlogoclip(0, 0)
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 clipping_test("/tmp/clipping-tests.png")

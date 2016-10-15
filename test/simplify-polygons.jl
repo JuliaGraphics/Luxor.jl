@@ -61,7 +61,7 @@ function simplify_poly(fname)
     sinecurves()
     test(pagewidth, pageheight)
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 @time simplify_poly("/tmp/simplify-poly.pdf")
