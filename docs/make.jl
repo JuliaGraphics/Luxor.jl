@@ -15,6 +15,7 @@ makedocs(
     "Clipping"                => "clipping.md",
     "Images"                  => "images.md",
     "Turtle graphics"         => "turtle.md",
+    "Animation"               => "animation.md",
     "More examples"           => "moreexamples.md",
     "Index"                   => "functionindex.md"
     ]

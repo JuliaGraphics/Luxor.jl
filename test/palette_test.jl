@@ -44,7 +44,7 @@ function palette_test(fname)
     draw_color_bars(720,  20, 50, diverging_palette(120, 140, 50, mid=1.0), "diverging 120 140 mid 1.0")
 
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 palette_test("/tmp/color-palette.pdf")

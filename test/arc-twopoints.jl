@@ -22,4 +22,4 @@ for (pos, n) in tiles
   arc2r(pos, pt2, pt3, :stroke)
 end
 finish()
-println("finished test: output in $(fname)")
+println("...finished test: output in $(fname)")

@@ -91,7 +91,7 @@ function julia_heart(fname)
         outlined_heart()
     end
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 julia_heart("/tmp/heart-julia.pdf")

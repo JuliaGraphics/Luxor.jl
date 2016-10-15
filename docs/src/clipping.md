@@ -7,6 +7,7 @@ using Luxor # hide
 Drawing(400, 250, "../figures/simpleclip.png") # hide
 background("white") # hide
 origin() # hide
+setline(3) # hide
 sethue("grey50")
 setdash("dotted")
 circle(O, 100, :stroke)

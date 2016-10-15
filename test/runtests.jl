@@ -6,6 +6,7 @@ end
 
 info(" running tests in: $(pwd())")
 
+info("starting test animation" );                   include("animation-test.jl")
 info("starting test arc-twopoints" );               include("arc-twopoints.jl")
 info("starting test arrow-arc-test" );              include("arrow-arc-test.jl")
 info("starting test arrow-line-test" );             include("arrow-line-test.jl")

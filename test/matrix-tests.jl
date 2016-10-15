@@ -114,7 +114,7 @@ function matrix_tests(fname)
     text("0/0", O + 15)
 
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 matrix_tests("/tmp/matrix-tests.pdf")

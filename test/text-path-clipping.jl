@@ -40,4 +40,4 @@ while y < currentheight
 end
 
 finish()
-println("finished test: output in $(fname)")
+println("...finished test: output in $(fname)")

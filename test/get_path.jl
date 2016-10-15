@@ -46,7 +46,7 @@ function get_path_test(fname)
     fontsize(80)
     get_path("Luxor")
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 get_path_test("/tmp/get-path-test.pdf")

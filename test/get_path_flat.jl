@@ -44,9 +44,9 @@ function get_path_flat_test(fname)
     Drawing(500, 500, fname)
     origin()
     fontsize(80)
-    get_path("Luxor")
+    get_path_flat("Luxor")
     finish()
-    println("finished test: output in $(fname)")
+    println("...finished test: output in $(fname)")
 end
 
 get_path_flat_test("/tmp/get-path-flat-test.pdf")
