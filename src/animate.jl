@@ -28,7 +28,7 @@ Create frames in the range `frames`, using a backdrop function and a frame funct
 
 The backdrop function is called for every frame.
 
-    function backdrop_f(demo)
+    function backdrop_f(demo, framenumber, framerange)
     ...
     end
 
