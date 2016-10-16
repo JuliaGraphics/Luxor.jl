@@ -4,7 +4,7 @@ using Luxor
 
 demo = Sequence(400, 400, "test")
 
-function backdrop_f(demo)
+function backdrop_f(demo, framenumber, framerange)
     background("black")
 end
 

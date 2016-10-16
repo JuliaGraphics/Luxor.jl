@@ -46,7 +46,7 @@ If `createanimation` is `true`, the function tries to call `ffmpeg` on the resul
 build the animation.
 """
 
-function animate(seq::Sequence, frames::Range, backdrop_func=(s, fn), frame_func=(s, fn, fr);
+function animate(seq::Sequence, frames::Range, backdrop_func=(s), frame_func=(s, fn, fr);
         createanimation = true)
     tempdirectory = mktempdir("/tmp")
     info("storing \"$(seq.stitle)\" in directory; $(tempdirectory)")
@@ -54,8 +54,8 @@ function animate(seq::Sequence, frames::Range, backdrop_func=(s, fn), frame_func
     for currentframe in frames
         Drawing(seq.width, seq.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
         origin()
-        # use invoke() until 0.6?
-        invoke(backdrop_func, (typeof(seq),), seq)
+        # use invoke() until 0.6 fixed #265
+        invoke(backdrop_func, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
         invoke(frame_func, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
         finish()
         filecounter += 1
