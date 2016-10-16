@@ -6,7 +6,7 @@ There are four steps to creating an animation.
 
 1 Use `Sequence` to create a Sequence object which determines the title and dimensions.
 
-2 Define a suitable `backdrop(seq::Sequence)` function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define the background color.
+2 Define a suitable `backdrop(seq::Sequence, framenumber, framerange)` function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define the background color.
 
 3 Define a suitable `frame(seq::Sequence, framenumber, framerange)` function that constructs the contents of frame `framenumber`. `framerange` is available for possible reference inside the function.
 
@@ -18,7 +18,7 @@ There are four steps to creating an animation.
 
     demo = Sequence(400, 400, "test")
 
-    function backdrop_f(demo)
+    function backdrop_f(demo, framenumber, framerange)
         background("black")
     end
 
