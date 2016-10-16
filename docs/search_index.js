@@ -1405,7 +1405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Animation helper functions",
     "category": "section",
-    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can be stitched together to form a moving animation, such as a GIF.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define the background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of frame framenumber. framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates the frames in the given framerange and saves them in a temporary directory."
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can be stitched together to form a moving animation, such as a GIF.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence, framenumber, framerange) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define the background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of frame framenumber. framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates the frames in the given framerange and saves them in a temporary directory."
 },
 
 {
@@ -1421,7 +1421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "Function",
-    "text": "animate(seq::Sequence, frames::Range, backdrop_func=(seq), frame_func=(seq, n, range);\n    createanimation = true)\n\nCreate frames in the range frames, using a backdrop function and a frame function.\n\nThe backdrop function is called for every frame.\n\nfunction backdrop_f(demo)\n...\nend\n\nThe frame generating function draws the graphics for a single frame.\n\nfunction frame_f(demo, framenumber, framerange)\n...\nend\n\nThen call animate() like this:\n\nanimate(demo, 1:100, backdrop_f, frame_f)\n\nIf createanimation is true, the function tries to call ffmpeg on the resulting frames to build the animation.\n\n\n\n"
+    "text": "animate(seq::Sequence, frames::Range, backdrop_func=(seq), frame_func=(seq, n, range);\n    createanimation = true)\n\nCreate frames in the range frames, using a backdrop function and a frame function.\n\nThe backdrop function is called for every frame.\n\nfunction backdrop_f(demo, framenumber, framerange)\n...\nend\n\nThe frame generating function draws the graphics for a single frame.\n\nfunction frame_f(demo, framenumber, framerange)\n...\nend\n\nThen call animate() like this:\n\nanimate(demo, 1:100, backdrop_f, frame_f)\n\nIf createanimation is true, the function tries to call ffmpeg on the resulting frames to build the animation.\n\n\n\n"
 },
 
 {
@@ -1429,7 +1429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Example",
     "category": "section",
-    "text": "using Luxor\n\ndemo = Sequence(400, 400, \"test\")\n\nfunction backdrop_f(demo)\n    background(\"black\")\nend\n\nfunction frame_f(demo, framenumber, framerange)\n    xpos = 100 * cos(framenumber/100)\n    ypos = 100 * sin(framenumber/100)\n    sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))\n    circle(xpos, ypos, 90, :stroke)\n    gsave()\n    translate(xpos, ypos)\n    juliacircles(50)\n    grestore()\n    text(string(\"frame $framenumber of $(length(framerange))\"), O)\nend\n\nanimate(demo, 1:630, backdrop_f, frame_f, createanimation=true)(Image: animation example)Sequence\nanimate"
+    "text": "using Luxor\n\ndemo = Sequence(400, 400, \"test\")\n\nfunction backdrop_f(demo, framenumber, framerange)\n    background(\"black\")\nend\n\nfunction frame_f(demo, framenumber, framerange)\n    xpos = 100 * cos(framenumber/100)\n    ypos = 100 * sin(framenumber/100)\n    sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))\n    circle(xpos, ypos, 90, :stroke)\n    gsave()\n    translate(xpos, ypos)\n    juliacircles(50)\n    grestore()\n    text(string(\"frame $framenumber of $(length(framerange))\"), O)\nend\n\nanimate(demo, 1:630, backdrop_f, frame_f, createanimation=true)(Image: animation example)Sequence\nanimate"
 },
 
 {
