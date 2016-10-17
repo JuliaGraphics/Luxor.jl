@@ -30,6 +30,12 @@ Example:
         "red",
         "blue"
         )
+
+Use `addstop` to define transparent blends:
+
+    blend_red_blue = blend(Point(0, 0), 0, Point(0, 0), 1)
+    addstop(blend_red_blue, 0, setcolor(sethue("red")..., .2))
+    addstop(blend_red_blue, 1, setcolor(sethue("blue")..., .2))
 """
 
 function blend(centerpos1::Point, rad1, centerpos2::Point, rad2, color1, color2)
@@ -63,7 +69,9 @@ function blend(from::Point, startradius, to::Point, endradius)
 end
 
 """
-    addstop(b::Blend, offset, col
+    addstop(b::Blend, offset, col)
+    addstop(b::Blend, offset, (r, g, b, a))
+    addstop(b::Blend, offset, string)
 
 Add a color stop to a blend. The offset specifies the location along the blend's 'control
 vector', which varies between 0 (beginning of the blend) and 1 (end of the blend). For
@@ -82,6 +90,10 @@ function addstop(b::Blend, offset, col::String)
     Cairo.pattern_add_color_stop_rgba(b, offset, temp.r, temp.g, temp.b, temp.alpha)
 end
 
+function addstop(b::Blend, offset, col::NTuple{4,Number})
+    Cairo.pattern_add_color_stop_rgba(b, offset, col[1], col[2], col[3], col[4])
+end
+
 """
     setblend(blend)
 
@@ -95,9 +107,9 @@ function setblend(b::Blend)
 end
 
 """
-    blend_adjust(ablend, center::Point, xscale, yscale)
+    blend_adjust(ablend, center::Point, xscale, yscale, rot=0)
 
-Modify an existing blend by scaling and translating it so that it will fill a shape properly
+Modify an existing blend by scaling, translating, and rotating it so that it will fill a shape properly
 even if the position of the shape is nowhere near the original location of the blend's
 definition.
 
@@ -118,11 +130,14 @@ then use `setblend()`:
 
     setblend(blend_gold_magenta)
 
+
 """
-function blend_adjust(ablend, center::Point, xscale, yscale)
+function blend_adjust(ablend, center::Point, xscale, yscale, rot)
     blendmatrix(ablend,
-        juliatocairomatrix(scaling_matrix(1/xscale, 1/yscale) *
-        translation_matrix(-center.x, -center.y) *
+        juliatocairomatrix(
+            rotation_matrix(-rot) *
+            scaling_matrix(1/xscale, 1/yscale) *
+            translation_matrix(-center.x, -center.y) *
         cairotojuliamatrix([1 0 0 1 0 0])))
 end
 

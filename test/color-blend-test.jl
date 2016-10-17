@@ -52,12 +52,17 @@ blend_gold_black = blend(
 
 translate(0, -550)
 
+
 tiles = Tiler(1000, 200, 1, 15, margin=20)
+orangegreenlinearblend = blend(Point(-1, 0), Point(1, 0), "orange", "green")
 
 for (pos, n) in tiles
-    blend_adjust(blend_gold_black, pos, tiles.tilewidth/2, tiles.tilewidth/2)
-    setblend(blend_gold_black)
+    blend_adjust(orangegreenlinearblend, pos, tiles.tilewidth/2, tiles.tilewidth/2, rescale(n, 1, 15, 0, 2pi))
+    setblend(orangegreenlinearblend)
     ellipse(pos, tiles.tilewidth, tiles.tilewidth, :fill)
+    sethue("white")
+    text(string(rescale(n, 1, 15, 0, 2pi)), pos)
 end
 
 finish()
+println("...finished color-blend-test")

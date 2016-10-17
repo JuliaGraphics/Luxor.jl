@@ -70,3 +70,10 @@ end
 function Base.length(pt::Tiler)
     pt.nrows * pt.ncols
 end
+
+function Base.getindex(pt::Tiler, i::Int)
+    1 <= i <= pt.ncols *  pt.nrows || throw(BoundsError(pt, i))
+    xcoord = -pt.width/2  + pt.margin + mod1(i, pt.ncols) * pt.tilewidth  - pt.tilewidth/2
+    ycoord = -pt.height/2 + pt.margin + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
+    return (Point(xcoord, ycoord), i)
+end
