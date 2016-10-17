@@ -233,9 +233,9 @@ curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 """
-     circlepath(center::Point, radius, action=:none;
-         reversepath=false,
-         kappa = 0.5522847)
+    circlepath(center::Point, radius, action=:none;
+        reversepath=false,
+        kappa = 0.5522847)
 
 Draw a circle using Bézier curves.
 """

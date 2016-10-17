@@ -309,7 +309,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.circlepath",
     "category": "Function",
-    "text": " circlepath(center::Point, radius, action=:none;\n     reversepath=false,\n     kappa = 0.5522847)\n\nDraw a circle using Bézier curves.\n\n\n\n"
+    "text": "circlepath(center::Point, radius, action=:none;\n    reversepath=false,\n    kappa = 0.5522847)\n\nDraw a circle using Bézier curves.\n\n\n\n"
 },
 
 {
@@ -725,7 +725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.blend",
     "category": "Function",
-    "text": "blend(from::Point, to::Point)\n\nCreate a linear blend.\n\nA blend is a specification of how one color changes into another. Linear blends are defined by two points: parallel lines through these points define the start and stop locations of the blend. The blend is defined relative to the current axes origin. This means that you should be aware of the current axes when you define blends, and when you use them.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\nblend(centerpos1, rad1, centerpos2, rad2, color1, color2)\n\nCreate a radial blend.\n\nExample:\n\nredblue = blend(\n    pos, 0,                   # first circle center and radius\n    pos, tiles.tilewidth/2,   # second circle center and radius\n    \"red\",\n    \"blue\"\n    )\n\n\n\nblend(from::Point, startradius, to::Point, endradius)\n\nCreate an empty radial blend.\n\nRadial blends are defined by two circles that define the start and stop locations. The first point is the center of the start circle, the first radius is the radius of the first circle.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\n"
+    "text": "blend(from::Point, to::Point)\n\nCreate a linear blend.\n\nA blend is a specification of how one color changes into another. Linear blends are defined by two points: parallel lines through these points define the start and stop locations of the blend. The blend is defined relative to the current axes origin. This means that you should be aware of the current axes when you define blends, and when you use them.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\nblend(centerpos1, rad1, centerpos2, rad2, color1, color2)\n\nCreate a radial blend.\n\nExample:\n\nredblue = blend(\n    pos, 0,                   # first circle center and radius\n    pos, tiles.tilewidth/2,   # second circle center and radius\n    \"red\",\n    \"blue\"\n    )\n\nUse addstop to define transparent blends:\n\nblend_red_blue = blend(Point(0, 0), 0, Point(0, 0), 1)\naddstop(blend_red_blue, 0, setcolor(sethue(\"red\")..., .2))\naddstop(blend_red_blue, 1, setcolor(sethue(\"blue\")..., .2))\n\n\n\nblend(from::Point, startradius, to::Point, endradius)\n\nCreate an empty radial blend.\n\nRadial blends are defined by two circles that define the start and stop locations. The first point is the center of the start circle, the first radius is the radius of the first circle.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\n"
 },
 
 {
@@ -733,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.addstop",
     "category": "Function",
-    "text": "addstop(b::Blend, offset, col\n\nAdd a color stop to a blend. The offset specifies the location along the blend's 'control vector', which varies between 0 (beginning of the blend) and 1 (end of the blend). For linear blends, the control vector is from the start point to the end point. For radial blends, the control vector is from any point on the start circle, to the corresponding point on the end circle.\n\n\n\n"
+    "text": "addstop(b::Blend, offset, col)\naddstop(b::Blend, offset, (r, g, b, a))\naddstop(b::Blend, offset, string)\n\nAdd a color stop to a blend. The offset specifies the location along the blend's 'control vector', which varies between 0 (beginning of the blend) and 1 (end of the blend). For linear blends, the control vector is from the start point to the end point. For radial blends, the control vector is from any point on the start circle, to the corresponding point on the end circle.\n\n\n\n"
 },
 
 {
@@ -741,7 +741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Styling",
     "title": "Luxor.blend_adjust",
     "category": "Function",
-    "text": "blend_adjust(ablend, center::Point, xscale, yscale)\n\nModify an existing blend by scaling and translating it so that it will fill a shape properly even if the position of the shape is nowhere near the original location of the blend's definition.\n\nFor example, if your blend definition was this (notice the 1)\n\nblend_gold_magenta = blend(\n        Point(0, 0), 0,                   # first circle center and radius\n        Point(0, 0), 1,                   # second circle center and radius\n        \"gold\",\n        \"magenta\"\n        )\n\nyou can use it in a shape that's 100 units across and centered at pos, by calling this:\n\nblend_adjust(blend_gold_magenta, -Point(pos.x, pos.y), 100, 100)\n\nthen use setblend():\n\nsetblend(blend_gold_magenta)\n\n\n\n"
+    "text": "blend_adjust(ablend, center::Point, xscale, yscale, rot=0)\n\nModify an existing blend by scaling, translating, and rotating it so that it will fill a shape properly even if the position of the shape is nowhere near the original location of the blend's definition.\n\nFor example, if your blend definition was this (notice the 1)\n\nblend_gold_magenta = blend(\n        Point(0, 0), 0,                   # first circle center and radius\n        Point(0, 0), 1,                   # second circle center and radius\n        \"gold\",\n        \"magenta\"\n        )\n\nyou can use it in a shape that's 100 units across and centered at pos, by calling this:\n\nblend_adjust(blend_gold_magenta, -Point(pos.x, pos.y), 100, 100)\n\nthen use setblend():\n\nsetblend(blend_gold_magenta)\n\n\n\n"
 },
 
 {
@@ -1101,7 +1101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.crossproduct",
     "category": "Function",
-    "text": "crossproduct(p1::Point, p2::Point)\n\nThis is the perp dot product, really, not the crossproduct. dot(p1, perpendicular(p2))\n\n\n\n"
+    "text": "crossproduct(p1::Point, p2::Point)\n\nThis is the perp dot product, really, not the crossproduct proper (which is 3D):\n\n`dot(p1, perpendicular(p2))`\n\n\n\n"
 },
 
 {

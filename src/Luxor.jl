@@ -765,6 +765,16 @@ string to RGBA eg setcolor("gold") # or "green", "darkturquoise", "lavender", et
 is at `Colors.color_names`.
 
 Use `sethue()` for changing colors without changing current opacity level.
+
+`sethue()` and `setcolor()` return the three or four values that were used:
+
+    julia> setcolor(sethue("red")..., .8)
+
+    (1.0,0.0,0.0,0.8)
+
+    julia> sethue(setcolor("red")[1:3]...)
+
+    (1.0,0.0,0.0)
 """
 
 function setcolor(col::String)
