@@ -127,8 +127,9 @@ end
 """
     crossproduct(p1::Point, p2::Point)
 
-This is the *perp dot product*, really, not the crossproduct.
-`dot(p1, perpendicular(p2))`
+This is the *perp dot product*, really, not the crossproduct proper (which is 3D):
+
+    `dot(p1, perpendicular(p2))`
 """
 
 function crossproduct(p1::Point, p2::Point)

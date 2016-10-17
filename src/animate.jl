@@ -46,7 +46,7 @@ If `createanimation` is `true`, the function tries to call `ffmpeg` on the resul
 build the animation.
 """
 
-function animate(seq::Sequence, frames::Range, backdrop_func=(s), frame_func=(s, fn, fr);
+function animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
         createanimation = true)
     tempdirectory = mktempdir("/tmp")
     info("storing \"$(seq.stitle)\" in directory; $(tempdirectory)")
