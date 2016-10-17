@@ -240,20 +240,29 @@ function origin()
 end
 
 """
-    rescale(value, oldmin, oldmax, newmin, newmax)
-
-Convert or rescale a value between `oldmin`/`oldmax` to the equivalent value between
-`newmin`/`newmax`.
-
-For example, to convert 42 lying on a scale from 0 and 100 to the equivalent number
-between 1 and 0 (inverting the direction):
-
-    rescale(42, 0, 100, 1, 0)
-
-returns 0.5800000000000001
+    rescale(x, from_min, from_max, to_min, to_max)
+Convert `x` from one linear scale (`from_min` to `from_max`) to another (`to_min` to `to_max`).
+The scales can also be supplied in tuple form:
+    rescale(x, (from_min, from_max), (to_min, to_max))
+```jldoctest
+julia> rescale(15, 0, 100, 0, 1)
+0.15
+julia> rescale(15, (0, 100), (0, 1))
+0.15
+julia> rescale(pi/20, 0, 2pi, 0, 1)
+0.025
+julia> rescale(pi/20, (0, 2pi), (0, 1))
+0.025
+julia> rescale(25, 0, 1, 0, 1.609344)
+40.2336
+julia> rescale(15, (0, 100), (1000, 0))
+850.0
+```
 """
-rescale(value, oldmin, oldmax, newmin=0, newmax=1) =
-   ((value - oldmin) / (oldmax - oldmin)) * (newmax - newmin) + newmin
+rescale(x, from_min, from_max, to_min, to_max) =
+    ((x - from_min) / (from_max - from_min)) * (to_max - to_min) + to_min
+rescale(x, from::NTuple{2,Number}, to::NTuple{2, Number}) =
+    ((x - from[1]) / (from[2] - from[1])) * (to[2] - to[1]) + to[1]
 
 """
 Draw and label two axes lines starting at `O`, the current 0/0, and continuing out along the
@@ -764,7 +773,7 @@ function setcolor(col::String)
         currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
         currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
-    return (temp.r, temp.g, temp.b, temp.alpha)
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
 """
@@ -789,7 +798,7 @@ Examples:
 function setcolor(col::ColorTypes.Colorant)
   temp = convert(RGBA, col)
   setcolor(temp.r, temp.g, temp.b)
-  return (temp.r, temp.g, temp.b)
+  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
 function setcolor(r, g, b, a=1)
@@ -835,7 +844,7 @@ function sethue(col::String)
     # use current alpha, not incoming one
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
         currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-    return (temp.r, temp.g, temp.b)
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
 end
 
 """
@@ -849,7 +858,7 @@ function sethue(col::ColorTypes.Colorant)
         currentdrawing.bluevalue = temp.r, temp.g, temp.b
     # use current alpha
     Cairo.set_source_rgba(currentdrawing.cr, temp.r, temp.g, temp.b, currentdrawing.alpha)
-    return (temp.r, temp.g, temp.b, currentdrawing.alpha)
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
 end
 
 """
@@ -861,7 +870,7 @@ function sethue(r, g, b)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
     # use current alpha
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, currentdrawing.alpha)
-    return (r, g, b, currentdrawing.alpha)
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
 end
 
 """
@@ -888,7 +897,7 @@ Choose a random color without changing the current alpha opacity.
 function randomhue()
   rrand, grand, brand = rand(3)
   sethue(rrand, grand, brand)
-  return (rrand, grand, brand)
+  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
 end
 
 """
@@ -900,7 +909,7 @@ Set a random color. This may change the current alpha opacity too.
 function randomcolor()
   rrand, grand, brand, arand = rand(4)
   setcolor(rrand, grand, brand, arand)
-  return (rrand, grand, brand, arand)
+  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
 """
