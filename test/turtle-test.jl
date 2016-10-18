@@ -63,8 +63,9 @@ function test_turtles(fname)
 
     # test warnings
     Pop(michaelangelo) # warning!
+    @test finish() == true
 end
 
 fname = "turtles-all-the-way-down.png"
-@test finish() == true
+test_turtles(fname)
 println("...finished test: output in $(fname)")
