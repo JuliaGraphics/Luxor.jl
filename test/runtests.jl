@@ -104,13 +104,14 @@ if get(ENV, "LUXOR_KEEP_TEST_RESULTS", false) == "true"
         cd(mktempdir())
         info("...Keeping the results")
         run_all_tests()
-        info("Test results saved in: $(pwd())")
+        info("Test images saved in: $(pwd())")
 else
     mktempdir() do tmpdir
         cd(tmpdir)
         info("running tests in: $(pwd())")
         info("but not keeping the results")
         run_all_tests()
-        info("Test results not saved. To keep the results next time: ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
+        info("Test images not saved. To see the images, next time do this before running")
+        info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
     end
 end

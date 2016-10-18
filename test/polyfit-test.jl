@@ -9,6 +9,14 @@ else
     const Test = BaseTestNext
 end
 
+macro g(a)
+    quote
+        gsave()
+        $(esc(a))
+        grestore()
+    end
+end
+
 function poly_fit(fname)
     currentwidth = 2400 # pts
     currentheight = 2400 # pts
@@ -19,13 +27,6 @@ function poly_fit(fname)
 
     fontsize(20)
     setopacity(0.7)
-    macro g(a)
-        quote
-            gsave()
-            $(esc(a))
-            grestore()
-        end
-    end
     tiles = Tiler(2400, 2400, 5, 5, margin=20)
     setline(1)
     for (pos, n) in tiles
@@ -49,4 +50,4 @@ function poly_fit(fname)
 end
 
 fname = "polyfit.pdf"
-polyfit(fname)
+poly_fit(fname)
