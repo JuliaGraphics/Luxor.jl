@@ -3,7 +3,14 @@
 # testing isinside(), is point inside polygon
 # all the random points are drawn only if they're inside one of the polygons
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 function ngon_poly(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,

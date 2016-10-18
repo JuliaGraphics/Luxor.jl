@@ -1,6 +1,13 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 fname = "sector-test.pdf"
 Drawing(1500, 1500, fname) # points/pixels, 2000 points is 70.56cm × 70.56cm

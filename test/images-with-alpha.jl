@@ -1,6 +1,13 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 function get_all_png_files_alpha(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))

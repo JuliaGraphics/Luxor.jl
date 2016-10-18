@@ -1,6 +1,14 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
+
 w, h = 600, 600
 
 fname = "stars.png"

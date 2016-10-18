@@ -1,6 +1,13 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)

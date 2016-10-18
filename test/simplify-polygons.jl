@@ -2,7 +2,14 @@
 
 # test polygon simplification
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 function circles(points)
     gsave()
@@ -64,4 +71,4 @@ function simplify_poly(fname)
     println("...finished test: output in $(fname)")
 end
 
-@time simplify_poly("simplify-poly.pdf")
+simplify_poly("simplify-poly.pdf")

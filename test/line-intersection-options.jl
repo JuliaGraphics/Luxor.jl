@@ -1,9 +1,16 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 function run_line_intersection_test(fname)
-    Drawing(2000, 2000, "line-intersection-options.pdf")
+    Drawing(2000, 2000, fname)
     origin()
     sethue("magenta")
     setline(.3)
@@ -61,4 +68,5 @@ function run_line_intersection_test(fname)
     println("...finished line-intersection-options test, saved in $(fname)")
 end
 
-run_line_intersection_test("line-intersection-options.pdf")
+fname = "line-intersection-options.pdf"
+run_line_intersection_test(fname)

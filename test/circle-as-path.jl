@@ -1,6 +1,13 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 
 function circle_as_path(fname)
     currentwidth = 1200
@@ -19,4 +26,5 @@ function circle_as_path(fname)
     println("...finished circle_as_path test, saved in $(fname)")
 end
 
-circle_as_path("circlepath.pdf")
+fname = "circlepath.pdf"
+circle_as_path(fname)
