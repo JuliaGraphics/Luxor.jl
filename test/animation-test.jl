@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 demo = Sequence(400, 400, "test")
 
@@ -16,6 +16,8 @@ function frame_f(demo, framenumber, framerange)
     text(string("frame $framenumber of $(length(framerange))"), O)
 end
 
-animate(demo, 1:2:6, backdrop_f, frame_f, createanimation=false)
+mktempdir() do tmpdir
+    @test animate(demo, 1:2:6, backdrop_f, frame_f, createanimation=false) == true
+end
 
 println("...finished animation test")

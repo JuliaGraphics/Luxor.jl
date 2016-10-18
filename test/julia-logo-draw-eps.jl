@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor, Base.Test, Colors
 
-function spiral_logo()
+function spiral_logo_eps()
     gsave()
     scale(.3, .3)
     r = 200
@@ -17,7 +17,7 @@ function spiral_logo()
     grestore()
 end
 
-function expandingspiral()
+function expandingspiral_eps()
     gsave()
     scale(.3, .3)
     r = 200
@@ -32,7 +32,7 @@ function expandingspiral()
     grestore()
 end
 
-function dropshadow()
+function dropshadow_eps()
     steps=20
     # white-gray ramp
     gramp = linspace(colorant"white", colorant"gray60", steps)
@@ -48,7 +48,7 @@ function dropshadow()
     grestore()
 end
 
-function colorgrid()
+function colorgrid_eps()
     #cols = colormap("RdBu", 5; mid=0.5, logscale=false)
     #cols = sequential_palette(rand(10:360), 5, b=0.1)
     cols = distinguishable_colors(25)
@@ -73,19 +73,19 @@ function draw_logo(fname)
     background("white")
 
     translate(-500,-200)
-    spiral_logo()
+    spiral_logo_eps()
 
     translate(750,0)
-    expandingspiral()
+    expandingspiral_eps()
 
     translate(-1000,500)
-    dropshadow()
+    dropshadow_eps()
 
     translate(700, -100)
-    colorgrid()
+    colorgrid_eps()
 
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-draw_logo("/tmp/julia-logo-draw-eps.eps")
+draw_logo("julia-logo-draw-eps.eps")

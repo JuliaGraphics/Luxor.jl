@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
@@ -90,8 +90,8 @@ function julia_heart(fname)
         rotate(2pi/5)
         outlined_heart()
     end
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-julia_heart("/tmp/heart-julia.pdf")
+julia_heart("heart-julia.pdf")

@@ -70,6 +70,7 @@ for (pos, n) in tiles
     clipreset()
 end
 finish() # hide
+nothing # hide
 ```
 
 ![background](figures/backgrounds.png)
@@ -83,6 +84,7 @@ background("gray80")
 origin()
 axes()
 finish() # hide
+nothing # hide
 ```
 
 ![axes](figures/axes.png)
@@ -124,6 +126,7 @@ for (pos, n) in tiles
     textcentred(string(n), pos + Point(0, 5))
 end
 finish() # hide
+nothing # hide
 ```
 
 ![tiler](figures/tiler.png)
@@ -176,6 +179,7 @@ sethue("black")
 arrow(O, Point(0, -40))
 map(p -> circle(p, 4, :fill), [p1, p2])
 finish() # hide
+nothing # hide
 ```
 
 ![circles](figures/circles.png)
@@ -196,6 +200,7 @@ map(p -> circle(p, 4, :fill), [p1, p2, p3])
 sethue("orange") # hide
 circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
+nothing # hide
 ```
 
 ![center and radius of 3 points](figures/center3.png)
@@ -221,6 +226,7 @@ for (pos, n) in tiles
     width += 2
 end
 finish() # hide
+nothing # hide
 ```
 
 ![ellipses](figures/ellipses.png)
@@ -247,6 +253,7 @@ newsubpath()
 circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![circles as paths](figures/circle-path.png)
@@ -265,6 +272,7 @@ origin() # hide
 sethue("cyan") # hide
 sector(50, 90, pi/2, 0, :fill)
 finish() # hide
+nothing # hide
 ```
 
 ![sector](figures/sector.png)
@@ -283,6 +291,7 @@ origin() # hide
 sethue("magenta") # hide
 pie(0, 0, 100, pi/2, pi, :fill)
 finish() # hide
+nothing # hide
 ```
 
 ![pie](figures/pie.png)
@@ -309,6 +318,7 @@ for (pos, n) in tiles
     textcentered("rt = $([0.3, 0.5, 0.7][n])", pos)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![squircles](figures/squircle.png)
@@ -328,6 +338,7 @@ sethue("black") # hide
 setline(4)
 polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
 finish() # hide
+nothing # hide
 ```
 ![rounded rect](figures/round-rect.png)
 
@@ -371,6 +382,7 @@ move(O)
 curve(pt1, pt2, pt3)
 stroke()
 finish()  # hide
+nothing # hide
 ```
 
 ![curve](figures/curve.png)
@@ -394,6 +406,7 @@ for (pos, n) in tiles
     arc2r(c1, pt2, pt3, :stroke)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![arc](figures/arc2r.png)
@@ -429,6 +442,7 @@ for i in eachindex(p5)
     ngon(midp, 20, 5, 0, :fill)
 end
 finish() # hide
+nothing # hide
 ```
 ![arc](figures/midpoint.png)
 
@@ -458,6 +472,7 @@ if flag
     circle(ip, 5, :fill)
 end
 finish() # hide
+nothing # hide
 ```
 ![arc](figures/intersection.png)
 
@@ -477,6 +492,7 @@ map(pt -> circle(pt, 5, :fill), [end1, end2, pt3])
 line(end1, end2, :stroke)
 arrow(pt3, getnearestpointonline(end1, end2, pt3))
 finish() # hide
+nothing # hide
 ```
 ![arc](figures/perpendicular.png)
 
@@ -499,6 +515,7 @@ arrow(O, Point(0, -65))
 arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
 arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
 finish() # hide
+nothing # hide
 ```
 ![arrows](figures/arrow.png)
 
@@ -537,6 +554,7 @@ for i in 5:5:35
     poly(offsetpoly(outline, i), :stroke, close=true)
 end
 finish() # hide
+nothing # hide
 ```
 ![get path](figures/get-path.png)
 
@@ -578,6 +596,7 @@ for (pos, n) in Tiler(750, 250, 1, 2)
     grestore()
 end
 finish() # hide
+nothing # hide
 ```
 
 ![get path](figures/julia-logo.png)

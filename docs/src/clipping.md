@@ -15,6 +15,7 @@ circle(O, 100, :clip)
 sethue("magenta")
 box(O, 125, 200, :fill)
 finish() # hide
+nothing # hide
 ```
 ![simple clip](figures/simpleclip.png)
 
@@ -48,7 +49,6 @@ origin()
 background("white")
 setopacity(.4)
 draw(0, 0)
-
 finish()
 preview()
 ```

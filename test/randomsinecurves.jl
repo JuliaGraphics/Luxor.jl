@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function randomsine(func, vertscale, horizontalscale, pagewidth, pageheight, style, delta=0.1)
     # y is positive downwards...
@@ -54,9 +54,9 @@ function random_sines(w, h, fname)
          rand(0.1:0.1:0.5))
         grestore()
     end
-    finish()
+    @test finish() == true
 end
 
-fname = "/tmp/random-sines.pdf"
+fname = "random-sines.pdf"
 random_sines(2000, 2000, fname)
 println("...finished test: output in $(fname)")

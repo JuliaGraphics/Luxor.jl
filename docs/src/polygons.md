@@ -50,6 +50,7 @@ for (pos, n) in tiles
     star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
 end
 finish() # hide
+nothing # hide
 ```
 ![stars](figures/stars.png)
 
@@ -66,6 +67,7 @@ for (pos, n) in tiles
     star(pos, tiles.tilewidth/2, 5, rescale(n, 1, 6, 1, 0), 0, :stroke)
 end
 finish() # hide
+nothing # hide
 ```
 ![stars](figures/star-ratios.png)
 
@@ -100,6 +102,7 @@ poly(randompoints, :fill)
 grestore()
 
 finish() # hide
+nothing # hide
 ```
 
 ![simple poly](figures/simplepoly.png)
@@ -124,6 +127,7 @@ newsubpath()
 ngon(0, 0, 40, 6, 0, :path, reversepath=true)
 fillstroke()
 finish() # hide
+nothing # hide
 ```
 ![holes](figures/holes.png)
 
@@ -144,6 +148,7 @@ prettypoly(apoly, :fill, () ->
         end,
     close=true)
 finish() # hide
+nothing # hide
 ```
 
 ![prettypoly](figures/prettypolybasic.png)
@@ -174,6 +179,7 @@ end
 apoly = star(O, 100, 7, 0.6, 0, vertices=true)
 prettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)
 finish() # hide
+nothing # hide
 ```
 
 ![prettypoly](figures/prettypolyrecursive.png)
@@ -205,6 +211,7 @@ prettypoly(simplercurve, :stroke,
           end)
 text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
+nothing # hide
 ```
 ![simplify](figures/simplify.png)
 
@@ -227,6 +234,7 @@ for n in 1:10000
     isinside(apoint, apolygon) ? circle(apoint, 3, :fill) : circle(apoint, .5, :stroke)
 end
 finish() # hide
+nothing # hide
 ```
 ![isinside](figures/isinside.png)
 
@@ -257,6 +265,7 @@ sethue("blue")
 map(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))
 
 finish() # hide
+nothing # hide
 ```
 
 ![isinside](figures/randompoints.png)
@@ -285,6 +294,7 @@ poly(poly1, :fill)
 randomhue()
 poly(poly2, :fill)
 finish() # hide
+nothing # hide
 ```
 ![polysplit](figures/polysplit.png)
 
@@ -320,6 +330,7 @@ for (pos, n) in tiles
 end
 
 finish() # hide
+nothing # hide
 ```
 
 ![polysmooth](figures/polysmooth.png)
@@ -342,6 +353,7 @@ setdash("solid")
 sethue("black")
 polysmooth(p, 40, :fill, debug=true)
 finish() # hide
+nothing # hide
 ```
 
 ![polysmooth](figures/polysmooth-pathological.png)
@@ -380,6 +392,7 @@ poly(offsetpoly(p, -10), :stroke, close=true)
 poly(offsetpoly(p, -15), :stroke, close=true)
 poly(offsetpoly(p, -20), :stroke, close=true)
 finish() # hide
+nothing # hide
 ```
 
 ![offset poly](figures/polyoffset-simple.png)
@@ -411,6 +424,7 @@ sethue("darkmagenta")
 poly(polyfit(pts, 200), :stroke)
 
 finish() # hide
+nothing # hide
 ```
 
 ![offset poly](figures/polyfit.png)

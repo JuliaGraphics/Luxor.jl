@@ -1,9 +1,9 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 w, h = 600, 600
 
-fname = "/tmp/stars.png"
+fname = "stars.png"
 Drawing(w, h, fname)
 origin()
 cols = [RGB(rand(3)...) for i in 1:50]
@@ -15,5 +15,5 @@ for y in 100 * randn(h, 1)
     star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)
     x += 2
 end
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

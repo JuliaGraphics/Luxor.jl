@@ -54,6 +54,7 @@ translate(200, -150)
 scale(0.3, 0.3)
 julialogo()
 finish()
+nothing # hide
 ```
 
 ![background](figures/julia-logos.png)

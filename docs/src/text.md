@@ -24,6 +24,7 @@ text("text 4",  pt1, halign=:left,   valign = :top)
 text("text 5 ", pt2, halign=:center, valign = :top)
 text("text 6",  pt3, halign=:right,  valign = :top)
 finish() # hide
+nothing # hide
 ```
 
 ![text placement](figures/text-placement.png)
@@ -109,6 +110,7 @@ textcurvecentered("hello world", pi/2, 100, O;
         baselineshift = 10
         )
 finish() # hide
+nothing # hide
 ```
 
 ![text centered on curve](figures/text-centered.png)

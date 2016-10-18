@@ -54,4 +54,5 @@ for (pos, n) in pagetiles
 end
 
 finish()
+nothing # hides
 ```

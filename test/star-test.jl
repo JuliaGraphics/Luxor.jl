@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 width, height = 2000, 2000
-fname = "/tmp/star.pdf"
+fname = "star.pdf"
 Drawing(width, height, fname)
 origin()
 background("grey10")
@@ -37,5 +37,5 @@ for (pos, n) in pagetiles
     fillstroke()
 end
 
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

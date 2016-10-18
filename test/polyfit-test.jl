@@ -1,10 +1,10 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 currentwidth = 2400 # pts
 currentheight = 2400 # pts
-Drawing(currentwidth, currentheight, "/tmp/polyfit.pdf")
+Drawing(currentwidth, currentheight, "polyfit.pdf")
 
 origin()
 background("white")
@@ -40,4 +40,4 @@ for (pos, n) in tiles
     end
 end
 
-finish()
+@test finish() == true

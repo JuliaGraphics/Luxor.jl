@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function dot(pos)
     gsave()
@@ -48,8 +48,8 @@ function text_alignment_tests(fname)
     end
     fontsize(8)
     text(join(legend, "; "), 0, 600, halign=:center)
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-text_alignment_tests("/tmp/text-alignment-tests.pdf")
+text_alignment_tests("text-alignment-tests.pdf")

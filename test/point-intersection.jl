@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function point_intersect(fname)
   Drawing(1000, 1000, fname)
@@ -24,8 +24,8 @@ function point_intersect(fname)
           stroke()
       end
   end
-  finish()
+  @test finish() == true
   println("...finished test: output in $(fname)")
 end
 
-point_intersect("/tmp/line_intersection.pdf")
+point_intersect("line_intersection.pdf")

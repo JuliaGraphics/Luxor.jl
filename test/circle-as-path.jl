@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function circle_as_path(fname)
     currentwidth = 1200
@@ -15,8 +15,8 @@ function circle_as_path(fname)
         newsubpath()
         circlepath(pos, rand(5:65), :fill, reversepath=true)
     end
-    finish()
-    println("circle_as_path test saved in $(fname)")
+    @test finish() == true
+    println("...finished circle_as_path test, saved in $(fname)")
 end
 
-circle_as_path("/tmp/circlepath.pdf")
+circle_as_path("circlepath.pdf")

@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test, Colors
 
 function simple_polys()
     gsave()
@@ -94,8 +94,8 @@ function polygon_test(fname)
     hex_mixtures()
     clipreset()
     simple_polys()
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-polygon_test("/tmp/polygon-test.pdf")
+polygon_test("polygon-test.pdf")

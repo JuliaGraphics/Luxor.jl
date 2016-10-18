@@ -1,11 +1,14 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function get_png_files(folder)
+    tempfolder = pwd()
     cd(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
-    return map(realpath, imagelist)
+    imagepathlist = map(realpath, imagelist)
+    cd(tempfolder)
+    return imagepathlist
 end
 
 function addimagetile(imgfile, xcenter, ycenter, tilewidth, tileheight; cropping=true)
@@ -41,7 +44,7 @@ imagelist = get_png_files(dirname(@__FILE__) * "/../docs/figures")
 shuffle!(imagelist)
 
 width, height = 1600, 1000
-fname = "/tmp/tiled-images.png"
+fname = "tiled-images.png"
 Drawing(width, height, fname)
 origin()
 background("grey50")
@@ -53,5 +56,5 @@ for (pos, n) in pagetiles
   end
   addimagetile(imagelist[n], pos.x, pos.y, pagetiles.tilewidth, pagetiles.tileheight, cropping=true)
 end
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

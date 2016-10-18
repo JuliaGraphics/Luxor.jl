@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function triangle(points, degree)
     sethue(cols[degree])
@@ -28,10 +28,10 @@ function draw(fname, n)
   my_points = ngon(O, 150, 3, -pi/2, vertices=true)
   depth = 8 # 12 is ok, 20 is right out
   sierpinski(my_points, n)
-  finish()
+  @test finish() == true
 end
 
 cols = distinguishable_colors(8)
-fname = "/tmp/sierpinski.pdf"
+fname = "sierpinski.pdf"
 draw(fname, 8)
 println("...finished test: output in $(fname)")

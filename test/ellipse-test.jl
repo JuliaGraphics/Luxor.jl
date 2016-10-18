@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function test_ellipse(fname)
   pagewidth, pageheight = 1200, 1400
@@ -28,9 +28,9 @@ function test_ellipse(fname)
     clipreset()
   end
 
-  finish()
-  println("ellipse-test saved in $(fname)")
+  @test finish() == true
+  println("...finished ellipse-test, saved in $(fname)")
 end
 
-fname = "/tmp/ellipse-test1.pdf"
+fname = "ellipse-test1.pdf"
 test_ellipse(fname)

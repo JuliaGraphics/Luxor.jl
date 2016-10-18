@@ -1,9 +1,9 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function run_line_intersection_test(fname)
-    Drawing(2000, 2000, "/tmp/line-intersection-options.pdf")
+    Drawing(2000, 2000, "line-intersection-options.pdf")
     origin()
     sethue("magenta")
     setline(.3)
@@ -57,8 +57,8 @@ function run_line_intersection_test(fname)
         end
         grestore()
     end
-    finish()
-    println("line-intersection-options-test saved in $(fname)")
+    @test finish() == true
+    println("...finished line-intersection-options test, saved in $(fname)")
 end
 
-run_line_intersection_test("/tmp/line-intersection-options.pdf")
+run_line_intersection_test("line-intersection-options.pdf")

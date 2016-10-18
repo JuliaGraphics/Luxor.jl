@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function get_path(str)
     sethue("blue")
@@ -45,8 +45,8 @@ function get_path_test(fname)
     origin()
     fontsize(80)
     get_path("Luxor")
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-get_path_test("/tmp/get-path-test.pdf")
+get_path_test("get-path-test.pdf")

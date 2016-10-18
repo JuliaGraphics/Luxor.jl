@@ -1,11 +1,11 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 width, height = 4000, 4000
 margin = 500
 
-fname = "/tmp/test-image.pdf"
+fname = "test-image.pdf"
 Drawing(width, height, fname)
 origin()
 background("grey25")
@@ -32,5 +32,5 @@ for (pos, n) in pagetiles
     clipreset()
 end
 
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

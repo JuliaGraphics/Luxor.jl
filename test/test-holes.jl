@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
-fname = "/tmp/holes.pdf"
+fname = "holes.pdf"
 Drawing(1200, 1200, fname)
 
 origin()
@@ -18,5 +18,5 @@ for (pos, n) in pagetiles
   fillstroke()
 end
 
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

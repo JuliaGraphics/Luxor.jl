@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function randompoly(rad, n)
     result = Point[]
@@ -58,7 +58,7 @@ function testapoly(pos)
     grestore()
 end
 
-fname = "/tmp/polysplit.pdf"
+fname = "polysplit.pdf"
 width, height = 2000, 2000
 Drawing(width, height, fname)
 origin()
@@ -73,5 +73,5 @@ for (pos, n) in pagetiles
     testapoly(pos)
 end
 
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

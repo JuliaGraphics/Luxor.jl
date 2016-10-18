@@ -1,7 +1,7 @@
 #!/usr/bin/env julia
 
-using Luxor # hide
-Drawing(400, 350, "/tmp/text-curve-centered.png") # hide
+using Luxor, Base.Test # hide
+Drawing(400, 350, "text-curve-centered.png") # hide
 origin() # hide
 background("ivory") # hide
 rotate(pi/8)
@@ -33,4 +33,4 @@ for i in 1:500
          randompoint(Point(-200, -350), Point(200, 350)),
          :stroke)
 end
-finish()
+@test finish() == true

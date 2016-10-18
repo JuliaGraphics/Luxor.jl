@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function drawbbox(apoly)
     gsave()
@@ -48,15 +48,18 @@ function test2(p)
         )
 end
 
-function get_png_files(folder)
+function get_all_png_files(folder)
+    tempfolder = pwd()
     cd(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
     imagelist = filter(f -> !startswith(f, "tiled-images"), imagelist) # don't recurse... :)
-    return map(realpath, imagelist)
+    imagepathlist = map(realpath, imagelist)
+    cd(tempfolder)
+    return imagepathlist
 end
 
 function test3(p)
-    imagelist = get_png_files(dirname(@__FILE__))
+    imagelist = get_all_png_files(dirname(@__FILE__))
     shuffle!(imagelist)
     img = readpng(imagelist[1])
     w = img.width
@@ -95,11 +98,15 @@ function draw_lots_of_polys(pagewidth, pageheight)
     end
 end
 
-width, height = 3000, 3000
-fname = "/tmp/pretty-poly-test.pdf"
-Drawing(width, height, fname)
-origin()
-background("ivory")
-draw_lots_of_polys(width, height)
-finish()
+function test_pretty_poly(fname)
+    width, height = 3000, 3000
+    Drawing(width, height, fname)
+    origin()
+    background("ivory")
+    draw_lots_of_polys(width, height)
+    @test finish() == true
+end
+
+test_pretty_poly(fname)
+fname = "pretty-poly-test.pdf"
 println("...finished test: output in $(fname)")

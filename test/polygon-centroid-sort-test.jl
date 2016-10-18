@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
-function drawbbox(apoly)
+function drawpolyboundingbox(apoly)
     gsave()
     setline(0.3)
     setdash("dotted")
@@ -15,7 +15,7 @@ function drawpoly(p, x, y, counter)
     translate(x, y)
     sethue("purple")
     psort = polysortbyangle(p)
-    drawbbox(psort)
+    drawpolyboundingbox(psort)
     poly(psort, close=true, :stroke)
 
     # label points
@@ -51,11 +51,16 @@ function polycentroidsort(width, height)
     end
 end
 
-width, height = 3000, 3000
-fname = "/tmp/polycentroidsort.pdf"
-Drawing(width, height, fname)
-fontsize(20)
-origin()
-polycentroidsort(width, height)
-finish()
+function polycentroidtest(fname)
+    width, height = 3000, 3000
+    Drawing(width, height, fname)
+    fontsize(20)
+    origin()
+    polycentroidsort(width, height)
+    @test finish() == true
+end
+
+fname = "polycentroidsort.pdf"
+polycentroidtest(fname)
+
 println("...finished test: output in $(fname)")
