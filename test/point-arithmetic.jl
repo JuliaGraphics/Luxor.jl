@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor, Base.Test, Base.Test
 
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)
@@ -150,10 +150,10 @@ function point_arithmetic_test(fname, npoints=20)
         text("the points really do compare elementwise", O + 15)
     end
 
-    finish()
+    @test finish() == true
 
     println("...finished test: output in $(fname)")
 end
 
 general_tests()
-point_arithmetic_test("/tmp/point-arithmetic.pdf", 100)
+point_arithmetic_test("point-arithmetic.pdf", 100)

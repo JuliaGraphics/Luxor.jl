@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
-fname = "/tmp/sector-test.pdf"
+fname = "sector-test.pdf"
 Drawing(1500, 1500, fname) # points/pixels, 2000 points is 70.56cm × 70.56cm
 
 setline(1)
@@ -19,5 +19,5 @@ for inner in 0:20:600
     end
 end
 
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function test_circular_arrows_1(pos)
     gsave()
@@ -27,7 +27,7 @@ function test_circular_arrows_2(pos, w)
   end
 end
 
-function arrow_test(fname)
+function arrow_arc_test(fname)
   pagewidth, pageheight = 2000, 2000
   Drawing(pagewidth, pageheight, fname)
   origin() # move 0/0 to center
@@ -42,10 +42,9 @@ function arrow_test(fname)
       test_circular_arrows_2(pos, pagetiles.tilewidth/2)
     end
   end
-  finish()
-  println("arrow-test saved in $(fname)")
+  @test finish() == true
+  println("...finished arrow-test: saved in $(fname)")
 end
 
-srand(42)
-fname = "/tmp/arrow-arctest.pdf"
-arrow_test(fname)
+fname = "arrow-arctest.pdf"
+arrow_arc_test(fname)

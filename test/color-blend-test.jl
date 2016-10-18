@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor, Base.Test, Colors
 
-Drawing(1200, 1200, "/tmp/color-blends-2.pdf")
+Drawing(1200, 1200, "color-blends-2.pdf")
 origin()
 background("blue")
 fontsize(20)
@@ -64,5 +64,5 @@ for (pos, n) in tiles
     text(string(rescale(n, 1, 15, 0, 2pi)), pos)
 end
 
-finish()
+@test finish() == true
 println("...finished color-blend-test")

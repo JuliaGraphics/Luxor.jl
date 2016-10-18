@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
-Drawing(2500, 2500, "/tmp/polysplit-2.pdf")
+Drawing(2500, 2500, "polysplit-2.pdf")
 background(1, .8, .1)
 origin()
 setopacity(0.7)
@@ -34,4 +34,4 @@ for (pos, n) in tiles
     grestore()
 end
 
-finish()
+@test finish() == true

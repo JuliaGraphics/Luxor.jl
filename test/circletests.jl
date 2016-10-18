@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function test_circles(fname)
     pagewidth, pageheight = 1200, 1400
@@ -48,9 +48,9 @@ function test_circles(fname)
     end
     grestore()
 
-    finish()
-    println("test_circles saved in $(fname)")
+    @test finish() == true
+    println("...finished circletest, saved in $(fname)")
 end
 
-fname = "/tmp/circle-test.pdf"
+fname = "circle-test.pdf"
 test_circles(fname)

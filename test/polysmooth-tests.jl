@@ -1,6 +1,6 @@
 #!/usr/bin/env julia -
 
-using Luxor
+using Luxor, Base.Test
 
 function star_test(fname)
     Drawing(1600, 1600, fname)
@@ -19,7 +19,7 @@ function star_test(fname)
            prettypoly(p, close=true, :stroke)
            polysmooth(p, randomsmoothing, :fill, debug=true)
      end
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
@@ -45,9 +45,9 @@ function random_test(fname)
        polysmooth(p, randomsmoothradius, :fill, debug=true)
        sethue("red")
     end
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-star_test("/tmp/polysmooth-stars.pdf")
-random_test("/tmp/polysmooth-random.pdf")
+star_test("polysmooth-stars.pdf")
+random_test("polysmooth-random.pdf")

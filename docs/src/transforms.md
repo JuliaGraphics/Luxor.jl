@@ -20,6 +20,7 @@ for i in range(0, 30, 6)
     translate(25, 0)
 end
 finish() # hide
+nothing # hide
 ```
 ![translate](figures/translate.png)
 
@@ -40,6 +41,7 @@ for i in range(0, 30, 6)
     scale(0.8, 0.8)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![scale](figures/scale.png)
@@ -62,6 +64,7 @@ for i in 1:8
     rotate(pi/4)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![rotate](figures/rotate.png)
@@ -103,6 +106,7 @@ for i in 0:5
 end
 
 finish() # hide
+nothing # hide
 ```
 
 ![transform](figures/transform.png)

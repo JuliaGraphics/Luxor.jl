@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function test_pie(fname)
   pagewidth, pageheight = 1200, 1400
@@ -26,9 +26,9 @@ function test_pie(fname)
     sethue("black")
     text(string(fromA_str, "°/", toA_str, "°"), pos.x, pos.y)
   end
-  finish()
-  println("pie-test saved in $(fname)")
+  @test finish() == true
+  println("..finished pie-test, saved in $(fname)")
 end
 
-fname = "/tmp/pie-test1.pdf"
+fname = "pie-test1.pdf"
 test_pie(fname)

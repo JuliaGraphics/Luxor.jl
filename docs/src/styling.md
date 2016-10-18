@@ -25,6 +25,7 @@ for (pos, n) in tiles
     text(string(cols[n][1]), pos, halign=:center)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![line endings](figures/colors.png)
@@ -62,6 +63,7 @@ for l in 1:3
     stroke()
 end
 finish() # hide
+nothing # hide
 ```
 
 ![line endings](figures/line-ends.png)
@@ -83,6 +85,7 @@ for (pos, n) in tiles
     line(pos, Point(400, pos.y), :stroke)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![dashes](figures/dashes.png)
@@ -119,6 +122,7 @@ setblend(orangeblue)
 box(O, 400, 100, :fill)
 axes()
 finish() # hide
+nothing # hide
 ```
 
 ![linear blend](figures/color-blends-basic.png)
@@ -135,6 +139,7 @@ setblend(greenmagenta)
 box(O, 400, 200, :fill)
 axes()
 finish() # hide
+nothing # hide
 ```
 ![radial blends](figures/color-blends-radial.png)
 
@@ -155,6 +160,7 @@ setblend(goldblend)
 box(O, 400, 200, :fill)
 axes()
 finish() # hide
+nothing # hide
 ```
 
 ![blends from scratch](figures/color-blends-scratch.png)
@@ -182,7 +188,9 @@ for (pos, n) in tiles
     grestore()
 end
 finish() # hide
+nothing # hide
 ```
+
 ![blends 1](figures/color-blends-translate-1.png)
 
 Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape. An alternative is to use `blend_adjust()`.
@@ -208,6 +216,7 @@ for (pos, n) in tiles
     grestore()
 end
 finish() # hide
+nothing # hide
 ```
 ![blends 2](figures/color-blends-translate-2.png)
 

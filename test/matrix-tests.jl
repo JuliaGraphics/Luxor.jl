@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Base.Test
+using Luxor, Base.Test, Base.Test
 
 # some of these tests produce errors on Linux versions of Cairo
 # but no errors on MacOS X Cairo.
@@ -113,8 +113,8 @@ function matrix_tests(fname)
     setmatrix(original_matrix)
     text("0/0", O + 15)
 
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-matrix_tests("/tmp/matrix-tests.pdf")
+matrix_tests("matrix-tests.pdf")

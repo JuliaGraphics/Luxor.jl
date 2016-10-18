@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function get_path_flat(str)
     sethue("blue")
@@ -45,8 +45,8 @@ function get_path_flat_test(fname)
     origin()
     fontsize(80)
     get_path_flat("Luxor")
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-get_path_flat_test("/tmp/get-path-flat-test.pdf")
+get_path_flat_test("get-path-flat-test.pdf")

@@ -91,6 +91,7 @@ setdash("solid")
 sethue("black")
 polysmooth(p, 40, :fill, debug=true)
 finish() # hide
+nothing # hide
 ```
 
 ![polysmooth](figures/polysmoothy.png)

@@ -207,6 +207,7 @@ function finish()
         Cairo.finish(currentdrawing.surface)
         Cairo.destroy(currentdrawing.surface)
     end
+    return true
 end
 
 """

@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 width, height = 1000, 1000
-fname = "/tmp/subpath-clip-image.pdf"
+fname = "subpath-clip-image.pdf"
 Drawing(width, height, fname)
 origin()
 background("ivory")
@@ -31,5 +31,5 @@ placeimage(image, Point(-w/2, -h/2), 1)
 
 clipreset()
 
-finish()
+@test finish() == true
 println("...finished test: output in $(fname)")

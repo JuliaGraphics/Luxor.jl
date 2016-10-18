@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function draw_luxor_demo(fname)
     Drawing("A2landscape", fname)
@@ -53,8 +53,8 @@ function draw_luxor_demo(fname)
     fontface("Avenir-Black")
 
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, O)
-    finish()
-    println("...finished test: output in $(fname)")
+    @test finish() == true
+    println("...finished luxor test: output in $(fname)")
 end
 
-draw_luxor_demo("/tmp/luxor-test1.png") # PNG or PDF file name
+draw_luxor_demo("luxor-test1.png")

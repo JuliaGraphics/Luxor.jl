@@ -2,7 +2,7 @@
 
 # test polygon simplification
 
-using Luxor
+using Luxor, Base.Test
 
 function circles(points)
     gsave()
@@ -60,8 +60,8 @@ function simplify_poly(fname)
     Drawing(pagewidth, pageheight, fname)
     sinecurves()
     test(pagewidth, pageheight)
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-@time simplify_poly("/tmp/simplify-poly.pdf")
+@time simplify_poly("simplify-poly.pdf")

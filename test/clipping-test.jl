@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor, Base.Test, Colors
 
 function drawlogoclip(x, y)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
@@ -30,8 +30,8 @@ function clipping_test(fname)
     setopacity(.4)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     drawlogoclip(0, 0)
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-clipping_test("/tmp/clipping-tests.png")
+clipping_test("clipping-tests.png")

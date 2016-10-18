@@ -1,8 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
-fname = "/tmp/turtles-all-the-way-down.png"
+fname = "turtles-all-the-way-down.png"
 Drawing(1200, 1200, fname)
 origin()
 background("black")
@@ -51,5 +51,11 @@ end
 Reposition(raphael, 500, -180);         Reposition(michaelangelo, 500, 180)
 Message(raphael, "Raphael");            Message(michaelangelo, "Michaelangelo")
 
-finish()
+Push(raphael)
+Pop(raphael)
+
+# test warnings
+Pop(michaelangelo) # warning!
+
+@test finish() == true
 println("...finished test: output in $(fname)")

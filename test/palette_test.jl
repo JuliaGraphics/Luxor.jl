@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function draw_color_bars(x, y, n, colmap, label)
     setcolor(1,1,1)
@@ -43,8 +43,8 @@ function palette_test(fname)
     draw_color_bars(620,  20, 50, diverging_palette(120, 140, 50, b=1.0), "diverging 120 140 b 0.5")
     draw_color_bars(720,  20, 50, diverging_palette(120, 140, 50, mid=1.0), "diverging 120 140 mid 1.0")
 
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-palette_test("/tmp/color-palette.pdf")
+palette_test("color-palette.pdf")

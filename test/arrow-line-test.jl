@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Base.Test
 
 function arrow_test(fname)
   pagewidth, pageheight = 2000, 2000
@@ -20,10 +20,10 @@ function arrow_test(fname)
     line(Point(pos.x, pos.y+10), Point(pos.x + 200, pos.y+10), :stroke)
     grestore()
   end
-  finish()
-  println("arrow-line-test saved in $(fname)")
+  @test finish() == true
+  println("...finished arrow-line-test, saved in $(fname)")
 end
 
 srand(42)
-fname = "/tmp/arrow-line-test.pdf"
+fname = "arrow-line-test.pdf"
 arrow_test(fname)

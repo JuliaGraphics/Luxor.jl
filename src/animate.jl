@@ -48,8 +48,9 @@ build the animation.
 
 function animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
         createanimation = true)
-    tempdirectory = mktempdir("/tmp")
+    tempdirectory = mktempdir()
     info("storing \"$(seq.stitle)\" in directory; $(tempdirectory)")
+    info( "ffmpeg will $(createanimation ? "" : "not ")process the frames.")
     filecounter = 1
     for currentframe in frames
         Drawing(seq.width, seq.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
@@ -66,4 +67,5 @@ function animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
         run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(seq.stitle)-palette.png`)
         run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(seq.stitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(seq.stitle).gif`)
     end
+    return true
 end

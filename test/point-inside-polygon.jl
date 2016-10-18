@@ -3,7 +3,7 @@
 # testing isinside(), is point inside polygon
 # all the random points are drawn only if they're inside one of the polygons
 
-using Luxor
+using Luxor, Base.Test
 
 function ngon_poly(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,
@@ -38,8 +38,8 @@ function point_inside_polygon(fname)
         end
     end
 
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-point_inside_polygon("/tmp/point-inside-polygon.pdf")
+point_inside_polygon("point-inside-polygon.pdf")

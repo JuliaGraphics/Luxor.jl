@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor, Base.Test, Colors
 
 function spiral()
     gsave()
@@ -102,8 +102,8 @@ function draw_julia_logos(fname)
     translate(-700, 300)
     boxes_and_rectangles(O)
 
-    finish()
+    @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-draw_julia_logos("/tmp/julia-logo-draw.png")
+draw_julia_logos("julia-logo-draw.png")

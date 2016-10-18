@@ -17,6 +17,8 @@ export  Turtle,
         Reposition
 
 """
+    Turtle(xpos=0, ypos=0, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))
+
 With a Turtle you can command a turtle to move and draw: turtle graphics.
 
 The functions that start with a capital letter are: Forward, Turn,
@@ -29,7 +31,7 @@ type Turtle
     xpos::Float64
     ypos::Float64
     pendown::Bool
-    orientation::Float64 # stored in radians
+    orientation::Float64 # stored in radians but set in degrees
     pencolor::Tuple{Float64,Float64,Float64} # it's an RGB turtle
     function Turtle(xpos, ypos, pendown, orientation, pencolor)
         new(xpos, ypos, pendown, orientation, pencolor)
@@ -139,7 +141,7 @@ function Pop(t::Turtle)
 # restore xpos, ypos, turn from queue
     global queue
     if isempty(queue)
-        warn("turtle can't pop")
+        info("stack was already empty")
         t.xpos, t.ypos, t.orientation = 0.0, 0.0, 0.0
     else
         t.xpos, t.ypos, t.orientation = pop!(queue)
