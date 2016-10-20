@@ -25,8 +25,8 @@ You can access the calculated tile width and height like this:
     end
 """
 type Tiler
-    width::Real
-    height::Real
+    areawidth::Real
+    areaheight::Real
     tilewidth::Real
     tileheight::Real
     nrows::Int
@@ -41,8 +41,8 @@ end
 
 function Base.start(pt::Tiler)
     # return the initial state
-    x = -(pt.width/2)  + pt.margin + (pt.tilewidth/2)
-    y = -(pt.height/2) + pt.margin + (pt.tileheight/2)
+    x = -(pt.areawidth/2)  + pt.margin + (pt.tilewidth/2)
+    y = -(pt.areaheight/2) + pt.margin + (pt.tileheight/2)
     return (Point(x, y), 1)
 end
 
@@ -55,9 +55,9 @@ function Base.next(pt::Tiler, state)
     tilenumber = state[2]
     x1 = x + pt.tilewidth
     y1 = y
-    if x1 > (pt.width/2) - pt.margin
+    if x1 > (pt.areawidth/2) - pt.margin
         y1 += pt.tileheight
-        x1 = -(pt.width/2) + pt.margin + (pt.tilewidth/2)
+        x1 = -(pt.areawidth/2) + pt.margin + (pt.tilewidth/2)
     end
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
@@ -73,7 +73,7 @@ end
 
 function Base.getindex(pt::Tiler, i::Int)
     1 <= i <= pt.ncols *  pt.nrows || throw(BoundsError(pt, i))
-    xcoord = -pt.width/2  + pt.margin + mod1(i, pt.ncols) * pt.tilewidth  - pt.tilewidth/2
-    ycoord = -pt.height/2 + pt.margin + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
+    xcoord = -pt.areawidth/2  + pt.margin + mod1(i, pt.ncols) * pt.tilewidth  - pt.tilewidth/2
+    ycoord = -pt.areaheight/2 + pt.margin + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
     return (Point(xcoord, ycoord), i)
 end

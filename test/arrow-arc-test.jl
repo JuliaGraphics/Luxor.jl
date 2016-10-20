@@ -12,7 +12,7 @@ end
 function test_circular_arrows_1(pos)
     gsave()
     froma = rescale(rand(1:100), 1, 100, 0, 2pi)
-    toa =   rescale(rand(1:100), 1, 100, 0, 2pi)
+    toa =   rescale(rand(1:100), (1, 100), (0, 2pi))
     sethue("black")
     arrow(pos, 100, froma, toa, linewidth=rand(1:6), arrowheadlength=rand(10:30))
     text(string("from: ", round(rad2deg(froma), 1)), pos)
