@@ -1049,7 +1049,7 @@ end
 """
     readpng(pathname)
 
-Read a PNG file into Cairo.
+Read a PNG file.
 
 This returns a image object suitable for placing on the current drawing with `placeimage()`.
 You can access its `width` and `height` fields:

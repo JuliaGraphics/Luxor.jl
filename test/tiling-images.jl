@@ -41,7 +41,7 @@ function addimagetile(imgfile, xcenter, ycenter, tilewidth, tileheight; cropping
     end
     translate(xcenter, ycenter)
     scale(scalefactor, scalefactor)
-    placeimage(img, -w/2, -h/2)
+    placeimage(img, Point(-w/2, -h/2))
     clipreset()
     grestore()
 end

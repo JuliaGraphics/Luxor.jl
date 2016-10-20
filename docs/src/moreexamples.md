@@ -189,7 +189,8 @@ for i in 1:500
          randompoint(Point(-200, -350), Point(200, 350)),
          :stroke)
 end
-finish()
+finish() # hide
+nothing # hide
 ```
 
 ![text on a curve](figures/textcurvecenteredexample.png)
