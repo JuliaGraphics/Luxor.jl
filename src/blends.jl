@@ -3,16 +3,15 @@ typealias Blend CairoPattern
 """
     blend(from::Point, to::Point)
 
-Create a linear blend.
+Create an empty linear blend.
 
 A blend is a specification of how one color changes into another. Linear blends are
 defined by two points: parallel lines through these points define the start and stop
 locations of the blend. The blend is defined relative to the current axes origin. This means
 that you should be aware of the current axes when you define blends, and when you use them.
 
-A new blend is empty. To add colors, use `addstop()`.
+To add colors, use `addstop()`.
 """
-
 function blend(from::Point, to::Point)
     return Cairo.pattern_create_linear(from.x, from.y, to.x, to.y)
 end
@@ -30,14 +29,7 @@ Example:
         "red",
         "blue"
         )
-
-Use `addstop` to define transparent blends:
-
-    blend_red_blue = blend(Point(0, 0), 0, Point(0, 0), 1)
-    addstop(blend_red_blue, 0, setcolor(sethue("red")..., .2))
-    addstop(blend_red_blue, 1, setcolor(sethue("blue")..., .2))
 """
-
 function blend(centerpos1::Point, rad1, centerpos2::Point, rad2, color1, color2)
     newblend = blend(centerpos1, rad1, centerpos2, rad2)
     addstop(newblend, 0, color1)
@@ -45,6 +37,15 @@ function blend(centerpos1::Point, rad1, centerpos2::Point, rad2, color1, color2)
     return newblend
 end
 
+"""
+    blend(pt1::Point, pt2::Point, color1, color2)
+
+Create a linear blend.
+
+Example:
+
+    redblue = blend(pos, pos, "red", "blue")
+"""
 function blend(pt1::Point, pt2::Point, color1, color2)
     newblend = blend(pt1, pt2)
     addstop(newblend, 0, color1)
@@ -78,8 +79,13 @@ vector', which varies between 0 (beginning of the blend) and 1 (end of the blend
 linear blends, the control vector is from the start point to the end point. For radial
 blends, the control vector is from any point on the start circle, to the corresponding point
 on the end circle.
-"""
 
+Example:
+
+    blend_red_blue = blend(Point(0, 0), 0, Point(0, 0), 1)
+    addstop(blend_red_blue, 0, setcolor(sethue("red")..., .2))
+    addstop(blend_red_blue, 1, setcolor(sethue("blue")..., .2))
+"""
 function addstop(b::Blend, offset, col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
     Cairo.pattern_add_color_stop_rgba(b, offset, temp.r, temp.g, temp.b, temp.alpha)
@@ -101,7 +107,6 @@ Start using the named blend for filling graphics.
 
 This aligns the original coordinates of the blend definition with the current axes.
 """
-
 function setblend(b::Blend)
     Cairo.set_source(currentdrawing.cr, b)
 end
@@ -129,8 +134,6 @@ you can use it in a shape that's 100 units across and centered at `pos`, by call
 then use `setblend()`:
 
     setblend(blend_gold_magenta)
-
-
 """
 function blend_adjust(ablend, center::Point, xscale, yscale, rot)
     blendmatrix(ablend,
@@ -157,7 +160,6 @@ A1 = juliatocairomatrix(Tj)
 blendmatrix(b, As)
 ```
 """
-
 function blendmatrix(b::Blend, m)
     cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
     Cairo.set_matrix(b, cm)
@@ -168,7 +170,6 @@ end
 
 Return a 3 by 3 Julia matrix that will apply a rotation through `a` radians.
 """
-
 function rotation_matrix(a)
     return ([cos(a)  -sin(a)    0 ;
              sin(a)   cos(a)    0 ;
@@ -180,7 +181,6 @@ end
 
 Return a 3 by 3 Julia matrix that will apply a translation in `x` and `y`.
 """
-
 function translation_matrix(x, y)
     return ([1.0     0     x ;
                0     1.0   y ;
@@ -192,7 +192,6 @@ end
 
 Return a 3 by 3 Julia matrix that will apply a scaling by `sx` and `sy`.
 """
-
 function scaling_matrix(sx, sy)
     return ([sx   0   0 ;
              0   sy   0 ;
@@ -204,7 +203,6 @@ end
 
 Return a 3 by 3 Julia matrix that's the equivalent of the six-element Cairo matrix in `c`.
 """
-
 function cairotojuliamatrix(c::Array)
     return [c[1] c[3] c[5] ; c[2] c[4] c[6] ; 0 0 1]
 end
@@ -214,9 +212,7 @@ end
 
 Return a six-element Cairo matrix 3 that's the equivalent of the 3 by 3 Julia matrix in `c`.
 """
-
 function juliatocairomatrix(c::Matrix)
     return [c[1] c[2] c[4] c[5] c[7] c[8]]
 end
-
 # end

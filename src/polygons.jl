@@ -179,7 +179,6 @@ Simplify a polygon:
 
 `detail` is the smallest permitted distance between two points in pixels.
 """
-
 function simplify(pointlist, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
@@ -209,7 +208,6 @@ whereas
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-
 function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing;
     vertices=false,
     reversepath=false)
@@ -242,7 +240,6 @@ larger.
 
 Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
-
 function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5,
     orientation=0, action=:nothing;
     vertices = false,
@@ -389,7 +386,6 @@ For example, you can mark each vertex of a polygon with a randomly colored fille
         end,
         close=true)
 """
-
 function prettypoly(pointlist::Array, action=:nothing, vertex_function=() -> circle(O, 1, :fill);
     close=false,
     reversepath=false)
@@ -553,7 +549,6 @@ point (!). There are a number of issues to be aware of:
 
 - very sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity
 """
-
 function offsetpoly(path::Array, d)
     l = length(path)
     resultpoly = Array{Point}(l)

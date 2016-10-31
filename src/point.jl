@@ -119,7 +119,6 @@ midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 Returns point `Point(p.y, -p.x)`.
 """
-
 function perpendicular(p::Point)
     return Point(p.y, -p.x)
 end
@@ -131,7 +130,6 @@ This is the *perp dot product*, really, not the crossproduct proper (which is 3D
 
     `dot(p1, perpendicular(p2))`
 """
-
 function crossproduct(p1::Point, p2::Point)
     return dot(p1, perpendicular(p2))
 end
@@ -206,7 +204,6 @@ end point (because that's not so much an intersection, more a meeting).
 
 Function returns `(false, Point(0, 0))` if the lines are undefined,
 """
-
 function intersection(A::Point, B::Point, C::Point, D::Point;
         commonendpoints = false,
         crossingonly = false

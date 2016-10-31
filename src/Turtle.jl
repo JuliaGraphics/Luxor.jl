@@ -26,7 +26,6 @@ Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Repositi
 
 There are also some other functions. To see how they might be used, see Lindenmayer.jl.
 """
-
 type Turtle
     xpos::Float64
     ypos::Float64

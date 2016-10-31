@@ -247,10 +247,10 @@ sethue("black") # hide
 setline(4)
 tiles = Tiler(600, 250, 1, 5)
 for (pos, n) in tiles
-randomhue()
-circlepath(pos, tiles.tilewidth/2, :path)
-newsubpath()
-circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
+    randomhue()
+    circlepath(pos, tiles.tilewidth/2, :path)
+    newsubpath()
+    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
 end
 finish() # hide
 nothing # hide
