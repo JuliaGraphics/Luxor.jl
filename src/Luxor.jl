@@ -477,7 +477,6 @@ do an action.
 See `box()` for more ways to do similar things, such as supplying two opposite corners,
 placing by centerpoint and dimensions.
 """
-
 function rect(xmin, ymin, w, h, action=:nothing)
     if action != :path
         newpath()
@@ -777,7 +776,6 @@ Use `sethue()` for changing colors without changing current opacity level.
 
     (1.0,0.0,0.0)
 """
-
 function setcolor(col::String)
     temp = parse(RGBA, col)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,

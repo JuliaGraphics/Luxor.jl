@@ -95,12 +95,17 @@ fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
 Return the measurements of the string `str` when set using the current font settings:
 
-1 x_bearing
-2 y_bearing
-3 width
-4 height
-5 x_advance
-6 y_advance
+- 1 x_bearing
+
+- 2 y_bearing
+
+- 3 width
+
+- 4 height
+
+- 5 x_advance
+
+- 6 y_advance
 
 The bearing is the displacement from the reference point to the upper-left corner of the
 bounding box. It is often zero or a small positive value for x displacement, but can be

@@ -52,7 +52,7 @@ function center3pts(a::Point, b::Point, c::Point)
     # do the lines intersect?
     crossp = crossproduct(perpAB, perpBC)
     if isapprox(crossp, 0)
-        info("yes, no circle passes through all three points")
+        info("no circle passes through all three points")
         return Point(0,0), 0
     end
     centerX = ((midAB.y * perpAB.x * perpBC.x) +
@@ -101,8 +101,10 @@ Make a squircle (basically a rectangle with rounded corners). Specify the center
 
 The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.
 """
-
-function squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false, reversepath=false)
+function squircle(center::Point, hradius, vradius, action=:none;
+    rt = 0.5,
+    vertices=false,
+    reversepath=false)
   points = Point[]
   for theta in 0:pi/40:2pi
       xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
@@ -133,7 +135,6 @@ Arc with centerpoint.
 
     arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
 """
-
 arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
   arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
@@ -161,7 +162,6 @@ Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going
 
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
 """
-
 function arc2r(c1, p2, p3, action=:nothing)
     r = norm(c1, p2)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
@@ -194,7 +194,6 @@ end
 Make a pie shape centered at `x`/`y`. Angles start at the positive x-axis and are measured
 clockwise.
 """
-
 function pie(x, y, radius, startangle, endangle, action=:none)
     gsave()
     translate(x, y)
@@ -239,7 +238,6 @@ curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 Draw a circle using Bézier curves.
 """
-
 function circlepath(center::Point, radius, action=:none; reversepath=false, kappa = 0.5522847)
     function northtoeast(center::Point, radius, kappa)
         curve(center.x + (radius * kappa), center.y + radius, center.x + radius,
