@@ -124,4 +124,7 @@ scaling_matrix
 translation_matrix
 cairotojuliamatrix
 juliatocairomatrix
+get_scale
+get_translation
+get_rotation
 ```
