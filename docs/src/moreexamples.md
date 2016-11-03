@@ -171,8 +171,8 @@ circle(O, 125, :fill)
 sethue("gray90")
 circle(O, 85, :fill)
 
-textcurvecentered("• LUXOR •", -(pi/2), 100, O, clockwise=true, baselineshift = -4)
-textcurvecentered("- VECTOR GRAPHICS -", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
+textcurvecentered("- LUXOR -", -pi/2, 100, O, clockwise=true, letter_spacing=5, baselineshift = -4)
+textcurvecentered("- VECTOR GRAPHICS -", pi/2, 100, O, clockwise=false, letter_spacing=5, baselineshift = -15)
 
 sethue("gray20")
 map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
@@ -182,7 +182,7 @@ circle(O.x + 30, O.y - 55, 15, :fill)
 
 # cheap texture
 sethue("ivory")
-setline(0.3)
+setline(0.2)
 setdash("dotdotdashed")
 for i in 1:500
     line(randompoint(Point(-200, -350), Point(200, 350)),

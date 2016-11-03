@@ -172,25 +172,25 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
         cnter = (2pi * current_radius) / spiral_space_step
         radius_step = (spiral_ring_step + spiral_in_out_shift) / cnter
         current_radius += radius_step
-        angle_step += (glyph_x_advance / 2.) + letter_spacing/2.
+        angle_step += (glyph_x_advance / 2.0) + letter_spacing/2.0
         if clockwise
             refangle += angle_step / current_radius
         else
             refangle -= angle_step / current_radius
         end
-        angle_step = (glyph_x_advance / 2.) + letter_spacing/2.
+        angle_step = (glyph_x_advance / 2.0) + letter_spacing/2.0
         xx = cos(refangle) * current_radius + x_pos
         yy = sin(refangle) * current_radius + y_pos
         gsave()
         translate(xx, yy)
         if clockwise
-            rotate(pi/2. + refangle)
+            rotate(pi/2 + refangle)
         else
-            rotate(-pi/2. + refangle)
+            rotate(-pi/2 + refangle)
         end
-        textcentred(glyph, 0., 0.)
+        textcentred(glyph, 0, 0)
         grestore()
-        current_radius < 10. && break
+        current_radius < 10 && break
     end
 end
 
@@ -209,8 +209,6 @@ retronauts.)
 
 `letter_spacing` adjusts the tracking/space between chars, tighter is (-), looser is (+)).
 `baselineshift` moves the text up or down away from the baseline.
-
-The letter spacing is not taken into account when first positioning the text.
 """
 function textcurvecentered(the_text, start_angle, start_radius, center::Point;
       clockwise = true,
@@ -220,21 +218,26 @@ function textcurvecentered(the_text, start_angle, start_radius, center::Point;
     atextbox = textextents(the_text)
     atextwidth = atextbox[3]                         # width of text
     if clockwise
-        baselineradius = start_radius + baselineshift  # could be adjusted if we knew font height
+      baselineradius = start_radius + baselineshift  # could be adjusted if we knew font height
     else
-        baselineradius = start_radius - baselineshift  # could be adjusted if we knew font height
+      baselineradius = start_radius - baselineshift  # could be adjusted if we knew font height
     end
+
+    # hack to adjust starting angle for the letter spacing
+    # to do it accurately would take lots more code
+    lspaced = length(the_text) * letter_spacing
+    lspacedangle = atan2(lspaced, baselineradius)
 
     theta = atextwidth/baselineradius               # find angle
     if clockwise
-        starttextangle = start_angle - (theta/2)
+        starttextangle = start_angle - (theta/2) - lspacedangle/2
     else
-        starttextangle = start_angle + (theta/2)
+        starttextangle = start_angle + (theta/2) + lspacedangle/2
     end
     starttextxpos = baselineradius * cos(starttextangle)
     starttextypos = baselineradius * sin(starttextangle)
     textcurve(the_text, starttextangle, baselineradius, center,
-        clockwise=clockwise, letter_spacing=letter_spacing)
+      clockwise=clockwise, letter_spacing=letter_spacing)
 end
 
 # end

@@ -262,4 +262,14 @@ function intersection(A::Point, B::Point, C::Point, D::Point;
     return (true, intersectionpoint)
 end
 
+"""
+    slope(pointA::Point, pointB::Point)
+
+Find angle of a line between two points.
+Returns a value between 0 and 2pi. Value will be relative to the current axes.
+"""
+function slope(pointA, pointB)
+    return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
+end
+
 # end

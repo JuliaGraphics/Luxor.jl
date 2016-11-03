@@ -24,6 +24,40 @@ function matrix_tests(fname)
 
     Drawing(1000,1000, fname)
 
+    # get rotation
+    @test isapprox(get_rotation(cairotojuliamatrix(getmatrix())), 0.0)
+    rotate(pi/2)
+    @test isapprox(get_rotation(), pi/2)
+    @test isapprox(get_rotation(cairotojuliamatrix(getmatrix())), pi/2)
+    origin()
+    @test isapprox(get_rotation(cairotojuliamatrix(getmatrix())), 0.0)
+
+    # get translation
+    tx, ty =  get_translation(cairotojuliamatrix(getmatrix()))
+    @test tx == 500.0
+    @test ty == 500.0
+    translate(5, 10)
+    tx, ty =  get_translation()
+    @test tx == 505.0
+    @test ty == 510.0
+    origin()
+    tx, ty =  get_translation(cairotojuliamatrix(getmatrix()))
+    @test tx == 500.0
+    @test ty == 500.0
+
+    # get scale
+    sx, sy =  get_scale(cairotojuliamatrix(getmatrix()))
+    @test sx == 1.0
+    @test sy == 1.0
+    scale(5, 10)
+    sx, sy =  get_scale()
+    @test sx == 5.0
+    @test sy == 10.0
+    origin()
+    sx, sy =  get_scale(cairotojuliamatrix(getmatrix()))
+    @test sx == 1.0
+    @test sy == 1.0
+
     original_matrix = getmatrix()
 
     # absolute position 200,250 relative to top left origin (0, 0)
@@ -104,7 +138,6 @@ function matrix_tests(fname)
         transform([1, tand(i), 0, 1, 0, 20])    # yskew by i° and move down by 20 for each one
         text("hello world")
     end
-
 
     # flip hv
     # Flip H/V with center shifted by cx:cy
