@@ -21,8 +21,8 @@ type Sequence
 end
 
 """
-    animate(seq::Sequence, frames::Range, backdrop_func=(seq), frame_func=(seq, n, range);
-        createanimation = true)
+    animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
+            createanimation = true)
 
 Create frames in the range `frames`, using a backdrop function and a frame function.
 

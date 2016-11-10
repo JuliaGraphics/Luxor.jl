@@ -5,7 +5,7 @@ The Luxor package provides a set of vector drawing functions for creating graphi
 """
 module Luxor
 
-using Colors, Cairo, Compat
+using Colors, Cairo, Compat, FileIO
 
 include("point.jl")
 include("Turtle.jl")
@@ -214,12 +214,15 @@ end
 """
     preview()
 
+If working in Jupyter (IJUlia), display a PNG file in the notebook.
 On macOS, open the file, which probably uses the default, Preview.app.
 On Unix, open the file with `xdg-open`.
 On Windows, pass the filename to the shell.
 """
 function preview()
-    if @compat is_apple()
+    if isdefined(Main, :IJulia) && Main.IJulia.inited && currentdrawing.surfacetype == "png"
+        display(load(currentdrawing.filename))
+    elseif @compat is_apple()
         run(`open $(currentdrawing.filename)`)
     elseif @compat is_windows()
         run(`$(currentdrawing.filename)`)
@@ -231,8 +234,8 @@ end
 """
     origin()
 
-Reset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise
-it will stay at the top left corner, the default).
+Reset the current matrix, and then set the 0/0 origin to the center of the drawing
+(otherwise it will stay at the top left corner, the default).
 
 You can refer to the 0/0 point as `O`. (O = `Point(0, 0)`),
 """

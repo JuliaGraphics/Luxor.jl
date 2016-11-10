@@ -28,6 +28,10 @@ Drawing
 
 To finish a drawing and close the file, use `finish()`, and, to launch an external application to view it, use `preview()`.
 
+If you're using Jupyter (IJulia), `preview()` displays PNG files in the notebook.
+
+![jupyter](figures/jupyter.png)
+
 ```@docs
 finish
 preview
