@@ -59,6 +59,8 @@ nothing # hide
 
 ![background](figures/julia-logos.png)
 
+You can change the extension of the file name: "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps" to produce alternative formats.
+
 ## Something a bit more complicated: a Sierpinski triangle
 
 Here's a version of the Sierpinski recursive triangle, clipped to a circle. (This and subsequent examples assume that the drawing has been created, the origin and background set.)
@@ -94,8 +96,6 @@ depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
 cols = distinguishable_colors(depth)
 draw(depth)
 ```
-
-You can change "sierpinski.pdf" to "sierpinski.svg" or "sierpinski.png" or "sierpinski.eps" to produce alternative formats.
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
 

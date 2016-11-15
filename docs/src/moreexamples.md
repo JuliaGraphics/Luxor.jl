@@ -108,7 +108,7 @@ using Luxor, ColorSchemes
 function spiral(colscheme)
   circle(0, 0, 90, :clip)
   for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
-    sethue(colorscheme(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
+    sethue(get(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
     gsave()
     rotate(theta)
     move(5,0)
@@ -126,11 +126,11 @@ Drawing(width, height, "/tmp/logo.png")
 origin()
 background("white")
 scale(1.3, 1.3)
-colscheme = loadcolorscheme("solarcolors")
-colschememirror = vcat(colscheme, reverse(colscheme))
+using ColorSchemes.solar
+colschememirror = vcat(solar, reverse(solar))
 spiral(colschememirror)
 finish()
-```
+preview()```
 
 ## Why turtles?
 
