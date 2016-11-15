@@ -46,7 +46,7 @@ preview() # on macOS, opens in Preview
 
 ## Illustrating this document
 
-This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the documentation is generated, the source of the image being stored in the Markdown document and processed on the fly:
+This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the documentation is generated: the Julia source for the image is stored in the Markdown document, and processed every time the documentation is generated:
 
 The Markdown markup looks like this:
 
@@ -130,7 +130,8 @@ using ColorSchemes.solar
 colschememirror = vcat(solar, reverse(solar))
 spiral(colschememirror)
 finish()
-preview()```
+preview()
+```
 
 ## Why turtles?
 
@@ -139,6 +140,7 @@ An interesting application for turtle-style graphics is for drawing Lindenmayer 
 ![penrose](figures/penrose.png)
 
 The definition of this figure is:
+
 ```
 penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
                        "Y"  => "+PM--QM[---XM--YM]+t",
@@ -151,45 +153,51 @@ penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
 
 where some of the characters—eg "F", "+", "-", and "t"—issue turtle control commands, and others—"X,", "Y", "P", and "Q"—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.
 
-## Text on curves
-
+## Hipster logo: text on curves
 
 ```@example
-using Luxor # hide
-Drawing(400, 350, "../figures/textcurvecenteredexample.png") # hide
-origin() # hide
-background("ivory") # hide
-rotate(pi/12)
-fontsize(24)
-fontface("Futura-Bold")
-sethue("gray20")
-setline(3)
+using Luxor
+function hipster(fname)
+    Drawing(400, 350, fname)
+    origin()
+    rotate(pi/8)
 
-circle(O, 130, :stroke)
-circle(O, 135, :stroke)
-circle(O, 125, :fill)
-sethue("gray90")
-circle(O, 85, :fill)
+    circle(O, 135, :clip)
+    sethue("antiquewhite2")
+    paint()
 
-textcurvecentered("- LUXOR -", -pi/2, 100, O, clockwise=true, letter_spacing=5, baselineshift = -4)
-textcurvecentered("- VECTOR GRAPHICS -", pi/2, 100, O, clockwise=false, letter_spacing=5, baselineshift = -15)
+    sethue("gray20")
+    setline(3)
+    circle(O, 130, :stroke)
+    circle(O, 135, :stroke)
+    circle(O, 125, :fill)
 
-sethue("gray20")
-map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
+    sethue("antiquewhite2")
+    circle(O, 85, :fill)
 
-sethue("gray95")
-circle(O.x + 30, O.y - 55, 15, :fill)
+    sethue("wheat")
+    fontsize(24)
+    fontface("Helvetica-Bold")
+    textcurvecentered("• LUXOR •", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)
+    textcurvecentered("• VECTOR GRAPHICS •", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
 
-# cheap texture
-sethue("ivory")
-setline(0.2)
-setdash("dotdotdashed")
-for i in 1:500
-    line(randompoint(Point(-200, -350), Point(200, 350)),
-         randompoint(Point(-200, -350), Point(200, 350)),
-         :stroke)
+    sethue("gray20")
+    map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
+    circle(O.x + 30, O.y - 55, 15, :fill)
+
+    # cheap weathered texture:
+    sethue("antiquewhite2")
+    setline(0.2)
+    setdash("dotdotdashed")
+    for i in 1:500
+        line(randompoint(Point(-200, -350), Point(200, 350)),
+             randompoint(Point(-200, -350), Point(200, 350)),
+             :stroke)
+    end
+    finish()
 end
-finish() # hide
+
+hipster("../figures/textcurvecenteredexample.png")
 nothing # hide
 ```
 
