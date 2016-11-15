@@ -1,5 +1,7 @@
 #!/usr/bin/env julia
 
+# probably best to cd to `.julia/v0.5/Luxor/` first ...
+
 using ColorSchemes, DataFrames, Luxor,  Colors
 
 """
@@ -82,7 +84,7 @@ function drawstars(table, theme)
         -0.29	B0	Blue
         =#
         # rescale: blue is 0, red is 1
-        sethue(colorscheme(theme[:starcolorscheme], rescale(ci, -0.3, 1.5, 0, 1)))
+        sethue(get(theme[:starcolorscheme], rescale(ci, -0.3, 1.5, 0, 1)))
     else
         sethue("grey50")
     end
@@ -139,7 +141,7 @@ function main(d, w, h, margin, highest_mag)
   default_theme = Dict(
       :name                                   => "bright stars on dark background",
       :highest_magnitude                      => 15,
-      :starcolorscheme                        => loadcolorscheme("thermometercolors"),
+      :starcolorscheme                        => ColorSchemes.thermometer,
       :starname_font_face                     => "Times-Italic",
       :starname_font_size                     => 12,
       :starname_font_color                    => "grey90",
@@ -166,7 +168,7 @@ function main(d, w, h, margin, highest_mag)
   antique_theme = Dict(
       :name                                   => "antique theme",
       :highest_magnitude                      => 10,
-      :starcolorscheme                        => loadcolorscheme("thermometercolors"),
+      :starcolorscheme                        => ColorSchemes.thermometer,
       :starname_font_face                     => "InputMono-Medium",
       :starname_font_size                     => 9,
       :starname_font_color                    => "grey30",
