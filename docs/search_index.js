@@ -1521,11 +1521,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "moreexamples.html#Text-on-curves-1",
+    "location": "moreexamples.html#Strange-1",
     "page": "More examples",
-    "title": "Text on curves",
+    "title": "Strange",
     "category": "section",
-    "text": "using Luxor\nfunction hipster(fname)\n    Drawing(400, 350, fname)\n    origin()\n    rotate(pi/8)\n\n    circle(O, 135, :clip)\n    sethue(\"antiquewhite2\")\n    paint()\n\n    sethue(\"gray20\")\n    setline(3)\n    circle(O, 130, :stroke)\n    circle(O, 135, :stroke)\n    circle(O, 125, :fill)\n\n    sethue(\"antiquewhite2\")\n    circle(O, 85, :fill)\n\n    sethue(\"wheat\")\n    fontsize(24)\n    fontface(\"Helvetica-Bold\")\n    textcurvecentered(\"• LUXOR •\", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)\n    textcurvecentered(\"• VECTOR GRAPHICS •\", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)\n\n    sethue(\"gray20\")\n    map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))\n    circle(O.x + 30, O.y - 55, 15, :fill)\n\n    sethue(\"antiquewhite2\")\n    setline(0.2)\n    setdash(\"dotdotdashed\")\n    for i in 1:500\n        line(randompoint(Point(-200, -350), Point(200, 350)),\n             randompoint(Point(-200, -350), Point(200, 350)),\n             :stroke)\n    end\n    finish()\nend\n\nfname = \"../figures/textcurvecenteredexample.png\"\nhipster(fname)\nnothing # hide(Image: text on a curve)"
+    "text": "It's usually better to draw fractals and similar images using pixels and image processing tools. Just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels.using Luxor, Colors, ColorSchemes\nfunction strange(dotsize, w=800.0)\n    xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0\n    cs = ColorSchemes.botticelli\n    Drawing(w, w, \"../figures/strange-vector.png\")\n    origin()\n    background(\"white\")\n    xinc = w/(xmax - xmin)\n    yinc = w/(ymax - ymin)\n    # control parameters\n    a = 2.24; b = 0.43; c = -0.65; d = -2.43; e1 = 1.0\n    x = y = z = 0.0\n    wover2 = w/2\n    for j in 1:w\n        for i in 1:w\n            xx = sin(a * y) - z  *  cos(b * x)\n            yy = z * sin(c * x) - cos(d * y)\n            zz = e1 * sin(x)\n            x = xx; y = yy; z = zz\n            if xx < xmax && xx > xmin && yy < ymax && yy > ymin\n                xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range\n                ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range\n                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))\n                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))\n                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))\n                sethue(mean([col1, col2, col3]))\n                circle(Point(xpos, ypos), dotsize, :fill)\n            end\n        end\n    end\n    finish()\nend\n\nstrange(.3, 800)(Image: strange attractor in vectors)"
+},
+
+{
+    "location": "moreexamples.html#Hipster-logo:-text-on-curves-1",
+    "page": "More examples",
+    "title": "Hipster logo: text on curves",
+    "category": "section",
+    "text": "using Luxor\nfunction hipster(fname)\n    Drawing(400, 350, fname)\n    origin()\n    rotate(pi/8)\n\n    circle(O, 135, :clip)\n    sethue(\"antiquewhite2\")\n    paint()\n\n    sethue(\"gray20\")\n    setline(3)\n    circle(O, 130, :stroke)\n    circle(O, 135, :stroke)\n    circle(O, 125, :fill)\n\n    sethue(\"antiquewhite2\")\n    circle(O, 85, :fill)\n\n    sethue(\"wheat\")\n    fontsize(24)\n    fontface(\"Helvetica-Bold\")\n    textcurvecentered(\"• LUXOR •\", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)\n    textcurvecentered(\"• VECTOR GRAPHICS •\", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)\n\n    sethue(\"gray20\")\n    map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))\n    circle(O.x + 30, O.y - 55, 15, :fill)\n\n    # cheap weathered texture:\n    sethue(\"antiquewhite2\")\n    setline(0.2)\n    setdash(\"dotdotdashed\")\n    for i in 1:500\n        line(randompoint(Point(-200, -350), Point(200, 350)),\n             randompoint(Point(-200, -350), Point(200, 350)),\n             :stroke)\n    end\n    finish()\nend\n\nhipster(\"../figures/textcurvecenteredexample.png\")\nnothing # hide(Image: text on a curve)"
 },
 
 {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Ubuntu+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script></head><body><nav class="toc"><a href><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="styling.html">Styling</a></li><li><a class="toctext" href="polygons.html">Polygons</a></li><li><a class="toctext" href="text.html">Text</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li><a class="toctext" href="animation.html">Animation</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Illustrating-this-document-1">Illustrating this document</a></li><li><a class="toctext" href="#Luxor-logo-1">Luxor logo</a></li><li><a class="toctext" href="#Why-turtles?-1">Why turtles?</a></li><li><a class="toctext" href="#Text-on-curves-1">Text on curves</a></li><li class="toplevel"><a class="toctext" href="#Index-1">Index</a></li></ul></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/cormullion/Luxor.jl/tree/b7c15ee81fcb755064ad9d979ea7ac57038a6b8d/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>A good place to look for examples (sometimes not very exciting or well-written examples, I&#39;ll admit), is in the <code>Luxor/test</code> directory.</p><p><img src="figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Ubuntu+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script></head><body><nav class="toc"><a href><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="styling.html">Styling</a></li><li><a class="toctext" href="polygons.html">Polygons</a></li><li><a class="toctext" href="text.html">Text</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li><a class="toctext" href="animation.html">Animation</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Illustrating-this-document-1">Illustrating this document</a></li><li><a class="toctext" href="#Luxor-logo-1">Luxor logo</a></li><li><a class="toctext" href="#Why-turtles?-1">Why turtles?</a></li><li><a class="toctext" href="#Strange-1">Strange</a></li><li><a class="toctext" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></li><li class="toplevel"><a class="toctext" href="#Index-1">Index</a></li></ul></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/cormullion/Luxor.jl/tree/faeb81ae59be9ca005a94c47902df7c8243f7b4f/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>A good place to look for examples (sometimes not very exciting or well-written examples, I&#39;ll admit), is in the <code>Luxor/test</code> directory.</p><p><img src="figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor
 Drawing(1200, 1400, &quot;basic-test.png&quot;) # or PDF/SVG filename for PDF or SVG
 origin()
 background(&quot;purple&quot;)
@@ -89,7 +89,40 @@ preview()</code></pre><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-t
                        &quot;Q&quot;  =&gt; &quot;--PM++++XM[+QM++++YM]--YMt&quot;,
                        &quot;M&quot;  =&gt; &quot;F&quot;,
                        &quot;F&quot;  =&gt; &quot;&quot;),
-                  &quot;1[Y]++[Y]++[Y]++[Y]++[Y]&quot;)</code></pre><p>where some of the characters—eg &quot;F&quot;, &quot;+&quot;, &quot;-&quot;, and &quot;t&quot;—issue turtle control commands, and others—&quot;X,&quot;, &quot;Y&quot;, &quot;P&quot;, and &quot;Q&quot;—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.</p><h2><a class="nav-anchor" id="Text-on-curves-1" href="#Text-on-curves-1">Text on curves</a></h2><div><pre><code class="language-julia">using Luxor
+                  &quot;1[Y]++[Y]++[Y]++[Y]++[Y]&quot;)</code></pre><p>where some of the characters—eg &quot;F&quot;, &quot;+&quot;, &quot;-&quot;, and &quot;t&quot;—issue turtle control commands, and others—&quot;X,&quot;, &quot;Y&quot;, &quot;P&quot;, and &quot;Q&quot;—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.</p><h2><a class="nav-anchor" id="Strange-1" href="#Strange-1">Strange</a></h2><p>It&#39;s usually better to draw fractals and similar images using pixels and image processing tools. Just for fun it&#39;s an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels.</p><div><pre><code class="language-julia">using Luxor, Colors, ColorSchemes
+function strange(dotsize, w=800.0)
+    xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
+    cs = ColorSchemes.botticelli
+    Drawing(w, w, &quot;../figures/strange-vector.png&quot;)
+    origin()
+    background(&quot;white&quot;)
+    xinc = w/(xmax - xmin)
+    yinc = w/(ymax - ymin)
+    # control parameters
+    a = 2.24; b = 0.43; c = -0.65; d = -2.43; e1 = 1.0
+    x = y = z = 0.0
+    wover2 = w/2
+    for j in 1:w
+        for i in 1:w
+            xx = sin(a * y) - z  *  cos(b * x)
+            yy = z * sin(c * x) - cos(d * y)
+            zz = e1 * sin(x)
+            x = xx; y = yy; z = zz
+            if xx &lt; xmax &amp;&amp; xx &gt; xmin &amp;&amp; yy &lt; ymax &amp;&amp; yy &gt; ymin
+                xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range
+                ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range
+                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))
+                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))
+                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))
+                sethue(mean([col1, col2, col3]))
+                circle(Point(xpos, ypos), dotsize, :fill)
+            end
+        end
+    end
+    finish()
+end
+
+strange(.3, 800)</code></pre><pre><code class="language-none">true</code></pre></div><p><img src="figures/strange-vector.png" alt="strange attractor in vectors"/></p><h2><a class="nav-anchor" id="Hipster-logo:-text-on-curves-1" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></h2><div><pre><code class="language-julia">using Luxor
 function hipster(fname)
     Drawing(400, 350, fname)
     origin()
@@ -118,6 +151,7 @@ function hipster(fname)
     map(pt -&gt; star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
     circle(O.x + 30, O.y - 55, 15, :fill)
 
+    # cheap weathered texture:
     sethue(&quot;antiquewhite2&quot;)
     setline(0.2)
     setdash(&quot;dotdotdashed&quot;)
@@ -129,5 +163,4 @@ function hipster(fname)
     finish()
 end
 
-fname = &quot;../figures/textcurvecenteredexample.png&quot;
-hipster(fname)</code></pre></div><p><img src="figures/textcurvecenteredexample.png" alt="text on a curve"/></p><h1><a class="nav-anchor" id="Index-1" href="#Index-1">Index</a></h1><footer><hr/><a class="previous" href="animation.html"><span class="direction">Previous</span><span class="title">Animation</span></a><a class="next" href="functionindex.html"><span class="direction">Next</span><span class="title">Index</span></a></footer></article></body></html>
+hipster(&quot;../figures/textcurvecenteredexample.png&quot;)</code></pre></div><p><img src="figures/textcurvecenteredexample.png" alt="text on a curve"/></p><h1><a class="nav-anchor" id="Index-1" href="#Index-1">Index</a></h1><footer><hr/><a class="previous" href="animation.html"><span class="direction">Previous</span><span class="title">Animation</span></a><a class="next" href="functionindex.html"><span class="direction">Next</span><span class="title">Index</span></a></footer></article></body></html>

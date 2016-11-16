@@ -153,6 +153,49 @@ penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
 
 where some of the characters—eg "F", "+", "-", and "t"—issue turtle control commands, and others—"X,", "Y", "P", and "Q"—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.
 
+## Strange
+
+It's usually better to draw fractals and similar images using pixels and image processing tools. Just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels.
+
+```@example
+using Luxor, Colors, ColorSchemes
+function strange(dotsize, w=800.0)
+    xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
+    cs = ColorSchemes.botticelli
+    Drawing(w, w, "../figures/strange-vector.png")
+    origin()
+    background("white")
+    xinc = w/(xmax - xmin)
+    yinc = w/(ymax - ymin)
+    # control parameters
+    a = 2.24; b = 0.43; c = -0.65; d = -2.43; e1 = 1.0
+    x = y = z = 0.0
+    wover2 = w/2
+    for j in 1:w
+        for i in 1:w
+            xx = sin(a * y) - z  *  cos(b * x)
+            yy = z * sin(c * x) - cos(d * y)
+            zz = e1 * sin(x)
+            x = xx; y = yy; z = zz
+            if xx < xmax && xx > xmin && yy < ymax && yy > ymin
+                xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range
+                ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range
+                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))
+                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))
+                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))
+                sethue(mean([col1, col2, col3]))
+                circle(Point(xpos, ypos), dotsize, :fill)
+            end
+        end
+    end
+    finish()
+end
+
+strange(.3, 800)
+```
+
+![strange attractor in vectors](figures/strange-vector.png)
+
 ## Hipster logo: text on curves
 
 ```@example
