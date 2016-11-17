@@ -34,7 +34,7 @@ function color_blend_test(fname)
         # It doesn't seem right, does it...
         A = [1 0 0 1 0 0]
         Aj = cairotojuliamatrix(A)
-        Sj = translation_matrix(0, -15) * rotation_matrix(rescale(n, 0, 25, 0, 2pi)) * scaling_matrix(1 - n/30, 1 - n/30) * Aj
+        Sj = translationmatrix(0, -15) * rotationmatrix(rescale(n, 0, 25, 0, 2pi)) * scalingmatrix(1 - n/30, 1 - n/30) * Aj
         As = juliatocairomatrix(Sj)
         translate(pos)
         sethue("green")
@@ -62,7 +62,7 @@ function color_blend_test(fname)
     orangegreenlinearblend = blend(Point(-1, 0), Point(1, 0), "orange", "green")
 
     for (pos, n) in tiles
-        blend_adjust(orangegreenlinearblend, pos, tiles.tilewidth/2, tiles.tilewidth/2, rescale(n, 1, 15, 0, 2pi))
+        blendadjust(orangegreenlinearblend, pos, tiles.tilewidth/2, tiles.tilewidth/2, rescale(n, 1, 15, 0, 2pi))
         setblend(orangegreenlinearblend)
         ellipse(pos, tiles.tilewidth, tiles.tilewidth, :fill)
         sethue("white")

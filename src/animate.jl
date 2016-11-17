@@ -28,25 +28,25 @@ Create frames in the range `frames`, using a backdrop function and a frame funct
 
 The backdrop function is called for every frame.
 
-    function backdrop_f(demo, framenumber, framerange)
+    function backdropf(demo, framenumber, framerange)
     ...
     end
 
 The frame generating function draws the graphics for a single frame.
 
-    function frame_f(demo, framenumber, framerange)
+    function framef(demo, framenumber, framerange)
     ...
     end
 
 Then call `animate()` like this:
 
-    animate(demo, 1:100, backdrop_f, frame_f)
+    animate(demo, 1:100, backdropf, framef)
 
 If `createanimation` is `true`, the function tries to call `ffmpeg` on the resulting frames to
 build the animation.
 """
 
-function animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
+function animate(seq::Sequence, frames::Range, backdropfunc, framefunc;
         createanimation = true)
     tempdirectory = mktempdir()
     info("storing \"$(seq.stitle)\" in directory; $(tempdirectory)")
@@ -56,8 +56,8 @@ function animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
         Drawing(seq.width, seq.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
         origin()
         # use invoke() until 0.6 fixed #265
-        invoke(backdrop_func, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
-        invoke(frame_func, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
+        invoke(backdropfunc, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
+        invoke(framefunc, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
         finish()
         filecounter += 1
     end

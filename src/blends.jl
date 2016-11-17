@@ -82,9 +82,9 @@ on the end circle.
 
 Example:
 
-    blend_red_blue = blend(Point(0, 0), 0, Point(0, 0), 1)
-    addstop(blend_red_blue, 0, setcolor(sethue("red")..., .2))
-    addstop(blend_red_blue, 1, setcolor(sethue("blue")..., .2))
+    blendredblue = blend(Point(0, 0), 0, Point(0, 0), 1)
+    addstop(blendredblue, 0, setcolor(sethue("red")..., .2))
+    addstop(blendredblue, 1, setcolor(sethue("blue")..., .2))
 """
 function addstop(b::Blend, offset, col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
@@ -112,15 +112,15 @@ function setblend(b::Blend)
 end
 
 """
-    blend_adjust(ablend, center::Point, xscale, yscale, rot=0)
+    blendadjust(ablend, center::Point, xscale, yscale, rot=0)
 
-Modify an existing blend by scaling, translating, and rotating it so that it will fill a shape properly
-even if the position of the shape is nowhere near the original location of the blend's
-definition.
+Modify an existing blend by scaling, translating, and rotating it so that it will fill a
+shape properly even if the position of the shape is nowhere near the original location of
+the blend's definition.
 
 For example, if your blend definition was this (notice the `1`)
 
-    blend_gold_magenta = blend(
+    blendgoldmagenta = blend(
             Point(0, 0), 0,                   # first circle center and radius
             Point(0, 0), 1,                   # second circle center and radius
             "gold",
@@ -129,18 +129,18 @@ For example, if your blend definition was this (notice the `1`)
 
 you can use it in a shape that's 100 units across and centered at `pos`, by calling this:
 
-    blend_adjust(blend_gold_magenta, -Point(pos.x, pos.y), 100, 100)
+    blendadjust(blendgoldmagenta, -Point(pos.x, pos.y), 100, 100)
 
 then use `setblend()`:
 
-    setblend(blend_gold_magenta)
+    setblend(blendgoldmagenta)
 """
-function blend_adjust(ablend, center::Point, xscale, yscale, rot)
+function blendadjust(ablend, center::Point, xscale, yscale, rot)
     blendmatrix(ablend,
         juliatocairomatrix(
-            rotation_matrix(-rot) *
-            scaling_matrix(1/xscale, 1/yscale) *
-            translation_matrix(-center.x, -center.y) *
+            rotationmatrix(-rot) *
+            scalingmatrix(1/xscale, 1/yscale) *
+            translationmatrix(-center.x, -center.y) *
         cairotojuliamatrix([1 0 0 1 0 0])))
 end
 
@@ -154,8 +154,8 @@ To apply a sequence of matrix transforms to a blend:
 ```
 A = [1 0 0 1 0 0]
 Aj = cairotojuliamatrix(A)
-Sj = scaling_matrix(2, .2) * Aj
-Tj = translation_matrix(10, 0) * Sj
+Sj = scalingmatrix(2, .2) * Aj
+Tj = translationmatrix(10, 0) * Sj
 A1 = juliatocairomatrix(Tj)
 blendmatrix(b, As)
 ```
@@ -164,6 +164,5 @@ function blendmatrix(b::Blend, m)
     cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
     Cairo.set_matrix(b, cm)
 end
-
 
 # end
