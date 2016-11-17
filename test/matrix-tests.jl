@@ -25,36 +25,36 @@ function matrix_tests(fname)
     Drawing(1000,1000, fname)
 
     # get rotation
-    @test isapprox(get_rotation(cairotojuliamatrix(getmatrix())), 0.0)
+    @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), 0.0)
     rotate(pi/2)
-    @test isapprox(get_rotation(), pi/2)
-    @test isapprox(get_rotation(cairotojuliamatrix(getmatrix())), pi/2)
+    @test isapprox(getrotation(), pi/2)
+    @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), pi/2)
     origin()
-    @test isapprox(get_rotation(cairotojuliamatrix(getmatrix())), 0.0)
+    @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), 0.0)
 
     # get translation
-    tx, ty =  get_translation(cairotojuliamatrix(getmatrix()))
+    tx, ty =  gettranslation(cairotojuliamatrix(getmatrix()))
     @test tx == 500.0
     @test ty == 500.0
     translate(5, 10)
-    tx, ty =  get_translation()
+    tx, ty =  gettranslation()
     @test tx == 505.0
     @test ty == 510.0
     origin()
-    tx, ty =  get_translation(cairotojuliamatrix(getmatrix()))
+    tx, ty =  gettranslation(cairotojuliamatrix(getmatrix()))
     @test tx == 500.0
     @test ty == 500.0
 
     # get scale
-    sx, sy =  get_scale(cairotojuliamatrix(getmatrix()))
+    sx, sy =  getscale(cairotojuliamatrix(getmatrix()))
     @test sx == 1.0
     @test sy == 1.0
     scale(5, 10)
-    sx, sy =  get_scale()
+    sx, sy =  getscale()
     @test sx == 5.0
     @test sy == 10.0
     origin()
-    sx, sy =  get_scale(cairotojuliamatrix(getmatrix()))
+    sx, sy =  getscale(cairotojuliamatrix(getmatrix()))
     @test sx == 1.0
     @test sy == 1.0
 

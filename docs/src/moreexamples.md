@@ -155,7 +155,7 @@ where some of the characters—eg "F", "+", "-", and "t"—issue turtle control 
 
 ## Strange
 
-It's usually better to draw fractals and similar images using pixels and image processing tools. Just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels.
+It's usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circles as dots (which is why it's better to target PNG rather than SVG or PDF for this example).
 
 ```@example
 using Luxor, Colors, ColorSchemes
@@ -192,6 +192,7 @@ function strange(dotsize, w=800.0)
 end
 
 strange(.3, 800)
+nothing # hide
 ```
 
 ![strange attractor in vectors](figures/strange-vector.png)

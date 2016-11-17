@@ -7,7 +7,7 @@ You can make regular polygons — from triangles, pentagons, hexagons, septagons
 ![n-gons](figures/n-gon.png)
 
 ```julia
-using Luxor
+using Luxor, Colors
 Drawing(1200, 1400)
 
 origin()
@@ -131,7 +131,7 @@ nothing # hide
 ```
 ![holes](figures/holes.png)
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertex_function` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
+The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor

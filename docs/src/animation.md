@@ -18,11 +18,11 @@ There are four steps to creating an animation.
 
     demo = Sequence(400, 400, "test")
 
-    function backdrop_f(demo, framenumber, framerange)
+    function backdropf(demo, framenumber, framerange)
         background("black")
     end
 
-    function frame_f(demo, framenumber, framerange)
+    function framef(demo, framenumber, framerange)
         xpos = 100 * cos(framenumber/100)
         ypos = 100 * sin(framenumber/100)
         sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))
@@ -34,7 +34,7 @@ There are four steps to creating an animation.
         text(string("frame $framenumber of $(length(framerange))"), O)
     end
 
-    animate(demo, 1:630, backdrop_f, frame_f, createanimation=true)
+    animate(demo, 1:630, backdropf, framef, createanimation=true)
 
 ![animation example](figures/animation.gif)
 

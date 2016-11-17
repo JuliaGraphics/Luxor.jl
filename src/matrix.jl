@@ -127,33 +127,33 @@ function transform(a::Array)
 end
 
 """
-    rotation_matrix(a)
+    rotationmatrix(a)
 
 Return a 3 by 3 Julia matrix that will apply a rotation through `a` radians.
 """
-function rotation_matrix(a)
+function rotationmatrix(a)
     return ([cos(a)  -sin(a)    0 ;
              sin(a)   cos(a)    0 ;
              0            0   1.0 ])
 end
 
 """
-    translation_matrix(x, y)
+    translationmatrix(x, y)
 
 Return a 3 by 3 Julia matrix that will apply a translation in `x` and `y`.
 """
-function translation_matrix(x, y)
+function translationmatrix(x, y)
     return ([1.0     0     x ;
                0     1.0   y ;
                0     0     1.0 ])
 end
 
 """
-    scaling_matrix(sx, sy)
+    scalingmatrix(sx, sy)
 
 Return a 3 by 3 Julia matrix that will apply a scaling by `sx` and `sy`.
 """
-function scaling_matrix(sx, sy)
+function scalingmatrix(sx, sy)
     return ([sx   0   0 ;
              0   sy   0 ;
              0    0   1.0])
@@ -178,7 +178,7 @@ function juliatocairomatrix(c::Matrix)
 end
 
 """
-    get_rotation(R::Matrix)
+    getrotation(R::Matrix)
 
 Get rotation of a Julia matrix:
 
@@ -190,50 +190,50 @@ The rotation angle is `atan2(-b, a)` or `atan2(c, d)`.
 
 Get the current Luxor rotation:
 
-    get_rotation()
+    getrotation()
 
 """
-function get_rotation(R::Matrix)
+function getrotation(R::Matrix)
     # t = atan2(-R[4], R[1]) # should be the same as:
     t = atan2(R[2], R[5])
     return mod2pi(t)
 end
 
-function get_rotation()
-    get_rotation(cairotojuliamatrix(getmatrix()))
+function getrotation()
+    getrotation(cairotojuliamatrix(getmatrix()))
 end
 
 """
-    get_scale(R::Matrix)
-    get_scale()
+    getscale(R::Matrix)
+    getscale()
 
 Get the current scale of a Julia matrix, or the current Luxor scale.
 
 Returns a tuple of x and y values.
 
 """
-function get_scale(R::Matrix)
+function getscale(R::Matrix)
     sx = hypot(R[1], R[2])
     sy = hypot(R[4], R[5])
     return (sx, sy)
 end
 
-function get_scale()
-    get_scale(cairotojuliamatrix(getmatrix()))
+function getscale()
+    getscale(cairotojuliamatrix(getmatrix()))
 end
 
 """
-    get_translation(R::Matrix)
-    get_translation()
+    gettranslation(R::Matrix)
+    gettranslation()
 
 Get the current translation of a Julia matrix, or the current Luxor translation.
 
 Returns a tuple of x and y values.
 """
-function get_translation(R::Matrix)
+function gettranslation(R::Matrix)
     return (R[7], R[8])
 end
 
-function get_translation()
-    get_translation(cairotojuliamatrix(getmatrix()))
+function gettranslation()
+    gettranslation(cairotojuliamatrix(getmatrix()))
 end

@@ -193,7 +193,7 @@ nothing # hide
 
 ![blends 1](figures/color-blends-translate-1.png)
 
-Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape. An alternative is to use `blend_adjust()`.
+Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape. An alternative is to use `blendadjust()`.
 
 ```@example
 using Luxor # hide
@@ -223,5 +223,5 @@ nothing # hide
 ```@docs
 blend
 addstop
-blend_adjust
+blendadjust
 ```

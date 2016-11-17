@@ -56,9 +56,9 @@ export Drawing, currentdrawing, paper_sizes,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
-    Blend, setblend, blend, addstop, blend_adjust,
-    blendmatrix, rotation_matrix, scaling_matrix, translation_matrix,
-    cairotojuliamatrix, juliatocairomatrix, get_rotation, get_scale, get_translation,
+    Blend, setblend, blend, addstop, blendadjust,
+    blendmatrix, rotationmatrix, scalingmatrix, translationmatrix,
+    cairotojuliamatrix, juliatocairomatrix, getrotation, getscale, gettranslation,
 
     readpng, placeimage,
 
