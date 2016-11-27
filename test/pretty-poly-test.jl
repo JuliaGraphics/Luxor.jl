@@ -18,41 +18,43 @@ function drawbbox(apoly)
 end
 
 function test1(p, x, y)
-    prettypoly(p, :fill,
-              # all these commands are executed for each vertex of the polygon
-              () ->
-              begin
-              scale(0.5, 0.5)
-              randomhue()
-              opacity = currentdrawing.alpha
-              setopacity(rand(5:10)/10)
-              ngon(0, 0, 15, rand(3:12), 0, :fill)
-              setopacity(opacity)
-              sethue("black")
-          end
+    prettypoly1(p, :fill,
+        vertexnumberingfunction = (n, l) -> (text(string(n, " of ", l))),
+        # all these commands are executed for each vertex of the polygon
+        () ->
+        begin
+            scale(0.5, 0.5)
+            randomhue()
+            opacity = currentdrawing.alpha
+            setopacity(rand(5:10)/10)
+            ngon(0, 0, 15, rand(3:12), 0, :fill)
+            setopacity(opacity)
+            sethue("black")
+        end,
     )
 end
 
 function test2(p)
-    prettypoly(p, :fill,
-                  () ->
+    prettypoly(p,
+        :fill,
+        () ->
+        begin
+          ## all these commands are executed for each vertex of the polygon
+            randomhue()
+            scale(0.5, 0.5)
+            rotate(pi/2)
+            prettypoly(p, :fill,
+                () ->
                 begin
-                  ## all these commands are executed for each vertex of the polygon
-                  randomhue()
-                  scale(0.5, 0.5)
-                  rotate(pi/2)
-                  prettypoly(p, :fill,
-                    () ->
-                    begin
-                    # and all these commands are executed for each vertex of that polygon
-                    randomhue()
-                    scale(0.25, 0.25)
-                    rotate(pi/2)
-                    prettypoly(p, :fill)
-                    end
-                )
+                # and all these commands are executed for each vertex of that polygon
+                randomhue()
+                scale(0.25, 0.25)
+                rotate(pi/2)
+                prettypoly(p, :fill)
+                end
+            )
         end
-        )
+    )
 end
 
 function get_all_png_files(folder)
@@ -71,18 +73,19 @@ function test3(p)
     img = readpng(imagelist[1])
     w = img.width
     h = img.height
-    prettypoly(p, :fill,
-                  () ->
-                  begin
-                  ## all these commands are executed for each vertex of the polygon
-                  placeimage(readpng(imagelist[rand(1:end)]), -w/2, -h/2)
-                  end
-                  )
+    prettypoly(p,
+        :fill,
+        () ->
+        begin
+            ## all these commands are executed for each vertex of the polygon
+            placeimage(readpng(imagelist[rand(1:end)]), -w/2, -h/2)
+        end
+        )
 end
 
 function draw_lots_of_polys(pagewidth, pageheight)
     setopacity(0.75)
-    pagetiles = Tiler(width, height, 9, 9, margin=20)
+    pagetiles = Tiler(pagewidth, pageheight, 9, 9, margin=20)
     for (pos, n) in pagetiles
         if rand(Bool)
             p = randompointarray(rand(-140:-10), rand(-140:-10), rand(10:140), rand(10:140), rand(5:12))
@@ -114,6 +117,6 @@ function test_pretty_poly(fname)
     @test finish() == true
 end
 
-test_pretty_poly(fname)
 fname = "pretty-poly-test.pdf"
+test_pretty_poly(fname)
 println("...finished test: output in $(fname)")

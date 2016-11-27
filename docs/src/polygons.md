@@ -134,7 +134,7 @@ nothing # hide
 The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
-using Luxor
+using Luxor # hide
 Drawing(400, 250, "../figures/prettypolybasic.png") # hide
 background("white") # hide
 origin() # hide
@@ -152,6 +152,29 @@ nothing # hide
 ```
 
 ![prettypoly](figures/prettypolybasic.png)
+
+An optional keyword argument `vertexnumberingfunction` lets you pass a function that can
+number each vertex. The function can use two arguments, the current vertex number, and the
+total number of points in the polygon:
+
+```@example
+using Luxor # hide
+Drawing(400, 250, "../figures/prettypolyvertex.png") # hide
+background("white") # hide
+origin() # hide
+sethue("steelblue4") # hide
+
+apoly = star(O, 80, 5, 0.6, 0, vertices=true)
+prettypoly(apoly,
+    :stroke,  
+    vertexnumberingfunction = (n, l) -> (text(string(n, " of ", l), halign=:center)),
+    close=true)
+finish() # hide
+nothing # hide
+```
+
+![prettypoly](figures/prettypolyvertex.png)
+
 
 ```@docs
 prettypoly
