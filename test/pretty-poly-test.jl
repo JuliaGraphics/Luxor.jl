@@ -18,7 +18,7 @@ function drawbbox(apoly)
 end
 
 function test1(p, x, y)
-    prettypoly1(p, :fill,
+    prettypoly(p, :fill,
         vertexnumberingfunction = (n, l) -> (text(string(n, " of ", l))),
         # all these commands are executed for each vertex of the polygon
         () ->
