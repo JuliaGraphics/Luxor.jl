@@ -137,13 +137,13 @@ For example, if your blend definition was this (notice the `1`)
 
 you can use it in a shape that's 100 units across and centered at `pos`, by calling this:
 
-    blendadjust(blendgoldmagenta, -Point(pos.x, pos.y), 100, 100)
+    blendadjust(blendgoldmagenta, Point(pos.x, pos.y), 100, 100)
 
 then use `setblend()`:
 
     setblend(blendgoldmagenta)
 """
-function blendadjust(ablend, center::Point, xscale, yscale, rot)
+function blendadjust(ablend, center::Point, xscale, yscale, rot=0)
     blendmatrix(ablend,
         juliatocairomatrix(
             rotationmatrix(-rot) *
