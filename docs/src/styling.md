@@ -193,7 +193,7 @@ nothing # hide
 
 ![blends 1](figures/color-blends-translate-1.png)
 
-Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape. An alternative is to use `blendadjust()`.
+Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go (there are Cairo options to change this). But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
 
 ```@example
 using Luxor # hide
@@ -223,5 +223,58 @@ nothing # hide
 ```@docs
 blend
 addstop
+```
+
+### Using `blendadjust()`
+
+You can use `blendadjust()` to modify the blend so that objects scaled and positioned after the blend was defined are rendered correctly.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/blend-adjust.png") # hide
+origin() # hide
+background("white") # hide
+setline(20)
+
+# first line
+blendgoldmagenta = blend(Point(-100, 0), Point(100, 0), "gold", "magenta")
+setblend(blendgoldmagenta)
+line(Point(-100, -50), Point(100, -50))
+stroke()
+
+# second line
+blendadjust(blendgoldmagenta, Point(50, 0), 0.5, 0.5)
+line(O, Point(100, 0))
+stroke()
+
+# third line
+blendadjust(blendgoldmagenta, Point(-50, 50), 0.5, 0.5)
+line(Point(-100, 50), Point(0, 50))
+stroke()
+
+# fourth line
+gsave()
+translate(0, 100)
+scale(0.5, 0.5)
+setblend(blendgoldmagenta)
+line(Point(-100, 0), Point(100, 0))
+stroke()
+grestore()
+
+finish() # hide
+nothing # hide
+```
+
+![blends adjust](figures/blend-adjust.png)
+
+The blend is defined to span 200 units, horizontally centered at 0/0. The top line is also 200 units long and centered horizontally at 0/0, so the blend is rendered exactly as you'd hope.
+
+The second line is only half as long, at 100 units, centered at 50/0, so `blendadjust()` is used to relocate the blend's center to the point 50/0 and scale it by 0.5 (`100/200`).
+
+The third line is also 100 units long, centered at -50/0, so again `blendadjust()` is used to relocate the blend's center and scale it.
+
+The fourth line shows that you can translate and scale the axes instead of adjusting the blend, if you use `setblend()` again in the new scene.
+
+```@docs
 blendadjust
 ```
