@@ -373,7 +373,7 @@ end
     prettypoly(points, action=:nothing, vertexfunction=() -> circle(O, 1, :fill);
         close=false,
         reversepath=false,
-        vertexnumberingfunction = (n, l) -> ()
+        vertexlabels = (n, l) -> ()
         )
 
 Draw the polygon defined by `points`, possibly closing and reversing it, using the current
@@ -388,18 +388,18 @@ For example, you can mark each vertex of a polygon with a randomly colored fille
         end,
         close=true)
 
-The optional keyword argument `vertexnumberingfunction` lets you supply a function with
+The optional keyword argument `vertexlabels` lets you supply a function with
 two arguments that can access the current vertex number and the total number of vertices
 at each vertex. For example, you can label the vertices of a triangle "1 of 3", "2 of 3",
 and "3 of 3" using:
 
     prettypoly(triangle, :stroke,
-        vertexnumberingfunction = (n, l) -> (text(string(n, " of ", l))))
+        vertexlabels = (n, l) -> (text(string(n, " of ", l))))
 """
 function prettypoly(pointlist::Array, action=:nothing, vertexfunction = () -> circle(O, 1, :fill);
     close=false,
     reversepath=false,
-    vertexnumberingfunction = (n, l) -> ()
+    vertexlabels = (n, l) -> ()
     )
 
     if action != :path
@@ -421,7 +421,7 @@ function prettypoly(pointlist::Array, action=:nothing, vertexfunction = () -> ci
         gsave()
         translate(p.x, p.y)
         vertexfunction()
-        vertexnumberingfunction(pointnumber, length(pointlist))
+        vertexlabels(pointnumber, length(pointlist))
         grestore()
         pointnumber += 1
     end

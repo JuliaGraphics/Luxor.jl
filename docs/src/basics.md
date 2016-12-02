@@ -422,7 +422,7 @@ carc
 curve
 ```
 
-### Geometry tools
+## Geometry tools ##
 
 You can find the midpoint between two points using `midpoint()`.
 
@@ -450,8 +450,30 @@ nothing # hide
 ```
 ![arc](figures/midpoint.png)
 
+A more general function, `between()`, finds for a value `x` the corresponding point on a line between two points, normalized to the range 0 and 1. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
+
+```@example
+using Luxor # hide
+Drawing(700, 150, "../figures/betweenpoint.png") # hide
+origin() # hide
+background("white") # hide
+sethue("red")
+p1 = Point(-200, 0)
+p2 = Point(200, 50)
+line(p1, p2)
+stroke()
+for i in 0:0.1:1.0
+    randomhue()
+    circle(between(p1, p2, i), 5, :fill)
+end
+finish() # hide
+nothing # hide
+```
+![arc](figures/betweenpoint.png)
+
 ```@docs
 midpoint
+between
 ```
 
 `center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
