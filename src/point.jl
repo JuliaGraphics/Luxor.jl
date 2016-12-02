@@ -1,5 +1,5 @@
 import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
-import Base: isequal, isless, cmp, dot
+import Base: isequal, isless, isapprox, cmp, dot, size, getindex
 
 """
 The Point type holds two coordinates. Currently it's immutable, so remember not try to
@@ -34,6 +34,10 @@ const O = Point(0, 0)
 ./(p2::Point, k::Number)             = Point(p2.x/k,      p2.y/k)
 ^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
 ^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
+
+# for broadcasting
+Base.size(::Point) = 2
+Base.getindex(p::Point, i) = [p.x, p.y][i]
 
 function dot(a::Point, b::Point)
     return dot([a.x, a.y], [b.x, b.y])
@@ -104,15 +108,31 @@ end
 
 Find the midpoint between two points.
 """
-midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.)
+midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2.0, (p1.y + p2.y) / 2.0)
 
 """
     midpoint(a)
 
 Find midpoint between the first two elements of an array of points.
 """
-
 midpoint(pt::Array) = midpoint(pt[1], pt[2])
+
+"""
+    between(p1::Point, p2::Point, x)
+
+Find the point between point `p1` and point `p2` for `x`, where `x` is typically between 0 and
+1, so these two should be equivalent:
+
+    between(p1, p2, 0.5)
+
+and
+
+    midpoint(p1, p2)
+
+"""
+function between(p1::Point, p2::Point, x)
+    return p1 + (x * (p2 - p1))
+end
 
 """
     perpendicular(p::Point)
@@ -271,5 +291,6 @@ Returns a value between 0 and 2pi. Value will be relative to the current axes.
 function slope(pointA, pointB)
     return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
 end
+
 
 # end

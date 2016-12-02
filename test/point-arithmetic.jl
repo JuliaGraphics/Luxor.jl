@@ -64,6 +64,12 @@ function general_tests()
 
     @test pt1 ^ 1.5 < pt1 ^ 1.6
     @test pt1 ^ 1.6 > pt1 ^ 1.5
+
+    # test between interpolation
+    @test isequal(midpoint(pt1, pt3), between(pt1, pt3, 0.5))
+    @test isequal(between(pt1, pt3, 0.0), pt1)
+    @test isequal(between(pt1, pt3, 1.0), pt3)
+
 end
 
 function point_arithmetic_test(fname, npoints=20)

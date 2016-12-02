@@ -19,51 +19,40 @@ Some basic matrix transforms:
 
 - translate
 
-    transform([1, 0, 0, 1, dx, dy])
-
-  => shift by `dx`, `dy`
+`transform([1, 0, 0, 1, dx, dy])` shifts by `dx`, `dy`
 
 - scale
 
-    => scale by `fx`, `fy`
-
-    scale around O: [W  0 0  H 0 0]
+`transform([fx 0 0 fy 0 0])` scales by `fx` and `fy`
 
 - rotate
 
-    transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])
-
-    => rotate to `a` radians
+`transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])` rotates around to `a` radians
 
     rotate around O: [c -s s c 0 0]
 
- - shear in x: [1  0 A  1 0 0]
+- shear
+
+`transform([1 0 a 1 0 0])` shears in x direction by `a`
+-  shear in y: [1  B 0  1 0 0]
 
 - x-skew
 
-    transform([1, 0, tan(a), 1, 0, 0])
-
-    => xskew by `a`
+`transform([1, 0, tan(a), 1, 0, 0])` skews in x by `a`
 
 - y-skew
 
-    transform([1, tan(a), 0, 1, 0, 0])
-
-    => yskew by `a`
+`transform([1, tan(a), 0, 1, 0, 0])` skews in y by `a`
 
 - flip
 
-    transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])
+`transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])` flips with center at `centerx`/`centery`
 
-  => flip with center at `centerx`/`centery`
+- reflect
 
--  shear in y: [1  B 0  1 0 0]
+`transform([1 0 0 -1 0 0])` reflects in xaxis
 
--  reflect in O:  [-1 0 0 -1 0 0]
-
--  reflect in xaxis:  [1  0 0 -1 0 0]
-
--  reflect in yaxis:  [-1 0 0  1 0 0]
+`transform([-1 0 0 1 0 0])` reflects in yaxis
 
 When a drawing is first created, the matrix looks like this:
 

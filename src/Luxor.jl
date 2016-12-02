@@ -39,7 +39,7 @@ export Drawing, currentdrawing, paper_sizes,
     ngon, star, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
-    Point, O, randompoint, randompointarray, midpoint, intersection, pointlinedistance,
+    Point, O, randompoint, randompointarray, midpoint, between, intersection, pointlinedistance,
     getnearestpointonline, isinside, perpendicular, crossproduct, prettypoly, polysmooth,
     polysplit, poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance,
     offsetpoly, polyfit, slope,
@@ -64,7 +64,7 @@ export Drawing, currentdrawing, paper_sizes,
 
     julialogo, juliacircles,
 
-    Sequence, animate, backdrop, frame
+    Sequence, animate
 
 # as of version 0.4, we still share fill() and scale() with Base.
 
@@ -241,7 +241,7 @@ You can refer to the 0/0 point as `O`. (O = `Point(0, 0)`),
 """
 function origin()
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-    Cairo.translate(currentdrawing.cr, currentdrawing.width/2., currentdrawing.height/2.)
+    Cairo.translate(currentdrawing.cr, currentdrawing.width/2.0, currentdrawing.height/2.0)
 end
 
 """

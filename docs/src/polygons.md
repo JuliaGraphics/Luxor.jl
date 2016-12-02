@@ -153,7 +153,7 @@ nothing # hide
 
 ![prettypoly](figures/prettypolybasic.png)
 
-An optional keyword argument `vertexnumberingfunction` lets you pass a function that can
+An optional keyword argument `vertexlabels` lets you pass a function that can
 number each vertex. The function can use two arguments, the current vertex number, and the
 total number of points in the polygon:
 
@@ -167,7 +167,7 @@ sethue("steelblue4") # hide
 apoly = star(O, 80, 5, 0.6, 0, vertices=true)
 prettypoly(apoly,
     :stroke,  
-    vertexnumberingfunction = (n, l) -> (text(string(n, " of ", l), halign=:center)),
+    vertexlabels = (n, l) -> (text(string(n, " of ", l), halign=:center)),
     close=true)
 finish() # hide
 nothing # hide
