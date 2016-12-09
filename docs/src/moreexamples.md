@@ -50,30 +50,29 @@ This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/D
 
 The Markdown markup looks like this:
 
-```
-    ```@example
-    using Luxor # hide
-    Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
-    origin() # hide
-    background("white") # hide
-    setopacity(0.75) # hide
-    srand(42) # hide
-    setline(1) # hide
-    p = star(O, 60, 5, 0.35, 0, vertices=true)
-    setdash("dot")
-    sethue("red")
-    prettypoly(p, close=true, :stroke)
-    setdash("solid")
-    sethue("black")
-    polysmooth(p, 40, :fill, debug=true)
-    finish() # hide
-    ```
-
-    ![polysmooth](figures/polysmooth-pathological.png)
-
+`````
+```@example
+using Luxor # hide
+Drawing(600, 250, "../figures/polysmooth-pathological.png") # hide
+origin() # hide
+background("white") # hide
+setopacity(0.75) # hide
+srand(42) # hide
+setline(1) # hide
+p = star(O, 60, 5, 0.35, 0, vertices=true)
+setdash("dot")
+sethue("red")
+prettypoly(p, close=true, :stroke)
+setdash("solid")
+sethue("black")
+polysmooth(p, 40, :fill, debug=true)
+finish() # hide
 ```
 
-and it looks like this in the final document:
+![polysmooth](figures/polysmooth-pathological.png)
+`````
+
+and after the document is processed by Documenter it looks like this:
 
 ```@example
 using Luxor # hide
