@@ -7,7 +7,7 @@
 
 <!-- ![](docs/figures/luxor-big-logo.png) -->
 
-![](docs/figures/snow30.gif
+![](docs/figures/snow30.gif)
 
 Documentation: http://cormullion.github.io/Luxor.jl/
 
