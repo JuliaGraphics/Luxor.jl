@@ -5,12 +5,13 @@
 [![Luxor](http://pkg.julialang.org/badges/Luxor_0.6.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.6)
 [![][codecov-img]][codecov-url]
 
-![](docs/figures/luxor-big-logo.png)
+<!-- ![](docs/figures/luxor-big-logo.png) -->
+
+![](docs/figures/snow30.gif
 
 Documentation: http://cormullion.github.io/Luxor.jl/
 
 [![Build Status](https://travis-ci.org/cormullion/Luxor.jl.svg?branch=master)](https://travis-ci.org/cormullion/Luxor.jl)
-
 
 ## Luxor
 
@@ -18,4 +19,3 @@ Luxor provides basic vector drawing functions, and utilities for working with sh
 
 [codecov-img]: https://codecov.io/gh/cormullion/Luxor.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/cormullion/Luxor.jl
-
