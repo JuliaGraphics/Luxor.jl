@@ -1249,6 +1249,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "images.html#Images-1",
+    "page": "Images",
+    "title": "Images",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "images.html#Luxor.readpng",
     "page": "Images",
     "title": "Luxor.readpng",
@@ -1265,11 +1273,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "images.html#Images-1",
+    "location": "images.html#Placing-images-1",
     "page": "Images",
-    "title": "Images",
+    "title": "Placing images",
     "category": "section",
-    "text": "There is some limited support for placing PNG images on the drawing. First, load a PNG image using readpng(filename).Then use placeimage() to place it by its top left corner at point x/y or pt. Access the image's dimensions with .width and .height.using Luxor # hide\nDrawing(600, 350, \"../figures/images.png\") # hide\norigin() # hide\nbackground(\"grey40\") # hide\nimg = readpng(\"../figures/julia-logo-mask.png\")\nw = img.width\nh = img.height\naxes()\nscale(0.3, 0.3)\nrotate(pi/4)\nplaceimage(img, -w/2, -h/2, .5)\nsethue(\"red\")\ncircle(-w/2, -h/2, 15, :fill)\nfinish() # hide\nnothing # hide(Image: \"Images\")readpng\nplaceimageYou can clip images. The following script repeatedly places the image using a circle to define a clipping path:(Image: \"Images\")using Luxor\n\nwidth, height = 4000, 4000\nmargin = 500\n\nfname = \"/tmp/test-image.pdf\"\nDrawing(width, height, fname)\norigin()\nbackground(\"grey25\")\n\nsetline(5)\nsethue(\"green\")\n\nimage = readpng(dirname(@__FILE__) * \"/../docs/figures/julia-logo-mask.png\")\n\nw = image.width\nh = image.height\n\npagetiles = Tiler(width, height, 7, 9)\ntw = pagetiles.tilewidth/2\nfor (pos, n) in pagetiles\n    circle(pos, tw, :stroke)\n    circle(pos, tw, :clip)\n    gsave()\n    translate(pos)\n    scale(.95, .95)\n    rotate(rand(0.0:pi/8:2pi))\n    placeimage(image, -w/2, -h/2)\n    grestore()\n    clipreset()\nend\n\nfinish()"
+    "text": "There is some limited support for placing PNG images on the drawing. First, load a PNG image using readpng(filename).Then use placeimage() to place it by its top left corner at point x/y or pt. Access the image's dimensions with .width and .height.using Luxor # hide\nDrawing(600, 350, \"../figures/images.png\") # hide\norigin() # hide\nbackground(\"grey40\") # hide\nimg = readpng(\"../figures/julia-logo-mask.png\")\nw = img.width\nh = img.height\naxes()\nscale(0.3, 0.3)\nrotate(pi/4)\nplaceimage(img, -w/2, -h/2, .5)\nsethue(\"red\")\ncircle(-w/2, -h/2, 15, :fill)\nfinish() # hide\nnothing # hide(Image: \"Images\")readpng\nplaceimage"
+},
+
+{
+    "location": "images.html#Clipping-images-1",
+    "page": "Images",
+    "title": "Clipping images",
+    "category": "section",
+    "text": "You can clip images. The following script repeatedly places the image using a circle to define a clipping path:(Image: \"Images\")using Luxor\n\nwidth, height = 4000, 4000\nmargin = 500\n\nfname = \"/tmp/test-image.pdf\"\nDrawing(width, height, fname)\norigin()\nbackground(\"grey25\")\n\nsetline(5)\nsethue(\"green\")\n\nimage = readpng(dirname(@__FILE__) * \"/../docs/figures/julia-logo-mask.png\")\n\nw = image.width\nh = image.height\n\npagetiles = Tiler(width, height, 7, 9)\ntw = pagetiles.tilewidth/2\nfor (pos, n) in pagetiles\n    circle(pos, tw, :stroke)\n    circle(pos, tw, :clip)\n    gsave()\n    translate(pos)\n    scale(.95, .95)\n    rotate(rand(0.0:pi/8:2pi))\n    placeimage(image, -w/2, -h/2)\n    grestore()\n    clipreset()\nend\n\nfinish()"
+},
+
+{
+    "location": "images.html#Drawing-on-images-1",
+    "page": "Images",
+    "title": "Drawing on images",
+    "category": "section",
+    "text": "You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.In this example, we'll annotate a PNG file with some text and graphics.(Image: \"Drawing on images\")using Luxor # hide\n\nimage = readpng(dirname(@__FILE__) * \"/../docs/figures/julia-logo-mask.png\")\n\nw = image.width\nh = image.height\n\n# create a drawing surface of the same size\n\nfname = \"../figures/drawing_on_images.png\"\nDrawing(w, h, fname)\n\n# place the image on the Drawing - it's positioned by its top/left corner\n\nplaceimage(image, 0, 0)\n\n# now you can annotate the image. The (0/0) is at the top left.\n\nsethue(\"red\")\nfontsize(20)\ncircle(5, 5, 2, :fill)\ntext(\"(5/5)\", Point(25, 25), halign=:center)\n\narrow(Point(w/2, 50), Point(0, 50))\narrow(Point(w/2, 50), Point(w, 50))\ntext(\"width $w\", Point(w/2, 70), halign=:center)\n\n# to divide up the image into rectangular areas, temporarily position the axes at the center:\n\ngsave()\nsetline(0.2)\nsethue(\"green\")\nfontsize(12)\ntranslate(w/2, h/2)\ntiles = Tiler(w, h, 16, 10, margin=0)\nfor (pos, n) in tiles\n    box(pos, tiles.tilewidth, tiles.tileheight, :stroke)\n    text(string(n), pos, halign=:center)\nend\ngrestore()\n\n# If you want coordinates to be relative to the bottom left corner of the image, transform:\n\ntranslate(0, h)\n\n# and reflect in the x-axis\n\ntransform([1 0 0 -1 0 0])\n\n# now 0/0 is at the bottom left corner, and 50/50 is up and to the right.\n\nsethue(\"blue\")\narrow(O, Point(100, 100))\n\n# However, don't use text while flipped, because it's reversed:\n\ntext(\"I'm in reverse!\", w/2, h/2)\n\nfinish()\nnothing # hide"
 },
 
 {
