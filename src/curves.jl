@@ -1,3 +1,5 @@
+# arcs, circles, ellipses, curves, pie, sector, bezier
+
 """
     circle(x, y, r, action=:nothing)
 
@@ -123,7 +125,6 @@ Add an arc to the current path from `angle1` to `angle2` going clockwise.
     arc(xc, yc, radius, angle1, angle2, action=:nothing)
 
 Angles are defined relative to the x-axis, positive clockwise.
-
 """
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
@@ -144,7 +145,6 @@ Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
     carc(xc, yc, radius, angle1, angle2, action=:nothing)
 
 Angles are defined relative to the x-axis, positive clockwise.
-
 """
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
@@ -153,7 +153,6 @@ end
 
 carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
   carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
-
 
 """
       arc2r(c1, p2, p3, action=:nothing)
@@ -213,11 +212,10 @@ Make a pie shape centered at `centerpoint`.
 
 Angles start at the positive x-axis and are measured clockwise.
 """
-
 pie(centerpoint::Point, radius, startangle, endangle, action) =
  pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
 
- """
+"""
 Draw a Bézier curve.
 
      curve(x1, y1, x2, y2, x3, y3)
@@ -227,7 +225,6 @@ Draw a Bézier curve.
  control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
 
  """
-
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 

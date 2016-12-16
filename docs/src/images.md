@@ -130,7 +130,7 @@ translate(0, h)
 
 transform([1 0 0 -1 0 0])
 
-# now 0/0 is at the bottom left corner, and 50/50 is up and to the right.
+# now 0/0 is at the bottom left corner, and 100/100 is up and to the right.
 
 sethue("blue")
 arrow(O, Point(100, 100))

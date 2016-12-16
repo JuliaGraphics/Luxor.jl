@@ -14,32 +14,48 @@ Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
 the string at the point. If you omit the point, it's placed at the current `0/0`. In Luxor,
 placing text doesn't affect the current point.
 
-`:halign` can be `:left`, `:center`, or `:right`. `:valign` can be `:baseline`, `:top`,
-`:middle`, or `:bottom`.
-
-However, the `:valign` doesn't work properly because we're using
-Cairo's so-called "toy" interface... :(
+Horizontal alignment `:halign` can be `:left`, `:center`, or `:right`. Vertical alignment
+`:valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
 """
-function text(t, x=0.0, y=0.0; halign=:left, valign=:baseline)
-    wdfactor = 0.0
-    htfactor = 0.0
-    textents = textextents(t)
-    halign == :left         && (wdfactor = 0.0)
-    halign == :center       && (wdfactor = 0.5)
-    halign == :right        && (wdfactor = 1.0)
-    valign == :baseline     && (htfactor = 0.0)
-    valign == :top          && (htfactor = -1.0)
-    valign == :middle       && (htfactor = 0.5)
-    valign == :bottom       && (htfactor = 1.0)
-    textpointx = x - (wdfactor * (textents[3]))
-    textpointy = y - (htfactor * textents[4])
+function text(t, pt::Point; halign=:left, valign=:baseline)
+    #= text can aligned by one of the following points
+        top/left       top/center       top/right
+        middle/left    middle/center    middle/right
+        baseline/left  baseline/center  baseline/right
+        bottom/left    bottom/center    bottom/right
+
+    # left center right x coords are
+    # [:xbearing, :width-:xbearing/2, :width]
+    # top middle baseline bottom y coords are
+    # [:ybearing, :ybearing/2, 0, :height + :ybearing]
+    =#
+
+    xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(t)
+    halignment = findfirst([:left, :center, :right], halign)
+
+    # if unspecified or wrong, default to left
+    if halignment == 0
+        halignment = 1
+    end
+
+    textpointx = pt.x - [xbearing, (textwidth-xbearing)/2, textwidth][halignment]
+    valignment = findfirst([:top, :middle, :baseline, :bottom], valign)
+
+    # if unspecified or wrong, default to baseline
+    if valignment == 0
+        valignment = 3
+    end
+
+    textpointy = pt.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+
     gsave()
     Cairo.move_to(currentdrawing.cr, textpointx, textpointy)
     Cairo.show_text(currentdrawing.cr, t)
     grestore()
 end
 
-text(t, pt::Point; kwargs...) = text(t, pt.x, pt.y; kwargs...)
+text(t; kwargs...) = text(t, O; kwargs...)
+text(t, xpos, ypos; kwargs...) = text(t, Point(xpos, ypos); kwargs...)
 
 """
     textcentred(str)

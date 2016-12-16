@@ -110,6 +110,7 @@ else
         cd(tmpdir)
         info("running tests in: $(pwd())")
         info("but not keeping the results")
+        info("because you didn't do: ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
         run_all_tests()
         info("Test images not saved. To see the images, next time do this before running")
         info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")

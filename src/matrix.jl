@@ -1,3 +1,5 @@
+# matrix and transformations
+
 """
     getmatrix()
 
@@ -199,7 +201,6 @@ end
 Get the current scale of a Julia matrix, or the current Luxor scale.
 
 Returns a tuple of x and y values.
-
 """
 function getscale(R::Matrix)
     sx = hypot(R[1], R[2])
