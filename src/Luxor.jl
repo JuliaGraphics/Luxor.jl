@@ -352,7 +352,6 @@ Set the current antialiasing to a value between 0 and 6:
 
 I can't see any difference between these values. Perhaps on your machine you can!
 """
-
 setantialias(n) = Cairo.set_antialias(currentdrawing.cr, n)
 
 """
@@ -542,7 +541,6 @@ Create a box/rectangle centered at point `x/y` with width and height.
 function box(x, y, width, height, action=:nothing)
     rect(x - width/2, y - height/2, width, height, action)
 end
-
 
 """
     setline(n)
@@ -848,7 +846,6 @@ Set the color without changing opacity.
 `sethue()` is like `setcolor()`, but we sometimes want to change the current 'color' without
 changing alpha/opacity. Using `sethue()` rather than `setcolor()` doesn't change the current
 alpha opacity.
-
 """
 function sethue(col::String)
     temp = parse(RGBA,  col)
@@ -917,7 +914,6 @@ end
     randomcolor()
 
 Set a random color. This may change the current alpha opacity too.
-
 """
 function randomcolor()
   rrand, grand, brand, arand = rand(4)

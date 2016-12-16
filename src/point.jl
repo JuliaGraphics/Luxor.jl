@@ -128,7 +128,6 @@ Find the point between point `p1` and point `p2` for `x`, where `x` is typically
 and
 
     midpoint(p1, p2)
-
 """
 function between(p1::Point, p2::Point, x)
     return p1 + (x * (p2 - p1))
@@ -285,12 +284,11 @@ end
 """
     slope(pointA::Point, pointB::Point)
 
-Find angle of a line between two points.
-Returns a value between 0 and 2pi. Value will be relative to the current axes.
+Find angle of a line between two points. Returns a value between 0 and 2pi. Value will be
+relative to the current axes.
 """
 function slope(pointA, pointB)
     return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
 end
-
 
 # end
