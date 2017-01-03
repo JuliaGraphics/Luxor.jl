@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Introduction to Luxor",
     "category": "section",
-    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to Cairo.jl."
+    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to Cairo.jl.Please submit issues and pull requests."
 },
 
 {
@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Current status",
     "category": "section",
-    "text": "Luxor currently runs on Julia versions 0.4 and 0.5, and uses Cairo.jl and Colors.jl.Please submit issues and pull requests on github!"
+    "text": "Luxor currently runs on Julia versions 0.4 and 0.5, and uses Cairo.jl and Colors.jl."
 },
 
 {
@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
     "category": "section",
-    "text": "Install the package as follows:Pkg.add(\"Luxor\")and to use it:using Luxor"
+    "text": "Install the package as follows:Pkg.add(\"Luxor\")and to use it:using LuxorOriginal version by cormullion."
 },
 
 {
@@ -1469,7 +1469,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Animation helper functions",
     "category": "section",
-    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can be stitched together to form a moving animation, such as a GIF.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence, framenumber, framerange) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define the background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of frame framenumber. framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates the frames in the given framerange and saves them in a temporary directory."
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence, framenumber, framerange) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define a constant background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of the frame numbered framenumber. The total framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates all the frames in the given framerange and saves them in a temporary directory."
 },
 
 {
@@ -1501,7 +1501,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Making the animation",
     "category": "section",
-    "text": "Building an animation such as a GIF or MOV file is best done outside Julia, using something like ffmpeg, with its thousands of options, which include frame-rate adjustment and color palette tweaking. The animate function has a go at running it on Unix platforms, and assumes that ffmpeg is installed. Inside animate(), the first pass creates a color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen\n-y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png\n-i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)"
+    "text": "Building an animation such as a GIF or MOV file is best done outside Julia, using something like ffmpeg, with its thousands of options, which include frame-rate adjustment and color palette tweaking. The animate function has a go at running it on Unix platforms, and assumes that ffmpeg is installed. Inside animate(), the first pass creates a color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)"
 },
 
 {
@@ -1509,7 +1509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Passing information to later frames",
     "category": "section",
-    "text": "Sometimes you want some information to be passed from frame to frame, such as the updated position of a graphical shape. Currently, the only way to do this is to store things in the sequence's parameters dictionary.For example, for a \"bouncing ball\" animation, you can store the current position and direction of the ball in the Sequence dictionary, then recall them at the start of the next frame.function frameF(seq::Sequence, framenumber, framerange)\n    pos          = seq.parameters[\"pos\"]\n    direction    = seq.parameters[\"direction\"]\n    spriteradius = seq.parameters[\"spriteradius\"]\n    ...\n    seq.parameters[\"pos\"]          = newpos\n    seq.parameters[\"direction\"]    = newdirection\n    seq.parameters[\"spriteradius\"] = spriteradius\nend(Image: bouncing ball)"
+    "text": "Sometimes you want some information to be passed from frame to frame, such as the updated position of a graphical shape. Currently, the only way to do this is to store things in the sequence's parameters dictionary.For example, for a \"bouncing ball\" animation, you can store the current position and direction of the ball in the Sequence.parameters dictionary at the end of a frame, and then recall them at the start of the next frame.``julia function frameF(seq::Sequence, framenumber, framerange)     pos          = seq.parameters[\"pos\"]     direction    = seq.parameters[\"direction\"]     spriteradius = seq.parameters[\"spriteradius\"]# ... code to modify position, direction, and radius\n\nseq.parameters[\"pos\"]          = newpos\nseq.parameters[\"direction\"]    = newdirection\nseq.parameters[\"spriteradius\"] = spriteradiusend ```(Image: bouncing ball)"
 },
 
 {
@@ -1565,7 +1565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "More examples",
     "title": "Strange",
     "category": "section",
-    "text": "It's usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circles as dots (which is why it's better to target PNG rather than SVG or PDF for this example).using Luxor, Colors, ColorSchemes\nfunction strange(dotsize, w=800.0)\n    xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0\n    cs = ColorSchemes.botticelli\n    Drawing(w, w, \"../figures/strange-vector.png\")\n    origin()\n    background(\"white\")\n    xinc = w/(xmax - xmin)\n    yinc = w/(ymax - ymin)\n    # control parameters\n    a = 2.24; b = 0.43; c = -0.65; d = -2.43; e1 = 1.0\n    x = y = z = 0.0\n    wover2 = w/2\n    for j in 1:w\n        for i in 1:w\n            xx = sin(a * y) - z  *  cos(b * x)\n            yy = z * sin(c * x) - cos(d * y)\n            zz = e1 * sin(x)\n            x = xx; y = yy; z = zz\n            if xx < xmax && xx > xmin && yy < ymax && yy > ymin\n                xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range\n                ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range\n                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))\n                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))\n                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))\n                sethue(mean([col1, col2, col3]))\n                circle(Point(xpos, ypos), dotsize, :fill)\n            end\n        end\n    end\n    finish()\nend\n\nstrange(.3, 800)\nnothing # hide(Image: strange attractor in vectors)"
+    "text": "It's usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it's better to target PNG rather than SVG or PDF for this example!).using Luxor, Colors, ColorSchemes\nfunction strange(dotsize, w=800.0)\n    xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0\n    cs = ColorSchemes.botticelli\n    Drawing(w, w, \"../figures/strange-vector.png\")\n    origin()\n    background(\"white\")\n    xinc = w/(xmax - xmin)\n    yinc = w/(ymax - ymin)\n    # control parameters\n    a = 2.24; b = 0.43; c = -0.65; d = -2.43; e1 = 1.0\n    x = y = z = 0.0\n    wover2 = w/2\n    for j in 1:w\n        for i in 1:w\n            xx = sin(a * y) - z  *  cos(b * x)\n            yy = z * sin(c * x) - cos(d * y)\n            zz = e1 * sin(x)\n            x = xx; y = yy; z = zz\n            if xx < xmax && xx > xmin && yy < ymax && yy > ymin\n                xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range\n                ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range\n                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))\n                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))\n                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))\n                sethue(mean([col1, col2, col3]))\n                circle(Point(xpos, ypos), dotsize, :fill)\n            end\n        end\n    end\n    finish()\nend\n\nstrange(.3, 800)\nnothing # hide(Image: strange attractor in vectors)"
 },
 
 {
