@@ -23,7 +23,7 @@ circle(-w/2, -h/2, 15, :fill)
 finish() # hide
 nothing # hide
 ```
-!["Images"](figures/images.png)
+!["Images"](../figures/images.png)
 
 ```@docs
 readpng
@@ -34,7 +34,7 @@ placeimage
 
 You can clip images. The following script repeatedly places the image using a circle to define a clipping path:
 
-!["Images"](figures/test-image.png)
+!["Images"](../figures/test-image.png)
 
 ```julia
 using Luxor
@@ -78,7 +78,7 @@ You sometimes want to draw over images, for example to annotate them with text o
 
 In this example, we'll annotate a PNG file with some text and graphics.
 
-!["Drawing on images"](figures/drawing_on_images.png)
+!["Drawing on images"](../figures/drawing_on_images.png)
 
 ```@example
 using Luxor # hide

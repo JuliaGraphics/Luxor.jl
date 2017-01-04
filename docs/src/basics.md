@@ -30,7 +30,7 @@ To finish a drawing and close the file, use `finish()`, and, to launch an extern
 
 If you're using Jupyter (IJulia), `preview()` displays PNG files in the notebook.
 
-![jupyter](figures/jupyter.png)
+![jupyter](../figures/jupyter.png)
 
 ```@docs
 finish
@@ -77,7 +77,7 @@ finish() # hide
 nothing # hide
 ```
 
-![background](figures/backgrounds.png)
+![background](../figures/backgrounds.png)
 
 The `axes()` function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.
 
@@ -91,7 +91,7 @@ finish() # hide
 nothing # hide
 ```
 
-![axes](figures/axes.png)
+![axes](../figures/axes.png)
 
 ```@docs
 background
@@ -133,7 +133,7 @@ finish() # hide
 nothing # hide
 ```
 
-![tiler](figures/tiler.png)
+![tiler](../figures/tiler.png)
 
 ```@docs
 Tiler
@@ -154,7 +154,7 @@ Functions for making shapes include `rect()`, `box()`, `circle()`, `ellipse()`, 
 
 ## Rectangles and boxes
 
-![rects](figures/rects.png)
+![rects](../figures/rects.png)
 
 ```@docs
 rect
@@ -186,7 +186,7 @@ finish() # hide
 nothing # hide
 ```
 
-![circles](figures/circles.png)
+![circles](../figures/circles.png)
 
 Or passing through three points:
 
@@ -207,7 +207,7 @@ finish() # hide
 nothing # hide
 ```
 
-![center and radius of 3 points](figures/center3.png)
+![center and radius of 3 points](../figures/center3.png)
 
 With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
@@ -233,7 +233,7 @@ finish() # hide
 nothing # hide
 ```
 
-![ellipses](figures/ellipses.png)
+![ellipses](../figures/ellipses.png)
 
 ```@docs
 circle
@@ -260,7 +260,7 @@ finish() # hide
 nothing # hide
 ```
 
-![circles as paths](figures/circle-path.png)
+![circles as paths](../figures/circle-path.png)
 
 ```@docs
 circlepath
@@ -279,7 +279,7 @@ finish() # hide
 nothing # hide
 ```
 
-![sector](figures/sector.png)
+![sector](../figures/sector.png)
 
 ```@docs
 sector
@@ -298,7 +298,7 @@ finish() # hide
 nothing # hide
 ```
 
-![pie](figures/pie.png)
+![pie](../figures/pie.png)
 
 ```@docs
 pie
@@ -325,7 +325,7 @@ finish() # hide
 nothing # hide
 ```
 
-![squircles](figures/squircle.png)
+![squircles](../figures/squircle.png)
 
 ```@docs
 squircle
@@ -344,7 +344,7 @@ polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
 finish() # hide
 nothing # hide
 ```
-![rounded rect](figures/round-rect.png)
+![rounded rect](../figures/round-rect.png)
 
 
 ## Lines and positions
@@ -389,7 +389,7 @@ finish()  # hide
 nothing # hide
 ```
 
-![curve](figures/curve.png)
+![curve](../figures/curve.png)
 
 There are a few arc-drawing commands, such as `arc()`, `carc()`, and `arc2r()`. `arc2r()` draws a circular arc that joins two points:  
 
@@ -413,7 +413,7 @@ finish() # hide
 nothing # hide
 ```
 
-![arc](figures/arc2r.png)
+![arc](../figures/arc2r.png)
 
 ```@docs
 arc
@@ -448,7 +448,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](figures/midpoint.png)
+![arc](../figures/midpoint.png)
 
 A more general function, `between()`, finds for a value `x` the corresponding point on a line between two points, normalized to the range 0 and 1. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
 
@@ -469,7 +469,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](figures/betweenpoint.png)
+![arc](../figures/betweenpoint.png)
 
 ```@docs
 midpoint
@@ -500,7 +500,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](figures/intersection.png)
+![arc](../figures/intersection.png)
 
 ```@docs
 intersection
@@ -520,7 +520,7 @@ arrow(pt3, getnearestpointonline(end1, end2, pt3))
 finish() # hide
 nothing # hide
 ```
-![arc](figures/perpendicular.png)
+![arc](../figures/perpendicular.png)
 
 ```@docs
 getnearestpointonline
@@ -543,7 +543,7 @@ arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.
 finish() # hide
 nothing # hide
 ```
-![arrows](figures/arrow.png)
+![arrows](../figures/arrow.png)
 
 ```@docs
 arrow
@@ -582,7 +582,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![get path](figures/get-path.png)
+![get path](../figures/get-path.png)
 
 ```@docs
 newpath
@@ -625,7 +625,7 @@ finish() # hide
 nothing # hide
 ```
 
-![get path](figures/julia-logo.png)
+![get path](../figures/julia-logo.png)
 
 ```@docs
 julialogo

@@ -2,11 +2,11 @@
 
 A good place to look for examples (sometimes not very exciting or well-written examples, I'll admit), is in the `Luxor/test` directory.
 
-!["tiled images"](figures/tiled-images.png)
+!["tiled images"](../figures/tiled-images.png)
 
 ## An early test
 
-![Luxor test](figures/basic-test.png)
+![Luxor test](../figures/basic-test.png)
 
 ```julia
 using Luxor
@@ -69,7 +69,7 @@ polysmooth(p, 40, :fill, debug=true)
 finish() # hide
 ```
 
-![polysmooth](figures/polysmooth-pathological.png)
+![polysmooth](../figures/polysmooth-pathological.png)
 `````
 
 and after the document is processed by Documenter it looks like this:
@@ -93,13 +93,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](figures/polysmoothy.png)
+![polysmooth](../figures/polysmoothy.png)
 
 ## Luxor logo
 
 In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.
 
-![logo](figures/logo.png)
+![logo](../figures/logo.png)
 
 ```
 using Luxor, ColorSchemes
@@ -136,7 +136,7 @@ preview()
 
 An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here's an example of how a complex pattern can emerge from a simple set of rules, taken from [Lindenmayer.jl](https://github.com/cormullion/Lindenmayer.jl):
 
-![penrose](figures/penrose.png)
+![penrose](../figures/penrose.png)
 
 The definition of this figure is:
 
@@ -194,7 +194,7 @@ strange(.3, 800)
 nothing # hide
 ```
 
-![strange attractor in vectors](figures/strange-vector.png)
+![strange attractor in vectors](../figures/strange-vector.png)
 
 ## Hipster logo: text on curves
 
@@ -244,6 +244,6 @@ hipster("../figures/textcurvecenteredexample.png")
 nothing # hide
 ```
 
-![text on a curve](figures/textcurvecenteredexample.png)
+![text on a curve](../figures/textcurvecenteredexample.png)
 
 # Index

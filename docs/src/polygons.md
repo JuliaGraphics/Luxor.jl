@@ -4,7 +4,7 @@
 
 You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
 
-![n-gons](figures/n-gon.png)
+![n-gons](../figures/n-gon.png)
 
 ```julia
 using Luxor, Colors
@@ -52,7 +52,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![stars](figures/stars.png)
+![stars](../figures/stars.png)
 
 The `ratio` determines the length of the inner radius compared with the outer.
 ```@example
@@ -69,7 +69,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![stars](figures/star-ratios.png)
+![stars](../figures/star-ratios.png)
 
 ```@docs
 star
@@ -105,7 +105,7 @@ finish() # hide
 nothing # hide
 ```
 
-![simple poly](figures/simplepoly.png)
+![simple poly](../figures/simplepoly.png)
 
 ```@docs
 poly
@@ -129,7 +129,7 @@ fillstroke()
 finish() # hide
 nothing # hide
 ```
-![holes](figures/holes.png)
+![holes](../figures/holes.png)
 
 The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
@@ -151,7 +151,7 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](figures/prettypolybasic.png)
+![prettypoly](../figures/prettypolybasic.png)
 
 An optional keyword argument `vertexlabels` lets you pass a function that can
 number each vertex. The function can use two arguments, the current vertex number, and the
@@ -173,7 +173,7 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](figures/prettypolyvertex.png)
+![prettypoly](../figures/prettypolyvertex.png)
 
 
 ```@docs
@@ -205,7 +205,7 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](figures/prettypolyrecursive.png)
+![prettypoly](../figures/prettypolyrecursive.png)
 
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
 
@@ -236,7 +236,7 @@ text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
 nothing # hide
 ```
-![simplify](figures/simplify.png)
+![simplify](../figures/simplify.png)
 
 ```@docs
 simplify
@@ -259,7 +259,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![isinside](figures/isinside.png)
+![isinside](../figures/isinside.png)
 
 ```@docs
 isinside
@@ -291,7 +291,7 @@ finish() # hide
 nothing # hide
 ```
 
-![isinside](figures/randompoints.png)
+![isinside](../figures/randompoints.png)
 
 ```@docs
 randompoint
@@ -319,7 +319,7 @@ poly(poly2, :fill)
 finish() # hide
 nothing # hide
 ```
-![polysplit](figures/polysplit.png)
+![polysplit](../figures/polysplit.png)
 
 ```@docs
 polysplit
@@ -356,7 +356,7 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](figures/polysmooth.png)
+![polysmooth](../figures/polysmooth.png)
 
 The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
 
@@ -379,7 +379,7 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](figures/polysmooth-pathological.png)
+![polysmooth](../figures/polysmooth-pathological.png)
 
 ```@docs
 polysmooth
@@ -418,11 +418,11 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly](figures/polyoffset-simple.png)
+![offset poly](../figures/polyoffset-simple.png)
 
 The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.
 
-![offset poly problem](figures/polygon-offset.gif)
+![offset poly problem](../figures/polygon-offset.gif)
 
 ```@docs
 offsetpoly
@@ -450,7 +450,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly](figures/polyfit.png)
+![offset poly](../figures/polyfit.png)
 
 ```@docs
 polyfit
