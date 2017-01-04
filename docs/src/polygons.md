@@ -218,7 +218,7 @@ sethue("black") # hide
 setline(1) # hide
 fontsize(20) # hide
 translate(0, -120) # hide
-sincurve =  (Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi)
+sincurve = [Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi]
 prettypoly(collect(sincurve), :stroke,
     () -> begin
             sethue("red")
