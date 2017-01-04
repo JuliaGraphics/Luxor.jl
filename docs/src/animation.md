@@ -38,7 +38,7 @@ end
 animate(demo, 1:630, backdropf, framef, createanimation=true)
 ```
 
-![animation example](figures/animation.gif)
+![animation example](assets/figures/animation.gif)
 
 ```@docs
 Sequence
@@ -75,4 +75,4 @@ function frameF(seq::Sequence, framenumber, framerange)
 end
 ```
 
-![bouncing ball](figures/bouncingball.gif)
+![bouncing ball](assets/figures/bouncingball.gif)

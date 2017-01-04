@@ -2,11 +2,11 @@
 
 A good place to look for examples (sometimes not very exciting or well-written examples, I'll admit), is in the `Luxor/test` directory.
 
-!["tiled images"](figures/tiled-images.png)
+!["tiled images"](assets/figures/tiled-images.png)
 
 ## An early test
 
-![Luxor test](figures/basic-test.png)
+![Luxor test](assets/figures/basic-test.png)
 
 ```julia
 using Luxor
@@ -53,7 +53,7 @@ The Markdown markup looks like this:
 `````
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/polysmooth-pathological.png") # hide
+Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -69,14 +69,14 @@ polysmooth(p, 40, :fill, debug=true)
 finish() # hide
 ```
 
-![polysmooth](figures/polysmooth-pathological.png)
+![polysmooth](assets/figures/polysmooth-pathological.png)
 `````
 
 and after the document is processed by Documenter it looks like this:
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/polysmoothy.png") # hide
+Drawing(600, 250, "assets/figures/polysmoothy.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -93,13 +93,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](figures/polysmoothy.png)
+![polysmooth](assets/figures/polysmoothy.png)
 
 ## Luxor logo
 
 In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.
 
-![logo](figures/logo.png)
+![logo](assets/figures/logo.png)
 
 ```
 using Luxor, ColorSchemes
@@ -136,7 +136,7 @@ preview()
 
 An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here's an example of how a complex pattern can emerge from a simple set of rules, taken from [Lindenmayer.jl](https://github.com/cormullion/Lindenmayer.jl):
 
-![penrose](figures/penrose.png)
+![penrose](assets/figures/penrose.png)
 
 The definition of this figure is:
 
@@ -161,7 +161,7 @@ using Luxor, Colors, ColorSchemes
 function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
     cs = ColorSchemes.botticelli
-    Drawing(w, w, "figures/strange-vector.png")
+    Drawing(w, w, "assets/figures/strange-vector.png")
     origin()
     background("white")
     xinc = w/(xmax - xmin)
@@ -194,7 +194,7 @@ strange(.3, 800)
 nothing # hide
 ```
 
-![strange attractor in vectors](figures/strange-vector.png)
+![strange attractor in vectors](assets/figures/strange-vector.png)
 
 ## Hipster logo: text on curves
 
@@ -240,10 +240,10 @@ function hipster(fname)
     finish()
 end
 
-hipster("figures/textcurvecenteredexample.png")
+hipster("assets/figures/textcurvecenteredexample.png")
 nothing # hide
 ```
 
-![text on a curve](figures/textcurvecenteredexample.png)
+![text on a curve](assets/figures/textcurvecenteredexample.png)
 
 # Index

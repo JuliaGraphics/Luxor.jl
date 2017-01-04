@@ -6,7 +6,7 @@ Use `text()` to place text.
 
 ```@example
 using Luxor # hide
-Drawing(400, 150, "figures/text-placement.png") # hide
+Drawing(400, 150, "assets/figures/text-placement.png") # hide
 origin() # hide
 background("white") # hide
 fontsize(24) # hide
@@ -27,7 +27,7 @@ finish() # hide
 nothing # hide
 ```
 
-![text placement](figures/text-placement.png)
+![text placement](assets/figures/text-placement.png)
 
 ```@docs
 text
@@ -47,7 +47,7 @@ Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font siz
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
-![textextents](figures/textextents.png)
+![textextents](assets/figures/textextents.png)
 
 The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.
 
@@ -61,7 +61,7 @@ textextents
 
 Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
-![text on a curve or spiral](figures/text-spiral.png)
+![text on a curve or spiral](assets/figures/text-spiral.png)
 
 ```julia
 using Luxor
@@ -89,7 +89,7 @@ For shorter strings, `textcurvecentered()` tries to place the text on a circular
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "figures/text-centered.png") # hide
+Drawing(400, 250, "assets/figures/text-centered.png") # hide
 origin() # hide
 background("white") # hide
 background("white") # hide
@@ -113,7 +113,7 @@ finish() # hide
 nothing # hide
 ```
 
-![text centered on curve](figures/text-centered.png)
+![text centered on curve](assets/figures/text-centered.png)
 
 ```@docs
 textcurve
@@ -124,7 +124,7 @@ textcurvecentered
 
 You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:
 
-![text clipping](figures/text-path-clipping.png)
+![text clipping](assets/figures/text-path-clipping.png)
 
 ```julia
 using Luxor

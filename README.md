@@ -7,7 +7,7 @@
 
 <!-- ![](docs/figures/luxor-big-logo.png) -->
 
-![](docs/figures/snow30.gif)
+![](assets/figures/snow30.gif)
 
 Documentation: http://JuliaGraphics.github.io/Luxor.jl/
 
