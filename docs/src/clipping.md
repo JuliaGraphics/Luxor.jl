@@ -4,7 +4,7 @@ Use `clip()` to turn the current path into a clipping region, masking any graphi
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "figures/simpleclip.png") # hide
+Drawing(400, 250, "assets/figures/simpleclip.png") # hide
 background("white") # hide
 origin() # hide
 setline(3) # hide
@@ -17,7 +17,7 @@ box(O, 125, 200, :fill)
 finish() # hide
 nothing # hide
 ```
-![simple clip](figures/simpleclip.png)
+![simple clip](assets/figures/simpleclip.png)
 
 ```@docs
 clip
@@ -27,7 +27,7 @@ clipreset
 
 This example uses the built-in function that draws the Julia logo. The `clip` action lets you use the shapes as a mask for clipping subsequent graphics, which in this example are randomly-colored circles:
 
-![julia logo mask](figures/julia-logo-mask.png)
+![julia logo mask](assets/figures/julia-logo-mask.png)
 
 ```julia
 function draw(x, y)

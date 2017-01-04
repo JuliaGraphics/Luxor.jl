@@ -8,10 +8,10 @@ Then use `placeimage()` to place it by its top left corner at point `x/y` or `pt
 
 ```@example
 using Luxor # hide
-Drawing(600, 350, "figures/images.png") # hide
+Drawing(600, 350, "assets/figures/images.png") # hide
 origin() # hide
 background("grey40") # hide
-img = readpng("figures/julia-logo-mask.png")
+img = readpng("assets/figures/julia-logo-mask.png")
 w = img.width
 h = img.height
 axes()
@@ -23,7 +23,7 @@ circle(-w/2, -h/2, 15, :fill)
 finish() # hide
 nothing # hide
 ```
-!["Images"](figures/images.png)
+!["Images"](assets/figures/images.png)
 
 ```@docs
 readpng
@@ -34,7 +34,7 @@ placeimage
 
 You can clip images. The following script repeatedly places the image using a circle to define a clipping path:
 
-!["Images"](figures/test-image.png)
+!["Images"](assets/figures/test-image.png)
 
 ```julia
 using Luxor
@@ -50,7 +50,7 @@ background("grey25")
 setline(5)
 sethue("green")
 
-image = readpng(dirname(@__FILE__) * "/../docs/figures/julia-logo-mask.png")
+image = readpng(dirname(@__FILE__) * "/../docs/assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
@@ -78,19 +78,19 @@ You sometimes want to draw over images, for example to annotate them with text o
 
 In this example, we'll annotate a PNG file with some text and graphics.
 
-!["Drawing on images"](figures/drawing_on_images.png)
+!["Drawing on images"](assets/figures/drawing_on_images.png)
 
 ```@example
 using Luxor # hide
 
-image = readpng(dirname(@__FILE__) * "/../docs/figures/julia-logo-mask.png")
+image = readpng(dirname(@__FILE__) * "/../docs/assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
 
 # create a drawing surface of the same size
 
-fname = "figures/drawing_on_images.png"
+fname = "assets/figures/drawing_on_images.png"
 Drawing(w, h, fname)
 
 # place the image on the Drawing - it's positioned by its top/left corner

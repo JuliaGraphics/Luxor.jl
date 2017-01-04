@@ -4,7 +4,7 @@
 
 You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
 
-![n-gons](figures/n-gon.png)
+![n-gons](assets/figures/n-gon.png)
 
 ```julia
 using Luxor, Colors
@@ -41,7 +41,7 @@ Use `star()` to make a star. You can draw it immediately, or use the points it c
 
 ```@example
 using Luxor # hide
-Drawing(500, 300, "figures/stars.png") # hide
+Drawing(500, 300, "assets/figures/stars.png") # hide
 background("white") # hide
 origin() # hide
 tiles = Tiler(400, 300, 4, 6, margin=5)
@@ -52,12 +52,12 @@ end
 finish() # hide
 nothing # hide
 ```
-![stars](figures/stars.png)
+![stars](assets/figures/stars.png)
 
 The `ratio` determines the length of the inner radius compared with the outer.
 ```@example
 using Luxor # hide
-Drawing(500, 250, "figures/star-ratios.png") # hide
+Drawing(500, 250, "assets/figures/star-ratios.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
@@ -69,7 +69,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![stars](figures/star-ratios.png)
+![stars](assets/figures/star-ratios.png)
 
 ```@docs
 star
@@ -81,7 +81,7 @@ A polygon is an array of Points. Use `poly()` to draw lines connecting the point
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/simplepoly.png") # hide
+Drawing(600, 250, "assets/figures/simplepoly.png") # hide
 background("white") # hide
 srand(42) # hide
 origin() # hide
@@ -105,7 +105,7 @@ finish() # hide
 nothing # hide
 ```
 
-![simple poly](figures/simplepoly.png)
+![simple poly](assets/figures/simplepoly.png)
 
 ```@docs
 poly
@@ -115,7 +115,7 @@ A polygon can contain holes. The `reversepath` keyword changes the direction of 
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "figures/holes.png") # hide
+Drawing(400, 250, "assets/figures/holes.png") # hide
 background("white") # hide
 origin() # hide
 setline(5)
@@ -129,13 +129,13 @@ fillstroke()
 finish() # hide
 nothing # hide
 ```
-![holes](figures/holes.png)
+![holes](assets/figures/holes.png)
 
 The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "figures/prettypolybasic.png") # hide
+Drawing(400, 250, "assets/figures/prettypolybasic.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -151,7 +151,7 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](figures/prettypolybasic.png)
+![prettypoly](assets/figures/prettypolybasic.png)
 
 An optional keyword argument `vertexlabels` lets you pass a function that can
 number each vertex. The function can use two arguments, the current vertex number, and the
@@ -159,7 +159,7 @@ total number of points in the polygon:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "figures/prettypolyvertex.png") # hide
+Drawing(400, 250, "assets/figures/prettypolyvertex.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -173,7 +173,7 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](figures/prettypolyvertex.png)
+![prettypoly](assets/figures/prettypolyvertex.png)
 
 
 ```@docs
@@ -184,7 +184,7 @@ Recursive decoration is possible:
 
 ```@example
 using Luxor # hide
-Drawing(400, 260, "figures/prettypolyrecursive.png") # hide
+Drawing(400, 260, "assets/figures/prettypolyrecursive.png") # hide
 background("white") # hide
 srand(42) # hide
 origin() # hide
@@ -205,13 +205,13 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](figures/prettypolyrecursive.png)
+![prettypoly](assets/figures/prettypolyrecursive.png)
 
 Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
 
 ```@example
 using Luxor # hide
-Drawing(600, 500, "figures/simplify.png") # hide
+Drawing(600, 500, "assets/figures/simplify.png") # hide
 background("white") # hide
 origin() # hide
 sethue("black") # hide
@@ -236,7 +236,7 @@ text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
 nothing # hide
 ```
-![simplify](figures/simplify.png)
+![simplify](assets/figures/simplify.png)
 
 ```@docs
 simplify
@@ -246,7 +246,7 @@ The `isinside()` function returns true if a point is inside a polygon.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/isinside.png") # hide
+Drawing(600, 250, "assets/figures/isinside.png") # hide
 background("white") # hide
 origin() # hide
 setline(0.5)
@@ -259,7 +259,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![isinside](figures/isinside.png)
+![isinside](assets/figures/isinside.png)
 
 ```@docs
 isinside
@@ -269,7 +269,7 @@ You can use `randompoint()` and `randompointarray()` to create a random Point or
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "figures/randompoints.png") # hide
+Drawing(400, 250, "assets/figures/randompoints.png") # hide
 background("white") # hide
 srand(42) # hide
 origin() # hide
@@ -291,7 +291,7 @@ finish() # hide
 nothing # hide
 ```
 
-![isinside](figures/randompoints.png)
+![isinside](assets/figures/randompoints.png)
 
 ```@docs
 randompoint
@@ -302,7 +302,7 @@ There are some experimental polygon functions. These don't work well for polygon
 
 ```@example
 using Luxor # hide
-Drawing(400, 150, "figures/polysplit.png") # hide
+Drawing(400, 150, "assets/figures/polysplit.png") # hide
 origin() # hide
 setopacity(0.7) # hide
 srand(42) # hide
@@ -319,7 +319,7 @@ poly(poly2, :fill)
 finish() # hide
 nothing # hide
 ```
-![polysplit](figures/polysplit.png)
+![polysplit](assets/figures/polysplit.png)
 
 ```@docs
 polysplit
@@ -335,7 +335,7 @@ The original polygon is shown in red; the smoothed polygon is shown on top:
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/polysmooth.png") # hide
+Drawing(600, 250, "assets/figures/polysmooth.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.5) # hide
@@ -356,13 +356,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](figures/polysmooth.png)
+![polysmooth](assets/figures/polysmooth.png)
 
 The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/polysmooth-pathological.png") # hide
+Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -379,7 +379,7 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](figures/polysmooth-pathological.png)
+![polysmooth](assets/figures/polysmooth-pathological.png)
 
 ```@docs
 polysmooth
@@ -391,7 +391,7 @@ The experimental `offsetpoly()` function constructs an outline polygon outside o
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/polyoffset-simple.png") # hide
+Drawing(600, 250, "assets/figures/polyoffset-simple.png") # hide
 origin() # hide
 background("white") # hide
 srand(42) # hide
@@ -418,11 +418,11 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly](figures/polyoffset-simple.png)
+![offset poly](assets/figures/polyoffset-simple.png)
 
 The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.
 
-![offset poly problem](figures/polygon-offset.gif)
+![offset poly problem](assets/figures/polygon-offset.gif)
 
 ```@docs
 offsetpoly
@@ -434,7 +434,7 @@ The experimental `polyfit()` function constructs a B-spline that follows the poi
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "figures/polyfit.png") # hide
+Drawing(600, 250, "assets/figures/polyfit.png") # hide
 origin() # hide
 background("white") # hide
 srand(42) # hide
@@ -450,7 +450,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly](figures/polyfit.png)
+![offset poly](assets/figures/polyfit.png)
 
 ```@docs
 polyfit
