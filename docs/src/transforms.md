@@ -6,7 +6,7 @@ For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 200, "../figures/translate.png") # hide
+Drawing(400, 200, "figures/translate.png") # hide
 background("white") # hide
 srand(1) # hide
 setline(1) # hide
@@ -22,13 +22,13 @@ end
 finish() # hide
 nothing # hide
 ```
-![translate](../figures/translate.png)
+![translate](figures/translate.png)
 
 `scale()` scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 200, "../figures/scale.png") # hide
+Drawing(400, 200, "figures/scale.png") # hide
 background("white") # hide
 srand(1) # hide
 setline(1) # hide
@@ -44,13 +44,13 @@ finish() # hide
 nothing # hide
 ```
 
-![scale](../figures/scale.png)
+![scale](figures/scale.png)
 
 `rotate()` rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "../figures/rotate.png") # hide
+Drawing(400, 200, "figures/rotate.png") # hide
 background("white") # hide
 srand(1) # hide
 setline(1) # hide
@@ -67,7 +67,7 @@ finish() # hide
 nothing # hide
 ```
 
-![rotate](../figures/rotate.png)
+![rotate](figures/rotate.png)
 
 ```@docs
 scale
@@ -85,7 +85,7 @@ The current matrix is a six element array, perhaps like this:
 
 ```@example
 using Luxor # hide
-fname = "../figures/transform.png" # hide
+fname = "figures/transform.png" # hide
 pagewidth, pageheight = 450, 100 # hide
 Drawing(pagewidth, pageheight, fname) # hide
 origin() # hide
@@ -109,7 +109,7 @@ finish() # hide
 nothing # hide
 ```
 
-![transform](../figures/transform.png)
+![transform](figures/transform.png)
 
 `getmatrix()` gets the current matrix, `setmatrix(a)` sets the matrix to array `a`.
 

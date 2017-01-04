@@ -30,7 +30,7 @@ To finish a drawing and close the file, use `finish()`, and, to launch an extern
 
 If you're using Jupyter (IJulia), `preview()` displays PNG files in the notebook.
 
-![jupyter](../figures/jupyter.png)
+![jupyter](figures/jupyter.png)
 
 ```@docs
 finish
@@ -64,7 +64,7 @@ The `origin()` function moves the 0/0 point to the center of the drawing. It's o
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "../figures/backgrounds.png") # hide
+Drawing(600, 400, "figures/backgrounds.png") # hide
 background("magenta")
 origin() # hide
 tiles = Tiler(600, 400, 5, 5, margin=30)
@@ -77,13 +77,13 @@ finish() # hide
 nothing # hide
 ```
 
-![background](../figures/backgrounds.png)
+![background](figures/backgrounds.png)
 
 The `axes()` function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.
 
 ```@example
 using Luxor # hide
-Drawing(400, 400, "../figures/axes.png") # hide
+Drawing(400, 400, "figures/axes.png") # hide
 background("gray80")
 origin()
 axes()
@@ -91,7 +91,7 @@ finish() # hide
 nothing # hide
 ```
 
-![axes](../figures/axes.png)
+![axes](figures/axes.png)
 
 ```@docs
 background
@@ -107,7 +107,7 @@ In this example, every third tile is divided up into subtiles and colored:
 
 ```@example
 using Luxor # hide
-Drawing(400, 300, "../figures/tiler.png") # hide
+Drawing(400, 300, "figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
 srand(1) # hide
@@ -133,7 +133,7 @@ finish() # hide
 nothing # hide
 ```
 
-![tiler](../figures/tiler.png)
+![tiler](figures/tiler.png)
 
 ```@docs
 Tiler
@@ -154,7 +154,7 @@ Functions for making shapes include `rect()`, `box()`, `circle()`, `ellipse()`, 
 
 ## Rectangles and boxes
 
-![rects](../figures/rects.png)
+![rects](figures/rects.png)
 
 ```@docs
 rect
@@ -169,7 +169,7 @@ There are various ways to make circles, including by center and radius, through 
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "../figures/circles.png") # hide
+Drawing(400, 200, "figures/circles.png") # hide
 background("white") # hide
 origin() # hide
 setline(2) # hide
@@ -186,13 +186,13 @@ finish() # hide
 nothing # hide
 ```
 
-![circles](../figures/circles.png)
+![circles](figures/circles.png)
 
 Or passing through three points:
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "../figures/center3.png") # hide
+Drawing(400, 200, "figures/center3.png") # hide
 background("white") # hide
 origin() # hide
 setline(3) # hide
@@ -207,13 +207,13 @@ finish() # hide
 nothing # hide
 ```
 
-![center and radius of 3 points](../figures/center3.png)
+![center and radius of 3 points](figures/center3.png)
 
 With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
 ```@example
 using Luxor # hide
-Drawing(500, 300, "../figures/ellipses.png") # hide
+Drawing(500, 300, "figures/ellipses.png") # hide
 background("white") # hide
 fontsize(11) # hide
 srand(1) # hide
@@ -233,7 +233,7 @@ finish() # hide
 nothing # hide
 ```
 
-![ellipses](../figures/ellipses.png)
+![ellipses](figures/ellipses.png)
 
 ```@docs
 circle
@@ -244,7 +244,7 @@ ellipse
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "../figures/circle-path.png") # hide
+Drawing(600, 250, "figures/circle-path.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
@@ -260,7 +260,7 @@ finish() # hide
 nothing # hide
 ```
 
-![circles as paths](../figures/circle-path.png)
+![circles as paths](figures/circle-path.png)
 
 ```@docs
 circlepath
@@ -270,7 +270,7 @@ A sector (strictly an "annular sector") has an inner and outer radius, as well a
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "../figures/sector.png") # hide
+Drawing(400, 200, "figures/sector.png") # hide
 background("white") # hide
 origin() # hide
 sethue("cyan") # hide
@@ -279,7 +279,7 @@ finish() # hide
 nothing # hide
 ```
 
-![sector](../figures/sector.png)
+![sector](figures/sector.png)
 
 ```@docs
 sector
@@ -289,7 +289,7 @@ A pie (or wedge) has start and end angles.
 
 ```@example
 using Luxor # hide
-Drawing(400, 300, "../figures/pie.png") # hide
+Drawing(400, 300, "figures/pie.png") # hide
 background("white") # hide
 origin() # hide
 sethue("magenta") # hide
@@ -298,7 +298,7 @@ finish() # hide
 nothing # hide
 ```
 
-![pie](../figures/pie.png)
+![pie](figures/pie.png)
 
 ```@docs
 pie
@@ -308,7 +308,7 @@ A *squircle* is a cross between a square and a circle. You can adjust the squari
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "../figures/squircle.png") # hide
+Drawing(600, 250, "figures/squircle.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(20) # hide
@@ -325,7 +325,7 @@ finish() # hide
 nothing # hide
 ```
 
-![squircles](../figures/squircle.png)
+![squircles](figures/squircle.png)
 
 ```@docs
 squircle
@@ -335,7 +335,7 @@ Or for a simple rounded rectangle, smooth the corners of a box, like so:
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "../figures/round-rect.png") # hide
+Drawing(600, 250, "figures/round-rect.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
@@ -344,7 +344,7 @@ polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
 finish() # hide
 nothing # hide
 ```
-![rounded rect](../figures/round-rect.png)
+![rounded rect](figures/round-rect.png)
 
 
 ## Lines and positions
@@ -364,7 +364,7 @@ rline
 
 ```@example
 using Luxor # hide
-Drawing(500, 275, "../figures/curve.png") # hide
+Drawing(500, 275, "figures/curve.png") # hide
 origin() # hide
 background("white") # hide
 
@@ -389,13 +389,13 @@ finish()  # hide
 nothing # hide
 ```
 
-![curve](../figures/curve.png)
+![curve](figures/curve.png)
 
 There are a few arc-drawing commands, such as `arc()`, `carc()`, and `arc2r()`. `arc2r()` draws a circular arc that joins two points:  
 
 ```@example
 using Luxor # hide
-Drawing(700, 200, "../figures/arc2r.png") # hide
+Drawing(700, 200, "figures/arc2r.png") # hide
 origin() # hide
 srand(42) # hide
 background("white") # hide
@@ -413,7 +413,7 @@ finish() # hide
 nothing # hide
 ```
 
-![arc](../figures/arc2r.png)
+![arc](figures/arc2r.png)
 
 ```@docs
 arc
@@ -430,7 +430,7 @@ The following code places a small pentagon at the midpoint of each side of a lar
 
 ```@example
 using Luxor # hide
-Drawing(700, 220, "../figures/midpoint.png") # hide
+Drawing(700, 220, "figures/midpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
@@ -448,13 +448,13 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](../figures/midpoint.png)
+![arc](figures/midpoint.png)
 
 A more general function, `between()`, finds for a value `x` the corresponding point on a line between two points, normalized to the range 0 and 1. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
 
 ```@example
 using Luxor # hide
-Drawing(700, 150, "../figures/betweenpoint.png") # hide
+Drawing(700, 150, "figures/betweenpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
@@ -469,7 +469,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](../figures/betweenpoint.png)
+![arc](figures/betweenpoint.png)
 
 ```@docs
 midpoint
@@ -486,7 +486,7 @@ center3pts
 
 ```@example
 using Luxor # hide
-Drawing(700, 220, "../figures/intersection.png") # hide
+Drawing(700, 220, "figures/intersection.png") # hide
 origin() # hide
 background("white") # hide
 sethue("darkmagenta") # hide
@@ -500,7 +500,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](../figures/intersection.png)
+![arc](figures/intersection.png)
 
 ```@docs
 intersection
@@ -509,7 +509,7 @@ intersection
 
 ```@example
 using Luxor # hide
-Drawing(700, 200, "../figures/perpendicular.png") # hide
+Drawing(700, 200, "figures/perpendicular.png") # hide
 origin() # hide
 background("white") # hide
 sethue("darkmagenta") # hide
@@ -520,7 +520,7 @@ arrow(pt3, getnearestpointonline(end1, end2, pt3))
 finish() # hide
 nothing # hide
 ```
-![arc](../figures/perpendicular.png)
+![arc](figures/perpendicular.png)
 
 ```@docs
 getnearestpointonline
@@ -532,7 +532,7 @@ You can draw lines or arcs with arrows at the end with `arrow()`. For straight a
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../figures/arrow.png") # hide
+Drawing(400, 250, "figures/arrow.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -543,7 +543,7 @@ arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.
 finish() # hide
 nothing # hide
 ```
-![arrows](../figures/arrow.png)
+![arrows](figures/arrow.png)
 
 ```@docs
 arrow
@@ -557,7 +557,7 @@ The `getpath()` function gets the current path as an array of elements, lines an
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../figures/get-path.png") # hide
+Drawing(400, 250, "figures/get-path.png") # hide
 background("white") # hide
 background("white") # hide
 origin() # hide
@@ -582,7 +582,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![get path](../figures/get-path.png)
+![get path](figures/get-path.png)
 
 ```@docs
 newpath
@@ -599,7 +599,7 @@ three colored circles:
 
 ```@example
 using Luxor # hide
-Drawing(750, 250, "../figures/julia-logo.png")  # hide
+Drawing(750, 250, "figures/julia-logo.png")  # hide
 srand(42) # hide
 origin()  # hide
 background("white") # hide
@@ -625,7 +625,7 @@ finish() # hide
 nothing # hide
 ```
 
-![get path](../figures/julia-logo.png)
+![get path](figures/julia-logo.png)
 
 ```@docs
 julialogo
