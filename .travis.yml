@@ -10,6 +10,6 @@ julia:
 notifications:
   email: false
 after_success:
-- julia -e 'Pkg.add("Luxor")'
+- julia -e 'Pkg.add("Documenter")'
 - julia -e 'cd(Pkg.dir("Luxor")); include(joinpath("docs", "make.jl"))'
 - julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
