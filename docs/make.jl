@@ -22,5 +22,8 @@ makedocs(
   )
 
 deploydocs(
-  repo = "https://github.com/JuliaGraphics/Luxor.jl.git"
+    repo = "github.com/JuliaGraphics/Luxor.jl.git",
+    target = "build",
+    deps = nothing,
+    make = nothing,
 )
