@@ -374,7 +374,7 @@ pt2 = Point(200, 125)
 pt3 = Point(200, -125)
 
 sethue("red")
-foreach(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
+map(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
 
 line(O, pt1, :stroke)
 line(pt2, pt3, :stroke)
