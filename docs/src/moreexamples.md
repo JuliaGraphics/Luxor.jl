@@ -161,7 +161,7 @@ using Luxor, Colors, ColorSchemes
 function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
     cs = ColorSchemes.botticelli
-    Drawing(w, w, "assets/figures/strange-vector.png")
+    Drawing(w, w, "strange-vector.png")
     origin()
     background("white")
     xinc = w/(xmax - xmin)
