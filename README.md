@@ -11,6 +11,9 @@
 
 Documentation: http://juliagraphics.github.io/Luxor.jl/
 
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliagraphics.github.io/Luxor.jl/stable)
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphics.github.io/Luxor.jl/latest)
+
 [![Build Status](https://travis-ci.org/juliagraphics/Luxor.jl.svg?branch=master)](https://travis-ci.org/juliagraphics/Luxor.jl)
 
 ## Luxor

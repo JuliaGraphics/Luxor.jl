@@ -9,7 +9,7 @@ else
     const Test = BaseTestNext
 end
 
-function star_test(fname)
+function star_test_1(fname)
     width, height = 2000, 2000
     Drawing(width, height, fname)
     origin()
@@ -46,5 +46,5 @@ function star_test(fname)
 end
 
 fname = "star.pdf"
-star_test(fname)
+star_test_1(fname)
 println("...finished test: output in $(fname)")
