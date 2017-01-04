@@ -81,7 +81,7 @@ In this example, we'll annotate a PNG file with some text and graphics.
 ```@example
 using Luxor # hide
 
-image = readpng(dirname(@__FILE__) * "/../docs/assets/figures/julia-logo-mask.png")
+image = readpng(assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
@@ -137,8 +137,8 @@ arrow(O, Point(100, 100))
 
 text("I'm in reverse!", w/2, h/2)
 
-finish()
+finish() # hide
 nothing # hide
 ```
 
-!["Drawing on images"](assets/figures/drawing_on_images.png)
+![drawing on images](assets/figures/drawing_on_images.png)
