@@ -15,8 +15,8 @@ function get_all_png_files_alpha(folder)
 end
 
 function alphaimages(fname)
-    imagelist = get_all_png_files_alpha(dirname(@__FILE__) * "/../docs/figures/")
-    width, height = 2000, 2000
+    imagelist = get_all_png_files_alpha(dirname(@__FILE__) * "/../docs/src/assets/figures/")
+    width, height = 3000, 3000
     Drawing(width, height, fname)
     origin()
     background("grey50")

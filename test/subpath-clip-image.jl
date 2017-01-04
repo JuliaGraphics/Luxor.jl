@@ -15,7 +15,7 @@ function subpath_clipping(fname)
     origin()
     background("ivory")
     sethue("black")
-    image = readpng("../figures/sector-test.png")
+    image = readpng(dirname(@__FILE__) * "/stackoverflow.png")
     w = image.width
     h = image.height
     # all these graphics will make up the clipping mask:
@@ -32,6 +32,7 @@ function subpath_clipping(fname)
     # clip them
     clippreserve()
     # draw image 'through' clipping mask
+    scale(40, 40)
     placeimage(image, Point(-w/2, -h/2), 1)
     clipreset()
     @test finish() == true

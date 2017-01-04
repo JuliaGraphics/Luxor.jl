@@ -4,7 +4,7 @@
 
 Here's the "Hello world":
 
-!["Hello world"](../figures/hello-world.png)
+!["Hello world"](figures/hello-world.png)
 
 ```julia
 using Luxor
@@ -34,7 +34,7 @@ and the three Julia circles.
 
 ```@example
 using Luxor
-Drawing(600, 400, "../figures/julia-logos.png")
+Drawing(600, 400, "figures/julia-logos.png")
 origin()
 background("white")
 for theta in range(0, pi/8, 16)
@@ -57,7 +57,7 @@ finish()
 nothing # hide
 ```
 
-![background](../figures/julia-logos.png)
+![background](figures/julia-logos.png)
 
 You can change the extension of the file name: "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps" to produce alternative formats.
 
@@ -65,7 +65,7 @@ You can change the extension of the file name: "julia-logos.png" to "julia-logos
 
 Here's a version of the Sierpinski recursive triangle, clipped to a circle. (This and subsequent examples assume that the drawing has been created, the origin and background set.)
 
-![Sierpinski](../figures/sierpinski.png)
+![Sierpinski](figures/sierpinski.png)
 
 ```julia
 function triangle(points, degree)
@@ -105,11 +105,11 @@ These examples are more elaborate.
 
 ### Sector chart
 
-!["benchmark sector chart"](../figures/sector-chart.png)
+!["benchmark sector chart"](figures/sector-chart.png)
 
 Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and tries to render them literally as radiating sectors. The larger the sector, the slower the performance, so it's difficult to see the Julia scores sometimes...!
 
-[link to PDF original](../figures/sector-chart.pdf) | [link to Julia source](examples/sector-chart.jl)
+[link to PDF original](figures/sector-chart.pdf) | [link to Julia source](examples/sector-chart.jl)
 
 ### Star chart
 
@@ -117,32 +117,32 @@ Looking further afield, here's a straightforward chart rendering stars from the 
 
 A small detail:
 
-!["benchmark sector chart"](../figures/star-chart-detail.png)
+!["benchmark sector chart"](figures/star-chart-detail.png)
 
 A more complete version:
 
-!["benchmark sector chart"](../figures/star-chart.png)
+!["benchmark sector chart"](figures/star-chart.png)
 
-[link to PDF original](../figures/star-chart.pdf) | [link to Julia source](examples/star-chart.jl)
+[link to PDF original](figures/star-chart.pdf) | [link to Julia source](examples/star-chart.jl)
 
 ### Ampersands
 
 Here are a few ampersands collected together, mainly of interest to typomaniacs and fontophiles. It was necessary to vary the font size of each font, since they're naturally different.
 
-!["iloveampersands"](../figures/iloveampersands.png)
+!["iloveampersands"](figures/iloveampersands.png)
 
-[link to PDF original](../figures/iloveampersands.pdf) | [link to Julia source](examples/iloveampersands.jl)
+[link to PDF original](figures/iloveampersands.pdf) | [link to Julia source](examples/iloveampersands.jl)
 
 ### Moon phases
 
 Looking upwards again, this moon phase chart shows the calculated phase of the moon for every day in a year.
 
-!["benchmark sector chart"](../figures/2017-moon-phase-calendar.png)
+!["benchmark sector chart"](figures/2017-moon-phase-calendar.png)
 
-[link to PDF original](../figures/2017-moon-phase-calendar.pdf) | [link to github repository](https://github.com/cormullion/Spiral-moon-calendar)
+[link to PDF original](figures/2017-moon-phase-calendar.pdf) | [link to github repository](https://github.com/cormullion/Spiral-moon-calendar)
 
 ### Misc images
 
 Sometimes you just want to take a line for a walk:
 
-!["pointless"](../figures/art.png)
+!["pointless"](figures/art.png)
