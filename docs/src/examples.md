@@ -123,7 +123,7 @@ A more complete version:
 
 !["benchmark sector chart"](assets/figures/star-chart.png)
 
-[link to PDF original](assets/figures/star-chart.pdf) | [link to Julia source](examples/star-chart.jl)
+[link to PDF original](assets/figures/star-chart.pdf) | [link to Julia source](assets/examples/star-chart.jl)
 
 ### Ampersands
 
@@ -131,7 +131,7 @@ Here are a few ampersands collected together, mainly of interest to typomaniacs 
 
 !["iloveampersands"](assets/figures/iloveampersands.png)
 
-[link to PDF original](assets/figures/iloveampersands.pdf) | [link to Julia source](examples/iloveampersands.jl)
+[link to PDF original](assets/figures/iloveampersands.pdf) | [link to Julia source](assets/examples/iloveampersands.jl)
 
 ### Moon phases
 
