@@ -81,7 +81,7 @@ In this example, we'll annotate a PNG file with some text and graphics.
 ```@example
 using Luxor # hide
 
-image = readpng(assets/figures/julia-logo-mask.png")
+image = readpng("assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
