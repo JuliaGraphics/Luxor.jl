@@ -50,7 +50,7 @@ background("grey25")
 setline(5)
 sethue("green")
 
-image = readpng(dirname(@__FILE__) * "/../docs/assets/figures/julia-logo-mask.png")
+image = readpng(dirname(@__FILE__) * "assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
@@ -77,8 +77,6 @@ finish()
 You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.
 
 In this example, we'll annotate a PNG file with some text and graphics.
-
-!["Drawing on images"](assets/figures/drawing_on_images.png)
 
 ```@example
 using Luxor # hide
@@ -142,3 +140,5 @@ text("I'm in reverse!", w/2, h/2)
 finish()
 nothing # hide
 ```
+
+!["Drawing on images"](assets/figures/drawing_on_images.png)
