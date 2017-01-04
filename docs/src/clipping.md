@@ -17,7 +17,7 @@ box(O, 125, 200, :fill)
 finish() # hide
 nothing # hide
 ```
-![simple clip](figures/simpleclip.png)
+![simple clip](../figures/simpleclip.png)
 
 ```@docs
 clip
@@ -27,7 +27,7 @@ clipreset
 
 This example uses the built-in function that draws the Julia logo. The `clip` action lets you use the shapes as a mask for clipping subsequent graphics, which in this example are randomly-colored circles:
 
-![julia logo mask](figures/julia-logo-mask.png)
+![julia logo mask](../figures/julia-logo-mask.png)
 
 ```julia
 function draw(x, y)

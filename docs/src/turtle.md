@@ -2,7 +2,7 @@
 
 Some simple "turtle graphics" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
 
-![Turtle](figures/turtles.png)
+![Turtle](../figures/turtles.png)
 
 ```julia
 using Luxor

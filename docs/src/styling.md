@@ -28,7 +28,7 @@ finish() # hide
 nothing # hide
 ```
 
-![line endings](figures/colors.png)
+![line endings](../figures/colors.png)
 
 ```@docs
 sethue
@@ -66,7 +66,7 @@ finish() # hide
 nothing # hide
 ```
 
-![line endings](figures/line-ends.png)
+![line endings](../figures/line-ends.png)
 
 ```@example
 using Luxor # hide
@@ -88,7 +88,7 @@ finish() # hide
 nothing # hide
 ```
 
-![dashes](figures/dashes.png)
+![dashes](../figures/dashes.png)
 
 ```@docs
 setline
@@ -125,7 +125,7 @@ finish() # hide
 nothing # hide
 ```
 
-![linear blend](figures/color-blends-basic.png)
+![linear blend](../figures/color-blends-basic.png)
 
 And for a radial blend, provide two point/radius pairs, and two colors:
 
@@ -141,7 +141,7 @@ axes()
 finish() # hide
 nothing # hide
 ```
-![radial blends](figures/color-blends-radial.png)
+![radial blends](../figures/color-blends-radial.png)
 
 You can also use `blend()` to create an empty blend. Then you use `addstop()` to define the locations of specific colors along the blend, where `0` is the start, and `1` is the end.
 
@@ -163,7 +163,7 @@ finish() # hide
 nothing # hide
 ```
 
-![blends from scratch](figures/color-blends-scratch.png)
+![blends from scratch](../figures/color-blends-scratch.png)
 
 When you define blends, the location of the axes (eg the current workspace as defined by `translate()`, etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with `translate(pos)`. The blend 'samples' the original location of the blend's definition.
 
@@ -191,7 +191,7 @@ finish() # hide
 nothing # hide
 ```
 
-![blends 1](figures/color-blends-translate-1.png)
+![blends 1](../figures/color-blends-translate-1.png)
 
 Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go (there are Cairo options to change this). But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
 
@@ -218,7 +218,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![blends 2](figures/color-blends-translate-2.png)
+![blends 2](../figures/color-blends-translate-2.png)
 
 ```@docs
 blend
@@ -265,7 +265,7 @@ finish() # hide
 nothing # hide
 ```
 
-![blends adjust](figures/blend-adjust.png)
+![blends adjust](../figures/blend-adjust.png)
 
 The blend is defined to span 200 units, horizontally centered at 0/0. The top line is also 200 units long and centered horizontally at 0/0, so the blend is rendered exactly as you'd hope.
 
