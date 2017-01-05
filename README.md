@@ -5,14 +5,12 @@
 [![Luxor](http://pkg.julialang.org/badges/Luxor_0.6.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.6)
 [![][codecov-img]][codecov-url]
 
-<!-- ![](docs/figures/luxor-big-logo.png) -->
-
-![](docs/src/assets/figures/snow30.gif)
-
 Documentation: http://JuliaGraphics.github.io/Luxor.jl/
 
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/stable)
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/latest)
+
+![](docs/src/assets/figures/luxor-big-logo.png)
 
 [![Build Status](https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphics/Luxor.jl)
 
