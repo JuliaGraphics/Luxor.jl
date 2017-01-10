@@ -19,8 +19,6 @@ include("matrix.jl")
 include("juliagraphics.jl")
 include("animate.jl")
 
-global currentdrawing
-
 export Drawing, currentdrawing, paper_sizes,
     Tiler,
     rescale,
@@ -34,15 +32,16 @@ export Drawing, currentdrawing, paper_sizes,
 
     move, rmove, line, rline, arrow,
 
-    circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, sector,
+    circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, carc2r,  sector,
 
     ngon, star, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
 
-    Point, O, randompoint, randompointarray, midpoint, between, intersection, pointlinedistance,
-    getnearestpointonline, isinside, perpendicular, crossproduct, prettypoly, polysmooth,
-    polysplit, poly, simplify, polybbox, polycentroid, polysortbyangle, polysortbydistance,
-    offsetpoly, polyfit, slope,
+    Point, O, randompoint, randompointarray, midpoint, between, slope, intersection,
+    intersection_line_circle, pointlinedistance, getnearestpointonline, isinside,
+    perpendicular, crossproduct,
+    prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
+    polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
     strokepreserve, fillpreserve,
     gsave, grestore,
@@ -81,7 +80,7 @@ type Drawing
     greenvalue::Float64
     bluevalue::Float64
     alpha::Float64
-    function Drawing(w=800, h=800, f="luxor-drawing.png")
+    function Drawing(w=800.0, h=800.0, f="luxor-drawing.png")
         global currentdrawing
         (path, ext)         = splitext(f)
         if ext == ".pdf"
@@ -102,7 +101,7 @@ type Drawing
             the_cr          = Cairo.CairoContext(the_surface)
         end
         # info("drawing '$f' ($w w x $h h) created in $(pwd())")
-        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0, 0, 0, 1)
+        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0)
         return currentdrawing
     end
 end
@@ -246,9 +245,13 @@ end
 
 """
     rescale(x, from_min, from_max, to_min, to_max)
+
 Convert `x` from one linear scale (`from_min` to `from_max`) to another (`to_min` to `to_max`).
+
 The scales can also be supplied in tuple form:
+
     rescale(x, (from_min, from_max), (to_min, to_max))
+
 ```jldoctest
 julia> rescale(15, 0, 100, 0, 1)
 0.15
@@ -279,11 +282,11 @@ function axes()
     setline(1)
     fontsize(20)
     sethue("gray")
-    arrow(O, Point(currentdrawing.width/2. * .6, 0))
-    text("x", Point(currentdrawing.width/2. * .6, -15))
+    arrow(O, Point(currentdrawing.width/2.0 * 0.6, 0.0))
+    text("x", Point(currentdrawing.width/2.0 * 0.6, -15.0))
     text("x", Point(30, -15))
-    arrow(O, Point(0, currentdrawing.height/2. * .6))
-    text("y", Point(5, currentdrawing.width/2. * .6))
+    arrow(O, Point(0, currentdrawing.height/2.0 * 0.6))
+    text("y", Point(5, currentdrawing.width/2.0 * 0.6))
     text("y", Point(5, 30))
     grestore()
 end
@@ -540,7 +543,7 @@ end
 Create a box/rectangle centered at point `x/y` with width and height.
 """
 function box(x, y, width, height, action=:nothing)
-    rect(x - width/2, y - height/2, width, height, action)
+    rect(x - width/2.0, y - height/2.0, width, height, action)
 end
 
 
@@ -826,7 +829,7 @@ Set the current color to a string.
 
 For example:
 
-    @setcolor"red"
+    setcolor"red"
 """
 macro setcolor_str(ex)
     isa(ex, String) || error("colorant requires literal strings")

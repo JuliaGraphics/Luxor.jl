@@ -128,7 +128,6 @@ Find the point between point `p1` and point `p2` for `x`, where `x` is typically
 and
 
     midpoint(p1, p2)
-
 """
 function between(p1::Point, p2::Point, x)
     return p1 + (x * (p2 - p1))
@@ -292,5 +291,47 @@ function slope(pointA, pointB)
     return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
 end
 
+"""
+    intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
 
+Find the intersection points of a line (extended through points `p1` and `p2`) and a circle.
+
+Return a tuple of `(n, pt1, pt2)`
+
+where
+
+    `n` is the number of intersections, `0`, `1`, or `2`
+    `pt1` is first intersection point, or `Point(0, 0)` if none
+    `pt2` is the second intersection point, or `Point(0, 0)` if none
+
+The calculated intersection points wont necessarily lie on the line segment between `p1` and `p2`.
+"""
+function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
+    a = (p2.x - p1.x)^2 + (p2.y - p1.y)^2
+    b = 2.0 * ((p2.x - p1.x) * (p1.x - cpoint.x) +
+               (p2.y - p1.y) * (p1.y - cpoint.y))
+    c = ((cpoint.x)^2 + (cpoint.y)^2 + (p1.x)^2 + (p1.y)^2 - 2.0 *
+        (cpoint.x * p1.x + cpoint.y * p1.y) - r^2)
+    i = b^2 - 4.0 * a * c
+    if i < 0.0
+        number_of_intersections = 0
+        intpoint1 = O
+        intpoint2 = O
+    elseif isapprox(i, 0.0)
+        number_of_intersections = 1
+        mu = -b / (2.0 * a)
+        intpoint1 = Point(p1.x + mu * (p2.x - p1.x), p1.y + mu * (p2.y - p1.y))
+        intpoint2 = O
+    elseif i > 0.0
+        number_of_intersections = 2
+        # first intersection
+        mu = (-b + sqrt(i)) / (2.0 * a)
+        intpoint1 = Point(p1.x + mu * (p2.x - p1.x),
+                     p1.y + mu * (p2.y - p1.y))
+        # second intersection
+        mu = (-b - sqrt(i)) / (2.0 * a)
+        intpoint2 = Point(p1.x + mu * (p2.x - p1.x), p1.y + mu * (p2.y - p1.y))
+    end
+    return number_of_intersections, intpoint1, intpoint2
+end
 # end

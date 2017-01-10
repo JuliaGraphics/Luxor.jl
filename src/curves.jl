@@ -144,7 +144,6 @@ Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
     carc(xc, yc, radius, angle1, angle2, action=:nothing)
 
 Angles are defined relative to the x-axis, positive clockwise.
-
 """
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
   Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
@@ -153,7 +152,6 @@ end
 
 carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
   carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
-
 
 """
       arc2r(c1, p2, p3, action=:nothing)
@@ -170,6 +168,23 @@ function arc2r(c1, p2, p3, action=:nothing)
       startangle = mod2pi(startangle + 2pi)
     end
     arc(c1, r, startangle, endangle, action)
+end
+
+"""
+      carc2r(c1, p2, p3, action=:nothing)
+
+Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going counterclockwise.
+
+`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
+"""
+function carc2r(c1, p2, p3, action=:nothing)
+    r = norm(c1, p2)
+    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
+    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
+    if startangle < endangle
+      startangle = mod2pi(startangle + 2pi)
+    end
+    carc(c1, r, startangle, endangle, action)
 end
 
 """
