@@ -172,6 +172,23 @@ function arc2r(c1, p2, p3, action=:nothing)
 end
 
 """
+      carc2r(c1, p2, p3, action=:nothing)
+
+Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going counterclockwise.
+
+`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
+"""
+function carc2r(c1, p2, p3, action=:nothing)
+    r = norm(c1, p2)
+    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
+    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
+    if startangle < endangle
+      startangle = mod2pi(startangle + 2pi)
+    end
+    carc(c1, r, startangle, endangle, action)
+end
+
+"""
     sector(innerradius, outerradius, startangle, endangle, action=:none)
 
 Make an annular sector centered at the current `0/0` point.
