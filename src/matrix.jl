@@ -123,9 +123,9 @@ end
 Return a 3 by 3 Julia matrix that will apply a rotation through `a` radians.
 """
 function rotationmatrix(a)
-    return ([cos(a)  -sin(a)    0 ;
-             sin(a)   cos(a)    0 ;
-             0            0   1.0 ])
+    return ([cos(a)  -sin(a)  0.0 ;
+             sin(a)   cos(a)  0.0 ;
+             0.0         0.0  1.0 ])
 end
 
 """
@@ -134,9 +134,9 @@ end
 Return a 3 by 3 Julia matrix that will apply a translation in `x` and `y`.
 """
 function translationmatrix(x, y)
-    return ([1.0     0     x ;
-               0     1.0   y ;
-               0     0     1.0 ])
+    return ([1.0   0.0   x ;
+             0.0   1.0   y ;
+             0.0   0.0   1.0 ])
 end
 
 """
@@ -145,9 +145,9 @@ end
 Return a 3 by 3 Julia matrix that will apply a scaling by `sx` and `sy`.
 """
 function scalingmatrix(sx, sy)
-    return ([sx   0   0 ;
-             0   sy   0 ;
-             0    0   1.0])
+    return ([sx 0.0  0.0 ;
+           0.0   sy  0.0 ;
+           0.0  0.0  1.0])
 end
 
 """
@@ -156,7 +156,7 @@ end
 Return a 3 by 3 Julia matrix that's the equivalent of the six-element Cairo matrix in `c`.
 """
 function cairotojuliamatrix(c::Array)
-    return [c[1] c[3] c[5] ; c[2] c[4] c[6] ; 0 0 1]
+    return [c[1] c[3] c[5] ; c[2] c[4] c[6] ; 0.0 0.0 1.0]
 end
 
 """

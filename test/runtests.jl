@@ -93,8 +93,9 @@ function run_all_tests()
     @testset "turtle" begin
         include("turtle-test.jl")
     end
-    @testset "line intersection" begin
+    @testset "intersection" begin
         include("line-intersection-options.jl")
+        include("intersection-line-circle.jl")
     end
     @testset "misc" begin
         include("luxor-test1.jl")

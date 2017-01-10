@@ -450,7 +450,7 @@ nothing # hide
 ```
 ![arc](assets/figures/midpoint.png)
 
-A more general function, `between()`, finds for a value `x` the corresponding point on a line between two points, normalized to the range 0 and 1. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
+A more general function, `between()`, finds for a value `x` the corresponding point on a line defined by two points, normalized to the range 0 and 1. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
 
 ```@example
 using Luxor # hide
@@ -462,14 +462,21 @@ p1 = Point(-200, 0)
 p2 = Point(200, 50)
 line(p1, p2)
 stroke()
-for i in 0:0.1:1.0
+for i in -0.5:0.1:1.5
     randomhue()
     circle(between(p1, p2, i), 5, :fill)
 end
 finish() # hide
 nothing # hide
 ```
+<<<<<<< HEAD
 ![arc](assets/figures/betweenpoint.png)
+=======
+
+Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.
+
+![arc](figures/betweenpoint.png)
+>>>>>>> intersect
 
 ```@docs
 midpoint
@@ -502,8 +509,35 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection.png)
 
+`intersection_line_circle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersections.
+
+```@example
+using Luxor # hide
+Drawing(700, 220, "../figures/intersection_line_circle.png") # hide
+origin() # hide
+background("white") # hide
+sethue("chocolate2") # hide
+l1 = Point(-100.0, -75.0)
+l2 = Point(300.0, 100.0)
+rad = 100
+cpoint = Point(0, 0)
+line(l1, l2, :stroke)
+sethue("darkgreen") # hide
+circle(cpoint, rad, :stroke)
+nints, ip1, ip2 =  intersection_line_circle(l1, l2, cpoint, rad)
+sethue("black")
+if nints == 2
+    circle(ip1, 8, :stroke)
+    circle(ip2, 8, :stroke)
+end
+finish() # hide
+nothing # hide
+```
+![arc](figures/intersection_line_circle.png)
+
 ```@docs
 intersection
+intersection_line_circle
 ```
 `getnearestpointonline()` finds perpendiculars.
 
