@@ -469,14 +469,9 @@ end
 finish() # hide
 nothing # hide
 ```
-<<<<<<< HEAD
 ![arc](assets/figures/betweenpoint.png)
-=======
 
 Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.
-
-![arc](figures/betweenpoint.png)
->>>>>>> intersect
 
 ```@docs
 midpoint
@@ -513,7 +508,7 @@ nothing # hide
 
 ```@example
 using Luxor # hide
-Drawing(700, 220, "../figures/intersection_line_circle.png") # hide
+Drawing(700, 220, "assets/figures/intersection_line_circle.png") # hide
 origin() # hide
 background("white") # hide
 sethue("chocolate2") # hide
@@ -533,7 +528,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](figures/intersection_line_circle.png)
+![arc](assets/figures/intersection_line_circle.png)
 
 ```@docs
 intersection
