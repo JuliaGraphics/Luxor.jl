@@ -291,8 +291,6 @@ function slope(pointA, pointB)
     return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
 end
 
-<<<<<<< HEAD
-=======
 """
     intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
 
@@ -336,5 +334,4 @@ function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
     end
     return number_of_intersections, intpoint1, intpoint2
 end
->>>>>>> intersect
 # end
