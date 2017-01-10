@@ -57,15 +57,15 @@ You could test the point using `isinside()`.
 """
 function polycentroid(pointlist)
     # Points are immutable, use separate variables for these calculations
-    centroid_x = 0
-    centroid_y = 0
+    centroid_x = 0.0
+    centroid_y = 0.0
     signedArea = 0.0
     vertexCount = length(pointlist)
     x0 = 0.0 # Current vertex X
     y0 = 0.0 # Current vertex Y
     x1 = 0.0 # Next vertex X
     y1 = 0.0 # Next vertex Y
-    a = 0.0  # Partial signed area
+    a  = 0.0  # Partial signed area
 
     # For all vertices except last
     i = 1
@@ -74,10 +74,10 @@ function polycentroid(pointlist)
         y0 = pointlist[i].y
         x1 = pointlist[i+1].x
         y1 = pointlist[i+1].y
-        a = x0*y1 - x1*y0
+        a = x0 * y1 - x1 * y0
         signedArea += a
-        centroid_x += (x0 + x1)*a
-        centroid_y += (y0 + y1)*a
+        centroid_x += (x0 + x1) * a
+        centroid_y += (y0 + y1) * a
    end
     # Do last vertex separately to avoid performing an expensive
     # modulus operation in each iteration.
@@ -85,10 +85,10 @@ function polycentroid(pointlist)
     y0 = pointlist[vertexCount].y
     x1 = pointlist[1].x
     y1 = pointlist[1].y
-    a = x0*y1 - x1*y0
+    a = x0 * y1 - x1 * y0
     signedArea += a
-    centroid_x += (x0 + x1)*a
-    centroid_y += (y0 + y1)*a
+    centroid_x += (x0 + x1) * a
+    centroid_y += (y0 + y1) * a
     signedArea *= 0.5
     centroid_x /= (6.0 * signedArea)
     centroid_y /= (6.0 * signedArea)
@@ -245,9 +245,9 @@ function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5,
     vertices = false,
     reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
-                    y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
+                         y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
-                    y+sin(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio)) for n in 1:npoints]
+                         y+sin(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio)) for n in 1:npoints]
     result = Point[]
     for i in eachindex(outerpoints)
         push!(result, outerpoints[i])
@@ -616,14 +616,14 @@ function polyfit(plist::Array, npoints=30)
         p2 = plist[mod1(i, l)]
         p3 = plist[mod1(i + 1, l)]
         p4 = plist[mod1(i + 2, l)]
-        a3 = (-p1.x + 3 * (p2.x - p3.x) + p4.x) / 6
-        b3 = (-p1.y + 3 * (p2.y - p3.y) + p4.y) / 6
-        a2 = (p1.x - 2p2.x + p3.x) / 2
-        b2 = (p1.y - 2p2.y + p3.y) / 2
-        a1 = (p3.x - p1.x) / 2
-        b1 = (p3.y - p1.y) / 2
-        a0 = (p1.x + 4p2.x + p3.x) / 6
-        b0 = (p1.y + 4p2.y + p3.y) / 6
+        a3 = (-p1.x + 3 * (p2.x - p3.x) + p4.x) / 6.0
+        b3 = (-p1.y + 3 * (p2.y - p3.y) + p4.y) / 6.0
+        a2 = (p1.x - 2p2.x + p3.x) / 2.0
+        b2 = (p1.y - 2p2.y + p3.y) / 2.0
+        a1 = (p3.x - p1.x) / 2.0
+        b1 = (p3.y - p1.y) / 2.0
+        a0 = (p1.x + 4p2.x + p3.x) / 6.0
+        b0 = (p1.y + 4p2.y + p3.y) / 6.0
         for i in 1:l-1
             t = i/npoints
             x = ((((a3 * t + a2) * t) + a1) * t) + a0
