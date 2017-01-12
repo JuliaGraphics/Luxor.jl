@@ -32,7 +32,8 @@ export Drawing, currentdrawing, paper_sizes,
 
     move, rmove, line, rline, arrow,
 
-    circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, carc2r,  sector,
+    circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, carc2r,
+    sector, sectorrounded,
 
     ngon, star, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
@@ -41,7 +42,7 @@ export Drawing, currentdrawing, paper_sizes,
     intersection_line_circle, pointlinedistance, getnearestpointonline, isinside,
     perpendicular, crossproduct,
     prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
-    polysortbyangle, polysortbydistance, offsetpoly, polyfit,
+    polysortbyangle, polysortbydistance, offsetpoly, polyfit, @polar,
 
     strokepreserve, fillpreserve,
     gsave, grestore,

@@ -8,20 +8,22 @@ For color definitions and conversions, you can use Colors.jl.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
 
-Named colors, such as "gold", or "lavender", can be found in Colors.color_names. This code shows the first 600 colors.
+Named colors, such as "gold", or "lavender", can be found in Colors.color_names. This code shows the first 625 colors.
 
 ```@example
 using Luxor, Colors # hide
 Drawing(800, 500, "assets/figures/colors.png") # hide
-origin()
+origin() # hide
 background("white") # hide
 fontsize(5) # hide
 cols = collect(Colors.color_names)
-tiles = Tiler(800, 500, 30, 20)
+tiles = Tiler(800, 500, 25, 25)
 for (pos, n) in tiles
     sethue(cols[n][1])
     box(pos, tiles.tilewidth, tiles.tileheight, :fill)
-    sethue("black")
+    clab = convert(Lab, parse(Colorant, cols[n][1]))
+    labelbrightness = 100 - clab.l
+    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))
     text(string(cols[n][1]), pos, halign=:center)
 end
 finish() # hide
@@ -29,6 +31,8 @@ nothing # hide
 ```
 
 ![line endings](assets/figures/colors.png)
+
+Some fiddling with Lab colors adjusts the label color to make it stand out against the background.
 
 ```@docs
 sethue

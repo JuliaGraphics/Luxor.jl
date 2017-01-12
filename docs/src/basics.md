@@ -162,10 +162,9 @@ box
 polybbox
 ```
 
-## Circles, ellipses, and the like
+## Circles, ellipses, and other curvey things
 
 There are various ways to make circles, including by center and radius, through two points:
-
 
 ```@example
 using Luxor # hide
@@ -273,7 +272,7 @@ using Luxor # hide
 Drawing(400, 200, "assets/figures/sector.png") # hide
 background("white") # hide
 origin() # hide
-sethue("cyan") # hide
+sethue("tomato3") # hide
 sector(50, 90, pi/2, 0, :fill)
 finish() # hide
 nothing # hide
@@ -281,8 +280,24 @@ nothing # hide
 
 ![sector](assets/figures/sector.png)
 
+A different function, sectorrounded(), draws the same sectors but with rounded corners.
+
+```@example
+using Luxor # hide
+Drawing(400, 200, "assets/figures/sectorrounded.png") # hide
+background("white") # hide
+origin() # hide
+sethue("tomato3") # hide
+sectorrounded(50, 90, pi/2, 0, 15, :fill)
+finish() # hide
+nothing # hide
+```
+
+![sector](assets/figures/sectorrounded.png)
+
 ```@docs
 sector
+sectorrounded
 ```
 
 A pie (or wedge) has start and end angles.

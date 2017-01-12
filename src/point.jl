@@ -284,8 +284,16 @@ end
 """
     slope(pointA::Point, pointB::Point)
 
-Find angle of a line between two points. Returns a value between 0 and 2pi. Value will be
-relative to the current axes.
+Find angle of a line starting at `pointA` and ending at `pointB`.
+
+Return a value between 0 and 2pi. Value will be relative to the current axes.
+
+    slope(O, Point(0, 100)) |> rad2deg # y is positive down the page
+    90.0
+
+    slope(Point(0, 100), O) |> rad2deg
+    270.0
+
 """
 function slope(pointA, pointB)
     return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
@@ -334,4 +342,23 @@ function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
     end
     return number_of_intersections, intpoint1, intpoint2
 end
+
+"""
+    polar(p)
+
+Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.
+
+    @polar (10, pi/4)
+    @polar [10, pi/4]
+
+produces
+
+    Luxor.Point(7.0710678118654755,7.071067811865475)
+"""
+macro polar(p)
+    quote
+      Point($(esc(p))[1] * cos($(esc(p))[2]), $(esc(p))[1] * sin($(esc(p))[2]))
+    end
+end
+
 # end

@@ -41,6 +41,7 @@ function run_all_tests()
         include("circle-as-path.jl")
         include("randomsinecurves.jl")
         include("sector-test.jl")
+        include("sector-rounded.jl")
         include("ellipse-test.jl")
         include("pie-test.jl")
     end
@@ -114,7 +115,7 @@ else
         info("but not keeping the results")
         info("because you didn't do: ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
         run_all_tests()
-        info("Test images not saved. To see the images, next time do this before running")
+        info("Test images weren't saved. To see the test images, next time do this before running")
         info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
     end
 end

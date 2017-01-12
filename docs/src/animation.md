@@ -61,7 +61,7 @@ Sometimes you want some information to be passed from frame to frame, such as th
 
 For example, for a "bouncing ball" animation, you can store the current position and direction of the ball in the `Sequence.parameters` dictionary at the end of a frame, and then recall them at the start of the next frame.
 
-``julia
+```julia
 function frameF(seq::Sequence, framenumber, framerange)
     pos          = seq.parameters["pos"]
     direction    = seq.parameters["direction"]
