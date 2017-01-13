@@ -131,6 +131,12 @@ function point_arithmetic_test(fname, npoints=20)
         end
     end
 
+# TODO: Version 0.6 gives these warnings
+# WARNING: .< is no longer a function object; use broadcast(<, ...) instead
+# WARNING: .> is no longer a function object; use broadcast(>, ...) instead
+# WARNING: .>= is no longer a function object; use broadcast(>=, ...) instead
+# WARNING: .<= is no longer a function object; use broadcast(<=, ...) instead
+
     testfunctions = [.<, .>, .>=, .<=]
     for f in testfunctions
         randomhue()
