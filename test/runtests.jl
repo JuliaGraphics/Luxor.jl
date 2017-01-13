@@ -100,6 +100,7 @@ function run_all_tests()
     end
     @testset "misc" begin
         include("luxor-test1.jl")
+        include("unit-conversions.jl")
     end
 end
 

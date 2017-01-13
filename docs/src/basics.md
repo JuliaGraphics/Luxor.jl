@@ -4,7 +4,17 @@ The underlying drawing model is that points are added to paths, then the paths c
 
 Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
-Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually measured starting at the positive x-axis going towards the positive y-axis (which usually points 'down' the page or canvas) in radians. Or 'clockwise'.
+Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas) in radians: 'clockwise'.
+
+Coordinates are specified in PostScript points, where a point is 1/72 of an inch. Three other units are available for distances:
+
+- inch (`in` is unavailable, being used by `for` syntax)
+- cm   (centimeters)
+- mm   (millimeters)
+
+Because Julia allows you to combine numbers and variables directly, you can type, for example:
+
+    rect(Point(20mm, 2cm), 5in, 22/7inch, :fill)
 
 ## Types
 
@@ -280,7 +290,7 @@ nothing # hide
 
 ![sector](assets/figures/sector.png)
 
-A different function, sectorrounded(), draws the same sectors but with rounded corners.
+You can supply a value for corner radius. The same sector is drawn but with rounded corners.
 
 ```@example
 using Luxor # hide
@@ -288,7 +298,7 @@ Drawing(400, 200, "assets/figures/sectorrounded.png") # hide
 background("white") # hide
 origin() # hide
 sethue("tomato3") # hide
-sectorrounded(50, 90, pi/2, 0, 15, :fill)
+sector(50, 90, pi/2, 0, 15, :fill)
 finish() # hide
 nothing # hide
 ```
@@ -297,7 +307,6 @@ nothing # hide
 
 ```@docs
 sector
-sectorrounded
 ```
 
 A pie (or wedge) has start and end angles.
@@ -473,8 +482,8 @@ Drawing(700, 150, "assets/figures/betweenpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
-p1 = Point(-200, 0)
-p2 = Point(200, 50)
+p1 = Point(-180, 0)
+p2 = Point(180, 50)
 line(p1, p2)
 stroke()
 for i in -0.5:0.1:1.5

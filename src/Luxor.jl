@@ -19,7 +19,9 @@ include("matrix.jl")
 include("juliagraphics.jl")
 include("animate.jl")
 
-export Drawing, currentdrawing, paper_sizes,
+export Drawing, currentdrawing,
+    cm, inch, mm,
+    paper_sizes,
     Tiler,
     rescale,
 
@@ -33,7 +35,7 @@ export Drawing, currentdrawing, paper_sizes,
     move, rmove, line, rline, arrow,
 
     circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, carc2r,
-    sector, sectorrounded,
+    sector,
 
     ngon, star, pie,
     do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
@@ -69,6 +71,11 @@ export Drawing, currentdrawing, paper_sizes,
 # as of version 0.4, we still share fill() and scale() with Base.
 
 import Base: fill, scale
+
+# basic unit conversion to Cairo/PostScript points
+const inch = 72.0
+const cm = 28.3464566929
+const mm = 2.83464566929
 
 type Drawing
     width::Float64
