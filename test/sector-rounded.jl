@@ -21,9 +21,9 @@ function multitest(w, h)
             for a in 0:ang:2pi
                 randomhue()
                 if n % 3 == 0
-                    sectorrounded(l, l + bandthickness/2, a, a + pi/8, 5, :stroke)
+                    sector(l, l + bandthickness/2, a, a + pi/8, 5, :stroke)
                 else
-                    sectorrounded(l, l + bandthickness/2, a, a + pi/8, 5, :fill)
+                    sector(l, l + bandthickness/2, a, a + pi/8, 5, :fill)
                 end
             end
         end
@@ -40,7 +40,7 @@ function multitest1(w, h)
         translate(pos)
         cornerradius = rand(5:14)
         endangle = deg2rad(45/n)
-        sectorrounded(60, 90, 0, endangle, cornerradius, :fillstroke)
+        sector(60, 90, 0, endangle, cornerradius, :fillstroke)
         text("corner $cornerradius angle $(rad2deg(endangle))")
         grestore()
     end

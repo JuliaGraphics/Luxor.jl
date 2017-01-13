@@ -195,13 +195,80 @@ end
 
 Make an annular sector centered at the current `0/0` point.
 """
-function sector(innerradius, outerradius, startangle, endangle, action=:none)
+function sector(innerradius, outerradius, startangle, endangle, action::Symbol=:none)
     newpath()
     move(innerradius * cos(startangle), innerradius * sin(startangle))
     line(outerradius * cos(startangle), outerradius * sin(startangle))
     arc(0, 0, outerradius, startangle, endangle,:none)
     line(innerradius * cos(endangle), innerradius * sin(endangle))
     carc(0, 0, innerradius, endangle, startangle, :none)
+    closepath()
+    do_action(action)
+end
+
+"""
+    sector(innerradius, outerradius, startangle, endangle, cornerradius, action=:none)
+
+Draw an annular sector with rounded corners, basically a bent sausage shape.
+
+TODO: The results aren't 100% accurate at the moment. There are small discontinuities where
+the curves join.
+
+The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
+"""
+function sector(innerradius, outerradius, startangle, endangle, cornerradius, action::Symbol=:none)
+    # some work is done using polar coords to calculate the points
+
+    # attempts to prevent pathological cases
+    cornerradius = min(cornerradius, (outerradius-innerradius)/2)
+    if endangle < startangle
+        endangle = endangle + 2pi
+    end
+    # reduce given corner radius to prevent messes when spanning angle too small
+    # 4 is a magic number
+    while (endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
+        cornerradius *= 0.75
+    end
+
+    # first inner corner
+    alpha1 = asin(cornerradius/(innerradius+cornerradius))
+    p1p2center = (innerradius + cornerradius, startangle + alpha1)
+    p1 = (innerradius, startangle + alpha1)
+    p2 = (innerradius + cornerradius, startangle)
+    # first outer
+    alpha2 = asin(cornerradius/(outerradius-cornerradius))
+    p3p4center = (outerradius - cornerradius, startangle + alpha2)
+    p3 = (outerradius - cornerradius, startangle)
+    p4 = (outerradius, startangle + alpha2)
+    # last outer
+    p5p6center = (outerradius - cornerradius, endangle - alpha2)
+    p5 = (outerradius, endangle - alpha2)
+    p6 = (outerradius - cornerradius, endangle)
+    # last inner
+    p7p8center = (innerradius + cornerradius, endangle - alpha1)
+    p7 = (innerradius + cornerradius, endangle)
+    p8 = (innerradius, endangle - alpha1)
+
+    # make path
+    move(@polar(p1))
+    newpath()
+    # inner corner
+    arc(@polar(p1p2center), cornerradius, slope(@polar(p1p2center), @polar(p1)), slope(@polar(p1p2center), @polar(p2)), :none)
+    line(@polar(p3))
+    # outer corner
+    arc(@polar(p3p4center), cornerradius, slope(@polar(p3p4center), @polar(p3)), slope(@polar(p3p4center), @polar(p4)), :none)
+    # outside arc
+    arc(O, outerradius, slope(O, @polar(p4)), slope(O, @polar(p5)), :none)
+    # last outside corner
+    arc(@polar(p5p6center), cornerradius, slope(@polar(p5p6center), @polar(p5)), slope(@polar(p5p6center), @polar(p6)), :none)
+    line(@polar(p7))
+    # last inner corner
+    arc(@polar(p7p8center), cornerradius, slope(@polar(p7p8center), @polar(p7)), slope(@polar(p7p8center), @polar(p8)), :none)
+    s1, s2 = slope(O, @polar(p8)), slope(O, @polar(p1))
+    if s1 < s2
+        s2 = mod2pi(s2 + 2pi)
+    end
+    carc(O, innerradius, s1, s2, :none)
     closepath()
     do_action(action)
 end
@@ -310,69 +377,4 @@ function circlepath(center::Point, radius, action=:none; reversepath=false, kapp
     do_action(action)
 end
 
-"""
-    sectorrounded(innerradius, outerradius, startangle, endangle, cornerradius, action=:none)
-
-Draw an annular sector with rounded corners, basically a bent sausage shape.
-
-TODO: The results aren't 100% accurate at the moment. There are small discontinuities where
-the curves join.
-
-The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
-"""
-function sectorrounded(innerradius, outerradius, startangle, endangle, cornerradius, action=:none)
-    # some work is done using polar coords to calculate the points
-
-    # attempts to prevent pathological cases
-    cornerradius = min(cornerradius, (outerradius-innerradius)/2)
-    if endangle < startangle
-        endangle = endangle + 2pi
-    end
-    # reduce given corner radius to prevent messes when spanning angle too small
-    # 4 is a magic number
-    while (endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
-        cornerradius *= 0.75
-    end
-
-    # first inner corner
-    alpha1 = asin(cornerradius/(innerradius+cornerradius))
-    p1p2center = (innerradius + cornerradius, startangle + alpha1)
-    p1 = (innerradius, startangle + alpha1)
-    p2 = (innerradius + cornerradius, startangle)
-    # first outer
-    alpha2 = asin(cornerradius/(outerradius-cornerradius))
-    p3p4center = (outerradius - cornerradius, startangle + alpha2)
-    p3 = (outerradius - cornerradius, startangle)
-    p4 = (outerradius, startangle + alpha2)
-    # last outer
-    p5p6center = (outerradius - cornerradius, endangle - alpha2)
-    p5 = (outerradius, endangle - alpha2)
-    p6 = (outerradius - cornerradius, endangle)
-    # last inner
-    p7p8center = (innerradius + cornerradius, endangle - alpha1)
-    p7 = (innerradius + cornerradius, endangle)
-    p8 = (innerradius, endangle - alpha1)
-
-    # make path
-    move(@polar(p1))
-    newpath()
-    # inner corner
-    arc(@polar(p1p2center), cornerradius, slope(@polar(p1p2center), @polar(p1)), slope(@polar(p1p2center), @polar(p2)), :none)
-    line(@polar(p3))
-    # outer corner
-    arc(@polar(p3p4center), cornerradius, slope(@polar(p3p4center), @polar(p3)), slope(@polar(p3p4center), @polar(p4)), :none)
-    # outside arc
-    arc(O, outerradius, slope(O, @polar(p4)), slope(O, @polar(p5)), :none)
-    # last outside corner
-    arc(@polar(p5p6center), cornerradius, slope(@polar(p5p6center), @polar(p5)), slope(@polar(p5p6center), @polar(p6)), :none)
-    line(@polar(p7))
-    # last inner corner
-    arc(@polar(p7p8center), cornerradius, slope(@polar(p7p8center), @polar(p7)), slope(@polar(p7p8center), @polar(p8)), :none)
-    s1, s2 = slope(O, @polar(p8)), slope(O, @polar(p1))
-    if s1 < s2
-        s2 = mod2pi(s2 + 2pi)
-    end
-    carc(O, innerradius, s1, s2, :none)
-    closepath()
-    do_action(action)
-end
+# eof
