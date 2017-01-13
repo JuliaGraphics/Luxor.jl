@@ -245,5 +245,3 @@ nothing # hide
 ```
 
 ![text on a curve](assets/figures/textcurvecenteredexample.png)
-
-# Index
