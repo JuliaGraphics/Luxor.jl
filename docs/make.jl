@@ -4,6 +4,7 @@ makedocs(
   modules = [Luxor],
   format = :html,
   sitename = "Luxor",
+  assets = ["assets/custom.js"],
   pages    = Any[
     "Introduction to Luxor"   => "index.md",
     "A few examples"          => "examples.md",
