@@ -25,7 +25,6 @@ deploydocs(
     repo = "github.com/JuliaGraphics/Luxor.jl.git",
     target = "build",
     julia  = "0.5",
-    osname = "osx",
     deps = nothing,
     make = nothing,
 )
