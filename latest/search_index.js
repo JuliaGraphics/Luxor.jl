@@ -1585,14 +1585,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "moreexamples.html#Index-1",
-    "page": "More examples",
-    "title": "Index",
-    "category": "section",
-    "text": ""
-},
-
-{
     "location": "functionindex.html#",
     "page": "Index",
     "title": "Index",
