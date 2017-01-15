@@ -163,12 +163,10 @@ Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going
 """
 function arc2r(c1, p2, p3, action=:nothing)
     r = norm(c1, p2)
-#    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
-#    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
-    startangle = slope(p2, c1)
-    endangle   = slope(p3, c1)
-    if startangle < endangle
-      startangle = mod2pi(startangle + 2pi)
+    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
+    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
+    if endangle < startangle
+       endangle = mod2pi(endangle + 2pi)
     end
     arc(c1, r, startangle, endangle, action)
 end
@@ -184,8 +182,8 @@ function carc2r(c1, p2, p3, action=:nothing)
     r = norm(c1, p2)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
-    if startangle < endangle
-      startangle = mod2pi(startangle + 2pi)
+    if startangle < startangle
+       startangle = mod2pi(startangle + 2pi)
     end
     carc(c1, r, startangle, endangle, action)
 end
