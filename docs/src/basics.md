@@ -14,7 +14,7 @@ Coordinates are specified in PostScript points, where a point is 1/72 of an inch
 
 Because Julia allows you to combine numbers and variables directly, you can type, for example:
 
-    rect(Point(20mm, 2cm), 5in, 22/7inch, :fill)
+    rect(Point(20mm, 2cm), 5inch, 22/7inch, :fill)
 
 ## Types
 
@@ -174,7 +174,7 @@ polybbox
 
 ## Circles, ellipses, and other curvey things
 
-There are various ways to make circles, including by center and radius, through two points:
+There are various ways to make circles, including by center and radius, or passing through two points:
 
 ```@example
 using Luxor # hide
@@ -197,7 +197,7 @@ nothing # hide
 
 ![circles](assets/figures/circles.png)
 
-Or passing through three points:
+Or passing through three points. The `center3pts()` function returns the center position and radius of a circle passing through three points:
 
 ```@example
 using Luxor # hide
@@ -370,19 +370,7 @@ nothing # hide
 ```
 ![rounded rect](assets/figures/round-rect.png)
 
-
-## Lines and positions
-
-There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
-
-```@docs
-move
-rmove
-line
-rline
-```
-
-## Arcs and curves
+### Arcs and curves
 
 `curve()` constructs Bèzier curves from control points:
 
@@ -444,6 +432,17 @@ arc
 arc2r
 carc
 curve
+```
+
+## Lines and positions
+
+There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
+
+```@docs
+move
+rmove
+line
+rline
 ```
 
 ## Geometry tools ##
