@@ -1,6 +1,6 @@
 # Transforms and matrices
 
-For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`. You can use `origin()` to return to the document's original state, with the axes in the center.
+For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`.
 
 `translate()` shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:
 
@@ -75,10 +75,30 @@ rotate
 translate
 ```
 
-The current matrix is a six element array, perhaps like this:
+To return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` to reset the matrix to the default. `origin()` resets the matrix then moves the origin to the center of the page.
+
+# Matrices and transformations
+
+In Luxor, there's always a *current matrix*. It's a six element array:
+
+```math
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+\end{bmatrix}
+```
+
+which is usually handled in Julia/Cairo/Luxor as a simple vector/array:
 
 ```
-[1, 0, 0, 1, 0, 0]
+julia> getmatrix()
+6-element Array{Float64,1}:
+   1.0
+   0.0
+   0.0
+   1.0
+   0.0
+   0.0
 ```
 
 `transform(a)` transforms the current workspace by 'multiplying' the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
@@ -113,6 +133,7 @@ nothing # hide
 
 `getmatrix()` gets the current matrix, `setmatrix(a)` sets the matrix to array `a`.
 
+
 ```@docs
 getmatrix
 setmatrix
@@ -122,9 +143,20 @@ blendmatrix
 rotationmatrix
 scalingmatrix
 translationmatrix
-cairotojuliamatrix
-juliatocairomatrix
+```
+
+Use the `getscale()`, `gettranslation()`, and `getrotation()` functions to find the current values of the current matrix. These can also find the values of arbitrary 3x3 matrices.
+
+```@docs
 getscale
 gettranslation
 getrotation
+```
+
+You can convert between the 6-element and 3x3 versions of a transformation matrix using the functions `cairotojuliamatrix()`
+and `juliatocairomatrix()`.
+
+```@docs
+cairotojuliamatrix
+juliatocairomatrix
 ```

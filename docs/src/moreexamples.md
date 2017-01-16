@@ -200,7 +200,7 @@ nothing # hide
 
 ```@example
 using Luxor
-function hipster(fname)
+function hipster(fname, toptext, bottomtext)
     Drawing(400, 350, fname)
     origin()
     rotate(pi/8)
@@ -219,10 +219,10 @@ function hipster(fname)
     circle(O, 85, :fill)
 
     sethue("wheat")
-    fontsize(24)
+    fontsize(20)
     fontface("Helvetica-Bold")
-    textcurvecentered("• LUXOR •", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)
-    textcurvecentered("• VECTOR GRAPHICS •", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
+    textcurvecentered(toptext, (3pi)/2, 100, O, clockwise=true,  letter_spacing=5, baselineshift = -4)
+    textcurvecentered(bottomtext, pi/2, 100, O, clockwise=false, letter_spacing=5, baselineshift = -15)
 
     sethue("gray20")
     map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
@@ -231,7 +231,7 @@ function hipster(fname)
     # cheap weathered texture:
     sethue("antiquewhite2")
     setline(0.2)
-    setdash("dotdotdashed")
+    setdash("dot")
     for i in 1:500
         line(randompoint(Point(-200, -350), Point(200, 350)),
              randompoint(Point(-200, -350), Point(200, 350)),
@@ -240,7 +240,7 @@ function hipster(fname)
     finish()
 end
 
-hipster("assets/figures/textcurvecenteredexample.png")
+hipster("assets/figures/textcurvecenteredexample.png", "• LUXOR •", "• VECTOR GRAPHICS •")
 nothing # hide
 ```
 

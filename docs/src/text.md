@@ -9,7 +9,7 @@ using Luxor # hide
 Drawing(400, 150, "assets/figures/text-placement.png") # hide
 origin() # hide
 background("white") # hide
-fontsize(24) # hide
+fontsize(20) # hide
 sethue("black") # hide
 pt1 = Point(-100, 0)
 pt2 = Point(0, 0)
@@ -93,7 +93,7 @@ Drawing(400, 250, "assets/figures/text-centered.png") # hide
 origin() # hide
 background("white") # hide
 background("white") # hide
-fontface("GothamBlack")
+fontface("Arial-Black")
 fontsize(24) # hide
 sethue("black") # hide
 setdash("dot") # hide
