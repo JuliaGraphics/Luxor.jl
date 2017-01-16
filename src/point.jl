@@ -147,7 +147,7 @@ end
 
 This is the *perp dot product*, really, not the crossproduct proper (which is 3D):
 
-    `dot(p1, perpendicular(p2))`
+    dot(p1, perpendicular(p2))
 """
 function crossproduct(p1::Point, p2::Point)
     return dot(p1, perpendicular(p2))
@@ -308,9 +308,9 @@ Return a tuple of `(n, pt1, pt2)`
 
 where
 
-    `n` is the number of intersections, `0`, `1`, or `2`
-    `pt1` is first intersection point, or `Point(0, 0)` if none
-    `pt2` is the second intersection point, or `Point(0, 0)` if none
+- `n` is the number of intersections, `0`, `1`, or `2`
+- `pt1` is first intersection point, or `Point(0, 0)` if none
+- `pt2` is the second intersection point, or `Point(0, 0)` if none
 
 The calculated intersection points wont necessarily lie on the line segment between `p1` and `p2`.
 """

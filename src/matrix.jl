@@ -3,7 +3,7 @@
 """
     getmatrix()
 
-Get the current Cairo matrix. Returns an array of six float64 numbers:
+Get the current matrix. Returns an array of six float64 numbers:
 
 - xx component of the affine transformation
 
@@ -77,7 +77,7 @@ end
 """
     setmatrix(m::Array)
 
-Change the current Cairo matrix to matrix `m`. Use `getmatrix()` to get the current matrix.
+Change the current matrix to matrix `m`. Use `getmatrix()` to get the current matrix.
 """
 function setmatrix(m::Array)
     if eltype(m) != Float64
@@ -120,7 +120,7 @@ end
 """
     rotationmatrix(a)
 
-Return a 3 by 3 Julia matrix that will apply a rotation through `a` radians.
+Return a 3x3 Julia matrix that will apply a rotation through `a` radians.
 """
 function rotationmatrix(a)
     return ([cos(a)  -sin(a)  0.0 ;
@@ -131,7 +131,7 @@ end
 """
     translationmatrix(x, y)
 
-Return a 3 by 3 Julia matrix that will apply a translation in `x` and `y`.
+Return a 3x3 Julia matrix that will apply a translation in `x` and `y`.
 """
 function translationmatrix(x, y)
     return ([1.0   0.0   x ;
@@ -142,7 +142,7 @@ end
 """
     scalingmatrix(sx, sy)
 
-Return a 3 by 3 Julia matrix that will apply a scaling by `sx` and `sy`.
+Return a 3x3 Julia matrix that will apply a scaling by `sx` and `sy`.
 """
 function scalingmatrix(sx, sy)
     return ([sx 0.0  0.0 ;
@@ -153,7 +153,7 @@ end
 """
     cairotojuliamatrix(c)
 
-Return a 3 by 3 Julia matrix that's the equivalent of the six-element Cairo matrix in `c`.
+Return a 3x3 Julia matrix that's the equivalent of the six-element matrix in `c`.
 """
 function cairotojuliamatrix(c::Array)
     return [c[1] c[3] c[5] ; c[2] c[4] c[6] ; 0.0 0.0 1.0]
@@ -162,27 +162,27 @@ end
 """
     juliatocairomatrix(c)
 
-Return a six-element Cairo matrix 3 that's the equivalent of the 3 by 3 Julia matrix in `c`.
+Return a six-element matrix that's the equivalent of the 3x3 Julia matrix in `c`.
 """
 function juliatocairomatrix(c::Matrix)
     return [c[1] c[2] c[4] c[5] c[7] c[8]]
 end
 
-"""
+doc"""
     getrotation(R::Matrix)
-
-Get rotation of a Julia matrix:
-
-        | a  b  tx |
-    R = | c  d  ty |
-        | 0  0  1  |
-
-The rotation angle is `atan2(-b, a)` or `atan2(c, d)`.
-
-Get the current Luxor rotation:
-
     getrotation()
 
+Get the rotation of a Julia 3x3 matrix, or the current Luxor rotation.
+
+```math
+R = \begin{bmatrix}
+a & b & tx \\
+c & d & ty \\
+0 & 0 & 1  \\
+\end{bmatrix}
+```
+
+The rotation angle is `atan2(-b, a)` or `atan2(c, d)`.
 """
 function getrotation(R::Matrix)
     # t = atan2(-R[4], R[1]) # should be the same as:
@@ -198,7 +198,7 @@ end
     getscale(R::Matrix)
     getscale()
 
-Get the current scale of a Julia matrix, or the current Luxor scale.
+Get the current scale of a Julia 3x3 matrix, or the current Luxor scale.
 
 Returns a tuple of x and y values.
 """
@@ -216,7 +216,7 @@ end
     gettranslation(R::Matrix)
     gettranslation()
 
-Get the current translation of a Julia matrix, or the current Luxor translation.
+Get the current translation of a Julia 3x3 matrix, or the current Luxor translation.
 
 Returns a tuple of x and y values.
 """

@@ -461,7 +461,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.intersection_line_circle",
     "category": "Function",
-    "text": "intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)\n\nFind the intersection points of a line (extended through points p1 and p2) and a circle.\n\nReturn a tuple of (n, pt1, pt2)\n\nwhere\n\n`n` is the number of intersections, `0`, `1`, or `2`\n`pt1` is first intersection point, or `Point(0, 0)` if none\n`pt2` is the second intersection point, or `Point(0, 0)` if none\n\nThe calculated intersection points wont necessarily lie on the line segment between p1 and p2.\n\n\n\n"
+    "text": "intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)\n\nFind the intersection points of a line (extended through points p1 and p2) and a circle.\n\nReturn a tuple of (n, pt1, pt2)\n\nwhere\n\nn is the number of intersections, 0, 1, or 2\npt1 is first intersection point, or Point(0, 0) if none\npt2 is the second intersection point, or Point(0, 0) if none\n\nThe calculated intersection points wont necessarily lie on the line segment between p1 and p2.\n\n\n\n"
 },
 
 {
@@ -997,7 +997,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Placing text",
     "category": "section",
-    "text": "Use text() to place text.using Luxor # hide\nDrawing(400, 150, \"assets/figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(24) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nsethue(\"black\")\ntext(\"text 1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"text 2\",  pt2, halign=:center, valign = :bottom)\ntext(\"text 3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"text 4\",  pt1, halign=:left,   valign = :top)\ntext(\"text 5 \", pt2, halign=:center, valign = :top)\ntext(\"text 6\",  pt3, halign=:right,  valign = :top)\nfinish() # hide\nnothing # hide(Image: text placement)texttextpath() converts the text into a graphic path suitable for further styling.textpathLuxor uses what's called the \"toy\" text interface in Cairo."
+    "text": "Use text() to place text.using Luxor # hide\nDrawing(400, 150, \"assets/figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(20) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nsethue(\"black\")\ntext(\"text 1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"text 2\",  pt2, halign=:center, valign = :bottom)\ntext(\"text 3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"text 4\",  pt1, halign=:left,   valign = :top)\ntext(\"text 5 \", pt2, halign=:center, valign = :top)\ntext(\"text 6\",  pt3, halign=:right,  valign = :top)\nfinish() # hide\nnothing # hide(Image: text placement)texttextpath() converts the text into a graphic path suitable for further styling.textpathLuxor uses what's called the \"toy\" text interface in Cairo."
 },
 
 {
@@ -1021,7 +1021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textextents",
     "category": "Function",
-    "text": "textextents(str)\n\nReturn the measurements of the string str when set using the current font settings:\n\n1 x_bearing\n2 y_bearing\n3 width\n4 height\n5 x_advance\n6 y_advance\n\nThe bearing is the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like j; it's almost always a negative value for y displacement.\n\nThe width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\nExample:\n\ntextextents(\"R\")\n\nreturns\n\n[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]\n\n\n\n"
+    "text": "textextents(str)\n\nReturn an array of six Float64s containing the measurements of the string str when set using the current font settings:\n\n1 x_bearing\n\n2 y_bearing\n\n3 width\n\n4 height\n\n5 x_advance\n\n6 y_advance\n\nThe x and y bearings are the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like \"j\"; it's almost always a negative value for y displacement.\n\nThe width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\nExample:\n\ntextextents(\"R\")\n\nreturns\n\n[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]\n\n\n\n"
 },
 
 {
@@ -1053,7 +1053,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Text on a curve",
     "category": "section",
-    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring, -pi/2,\n  800, 0, 0,\n  spiral_in_out_shift = -18.0,\n  letter_spacing = 0,\n  spiral_ring_step = 0)\n\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentred(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\nfontface(\"GothamBlack\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n        clockwise = true,\n        letter_spacing = 0,\n        baselineshift = -20\n        )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n        clockwise = false,\n        letter_spacing = 0,\n        baselineshift = 10\n        )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
+    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring, -pi/2,\n  800, 0, 0,\n  spiral_in_out_shift = -18.0,\n  letter_spacing = 0,\n  spiral_ring_step = 0)\n\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentred(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n        clockwise = true,\n        letter_spacing = 0,\n        baselineshift = -20\n        )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n        clockwise = false,\n        letter_spacing = 0,\n        baselineshift = 10\n        )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
 },
 
 {
@@ -1097,11 +1097,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "transforms.html#Transforms-and-matrices-1",
+    "page": "Transforms and matrices",
+    "title": "Transforms and matrices",
+    "category": "section",
+    "text": "For basic transformations of the drawing space, use scale(sx, sy), rotate(a), and translate(tx, ty).translate() shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:using Luxor, Colors # hide\nDrawing(400, 200, \"assets/figures/translate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    setopacity(0.5)\n    circle(0, 0, 20, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    translate(25, 0)\nend\nfinish() # hide\nnothing # hide(Image: translate)scale() scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.using Luxor, Colors # hide\nDrawing(400, 200, \"assets/figures/scale.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    circle(0, 0, 90, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    scale(0.8, 0.8)\nend\nfinish() # hide\nnothing # hide(Image: scale)rotate() rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.using Luxor # hide\nDrawing(400, 200, \"assets/figures/rotate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nsetopacity(0.7) # hide\nfor i in 1:8\n    randomhue()\n    squircle(Point(40, 0), 20, 30, :fillpreserve)\n    sethue(\"black\")\n    stroke()\n    rotate(pi/4)\nend\nfinish() # hide\nnothing # hide(Image: rotate)scale\nrotate\ntranslateTo return home after many changes, you can use setmatrix([1, 0, 0, 1, 0, 0]) to reset the matrix to the default. origin() resets the matrix then moves the origin to the center of the page."
+},
+
+{
     "location": "transforms.html#Luxor.getmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.getmatrix",
     "category": "Function",
-    "text": "getmatrix()\n\nGet the current Cairo matrix. Returns an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate\n\ntransform([1, 0, 0, 1, dx, dy]) shifts by dx, dy\n\nscale\n\ntransform([fx 0 0 fy 0 0]) scales by fx and fy\n\nrotate\n\ntransform([cos(a), -sin(a), sin(a), cos(a), 0, 0]) rotates around to a radians\n\nrotate around O: [c -s s c 0 0]\n\nshear\n\ntransform([1 0 a 1 0 0]) shears in x direction by a\n\nshear in y: [1  B 0  1 0 0]\nx-skew\n\ntransform([1, 0, tan(a), 1, 0, 0]) skews in x by a\n\ny-skew\n\ntransform([1, tan(a), 0, 1, 0, 0]) skews in y by a\n\nflip\n\ntransform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)]) flips with center at centerx/centery\n\nreflect\n\ntransform([1 0 0 -1 0 0]) reflects in xaxis\n\ntransform([-1 0 0 1 0 0]) reflects in yaxis\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
+    "text": "getmatrix()\n\nGet the current matrix. Returns an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate\n\ntransform([1, 0, 0, 1, dx, dy]) shifts by dx, dy\n\nscale\n\ntransform([fx 0 0 fy 0 0]) scales by fx and fy\n\nrotate\n\ntransform([cos(a), -sin(a), sin(a), cos(a), 0, 0]) rotates around to a radians\n\nrotate around O: [c -s s c 0 0]\n\nshear\n\ntransform([1 0 a 1 0 0]) shears in x direction by a\n\nshear in y: [1  B 0  1 0 0]\nx-skew\n\ntransform([1, 0, tan(a), 1, 0, 0]) skews in x by a\n\ny-skew\n\ntransform([1, tan(a), 0, 1, 0, 0]) skews in y by a\n\nflip\n\ntransform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)]) flips with center at centerx/centery\n\nreflect\n\ntransform([1 0 0 -1 0 0]) reflects in xaxis\n\ntransform([-1 0 0 1 0 0]) reflects in yaxis\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
 },
 
 {
@@ -1109,7 +1117,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.setmatrix",
     "category": "Function",
-    "text": "setmatrix(m::Array)\n\nChange the current Cairo matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n"
+    "text": "setmatrix(m::Array)\n\nChange the current matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
@@ -1125,7 +1133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.crossproduct",
     "category": "Function",
-    "text": "crossproduct(p1::Point, p2::Point)\n\nThis is the perp dot product, really, not the crossproduct proper (which is 3D):\n\n`dot(p1, perpendicular(p2))`\n\n\n\n"
+    "text": "crossproduct(p1::Point, p2::Point)\n\nThis is the perp dot product, really, not the crossproduct proper (which is 3D):\n\ndot(p1, perpendicular(p2))\n\n\n\n"
 },
 
 {
@@ -1141,7 +1149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.rotationmatrix",
     "category": "Function",
-    "text": "rotationmatrix(a)\n\nReturn a 3 by 3 Julia matrix that will apply a rotation through a radians.\n\n\n\n"
+    "text": "rotationmatrix(a)\n\nReturn a 3x3 Julia matrix that will apply a rotation through a radians.\n\n\n\n"
 },
 
 {
@@ -1149,7 +1157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.scalingmatrix",
     "category": "Function",
-    "text": "scalingmatrix(sx, sy)\n\nReturn a 3 by 3 Julia matrix that will apply a scaling by sx and sy.\n\n\n\n"
+    "text": "scalingmatrix(sx, sy)\n\nReturn a 3x3 Julia matrix that will apply a scaling by sx and sy.\n\n\n\n"
 },
 
 {
@@ -1157,23 +1165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.translationmatrix",
     "category": "Function",
-    "text": "translationmatrix(x, y)\n\nReturn a 3 by 3 Julia matrix that will apply a translation in x and y.\n\n\n\n"
-},
-
-{
-    "location": "transforms.html#Luxor.cairotojuliamatrix",
-    "page": "Transforms and matrices",
-    "title": "Luxor.cairotojuliamatrix",
-    "category": "Function",
-    "text": "cairotojuliamatrix(c)\n\nReturn a 3 by 3 Julia matrix that's the equivalent of the six-element Cairo matrix in c.\n\n\n\n"
-},
-
-{
-    "location": "transforms.html#Luxor.juliatocairomatrix",
-    "page": "Transforms and matrices",
-    "title": "Luxor.juliatocairomatrix",
-    "category": "Function",
-    "text": "juliatocairomatrix(c)\n\nReturn a six-element Cairo matrix 3 that's the equivalent of the 3 by 3 Julia matrix in c.\n\n\n\n"
+    "text": "translationmatrix(x, y)\n\nReturn a 3x3 Julia matrix that will apply a translation in x and y.\n\n\n\n"
 },
 
 {
@@ -1181,7 +1173,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.getscale",
     "category": "Function",
-    "text": "getscale(R::Matrix)\ngetscale()\n\nGet the current scale of a Julia matrix, or the current Luxor scale.\n\nReturns a tuple of x and y values.\n\n\n\n"
+    "text": "getscale(R::Matrix)\ngetscale()\n\nGet the current scale of a Julia 3x3 matrix, or the current Luxor scale.\n\nReturns a tuple of x and y values.\n\n\n\n"
 },
 
 {
@@ -1189,7 +1181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.gettranslation",
     "category": "Function",
-    "text": "gettranslation(R::Matrix)\ngettranslation()\n\nGet the current translation of a Julia matrix, or the current Luxor translation.\n\nReturns a tuple of x and y values.\n\n\n\n"
+    "text": "gettranslation(R::Matrix)\ngettranslation()\n\nGet the current translation of a Julia 3x3 matrix, or the current Luxor translation.\n\nReturns a tuple of x and y values.\n\n\n\n"
 },
 
 {
@@ -1197,15 +1189,31 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.getrotation",
     "category": "Function",
-    "text": "getrotation(R::Matrix)\n\nGet rotation of a Julia matrix:\n\n    | a  b  tx |\nR = | c  d  ty |\n    | 0  0  1  |\n\nThe rotation angle is atan2(-b, a) or atan2(c, d).\n\nGet the current Luxor rotation:\n\ngetrotation()\n\n\n\n"
+    "text": "getrotation(R::Matrix)\ngetrotation()\n\nGet the rotation of a Julia 3x3 matrix, or the current Luxor rotation.\n\nR = beginbmatrix\na  b  tx \nc  d  ty \n0  0  1  \nendbmatrix\n\nThe rotation angle is atan2(-b, a) or atan2(c, d).\n\n\n\n"
 },
 
 {
-    "location": "transforms.html#Transforms-and-matrices-1",
+    "location": "transforms.html#Luxor.cairotojuliamatrix",
     "page": "Transforms and matrices",
-    "title": "Transforms and matrices",
+    "title": "Luxor.cairotojuliamatrix",
+    "category": "Function",
+    "text": "cairotojuliamatrix(c)\n\nReturn a 3x3 Julia matrix that's the equivalent of the six-element matrix in c.\n\n\n\n"
+},
+
+{
+    "location": "transforms.html#Luxor.juliatocairomatrix",
+    "page": "Transforms and matrices",
+    "title": "Luxor.juliatocairomatrix",
+    "category": "Function",
+    "text": "juliatocairomatrix(c)\n\nReturn a six-element matrix that's the equivalent of the 3x3 Julia matrix in c.\n\n\n\n"
+},
+
+{
+    "location": "transforms.html#Matrices-and-transformations-1",
+    "page": "Transforms and matrices",
+    "title": "Matrices and transformations",
     "category": "section",
-    "text": "For basic transformations of the drawing space, use scale(sx, sy), rotate(a), and translate(tx, ty). You can use origin() to return to the document's original state, with the axes in the center.translate() shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:using Luxor, Colors # hide\nDrawing(400, 200, \"assets/figures/translate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    setopacity(0.5)\n    circle(0, 0, 20, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    translate(25, 0)\nend\nfinish() # hide\nnothing # hide(Image: translate)scale() scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.using Luxor, Colors # hide\nDrawing(400, 200, \"assets/figures/scale.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nfor i in range(0, 30, 6)\n    sethue(HSV(i, 1, 1)) # from Colors\n    circle(0, 0, 90, :fillpreserve)\n    setcolor(\"black\")\n    stroke()\n    scale(0.8, 0.8)\nend\nfinish() # hide\nnothing # hide(Image: scale)rotate() rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.using Luxor # hide\nDrawing(400, 200, \"assets/figures/rotate.png\") # hide\nbackground(\"white\") # hide\nsrand(1) # hide\nsetline(1) # hide\norigin()\nsetopacity(0.7) # hide\nfor i in 1:8\n    randomhue()\n    squircle(Point(40, 0), 20, 30, :fillpreserve)\n    sethue(\"black\")\n    stroke()\n    rotate(pi/4)\nend\nfinish() # hide\nnothing # hide(Image: rotate)scale\nrotate\ntranslateThe current matrix is a six element array, perhaps like this:[1, 0, 0, 1, 0, 0]transform(a) transforms the current workspace by 'multiplying' the current matrix with matrix a. For example, transform([1, 0, xskew, 1, 50, 0]) skews the current matrix by xskew radians and moves it 50 in x and 0 in y.using Luxor # hide\nfname = \"assets/figures/transform.png\" # hide\npagewidth, pageheight = 450, 100 # hide\nDrawing(pagewidth, pageheight, fname) # hide\norigin() # hide\nbackground(\"white\") # hide\ntranslate(-200, 0) # hide\n\nfunction boxtext(p, t)\n    sethue(\"grey30\")\n    box(p, 30, 50, :fill)\n    sethue(\"white\")\n    textcentred(t, p)\nend\n\nfor i in 0:5\n    xskew = tand(i * 5.0)\n    transform([1, 0, xskew, 1, 50, 0])\n    boxtext(O, string(round(rad2deg(xskew), 1), \"°\"))\nend\n\nfinish() # hide\nnothing # hide(Image: transform)getmatrix() gets the current matrix, setmatrix(a) sets the matrix to array a.getmatrix\nsetmatrix\ntransform\ncrossproduct\nblendmatrix\nrotationmatrix\nscalingmatrix\ntranslationmatrix\ncairotojuliamatrix\njuliatocairomatrix\ngetscale\ngettranslation\ngetrotation"
+    "text": "In Luxor, there's always a current matrix. It's a six element array:beginbmatrix\n1  0  0 \n0  1  0 \nendbmatrixwhich is usually handled in Julia/Cairo/Luxor as a simple vector/array:julia> getmatrix()\n6-element Array{Float64,1}:\n   1.0\n   0.0\n   0.0\n   1.0\n   0.0\n   0.0transform(a) transforms the current workspace by 'multiplying' the current matrix with matrix a. For example, transform([1, 0, xskew, 1, 50, 0]) skews the current matrix by xskew radians and moves it 50 in x and 0 in y.using Luxor # hide\nfname = \"assets/figures/transform.png\" # hide\npagewidth, pageheight = 450, 100 # hide\nDrawing(pagewidth, pageheight, fname) # hide\norigin() # hide\nbackground(\"white\") # hide\ntranslate(-200, 0) # hide\n\nfunction boxtext(p, t)\n    sethue(\"grey30\")\n    box(p, 30, 50, :fill)\n    sethue(\"white\")\n    textcentred(t, p)\nend\n\nfor i in 0:5\n    xskew = tand(i * 5.0)\n    transform([1, 0, xskew, 1, 50, 0])\n    boxtext(O, string(round(rad2deg(xskew), 1), \"°\"))\nend\n\nfinish() # hide\nnothing # hide(Image: transform)getmatrix() gets the current matrix, setmatrix(a) sets the matrix to array a.getmatrix\nsetmatrix\ntransform\ncrossproduct\nblendmatrix\nrotationmatrix\nscalingmatrix\ntranslationmatrixUse the getscale(), gettranslation(), and getrotation() functions to find the current values of the current matrix. These can also find the values of arbitrary 3x3 matrices.getscale\ngettranslation\ngetrotationYou can convert between the 6-element and 3x3 versions of a transformation matrix using the functions cairotojuliamatrix() and juliatocairomatrix().cairotojuliamatrix\njuliatocairomatrix"
 },
 
 {
@@ -1581,7 +1589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "More examples",
     "title": "Hipster logo: text on curves",
     "category": "section",
-    "text": "using Luxor\nfunction hipster(fname)\n    Drawing(400, 350, fname)\n    origin()\n    rotate(pi/8)\n\n    circle(O, 135, :clip)\n    sethue(\"antiquewhite2\")\n    paint()\n\n    sethue(\"gray20\")\n    setline(3)\n    circle(O, 130, :stroke)\n    circle(O, 135, :stroke)\n    circle(O, 125, :fill)\n\n    sethue(\"antiquewhite2\")\n    circle(O, 85, :fill)\n\n    sethue(\"wheat\")\n    fontsize(24)\n    fontface(\"Helvetica-Bold\")\n    textcurvecentered(\"• LUXOR •\", (3pi)/2, 100, O, clockwise=true, baselineshift = -4)\n    textcurvecentered(\"• VECTOR GRAPHICS •\", pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)\n\n    sethue(\"gray20\")\n    map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))\n    circle(O.x + 30, O.y - 55, 15, :fill)\n\n    # cheap weathered texture:\n    sethue(\"antiquewhite2\")\n    setline(0.2)\n    setdash(\"dotdotdashed\")\n    for i in 1:500\n        line(randompoint(Point(-200, -350), Point(200, 350)),\n             randompoint(Point(-200, -350), Point(200, 350)),\n             :stroke)\n    end\n    finish()\nend\n\nhipster(\"assets/figures/textcurvecenteredexample.png\")\nnothing # hide(Image: text on a curve)"
+    "text": "using Luxor\nfunction hipster(fname, toptext, bottomtext)\n    Drawing(400, 350, fname)\n    origin()\n    rotate(pi/8)\n\n    circle(O, 135, :clip)\n    sethue(\"antiquewhite2\")\n    paint()\n\n    sethue(\"gray20\")\n    setline(3)\n    circle(O, 130, :stroke)\n    circle(O, 135, :stroke)\n    circle(O, 125, :fill)\n\n    sethue(\"antiquewhite2\")\n    circle(O, 85, :fill)\n\n    sethue(\"wheat\")\n    fontsize(20)\n    fontface(\"Helvetica-Bold\")\n    textcurvecentered(toptext, (3pi)/2, 100, O, clockwise=true,  letter_spacing=5, baselineshift = -4)\n    textcurvecentered(bottomtext, pi/2, 100, O, clockwise=false, letter_spacing=5, baselineshift = -15)\n\n    sethue(\"gray20\")\n    map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))\n    circle(O.x + 30, O.y - 55, 15, :fill)\n\n    # cheap weathered texture:\n    sethue(\"antiquewhite2\")\n    setline(0.2)\n    setdash(\"dot\")\n    for i in 1:500\n        line(randompoint(Point(-200, -350), Point(200, 350)),\n             randompoint(Point(-200, -350), Point(200, 350)),\n             :stroke)\n    end\n    finish()\nend\n\nhipster(\"assets/figures/textcurvecenteredexample.png\", \"• LUXOR •\", \"• VECTOR GRAPHICS •\")\nnothing # hide(Image: text on a curve)"
 },
 
 {
