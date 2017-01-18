@@ -72,6 +72,32 @@ end
 finish()
 ```
 
+## Transforming images
+
+You can transform images by setting the current matrix, either with `scale()` and `rotate()` and similar, or by modifying it directly. This code skews the image and scales and rotates it in a circle:
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/transform-images.png") # hide
+origin() # hide
+img = readpng("assets/figures/clipping-tests.png")
+w = img.width
+h = img.height
+for theta in 0:pi/6:2pi
+    gsave()
+        scale(.5, .5)
+        rotate(theta)
+        transform([1, 0, -pi/4, 1, 250, 0])
+        placeimage(img, -w/2, -h/2, .75)
+    grestore()
+end
+
+finish() # hide
+nothing # hide
+```
+
+![transforming images](assets/figures/transform-images.png)
+
 ## Drawing on images
 
 You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.

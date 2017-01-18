@@ -33,7 +33,6 @@ end
 function clipping_test(fname)
     Drawing(500, 500, fname)
     origin()
-    background("white")
     setopacity(.4)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     drawlogoclip(0, 0)
