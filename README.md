@@ -4,15 +4,14 @@
 [![Luxor](http://pkg.julialang.org/badges/Luxor_0.5.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.5)
 [![Luxor](http://pkg.julialang.org/badges/Luxor_0.6.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.6)
 [![][codecov-img]][codecov-url]
+[![Build Status](https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphics/Luxor.jl)
 
-Documentation: http://JuliaGraphics.github.io/Luxor.jl/
+Documentation:
 
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/stable)
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/latest)
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/stable) This describes the most recent released version of the package.
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/latest) This refers to the current in-development version of the package.
 
 ![](docs/src/assets/figures/luxor-big-logo.png)
-
-[![Build Status](https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphics/Luxor.jl)
 
 ## Luxor
 

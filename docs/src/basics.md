@@ -481,8 +481,8 @@ Drawing(700, 150, "assets/figures/betweenpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
-p1 = Point(-180, 0)
-p2 = Point(180, 50)
+p1 = Point(-150, 0)
+p2 = Point(150, 50)
 line(p1, p2)
 stroke()
 for i in -0.5:0.1:1.5
