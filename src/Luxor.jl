@@ -34,7 +34,8 @@ export Drawing, currentdrawing,
 
     move, rmove, line, rline, arrow,
 
-    circle, circlepath, ellipse, squircle, center3pts, curve, arc, carc, arc2r, carc2r,
+    circle, circlepath, ellipse, hypotrochoid, squircle, center3pts, curve,
+    arc, carc, arc2r, carc2r,
     sector,
 
     ngon, star, pie,

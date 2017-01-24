@@ -12,7 +12,7 @@ else
     const Test = BaseTestNext
 end
 
-function ngon_poly(x, y, radius, sides::Int64, orientation=0, action=:nothing; close=true)
+function ngon_poly(x, y, radius, sides::Int, orientation=0, action=:nothing; close=true)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,
     y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end

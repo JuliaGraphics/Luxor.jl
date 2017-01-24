@@ -244,6 +244,32 @@ nothing # hide
 
 ![ellipses](assets/figures/ellipses.png)
 
+It's also possible to make polygonal approximations to ellipses from two focal points and a
+distance.
+
+```@example
+using Luxor # hide
+Drawing(500, 450, "assets/figures/ellipses_1.png") # hide
+origin() # hide
+background("antiquewhite") # hide
+sethue("gray30") # hide
+setline(1) # hide
+f1 = Point(-100, 0)
+f2 = Point(100, 0)
+ellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)
+[ begin
+    poly(offsetpoly(ellipsepoly, c), close=true, :stroke);
+    circle(f1, 2, :fill)
+    circle(f2, 2, :fill)
+    rotate(pi/48)
+  end
+     for c in 150:-5:1 ]
+finish() # hide
+nothing # hide
+```
+
+![more ellipses](assets/figures/ellipses_1.png)
+
 ```@docs
 circle
 ellipse
@@ -682,4 +708,26 @@ nothing # hide
 ```@docs
 julialogo
 juliacircles
+```
+
+## Miscellaneous
+
+`hypotrochoid()` makes hypotrochoids.
+
+```@example
+using Luxor # hide
+Drawing(750, 250, "assets/figures/hypotrochoid.png")  # hide
+origin()
+background("grey20")
+sethue("antiquewhite")
+setline(1.5)
+hypotrochoid(40, 0.6, 80, :stroke, stepby=pi/2000, revolutions=pi)
+finish() # hide
+nothing # hide
+```
+
+![hypotrochoid](assets/figures/hypotrochoid.png)
+
+```@docs
+hypotrochoid
 ```

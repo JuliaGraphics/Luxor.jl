@@ -375,4 +375,69 @@ function circlepath(center::Point, radius, action=:none; reversepath=false, kapp
     do_action(action)
 end
 
+"""
+    ellipse(focus1::Point, focus2::Point, k, action=:none;
+             stepvalue=pi/100,
+             vertices=false,
+             reversepath=false)
+
+Build a polygon approximation to an ellipse, given two points and a distance, `k`, which is
+the sum of the distances to the focii of any points on the ellipse (or the shortest length
+of string required to go from one focus to the perimeter and on to the other focus).
+"""
+function ellipse(focus1::Point, focus2::Point, k, action=:none;
+        stepvalue=pi/100,
+        vertices=false,
+        reversepath=false)
+    a = k/2  # a = ellipse's major axis, the widest part
+    cpoint = midpoint(focus1, focus2)
+    dc = norm(focus1, cpoint)
+    b = sqrt(abs(a^2 - dc^2)) # minor axis, hopefuly not 0
+    phi = slope(O, focus2) # angle between the major axis and the x-axis
+    points = Point[]
+    drawing = false
+    for t in 0:stepvalue:2pi
+        xt = cpoint.x + a * cos(t) * cos(phi) - b * sin(t) * sin(phi)
+        yt = cpoint.y + a * cos(t) * sin(phi) + b * sin(t) * cos(phi)
+        push!(points, Point(xt, yt))
+    end
+    if vertices
+        return points
+    end
+    poly(points, action, close=true, reversepath=reversepath)
+end
+
+"""
+    hypotrochoid(R, r, d, action=:none; stepby=pi/24, revolutions=2pi)
+
+Draw a hypotrochoid with short line segments. The curve is traced by a point attached to a
+circle of radius `r` rolling around the inside  of a fixed circle of radius `R`, where the
+point is a distance `d` from  the center of the interior circle.
+
+`stepby` controls the detail level, `revolutions` determines how many revolutions are made.
+
+Special cases include the hypocycloid, if `d` = `r`, and an ellipse, if `R` = `2r`.
+
+The polygon might be split if the number of line segments gets too large (eg over 1200).
+"""
+function hypotrochoid(R, r, d, action=:none; stepby=pi/24, revolutions=2pi)
+    function nextposition(t)
+        x = (R - r) * cos(t) + d * cos(((R - r)/r) * t)
+        y = (R - r) * sin(t) - d * sin(((R - r)/r) * t)
+        return Point(x, y)
+    end
+    counter=1
+    move(nextposition(0))
+    for t = 0:stepby:revolutions
+        line(nextposition(t))
+        counter += 1
+        if counter > 1200 # break very long curves
+            stroke()
+            counter = 0
+            move(nextposition(t))
+        end
+    end
+    do_action(action)
+    return(move(nextposition(revolutions)))
+end
 # eof

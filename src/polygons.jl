@@ -208,7 +208,7 @@ whereas
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-function ngon(x::Real, y::Real, radius::Real, sides::Int64=5, orientation=0, action=:nothing;
+function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0, action=:nothing;
     vertices=false,
     reversepath=false)
     ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
@@ -228,7 +228,7 @@ end
 Draw a regular polygon centred at point `p`:
 """
 
-ngon(centrepoint::Point, radius::Real, sides::Int64=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation, action; kwargs...)
+ngon(centrepoint::Point, radius::Real, sides::Int=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation, action; kwargs...)
 
 """
     star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
@@ -240,7 +240,7 @@ larger.
 
 Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
-function star(x::Real, y::Real, radius::Real, npoints::Int64=5, ratio::Real=0.5,
+function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
     orientation=0, action=:nothing;
     vertices = false,
     reversepath=false)
@@ -270,7 +270,7 @@ end
 Draw a star centered at a position:
 """
 
-star(centerpoint::Point, radius::Real, npoints::Int64=5, ratio::Real=0.5, orientation=0,
+star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0,
     action=:nothing;
     vertices = false,
     reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio,

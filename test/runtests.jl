@@ -43,6 +43,7 @@ function run_all_tests()
         include("sector-test.jl")
         include("sector-rounded.jl")
         include("ellipse-test.jl")
+        include("hypertrochoid-test.jl")
         include("pie-test.jl")
     end
 
