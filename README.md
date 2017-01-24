@@ -6,6 +6,8 @@
 [![][codecov-img]][codecov-url]
 [![Build Status](https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphics/Luxor.jl)
 
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/JuliaGraphics/Luxor.jl?branch=master&svg=true)](https://ci.appveyor.com/project/cormullion/luxor-jl/branch/master)
+
 Documentation:
 
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaGraphics.github.io/Luxor.jl/stable) This describes the most recent released version of the package.

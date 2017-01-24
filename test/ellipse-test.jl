@@ -25,7 +25,7 @@ function test_ellipse(fname)
     for i in 1:10
       ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :fill)
       randomhue()
-      ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :stroke)
+      ellipse(pos, Point(pos.x + rand(50:pagetiles.tilewidth), pos.y), rand(50:pagetiles.tileheight), :stroke)
     end
     setline(5)
     sethue("black")
