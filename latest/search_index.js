@@ -573,7 +573,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.hypotrochoid",
     "category": "Function",
-    "text": "hypotrochoid(R, r, d, action=:none; stepby=pi/24, revolutions=2pi)\n\nDraw a hypotrochoid with short line segments. The curve is traced by a point attached to a circle of radius r rolling around the inside  of a fixed circle of radius R, where the point is a distance d from  the center of the interior circle.\n\nstepby controls the detail level, revolutions determines how many revolutions are made.\n\nSpecial cases include the hypocycloid, if d = r, and an ellipse, if R = 2r.\n\nThe polygon might be split if the number of line segments gets too large (eg over 1200).\n\n\n\n"
+    "text": "hypotrochoid(R, r, d, action=:none; stepby=0.1, period=0)\n\nDraw a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius r rolling around the inside  of a fixed circle of radius R, where the point is a distance d from  the center of the interior circle.\n\nstepby controls the detail level. If period is not supplied, or 0, the lowest period is calculated (somewhat approximately at the moment), and also returned in terms of 2pi.\n\nSpecial cases include the hypocycloid, if d = r, and an ellipse, if R = 2r.\n\nThe polygon might be split if the number of line segments gets too large (currently over 1200).\n\n\n\n"
 },
 
 {
@@ -581,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Miscellaneous",
     "category": "section",
-    "text": "hypotrochoid() makes hypotrochoids.using Luxor # hide\nDrawing(750, 250, \"assets/figures/hypotrochoid.png\")  # hide\norigin()\nbackground(\"grey20\")\nsethue(\"antiquewhite\")\nsetline(1.5)\nhypotrochoid(40, 0.6, 80, :stroke, stepby=pi/2000, revolutions=pi)\nfinish() # hide\nnothing # hide(Image: hypotrochoid)hypotrochoid"
+    "text": "hypotrochoid() makes hypotrochoids.using Luxor # hide\nDrawing(750, 250, \"assets/figures/hypotrochoid.png\")  # hide\norigin()\nbackground(\"grey20\")\nsethue(\"antiquewhite\")\nsetline(1.5)\nhypotrochoid(40, 1, 80, :stroke, stepby=pi/2000, period=pi)\nfinish() # hide\nnothing # hide(Image: hypotrochoid)hypotrochoid"
 },
 
 {
