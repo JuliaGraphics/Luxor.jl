@@ -721,7 +721,7 @@ origin()
 background("grey20")
 sethue("antiquewhite")
 setline(1.5)
-hypotrochoid(40, 0.6, 80, :stroke, stepby=pi/2000, revolutions=pi)
+hypotrochoid(40, 1, 80, :stroke, stepby=pi/2000, period=pi)
 finish() # hide
 nothing # hide
 ```

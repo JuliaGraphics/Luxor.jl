@@ -123,5 +123,10 @@ else
         run_all_tests()
         info("Test images weren't saved. To see the test images, next time do this before running")
         info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
+
+        for f in readdir()
+            info("deleting file $f")
+            rm(f, force=true, recursive=true)
+        end
     end
 end
