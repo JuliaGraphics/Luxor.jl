@@ -408,27 +408,34 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
 end
 
 """
-    hypotrochoid(R, r, d, action=:none; stepby=pi/24, revolutions=2pi)
+    hypotrochoid(R, r, d, action=:none; stepby=0.1, period=0)
 
-Draw a hypotrochoid with short line segments. The curve is traced by a point attached to a
-circle of radius `r` rolling around the inside  of a fixed circle of radius `R`, where the
-point is a distance `d` from  the center of the interior circle.
+Draw a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
+point attached to a circle of radius `r` rolling around the inside  of a fixed circle of
+radius `R`, where the point is a distance `d` from  the center of the interior circle.
 
-`stepby` controls the detail level, `revolutions` determines how many revolutions are made.
+`stepby` controls the detail level. If `period` is not supplied, or 0, the lowest period is
+calculated (somewhat approximately at the moment), and also returned in terms of `2pi`.
 
 Special cases include the hypocycloid, if `d` = `r`, and an ellipse, if `R` = `2r`.
 
-The polygon might be split if the number of line segments gets too large (eg over 1200).
+The polygon might be split if the number of line segments gets too large (currently over
+1200).
 """
-function hypotrochoid(R, r, d, action=:none; stepby=pi/24, revolutions=2pi)
+function hypotrochoid(R, r, d, action=:none; stepby=0.1, period=0)
     function nextposition(t)
         x = (R - r) * cos(t) + d * cos(((R - r)/r) * t)
         y = (R - r) * sin(t) - d * sin(((R - r)/r) * t)
         return Point(x, y)
     end
+    # try to calculate the period exactly
+    maxt = 2pi * (r/gcd(convert(Int, ceil(R)), convert(Int, ceil(r))))
+    if period == 0
+        period = maxt
+    end
     counter=1
     move(nextposition(0))
-    for t = 0:stepby:revolutions
+    for t = 0:stepby:period + stepby
         line(nextposition(t))
         counter += 1
         if counter > 1200 # break very long curves
@@ -437,7 +444,11 @@ function hypotrochoid(R, r, d, action=:none; stepby=pi/24, revolutions=2pi)
             move(nextposition(t))
         end
     end
+    # not sure whether to close path. Perhaps not...
     do_action(action)
-    return(move(nextposition(revolutions)))
+    # return the period we used
+    return(
+        divrem(period, 2pi)
+        )
 end
 # eof
