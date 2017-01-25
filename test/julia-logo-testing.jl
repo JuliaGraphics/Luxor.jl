@@ -44,4 +44,4 @@ end
 
 fname="julia-logo-drawing.pdf"
 julia_logo_test(fname)
-println("...finished julia-logo-testing, saved in $fname")
+println("...finished test: output in $(fname)")

@@ -34,8 +34,8 @@ function test_pie(fname)
     text(string(fromA_str, "°/", toA_str, "°"), pos.x, pos.y)
   end
   @test finish() == true
-  println("..finished pie-test, saved in $(fname)")
 end
 
 fname = "pie-test1.pdf"
 test_pie(fname)
+println("...finished test: output in $(fname)")

@@ -61,7 +61,8 @@ function draw_luxor_demo(fname)
 
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, O)
     @test finish() == true
-    println("...finished luxor test: output in $(fname)")
 end
 
-draw_luxor_demo("luxor-test1.png")
+fname = "luxor-test1.png"
+draw_luxor_demo(fname)
+println("...finished test: output in $(fname)")

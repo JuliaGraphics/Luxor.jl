@@ -45,7 +45,6 @@ function unit_conversions_test(fname)
         grestore()
     end
     @test finish() == true
-    println("...finished unit-conversions-test: saved in $(fname)")
 end
 
 @test isapprox(1inch, 72)
@@ -55,3 +54,4 @@ end
 
 fname = "unit-conversions-test.pdf"
 unit_conversions_test(fname)
+println("...finished test: output in $(fname)")

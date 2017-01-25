@@ -23,8 +23,8 @@ function circle_as_path(fname)
         circlepath(pos, rand(5:65), :fill, reversepath=true)
     end
     @test finish() == true
-    println("...finished circle_as_path test, saved in $(fname)")
 end
 
 fname = "circlepath.pdf"
 circle_as_path(fname)
+println("...finished test: output in $(fname)")

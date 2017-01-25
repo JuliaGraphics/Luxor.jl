@@ -29,8 +29,8 @@ function test_hypotrochoid(fname)
         grestore()
     end
     @test finish() == true
-    println("...finished hypotrochoid-test, saved in $(fname)")
 end
 
 fname = "hypertrochoid-test.pdf"
 test_hypotrochoid(fname)
+println("...finished test: output in $(fname)")

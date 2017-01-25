@@ -34,10 +34,9 @@ function test_ellipse(fname)
     ellipse(pos, 5, 5, :fill)
     clipreset()
   end
-
   @test finish() == true
-  println("...finished ellipse-test, saved in $(fname)")
 end
 
 fname = "ellipse-test1.pdf"
 test_ellipse(fname)
+println("...finished test: output in $(fname)")
