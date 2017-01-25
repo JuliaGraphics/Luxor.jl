@@ -5,10 +5,12 @@ else
     const Test = BaseTestNext
 end
 
+using Compat
+
 function run_all_tests()
 
     @testset "animation (Unix only)" begin
-        if ! is_windows()
+        if !  @compat is_windows()
             include("animation-test.jl")
         end
     end
