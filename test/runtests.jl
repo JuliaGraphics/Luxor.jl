@@ -126,7 +126,11 @@ else
 
         for f in readdir()
             info("deleting file $f")
-            rm(f, force=true, recursive=true)
+            if VERSION >= v"0.5.0"
+                rm(f, force=true, recursive=true)
+	        else
+                rm(f, recursive=true)
+            end
         end
     end
 end
