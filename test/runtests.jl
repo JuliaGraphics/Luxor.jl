@@ -7,8 +7,8 @@ end
 
 function run_all_tests()
 
-    @testset "animation" begin
-        if ! is_windows
+    @testset "animation (Unix only)" begin
+        if ! is_windows()
             include("animation-test.jl")
         end
     end
