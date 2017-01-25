@@ -72,7 +72,5 @@ function color_blend_test(fname)
 end
 
 fname = "color-blends-2.pdf"
-
 color_blend_test(fname)
-
-println("...finished color-blend-test")
+println("...finished test: output in $(fname)")

@@ -50,4 +50,4 @@ end
 
 fname = "text-curve-centered.png"
 hipster(fname)
-println("...finished hipster logo")
+println("...finished test: output in $(fname)")

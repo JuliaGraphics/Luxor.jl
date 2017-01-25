@@ -116,6 +116,7 @@ if get(ENV, "LUXOR_KEEP_TEST_RESULTS", false) == "true"
         info("Test images saved in: $(pwd())")
 else
     mktempdir() do tmpdir
+        olddir = pwd()
         cd(tmpdir)
         info("running tests in: $(pwd())")
         info("but not keeping the results")
@@ -123,14 +124,6 @@ else
         run_all_tests()
         info("Test images weren't saved. To see the test images, next time do this before running")
         info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
-
-        for f in readdir()
-            info("deleting file $f")
-            if VERSION >= v"0.5.0"
-                rm(f, force=true, recursive=true)
-	        else
-                rm(f, recursive=true)
-            end
-        end
+        cd(olddir)
     end
 end

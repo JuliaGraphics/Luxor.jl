@@ -38,4 +38,4 @@ end
 
 fname="offsetpolys.pdf"
 offset_poly_test(fname)
-println("...finished luxor test: output in $(fname)")
+println("...finished test: output in $(fname)")

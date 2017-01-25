@@ -28,9 +28,9 @@ function arrow_test(fname)
     grestore()
   end
   @test finish() == true
-  println("...finished arrow-line-test, saved in $(fname)")
 end
 
 srand(42)
 fname = "arrow-line-test.pdf"
 arrow_test(fname)
+println("...finished test: output in $(fname)")

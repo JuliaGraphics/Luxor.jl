@@ -65,8 +65,8 @@ function run_line_intersection_test(fname)
         grestore()
     end
     @test finish() == true
-    println("...finished line-intersection-options test, saved in $(fname)")
 end
 
 fname = "line-intersection-options.pdf"
 run_line_intersection_test(fname)
+println("...finished test: output in $(fname)")
