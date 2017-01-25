@@ -508,7 +508,7 @@ origin() # hide
 background("white") # hide
 sethue("red")
 p1 = Point(-150, 0)
-p2 = Point(150, 50)
+p2 = Point(150, 40)
 line(p1, p2)
 stroke()
 for i in -0.5:0.1:1.5

@@ -8,7 +8,9 @@ end
 function run_all_tests()
 
     @testset "animation" begin
-        include("animation-test.jl")
+        if ! is_windows
+            include("animation-test.jl")
+        end
     end
 
     @testset "polygons" begin
