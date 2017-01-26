@@ -45,8 +45,9 @@ end
 
 # comparisons
 
-isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x) && (isapprox(p1.y, p2.y))
-isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y) )
+isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
+isapprox(p1::Point, p2::Point)        = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
+isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
 !=(p1::Point, p2::Point)              = !isequal(p1, p2)
 <(p1::Point, p2::Point)               = isless(p1,p2)
 >(p1::Point, p2::Point)               = p2 < p1

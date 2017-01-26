@@ -408,47 +408,52 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
 end
 
 """
-    hypotrochoid(R, r, d, action=:none; stepby=0.1, period=0)
+    hypotrochoid1(R, r, d, action=:none;
+            stepby=0.01,
+            period=0,
+            vertices=false)
 
-Draw a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
+Make a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
 point attached to a circle of radius `r` rolling around the inside  of a fixed circle of
 radius `R`, where the point is a distance `d` from  the center of the interior circle.
+Things get interesting if you supply non-integral values.
 
 `stepby` controls the detail level. If `period` is not supplied, or 0, the lowest period is
-calculated (somewhat approximately at the moment), and also returned in terms of `2pi`.
+calculated for you.
+
+The function can return a polygon (a list of points), or draw the points directly using
+the supplied `action`. If the points are drawn, the function returns a tuple showing how
+many points were drawn and what the period was (as a multiple of `pi`).
 
 Special cases include the hypocycloid, if `d` = `r`, and an ellipse, if `R` = `2r`.
-
-The polygon might be split if the number of line segments gets too large (currently over
-1200).
 """
-function hypotrochoid(R, r, d, action=:none; stepby=0.1, period=0)
+function hypotrochoid(R, r, d, action=:none;
+        stepby   = 0.01,
+        period   = 0,
+        vertices = false)
     function nextposition(t)
-        x = (R - r) * cos(t) + d * cos(((R - r)/r) * t)
-        y = (R - r) * sin(t) - d * sin(((R - r)/r) * t)
+        x = (R - r) * cos(t) + (d * cos(((R - r)/r) * t))
+        y = (R - r) * sin(t) - (d * sin(((R - r)/r) * t))
         return Point(x, y)
     end
     # try to calculate the period exactly
-    maxt = 2pi * (r/gcd(convert(Int, ceil(R)), convert(Int, ceil(r))))
-    if period == 0
-        period = maxt
+    if isapprox(period, 0)
+        period = 2pi * (r/gcd(convert(Int, floor(R)), convert(Int, floor(r))))
     end
     counter=1
-    move(nextposition(0))
-    for t = 0:stepby:period + stepby
-        line(nextposition(t))
-        counter += 1
-        if counter > 1200 # break very long curves
-            stroke()
-            counter = 0
-            move(nextposition(t))
-        end
+    points=Point[]
+    for t = 0:stepby:period
+        push!(points, nextposition(t))
     end
-    # not sure whether to close path. Perhaps not...
-    do_action(action)
-    # return the period we used
-    return(
-        divrem(period, 2pi)
-        )
+    # don't repeat end point if it's more or less the same as the start point
+    if isapprox(points[1], points[end])
+        pop!(points)
+    end
+    if vertices == false
+        poly(points, action)
+        return (length(points), period/pi)
+    else
+        return points
+    end
 end
 # eof

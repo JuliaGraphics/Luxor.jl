@@ -712,16 +712,19 @@ juliacircles
 
 ## Miscellaneous
 
-`hypotrochoid()` makes hypotrochoids.
+`hypotrochoid()` makes hypotrochoids. The results are polygons, so you can either draw them directly, or pass them on for further polygon fun.
 
 ```@example
 using Luxor # hide
-Drawing(750, 250, "assets/figures/hypotrochoid.png")  # hide
+Drawing(500, 300, "assets/figures/hypotrochoid.png")  # hide
 origin()
-background("grey20")
+background("grey15")
 sethue("antiquewhite")
-setline(1.5)
-hypotrochoid(40, 1, 80, :stroke, stepby=pi/2000, period=pi)
+setline(1)
+p = hypotrochoid(100, 25, 55, :stroke, stepby=pi/325, vertices=true)
+for i in 0:3:15
+poly(offsetpoly(p, i), :stroke, close=true)
+end
 finish() # hide
 nothing # hide
 ```
