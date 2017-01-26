@@ -25,7 +25,12 @@ function test_hypotrochoid(fname)
         text(string("R = $(2n), r = $(r), d = $(d)"), halign=:center, O.x, O.y+tiles.tileheight/2)
         R = 2n; r = 12; d = 5
         sethue("orange")
-        hypotrochoid(R, r, d, :stroke, stepby=pi/300)
+        p = hypotrochoid(R, r, d, :none, stepby=pi/305, vertices=true)
+        text(string("R = $(2n), r = $(r), d = $(d)"), halign=:center, O.x, O.y+tiles.tileheight/2 + 10)
+        poly(p, :stroke, close=true)
+
+        sethue("cyan")
+        poly(offsetpoly(p, 15), :stroke, close=true)
         grestore()
     end
     @test finish() == true
