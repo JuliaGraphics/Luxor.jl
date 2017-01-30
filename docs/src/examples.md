@@ -18,19 +18,11 @@ finish()
 preview()
 ```
 
-The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the
-location and type of the finished image when it's saved. `origin()` moves the 0/0 point to
-the centre of the drawing surface (by default it's at the top left corner). Because we're
-`using Colors`.jl, we can specify colors by name: `background("black")` defines the color of
-the background of the drawing. `text("helloworld")` draws the text. It's placed at the
-current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the
-image in the file. `preview()` tries to open the saved file using some other application (eg
-on MacOS X, Preview).
+The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the location and type of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
 
 ## The Julia logos
 
-Luxor contains two functions that draw the Julia logo, either in color or a single color,
-and the three Julia circles.
+Luxor contains two functions that draw the Julia logo, either in color or a single color, and the three Julia circles.
 
 ```@example
 using Luxor
@@ -99,9 +91,13 @@ draw(depth)
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
 
-## More complex examples
+## Working in Jupyter
 
-These examples are more elaborate.
+If you want to work interactively, you can use an environment such as a Jupyter notebook, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work, of course. And if you're working in the REPL, after your first drawing, subsequent drawings will be much quicker.)
+
+![Jupyter](assets/figures/jupyter-hypo.png)
+
+## More complex examples
 
 ### Sector chart
 

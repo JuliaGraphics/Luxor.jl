@@ -168,3 +168,26 @@ nothing # hide
 ```
 
 ![drawing on images](assets/figures/drawing_on_images.png)
+
+## Image compositing
+
+You should be using [Images.jl](https://github.com/JuliaImages) for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by `setmode()`.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/image-compositing.png") # hide
+origin() # hide
+img = readpng("assets/figures/textcurvecenteredexample.png")
+w = img.width
+h = img.height
+
+placeimage(img, -w/2, -h/2, .5)
+setmode("saturate")
+translate(50, 0)
+placeimage(img, -w/2, -h/2, .5)
+
+finish() # hide
+nothing # hide
+```
+
+![transforming images](assets/figures/image-compositing.png)

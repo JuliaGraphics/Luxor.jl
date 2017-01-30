@@ -8,7 +8,7 @@ makedocs(
     "Introduction to Luxor"   => "index.md",
     "A few examples"          => "examples.md",
     "Basic graphics"          => "basics.md",
-    "Styling"                 => "styling.md",
+    "Colors and styles"       => "colors-styles.md",
     "Polygons"                => "polygons.md",
     "Text"                    => "text.md",
     "Transforms and matrices" => "transforms.md",

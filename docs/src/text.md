@@ -1,6 +1,76 @@
 # Text and fonts
 
-## Placing text
+## A tale of two APIs
+
+There are two ways to draw text in Luxor. You can use either the so-called 'toy' API or the 'pro' API.
+
+Both have their advantages and disadvantages, and, given that trying to write anything definitive about font usage on three very different operating systems is an impossibility, trial and error will eventually lead to code patterns that work for you, if not other people.
+
+#### The Toy API
+
+Use:
+- `text(string, [position])` to place text at a position, otherwise at `0/0`, and optionally specify the horizontal and vertical alignment
+- `fontface(fontname)` to specify the fontname
+- `fontsize(fontsize)` to specify the fontsize in points
+
+```@example
+using Luxor # hide
+Drawing(600, 100, "assets/figures/toy-text-example.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+fontsize(20)
+fontface("Georgia")
+text("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
+finish() # hide
+nothing # hide
+```
+
+![text placement](assets/figures/toy-text-example.png)
+
+#### The Pro API
+
+Use:
+
+- `setfont(fontname, fontsize)` to specify the fontname and size in points
+- `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise), and the presence of any Pango-flavored markup.
+
+```@example
+using Luxor # hide
+Drawing(600, 100, "assets/figures/pro-text-example.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setfont("Georgia", 20)
+settext("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign="center")
+finish() # hide
+nothing # hide
+```
+
+![text placement](assets/figures/pro-text-example.png)
+
+## Specifying the font ("Toy" API)
+
+Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.
+
+On macOS, the fontname should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.
+
+```@docs
+fontface
+fontsize
+```
+
+## Specifying the font ("Pro" API)
+
+To select a font in the Pro text API, use `setfont()` and supply both the font name and a size.
+
+You *may* be able to use [Fontconfig.jl](https://github.com/JuliaGraphics/Fontconfig.jl) to find out which fonts are available to Julia.
+
+```@docs
+setfont
+```
+
+## Placing text ("Toy" API)
 
 Use `text()` to place text.
 
@@ -33,17 +103,21 @@ nothing # hide
 text
 ```
 
-`textpath()` converts the text into a graphic path suitable for further styling.
+## Placing text ("Pro" API)
+
+```@docs
+settext
+```
+
+## Text to paths
+
+`textpath()` converts the text into graphic paths suitable for further manipulation.
 
 ```@docs
 textpath
 ```
 
-Luxor uses what's called the "toy" text interface in Cairo.
-
-## Fonts
-
-Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.
+## Font dimensions ("toy" API)
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
@@ -52,8 +126,6 @@ The `textextents(str)` function gets an array of dimensions of the string `str`,
 The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.
 
 ```@docs
-fontface
-fontsize
 textextents
 ```
 

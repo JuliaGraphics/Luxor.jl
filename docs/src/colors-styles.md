@@ -1,4 +1,4 @@
-# Styling
+# Colors and styles
 
 ## Color and opacity
 
@@ -281,4 +281,66 @@ The fourth line shows that you can translate and scale the axes instead of adjus
 
 ```@docs
 blendadjust
+```
+
+## Blending (compositing) operators
+
+Graphics software provides ways to modify how the virtual "ink" is applied to existing graphic elements. In PhotoShop and other software products the compositing process is done using [blend modes](https://en.wikipedia.org/wiki/Blend_modes).
+
+Use `setmode()` to set the blending mode of subsequent graphics.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/blendmodes.png") # hide
+origin()
+# transparent, no background
+fontsize(15)
+setline(1)
+tiles = Tiler(600, 600, 4, 5, margin=30)
+modes = length(Luxor.blendingmodes)
+setcolor("black")
+for (pos, n) in tiles
+    n > modes && break
+    gsave()
+    translate(pos)
+    box(O, tiles.tilewidth-10, tiles.tileheight-10, :clip)
+
+    # calculate points for circles
+    diag = (Point(-tiles.tilewidth/2, -tiles.tileheight/2),
+            Point(tiles.tilewidth/2,  tiles.tileheight/2))
+    upper = between(diag, 0.4)
+    lower = between(diag, 0.6)
+
+    # first red shape uses default blend operator
+    setcolor(0.7, 0, 0, .8)
+    circle(upper, tiles.tilewidth/4, :fill)
+
+    # second blue shape shows results of blend operator
+    setcolor(0, 0, 0.9, 0.4)
+    blendingmode = Luxor.blendingmodes[mod1(n, modes)]
+    setmode(blendingmode)
+    circle(lower, tiles.tilewidth/4, :fill)
+
+    clipreset()
+    grestore()
+
+    gsave()
+    translate(pos)
+    text(Luxor.blendingmodes[mod1(n, modes)], O.x, O.y + tiles.tilewidth/2, halign=:center)
+    grestore()
+end
+finish() # hide
+nothing # hide
+```
+
+![blend modes](assets/figures/blendmodes.png)
+
+Notice in this example that clipping was used to restrict the area affected by the blending process.
+
+In Cairo these blend modes are called *operators*. A source for a more detailed explanation can be found [here](https://www.cairographics.org/operators/).
+
+You can access the list of modes with the unexported symbol `Luxor.blendingmodes`.
+
+```@docs
+setmode
 ```
