@@ -9,6 +9,7 @@ using Colors, Cairo, Compat, FileIO
 
 include("point.jl")
 include("Turtle.jl")
+include("shapes.jl")
 include("polygons.jl")
 include("curves.jl")
 include("Tiler.jl")
@@ -17,6 +18,8 @@ include("text.jl")
 include("blends.jl")
 include("matrix.jl")
 include("juliagraphics.jl")
+include("colors_styles.jl")
+include("images.jl")
 include("animate.jl")
 
 export Drawing, currentdrawing,
@@ -59,9 +62,13 @@ export Drawing, currentdrawing,
     setcolor, setopacity, sethue, randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
 
+    setfont, settext,
+
     Blend, setblend, blend, addstop, blendadjust,
     blendmatrix, rotationmatrix, scalingmatrix, translationmatrix,
     cairotojuliamatrix, juliatocairomatrix, getrotation, getscale, gettranslation,
+
+    setmode,
 
     readpng, placeimage,
 
@@ -483,76 +490,7 @@ Reset the clipping region to the current drawing's extent.
 """
 clipreset() = Cairo.reset_clip(currentdrawing.cr)
 
-"""
-    rect(xmin, ymin, w, h, action)
 
-Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and then
-do an action.
-
-See `box()` for more ways to do similar things, such as supplying two opposite corners,
-placing by centerpoint and dimensions.
-"""
-function rect(xmin, ymin, w, h, action=:nothing)
-    if action != :path
-        newpath()
-    end
-    Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
-    do_action(action)
-end
-
-"""
-    rect(cornerpoint, w, h, action)
-
-Create a rectangle with one corner at `cornerpoint` with width `w` and height `h` and do an
-action.
-"""
-function rect(cornerpoint::Point, w, h, action)
-    rect(cornerpoint.x, cornerpoint.y, w, h, action)
-end
-
-"""
-    box(cornerpoint1, cornerpoint2, action=:nothing)
-
-Create a rectangle between two points and do an action.
-"""
-function box(corner1::Point, corner2::Point, action=:nothing)
-    rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
-end
-
-"""
-    box(points::Array, action=:nothing)
-
-Create a box/rectangle using the first two points of an array of Points to defined
-opposite corners.
-"""
-function box(bbox::Array, action=:nothing)
-    box(bbox[1], bbox[2], action)
-end
-
-"""
-    box(pt::Point, width, height, action=:nothing; vertices=false)
-
-Create a box/rectangle centered at point `pt` with width and height. Use `vertices=true` to
-return an array of the four corner points rather than draw the box.
-"""
-function box(pt::Point, width, height, action=:nothing; vertices=false)
-    if vertices
-        return [Point(pt.x - width/2, pt.y + height/2),
-                Point(pt.x - width/2, pt.y - height/2),
-                Point(pt.x + width/2, pt.y - height/2),
-                Point(pt.x + width/2, pt.y + height/2)]
-    end
-    rect(pt.x - width/2, pt.y - height/2, width, height, action)
-end
-
-"""
-    box(x, y, width, height, action=:nothing)
-
-Create a box/rectangle centered at point `x/y` with width and height.
-"""
-function box(x, y, width, height, action=:nothing)
-    rect(x - width/2.0, y - height/2.0, width, height, action)
-end
 
 """
     setline(n)
@@ -770,225 +708,5 @@ Returns a CairoPath which is an array of `element_type` and `points` objects.
 """
 getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
 
-"""
-    setcolor("gold")
-    setcolor("darkturquoise")
 
-Set the current color to a named color. This use the definitions in Colors.jl to convert a
-string to RGBA eg setcolor("gold") # or "green", "darkturquoise", "lavender", etc. The list
-is at `Colors.color_names`.
-
-Use `sethue()` for changing colors without changing current opacity level.
-
-`sethue()` and `setcolor()` return the three or four values that were used:
-
-    julia> setcolor(sethue("red")..., .8)
-
-    (1.0,0.0,0.0,0.8)
-
-    julia> sethue(setcolor("red")[1:3]...)
-
-    (1.0,0.0,0.0)
-"""
-function setcolor(col::String)
-    temp = parse(RGBA, col)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
-        currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-        currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-end
-
-"""
-    setcolor(r, g, b)
-    setcolor(r, g, b, alpha)
-    setcolor(color)
-    setcolor(col::ColorTypes.Colorant)
-
-Set the current color.
-
-Examples:
-
-    setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))
-    setcolor(.2, .3, .4, .5)
-    setcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))
-
-    for i in 1:15:360
-       setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))
-       ...
-    end
-"""
-function setcolor(col::ColorTypes.Colorant)
-  temp = convert(RGBA, col)
-  setcolor(temp.r, temp.g, temp.b)
-  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-end
-
-function setcolor(r, g, b, a=1)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
-      currentdrawing.alpha = r, g, b, a
-    Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
-    return (r, g, b, a)
-end
-
-"""
-Set the current color to a string.
-
-For example:
-
-    setcolor"red"
-"""
-macro setcolor_str(ex)
-    isa(ex, String) || error("colorant requires literal strings")
-    col = parse(RGBA, ex)
-    quote
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
-      currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-      currentdrawing.greenvalue, currentdrawing.bluevalue, $col.alpha)
-    end
-end
-
-"""
-    sethue("black")
-    sethue(0.3,0.7,0.9)
-
-Set the color without changing opacity.
-
-`sethue()` is like `setcolor()`, but we sometimes want to change the current 'color' without
-changing alpha/opacity. Using `sethue()` rather than `setcolor()` doesn't change the current
-alpha opacity.
-"""
-function sethue(col::String)
-    temp = parse(RGBA,  col)
-    currentdrawing.redvalue, currentdrawing.greenvalue,
-        currentdrawing.bluevalue = temp.r, temp.g, temp.b
-    # use current alpha, not incoming one
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-        currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
-end
-
-"""
-    sethue(col::ColorTypes.Colorant)
-
-Set the color without changing current opacity:
-"""
-function sethue(col::ColorTypes.Colorant)
-    temp = convert(RGBA,  col)
-    currentdrawing.redvalue, currentdrawing.greenvalue,
-        currentdrawing.bluevalue = temp.r, temp.g, temp.b
-    # use current alpha
-    Cairo.set_source_rgba(currentdrawing.cr, temp.r, temp.g, temp.b, currentdrawing.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
-end
-
-"""
-    sethue(0.3, 0.7, 0.9)
-
-Set the color's `r`, `g`, `b` values. Use `setcolor(r,g,b,a)` to set transparent colors.
-"""
-function sethue(r, g, b)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
-    # use current alpha
-    Cairo.set_source_rgba(currentdrawing.cr, r, g, b, currentdrawing.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
-end
-
-"""
-    setopacity(alpha)
-
-Set the current opacity to a value between 0 and 1. This modifies the alpha value of the
-current color.
-"""
-function setopacity(a)
-    # use current RGB values
-    currentdrawing.alpha = a
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-        currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-    return a
-end
-
-"""
-    randomhue()
-
-Set a random hue.
-
-Choose a random color without changing the current alpha opacity.
-"""
-function randomhue()
-  rrand, grand, brand = rand(3)
-  sethue(rrand, grand, brand)
-  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
-end
-
-"""
-    randomcolor()
-
-Set a random color. This may change the current alpha opacity too.
-"""
-function randomcolor()
-  rrand, grand, brand, arand = rand(4)
-  setcolor(rrand, grand, brand, arand)
-  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-end
-
-"""
-    readpng(pathname)
-
-Read a PNG file.
-
-This returns a image object suitable for placing on the current drawing with `placeimage()`.
-You can access its `width` and `height` fields:
-
-    image = readpng("/tmp/test-image.png")
-    w = image.width
-    h = image.height
-"""
-function readpng(pathname)
-    return Cairo.read_from_png(pathname)
-end
-
-function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
-    Cairo.paint_with_alpha(currentdrawing.cr, a)
-end
-
-"""
-    placeimage(img, xpos, ypos)
-
-Place a PNG image on the drawing at (`xpos`/`ypos`). The image `img` has been previously
-loaded using `readpng()`.
-"""
-function placeimage(img::Cairo.CairoSurface, xpos, ypos)
-    Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
-    # no alpha
-    Cairo.paint(currentdrawing.cr)
-end
-
-"""
-    placeimage(img, pos)
-
-Place a PNG image on the drawing at `pos`.
-"""
-placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img, pt.x, pt.y)
-
-"""
-    placeimage(img, xpos, ypos, a)
-
-Place a PNG image on the drawing at (`xpos`/`ypos`) with transparency `a`.
-"""
-function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
-    Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
-    paint_with_alpha(currentdrawing.cr, alpha)
-end
-
-"""
-    placeimage(img, pos, a)
-
-Place a PNG image on the drawing at `pos` with transparency `a`.
-"""
-placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
-  placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
-
-end
-# module
+end # module

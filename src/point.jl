@@ -120,9 +120,10 @@ midpoint(pt::Array) = midpoint(pt[1], pt[2])
 
 """
     between(p1::Point, p2::Point, x)
+    between((p1::Point, p2::Point), x)
 
-Find the point between point `p1` and point `p2` for `x`, where `x` is typically between 0 and
-1, so these two should be equivalent:
+Find the point between point `p1` and point `p2` for `x`, where `x` is typically between 0
+and 1, so these two should be equivalent:
 
     between(p1, p2, 0.5)
 
@@ -131,6 +132,11 @@ and
     midpoint(p1, p2)
 """
 function between(p1::Point, p2::Point, x)
+    return p1 + (x * (p2 - p1))
+end
+
+function between(couple::NTuple{2, Point}, x)
+    p1, p2 = couple
     return p1 + (x * (p2 - p1))
 end
 

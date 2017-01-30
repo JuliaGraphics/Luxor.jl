@@ -1,5 +1,6 @@
 # text
-# the 'toy' API... "Any serious application should avoid them." :)
+
+# first, the 'toy' API... "Any serious application should avoid them." :)
 
 """
     text(str)
@@ -14,8 +15,8 @@ Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
 the string at the point. If you omit the point, it's placed at the current `0/0`. In Luxor,
 placing text doesn't affect the current point.
 
-Horizontal alignment `:halign` can be `:left`, `:center`, or `:right`. Vertical alignment
-`:valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
+Horizontal alignment `halign` can be `:left`, `:center`, or `:right`. Vertical alignment
+`valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
 """
 function text(t, pt::Point; halign=:left, valign=:baseline)
     #= text can aligned by one of the following points
@@ -255,5 +256,57 @@ function textcurvecentered(the_text, the_angle, the_radius, center::Point;
     starttextypos = baselineradius * sin(starttextangle)
     textcurve(the_text, starttextangle, baselineradius, center, clockwise=clockwise, letter_spacing=letter_spacing)
 end
+
+
+# the professional interface
+
+"""
+    setfont(family, fontsize)
+
+Select a font and specify the size in points.
+
+Example:
+
+    setfont("Helvetica", 24)
+    settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
+
+"""
+function setfont(family::AbstractString, fontsize)
+    # why is the size of the output set relative to 96dpi???
+    fsize = fontsize * 72/96
+    set_font_face(currentdrawing.cr, string(family, " ", fsize))
+end
+
+"""
+    settext(text, pos;
+        halign = "left",
+        valign = "bottom",
+        angle  = 0,
+        markup = false)
+
+    settext(text;
+        kwargs)
+
+Draw the `text` at `pos` (if omitted defaults to `0/0`).
+
+To align the text, use `halign`, one of "left", "center", or "right", and `valign`, one of
+"top", "center", or "bottom".
+
+`angle` is the rotation - in counterclockwise degrees.
+
+If `markup` is `true`, then the string can contain some HTML-style markup. Supported tags
+include:
+
+    <b>, <i>, <s>, <sub>, <sup>, <small>, <big>, <u>, <tt>, and <span>
+
+The `<span>` tag can contains things like this:
+
+    <span font='26' background='green' foreground='red'>unreadable text</span>
+"""
+function settext(text::AbstractString, pos::Point; kwargs...)
+    Cairo.text(currentdrawing.cr, pos.x, pos.y, text; kwargs...)
+end
+
+settext(text; kwargs...) = settext(text, O; kwargs...)
 
 # end

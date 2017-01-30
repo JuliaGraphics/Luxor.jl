@@ -35,6 +35,7 @@ function run_all_tests()
 
     @testset "text" begin
         include("text-alignment.jl")
+        include("pro-text-test.jl")
         include("text-curve-centered.jl")
         include("text-path-clipping.jl")
     end
@@ -53,6 +54,7 @@ function run_all_tests()
 
     @testset "color" begin
         include("color-blend-test.jl")
+        include("blendmodes.jl")
         include("palette_test.jl")
     end
 
