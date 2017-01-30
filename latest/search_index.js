@@ -73,11 +73,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples.html#Working-in-Jupyter-1",
+    "page": "A few examples",
+    "title": "Working in Jupyter",
+    "category": "section",
+    "text": "If you want to work interactively, you can use an environment such as a Jupyter notebook, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work, of course. And if you're working in the REPL, after your first drawing, subsequent drawings will be much quicker.)(Image: Jupyter)"
+},
+
+{
     "location": "examples.html#More-complex-examples-1",
     "page": "A few examples",
     "title": "More complex examples",
     "category": "section",
-    "text": "These examples are more elaborate."
+    "text": ""
 },
 
 {
@@ -437,7 +445,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.between",
     "category": "Function",
-    "text": "between(p1::Point, p2::Point, x)\n\nFind the point between point p1 and point p2 for x, where x is typically between 0 and 1, so these two should be equivalent:\n\nbetween(p1, p2, 0.5)\n\nand\n\nmidpoint(p1, p2)\n\n\n\n"
+    "text": "between(p1::Point, p2::Point, x)\nbetween((p1::Point, p2::Point), x)\n\nFind the point between point p1 and point p2 for x, where x is typically between 0 and 1, so these two should be equivalent:\n\nbetween(p1, p2, 0.5)\n\nand\n\nmidpoint(p1, p2)\n\n\n\n"
 },
 
 {
@@ -585,211 +593,227 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "styling.html#",
-    "page": "Styling",
-    "title": "Styling",
+    "location": "colors-styles.html#",
+    "page": "Colors and styles",
+    "title": "Colors and styles",
     "category": "page",
     "text": ""
 },
 
 {
-    "location": "styling.html#Styling-1",
-    "page": "Styling",
-    "title": "Styling",
+    "location": "colors-styles.html#Colors-and-styles-1",
+    "page": "Colors and styles",
+    "title": "Colors and styles",
     "category": "section",
     "text": ""
 },
 
 {
-    "location": "styling.html#Luxor.sethue",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.sethue",
+    "page": "Colors and styles",
     "title": "Luxor.sethue",
     "category": "Function",
     "text": "sethue(\"black\")\nsethue(0.3,0.7,0.9)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current 'color' without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing current opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color's r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.setcolor",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setcolor",
+    "page": "Colors and styles",
     "title": "Luxor.setcolor",
     "category": "Function",
     "text": "setcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nSet the current color to a named color. This use the definitions in Colors.jl to convert a string to RGBA eg setcolor(\"gold\") # or \"green\", \"darkturquoise\", \"lavender\", etc. The list is at Colors.color_names.\n\nUse sethue() for changing colors without changing current opacity level.\n\nsethue() and setcolor() return the three or four values that were used:\n\njulia> setcolor(sethue(\"red\")..., .8)\n\n(1.0,0.0,0.0,0.8)\n\njulia> sethue(setcolor(\"red\")[1:3]...)\n\n(1.0,0.0,0.0)\n\n\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\n\nSet the current color.\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))\n   ...\nend\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.setblend",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setblend",
+    "page": "Colors and styles",
     "title": "Luxor.setblend",
     "category": "Function",
     "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.setopacity",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setopacity",
+    "page": "Colors and styles",
     "title": "Luxor.setopacity",
     "category": "Function",
     "text": "setopacity(alpha)\n\nSet the current opacity to a value between 0 and 1. This modifies the alpha value of the current color.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.randomhue",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.randomhue",
+    "page": "Colors and styles",
     "title": "Luxor.randomhue",
     "category": "Function",
     "text": "randomhue()\n\nSet a random hue.\n\nChoose a random color without changing the current alpha opacity.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.randomcolor",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.randomcolor",
+    "page": "Colors and styles",
     "title": "Luxor.randomcolor",
     "category": "Function",
     "text": "randomcolor()\n\nSet a random color. This may change the current alpha opacity too.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Color-and-opacity-1",
-    "page": "Styling",
+    "location": "colors-styles.html#Color-and-opacity-1",
+    "page": "Colors and styles",
     "title": "Color and opacity",
     "category": "section",
     "text": "For color definitions and conversions, you can use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.Named colors, such as \"gold\", or \"lavender\", can be found in Colors.color_names. This code shows the first 625 colors.using Luxor, Colors # hide\nDrawing(800, 500, \"assets/figures/colors.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(5) # hide\ncols = collect(Colors.color_names)\ntiles = Tiler(800, 500, 25, 25)\nfor (pos, n) in tiles\n    sethue(cols[n][1])\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    clab = convert(Lab, parse(Colorant, cols[n][1]))\n    labelbrightness = 100 - clab.l\n    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))\n    text(string(cols[n][1]), pos, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: line endings)Some fiddling with Lab colors adjusts the label color to make it stand out against the background.sethue\nsetcolor\nsetblend\nsetopacity\nrandomhue\nrandomcolor"
 },
 
 {
-    "location": "styling.html#Luxor.setline",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setline",
+    "page": "Colors and styles",
     "title": "Luxor.setline",
     "category": "Function",
     "text": "setline(n)\n\nSet the line width.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.setlinecap",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setlinecap",
+    "page": "Colors and styles",
     "title": "Luxor.setlinecap",
     "category": "Function",
     "text": "setlinecap(s)\n\nSet the line ends. s can be \"butt\" (the default), \"square\", or \"round\".\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.setlinejoin",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setlinejoin",
+    "page": "Colors and styles",
     "title": "Luxor.setlinejoin",
     "category": "Function",
     "text": "setlinejoin(\"miter\")\nsetlinejoin(\"round\")\nsetlinejoin(\"bevel\")\n\nSet the line join style, or how to render the junction of two lines when stroking.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.setdash",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.setdash",
+    "page": "Colors and styles",
     "title": "Luxor.setdash",
     "category": "Function",
     "text": "setlinedash(\"dot\")\n\nSet the dash pattern to one of: \"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\", \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.fillstroke",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.fillstroke",
+    "page": "Colors and styles",
     "title": "Luxor.fillstroke",
     "category": "Function",
     "text": "fillstroke()\n\nFill and stroke the current path.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.stroke",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.stroke",
+    "page": "Colors and styles",
     "title": "Luxor.stroke",
     "category": "Function",
     "text": "stroke()\n\nStroke the current path with the current line width, line join, line cap, and dash settings. The current path is then cleared.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Base.fill",
-    "page": "Styling",
+    "location": "colors-styles.html#Base.fill",
+    "page": "Colors and styles",
     "title": "Base.fill",
     "category": "Function",
     "text": "fill()\n\nFill the current path with current settings. The current path is then cleared.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.strokepreserve",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.strokepreserve",
+    "page": "Colors and styles",
     "title": "Luxor.strokepreserve",
     "category": "Function",
     "text": "strokepreserve()\n\nStroke the current path with current line width, line join, line cap, and dash settings, but then keep the path current.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.fillpreserve",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.fillpreserve",
+    "page": "Colors and styles",
     "title": "Luxor.fillpreserve",
     "category": "Function",
     "text": "fillpreserve()\n\nFill the current path with current settings, but then keep the path current.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.paint",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.paint",
+    "page": "Colors and styles",
     "title": "Luxor.paint",
     "category": "Function",
     "text": "paint()\n\nPaint the current clip region with the current settings.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.do_action",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.do_action",
+    "page": "Colors and styles",
     "title": "Luxor.do_action",
     "category": "Function",
     "text": "do_action(action)\n\nThis is usually called by other graphics functions. Actions for graphics commands include :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve, :none, and :path.\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Line-styles-1",
-    "page": "Styling",
+    "location": "colors-styles.html#Line-styles-1",
+    "page": "Colors and styles",
     "title": "Line styles",
     "category": "section",
     "text": "The set- functions control subsequent lines' width, end shapes, join behavior, and dash pattern:using Luxor # hide\nDrawing(400, 250, \"assets/figures/line-ends.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntranslate(-100, -60) # hide\nfontsize(18) # hide\nfor l in 1:3\n    sethue(\"black\")\n    setline(20)\n    setlinecap([\"butt\", \"square\", \"round\"][l])\n    textcentred([\"butt\", \"square\", \"round\"][l], 80l, 80)\n    setlinejoin([\"round\", \"miter\", \"bevel\"][l])\n    textcentred([\"round\", \"miter\", \"bevel\"][l], 80l, 120)\n    poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)\n    sethue(\"white\")\n    setline(1)\n    stroke()\nend\nfinish() # hide\nnothing # hide(Image: line endings)using Luxor # hide\nDrawing(600, 250, \"assets/figures/dashes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(14) # hide\nsethue(\"black\") # hide\nsetline(12)\npatterns = [\"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\",\n  \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"]\ntiles =  Tiler(400, 250, 10, 1, margin=10)\nfor (pos, n) in tiles\n    setdash(patterns[n])\n    textright(patterns[n], pos.x - 20, pos.y + 4)\n    line(pos, Point(400, pos.y), :stroke)\nend\nfinish() # hide\nnothing # hide(Image: dashes)setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstroke\nfill\nstrokepreserve\nfillpreserve\npaint\ndo_action"
 },
 
 {
-    "location": "styling.html#Luxor.blend",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.blend",
+    "page": "Colors and styles",
     "title": "Luxor.blend",
     "category": "Function",
     "text": "blend(from::Point, to::Point)\n\nCreate an empty linear blend.\n\nA blend is a specification of how one color changes into another. Linear blends are defined by two points: parallel lines through these points define the start and stop locations of the blend. The blend is defined relative to the current axes origin. This means that you should be aware of the current axes when you define blends, and when you use them.\n\nTo add colors, use addstop().\n\n\n\nblend(centerpos1, rad1, centerpos2, rad2, color1, color2)\n\nCreate a radial blend.\n\nExample:\n\nredblue = blend(\n    pos, 0,                   # first circle center and radius\n    pos, tiles.tilewidth/2,   # second circle center and radius\n    \"red\",\n    \"blue\"\n    )\n\n\n\nblend(pt1::Point, pt2::Point, color1, color2)\n\nCreate a linear blend.\n\nExample:\n\nredblue = blend(pos, pos, \"red\", \"blue\")\n\n\n\nblend(from::Point, startradius, to::Point, endradius)\n\nCreate an empty radial blend.\n\nRadial blends are defined by two circles that define the start and stop locations. The first point is the center of the start circle, the first radius is the radius of the first circle.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Luxor.addstop",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.addstop",
+    "page": "Colors and styles",
     "title": "Luxor.addstop",
     "category": "Function",
     "text": "addstop(b::Blend, offset, col)\naddstop(b::Blend, offset, (r, g, b, a))\naddstop(b::Blend, offset, string)\n\nAdd a color stop to a blend. The offset specifies the location along the blend's 'control vector', which varies between 0 (beginning of the blend) and 1 (end of the blend). For linear blends, the control vector is from the start point to the end point. For radial blends, the control vector is from any point on the start circle, to the corresponding point on the end circle.\n\nExample:\n\nblendredblue = blend(Point(0, 0), 0, Point(0, 0), 1)\naddstop(blendredblue, 0, setcolor(sethue(\"red\")..., .2))\naddstop(blendredblue, 1, setcolor(sethue(\"blue\")..., .2))\naddstop(blendredblue, 0.5, sethue(randomhue()...))\naddstop(blendredblue, 0.5, setcolor(randomcolor()...))\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Blends-1",
-    "page": "Styling",
+    "location": "colors-styles.html#Blends-1",
+    "page": "Colors and styles",
     "title": "Blends",
     "category": "section",
     "text": "A blend is a color gradient. Use setblend() to select a blend in the same way that you'd use setcolor() and sethue() to select a solid color.You can make linear or radial blends. Use blend() in either case.To create a simple linear blend between two colors, supply two points and two colors to blend():using Luxor # hide\nDrawing(600, 200, \"assets/figures/color-blends-basic.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\norangeblue = blend(Point(-200, 0), Point(200, 0), \"orange\", \"blue\")\nsetblend(orangeblue)\nbox(O, 400, 100, :fill)\naxes()\nfinish() # hide\nnothing # hide(Image: linear blend)And for a radial blend, provide two point/radius pairs, and two colors:using Luxor # hide\nDrawing(600, 200, \"assets/figures/color-blends-radial.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\ngreenmagenta = blend(Point(0, 0), 5, Point(0, 0), 150, \"green\", \"magenta\")\nsetblend(greenmagenta)\nbox(O, 400, 200, :fill)\naxes()\nfinish() # hide\nnothing # hide(Image: radial blends)You can also use blend() to create an empty blend. Then you use addstop() to define the locations of specific colors along the blend, where 0 is the start, and 1 is the end.using Luxor # hide\nDrawing(600, 200, \"assets/figures/color-blends-scratch.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\ngoldblend = blend(Point(-200, 0), Point(200, 0))\naddstop(goldblend, 0.0,  \"gold4\")\naddstop(goldblend, 0.25, \"gold1\")\naddstop(goldblend, 0.5,  \"gold3\")\naddstop(goldblend, 0.75, \"darkgoldenrod4\")\naddstop(goldblend, 1.0,  \"gold2\")\nsetblend(goldblend)\nbox(O, 400, 200, :fill)\naxes()\nfinish() # hide\nnothing # hide(Image: blends from scratch)When you define blends, the location of the axes (eg the current workspace as defined by translate(), etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with translate(pos). The blend 'samples' the original location of the blend's definition.using Luxor # hide\nDrawing(600, 200, \"assets/figures/color-blends-translate-1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\ngoldblend = blend(Point(0, 0), Point(200, 0))\naddstop(goldblend, 0.0,  \"gold4\")\naddstop(goldblend, 0.25, \"gold1\")\naddstop(goldblend, 0.5,  \"gold3\")\naddstop(goldblend, 0.75, \"darkgoldenrod4\")\naddstop(goldblend, 1.0,  \"gold2\")\nsetblend(goldblend)\ntiles = Tiler(600, 200, 1, 5, margin=10)\nfor (pos, n) in tiles\n    gsave()\n    setblend(goldblend)\n    translate(pos)\n    ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: blends 1)Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go (there are Cairo options to change this). But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to 0/0 each time, which is at the center of shape.using Luxor # hide\nDrawing(600, 200, \"assets/figures/color-blends-translate-2.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\ngoldblend = blend(Point(0, 0), Point(200, 0))\naddstop(goldblend, 0.0,  \"gold4\")\naddstop(goldblend, 0.25, \"gold1\")\naddstop(goldblend, 0.5,  \"gold3\")\naddstop(goldblend, 0.75, \"darkgoldenrod4\")\naddstop(goldblend, 1.0,  \"gold2\")\nsetblend(goldblend)\ntiles = Tiler(600, 200, 1, 5, margin=10)\nfor (pos, n) in tiles\n    gsave()\n    translate(pos)\n    setblend(goldblend)\n    ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: blends 2)blend\naddstop"
 },
 
 {
-    "location": "styling.html#Luxor.blendadjust",
-    "page": "Styling",
+    "location": "colors-styles.html#Luxor.blendadjust",
+    "page": "Colors and styles",
     "title": "Luxor.blendadjust",
     "category": "Function",
     "text": "blendadjust(ablend, center::Point, xscale, yscale, rot=0)\n\nModify an existing blend by scaling, translating, and rotating it so that it will fill a shape properly even if the position of the shape is nowhere near the original location of the blend's definition.\n\nFor example, if your blend definition was this (notice the 1)\n\nblendgoldmagenta = blend(\n        Point(0, 0), 0,                   # first circle center and radius\n        Point(0, 0), 1,                   # second circle center and radius\n        \"gold\",\n        \"magenta\"\n        )\n\nyou can use it in a shape that's 100 units across and centered at pos, by calling this:\n\nblendadjust(blendgoldmagenta, Point(pos.x, pos.y), 100, 100)\n\nthen use setblend():\n\nsetblend(blendgoldmagenta)\n\n\n\n"
 },
 
 {
-    "location": "styling.html#Using-blendadjust()-1",
-    "page": "Styling",
+    "location": "colors-styles.html#Using-blendadjust()-1",
+    "page": "Colors and styles",
     "title": "Using blendadjust()",
     "category": "section",
     "text": "You can use blendadjust() to modify the blend so that objects scaled and positioned after the blend was defined are rendered correctly.using Luxor # hide\nDrawing(600, 250, \"assets/figures/blend-adjust.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetline(20)\n\n# first line\nblendgoldmagenta = blend(Point(-100, 0), Point(100, 0), \"gold\", \"magenta\")\nsetblend(blendgoldmagenta)\nline(Point(-100, -50), Point(100, -50))\nstroke()\n\n# second line\nblendadjust(blendgoldmagenta, Point(50, 0), 0.5, 0.5)\nline(O, Point(100, 0))\nstroke()\n\n# third line\nblendadjust(blendgoldmagenta, Point(-50, 50), 0.5, 0.5)\nline(Point(-100, 50), Point(0, 50))\nstroke()\n\n# fourth line\ngsave()\ntranslate(0, 100)\nscale(0.5, 0.5)\nsetblend(blendgoldmagenta)\nline(Point(-100, 0), Point(100, 0))\nstroke()\ngrestore()\n\nfinish() # hide\nnothing # hide(Image: blends adjust)The blend is defined to span 200 units, horizontally centered at 0/0. The top line is also 200 units long and centered horizontally at 0/0, so the blend is rendered exactly as you'd hope.The second line is only half as long, at 100 units, centered at 50/0, so blendadjust() is used to relocate the blend's center to the point 50/0 and scale it by 0.5 (100/200).The third line is also 100 units long, centered at -50/0, so again blendadjust() is used to relocate the blend's center and scale it.The fourth line shows that you can translate and scale the axes instead of adjusting the blend, if you use setblend() again in the new scene.blendadjust"
+},
+
+{
+    "location": "colors-styles.html#Luxor.setmode",
+    "page": "Colors and styles",
+    "title": "Luxor.setmode",
+    "category": "Function",
+    "text": "setmode(mode::String)\n\nSet the compositing/blending mode. mode can be one of:\n\n\"clear\" Where the second object is drawn, the first is completely removed.\n\"source\" The second object is drawn as if nothing else were below.\n\"over\" The default mode: like two transparent slides overlapping.\n\"in\" The first object is removed completely, the second is only drawn where the first was.\n\"out\" The second object is drawn only where the first one wasn't.\n\"atop\" The first object is mostly intact, but mixes both objects in the overlapping area. The second object object is not drawn elsewhere.\n\"dest\" Discard the second object completely.\n\"dest_over\" Like \"over\" but draw second object below the first\n\"dest_in\" Keep the first object whereever the second one overlaps.\n\"dest_out\" The second object is used to reduce the visibility of the first where they overlap.\n\"dest_atop\" Like \"over\" but draw second object below the first.\n\"xor\" XOR where the objects overlap\n\"add\" Add the overlapping areas together\n\"saturate\" Increase Saturation where objects overlap\n\"multiply\" Multiply where objects overlap\n\"screen\" Input colors are complemented and multiplied, the product is complemented again. The result is at least as light as the lighter of the input colors.\n\"overlay\" Multiplies or screens colors, depending on the lightness of the destination color.\n\"darken\" Selects the darker of the color values in each component.\n\"lighten\" Selects the lighter of the color values in each component.\n\nSee the Cairo documentation for details.\n\nMany of these work only in PNG drawings.\n\n\n\n"
+},
+
+{
+    "location": "colors-styles.html#Blending-(compositing)-operators-1",
+    "page": "Colors and styles",
+    "title": "Blending (compositing) operators",
+    "category": "section",
+    "text": "Graphics software provides ways to modify how the virtual \"ink\" is applied to existing graphic elements. In PhotoShop and other software products the compositing process is done using blend modes.Use setmode() to set the blending mode of subsequent graphics.using Luxor # hide\nDrawing(600, 600, \"assets/figures/blendmodes.png\") # hide\norigin()\n# transparent, no background\nfontsize(15)\nsetline(1)\ntiles = Tiler(600, 600, 4, 5, margin=30)\nmodes = length(Luxor.blendingmodes)\nsetcolor(\"black\")\nfor (pos, n) in tiles\n    n > modes && break\n    gsave()\n    translate(pos)\n    box(O, tiles.tilewidth-10, tiles.tileheight-10, :clip)\n\n    # calculate points for circles\n    diag = (Point(-tiles.tilewidth/2, -tiles.tileheight/2),\n            Point(tiles.tilewidth/2,  tiles.tileheight/2))\n    upper = between(diag, 0.4)\n    lower = between(diag, 0.6)\n\n    # first red shape uses default blend operator\n    setcolor(0.7, 0, 0, .8)\n    circle(upper, tiles.tilewidth/4, :fill)\n\n    # second blue shape shows results of blend operator\n    setcolor(0, 0, 0.9, 0.4)\n    blendingmode = Luxor.blendingmodes[mod1(n, modes)]\n    setmode(blendingmode)\n    circle(lower, tiles.tilewidth/4, :fill)\n\n    clipreset()\n    grestore()\n\n    gsave()\n    translate(pos)\n    text(Luxor.blendingmodes[mod1(n, modes)], O.x, O.y + tiles.tilewidth/2, halign=:center)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: blend modes)Notice in this example that clipping was used to restrict the area affected by the blending process.In Cairo these blend modes are called operators. A source for a more detailed explanation can be found here.You can access the list of modes with the unexported symbol Luxor.blendingmodes.setmode"
 },
 
 {
@@ -993,27 +1017,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "text.html#Luxor.text",
+    "location": "text.html#A-tale-of-two-APIs-1",
     "page": "Text",
-    "title": "Luxor.text",
-    "category": "Function",
-    "text": "text(str)\ntext(str, pos)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at the current 0/0. In Luxor, placing text doesn't affect the current point.\n\nHorizontal alignment :halign can be :left, :center, or :right. Vertical alignment :valign can be :baseline, :top, :middle, or :bottom.\n\n\n\n"
-},
-
-{
-    "location": "text.html#Luxor.textpath",
-    "page": "Text",
-    "title": "Luxor.textpath",
-    "category": "Function",
-    "text": "textpath(t)\n\nConvert the text in string t to a new path, for subsequent filling/stroking etc...\n\n\n\n"
-},
-
-{
-    "location": "text.html#Placing-text-1",
-    "page": "Text",
-    "title": "Placing text",
+    "title": "A tale of two APIs",
     "category": "section",
-    "text": "Use text() to place text.using Luxor # hide\nDrawing(400, 150, \"assets/figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(20) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nsethue(\"black\")\ntext(\"text 1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"text 2\",  pt2, halign=:center, valign = :bottom)\ntext(\"text 3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"text 4\",  pt1, halign=:left,   valign = :top)\ntext(\"text 5 \", pt2, halign=:center, valign = :top)\ntext(\"text 6\",  pt3, halign=:right,  valign = :top)\nfinish() # hide\nnothing # hide(Image: text placement)texttextpath() converts the text into a graphic path suitable for further styling.textpathLuxor uses what's called the \"toy\" text interface in Cairo."
+    "text": "There are two ways to draw text in Luxor. You can use either the so-called 'toy' API or the 'pro' API.Both have their advantages and disadvantages, and, given that trying to write anything definitive about font usage on three very different operating systems is an impossibility, trial and error will eventually lead to code patterns that work for you, if not other people."
+},
+
+{
+    "location": "text.html#The-Toy-API-1",
+    "page": "Text",
+    "title": "The Toy API",
+    "category": "section",
+    "text": "Use:text(string, [position]) to place text at a position, otherwise at 0/0, and optionally specify the horizontal and vertical alignment\nfontface(fontname) to specify the fontname\nfontsize(fontsize) to specify the fontsize in pointsusing Luxor # hide\nDrawing(600, 100, \"assets/figures/toy-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nfontsize(20)\nfontface(\"Georgia\")\ntext(\"Georgia is a serif typeface designed in 1993 by Matthew Carter.\", halign=:center)\nfinish() # hide\nnothing # hide(Image: text placement)"
+},
+
+{
+    "location": "text.html#The-Pro-API-1",
+    "page": "Text",
+    "title": "The Pro API",
+    "category": "section",
+    "text": "Use:setfont(fontname, fontsize) to specify the fontname and size in points\nsettext(text, [position]) to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise), and the presence of any Pango-flavored markup.using Luxor # hide\nDrawing(600, 100, \"assets/figures/pro-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetfont(\"Georgia\", 20)\nsettext(\"Georgia is a serif typeface designed in 1993 by Matthew Carter.\", halign=\"center\")\nfinish() # hide\nnothing # hide(Image: text placement)"
 },
 
 {
@@ -1033,6 +1057,78 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "text.html#Specifying-the-font-(\"Toy\"-API)-1",
+    "page": "Text",
+    "title": "Specifying the font (\"Toy\" API)",
+    "category": "section",
+    "text": "Use fontface(fontname) to choose a font, and fontsize(n) to set the font size in points.On macOS, the fontname should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.fontface\nfontsize"
+},
+
+{
+    "location": "text.html#Luxor.setfont",
+    "page": "Text",
+    "title": "Luxor.setfont",
+    "category": "Function",
+    "text": "setfont(family, fontsize)\n\nSelect a font and specify the size in points.\n\nExample:\n\nsetfont(\"Helvetica\", 24)\nsettext(\"Hello in Helvetica 24 using the Pro API\", Point(0, 10))\n\n\n\n"
+},
+
+{
+    "location": "text.html#Specifying-the-font-(\"Pro\"-API)-1",
+    "page": "Text",
+    "title": "Specifying the font (\"Pro\" API)",
+    "category": "section",
+    "text": "To select a font in the Pro text API, use setfont() and supply both the font name and a size.You may be able to use Fontconfig.jl to find out which fonts are available to Julia.setfont"
+},
+
+{
+    "location": "text.html#Luxor.text",
+    "page": "Text",
+    "title": "Luxor.text",
+    "category": "Function",
+    "text": "text(str)\ntext(str, pos)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at the current 0/0. In Luxor, placing text doesn't affect the current point.\n\nHorizontal alignment halign can be :left, :center, or :right. Vertical alignment valign can be :baseline, :top, :middle, or :bottom.\n\n\n\n"
+},
+
+{
+    "location": "text.html#Placing-text-(\"Toy\"-API)-1",
+    "page": "Text",
+    "title": "Placing text (\"Toy\" API)",
+    "category": "section",
+    "text": "Use text() to place text.using Luxor # hide\nDrawing(400, 150, \"assets/figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(20) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nsethue(\"black\")\ntext(\"text 1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"text 2\",  pt2, halign=:center, valign = :bottom)\ntext(\"text 3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"text 4\",  pt1, halign=:left,   valign = :top)\ntext(\"text 5 \", pt2, halign=:center, valign = :top)\ntext(\"text 6\",  pt3, halign=:right,  valign = :top)\nfinish() # hide\nnothing # hide(Image: text placement)text"
+},
+
+{
+    "location": "text.html#Luxor.settext",
+    "page": "Text",
+    "title": "Luxor.settext",
+    "category": "Function",
+    "text": "settext(text, pos;\n    halign = \"left\",\n    valign = \"bottom\",\n    angle  = 0,\n    markup = false)\n\nsettext(text;\n    kwargs)\n\nDraw the text at pos (if omitted defaults to 0/0).\n\nTo align the text, use halign, one of \"left\", \"center\", or \"right\", and valign, one of \"top\", \"center\", or \"bottom\".\n\nangle is the rotation - in counterclockwise degrees.\n\nIf markup is true, then the string can contain some HTML-style markup. Supported tags include:\n\n<b>, <i>, <s>, <sub>, <sup>, <small>, <big>, <u>, <tt>, and <span>\n\nThe <span> tag can contains things like this:\n\n<span font='26' background='green' foreground='red'>unreadable text</span>\n\n\n\n"
+},
+
+{
+    "location": "text.html#Placing-text-(\"Pro\"-API)-1",
+    "page": "Text",
+    "title": "Placing text (\"Pro\" API)",
+    "category": "section",
+    "text": "settext"
+},
+
+{
+    "location": "text.html#Luxor.textpath",
+    "page": "Text",
+    "title": "Luxor.textpath",
+    "category": "Function",
+    "text": "textpath(t)\n\nConvert the text in string t to a new path, for subsequent filling/stroking etc...\n\n\n\n"
+},
+
+{
+    "location": "text.html#Text-to-paths-1",
+    "page": "Text",
+    "title": "Text to paths",
+    "category": "section",
+    "text": "textpath() converts the text into graphic paths suitable for further manipulation.textpath"
+},
+
+{
     "location": "text.html#Luxor.textextents",
     "page": "Text",
     "title": "Luxor.textextents",
@@ -1041,11 +1137,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "text.html#Fonts-1",
+    "location": "text.html#Font-dimensions-(\"toy\"-API)-1",
     "page": "Text",
-    "title": "Fonts",
+    "title": "Font dimensions (\"toy\" API)",
     "category": "section",
-    "text": "Use fontface(fontname) to choose a font, and fontsize(n) to set the font size in points.The textextents(str) function gets an array of dimensions of the string str, given the current font.(Image: textextents)The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.fontface\nfontsize\ntextextents"
+    "text": "The textextents(str) function gets an array of dimensions of the string str, given the current font.(Image: textextents)The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.textextents"
 },
 
 {
@@ -1334,6 +1430,14 @@ var documenterSearchIndex = {"docs": [
     "title": "Drawing on images",
     "category": "section",
     "text": "You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.In this example, we'll annotate a PNG file with some text and graphics.using Luxor # hide\n\nimage = readpng(\"assets/figures/julia-logo-mask.png\")\n\nw = image.width\nh = image.height\n\n# create a drawing surface of the same size\n\nfname = \"assets/figures/drawing_on_images.png\"\nDrawing(w, h, fname)\n\n# place the image on the Drawing - it's positioned by its top/left corner\n\nplaceimage(image, 0, 0)\n\n# now you can annotate the image. The (0/0) is at the top left.\n\nsethue(\"red\")\nfontsize(20)\ncircle(5, 5, 2, :fill)\ntext(\"(5/5)\", Point(25, 25), halign=:center)\n\narrow(Point(w/2, 50), Point(0, 50))\narrow(Point(w/2, 50), Point(w, 50))\ntext(\"width $w\", Point(w/2, 70), halign=:center)\n\n# to divide up the image into rectangular areas, temporarily position the axes at the center:\n\ngsave()\nsetline(0.2)\nsethue(\"green\")\nfontsize(12)\ntranslate(w/2, h/2)\ntiles = Tiler(w, h, 16, 10, margin=0)\nfor (pos, n) in tiles\n    box(pos, tiles.tilewidth, tiles.tileheight, :stroke)\n    text(string(n), pos, halign=:center)\nend\ngrestore()\n\n# If you want coordinates to be relative to the bottom left corner of the image, transform:\n\ntranslate(0, h)\n\n# and reflect in the x-axis\n\ntransform([1 0 0 -1 0 0])\n\n# now 0/0 is at the bottom left corner, and 100/100 is up and to the right.\n\nsethue(\"blue\")\narrow(O, Point(100, 100))\n\n# However, don't use text while flipped, because it's reversed:\n\ntext(\"I'm in reverse!\", w/2, h/2)\n\nfinish() # hide\nnothing # hide(Image: drawing on images)"
+},
+
+{
+    "location": "images.html#Image-compositing-1",
+    "page": "Images",
+    "title": "Image compositing",
+    "category": "section",
+    "text": "You should be using Images.jl for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by setmode().using Luxor # hide\nDrawing(600, 400, \"assets/figures/image-compositing.png\") # hide\norigin() # hide\nimg = readpng(\"assets/figures/textcurvecenteredexample.png\")\nw = img.width\nh = img.height\n\nplaceimage(img, -w/2, -h/2, .5)\nsetmode(\"saturate\")\ntranslate(50, 0)\nplaceimage(img, -w/2, -h/2, .5)\n\nfinish() # hide\nnothing # hide(Image: transforming images)"
 },
 
 {
