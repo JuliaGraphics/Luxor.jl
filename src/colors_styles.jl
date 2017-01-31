@@ -138,6 +138,16 @@ function setopacity(a)
 end
 
 """
+    setgray(n)
+    setgrey(n)
+
+Set the color to a gray level of `n`, where `n` is between 0 and 1.
+
+"""
+setgray(n) = sethue(n, n, n)
+setgrey(n) = setgray(n)
+
+"""
     randomhue()
 
 Set a random hue.

@@ -19,8 +19,8 @@ Drawing(600, 100, "assets/figures/toy-text-example.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
-fontsize(20)
-fontface("Georgia")
+fontsize(18)
+fontface("Georgia-Bold")
 text("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
 finish() # hide
 nothing # hide
@@ -41,7 +41,7 @@ Drawing(600, 100, "assets/figures/pro-text-example.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
-setfont("Georgia", 20)
+setfont("Georgia Bold", 18)
 settext("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign="center")
 finish() # hide
 nothing # hide
@@ -53,8 +53,6 @@ nothing # hide
 
 Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.
 
-On macOS, the fontname should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.
-
 ```@docs
 fontface
 fontsize
@@ -63,8 +61,6 @@ fontsize
 ## Specifying the font ("Pro" API)
 
 To select a font in the Pro text API, use `setfont()` and supply both the font name and a size.
-
-You *may* be able to use [Fontconfig.jl](https://github.com/JuliaGraphics/Fontconfig.jl) to find out which fonts are available to Julia.
 
 ```@docs
 setfont
@@ -105,9 +101,51 @@ text
 
 ## Placing text ("Pro" API)
 
+Use `settext()` to place text. You can include some pseudo-HTML markup.
+
+```@example
+using Luxor # hide
+Drawing(400, 150, "assets/figures/pro-text-placement.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black")
+settext("<span font='26' background ='green' foreground='red'> Hey</span>
+    <i>italic</i> <b>bold</b> <sup>superscript</sup>
+    <tt>monospaced</tt>",
+    halign="center",
+    markup=true,
+    angle=10)
+finish() # hide
+nothing # hide
+```
+
+![pro text placement](assets/figures/pro-text-placement.png)
+
 ```@docs
 settext
 ```
+
+## Notes on fonts
+
+On macOS, the fontname required by the Toy API's `fontface()` should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.
+
+On macOS, a list of currently activated fonts can be found (after a while) with:
+
+    system_profiler SPFontsDataType
+
+Fonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer at the time of writing).
+
+On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with `setfont()`) using:
+
+    fc-list | cut -f 2 -d ":"
+
+although typically this lists only those fonts in /System/Library/Fonts and /Library/Fonts, and not ~/Library/Fonts.
+
+(There is a Julia interface to `fontconfig` at [Fontconfig.jl](https://github.com/JuliaGraphics/Fontconfig.jl).)
+
+In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).
+
+Cairo doesn't support emoji symbols at the time of writing.
 
 ## Text to paths
 

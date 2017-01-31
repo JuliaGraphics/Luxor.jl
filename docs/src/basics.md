@@ -1,20 +1,22 @@
 # The basics
 
-The underlying drawing model is that points are added to paths, then the paths can be filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses and patterns, and opacity. You can modify the drawing space by transforming/rotating/scaling it before you add graphics.
+The underlying drawing model is that you add shapes, or add points to paths, then these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics.
 
 Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
 Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas) in radians: 'clockwise'.
 
-Coordinates are specified in PostScript points, where a point is 1/72 of an inch. Three other units are available for distances:
+Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
+
+Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points:
 
 - inch (`in` is unavailable, being used by `for` syntax)
 - cm   (centimeters)
 - mm   (millimeters)
 
-Because Julia allows you to combine numbers and variables directly, you can type, for example:
+For example:
 
-    rect(Point(20mm, 2cm), 5inch, 22/7inch, :fill)
+    rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 
 ## Types
 
@@ -244,26 +246,24 @@ nothing # hide
 
 ![ellipses](assets/figures/ellipses.png)
 
-It's also possible to make polygonal approximations to ellipses from two focal points and a
-distance.
+It's also possible to make polygons that are approximations to ellipses with two focal points and a distance.
 
 ```@example
 using Luxor # hide
 Drawing(500, 450, "assets/figures/ellipses_1.png") # hide
 origin() # hide
-background("antiquewhite") # hide
+background("white") # hide
 sethue("gray30") # hide
 setline(1) # hide
 f1 = Point(-100, 0)
 f2 = Point(100, 0)
 ellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)
 [ begin
-    poly(offsetpoly(ellipsepoly, c), close=true, :stroke);
-    circle(f1, 2, :fill)
-    circle(f2, 2, :fill)
-    rotate(pi/48)
+    setgray(rescale(c, 150, 1, 0, 1))
+    poly(offsetpoly(ellipsepoly, c), close=true, :fill);
+    rotate(pi/20)
   end
-     for c in 150:-5:1 ]
+     for c in 150:-10:1 ]
 finish() # hide
 nothing # hide
 ```
