@@ -33,7 +33,7 @@ function test_pro_text(fname)
     counter = 1
     for i in 4:30
         # pro api:
-        setfont("Helvetica", i)
+        setfont("Georgia", i)
         settext(
             strings[mod1(counter, length(strings))],
             Point(col1, row),
@@ -44,9 +44,9 @@ function test_pro_text(fname)
         counter += 1
 
         # toy api:
-        fontface("Helvetica")
+        fontface("Georgia")
         fontsize(i)
-        text("hello in Helvetica $i using the Toy API", Point(col2, row))
+        text("hello in Georgia $i using the Toy API", Point(col2, row))
         row += 30
     end
     @test finish() == true

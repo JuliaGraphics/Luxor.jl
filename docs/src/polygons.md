@@ -1,5 +1,7 @@
 # Polygons and shapes
 
+A polygon is an array of points. The points can be joined with straight lines.
+
 ## Regular polygons ("ngons")
 
 You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
@@ -52,9 +54,11 @@ end
 finish() # hide
 nothing # hide
 ```
+
 ![stars](assets/figures/stars.png)
 
 The `ratio` determines the length of the inner radius compared with the outer.
+
 ```@example
 using Luxor # hide
 Drawing(500, 250, "assets/figures/star-ratios.png") # hide
@@ -69,6 +73,7 @@ end
 finish() # hide
 nothing # hide
 ```
+
 ![stars](assets/figures/star-ratios.png)
 
 ```@docs
@@ -77,7 +82,7 @@ star
 
 ## Polygons
 
-A polygon is an array of Points. Use `poly()` to draw lines connecting the points or fill the area:
+Use `poly()` to draw lines connecting the points or just fill the area:
 
 ```@example
 using Luxor # hide

@@ -17,6 +17,8 @@ placing text doesn't affect the current point.
 
 Horizontal alignment `halign` can be `:left`, `:center`, or `:right`. Vertical alignment
 `valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
+
+The default alignment is `:left`, `:baseline`.
 """
 function text(t, pt::Point; halign=:left, valign=:baseline)
     #= text can aligned by one of the following points
@@ -94,16 +96,14 @@ textright(t, pt::Point) = textright(t, pt.x, pt.y)
 """
     fontface(fontname)
 
-Select a font to use. If the font is unavailable, it defaults to Helvetica/San Francisco
-(on macOS).
+Select a font to use. (Toy API)
 """
 fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
 
 """
     fontsize(n)
 
-Set the font size to `n` points. Default is 10pt.
-
+Set the font size to `n` points. The default size is 10 points. (Toy API)
 """
 fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 
@@ -111,7 +111,7 @@ fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
     textextents(str)
 
 Return an array of six Float64s containing the measurements of the string `str` when set
-using the current font settings:
+using the current font settings (Toy API):
 
 1 x_bearing
 
@@ -269,7 +269,6 @@ Example:
 
     setfont("Helvetica", 24)
     settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
-
 """
 function setfont(family::AbstractString, fontsize)
     # why is the size of the output set relative to 96dpi???
@@ -287,7 +286,8 @@ end
     settext(text;
         kwargs)
 
-Draw the `text` at `pos` (if omitted defaults to `0/0`).
+Draw the `text` at `pos` (if omitted defaults to `0/0`). If no font is specified, on macOS
+the default font is Times Roman.
 
 To align the text, use `halign`, one of "left", "center", or "right", and `valign`, one of
 "top", "center", or "bottom".

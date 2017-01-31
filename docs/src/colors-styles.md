@@ -37,15 +37,16 @@ Some fiddling with Lab colors adjusts the label color to make it stand out again
 ```@docs
 sethue
 setcolor
-setblend
+setgray
 setopacity
+setblend
 randomhue
 randomcolor
 ```
 
 ## Line styles
 
-The `set-` functions control subsequent lines' width, end shapes, join behavior, and dash pattern:
+There are `set-` functions for controlling subsequent lines' width, end shapes, join behavior, and dash patterns:
 
 ```@example
 using Luxor # hide
