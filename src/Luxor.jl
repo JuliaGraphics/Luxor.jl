@@ -69,7 +69,7 @@ export Drawing, currentdrawing,
     blendmatrix, rotationmatrix, scalingmatrix, translationmatrix,
     cairotojuliamatrix, juliatocairomatrix, getrotation, getscale, gettranslation,
 
-    setmode,
+    setmode, getmode,
 
     readpng, placeimage,
 
@@ -272,17 +272,24 @@ The scales can also be supplied in tuple form:
 ```jldoctest
 julia> rescale(15, 0, 100, 0, 1)
 0.15
+
 julia> rescale(15, (0, 100), (0, 1))
 0.15
+
 julia> rescale(pi/20, 0, 2pi, 0, 1)
 0.025
+
 julia> rescale(pi/20, (0, 2pi), (0, 1))
 0.025
+
 julia> rescale(25, 0, 1, 0, 1.609344)
 40.2336
+
 julia> rescale(15, (0, 100), (1000, 0))
 850.0
+
 ```
+
 """
 rescale(x, from_min, from_max, to_min, to_max) =
     ((x - from_min) / (from_max - from_min)) * (to_max - to_min) + to_min
@@ -708,6 +715,5 @@ Get the current path, like `getpath()` but flattened so that there are no Bèzie
 Returns a CairoPath which is an array of `element_type` and `points` objects.
 """
 getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
-
 
 end # module

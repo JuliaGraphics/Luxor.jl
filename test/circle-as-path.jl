@@ -14,7 +14,7 @@ function circle_as_path(fname)
     currentheight = 1200 # pts
     Drawing(currentwidth, currentheight, fname)
     origin()
-    background("white")
+    background(setgray(0.8)...)
     tiles = Tiler(currentwidth, currentheight, 8, 8, margin=20)
     for (pos, n) in tiles
         randomhue()

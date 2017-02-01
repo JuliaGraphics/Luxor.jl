@@ -218,7 +218,11 @@ function setmode(operator::String)
     end
 end
 
+"""
+    getmode()
+
+Get the compositing/blending mode.
+"""
 function getmode()
-    indx = Cairo.get_operator(currentdrawing.cr, blendingoperators[indx])
-    return findfirst(blendingmodes, operator)
+    return findfirst(blendingmodes, Cairo.get_operator(currentdrawing.cr))
 end

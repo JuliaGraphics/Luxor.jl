@@ -18,7 +18,7 @@ finish()
 preview()
 ```
 
-The `Drawing(1000, 1000, "hello-world.png")` line defines the size of the image and the location and type of the finished image when it's saved. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on MacOS X, Preview).
+`Drawing(1000, 1000, "hello-world.png")` defines the size of the image, and the location and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Because we're `using Colors`.jl, we can specify colors by name: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg on macOS, Preview).
 
 ## The Julia logos
 
@@ -51,7 +51,7 @@ nothing # hide
 
 ![background](assets/figures/julia-logos.png)
 
-You can change the extension of the file name: "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps" to produce alternative formats.
+You can change the extension of the file name, for example "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps", to produce alternative formats.
 
 ## Something a bit more complicated: a Sierpinski triangle
 
