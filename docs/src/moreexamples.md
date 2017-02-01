@@ -1,6 +1,12 @@
+```@meta
+DocTestSetup = quote
+    using Luxor
+end
+```
+
 # More examples
 
-A good place to look for examples (sometimes not very exciting or well-written examples, I'll admit), is in the `Luxor/test` directory.
+One place to look for examples is the `Luxor/test` directory.
 
 !["tiled images"](assets/figures/tiled-images.png)
 
@@ -46,7 +52,7 @@ preview() # on macOS, opens in Preview
 
 ## Illustrating this document
 
-This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the documentation is generated: the Julia source for the image is stored in the Markdown document, and processed every time the documentation is generated:
+This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the HTML pages are built: the Julia source for the image is stored in the Markdown source document, and the code to create the images runs each time the documentation is generated.
 
 The Markdown markup looks like this:
 
@@ -72,7 +78,7 @@ finish() # hide
 ![polysmooth](assets/figures/polysmooth-pathological.png)
 `````
 
-and after the document is processed by Documenter it looks like this:
+and after you run Documenter's build process the HTML output looks like this:
 
 ```@example
 using Luxor # hide
@@ -221,8 +227,8 @@ function hipster(fname, toptext, bottomtext)
     sethue("wheat")
     fontsize(20)
     fontface("Helvetica-Bold")
-    textcurvecentered(toptext, (3pi)/2, 100, O, clockwise=true,  letter_spacing=5, baselineshift = -4)
-    textcurvecentered(bottomtext, pi/2, 100, O, clockwise=false, letter_spacing=5, baselineshift = -15)
+    textcurvecentered(toptext, (3pi)/2, 100, O, clockwise=true,  letter_spacing=1, baselineshift = -4)
+    textcurvecentered(bottomtext, pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
 
     sethue("gray20")
     map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
@@ -230,7 +236,7 @@ function hipster(fname, toptext, bottomtext)
 
     # cheap weathered texture:
     sethue("antiquewhite2")
-    setline(0.2)
+    setline(0.4)
     setdash("dot")
     for i in 1:500
         line(randompoint(Point(-200, -350), Point(200, 350)),
@@ -240,7 +246,10 @@ function hipster(fname, toptext, bottomtext)
     finish()
 end
 
-hipster("assets/figures/textcurvecenteredexample.png", "• LUXOR •", "• VECTOR GRAPHICS •")
+hipster("assets/figures/textcurvecenteredexample.png",
+    "• DRAWN WITH LUXOR • ",
+    "VECTOR GRAPHICS FOR JULIA")
+
 nothing # hide
 ```
 

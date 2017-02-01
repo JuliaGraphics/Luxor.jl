@@ -1,10 +1,18 @@
+```@meta
+DocTestSetup = quote
+    using Luxor
+end
+```
+
 # The basics
 
-The underlying drawing model is that you add shapes, or add points to paths, then these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics.
+The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already added.
 
 Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
-Positions are usually specified either by x and y coordinates or a `Point(x, y)`. Angles are usually in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas) in radians: 'clockwise'.
+Positions are specified either by x and y coordinates or a `Point(x, y)`. The default origin is at the top left of the drawing area.
+
+Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').
 
 Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
 
@@ -49,7 +57,7 @@ finish
 preview
 ```
 
-The global variable `currentdrawing` (of type Drawing) holds a few parameters which are occasionally useful:
+The global variable `currentdrawing` (of type Drawing) stores some parameters related to the current drawing:
 
 ```
 julia> fieldnames(currentdrawing)
@@ -66,13 +74,13 @@ julia> fieldnames(currentdrawing)
 :alpha
 ```
 
-## The drawing area
+## The drawing surface
 
-The origin (0/0) starts off at the top left: the x axis runs left to right, and the y axis runs top to bottom.
+The origin (0/0) starts off at the top left: the x axis runs left to right across the page, and the y axis runs top to bottom down the page.
 
 The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
-`background()` fills the image with a color, covering any previous contents. By default, PDF files have a white background, whereas PNG drawings have no background, so the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. Here, the first `background()` filled the entire drawing; the calls in the loop fill only the active clipping region, a tile defined by the `Tiler` iterator:
+`background()` fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. In the next example, the first `background()` filled the entire drawing, but the calls in the loop fill only the active clipping region, a tile defined by the `Tiler` iterator:
 
 ```@example
 using Luxor # hide
@@ -316,7 +324,7 @@ nothing # hide
 
 ![sector](assets/figures/sector.png)
 
-You can supply a value for corner radius. The same sector is drawn but with rounded corners.
+You can supply a value for the corner radius. The same sector is drawn but with rounded corners.
 
 ```@example
 using Luxor # hide
@@ -457,6 +465,7 @@ nothing # hide
 arc
 arc2r
 carc
+carc2r
 curve
 ```
 
@@ -602,6 +611,10 @@ nothing # hide
 
 ```@docs
 getnearestpointonline
+pointlinedistance
+slope
+rescale
+perpendicular
 ```
 
 ## Arrows
@@ -733,4 +746,5 @@ nothing # hide
 
 ```@docs
 hypotrochoid
+@polar
 ```

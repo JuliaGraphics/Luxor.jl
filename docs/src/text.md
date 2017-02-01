@@ -75,20 +75,20 @@ using Luxor # hide
 Drawing(400, 150, "assets/figures/text-placement.png") # hide
 origin() # hide
 background("white") # hide
-fontsize(20) # hide
+fontsize(80) # hide
 sethue("black") # hide
 pt1 = Point(-100, 0)
 pt2 = Point(0, 0)
 pt3 = Point(100, 0)
+sethue("black")
+text("1",  pt1, halign=:left,   valign = :bottom)
+text("2",  pt2, halign=:center, valign = :bottom)
+text("3",  pt3, halign=:right,  valign = :bottom)
+text("4",  pt1, halign=:left,   valign = :top)
+text("5 ", pt2, halign=:center, valign = :top)
+text("6",  pt3, halign=:right,  valign = :top)
 sethue("red")
 map(p -> circle(p, 4, :fill), [pt1, pt2, pt3])
-sethue("black")
-text("text 1",  pt1, halign=:left,   valign = :bottom)
-text("text 2",  pt2, halign=:center, valign = :bottom)
-text("text 3",  pt3, halign=:right,  valign = :bottom)
-text("text 4",  pt1, halign=:left,   valign = :top)
-text("text 5 ", pt2, halign=:center, valign = :top)
-text("text 6",  pt3, halign=:right,  valign = :top)
 finish() # hide
 nothing # hide
 ```
@@ -108,6 +108,7 @@ using Luxor # hide
 Drawing(400, 150, "assets/figures/pro-text-placement.png") # hide
 origin() # hide
 background("white") # hide
+axes()
 sethue("black")
 settext("<span font='26' background ='green' foreground='red'> Hey</span>
     <i>italic</i> <b>bold</b> <sup>superscript</sup>
@@ -133,7 +134,7 @@ On macOS, a list of currently activated fonts can be found (after a while) with:
 
     system_profiler SPFontsDataType
 
-Fonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer at the time of writing).
+Fonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer currently).
 
 On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with `setfont()`) using:
 
@@ -145,7 +146,7 @@ although typically this lists only those fonts in /System/Library/Fonts and /Lib
 
 In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).
 
-Cairo doesn't support emoji symbols at the time of writing.
+Cairo (and hence Luxor) doesn't support emoji currently. 😢
 
 ## Text to paths
 
@@ -182,12 +183,12 @@ fontsize(18)
 fontface("LucidaSansUnicode")
 sethue("royalblue4")
 textstring = join(names(Base), " ")
-textcurve("this spiral contains every word in julia names(Base): " * textstring, -pi/2,
-  800, 0, 0,
-  spiral_in_out_shift = -18.0,
-  letter_spacing = 0,
-  spiral_ring_step = 0)
-
+textcurve("this spiral contains every word in julia names(Base): " * textstring,
+    -pi/2,
+    800, 0, 0,
+    spiral_in_out_shift = -18.0,
+    letter_spacing = 0,
+    spiral_ring_step = 0)
 fontsize(35)
 fontface("Agenda-Black")
 textcentred("julia names(Base)", 0, 0)
@@ -210,15 +211,15 @@ setdash("dot") # hide
 setline(0.25) # hide
 circle(O, 100, :stroke)
 textcurvecentered("hello world", -pi/2, 100, O;
-        clockwise = true,
-        letter_spacing = 0,
-        baselineshift = -20
-        )
+    clockwise = true,
+    letter_spacing = 0,
+    baselineshift = -20
+    )
 textcurvecentered("hello world", pi/2, 100, O;
-        clockwise = false,
-        letter_spacing = 0,
-        baselineshift = 10
-        )
+    clockwise = false,
+    letter_spacing = 0,
+    baselineshift = 10
+    )
 finish() # hide
 nothing # hide
 ```

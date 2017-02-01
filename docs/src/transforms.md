@@ -2,11 +2,11 @@
 
 For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`.
 
-`translate()` shifts the current 0/0 point by the specified amounts in x and y. It's relative and cumulative, rather than absolute:
+`translate()` shifts the current axes by the specified amounts in x and y. It's relative and cumulative, rather than absolute:
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 200, "assets/figures/translate.png") # hide
+Drawing(600, 200, "assets/figures/translate.png") # hide
 background("white") # hide
 srand(1) # hide
 setline(1) # hide
@@ -14,14 +14,15 @@ origin()
 for i in range(0, 30, 6)
     sethue(HSV(i, 1, 1)) # from Colors
     setopacity(0.5)
-    circle(0, 0, 20, :fillpreserve)
+    circle(0, 0, 40, :fillpreserve)
     setcolor("black")
     stroke()
-    translate(25, 0)
+    translate(50, 0)
 end
 finish() # hide
 nothing # hide
 ```
+
 ![translate](assets/figures/translate.png)
 
 `scale()` scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.
