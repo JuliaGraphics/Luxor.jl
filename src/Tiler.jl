@@ -77,3 +77,45 @@ function Base.getindex(pt::Tiler, i::Int)
     ycoord = -pt.areaheight/2 + pt.margin + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
     return (Point(xcoord, ycoord), i)
 end
+
+"""
+    findnextgridpoint(pt::Point, xspacing, yspacing, width, height)
+
+Return the next grid point.
+"""
+function findnextgridpoint(pt::Point, xspacing, yspacing, width, height)
+    temp = Point(pt.x + xspacing, pt.y) 
+    if temp.x >= width
+        return Point(0, temp.y + yspacing)
+    elseif temp.y >= height
+        # what to do? Perhaps just start again...
+        return Point(0, 0)
+    else
+        return temp
+    end
+end
+
+"""
+    setgrid(xspacing=100, yspacing=100, width=1200, height=1200)
+
+Grid generation: this function returns a function that creates grid points. 
+The grid starts at `0/0`, and proceeds along in the x-direction, and moves down
+in the y-direction when the x coordinate current point exceeds the `width`.
+
+    julia> grid = setgrid(400, 200, 400, 1200)
+    (::nextgridpoint) (generic function with 1 method)
+        
+    julia> grid()
+    Luxor.Point(0.0,0.0)
+    
+    julia> grid()
+    Luxor.Point(400.0,0.0)
+    
+    julia> grid()
+    Luxor.Point(0.0,200.0)
+"""
+function setgrid(xspacing=100, yspacing=100, width=1200, height=1200)
+   pt = Point(-xspacing, 0)
+   nextgridpoint() = pt = findnextgridpoint(pt, xspacing, yspacing, width, height)
+   return nextgridpoint
+end
