@@ -36,6 +36,6 @@ function test_hypotrochoid(fname)
     @test finish() == true
 end
 
-fname = "hypertrochoid-test.pdf"
+fname = "hypotrochoid-test.pdf"
 test_hypotrochoid(fname)
 println("...finished test: output in $(fname)")

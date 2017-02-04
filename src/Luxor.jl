@@ -287,7 +287,6 @@ julia> rescale(25, 0, 1, 0, 1.609344)
 
 julia> rescale(15, (0, 100), (1000, 0))
 850.0
-
 ```
 
 """
@@ -497,8 +496,6 @@ clippreserve() = Cairo.clip_preserve(currentdrawing.cr)
 Reset the clipping region to the current drawing's extent.
 """
 clipreset() = Cairo.reset_clip(currentdrawing.cr)
-
-
 
 """
     setline(n)
