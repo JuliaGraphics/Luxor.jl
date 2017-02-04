@@ -83,11 +83,11 @@ sethue("black") # hide
 setline(12)
 patterns = ["solid", "dotted", "dot", "dotdashed", "longdashed",
   "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"]
-tiles =  Tiler(400, 250, 10, 1, margin=10)
+tiles =  Tiler(600, 250, 10, 1, margin=10)
 for (pos, n) in tiles
     setdash(patterns[n])
     textright(patterns[n], pos.x - 20, pos.y + 4)
-    line(pos, Point(400, pos.y), :stroke)
+    line(pos, Point(240, pos.y), :stroke)
 end
 finish() # hide
 nothing # hide
