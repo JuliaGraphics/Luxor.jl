@@ -42,8 +42,8 @@ function sinecurves()
 end
 
 function test(pagewidth, pageheight)
-    gsave()
     translate(100, pageheight/2)
+    g = setgrid(0, 50, 0)
     setline(0.25)
     sethue(0,0,0)
     x_vals = collect(0:pi/100: 4pi)
@@ -52,13 +52,14 @@ function test(pagewidth, pageheight)
     circles(polyline)
     text("original " * string(length(polyline)) * " vertices" , 0, -30)
     for detail in [0.01, 0.05, 0.075, 0.1, 0.2, 0.5, 0.75, 1.0, 2.0]
-        translate(0, 60)
+        gsave()
+        translate(g())
         polysimple = simplify(polyline, detail)
         poly(polysimple, :stroke)
         circles(polysimple)
-        text(" detail ($detail), " * string(length(polysimple)) * " vertices" , 0, -30)
+        text(" detail ($detail), " * string(length(polysimple)) * " vertices" , 0, -20)
+        grestore()
     end
-    grestore()
 end
 
 function simplify_poly(fname)

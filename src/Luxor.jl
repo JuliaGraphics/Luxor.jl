@@ -70,6 +70,8 @@ export Drawing, currentdrawing,
     cairotojuliamatrix, juliatocairomatrix, getrotation, getscale, gettranslation,
 
     setmode, getmode,
+    
+    setgrid,
 
     readpng, placeimage,
 
