@@ -71,7 +71,7 @@ export Drawing, currentdrawing,
 
     setmode, getmode,
     
-    setgrid,
+    Grid, gp,
 
     readpng, placeimage,
 
