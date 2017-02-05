@@ -43,7 +43,7 @@ end
 
 function test(pagewidth, pageheight)
     translate(100, pageheight/2)
-    g = setgrid(0, 50, 0)
+    g = Grid(O, 0, 60)
     setline(0.25)
     sethue(0,0,0)
     x_vals = collect(0:pi/100: 4pi)
@@ -53,7 +53,7 @@ function test(pagewidth, pageheight)
     text("original " * string(length(polyline)) * " vertices" , 0, -30)
     for detail in [0.01, 0.05, 0.075, 0.1, 0.2, 0.5, 0.75, 1.0, 2.0]
         gsave()
-        translate(g())
+        translate(gp(g))
         polysimple = simplify(polyline, detail)
         poly(polysimple, :stroke)
         circles(polysimple)

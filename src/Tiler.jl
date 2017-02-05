@@ -79,43 +79,60 @@ function Base.getindex(pt::Tiler, i::Int)
 end
 
 """
-    findnextgridpoint(pt::Point, xspacing, yspacing, width, height)
+    g = Grid(startpoint, xspacing=100.0, yspacing=100.0, width=600.0, height=600.0)
+    
+Define a grid.
 
-Return the next grid point.
+    grid = Grid(O, 100, 0)   # 100 wide rows until width reached, then wrap
+    grid = Grid(O, 0, 100)   # 100 high columns until height reached, then wrap
+    grid = Grid(O, 100, 100) # 100 high rows and 100 high columns until width/height reached then wrap
+
+Get points from the grid with `gp(g::Grid)`.
 """
-function findnextgridpoint(pt::Point, xspacing, yspacing, width, height)
-    temp = Point(pt.x + xspacing, pt.y) 
-    if temp.x >= width
-        return Point(0, temp.y + yspacing)
-    elseif temp.y >= height
-        # what to do? Perhaps just start again...
-        return Point(0, 0)
-    else
-        return temp
+type Grid
+    startpoint::Point
+    currentpoint::Point
+    xspacing::Real
+    yspacing::Real
+    width::Real
+    height::Real
+    rownumber::Int
+    colnumber::Int
+    function Grid(startpoint, xspacing=100.0, yspacing=100.0, width=600.0, height=600.0)
+        rownumber = 1
+        colnumber = 1
+        # find the "previous" point, so that the first call gets the first point
+        currentpoint = Point(startpoint.x - xspacing, 0)
+        new(startpoint, currentpoint, xspacing, yspacing, width, height, rownumber, colnumber)
     end
 end
 
 """
-    setgrid(xspacing=100, yspacing=100, width=1200, height=1200)
+    gp(g::Grid)
 
-Grid generation: this function returns a function that creates grid points. 
-The grid starts at `0/0`, and proceeds along in the x-direction, and moves down
-in the y-direction when the x coordinate current point exceeds the `width`.
-
-    julia> grid = setgrid(400, 200, 400, 1200)
-    (::nextgridpoint) (generic function with 1 method)
-        
-    julia> grid()
-    Luxor.Point(0.0,0.0)
-    
-    julia> grid()
-    Luxor.Point(400.0,0.0)
-    
-    julia> grid()
-    Luxor.Point(0.0,200.0)
+Returns the next available grid point of a grid created with `Grid()`.
 """
-function setgrid(xspacing=100, yspacing=100, width=1200, height=1200)
-   pt = Point(-xspacing, 0)
-   nextgridpoint() = pt = findnextgridpoint(pt, xspacing, yspacing, width, height)
-   return nextgridpoint
+function gp(g::Grid)
+    tempx = g.currentpoint.x + g.xspacing
+    tempy = g.currentpoint.y 
+    if g.xspacing == 0
+        g.rownumber += 1
+        g.colnumber = 1
+        g.currentpoint = Point(g.startpoint.x, tempy + g.yspacing)
+    else
+        g.colnumber += 1
+        g.currentpoint = Point(tempx, tempy)
+    end    
+    if g.currentpoint.x >= g.width
+        g.rownumber += 1
+        g.colnumber = 1
+        g.currentpoint = Point(g.startpoint.x, tempy + g.yspacing)
+    end
+    if g.currentpoint.y >= g.height
+        # what to do? Perhaps just start again...
+        g.rownumber = 1
+        g.colnumber = 1
+        g.currentpoint = Point(0, 0)
+    end
+    return g.currentpoint
 end
