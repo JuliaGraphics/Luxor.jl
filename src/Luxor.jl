@@ -12,7 +12,7 @@ include("Turtle.jl")
 include("shapes.jl")
 include("polygons.jl")
 include("curves.jl")
-include("Tiler.jl")
+include("tiles-grids.jl")
 include("arrows.jl")
 include("text.jl")
 include("blends.jl")
@@ -71,7 +71,7 @@ export Drawing, currentdrawing,
 
     setmode, getmode,
     
-    Grid, gp,
+    Grid, nextgridpoint,
 
     readpng, placeimage,
 

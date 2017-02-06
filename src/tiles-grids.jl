@@ -14,14 +14,14 @@ edges of the area before the function calculates the tile sizes required.
 
     tiles = Tiler(1000, 800, 4, 5, margin=20)
     for (pos, n) in tiles
-    # the point pos is the center of the tile
+        # the point pos is the center of the tile
     end
 
 You can access the calculated tile width and height like this:
 
     tiles = Tiler(1000, 800, 4, 5, margin=20)
     for (pos, n) in tiles
-      ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+        ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
     end
 """
 type Tiler
@@ -79,40 +79,45 @@ function Base.getindex(pt::Tiler, i::Int)
 end
 
 """
-    g = Grid(startpoint, xspacing=100.0, yspacing=100.0, width=600.0, height=600.0)
+    Grid(startpoint, xspacing, yspacing, width, height)
     
-Define a grid.
+Define a grid, to start at `startpoint` and proceed along the x-axis in steps of `xspacing`, then
+along the `y-axis` in steps of `yspacing`. 
 
-    grid = Grid(O, 100, 0)   # 100 wide rows until width reached, then wrap
-    grid = Grid(O, 0, 100)   # 100 high columns until height reached, then wrap
-    grid = Grid(O, 100, 100) # 100 high rows and 100 high columns until width/height reached then wrap
+    Grid(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
 
-Get points from the grid with `gp(g::Grid)`.
+For a column, set the xspacing to 0:
+
+    grid = Grid(O, 0, 40)
+
+To get points from the grid, use `nextgridpoint(g::Grid)`.
+
+When you run out of grid points, you'll wrap round and start again.
 """
 type Grid
     startpoint::Point
     currentpoint::Point
-    xspacing::Real
-    yspacing::Real
-    width::Real
-    height::Real
+    xspacing::Float64
+    yspacing::Float64
+    width::Float64
+    height::Float64
     rownumber::Int
     colnumber::Int
-    function Grid(startpoint, xspacing=100.0, yspacing=100.0, width=600.0, height=600.0)
+    function Grid(startpoint=Point(0, 0), xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
         rownumber = 1
         colnumber = 1
         # find the "previous" point, so that the first call gets the first point
-        currentpoint = Point(startpoint.x - xspacing, 0)
+        currentpoint = Point(startpoint.x - xspacing, startpoint.y)
         new(startpoint, currentpoint, xspacing, yspacing, width, height, rownumber, colnumber)
     end
 end
 
 """
-    gp(g::Grid)
+    nextgridpoint(g::Grid)
 
 Returns the next available grid point of a grid created with `Grid()`.
 """
-function gp(g::Grid)
+function nextgridpoint(g::Grid)
     tempx = g.currentpoint.x + g.xspacing
     tempy = g.currentpoint.y 
     if g.xspacing == 0
@@ -132,7 +137,7 @@ function gp(g::Grid)
         # what to do? Perhaps just start again...
         g.rownumber = 1
         g.colnumber = 1
-        g.currentpoint = Point(0, 0)
+        g.currentpoint = Point(g.startpoint.x, g.startpoint.y)
     end
     return g.currentpoint
 end
