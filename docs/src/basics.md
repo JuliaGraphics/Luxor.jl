@@ -759,13 +759,15 @@ If you have to position items regularly, you might find a use for a grid. Luxor 
 using Luxor # hide
 Drawing(700, 200, "assets/figures/grids.png")  # hide
 background("white") # hide
-fontsize(14) # hide
-grid = Grid(O + 50, 40, 80, 8 * 40)
-for i in 1:21
+fontsize(14) # hide 
+translate(50, 50) # hide
+grid = Grid(O, 40, 80, (10 - 1) * 40) # 10 cells, but first one is #0 :)
+for i in 1:20
     randomhue()
-    squircle(nextgridpoint(grid), 20, 20, :fill)
+    p = nextgridpoint(grid)
+    squircle(p, 20, 20, :fill)
     sethue("black")
-    text(string(i), nextgridpoint(grid), halign=:center)
+    text(string(i), p, halign=:center)
 end
 finish() # hide
 nothing # hide
