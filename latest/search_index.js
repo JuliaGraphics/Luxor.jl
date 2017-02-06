@@ -669,7 +669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Grids",
     "category": "section",
-    "text": "If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility that supplies points on a grid when you need them.using Luxor # hide\nDrawing(600, 250, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\ngrid = Grid(O + 50, 40, 80)\nfor i in 1:21\n    randomhue()\n    squircle(nextgridpoint(grid), 20, 20, :fill)\n    sethue(\"black\")\n    text(string(i), nextgridpoint(grid), halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)Grid\nnextgridpoint"
+    "text": "If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility that supplies points on a grid when you need them.using Luxor # hide\nDrawing(700, 200, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide \ntranslate(50, 50) # hide\ngrid = Grid(O, 40, 80, (10 - 1) * 40) # 10 cells, but first one is #0 :)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"black\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)Grid\nnextgridpoint"
 },
 
 {
