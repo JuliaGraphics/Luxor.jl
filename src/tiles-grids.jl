@@ -82,11 +82,11 @@ end
     Grid(startpoint, xspacing, yspacing, width, height)
     
 Define a grid, to start at `startpoint` and proceed along the x-axis in steps of `xspacing`, then
-along the `y-axis` in steps of `yspacing`. 
+along the y-axis in steps of `yspacing`. 
 
     Grid(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
 
-For a column, set the xspacing to 0:
+For a column, set the `xspacing` to 0:
 
     grid = Grid(O, 0, 40)
 
@@ -128,7 +128,7 @@ function nextgridpoint(g::Grid)
         g.colnumber += 1
         g.currentpoint = Point(tempx, tempy)
     end    
-    if g.currentpoint.x >= g.width
+    if g.currentpoint.x > g.width # next row
         g.rownumber += 1
         g.colnumber = 1
         g.currentpoint = Point(g.startpoint.x, tempy + g.yspacing)
