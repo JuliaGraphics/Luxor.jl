@@ -615,6 +615,7 @@ pointlinedistance
 slope
 rescale
 perpendicular
+@polar
 ```
 
 ## Arrows
@@ -725,6 +726,8 @@ juliacircles
 
 ## Miscellaneous
 
+### Hypotrochoids
+
 `hypotrochoid()` makes hypotrochoids. The results are polygons, so you can either draw them directly, or pass them on for further polygon fun.
 
 ```@example
@@ -746,5 +749,31 @@ nothing # hide
 
 ```@docs
 hypotrochoid
-@polar
+```
+
+### Grids
+
+If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility that supplies points on a grid when you need them.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/grids.png")  # hide
+background("white") # hide
+fontsize(14) # hide
+grid = Grid(O + 50, 40, 80)
+for i in 1:21
+    randomhue()
+    squircle(nextgridpoint(grid), 20, 20, :fill)
+    sethue("black")
+    text(string(i), nextgridpoint(grid), halign=:center)
+end
+finish() # hide
+nothing # hide
+```
+
+![grids](assets/figures/grids.png)
+
+```@docs
+Grid
+nextgridpoint
 ```

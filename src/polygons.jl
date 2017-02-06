@@ -278,7 +278,7 @@ end
 
 
 """
-    prettypoly(points, action=:nothing, vertexfunction=() -> circle(O, 1, :fill);
+    prettypoly(points, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
         close=false,
         reversepath=false,
         vertexlabels = (n, l) -> ()
@@ -286,7 +286,10 @@ end
 
 Draw the polygon defined by `points`, possibly closing and reversing it, using the current
 parameters, and then evaluate the `vertexfunction` function at every vertex of the polygon.
-For example, you can mark each vertex of a polygon with a randomly colored filled circle.
+
+The default vertexfunction draws a 2 pt radius circle.
+
+To mark each vertex of a polygon with a randomly colored filled circle:
 
     p = star(O, 70, 7, 0.6, 0, vertices=true)
     prettypoly(p, :fill, () ->
@@ -304,7 +307,7 @@ and "3 of 3" using:
     prettypoly(triangle, :stroke,
         vertexlabels = (n, l) -> (text(string(n, " of ", l))))
 """
-function prettypoly(pointlist::Array, action=:nothing, vertexfunction = () -> circle(O, 1, :fill);
+function prettypoly(pointlist::Array, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
     close=false,
     reversepath=false,
     vertexlabels = (n, l) -> ()
