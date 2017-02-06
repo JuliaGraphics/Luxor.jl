@@ -757,10 +757,10 @@ If you have to position items regularly, you might find a use for a grid. Luxor 
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/grids.png")  # hide
+Drawing(700, 200, "assets/figures/grids.png")  # hide
 background("white") # hide
 fontsize(14) # hide
-grid = Grid(O + 50, 40, 80)
+grid = Grid(O + 50, 40, 80, 8 * 40)
 for i in 1:21
     randomhue()
     squircle(nextgridpoint(grid), 20, 20, :fill)

@@ -45,7 +45,7 @@ function nextgridpoint(g::Luxor.Grid, radius)
 end
 
 function hex_grid_test(fname)
-    Drawing("A1landscape", "fname")
+    Drawing("A0landscape", fname)
     background("white")
     translate(200, 200)
     fontsize(20)
