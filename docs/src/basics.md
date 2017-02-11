@@ -313,26 +313,30 @@ A sector (strictly an "annular sector") has an inner and outer radius, as well a
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "assets/figures/sector.png") # hide
+Drawing(600, 200, "assets/figures/sector.png") # hide
 background("white") # hide
 origin() # hide
-sethue("tomato3") # hide
+sethue("tomato")
 sector(50, 90, pi/2, 0, :fill)
+sethue("olive")
+sector(Point(O.x + 200, O.y), 50, 90, 0, pi/2, :fill)
 finish() # hide
 nothing # hide
 ```
 
 ![sector](assets/figures/sector.png)
 
-You can supply a value for the corner radius. The same sector is drawn but with rounded corners.
+You can also supply a value for a corner radius. The same sector is drawn but with rounded corners.
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "assets/figures/sectorrounded.png") # hide
+Drawing(600, 200, "assets/figures/sectorrounded.png") # hide
 background("white") # hide
 origin() # hide
-sethue("tomato3") # hide
+sethue("tomato") 
 sector(50, 90, pi/2, 0, 15, :fill)
+sethue("olive") 
+sector(Point(O.x + 200, O.y), 50, 90, pi/2, 0, 15, :fill)
 finish() # hide
 nothing # hide
 ```

@@ -151,17 +151,18 @@ function carc(xc, yc, radius, angle1, angle2, action=:nothing)
   do_action(action)
 end
 
+" Add an arc centered at `centerpoint` to the current path from `angle1` to `angle2` going counterclockwise."
 carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
   carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
-      arc2r(c1, p2, p3, action=:nothing)
+      arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
 
 Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise.
 
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
 """
-function arc2r(c1, p2, p3, action=:nothing)
+function arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     r = norm(c1, p2)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
@@ -172,13 +173,13 @@ function arc2r(c1, p2, p3, action=:nothing)
 end
 
 """
-      carc2r(c1, p2, p3, action=:nothing)
+    carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
 
 Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going counterclockwise.
 
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
 """
-function carc2r(c1, p2, p3, action=:nothing)
+function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     r = norm(c1, p2)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
@@ -189,11 +190,14 @@ function carc2r(c1, p2, p3, action=:nothing)
 end
 
 """
-    sector(innerradius, outerradius, startangle, endangle, action=:none)
+    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action)
 
-Make an annular sector centered at the current `0/0` point.
+Draw an annular sector centered at `centerpoint`.
 """
-function sector(innerradius, outerradius, startangle, endangle, action::Symbol=:none)
+function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, 
+      endangle::Real, action::Symbol)
+    gsave()
+    translate(centerpoint)
     newpath()
     move(innerradius * cos(startangle), innerradius * sin(startangle))
     line(outerradius * cos(startangle), outerradius * sin(startangle))
@@ -202,31 +206,40 @@ function sector(innerradius, outerradius, startangle, endangle, action::Symbol=:
     carc(0, 0, innerradius, endangle, startangle, :none)
     closepath()
     do_action(action)
+    grestore()
 end
 
-"""
-    sector(innerradius, outerradius, startangle, endangle, cornerradius, action=:none)
+"Draw an annular sector centered at the origin."
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol) = 
+    sector(O, innerradius, outerradius, startangle, endangle, action)
 
-Draw an annular sector with rounded corners, basically a bent sausage shape.
+"""
+    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, cornerradius, action)
+
+Draw an annular sector with rounded corners, basically a bent sausage shape, centered at `centerpoint`.
 
 TODO: The results aren't 100% accurate at the moment. There are small discontinuities where
 the curves join.
 
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
-function sector(innerradius, outerradius, startangle, endangle, cornerradius, action::Symbol=:none)
+function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, 
+    endangle::Real, cornerradius::Real, action::Symbol)      
+    gsave()
+    translate(centerpoint)
     # some work is done using polar coords to calculate the points
 
     # attempts to prevent pathological cases
-    cornerradius = min(cornerradius, (outerradius-innerradius)/2)
+    cornerradius = min(cornerradius, abs(outerradius-innerradius)/2)
     if endangle < startangle
-        endangle = endangle + 2pi
+        startangle, endangle = endangle, startangle
     end
-    # reduce given corner radius to prevent messes when spanning angle too small
+
+    # TODO reduce given corner radius to prevent messes when spanning angle too small
     # 4 is a magic number
-    while (endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
-        cornerradius *= 0.75
-    end
+        while abs(endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
+            cornerradius *= 0.75
+        end
 
     # first inner corner
     alpha1 = asin(cornerradius/(innerradius+cornerradius))
@@ -269,7 +282,13 @@ function sector(innerradius, outerradius, startangle, endangle, cornerradius, ac
     carc(O, innerradius, s1, s2, :none)
     closepath()
     do_action(action)
+    grestore()
 end
+
+"Draw an annular sector with rounded corners, centered at the current origin."
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, 
+    cornerradius::Real, action::Symbol) = 
+    sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)     
 
 """
     pie(x, y, radius, startangle, endangle, action=:none)
@@ -297,7 +316,10 @@ Make a pie shape centered at `centerpoint`.
 Angles start at the positive x-axis and are measured clockwise.
 """
 pie(centerpoint::Point, radius, startangle, endangle, action) =
- pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
+    pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
+
+"Make a pie shape centered at the origin"
+pie(radius, startangle, endangle, action=:none) = pie(O, radius, startangle, endangle, action)
 
 """
 Draw a Bézier curve.

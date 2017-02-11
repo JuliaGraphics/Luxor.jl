@@ -183,7 +183,6 @@ function simplify(pointlist, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
 
-
 """
     isinside(p, pol)
 
@@ -275,7 +274,6 @@ function polysplit(pointlist, p1, p2)
     end
     return(poly1, poly2)
 end
-
 
 """
     prettypoly(points, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
@@ -505,7 +503,6 @@ function offsetpoly(path::Array, d)
         if intersectionpoint[1]
             resultpoly[i] = intersectionpoint[2]
         end
-
     end
     return resultpoly
 end
