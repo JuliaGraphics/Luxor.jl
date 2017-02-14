@@ -32,7 +32,7 @@ end
 
 function test(pagewidth, pageheight)
     translate(100, pageheight/2)
-    g = Grid(O, 0, 60)
+    g = GridRect(O, 0, 60)
     setline(0.25)
     sethue(0,0,0)
     x_vals = collect(0:pi/100: 4pi)

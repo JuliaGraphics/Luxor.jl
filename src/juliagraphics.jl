@@ -3,22 +3,27 @@
 """
     julialogo(;action=:fill, color=true)
 
-Draw the Julia logo. The logo's dimensions are about 330 wide and 240 high:
-
-    translate(-330/2, -240/2)
-    julialogo()
-
-The default action is to fill the logo and use colors:
+Draw the Julia logo. The default action is to fill the logo and use the colors:
 
     julialogo()
+
+If `color` is `false`, the logo will use the current color, and the dots won't be colored
+in the usual way.
+
+The logo's dimensions are about 330 wide and 240 high, and the
+`0/0` point is at the bottom left corner. To place the logo by locating its center,
+do this:
+
+    gsave()
+    translate(-165, -120)
+    julialogo() # locate center at 0/0
+    grestore()
 
 To use the logo as a clipping mask:
 
     julialogo(action=:clip)
 
 (In this case the `color` setting is automatically ignored.)
-
-If `color` is `false`, the logo will use the current color.
 
 """
 function julialogo(;action=:fill, color=true)
@@ -183,9 +188,14 @@ end
 """
     juliacircles(radius=100)
 
-Draw the three Julia circles in color at the origin using the given radius.
+Draw the three Julia circles in color centered at the origin.
+
+The distance of the centers of the circles from the origin is `radius`.
+The optional keyword arguments `outercircleratio` (default 0.75) and `innercircleratio` 
+(default 0.65) control the radius of the individual colored circles relative to the `radius`. 
+So you can get relatively smaller or larger circles by adjusting the ratios.
 """
-function juliacircles(radius=100)
+function juliacircles(radius=100; outercircleratio=0.75, innercircleratio=0.65)
     darker_blue = (0.251, 0.388, 0.847)    # the darker blue not used
     lighter_blue = (0.4, 0.51, 0.878)      # the lighter blue not used
     darker_purple = (0.584, 0.345, 0.698)
@@ -206,8 +216,8 @@ function juliacircles(radius=100)
 
     for (n, p) in enumerate(points)
         setcolor(color_sequence[n][1]...)
-        circle(p, 0.75radius, :fill)
+        circle(p, outercircleratio * radius, :fill)
         setcolor(color_sequence[n][2]...)
-        circle(p, 0.65radius, :fill)
+        circle(p, innercircleratio * radius, :fill)
     end
 end

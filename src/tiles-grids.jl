@@ -79,10 +79,10 @@ function Base.getindex(pt::Tiler, i::Int)
 end
 
 """
-    Grid(startpoint, xspacing, yspacing, width, height)
+    GridRect(startpoint, xspacing, yspacing, width, height)
     
-Define a grid, to start at `startpoint` and proceed along the x-axis in steps of `xspacing`, then
-along the y-axis in steps of `yspacing`. 
+Define a rectangular grid, to start at `startpoint` and proceed along the x-axis in 
+steps of `xspacing`, then along the y-axis in steps of `yspacing`. 
 
     Grid(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
 
@@ -94,7 +94,7 @@ To get points from the grid, use `nextgridpoint(g::Grid)`.
 
 When you run out of grid points, you'll wrap round and start again.
 """
-type Grid
+type GridRect
     startpoint::Point
     currentpoint::Point
     xspacing::Float64
@@ -103,39 +103,95 @@ type Grid
     height::Float64
     rownumber::Int
     colnumber::Int
-    function Grid(startpoint=Point(0, 0), xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
+    function GridRect(startpoint, xspacing, yspacing, width=1200.0, height=1200.0)
         rownumber = 1
-        colnumber = 1
-        # find the "previous" point, so that the first call gets the first point
-        currentpoint = Point(startpoint.x - xspacing, startpoint.y)
+        colnumber = 0
+        # find the "previous" point, so that the first call gets the real first point
+        xspacing == 0 ? sp = startpoint.y - yspacing : sp = startpoint.y 
+        currentpoint = Point(startpoint.x - xspacing, sp)
         new(startpoint, currentpoint, xspacing, yspacing, width, height, rownumber, colnumber)
     end
 end
 
 """
-    nextgridpoint(g::Grid)
+    GridHex(startpoint, radius, width=1200.0, height=1200.0)
 
-Returns the next available grid point of a grid created with `Grid()`.
+Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis and 
+then along the y-axis, `radius` is the radius of a circle that encloses each hexagon.
+The distance in `x` between the centers of successive hexagons is:
+
+```math
+\frac{\sqrt{(3)} radius}{2}
+```
+
+To get the next point from the grid, use `nextgridpoint(g::Grid)`.
+
+When you run out of grid points, you'll wrap round and start again.
 """
-function nextgridpoint(g::Grid)
-    tempx = g.currentpoint.x + g.xspacing
-    tempy = g.currentpoint.y 
+type GridHex
+    startpoint::Point
+    radius::Float64
+    currentpoint::Point
+    width::Float64
+    height::Float64
+    rownumber::Int
+    colnumber::Int
+    function GridHex(startpoint, radius, width=1200.0, height=1200.0)
+        rownumber = 1
+        colnumber = 0
+        # find the "previous" point, so that the first call gets the real first point
+        currentpoint = Point(startpoint.x - (sqrt(3) * radius), startpoint.y)
+        new(startpoint, radius, currentpoint, width, height, rownumber, colnumber)
+    end
+end
+
+"""
+    nextgridpoint(g::GridRect)
+
+Returns the next available (or even the first) grid point of a grid.
+"""
+function nextgridpoint(g::GridRect)
+    temp = Point(g.currentpoint.x + g.xspacing, g.currentpoint.y)
     if g.xspacing == 0
         g.rownumber += 1
         g.colnumber = 1
-        g.currentpoint = Point(g.startpoint.x, tempy + g.yspacing)
+        g.currentpoint = Point(g.startpoint.x, temp.y + g.yspacing)
     else
         g.colnumber += 1
-        g.currentpoint = Point(tempx, tempy)
+        g.currentpoint = temp
     end    
     if g.currentpoint.x > g.width # next row
         g.rownumber += 1
         g.colnumber = 1
-        g.currentpoint = Point(g.startpoint.x, tempy + g.yspacing)
+        g.currentpoint = Point(g.startpoint.x, temp.y + g.yspacing)
     end
-    if g.currentpoint.y >= g.height
-        # what to do? Perhaps just start again...
+    if g.currentpoint.y >= g.height   # finished, start again?
         g.rownumber = 1
+        g.colnumber = 1
+        g.currentpoint = Point(g.startpoint.x, g.startpoint.y)
+    end
+    return g.currentpoint
+end
+
+"""
+    nextgridpoint(g::GridHex)
+
+Returns the next available grid point of a hexagonal grid.
+"""
+function nextgridpoint(g::GridHex)
+    g.currentpoint = Point(g.currentpoint.x + (g.radius * sqrt(3)), g.currentpoint.y)
+    g.colnumber += 1
+    if g.currentpoint.x >= g.width                 # next row
+        g.rownumber += 1
+        g.colnumber = 1
+        if g.rownumber % 2 == 0
+            g.currentpoint = Point(g.startpoint.x + (sqrt(3) * g.radius)/2, g.currentpoint.y + (3/2) * g.radius)
+        else
+            g.currentpoint = Point(g.startpoint.x, g.currentpoint.y + (3/2) * g.radius)
+        end        
+    end
+    if g.currentpoint.y >= g.height     # finished?
+        g.rownumber = 1                 # start again...
         g.colnumber = 1
         g.currentpoint = Point(g.startpoint.x, g.startpoint.y)
     end
