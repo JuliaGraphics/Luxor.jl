@@ -71,7 +71,7 @@ export Drawing, currentdrawing,
 
     setmode, getmode,
     
-    Grid, nextgridpoint,
+    GridHex, GridRect, nextgridpoint,
 
     readpng, placeimage,
 
