@@ -605,7 +605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.julialogo",
     "category": "Function",
-    "text": "julialogo(;action=:fill, color=true)\n\nDraw the Julia logo. The logo's dimensions are about 330 wide and 240 high:\n\ntranslate(-330/2, -240/2)\njulialogo()\n\nThe default action is to fill the logo and use colors:\n\njulialogo()\n\nTo use the logo as a clipping mask:\n\njulialogo(action=:clip)\n\n(In this case the color setting is automatically ignored.)\n\nIf color is false, the logo will use the current color.\n\n\n\n"
+    "text": "julialogo(;action=:fill, color=true)\n\nDraw the Julia logo. The default action is to fill the logo and use the colors:\n\njulialogo()\n\nIf color is false, the logo will use the current color, and the dots won't be colored in the usual way.\n\nThe logo's dimensions are about 330 wide and 240 high, and the 0/0 point is at the bottom left corner. To place the logo by locating its center, do this:\n\ngsave()\ntranslate(-165, -120)\njulialogo() # locate center at 0/0\ngrestore()\n\nTo use the logo as a clipping mask:\n\njulialogo(action=:clip)\n\n(In this case the color setting is automatically ignored.)\n\n\n\n"
 },
 
 {
@@ -613,7 +613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.juliacircles",
     "category": "Function",
-    "text": "juliacircles(radius=100)\n\nDraw the three Julia circles in color at the origin using the given radius.\n\n\n\n"
+    "text": "juliacircles(radius=100)\n\nDraw the three Julia circles in color centered at the origin.\n\nThe distance of the centers of the circles from the origin is radius. The optional keyword arguments outercircleratio (default 0.75) and innercircleratio  (default 0.65) control the radius of the individual colored circles relative to the radius.  So you can get relatively smaller or larger circles by adjusting the ratios.\n\n\n\n"
 },
 
 {
@@ -649,11 +649,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "basics.html#Luxor.Grid",
+    "location": "basics.html#Luxor.GridRect",
     "page": "Basic graphics",
-    "title": "Luxor.Grid",
+    "title": "Luxor.GridRect",
     "category": "Type",
-    "text": "Grid(startpoint, xspacing, yspacing, width, height)\n\nDefine a grid, to start at startpoint and proceed along the x-axis in steps of xspacing, then along the y-axis in steps of yspacing. \n\nGrid(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)\n\nFor a column, set the xspacing to 0:\n\ngrid = Grid(O, 0, 40)\n\nTo get points from the grid, use nextgridpoint(g::Grid).\n\nWhen you run out of grid points, you'll wrap round and start again.\n\n\n\n"
+    "text": "GridRect(startpoint, xspacing, yspacing, width, height)\n\nDefine a rectangular grid, to start at startpoint and proceed along the x-axis in  steps of xspacing, then along the y-axis in steps of yspacing. \n\nGrid(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)\n\nFor a column, set the xspacing to 0:\n\ngrid = Grid(O, 0, 40)\n\nTo get points from the grid, use nextgridpoint(g::Grid).\n\nWhen you run out of grid points, you'll wrap round and start again.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.GridHex",
+    "page": "Basic graphics",
+    "title": "Luxor.GridHex",
+    "category": "Type",
+    "text": "GridHex(startpoint, radius, width=1200.0, height=1200.0)\n\nDefine a hexagonal grid, to start at startpoint and proceed along the x-axis and  then along the y-axis, radius is the radius of a circle that encloses each hexagon. The distance in x between the centers of successive hexagons is:\n\nracsqrt(3) radius2\n\nTo get the next point from the grid, use nextgridpoint(g::Grid).\n\nWhen you run out of grid points, you'll wrap round and start again.\n\n\n\n"
 },
 
 {
@@ -661,7 +669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.nextgridpoint",
     "category": "Function",
-    "text": "nextgridpoint(g::Grid)\n\nReturns the next available grid point of a grid created with Grid().\n\n\n\n"
+    "text": "nextgridpoint(g::GridRect)\n\nReturns the next available (or even the first) grid point of a grid.\n\n\n\nnextgridpoint(g::GridHex)\n\nReturns the next available grid point of a hexagonal grid.\n\n\n\n"
 },
 
 {
@@ -669,7 +677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Grids",
     "category": "section",
-    "text": "If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility that supplies points on a grid when you need them.using Luxor # hide\nDrawing(700, 200, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide \ntranslate(50, 50) # hide\ngrid = Grid(O, 40, 80, (10 - 1) * 40) # 10 cells, but first one is #0 :)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"black\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)Grid\nnextgridpoint"
+    "text": "If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you need it.Define a rectangular grid with GridRect, and a hexagonal grid with GridHex.using Luxor # hide\nDrawing(700, 250, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\ntranslate(50, 50) # hide\ngrid = GridRect(O, 40, 80, (10 - 1) * 40)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)using Luxor # hide\nDrawing(700, 400, \"assets/figures/grid-hex.png\")  # hide\nbackground(\"white\") # hide\nfontsize(22) # hide\ntranslate(100, 100) # hide\nradius = 70\ngrid = GridHex(O, radius, 600)\n\narrow(O, Point(O.x + (sqrt(3) * radius)/2, 0))\n\nfor i in 1:15\n    randomhue()\n    p = nextgridpoint(grid)\n    ngon(p, radius-5, 6, pi/2, :fillstroke)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)GridRect\nGridHex\nnextgridpoint"
 },
 
 {
