@@ -1,4 +1,4 @@
-typealias Blend CairoPattern
+const Blend = CairoPattern
 
 """
     blend(from::Point, to::Point)
