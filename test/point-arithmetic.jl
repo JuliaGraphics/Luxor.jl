@@ -78,8 +78,8 @@ function point_arithmetic_test(fname, npoints=20)
     scale(0.5, 0.5)
     setline(2.5)
     background("white")
-    setopacity(0.7)
-    fontsize(25)
+    setopacity(0.5)
+    fontsize(8)
     randompoints = randompointarray(Point(-600, -600), Point(600, 600), npoints)
 
     # +
@@ -112,49 +112,71 @@ function point_arithmetic_test(fname, npoints=20)
     # ^ FAILS
     # pl8 = map(pt -> ^(pt, 1.2), randompoints)
 
-    for p in zip(pl1, pl1a, pl2, pl2a, pl3, pl3a, pl4, pl5, pl5a, pl5b, pl6, pl6a, pl7)
-        randomhue()
-        map(pt -> circle(pt, 3, :fill), p)
-        poly(collect(p), :stroke)
-    end
+# bug in v0.6 at the moment
+#    sethue("red")
+#    for p in zip(pl1, pl1a, pl2, pl2a, pl3, pl3a, pl4, pl5, pl5a, pl5b, pl6, pl6a, pl7)
+#        map(pt -> circle(pt, 3, :fill), p)
+#        poly(collect(p), :stroke)
+#    end
 
     # comparisons
-
     testfunctions = [isequal, isless, <, >, ==]
+    sethue("green")
     for f in testfunctions
-        randomhue()
         for i in 1:length(randompoints)-1
             if f(randompoints[i], randompoints[i+1])
-                circle(randompoints[i], i * 1.2, :stroke)
-                circle(randompoints[i+1], i * 1.3, :stroke)
+                circle(randompoints[i], 18, :fill)
+                circle(randompoints[i+1], 7, :fill)
+                text(string("$f"), randompoints[i] - 12)
             end
         end
     end
 
-# TODO: Version 0.6 gives these warnings
-# WARNING: .< is no longer a function object; use broadcast(<, ...) instead
-# WARNING: .> is no longer a function object; use broadcast(>, ...) instead
-# WARNING: .>= is no longer a function object; use broadcast(>=, ...) instead
-# WARNING: .<= is no longer a function object; use broadcast(<=, ...) instead
-
-    testfunctions = [.<, .>, .>=, .<=]
-    for f in testfunctions
-        randomhue()
-            if f(randompoints[1:npoints], randompoints[npoints:-1:1]) == true
-                ellipse(randompoints[i], i * 1.2, i * 1.3, :stroke)
+    if VERSION < v"0.6.0-"
+        # .<(p1, p2)              = p1 < p2
+        # .>(p1, p2)              = p2 < p1
+        # .<=(p1, p2)             = p1 <= p2
+        # .>=(p1, p2)             = p2 <= p1
+        testfunctions = [.<, .>, .>=, .<=]
+        sethue("blue")
+        for f in testfunctions
+            for i in 1:length(randompoints)-1
+                if f(randompoints[1:npoints], randompoints[npoints:-1:1]) != true
+                    ellipse(randompoints[i], 12, 23, :fill)
+                    text(string("$f 4 & 5"), randompoints[i] + 6)
+                end
             end
+        end
+    else
+        # WARNING: .< is no longer a function object; use broadcast(<, ...) instead
+        # WARNING: .> is no longer a function object; use broadcast(>, ...) instead
+        # WARNING: .>= is no longer a function object; use broadcast(>=, ...) instead
+        # WARNING: .<= is no longer a function object; use broadcast(<=, ...) instead
+        testfunctions = [<, >, >=, <=]
+        sethue("orange")
+        for f in testfunctions
+            for i in 1:length(randompoints)-1
+                if f.(randompoints[1:npoints], randompoints[npoints:-1:1]) != true
+                    ellipse(randompoints[i], 19, 32, :fill)
+                    text(string("v6"), randompoints[i] - 6)
+                end
+            end
+        end
     end
 
+    sethue("purple")
     for i in 1:length(randompoints)-1
         v = cmp(randompoints[i], randompoints[i+1])
         text(string(round(v, 1)), randompoints[i] + 15)
     end
 
+    sethue("cyan")
     for i in 1:length(randompoints)-1
         n = norm(randompoints[i], randompoints[i+1])
         text(string(round(n, 1)), randompoints[i])
     end
 
+    sethue("magenta")
     map(pt -> circle(pt, 6, :stroke), [midpoint(randompoints), randompoints[1], randompoints[2]])
 
     if all(randompoints .== randompoints)

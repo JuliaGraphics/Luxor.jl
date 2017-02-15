@@ -53,11 +53,18 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 >(p1::Point, p2::Point)               = p2 < p1
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
 
-.<(p1::Point, p2::Point)              = p1 < p2
-.>(p1::Point, p2::Point)              = p2 < p1
+# TODO: Version 0.6 gives these warnings
+# WARNING: .< is no longer a function object; use broadcast(<, ...) instead
+# WARNING: .> is no longer a function object; use broadcast(>, ...) instead
+# WARNING: .>= is no longer a function object; use broadcast(>=, ...) instead
+# WARNING: .<= is no longer a function object; use broadcast(<=, ...) instead
 
-.<=(p1::Point, p2::Point)             = p1 <= p2
-.>=(p1::Point, p2::Point)             = p2 <= p1
+if VERSION < v"0.6.0-"
+    .<(p1::Point, p2::Point)              = p1 < p2
+    .>(p1::Point, p2::Point)              = p2 < p1
+    .<=(p1::Point, p2::Point)             = p1 <= p2
+    .>=(p1::Point, p2::Point)             = p2 <= p1
+end
 
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
