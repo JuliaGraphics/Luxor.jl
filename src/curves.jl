@@ -190,12 +190,12 @@ function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
 end
 
 """
-    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action)
+    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)
 
 Draw an annular sector centered at `centerpoint`.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, 
-      endangle::Real, action::Symbol)
+      endangle::Real, action::Symbol=:none)
     gsave()
     translate(centerpoint)
     newpath()
@@ -210,11 +210,11 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
 end
 
 "Draw an annular sector centered at the origin."
-sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol) = 
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol=:none) = 
     sector(O, innerradius, outerradius, startangle, endangle, action)
 
 """
-    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, cornerradius, action)
+    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, cornerradius, action:none)
 
 Draw an annular sector with rounded corners, basically a bent sausage shape, centered at `centerpoint`.
 
@@ -224,7 +224,7 @@ the curves join.
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, 
-    endangle::Real, cornerradius::Real, action::Symbol)      
+    endangle::Real, cornerradius::Real, action::Symbol=:none)
     gsave()
     translate(centerpoint)
     # some work is done using polar coords to calculate the points
@@ -287,7 +287,7 @@ end
 
 "Draw an annular sector with rounded corners, centered at the current origin."
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, 
-    cornerradius::Real, action::Symbol) = 
+    cornerradius::Real, action::Symbol=:none) = 
     sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)     
 
 """

@@ -2,7 +2,7 @@
 
 Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to [Cairo.jl](https://github.com/JuliaLang/Cairo.jl).
 
-Please submit issues and pull requests.
+Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl).
 
 ## Current status
 
