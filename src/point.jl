@@ -1,4 +1,4 @@
-import Base: +, -, *, /, .*, ./, ^, !=, <, >, ==, .<, .>, .>=, .<=, norm
+import Base: +, -, *, /, ^, !=, <, >, ==, norm
 import Base: isequal, isless, isapprox, cmp, dot, size, getindex
 
 """
@@ -26,12 +26,7 @@ const O = Point(0, 0)
 *(k::Number, p2::Point)              = Point(k * p2.x,    k * p2.y)
 *(p2::Point, k::Number)              = Point(k * p2.x,    k * p2.y)
 /(p2::Point, k::Number)              = Point(p2.x/k,      p2.y/k)
-.*(k::Number, p2::Point)             = Point(k * p2.x,    k * p2.y)
-.*(p2::Point, k::Number)             = Point(k * p2.x,    k * p2.y)
-
 *(p1::Point, p2::Point)              = Point(p1.x * p2.x, p1.y * p2.y)
-
-./(p2::Point, k::Number)             = Point(p2.x/k,      p2.y/k)
 ^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
 ^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
 
@@ -53,13 +48,12 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 >(p1::Point, p2::Point)               = p2 < p1
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
 
-# TODO: Version 0.6 gives these warnings
-# WARNING: .< is no longer a function object; use broadcast(<, ...) instead
-# WARNING: .> is no longer a function object; use broadcast(>, ...) instead
-# WARNING: .>= is no longer a function object; use broadcast(>=, ...) instead
-# WARNING: .<= is no longer a function object; use broadcast(<=, ...) instead
-
+# These have been replaced in v0.6 with broadcasting syntax
 if VERSION < v"0.6.0-"
+    import Base: .*, ./, .<, .>, .>=, .<=
+    .*(k::Number, p2::Point)              = Point(k * p2.x,    k * p2.y)
+    .*(p2::Point, k::Number)              = Point(k * p2.x,    k * p2.y)
+    ./(p2::Point, k::Number)              = Point(p2.x/k,      p2.y/k)
     .<(p1::Point, p2::Point)              = p1 < p2
     .>(p1::Point, p2::Point)              = p2 < p1
     .<=(p1::Point, p2::Point)             = p1 <= p2

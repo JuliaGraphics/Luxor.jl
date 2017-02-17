@@ -80,7 +80,7 @@ export Drawing, currentdrawing,
     Sequence, animate
 
 # as of version 0.4, we still share fill() and scale() with Base.
-
+# as of version 0.6, we still share fill() with Base.
 import Base: fill, scale
 
 # basic unit conversion to Cairo/PostScript points
