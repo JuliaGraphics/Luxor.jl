@@ -3,7 +3,7 @@
     setcolor("darkturquoise")
 
 Set the current color to a named color. This use the definitions in Colors.jl to convert a
-string to RGBA eg `setcolor("gold")`` or "green", "darkturquoise", "lavender", etc. The list
+string to RGBA eg `setcolor("gold")` or "green", "darkturquoise", "lavender", etc. The list
 is at `Colors.color_names`.
 
 Use `sethue()` for changing colors without changing current opacity level.
