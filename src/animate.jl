@@ -55,10 +55,9 @@ function animate(seq::Sequence, frames::Range, backdropfunc, framefunc;
     for currentframe in frames
         Drawing(seq.width, seq.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
         origin()
-        # use invoke() until 0.6 fixes #265 
-        # TODO WARNING: `invoke(f, (types...), ...)` is deprecated, use `invoke(f, Tuple{types...}, ...)` instead
-        invoke(backdropfunc, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
-        invoke(framefunc, (typeof(seq), typeof(currentframe), typeof(frames)), seq, currentframe, frames)
+        # use invoke()? TODO change for v0.6?
+        invoke(backdropfunc, Tuple{typeof(seq), typeof(currentframe), typeof(frames)}, seq, currentframe, frames)
+        invoke(framefunc, Tuple{typeof(seq), typeof(currentframe), typeof(frames)}, seq, currentframe, frames)
         finish()
         filecounter += 1
     end
