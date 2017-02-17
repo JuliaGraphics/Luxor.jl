@@ -3,7 +3,7 @@
     setcolor("darkturquoise")
 
 Set the current color to a named color. This use the definitions in Colors.jl to convert a
-string to RGBA eg setcolor("gold") # or "green", "darkturquoise", "lavender", etc. The list
+string to RGBA eg `setcolor("gold")`` or "green", "darkturquoise", "lavender", etc. The list
 is at `Colors.color_names`.
 
 Use `sethue()` for changing colors without changing current opacity level.
@@ -83,7 +83,7 @@ end
 
 Set the color without changing opacity.
 
-`sethue()` is like `setcolor()`, but we sometimes want to change the current 'color' without
+`sethue()` is like `setcolor()`, but we sometimes want to change the current color without
 changing alpha/opacity. Using `sethue()` rather than `setcolor()` doesn't change the current
 alpha opacity.
 """
@@ -100,7 +100,7 @@ end
 """
     sethue(col::ColorTypes.Colorant)
 
-Set the color without changing current opacity:
+Set the color without changing the current alpha/opacity:
 """
 function sethue(col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
@@ -150,9 +150,7 @@ setgrey(n) = setgray(n)
 """
     randomhue()
 
-Set a random hue.
-
-Choose a random color without changing the current alpha opacity.
+Set a random hue, without changing the current alpha opacity.
 """
 function randomhue()
   rrand, grand, brand = rand(3)
@@ -208,8 +206,6 @@ Set the compositing/blending mode. `mode` can be one of:
 - `"lighten"` Selects the lighter of the color values in each component.
 
 See the [Cairo documentation](https://www.cairographics.org/operators/) for details.
-
-Many of these work only in PNG drawings.
 """
 function setmode(operator::String)
     indx = findfirst(blendingmodes, operator)

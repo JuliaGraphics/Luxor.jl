@@ -13,7 +13,10 @@ specify another value. It doesn't need stroking/filling, the shaft is `stroke()`
 head `fill()`ed with the current color.
 
 """
-function arrow(startpoint::Point, endpoint::Point; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
+function arrow(startpoint::Point, endpoint::Point; 
+    linewidth=1.0, 
+    arrowheadlength=10, 
+    arrowheadangle=pi/8)
   gsave()
   setlinejoin("butt")
   setline(linewidth)
@@ -63,7 +66,10 @@ x-axis.
 
 Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
 """
-function arrow(centerpos::Point, radius, startangle, endangle; linewidth=1.0, arrowheadlength=10, arrowheadangle=pi/8)
+function arrow(centerpos::Point, radius, startangle, endangle; 
+    linewidth=1.0, 
+    arrowheadlength=10, 
+    arrowheadangle=pi/8)
   gsave()
   setlinejoin("butt")
   setline(linewidth)

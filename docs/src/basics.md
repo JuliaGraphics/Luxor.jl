@@ -16,7 +16,7 @@ Angles are mostly supplied in radians, measured starting at the positive x-axis 
 
 Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
 
-Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points:
+Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points (assuming the current scale is 1:1):
 
 - inch (`in` is unavailable, being used by `for` syntax)
 - cm   (centimeters)
@@ -649,7 +649,9 @@ arrow
 
 A path is a group of points. A path can have subpaths (which can form holes).
 
-The `getpath()` function gets the current path as an array of elements, lines and curves. `getpathflat()` gets the current path as an array of lines with all curves flattened to line segments.
+The `getpath()` function gets the current path as an array of elements, lines and curves. 
+
+`getpathflat()` gets the current path as an array of lines with all curves flattened to line segments.
 
 ```@example
 using Luxor # hide
@@ -690,8 +692,7 @@ getpathflat
 
 ## Julia graphics
 
-A couple of functions in Luxor provide you with instant access to the Julia logo, and the
-three colored circles:
+A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:
 
 ```@example
 using Luxor # hide
@@ -757,8 +758,7 @@ hypotrochoid
 
 ### Grids
 
-If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy:
-they'll supply the next point on the grid when you need it.
+If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you need it.
 
 Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`.
 
@@ -806,7 +806,6 @@ nothing # hide
 ```
 
 ![grids](assets/figures/grid-hex.png)
-
 
 ```@docs
 GridRect
