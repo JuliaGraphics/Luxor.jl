@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor
-end
+    end
 ```
 
 # The basics
