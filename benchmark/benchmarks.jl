@@ -25,7 +25,8 @@ end
 
 #=
 
-results of latest version of 2017-02-02 13:54:56 
+results of version of 2017-02-02 13:54:56 
+macOS, Luxor release 0.7.5, Julia release 0.5
 
 BenchmarkTools.Trial: 
   memory estimate:  90.02 kb
@@ -56,9 +57,8 @@ BenchmarkTools.Trial:
   memory tolerance: 1.00%
 
 
-results of latest version of 2017-02-18 08:46:03 
-
-macOS v0.5
+results of version of 2017-02-18 08:46:03 
+macOS, Luxor release 0.8, Julia release 0.5
 
 BenchmarkTools.Trial: 
   memory estimate:  90.02 KiB
@@ -88,9 +88,8 @@ BenchmarkTools.Trial:
   time tolerance:   5.00%
   memory tolerance: 1.00%
 
-results of latest version of 2017-02-18 08:51:01
-
-macOS, v0.6
+results of version of 2017-02-18 08:51:01
+macOS, Luxor release 0.8, Julia release 0.6
 
 BenchmarkTools.Trial: 
   memory estimate:  89.92 KiB
