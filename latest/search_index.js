@@ -5,7 +5,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Introduction to Luxor",
     "category": "page",
-    "text": "DocTestSetup = quote\n    using Luxor\n    function get_os()\n           if is_apple()\n               osname = \"macOS\"\n           elseif is_unix()\n               osname = \"UNIX\"\n           elseif is_linux()\n               osname = \"Linux\"\n           elseif is_windows()\n               osname = \"Windows\"\n           else\n               osname = \"unspecified\"\n           end\n           return osname\n       end\nend"
+    "text": ""
 },
 
 {
@@ -30,14 +30,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Installation and basic usage",
     "category": "section",
     "text": "Install the package as follows:Pkg.add(\"Luxor\")and to use it:using LuxorOriginal version by cormullion."
-},
-
-{
-    "location": "index.html#Documentation-1",
-    "page": "Introduction to Luxor",
-    "title": "Documentation",
-    "category": "section",
-    "text": "The documentation was built using Documenter.jl.function get_os() # hide\n    if is_apple() # hide\n        osname = \"macOS\" # hide\n    elseif is_unix() # hide\n        osname = \"UNIX\" # hide\n    elseif is_linux() # hide\n        osname = \"Linux\" # hide\n    elseif is_windows() # hide\n        osname = \"Windows\" # hide\n    else # hide\n        osname = \"unspecified\" # hide\n    end # hide\n    return osname # hide\nend # hide\nprintln(\"Build date: $(now()), built with Julia $(VERSION) on $(get_os()).\") # hide"
 },
 
 {
@@ -141,7 +133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Basic graphics",
     "category": "page",
-    "text": "DocTestSetup = quote\n    using Luxor\n    end"
+    "text": "DocTestSetup = quote\n    using Luxor\nend"
 },
 
 {
