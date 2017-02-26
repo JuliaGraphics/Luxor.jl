@@ -51,6 +51,8 @@ nothing # hide
 
 ![background](assets/figures/julia-logos.png)
 
+The `gsave()` function saves the current drawing parameters, and the subsequent changes such as the `scale()` and `rotate()` oeprates can be discarded by the next `grestore()` function.
+
 You can change the extension of the file name, for example "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps", to produce alternative formats.
 
 ## Something a bit more complicated: a Sierpinski triangle

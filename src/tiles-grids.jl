@@ -113,7 +113,7 @@ type GridRect
     end
 end
 
-"""
+doc"""
     GridHex(startpoint, radius, width=1200.0, height=1200.0)
 
 Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis and 
