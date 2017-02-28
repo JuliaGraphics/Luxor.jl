@@ -119,7 +119,7 @@ axes
 origin
 ```
 
-### Tiles
+## Tiles
 
 The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile.
 
@@ -159,7 +159,7 @@ nothing # hide
 Tiler
 ```
 
-### Save and restore
+## Save and restore
 
 `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
 
@@ -408,7 +408,57 @@ nothing # hide
 ```
 ![rounded rect](assets/figures/round-rect.png)
 
-### Arcs and curves
+## The current position
+
+There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, `arc()` and `curve()`.
+
+```@docs
+move
+rmove
+```
+
+## Lines
+
+Use `line()` and `rline()` to draw straight lines.
+
+```@docs
+line
+rline
+```
+
+You can use `rule()` to draw a line across the entire drawing through a point, at an angle to the current x-axis. 
+
+`rule()` returns two points that are probably outside the drawing area. Use `line()`, for example, to draw a straight line joining them.
+
+```@example
+using Luxor # hide
+Drawing(700, 200, "assets/figures/rule.png") # hide
+
+srand(42) # hide
+background("white") # hide
+sethue("black") # hide
+setline(1) # hide
+
+y = 10
+for x in logspace(0, 2.75, 40)
+    circle(Point(x, y), 2, :fill)
+    line(rule(Point(x, y), -pi/2)..., :stroke)
+    y += 2
+end
+
+finish() # hide
+nothing # hide
+```
+
+![arc](assets/figures/rule.png)
+
+```@docs
+rule
+```
+
+## Arcs and curves
+
+There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. 
 
 `curve()` constructs Bèzier curves from control points:
 
@@ -441,7 +491,7 @@ nothing # hide
 
 ![curve](assets/figures/curve.png)
 
-There are a few arc-drawing commands, such as `arc()`, `carc()`, and `arc2r()`. `arc2r()` draws a circular arc that joins two points:  
+`arc2r()` draws a circular arc that joins two points:  
 
 ```@example
 using Luxor # hide
@@ -471,17 +521,6 @@ arc2r
 carc
 carc2r
 curve
-```
-
-## Lines and positions
-
-There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, and `curve()`.
-
-```@docs
-move
-rmove
-line
-rline
 ```
 
 ## Geometry tools ##
@@ -647,11 +686,13 @@ arrow
 
 ## Paths
 
-A path is a group of points. A path can have subpaths (which can form holes).
+A path is a sequence of lines and curves. A path can have subpaths, which can form holes.
 
 The `getpath()` function gets the current path as an array of elements, lines and curves. 
 
 `getpathflat()` gets the current path as an array of lines with all curves flattened to line segments.
+
+This example uses `getpathflat()` to create a path from the outlines of the letter "N" and stores it in the `pathdata`. Then elements of this path that contain exactly two points are used to create a polygon, which is then drawn and outlined.
 
 ```@example
 using Luxor # hide
