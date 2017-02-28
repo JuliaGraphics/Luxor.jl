@@ -607,14 +607,14 @@ rline(pt)       = rline(pt.x, pt.y)
 Draw a line across the entire drawing passing through `pos`, at an angle of `theta` to the 
 x-axis.
 
-Returns a tuple of two points that, if connected, rule a line across the current 
+Returns a tuple of two points that, if connected, would rule a line across the current 
 drawing.
 
 TODO: I don't know how to calculate the end points exactly, so this just throws two points 
 way outside the current drawing and hopes that it will stay outside.
 """
 function rule(pos, theta=0.0)
-    # TODO stop cheating 
+    # TODO stop cheating :)
     cheatfactor = 20.0
     lengthx = cheatfactor * currentdrawing.width
     lengthy = cheatfactor * currentdrawing.height
