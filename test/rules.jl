@@ -1,0 +1,30 @@
+#!/usr/bin/env julia
+
+using Luxor
+
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
+
+function rule_test(fname)
+    Drawing(2000, 2000, fname)
+    origin()
+    setline(0.2)
+    for x in logspace(0, 3, 60)
+        line(rule(Point(0 + x, 0), pi/2)..., :stroke)
+        line(rule(Point(0 - x, 0), pi/2)..., :stroke)
+        rotate(0.05)
+    end    
+    for y in logspace(0, 3, 60)
+        line(rule(Point(0, 0 + y), 0)..., :stroke)
+        line(rule(Point(0, 0 - y), 0)..., :stroke)
+        rotate(0.05)
+    end
+    @test finish() == true
+    println("...finished test: output in $(fname)")
+end
+
+rule_test("rules.pdf")
