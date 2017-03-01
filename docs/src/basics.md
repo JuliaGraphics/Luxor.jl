@@ -426,15 +426,11 @@ line
 rline
 ```
 
-You can use `rule()` to draw a line across the entire drawing through a point, at an angle to the current x-axis. 
-
-`rule()` returns two points that are probably outside the drawing area. Use `line()`, for example, to draw a straight line joining them.
+You can use `rule()` to draw a line across the entire drawing through a point, at an angle to the current x-axis.
 
 ```@example
 using Luxor # hide
 Drawing(700, 200, "assets/figures/rule.png") # hide
-
-srand(42) # hide
 background("white") # hide
 sethue("black") # hide
 setline(1) # hide
@@ -442,7 +438,7 @@ setline(1) # hide
 y = 10
 for x in logspace(0, 2.75, 40)
     circle(Point(x, y), 2, :fill)
-    line(rule(Point(x, y), -pi/2)..., :stroke)
+    rule(Point(x, y), -pi/2)
     y += 2
 end
 

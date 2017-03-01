@@ -352,7 +352,7 @@ function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
 end
 
 """
-    polar(p)
+    @polar (p)
 
 Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.
 
@@ -368,5 +368,18 @@ macro polar(p)
       Point($(esc(p))[1] * cos($(esc(p))[2]), $(esc(p))[1] * sin($(esc(p))[2]))
     end
 end
+
+"""
+    polar(r, theta)
+
+Convert point in polar form (radius and angle) to a Point.
+
+    polar(10, pi/4)                                                                   09:19:38  v5   src 
+
+produces
+
+    Luxor.Point(7.071067811865475,7.0710678118654755)
+"""
+polar(r, theta) = Point(r * sin(theta), r * cos(theta))
 
 # end

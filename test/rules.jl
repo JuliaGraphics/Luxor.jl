@@ -14,13 +14,13 @@ function rule_test(fname)
     origin()
     setline(0.2)
     for x in logspace(0, 3, 60)
-        line(rule(Point(0 + x, 0), pi/2)..., :stroke)
-        line(rule(Point(0 - x, 0), pi/2)..., :stroke)
+        rule(Point(0 + x, 0), pi/2)
+        rule(Point(0 - x, 0), pi/2)
         rotate(0.05)
     end    
     for y in logspace(0, 3, 60)
-        line(rule(Point(0, 0 + y), 0)..., :stroke)
-        line(rule(Point(0, 0 - y), 0)..., :stroke)
+        rule(Point(0, 0 + y), 0)
+        rule(Point(0, 0 - y), 0)
         rotate(0.05)
     end
     @test finish() == true

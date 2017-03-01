@@ -193,7 +193,7 @@ This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorit
 function isinside(p::Point, pointlist::Array)
     c = false
     detq(q1, q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
-    for counter in 1:length(pointlist)
+    @inbounds for counter in 1:length(pointlist)
         q1 = pointlist[counter]
         # if reached last point, set "next point" to first point
         if counter == length(pointlist)
