@@ -361,6 +361,62 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.move",
+    "page": "Basic graphics",
+    "title": "Luxor.move",
+    "category": "Function",
+    "text": "move(x, y)\nmove(pt)\n\nMove to a point.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.rmove",
+    "page": "Basic graphics",
+    "title": "Luxor.rmove",
+    "category": "Function",
+    "text": "rmove(x, y)\n\nMove by an amount from the current point. Move relative to current position by x and y:\n\nMove relative to current position by the pt's x and y:\n\nrmove(pt)\n\n\n\n"
+},
+
+{
+    "location": "basics.html#The-current-position-1",
+    "page": "Basic graphics",
+    "title": "The current position",
+    "category": "section",
+    "text": "There is a 'current position' which you can set with move(), and can use implicitly in functions like line(), text(), arc() and curve().move\nrmove"
+},
+
+{
+    "location": "basics.html#Luxor.line",
+    "page": "Basic graphics",
+    "title": "Luxor.line",
+    "category": "Function",
+    "text": "line(x, y)\nline(x, y, :action)\nline(pt)\n\nCreate a line from the current position to the x/y position and optionally apply an action:\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.rline",
+    "page": "Basic graphics",
+    "title": "Luxor.rline",
+    "category": "Function",
+    "text": "rline(x, y)\nrline(x, y, :action)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position and optionally apply an action:\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.rule",
+    "page": "Basic graphics",
+    "title": "Luxor.rule",
+    "category": "Function",
+    "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the  x-axis.\n\nReturns a tuple of two points that, if connected, would rule a line across the current  drawing.\n\nTODO: I don't know how to calculate the end points exactly, so this just throws two points  way outside the current drawing and hopes that it will stay outside.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Lines-1",
+    "page": "Basic graphics",
+    "title": "Lines",
+    "category": "section",
+    "text": "Use line() and rline() to draw straight lines.line\nrlineYou can use rule() to draw a line across the entire drawing through a point, at an angle to the current x-axis. rule() returns two points that are probably outside the drawing area. Use line(), for example, to draw a straight line joining them.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\n\nsrand(42) # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ny = 10\nfor x in logspace(0, 2.75, 40)\n    circle(Point(x, y), 2, :fill)\n    line(rule(Point(x, y), -pi/2)..., :stroke)\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)rule"
+},
+
+{
     "location": "basics.html#Luxor.arc",
     "page": "Basic graphics",
     "title": "Luxor.arc",
@@ -405,47 +461,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Arcs and curves",
     "category": "section",
-    "text": "curve() constructs Bèzier curves from control points:using Luxor # hide\nDrawing(500, 275, \"assets/figures/curve.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetline(.5)\npt1 = Point(0, -125)\npt2 = Point(200, 125)\npt3 = Point(200, -125)\n\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])\n\nline(O, pt1, :stroke)\nline(pt2, pt3, :stroke)\n\nsethue(\"black\")\nsetline(3)\n\nmove(O)\ncurve(pt1, pt2, pt3)\nstroke()\nfinish()  # hide\nnothing # hide(Image: curve)There are a few arc-drawing commands, such as arc(), carc(), and arc2r(). arc2r() draws a circular arc that joins two points:  using Luxor # hide\nDrawing(700, 200, \"assets/figures/arc2r.png\") # hide\norigin() # hide\nsrand(42) # hide\nbackground(\"white\") # hide\ntiles = Tiler(700, 200, 1, 6)\nfor (pos, n) in tiles\n    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)\n    sethue(\"black\")\n    map(pt -> circle(pt, 4, :fill), [c1, pt3])\n    sethue(\"red\")\n    circle(pt2, 4, :fill)\n    randomhue()\n    arc2r(c1, pt2, pt3, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)arc\narc2r\ncarc\ncarc2r\ncurve"
-},
-
-{
-    "location": "basics.html#Luxor.move",
-    "page": "Basic graphics",
-    "title": "Luxor.move",
-    "category": "Function",
-    "text": "move(x, y)\nmove(pt)\n\nMove to a point.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.rmove",
-    "page": "Basic graphics",
-    "title": "Luxor.rmove",
-    "category": "Function",
-    "text": "rmove(x, y)\n\nMove by an amount from the current point. Move relative to current position by x and y:\n\nMove relative to current position by the pt's x and y:\n\nrmove(pt)\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.line",
-    "page": "Basic graphics",
-    "title": "Luxor.line",
-    "category": "Function",
-    "text": "line(x, y)\nline(x, y, :action)\nline(pt)\n\nCreate a line from the current position to the x/y position and optionally apply an action:\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.rline",
-    "page": "Basic graphics",
-    "title": "Luxor.rline",
-    "category": "Function",
-    "text": "rline(x, y)\nrline(x, y, :action)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position and optionally apply an action:\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Lines-and-positions-1",
-    "page": "Basic graphics",
-    "title": "Lines and positions",
-    "category": "section",
-    "text": "There is a 'current position' which you can set with move(), and can use implicitly in functions like line(), text(), and curve().move\nrmove\nline\nrline"
+    "text": "There are a few standard arc-drawing commands, such as curve(), arc(), carc(), and arc2r(). curve() constructs Bèzier curves from control points:using Luxor # hide\nDrawing(500, 275, \"assets/figures/curve.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetline(.5)\npt1 = Point(0, -125)\npt2 = Point(200, 125)\npt3 = Point(200, -125)\n\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])\n\nline(O, pt1, :stroke)\nline(pt2, pt3, :stroke)\n\nsethue(\"black\")\nsetline(3)\n\nmove(O)\ncurve(pt1, pt2, pt3)\nstroke()\nfinish()  # hide\nnothing # hide(Image: curve)arc2r() draws a circular arc that joins two points:  using Luxor # hide\nDrawing(700, 200, \"assets/figures/arc2r.png\") # hide\norigin() # hide\nsrand(42) # hide\nbackground(\"white\") # hide\ntiles = Tiler(700, 200, 1, 6)\nfor (pos, n) in tiles\n    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)\n    sethue(\"black\")\n    map(pt -> circle(pt, 4, :fill), [c1, pt3])\n    sethue(\"red\")\n    circle(pt2, 4, :fill)\n    randomhue()\n    arc2r(c1, pt2, pt3, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)arc\narc2r\ncarc\ncarc2r\ncurve"
 },
 
 {
@@ -605,7 +621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Paths",
     "category": "section",
-    "text": "A path is a group of points. A path can have subpaths (which can form holes).The getpath() function gets the current path as an array of elements, lines and curves. getpathflat() gets the current path as an array of lines with all curves flattened to line segments.using Luxor # hide\nDrawing(400, 250, \"assets/figures/get-path.png\") # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.75) # hide\nsethue(\"black\") # hide\nfontsize(220) # hide\ntranslate(-textextents(\"N\")[3]/2, textextents(\"N\")[4]/2) # hide\ntextpath(\"N\")\npathdata = getpathflat()\noutline = Point[]\nfor i in pathdata[1:end-1]\n    if length(i.points) == 2\n        x = i.points[1]\n        y = i.points[2]\n        push!(outline, Point(x, y))\n    end\nend\npoly(outline, :stroke, close=true)\nfor i in 5:5:35\n    poly(offsetpoly(outline, i), :stroke, close=true)\nend\nfinish() # hide\nnothing # hide(Image: get path)newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflat"
+    "text": "A path is a sequence of lines and curves. A path can have subpaths, which can form holes.The getpath() function gets the current path as an array of elements, lines and curves. getpathflat() gets the current path as an array of lines with all curves flattened to line segments.This example uses getpathflat() to create a path from the outlines of the letter \"N\" and stores it in the pathdata. Then elements of this path that contain exactly two points are used to create a polygon, which is then drawn and outlined.using Luxor # hide\nDrawing(400, 250, \"assets/figures/get-path.png\") # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.75) # hide\nsethue(\"black\") # hide\nfontsize(220) # hide\ntranslate(-textextents(\"N\")[3]/2, textextents(\"N\")[4]/2) # hide\ntextpath(\"N\")\npathdata = getpathflat()\noutline = Point[]\nfor i in pathdata[1:end-1]\n    if length(i.points) == 2\n        x = i.points[1]\n        y = i.points[2]\n        push!(outline, Point(x, y))\n    end\nend\npoly(outline, :stroke, close=true)\nfor i in 5:5:35\n    poly(offsetpoly(outline, i), :stroke, close=true)\nend\nfinish() # hide\nnothing # hide(Image: get path)newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflat"
 },
 
 {
