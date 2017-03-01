@@ -405,7 +405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.rule",
     "category": "Function",
-    "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the  x-axis.\n\nReturns a tuple of two points that, if connected, would rule a line across the current  drawing.\n\nTODO: I don't know how to calculate the end points exactly, so this just throws two points  way outside the current drawing and hopes that it will stay outside.\n\n\n\n"
+    "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the  x-axis. Returns the two points.\n\nTODO: I don't know how to calculate the end points exactly, so this just throws two points  way outside the current drawing and hopes that it will stay outside.\n\n\n\n"
 },
 
 {
@@ -413,7 +413,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Lines",
     "category": "section",
-    "text": "Use line() and rline() to draw straight lines.line\nrlineYou can use rule() to draw a line across the entire drawing through a point, at an angle to the current x-axis. rule() returns two points that are probably outside the drawing area. Use line(), for example, to draw a straight line joining them.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\n\nsrand(42) # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ny = 10\nfor x in logspace(0, 2.75, 40)\n    circle(Point(x, y), 2, :fill)\n    line(rule(Point(x, y), -pi/2)..., :stroke)\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)rule"
+    "text": "Use line() and rline() to draw straight lines.line\nrlineYou can use rule() to draw a line across the entire drawing through a point, at an angle to the current x-axis.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ny = 10\nfor x in logspace(0, 2.75, 40)\n    circle(Point(x, y), 2, :fill)\n    rule(Point(x, y), -pi/2)\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)rule"
 },
 
 {
@@ -549,7 +549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.@polar",
     "category": "Macro",
-    "text": "polar(p)\n\nConvert a tuple of two numbers to a Point of x, y Cartesian coordinates.\n\n@polar (10, pi/4)\n@polar [10, pi/4]\n\nproduces\n\nLuxor.Point(7.0710678118654755,7.071067811865475)\n\n\n\n"
+    "text": "@polar (p)\n\nConvert a tuple of two numbers to a Point of x, y Cartesian coordinates.\n\n@polar (10, pi/4)\n@polar [10, pi/4]\n\nproduces\n\nLuxor.Point(7.0710678118654755,7.071067811865475)\n\n\n\n"
 },
 
 {
