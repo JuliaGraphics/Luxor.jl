@@ -49,7 +49,9 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
 
 # These have been replaced in v0.6 with broadcasting syntax
-if VERSION < v"0.6.0-"
+# fix from https://github.com/JuliaLang/Compat.jl/issues/308
+if VERSION < v"0.6.0-dev.1632" # julia#17623
+    include_string("""
     import Base: .*, ./, .<, .>, .>=, .<=
     .*(k::Number, p2::Point)              = Point(k * p2.x,    k * p2.y)
     .*(p2::Point, k::Number)              = Point(k * p2.x,    k * p2.y)
@@ -58,6 +60,7 @@ if VERSION < v"0.6.0-"
     .>(p1::Point, p2::Point)              = p2 < p1
     .<=(p1::Point, p2::Point)             = p1 <= p2
     .>=(p1::Point, p2::Point)             = p2 <= p1
+    """, string(@__FILE__, ':', @__LINE__))
 end
 
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
@@ -374,7 +377,7 @@ end
 
 Convert point in polar form (radius and angle) to a Point.
 
-    polar(10, pi/4)                                                                   09:19:38  v5   src 
+    polar(10, pi/4)                                                                   09:19:38  v5   src
 
 produces
 
