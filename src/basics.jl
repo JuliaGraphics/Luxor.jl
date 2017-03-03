@@ -388,6 +388,10 @@ function gsave()
          currentdrawing.greenvalue,
          currentdrawing.bluevalue,
          currentdrawing.alpha))
+    return (currentdrawing.redvalue,
+         currentdrawing.greenvalue,
+         currentdrawing.bluevalue,
+         currentdrawing.alpha)
 end
 
 """

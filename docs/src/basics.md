@@ -80,7 +80,7 @@ The origin (0/0) starts off at the top left: the x axis runs left to right acros
 
 The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
-`background()` fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. In the next example, the first `background()` filled the entire drawing, but the calls in the loop fill only the active clipping region, a tile defined by the `Tiler` iterator:
+`background()` fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. In the next example, the first `background()` fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a tile defined by the `Tiler` iterator:
 
 ```@example
 using Luxor # hide
@@ -121,7 +121,7 @@ origin
 
 ## Tiles
 
-The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile.
+The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile in turn.
 
 In this example, every third tile is divided up into subtiles and colored:
 
@@ -333,9 +333,9 @@ using Luxor # hide
 Drawing(600, 200, "assets/figures/sectorrounded.png") # hide
 background("white") # hide
 origin() # hide
-sethue("tomato") 
+sethue("tomato")
 sector(50, 90, pi/2, 0, 15, :fill)
-sethue("olive") 
+sethue("olive")
 sector(Point(O.x + 200, O.y), 50, 90, pi/2, 0, 15, :fill)
 finish() # hide
 nothing # hide
@@ -366,7 +366,7 @@ nothing # hide
 pie
 ```
 
-A *squircle* is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste:
+A *squircle* is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste by supplying a value for keyword `rt`:
 
 ```@example
 using Luxor # hide
@@ -454,7 +454,7 @@ rule
 
 ## Arcs and curves
 
-There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. 
+There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`.
 
 `curve()` constructs Bèzier curves from control points:
 
@@ -523,7 +523,7 @@ curve
 
 You can find the midpoint between two points using `midpoint()`.
 
-The following code places a small pentagon at the midpoint of each side of a larger pentagon:
+The following code places a small pentagon (using `ngon()`) at the midpoint of each side of a larger pentagon:
 
 ```@example
 using Luxor # hide
@@ -539,15 +539,14 @@ p5 = ngon(O, 100, 5, 0, vertices=true)
 for i in eachindex(p5)
     pt1 = p5[mod1(i, 5)]
     pt2 = p5[mod1(i + 1, 5)]
-    midp = midpoint(pt1, pt2)
-    ngon(midp, 20, 5, 0, :fill)
+    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)
 end
 finish() # hide
 nothing # hide
 ```
 ![arc](assets/figures/midpoint.png)
 
-A more general function, `between()`, finds for a value `x` the corresponding point on a line defined by two points, normalized to the range 0 and 1. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
+A more general function, `between()`, finds for a value `x` between 0 and 1 the corresponding point on a line defined by two points. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
 
 ```@example
 using Luxor # hide
@@ -601,7 +600,7 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection.png)
 
-`intersection_line_circle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersections.
+`intersection_line_circle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
 
 ```@example
 using Luxor # hide
@@ -684,11 +683,11 @@ arrow
 
 A path is a sequence of lines and curves. A path can have subpaths, which can form holes.
 
-The `getpath()` function gets the current path as an array of elements, lines and curves. 
+The `getpath()` function gets the current path as an array of elements, lines and curves.
 
 `getpathflat()` gets the current path as an array of lines with all curves flattened to line segments.
 
-This example uses `getpathflat()` to create a path from the outlines of the letter "N" and stores it in the `pathdata`. Then elements of this path that contain exactly two points are used to create a polygon, which is then drawn and outlined.
+The next example uses `getpathflat()` to create a path from the outline of the letter "N" and stores it in `pathdata`. Then all elements of this path that contain exactly two points are used to create a polygon, which is then drawn and outlined.
 
 ```@example
 using Luxor # hide
@@ -770,7 +769,7 @@ juliacircles
 
 ### Hypotrochoids
 
-`hypotrochoid()` makes hypotrochoids. The results are polygons, so you can either draw them directly, or pass them on for further polygon fun.
+`hypotrochoid()` makes hypotrochoids. The result is a polygon. You can either it directly, or pass it on for further polygon fun, as here, which uses `offsetpoly()` to trace round it a few times.
 
 ```@example
 using Luxor # hide
@@ -781,7 +780,7 @@ sethue("antiquewhite")
 setline(1)
 p = hypotrochoid(100, 25, 55, :stroke, stepby=pi/325, vertices=true)
 for i in 0:3:15
-poly(offsetpoly(p, i), :stroke, close=true)
+    poly(offsetpoly(p, i), :stroke, close=true)
 end
 finish() # hide
 nothing # hide
@@ -797,7 +796,7 @@ hypotrochoid
 
 If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you need it.
 
-Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`.
+Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`, and get the next grid point from it with `nextgridpoint(grid)`.
 
 ```@example
 using Luxor # hide
@@ -818,7 +817,6 @@ nothing # hide
 ```
 
 ![grids](assets/figures/grids.png)
-
 
 ```@example
 using Luxor # hide
