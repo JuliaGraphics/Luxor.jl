@@ -23,6 +23,13 @@ You can access the calculated tile width and height like this:
     for (pos, n) in tiles
         ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
     end
+    
+It's sometimes useful to know which row and column you're currently on:
+    
+    tiles.currentrow
+    tiles.currentcol
+    
+should have that information for you.
 """
 type Tiler
     areawidth::Real
@@ -31,11 +38,15 @@ type Tiler
     tileheight::Real
     nrows::Int
     ncols::Int
+    currentrow::Int
+    currentcol::Int
     margin::Real
     function Tiler(areawidth, areaheight, nrows::Int, ncols::Int; margin=10)
         tilewidth  = (areawidth - 2margin)/ncols
         tileheight = (areaheight - 2margin)/nrows
-        new(areawidth, areaheight, tilewidth, tileheight, nrows, ncols, margin)
+        currentrow=1
+        currentcol=1
+        new(areawidth, areaheight, tilewidth, tileheight, nrows, ncols, currentrow, currentcol, margin)
     end
 end
 
@@ -59,6 +70,7 @@ function Base.next(pt::Tiler, state)
         y1 += pt.tileheight
         x1 = -(pt.areawidth/2) + pt.margin + (pt.tilewidth/2)
     end
+    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
