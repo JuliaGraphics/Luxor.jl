@@ -36,7 +36,7 @@ For interactive graphics, try [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl) 
 [travis-url]: https://travis-ci.org/JuliaGraphics/Luxor.jl
 
 [appvey-img]: https://ci.appveyor.com/api/projects/status/jfa9e54lv92rqd3m?svg=true
-[appvey-url]: https://ci.appveyor.com/api/projects/status/github/JuliaGraphics/Luxor.jl?branch=master&svg=true)
+[appvey-url]: https://ci.appveyor.com/project/cormullion/luxor-jl/branch/master
 
 [codecov-img]: https://codecov.io/gh/JuliaGraphics/Luxor.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/JuliaGraphics/Luxor.jl
