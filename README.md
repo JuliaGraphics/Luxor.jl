@@ -2,10 +2,10 @@
 
 | **Documentation**                       | [**Package Evaluator**][pkgeval-link] | **Build Status**                          | **Code Coverage**               |
 |:---------------------------------------:|:-------------------------------------:|:-----------------------------------------:|:-------------------------------:|
+|                                         | [![][pkg-0.4-img]][pkg-0.4-url]       |                                           |                                 |
 | [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
 | [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.6-img]][pkg-0.6-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
 
-[![Luxor](http://pkg.julialang.org/badges/Luxor_0.4.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.4)
 
 ![](docs/src/assets/figures/luxor-big-logo.png)
 
@@ -19,9 +19,13 @@ For interactive graphics, try [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl) 
 [docs-latest-url]: http://juliagraphics.github.io/Luxor.jl/latest/
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: https://astrolibjl.readthedocs.io/en/stable/
+[docs-stable-url]: http://juliagraphics.github.io/Luxor.jl/latest/
 
-[pkgeval-link]: http://pkg.julialang.org/?pkg=Luxor
+    [![Luxor](http://pkg.julialang.org/badges/Luxor_0.4.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.4)
+    [pkgeval-link]: http://pkg.julialang.org/?pkg=Luxor
+
+[pkg-0.4-img]: http://pkg.julialang.org/badges/Luxor_0.4.svg
+[pkg-0.4-url]: http://pkg.julialang.org/detail/Luxor.html
 
 [pkg-0.5-img]: http://pkg.julialang.org/badges/Luxor_0.5.svg
 [pkg-0.5-url]: http://pkg.julialang.org/detail/Luxor.html
