@@ -32,6 +32,7 @@ end
     setcolor(r, g, b, alpha)
     setcolor(color)
     setcolor(col::ColorTypes.Colorant)
+    setcolor(sethue("red")..., .2)
 
 Set the current color.
 
@@ -80,6 +81,7 @@ end
 """
     sethue("black")
     sethue(0.3,0.7,0.9)
+    setcolor(sethue("red")..., .2)
 
 Set the color without changing opacity.
 
