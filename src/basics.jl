@@ -352,21 +352,21 @@ rline(pt)       = rline(pt.x, pt.y)
 
 """
     rule(pos::Point, theta=0.0)
-    
-Draw a line across the entire drawing passing through `pos`, at an angle of `theta` to the 
+
+Draw a line across the entire drawing passing through `pos`, at an angle of `theta` to the
 x-axis. Returns the two points.
 
-TODO: I don't know how to calculate the end points exactly, so this just throws two points 
+TODO: I don't know how to calculate the end points exactly, so this just throws two points
 way outside the current drawing and hopes that it will stay outside.
 """
-function rule(pos, theta=0.0)
+function rule(pos::Point, theta=0.0)
     # TODO stop cheating :)
     cheatfactor = 20.0
     lengthx = cheatfactor * currentdrawing.width
     lengthy = cheatfactor * currentdrawing.height
-    (pt1, pt2) = (Point(pos.x + (-lengthx * cos(theta)), 
-                        pos.y + (-lengthy * sin(theta))), 
-                  Point(pos.x + (lengthx * cos(theta)), 
+    (pt1, pt2) = (Point(pos.x + (-lengthx * cos(theta)),
+                        pos.y + (-lengthy * sin(theta))),
+                  Point(pos.x + (lengthx * cos(theta)),
                         pos.y + (lengthy * sin(theta))))
     line(pt1, pt2, :stroke)
     return (pt1, pt2)
@@ -422,10 +422,10 @@ Example:
 
 """
 
-scale(sx, sy) = Cairo.scale(currentdrawing.cr, sx, sy)
+scale(sx::Real, sy::Real) = Cairo.scale(currentdrawing.cr, sx, sy)
 
 """
-    rotate(a)
+    rotate(a::Float64)
 
 Rotate workspace by `a` radians clockwise (from positive x-axis to positive y-axis).
 """
@@ -433,13 +433,13 @@ Rotate workspace by `a` radians clockwise (from positive x-axis to positive y-ax
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 
 """
-    translate(x, y)
+    translate(x::Real, y::Real)
     translate(point)
 
 Translate the workspace by `x` and `y` or by moving the origin to `pt`.
 """
 
-translate(tx, ty)        = Cairo.translate(currentdrawing.cr, tx, ty)
+translate(tx::Real, ty::Real)        = Cairo.translate(currentdrawing.cr, tx, ty)
 translate(pt::Point)     = translate(pt.x, pt.y)
 
 """
