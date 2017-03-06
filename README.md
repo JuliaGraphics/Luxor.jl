@@ -21,8 +21,7 @@ For interactive graphics, try [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl) 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
 [docs-stable-url]: http://juliagraphics.github.io/Luxor.jl/latest/
 
-    [![Luxor](http://pkg.julialang.org/badges/Luxor_0.4.svg)](http://pkg.julialang.org/?pkg=Luxor&ver=0.4)
-    [pkgeval-link]: http://pkg.julialang.org/?pkg=Luxor
+[pkgeval-link]: http://pkg.julialang.org/?pkg=Luxor
 
 [pkg-0.4-img]: http://pkg.julialang.org/badges/Luxor_0.4.svg
 [pkg-0.4-url]: http://pkg.julialang.org/detail/Luxor.html
