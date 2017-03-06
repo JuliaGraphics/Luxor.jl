@@ -7,7 +7,7 @@ module Luxor
 
 # as of version 0.4, we still have to share fill() and scale() with Base.
 # as of version 0.6, we still have to share fill() with Base.
-VERSION <= v"0.5" && import Base: fill, scale
+VERSION <= v"0.5+" && import Base: fill, scale
 VERSION >= v"0.6-" && import Base: fill
 
 using Colors, Cairo, Compat, FileIO
