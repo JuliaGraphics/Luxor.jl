@@ -725,7 +725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Colors and styles",
     "title": "Luxor.sethue",
     "category": "Function",
-    "text": "sethue(\"black\")\nsethue(0.3,0.7,0.9)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current color without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing the current alpha/opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color's r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\n"
+    "text": "sethue(\"black\")\nsethue(0.3,0.7,0.9)\nsetcolor(sethue(\"red\")..., .2)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current color without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing the current alpha/opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color's r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\n"
 },
 
 {
@@ -733,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Colors and styles",
     "title": "Luxor.setcolor",
     "category": "Function",
-    "text": "setcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nSet the current color to a named color. This use the definitions in Colors.jl to convert a string to RGBA eg setcolor(\"gold\") or \"green\", \"darkturquoise\", \"lavender\", etc. The list is at Colors.color_names.\n\nUse sethue() for changing colors without changing current opacity level.\n\nsethue() and setcolor() return the three or four values that were used:\n\njulia> setcolor(sethue(\"red\")..., .8)\n\n(1.0,0.0,0.0,0.8)\n\njulia> sethue(setcolor(\"red\")[1:3]...)\n\n(1.0,0.0,0.0)\n\n\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\n\nSet the current color.\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))\n   ...\nend\n\n\n\n"
+    "text": "setcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nSet the current color to a named color. This use the definitions in Colors.jl to convert a string to RGBA eg setcolor(\"gold\") or \"green\", \"darkturquoise\", \"lavender\", etc. The list is at Colors.color_names.\n\nUse sethue() for changing colors without changing current opacity level.\n\nsethue() and setcolor() return the three or four values that were used:\n\njulia> setcolor(sethue(\"red\")..., .8)\n\n(1.0,0.0,0.0,0.8)\n\njulia> sethue(setcolor(\"red\")[1:3]...)\n\n(1.0,0.0,0.0)\n\n\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\nsetcolor(sethue(\"red\")..., .2)\n\nSet the current color.\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))\n   ...\nend\n\n\n\n"
 },
 
 {
