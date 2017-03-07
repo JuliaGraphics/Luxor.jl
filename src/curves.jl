@@ -194,7 +194,7 @@ end
 
 Draw an annular sector centered at `centerpoint`.
 """
-function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, 
+function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
       endangle::Real, action::Symbol=:none)
     gsave()
     translate(centerpoint)
@@ -210,7 +210,7 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
 end
 
 "Draw an annular sector centered at the origin."
-sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol=:none) = 
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol=:none) =
     sector(O, innerradius, outerradius, startangle, endangle, action)
 
 """
@@ -223,7 +223,7 @@ the curves join.
 
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
-function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, 
+function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
     endangle::Real, cornerradius::Real, action::Symbol=:none)
     gsave()
     translate(centerpoint)
@@ -286,9 +286,9 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
 end
 
 "Draw an annular sector with rounded corners, centered at the current origin."
-sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, 
-    cornerradius::Real, action::Symbol=:none) = 
-    sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)     
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
+    cornerradius::Real, action::Symbol=:none) =
+    sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)
 
 """
     pie(x, y, radius, startangle, endangle, action=:none)
@@ -430,7 +430,7 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
 end
 
 """
-    hypotrochoid1(R, r, d, action=:none;
+    hypotrochoid(R, r, d, action=:none;
             stepby=0.01,
             period=0,
             vertices=false)
@@ -440,14 +440,16 @@ point attached to a circle of radius `r` rolling around the inside  of a fixed c
 radius `R`, where the point is a distance `d` from  the center of the interior circle.
 Things get interesting if you supply non-integral values.
 
-`stepby` controls the detail level. If `period` is not supplied, or 0, the lowest period is
-calculated for you.
+Special cases include the hypocycloid, if `d` = `r`, and an ellipse, if `R` = `2r`.
+
+`stepby`, the angular step value, controls the amount of detail, ie the smoothness of the
+polygon,
+
+If `period` is not supplied, or 0, the lowest period is calculated for you.
 
 The function can return a polygon (a list of points), or draw the points directly using
 the supplied `action`. If the points are drawn, the function returns a tuple showing how
 many points were drawn and what the period was (as a multiple of `pi`).
-
-Special cases include the hypocycloid, if `d` = `r`, and an ellipse, if `R` = `2r`.
 """
 function hypotrochoid(R, r, d, action=:none;
         stepby   = 0.01,
