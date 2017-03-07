@@ -101,43 +101,6 @@ nothing # hide
 
 ![polysmooth](assets/figures/polysmoothy.png)
 
-## Luxor logo
-
-In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.
-
-![logo](assets/figures/logo.png)
-
-```
-using Luxor, ColorSchemes
-
-function spiral(colscheme)
-  circle(0, 0, 90, :clip)
-  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
-    sethue(get(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
-    gsave()
-    rotate(theta)
-    move(5,0)
-    curve(Point(40, 40), Point(50, -40), Point(80, 30))
-    closepath()
-    fill()
-    grestore()
-  end
-  clipreset()
-end
-
-width = 225  # pts
-height = 225 # pts
-Drawing(width, height, "/tmp/logo.png")
-origin()
-background("white")
-scale(1.3, 1.3)
-using ColorSchemes.solar
-colschememirror = vcat(solar, reverse(solar))
-spiral(colschememirror)
-finish()
-preview()
-```
-
 ## Why turtles?
 
 An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here's an example of how a complex pattern can emerge from a simple set of rules, taken from [Lindenmayer.jl](https://github.com/cormullion/Lindenmayer.jl):
