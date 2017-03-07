@@ -661,7 +661,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.hypotrochoid",
     "category": "Function",
-    "text": "hypotrochoid1(R, r, d, action=:none;\n        stepby=0.01,\n        period=0,\n        vertices=false)\n\nMake a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius r rolling around the inside  of a fixed circle of radius R, where the point is a distance d from  the center of the interior circle. Things get interesting if you supply non-integral values.\n\nstepby controls the detail level. If period is not supplied, or 0, the lowest period is calculated for you.\n\nThe function can return a polygon (a list of points), or draw the points directly using the supplied action. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of pi).\n\nSpecial cases include the hypocycloid, if d = r, and an ellipse, if R = 2r.\n\n\n\n"
+    "text": "hypotrochoid(R, r, d, action=:none;\n        stepby=0.01,\n        period=0,\n        vertices=false)\n\nMake a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius r rolling around the inside  of a fixed circle of radius R, where the point is a distance d from  the center of the interior circle. Things get interesting if you supply non-integral values.\n\nSpecial cases include the hypocycloid, if d = r, and an ellipse, if R = 2r.\n\nstepby, the angular step value, controls the amount of detail, ie the smoothness of the polygon,\n\nIf period is not supplied, or 0, the lowest period is calculated for you.\n\nThe function can return a polygon (a list of points), or draw the points directly using the supplied action. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of pi).\n\n\n\n"
 },
 
 {
@@ -1814,14 +1814,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Illustrating this document",
     "category": "section",
     "text": "This documentation was built with Documenter.jl, which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the HTML pages are built: the Julia source for the image is stored in the Markdown source document, and the code to create the images runs each time the documentation is generated.The Markdown markup looks like this:```@example\nusing Luxor # hide\nDrawing(600, 250, \"assets/figures/polysmooth-pathological.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetopacity(0.75) # hide\nsrand(42) # hide\nsetline(1) # hide\np = star(O, 60, 5, 0.35, 0, vertices=true)\nsetdash(\"dot\")\nsethue(\"red\")\nprettypoly(p, close=true, :stroke)\nsetdash(\"solid\")\nsethue(\"black\")\npolysmooth(p, 40, :fill, debug=true)\nfinish() # hide\n```\n\n![polysmooth](assets/figures/polysmooth-pathological.png)and after you run Documenter's build process the HTML output looks like this:using Luxor # hide\nDrawing(600, 250, \"assets/figures/polysmoothy.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetopacity(0.75) # hide\nsrand(42) # hide\nsetline(1) # hide\np = star(O, 60, 5, 0.35, 0, vertices=true)\nsetdash(\"dot\")\nsethue(\"red\")\nprettypoly(p, close=true, :stroke)\nsetdash(\"solid\")\nsethue(\"black\")\npolysmooth(p, 40, :fill, debug=true)\nfinish() # hide\nnothing # hide(Image: polysmooth)"
-},
-
-{
-    "location": "moreexamples.html#Luxor-logo-1",
-    "page": "More examples",
-    "title": "Luxor logo",
-    "category": "section",
-    "text": "In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.(Image: logo)using Luxor, ColorSchemes\n\nfunction spiral(colscheme)\n  circle(0, 0, 90, :clip)\n  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom\n    sethue(get(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))\n    gsave()\n    rotate(theta)\n    move(5,0)\n    curve(Point(40, 40), Point(50, -40), Point(80, 30))\n    closepath()\n    fill()\n    grestore()\n  end\n  clipreset()\nend\n\nwidth = 225  # pts\nheight = 225 # pts\nDrawing(width, height, \"/tmp/logo.png\")\norigin()\nbackground(\"white\")\nscale(1.3, 1.3)\nusing ColorSchemes.solar\ncolschememirror = vcat(solar, reverse(solar))\nspiral(colschememirror)\nfinish()\npreview()"
 },
 
 {
