@@ -29,8 +29,7 @@ function test_ellipse(fname)
     end
     setline(5)
     sethue("black")
-    stroke()
-    fill()
+    fillstroke()
     ellipse(pos, 5, 5, :fill)
     clipreset()
   end

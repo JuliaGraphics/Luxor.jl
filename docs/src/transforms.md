@@ -16,7 +16,7 @@ for i in range(0, 30, 6)
     setopacity(0.5)
     circle(0, 0, 40, :fillpreserve)
     setcolor("black")
-    stroke()
+    strokepath()
     translate(50, 0)
 end
 finish() # hide
@@ -38,7 +38,7 @@ for i in range(0, 30, 6)
     sethue(HSV(i, 1, 1)) # from Colors
     circle(0, 0, 90, :fillpreserve)
     setcolor("black")
-    stroke()
+    strokepath()
     scale(0.8, 0.8)
 end
 finish() # hide
@@ -61,7 +61,7 @@ for i in 1:8
     randomhue()
     squircle(Point(40, 0), 20, 30, :fillpreserve)
     sethue("black")
-    stroke()
+    strokepath()
     rotate(pi/4)
 end
 finish() # hide

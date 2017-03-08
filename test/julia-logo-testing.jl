@@ -18,7 +18,7 @@ function julia_logo_test(fname)
         translate(pos - Point(150, 100))
         if n == 1
             julialogo()
-            fill()
+            fillpath()
         elseif n == 2
             randomhue()
             setline(0.3)

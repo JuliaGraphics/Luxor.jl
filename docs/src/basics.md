@@ -380,7 +380,7 @@ for (pos, n) in tiles
     sethue("lavender")
     squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)
     sethue("grey20")
-    stroke()
+    strokepath()
     textcentered("rt = $([0.3, 0.5, 0.7][n])", pos)
 end
 finish() # hide
@@ -480,7 +480,7 @@ setline(3)
 
 move(O)
 curve(pt1, pt2, pt3)
-stroke()
+strokepath()
 finish()  # hide
 nothing # hide
 ```
@@ -557,7 +557,7 @@ sethue("red")
 p1 = Point(-150, 0)
 p2 = Point(150, 40)
 line(p1, p2)
-stroke()
+strokepath()
 for i in -0.5:0.1:1.5
     randomhue()
     circle(between(p1, p2, i), 5, :fill)

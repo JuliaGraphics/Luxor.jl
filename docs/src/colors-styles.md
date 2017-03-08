@@ -65,7 +65,7 @@ for l in 1:3
     poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)
     sethue("white")
     setline(1)
-    stroke()
+    strokepath()
 end
 finish() # hide
 nothing # hide
@@ -101,8 +101,8 @@ setlinecap
 setlinejoin
 setdash
 fillstroke
-stroke
-fill
+strokepath
+fillpath
 strokepreserve
 fillpreserve
 paint
@@ -245,17 +245,17 @@ setline(20)
 blendgoldmagenta = blend(Point(-100, 0), Point(100, 0), "gold", "magenta")
 setblend(blendgoldmagenta)
 line(Point(-100, -50), Point(100, -50))
-stroke()
+strokepath()
 
 # second line
 blendadjust(blendgoldmagenta, Point(50, 0), 0.5, 0.5)
 line(O, Point(100, 0))
-stroke()
+strokepath()
 
 # third line
 blendadjust(blendgoldmagenta, Point(-50, 50), 0.5, 0.5)
 line(Point(-100, 50), Point(0, 50))
-stroke()
+strokepath()
 
 # fourth line
 gsave()
@@ -263,7 +263,7 @@ translate(0, 100)
 scale(0.5, 0.5)
 setblend(blendgoldmagenta)
 line(Point(-100, 0), Point(100, 0))
-stroke()
+strokepath()
 grestore()
 
 finish() # hide

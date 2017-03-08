@@ -79,7 +79,7 @@ function outlined_heart()
     heart()
     setline(4)
     setcolor(1,0,0)
-    stroke()
+    strokepath()
     grestore()
 end
 

@@ -5,10 +5,12 @@ The Luxor package provides a set of vector drawing functions for creating graphi
 """
 module Luxor
 
-# as of version 0.4, we still have to share fill() and scale() with Base.
-# as of version 0.6, we still have to share fill() with Base.
+# as of Julia version 0.4, we still have to share fill() and scale() with Base.
+# as of Julia version 0.6, we still have to share fill() with Base.
+# fill() is deprecated, replaced with fillpath()
 
 import Base: fill
+
 if isdefined(Base, :scale)
     import Base: scale
 end
@@ -31,6 +33,9 @@ include("colors_styles.jl")
 include("images.jl")
 include("animate.jl")
 
+@deprecate fill() fillpath()
+@deprecate stroke() strokepath()
+
 export Drawing, currentdrawing,
     cm, inch, mm,
     paper_sizes,
@@ -42,6 +47,9 @@ export Drawing, currentdrawing,
 
     newpath, closepath, newsubpath,
 
+    stroke, fill, # deprecated
+    strokepath, fillpath,
+
     rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
 
     move, rmove, line, rule, rline, arrow,
@@ -50,8 +58,9 @@ export Drawing, currentdrawing,
     arc, carc, arc2r, carc2r,
     sector,
 
+
     ngon, star, pie,
-    do_action, stroke, fill, paint, paint_with_alpha, fillstroke,
+    do_action, paint, paint_with_alpha, fillstroke,
 
     Point, O, randompoint, randompointarray, midpoint, between, slope, intersection,
     intersection_line_circle, pointlinedistance, getnearestpointonline, isinside,

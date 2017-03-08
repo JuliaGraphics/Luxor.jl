@@ -33,7 +33,7 @@ function draw_luxor_demo(fname)
     for i in 0:pi/36:2pi - pi/36
         move(0, 0)
         line(cos(i) * 600, sin(i) * 600)
-        stroke()
+        strokepath()
         move(cos(i) * 300, sin(i) * 300)
         rline(0, 5)
         rline(5, 0)
@@ -41,7 +41,7 @@ function draw_luxor_demo(fname)
         rline(-5, 0)
         rmove(10, 0)
         rline(-10, 0)
-        stroke()
+        strokepath()
     end
 
     # finish clipping
