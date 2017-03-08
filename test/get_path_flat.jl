@@ -15,7 +15,7 @@ function get_path_flat(str)
     setline(0.5)
     p = textpath(str)
     o = getpathflat()
-    stroke()
+    strokepath()
     sethue("red")
     x, y = 0, 0
     for e in o
@@ -26,7 +26,7 @@ function get_path_flat(str)
             (x, y) = e.points
             # straight lines
             line(x, y)
-            stroke()
+            strokepath()
             circle(x, y, 1, :stroke)
         elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
             (x1, y1, x2, y2, x3, y3) = e.points
@@ -36,7 +36,7 @@ function get_path_flat(str)
             circle(x3, y3, 1, :stroke)
             move(x, y)
             curve(x1, y1, x2, y2, x3, y3)
-            stroke()
+            strokepath()
             (x, y) = (x3, y3) # update current point
         elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
             closepath()

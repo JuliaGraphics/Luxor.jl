@@ -53,7 +53,7 @@ function Forward(t::Turtle, d)
         gsave()
         line(t.xpos, t.ypos)
         sethue(t.pencolor...)
-        stroke()
+        strokepath()
         grestore()
     else
         move(t.xpos, t.ypos)

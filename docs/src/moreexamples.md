@@ -33,7 +33,7 @@ setline(10)
 for i in 0:pi/36:2pi - pi/36
     move(0, 0)
     line(cos(i) * 600, sin(i) * 600 )
-    stroke()
+    strokepath()
 end
 clipreset()                           # finish clipping/masking
 fontsize(60)

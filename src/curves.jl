@@ -293,7 +293,7 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
 """
     pie(x, y, radius, startangle, endangle, action=:none)
 
-Make a pie shape centered at `x`/`y`. Angles start at the positive x-axis and are measured
+Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and are measured
 clockwise.
 """
 function pie(x, y, radius, startangle, endangle, action=:none)
@@ -311,18 +311,18 @@ end
 """
     pie(centerpoint, radius, startangle, endangle, action=:none)
 
-Make a pie shape centered at `centerpoint`.
+Draw a pie shape centered at `centerpoint`.
 
 Angles start at the positive x-axis and are measured clockwise.
 """
 pie(centerpoint::Point, radius, startangle, endangle, action) =
     pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
 
-"Make a pie shape centered at the origin"
+"Draw a pie shape centered at the origin"
 pie(radius, startangle, endangle, action=:none) = pie(O, radius, startangle, endangle, action)
 
 """
-Draw a Bézier curve.
+Add a Bézier curve.
 
      curve(x1, y1, x2, y2, x3, y3)
      curve(p1, p2, p3)
@@ -330,7 +330,7 @@ Draw a Bézier curve.
  The spline starts at the current position, finishing at `x3/y3` (`p3`), following two
  control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
 
- """
+"""
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
@@ -384,15 +384,15 @@ function circlepath(center::Point, radius, action=:none; reversepath=false, kapp
 
     move(center.x, center.y + radius)
     if !reversepath
-     northtoeast(center, radius, kappa)
-     easttosouth(center, radius, kappa)
-     southtowest(center, radius, kappa)
-     westtonorth(center, radius, kappa)
+        northtoeast(center, radius, kappa)
+        easttosouth(center, radius, kappa)
+        southtowest(center, radius, kappa)
+        westtonorth(center, radius, kappa)
     else
-     northtowest(center, radius, kappa)
-     westtosouth(center, radius, kappa)
-     southtoeast(center, radius, kappa)
-     easttonorth(center, radius, kappa)
+        northtowest(center, radius, kappa)
+        westtosouth(center, radius, kappa)
+        southtoeast(center, radius, kappa)
+        easttonorth(center, radius, kappa)
     end
     do_action(action)
 end

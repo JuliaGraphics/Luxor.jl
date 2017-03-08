@@ -154,19 +154,19 @@ Close the current path. This is Cairo's `close_path()` function.
 closepath() = Cairo.close_path(currentdrawing.cr)
 
 """
-    stroke()
+    strokepath()
 
 Stroke the current path with the current line width, line join, line cap, and dash settings.
 The current path is then cleared.
 """
-stroke() = Cairo.stroke(currentdrawing.cr)
+strokepath() = Cairo.stroke(currentdrawing.cr)
 
 """
-    fill()
+    fillpath()
 
-Fill the current path with current settings. The current path is then cleared.
+Fill the current path according to the current settings. The current path is then cleared.
 """
-fill() = Cairo.fill(currentdrawing.cr)
+fillpath() = Cairo.fill(currentdrawing.cr)
 
 """
     paint()
@@ -197,7 +197,7 @@ Fill and stroke the current path.
 """
 function fillstroke()
     fillpreserve()
-    stroke()
+    strokepath()
 end
 
 """
@@ -209,9 +209,9 @@ This is usually called by other graphics functions. Actions for graphics command
 """
 function do_action(action)
     if action == :fill
-        fill()
+        fillpath()
     elseif action == :stroke
-        stroke()
+        strokepath()
     elseif action == :clip
         clip()
     elseif action == :fillstroke
@@ -458,7 +458,7 @@ for e in o
           (x, y) = e.points
           # straight lines
           line(x, y)
-          stroke()
+          strokepath()
           circle(x, y, 1, :stroke)
       elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
           (x1, y1, x2, y2, x3, y3) = e.points
@@ -468,7 +468,7 @@ for e in o
           circle(x3, y3, 1, :stroke)
           move(x, y)
           curve(x1, y1, x2, y2, x3, y3)
-          stroke()
+          strokepath()
           (x, y) = (x3, y3) # update current point
       elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
           closepath()
