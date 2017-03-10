@@ -47,8 +47,7 @@ export Drawing, currentdrawing,
 
     newpath, closepath, newsubpath,
 
-    stroke, fill, # deprecated
-    strokepath, fillpath,
+    strokepath, fillpath, # stroke, fill are now deprecated
 
     rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
 
