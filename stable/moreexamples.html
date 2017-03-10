@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Ubuntu+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="../versions.js"></script></head><body><nav class="toc"><a href="index.html"><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><select id="version-selector" onChange="window.location.href=this.value"><option value="#" selected="selected" disabled="disabled">Version</option></select><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="colors-styles.html">Colors and styles</a></li><li><a class="toctext" href="polygons.html">Polygons</a></li><li><a class="toctext" href="text.html">Text</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li><a class="toctext" href="animation.html">Animation</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Illustrating-this-document-1">Illustrating this document</a></li><li><a class="toctext" href="#Luxor-logo-1">Luxor logo</a></li><li><a class="toctext" href="#Why-turtles?-1">Why turtles?</a></li><li><a class="toctext" href="#Strange-1">Strange</a></li><li><a class="toctext" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></li></ul></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/tree/d2af73cdccf669607bbb208817cd261c8a63b923/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>One place to look for examples is the <code>Luxor/test</code> directory.</p><p><img src="assets/figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="assets/figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More examples · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Ubuntu+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="assets/documenter.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="../versions.js"></script></head><body><nav class="toc"><a href="index.html"><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><form class="search" action="search.html"><select id="version-selector" onChange="window.location.href=this.value"><option value="#" selected="selected" disabled="disabled">Version</option></select><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="basics.html">Basic graphics</a></li><li><a class="toctext" href="colors-styles.html">Colors and styles</a></li><li><a class="toctext" href="polygons.html">Polygons</a></li><li><a class="toctext" href="text.html">Text</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li><a class="toctext" href="animation.html">Animation</a></li><li class="current"><a class="toctext" href="moreexamples.html">More examples</a><ul class="internal"><li><a class="toctext" href="#An-early-test-1">An early test</a></li><li><a class="toctext" href="#Illustrating-this-document-1">Illustrating this document</a></li><li><a class="toctext" href="#Why-turtles?-1">Why turtles?</a></li><li><a class="toctext" href="#Strange-1">Strange</a></li><li><a class="toctext" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></li></ul></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="moreexamples.html">More examples</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/tree/60851707467dc7679a85a984b39d000ac77006e0/docs/src/moreexamples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/></header><h1><a class="nav-anchor" id="More-examples-1" href="#More-examples-1">More examples</a></h1><p>One place to look for examples is the <code>Luxor/test</code> directory.</p><p><img src="assets/figures/tiled-images.png" alt="\"tiled images\""/></p><h2><a class="nav-anchor" id="An-early-test-1" href="#An-early-test-1">An early test</a></h2><p><img src="assets/figures/basic-test.png" alt="Luxor test"/></p><pre><code class="language-julia">using Luxor
 Drawing(1200, 1400, &quot;basic-test.png&quot;) # or PDF/SVG filename for PDF or SVG
 origin()
 background(&quot;purple&quot;)
@@ -17,7 +17,7 @@ setline(10)
 for i in 0:pi/36:2pi - pi/36
     move(0, 0)
     line(cos(i) * 600, sin(i) * 600 )
-    stroke()
+    strokepath()
 end
 clipreset()                           # finish clipping/masking
 fontsize(60)
@@ -55,34 +55,7 @@ sethue(&quot;red&quot;)
 prettypoly(p, close=true, :stroke)
 setdash(&quot;solid&quot;)
 sethue(&quot;black&quot;)
-polysmooth(p, 40, :fill, debug=true)</code></pre></div><p><img src="assets/figures/polysmoothy.png" alt="polysmooth"/></p><h2><a class="nav-anchor" id="Luxor-logo-1" href="#Luxor-logo-1">Luxor logo</a></h2><p>In this example, the color scheme is mirrored so that the lighter colors are at the top of the circle.</p><p><img src="assets/figures/logo.png" alt="logo"/></p><pre><code class="language-none">using Luxor, ColorSchemes
-
-function spiral(colscheme)
-  circle(0, 0, 90, :clip)
-  for theta in pi/2 - pi/8:pi/8: (19 * pi)/8 # start at the bottom
-    sethue(get(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
-    gsave()
-    rotate(theta)
-    move(5,0)
-    curve(Point(40, 40), Point(50, -40), Point(80, 30))
-    closepath()
-    fill()
-    grestore()
-  end
-  clipreset()
-end
-
-width = 225  # pts
-height = 225 # pts
-Drawing(width, height, &quot;/tmp/logo.png&quot;)
-origin()
-background(&quot;white&quot;)
-scale(1.3, 1.3)
-using ColorSchemes.solar
-colschememirror = vcat(solar, reverse(solar))
-spiral(colschememirror)
-finish()
-preview()</code></pre><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-turtles?-1">Why turtles?</a></h2><p>An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here&#39;s an example of how a complex pattern can emerge from a simple set of rules, taken from <a href="https://github.com/cormullion/Lindenmayer.jl">Lindenmayer.jl</a>:</p><p><img src="assets/figures/penrose.png" alt="penrose"/></p><p>The definition of this figure is:</p><pre><code class="language-none">penrose = LSystem(Dict(&quot;X&quot;  =&gt;  &quot;PM++QM----YM[-PM----XM]++t&quot;,
+polysmooth(p, 40, :fill, debug=true)</code></pre></div><p><img src="assets/figures/polysmoothy.png" alt="polysmooth"/></p><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-turtles?-1">Why turtles?</a></h2><p>An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here&#39;s an example of how a complex pattern can emerge from a simple set of rules, taken from <a href="https://github.com/cormullion/Lindenmayer.jl">Lindenmayer.jl</a>:</p><p><img src="assets/figures/penrose.png" alt="penrose"/></p><p>The definition of this figure is:</p><pre><code class="language-none">penrose = LSystem(Dict(&quot;X&quot;  =&gt;  &quot;PM++QM----YM[-PM----XM]++t&quot;,
                        &quot;Y&quot;  =&gt; &quot;+PM--QM[---XM--YM]+t&quot;,
                        &quot;P&quot;  =&gt; &quot;-XM++YM[+++PM++QM]-t&quot;,
                        &quot;Q&quot;  =&gt; &quot;--PM++++XM[+QM++++YM]--YMt&quot;,
