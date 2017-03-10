@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Current status",
     "category": "section",
-    "text": "Luxor currently runs on Julia versions 0.4 and 0.5, and uses Cairo.jl and Colors.jl."
+    "text": "Luxor currently runs on Julia versions 0.4, 0.5, and 0.6, and uses Cairo.jl and Colors.jl.warning: Deprecations\nThe functions fill() and stroke() are deprecated in this release, and will be removed in a future release. They should be replaced with fillpath() and strokepath() respectively.The change is because fill() clashes with Base.fill(), used to fill arrays."
 },
 
 {
