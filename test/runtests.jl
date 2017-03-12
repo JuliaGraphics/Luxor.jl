@@ -17,6 +17,7 @@ function run_all_tests()
 
     @testset "polygons" begin
         include("offset-poly-tests.jl")
+        include("path-to-poly.jl")
         include("point-arithmetic.jl")
         include("point-inside-polygon.jl")
         include("point-intersection.jl")

@@ -493,9 +493,6 @@ The `pathtopoly()` function calls `getpathflat()` to convert the current path to
 The `getpath()` function gets the current path as an array of elements, lines and unflattened curves.
 
 ```@docs
-newpath
-newsubpath
-closepath
 pathtopoly
 getpath
 getpathflat

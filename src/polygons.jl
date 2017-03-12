@@ -553,4 +553,39 @@ function polyfit(plist::Array, npoints=30)
     return resultpoly
 end
 
+"""
+    pathtopoly()
+
+Convert the current path to an array of polygons.
+
+Returns an array of polygons.
+
+"""
+function pathtopoly()
+    originalpath = getpathflat()
+    polygonlist = Array{Point, 1}[]
+    pointslist = Point[]
+    if length(originalpath) > 0
+        for e in originalpath
+            if e.element_type == Cairo.CAIRO_PATH_MOVE_TO                # 0
+                pointslist = Point[]
+                push!(pointslist, Point(e.points[1], e.points[2]))
+            elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO            # 1
+                push!(pointslist, Point(e.points[1], e.points[2]))
+            elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH         # 3
+                closepath()
+                push!(polygonlist, pointslist)
+            else
+                error("unknown CairoPathEntry " * repr(e.element_type))
+                error("unknown CairoPathEntry " * repr(e.points))
+            end
+        end
+        if length(pointslist) > 1
+            # if length is 1, there's a stray moveto point which we don't want
+            push!(polygonlist, pointslist)
+        end
+    end
+    return polygonlist
+end
+
 # end
