@@ -72,7 +72,7 @@ export Drawing, currentdrawing,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
 
-    getpath, getpathflat,
+    getpath, getpathflat, pathtopoly, 
 
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred, textcentered, textright, textcurvecentered,
