@@ -377,11 +377,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "basics.html#The-current-position-1",
+    "location": "basics.html#Luxor.newpath",
     "page": "Basic graphics",
-    "title": "The current position",
+    "title": "Luxor.newpath",
+    "category": "Function",
+    "text": "newpath()\n\nCreate a new path. This is Cairo's new_path() function.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.newsubpath",
+    "page": "Basic graphics",
+    "title": "Luxor.newsubpath",
+    "category": "Function",
+    "text": "newsubpath()\n\nAdd a new subpath to the current path. This is Cairo's new_sub_path() function. It can be used for example to make holes in shapes.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Luxor.closepath",
+    "page": "Basic graphics",
+    "title": "Luxor.closepath",
+    "category": "Function",
+    "text": "closepath()\n\nClose the current path. This is Cairo's close_path() function.\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Paths-and-positions-1",
+    "page": "Basic graphics",
+    "title": "Paths and positions",
     "category": "section",
-    "text": "There is a 'current position' which you can set with move(), and can use implicitly in functions like line(), text(), arc() and curve().move\nrmove"
+    "text": "A path is a sequence of lines and curves. You can add lines and curves to the current path, then use closepath() to join the last point to the first.A path can have subpaths, created withnewsubpath(), which can form holes.There is a 'current position' which you can set with move(), and can use implicitly in functions like line(), text(), arc() and curve().move\nrmove\nnewpath\nnewsubpath\nclosepath"
 },
 
 {
@@ -553,11 +577,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.polar",
+    "page": "Basic graphics",
+    "title": "Luxor.polar",
+    "category": "Function",
+    "text": "polar(r, theta)\n\nConvert point in polar form (radius and angle) to a Point.\n\npolar(10, pi/4)                                                                   09:19:38  v5   src\n\nproduces\n\nLuxor.Point(7.071067811865475,7.0710678118654755)\n\n\n\n"
+},
+
+{
     "location": "basics.html#Geometry-tools-1",
     "page": "Basic graphics",
     "title": "Geometry tools",
     "category": "section",
-    "text": "You can find the midpoint between two points using midpoint().The following code places a small pentagon (using ngon()) at the midpoint of each side of a larger pentagon:using Luxor # hide\nDrawing(700, 220, \"assets/figures/midpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\nngon(O, 100, 5, 0, :stroke)\n\nsethue(\"darkgreen\")\np5 = ngon(O, 100, 5, 0, vertices=true)\n\nfor i in eachindex(p5)\n    pt1 = p5[mod1(i, 5)]\n    pt2 = p5[mod1(i + 1, 5)]\n    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)A more general function, between(), finds for a value x between 0 and 1 the corresponding point on a line defined by two points. So midpoint(p1, p2) and between(p1, p2, 0.5) should return the same point.using Luxor # hide\nDrawing(700, 150, \"assets/figures/betweenpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\np1 = Point(-150, 0)\np2 = Point(150, 40)\nline(p1, p2)\nstrokepath()\nfor i in -0.5:0.1:1.5\n    randomhue()\n    circle(between(p1, p2, i), 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.midpoint\nbetweencenter3pts() finds the radius and center point of a circle passing through three points which you can then use with functions such as circle() or arc2r().center3ptsintersection() finds the intersection of two lines.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\npt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)\nline(pt1, pt2, :stroke)\nline(pt3, pt4, :stroke)\nflag, ip =  intersection(pt1, pt2, pt3, pt4)\nif flag\n    circle(ip, 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection_line_circle() finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection_line_circle.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"chocolate2\") # hide\nl1 = Point(-100.0, -75.0)\nl2 = Point(300.0, 100.0)\nrad = 100\ncpoint = Point(0, 0)\nline(l1, l2, :stroke)\nsethue(\"darkgreen\") # hide\ncircle(cpoint, rad, :stroke)\nnints, ip1, ip2 =  intersection_line_circle(l1, l2, cpoint, rad)\nsethue(\"black\")\nif nints == 2\n    circle(ip1, 8, :stroke)\n    circle(ip2, 8, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection\nintersection_line_circlegetnearestpointonline() finds perpendiculars.using Luxor # hide\nDrawing(700, 200, \"assets/figures/perpendicular.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\nend1, end2, pt3 = ngon(O, 100, 3, vertices=true)\nmap(pt -> circle(pt, 5, :fill), [end1, end2, pt3])\nline(end1, end2, :stroke)\narrow(pt3, getnearestpointonline(end1, end2, pt3))\nfinish() # hide\nnothing # hide(Image: arc)getnearestpointonline\npointlinedistance\nslope\nrescale\nperpendicular\n@polar"
+    "text": "You can find the midpoint between two points using midpoint().The following code places a small pentagon (using ngon()) at the midpoint of each side of a larger pentagon:using Luxor # hide\nDrawing(700, 220, \"assets/figures/midpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\nngon(O, 100, 5, 0, :stroke)\n\nsethue(\"darkgreen\")\np5 = ngon(O, 100, 5, 0, vertices=true)\n\nfor i in eachindex(p5)\n    pt1 = p5[mod1(i, 5)]\n    pt2 = p5[mod1(i + 1, 5)]\n    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)A more general function, between(), finds for a value x between 0 and 1 the corresponding point on a line defined by two points. So midpoint(p1, p2) and between(p1, p2, 0.5) should return the same point.using Luxor # hide\nDrawing(700, 150, \"assets/figures/betweenpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\np1 = Point(-150, 0)\np2 = Point(150, 40)\nline(p1, p2)\nstrokepath()\nfor i in -0.5:0.1:1.5\n    randomhue()\n    circle(between(p1, p2, i), 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.midpoint\nbetweencenter3pts() finds the radius and center point of a circle passing through three points which you can then use with functions such as circle() or arc2r().center3ptsintersection() finds the intersection of two lines.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\npt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)\nline(pt1, pt2, :stroke)\nline(pt3, pt4, :stroke)\nflag, ip =  intersection(pt1, pt2, pt3, pt4)\nif flag\n    circle(ip, 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection_line_circle() finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection_line_circle.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"chocolate2\") # hide\nl1 = Point(-100.0, -75.0)\nl2 = Point(300.0, 100.0)\nrad = 100\ncpoint = Point(0, 0)\nline(l1, l2, :stroke)\nsethue(\"darkgreen\") # hide\ncircle(cpoint, rad, :stroke)\nnints, ip1, ip2 =  intersection_line_circle(l1, l2, cpoint, rad)\nsethue(\"black\")\nif nints == 2\n    circle(ip1, 8, :stroke)\n    circle(ip2, 8, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection\nintersection_line_circlegetnearestpointonline() finds perpendiculars.using Luxor # hide\nDrawing(700, 200, \"assets/figures/perpendicular.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\nend1, end2, pt3 = ngon(O, 100, 3, vertices=true)\nmap(pt -> circle(pt, 5, :fill), [end1, end2, pt3])\nline(end1, end2, :stroke)\narrow(pt3, getnearestpointonline(end1, end2, pt3))\nfinish() # hide\nnothing # hide(Image: arc)getnearestpointonline\npointlinedistance\nslope\nrescale\nperpendicular\n@polar\npolar"
 },
 
 {
@@ -574,54 +606,6 @@ var documenterSearchIndex = {"docs": [
     "title": "Arrows",
     "category": "section",
     "text": "You can draw lines or arcs with arrows at the end with arrow(). For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the arrowheadlength and arrowheadangle of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to setline(1)), but you can specify another.using Luxor # hide\nDrawing(400, 250, \"assets/figures/arrow.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\nsetline(2) # hide\narrow(O, Point(0, -65))\narrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)\narrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)\nfinish() # hide\nnothing # hide(Image: arrows)arrow"
-},
-
-{
-    "location": "basics.html#Luxor.newpath",
-    "page": "Basic graphics",
-    "title": "Luxor.newpath",
-    "category": "Function",
-    "text": "newpath()\n\nCreate a new path. This is Cairo's new_path() function.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.newsubpath",
-    "page": "Basic graphics",
-    "title": "Luxor.newsubpath",
-    "category": "Function",
-    "text": "newsubpath()\n\nAdd a new subpath to the current path. This is Cairo's new_sub_path() function. It can be used for example to make holes in shapes.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.closepath",
-    "page": "Basic graphics",
-    "title": "Luxor.closepath",
-    "category": "Function",
-    "text": "closepath()\n\nClose the current path. This is Cairo's close_path() function.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.getpath",
-    "page": "Basic graphics",
-    "title": "Luxor.getpath",
-    "category": "Function",
-    "text": "getpath()\n\nGet the current path and return a CairoPath object, which is an array of element_type and points objects. With the results you can step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          strokepath()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          strokepath()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Luxor.getpathflat",
-    "page": "Basic graphics",
-    "title": "Luxor.getpathflat",
-    "category": "Function",
-    "text": "getpathflat()\n\nGet the current path, like getpath() but flattened so that there are no Bèzier curves.\n\nReturns a CairoPath which is an array of element_type and points objects.\n\n\n\n"
-},
-
-{
-    "location": "basics.html#Paths-1",
-    "page": "Basic graphics",
-    "title": "Paths",
-    "category": "section",
-    "text": "A path is a sequence of lines and curves. A path can have subpaths, which can form holes.The getpath() function gets the current path as an array of elements, lines and curves.getpathflat() gets the current path as an array of lines with all curves flattened to line segments.The next example uses getpathflat() to create a path from the outline of the letter \"N\" and stores it in pathdata. Then all elements of this path that contain exactly two points are used to create a polygon, which is then drawn and outlined.using Luxor # hide\nDrawing(400, 250, \"assets/figures/get-path.png\") # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.75) # hide\nsethue(\"black\") # hide\nfontsize(220) # hide\ntranslate(-textextents(\"N\")[3]/2, textextents(\"N\")[4]/2) # hide\ntextpath(\"N\")\npathdata = getpathflat()\noutline = Point[]\nfor i in pathdata[1:end-1]\n    if length(i.points) == 2\n        x = i.points[1]\n        y = i.points[2]\n        push!(outline, Point(x, y))\n    end\nend\npoly(outline, :stroke, close=true)\nfor i in 5:5:35\n    poly(offsetpoly(outline, i), :stroke, close=true)\nend\nfinish() # hide\nnothing # hide(Image: get path)newpath\nnewsubpath\nclosepath\ngetpath\ngetpathflat"
 },
 
 {
@@ -1093,7 +1077,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.offsetpoly",
     "category": "Function",
-    "text": "offsetpoly(path::Array, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\n\n\n\n"
+    "text": "offsetpoly(path::Array, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to\n\ndraw a line parallel to them\n\n\n\n"
 },
 
 {
@@ -1118,6 +1102,14 @@ var documenterSearchIndex = {"docs": [
     "title": "Fitting splines",
     "category": "section",
     "text": "The experimental polyfit() function constructs a B-spline that follows the points approximately.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyfit.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\n\npts = [Point(x, rand(-100:100)) for x in -280:30:280]\nsetopacity(0.7)\nsethue(\"red\")\nprettypoly(pts, :none, () -> circle(O, 5, :fill))\nsethue(\"darkmagenta\")\npoly(polyfit(pts, 200), :stroke)\n\nfinish() # hide\nnothing # hide(Image: offset poly)polyfit"
+},
+
+{
+    "location": "polygons.html#Converting-paths-to-polygons-1",
+    "page": "Polygons",
+    "title": "Converting paths to polygons",
+    "category": "section",
+    "text": "You can convert the current path to an array of polygons, using pathtopoly(). Some of the letters are paths containing subpaths (which form the holes).using Luxor # hide\nDrawing(800, 300, \"assets/figures/path-to-poly.png\") # hide\nbackground(\"white\") # hide\nfontsize(60) # hide\ntranslate(-300, -50) # hide\ntextpath(\"get polygons from paths\")\nplist = pathtopoly()\nsetline(0.5) # hide\nfor (n, pgon) in enumerate(plist)\n    randomhue()\n    prettypoly(pgon, :stroke, close=true)\n    gsave()\n    translate(0, 100)\n    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)The pathtopoly() function calls getpathflat() to convert the current path to an array of polygons, with each curved section flattened to line segments.The getpath() function gets the current path as an array of elements, lines and unflattened curves.newpath\nnewsubpath\nclosepath\npathtopoly\ngetpath\ngetpathflat"
 },
 
 {
