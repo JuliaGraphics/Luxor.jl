@@ -408,13 +408,21 @@ nothing # hide
 ```
 ![rounded rect](assets/figures/round-rect.png)
 
-## The current position
+## Paths and positions
+
+A path is a sequence of lines and curves. You can add lines and curves to the current path,
+then use `closepath()` to join the last point to the first.
+
+A path can have subpaths, created with` newsubpath()`, which can form holes.
 
 There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, `arc()` and `curve()`.
 
 ```@docs
 move
 rmove
+newpath
+newsubpath
+closepath
 ```
 
 ## Lines
@@ -654,6 +662,7 @@ slope
 rescale
 perpendicular
 @polar
+polar
 ```
 
 ## Arrows
@@ -677,53 +686,6 @@ nothing # hide
 
 ```@docs
 arrow
-```
-
-## Paths
-
-A path is a sequence of lines and curves. A path can have subpaths, which can form holes.
-
-The `getpath()` function gets the current path as an array of elements, lines and curves.
-
-`getpathflat()` gets the current path as an array of lines with all curves flattened to line segments.
-
-The next example uses `getpathflat()` to create a path from the outline of the letter "N" and stores it in `pathdata`. Then all elements of this path that contain exactly two points are used to create a polygon, which is then drawn and outlined.
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "assets/figures/get-path.png") # hide
-background("white") # hide
-background("white") # hide
-origin() # hide
-setline(0.75) # hide
-sethue("black") # hide
-fontsize(220) # hide
-translate(-textextents("N")[3]/2, textextents("N")[4]/2) # hide
-textpath("N")
-pathdata = getpathflat()
-outline = Point[]
-for i in pathdata[1:end-1]
-    if length(i.points) == 2
-        x = i.points[1]
-        y = i.points[2]
-        push!(outline, Point(x, y))
-    end
-end
-poly(outline, :stroke, close=true)
-for i in 5:5:35
-    poly(offsetpoly(outline, i), :stroke, close=true)
-end
-finish() # hide
-nothing # hide
-```
-![get path](assets/figures/get-path.png)
-
-```@docs
-newpath
-newsubpath
-closepath
-getpath
-getpathflat
 ```
 
 ## Julia graphics

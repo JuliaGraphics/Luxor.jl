@@ -460,3 +460,43 @@ nothing # hide
 ```@docs
 polyfit
 ```
+
+## Converting paths to polygons
+
+You can convert the current path to an array of polygons, using `pathtopoly()`. Some of the letters are paths containing subpaths (which form the holes).
+
+```@example
+using Luxor # hide
+Drawing(800, 300, "assets/figures/path-to-poly.png") # hide
+background("white") # hide
+fontsize(60) # hide
+translate(-300, -50) # hide
+textpath("get polygons from paths")
+plist = pathtopoly()
+setline(0.5) # hide
+for (n, pgon) in enumerate(plist)
+    randomhue()
+    prettypoly(pgon, :stroke, close=true)
+    gsave()
+    translate(0, 100)
+    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)
+    grestore()
+end
+finish() # hide
+nothing # hide
+```
+
+![path to polygon](assets/figures/path-to-poly.png)
+
+The `pathtopoly()` function calls `getpathflat()` to convert the current path to an array of polygons, with each curved section flattened to line segments.
+
+The `getpath()` function gets the current path as an array of elements, lines and unflattened curves.
+
+```@docs
+newpath
+newsubpath
+closepath
+pathtopoly
+getpath
+getpathflat
+```

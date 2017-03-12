@@ -472,14 +472,23 @@ point (!). There are a number of issues to be aware of:
 - small polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original
 
 - very sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity
+
+- duplicated adjacent points might cause the routine to scratch its head and wonder how to
+draw a line parallel to them
 """
 function offsetpoly(path::Array, d)
+    # don't try to calculate offset of two identical points
+    if path[1] == path[end]
+        shift!(path)
+    end
     l = length(path)
     resultpoly = Array{Point}(l)
     for i in 1:l
         p1 = path[mod1(i, l)]
         p2 = path[mod1(i + 1, l)]
         p3 = path[mod1(i + 2, l)]
+
+        # should check for identical points here too...
         L12 = norm(p1, p2)
         L23 = norm(p2, p3)
         # the offset line of p1 - p2
