@@ -1105,11 +1105,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "polygons.html#Luxor.pathtopoly",
+    "page": "Polygons",
+    "title": "Luxor.pathtopoly",
+    "category": "Function",
+    "text": "pathtopoly()\n\nConvert the current path to an array of polygons.\n\nReturns an array of polygons.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.getpath",
+    "page": "Polygons",
+    "title": "Luxor.getpath",
+    "category": "Function",
+    "text": "getpath()\n\nGet the current path and return a CairoPath object, which is an array of element_type and points objects. With the results you can step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          strokepath()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          strokepath()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.getpathflat",
+    "page": "Polygons",
+    "title": "Luxor.getpathflat",
+    "category": "Function",
+    "text": "getpathflat()\n\nGet the current path, like getpath() but flattened so that there are no Bèzier curves.\n\nReturns a CairoPath which is an array of element_type and points objects.\n\n\n\n"
+},
+
+{
     "location": "polygons.html#Converting-paths-to-polygons-1",
     "page": "Polygons",
     "title": "Converting paths to polygons",
     "category": "section",
-    "text": "You can convert the current path to an array of polygons, using pathtopoly(). Some of the letters are paths containing subpaths (which form the holes).using Luxor # hide\nDrawing(800, 300, \"assets/figures/path-to-poly.png\") # hide\nbackground(\"white\") # hide\nfontsize(60) # hide\ntranslate(-300, -50) # hide\ntextpath(\"get polygons from paths\")\nplist = pathtopoly()\nsetline(0.5) # hide\nfor (n, pgon) in enumerate(plist)\n    randomhue()\n    prettypoly(pgon, :stroke, close=true)\n    gsave()\n    translate(0, 100)\n    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)The pathtopoly() function calls getpathflat() to convert the current path to an array of polygons, with each curved section flattened to line segments.The getpath() function gets the current path as an array of elements, lines and unflattened curves.newpath\nnewsubpath\nclosepath\npathtopoly\ngetpath\ngetpathflat"
+    "text": "You can convert the current path to an array of polygons, using pathtopoly(). Some of the letters are paths containing subpaths (which form the holes).using Luxor # hide\nDrawing(800, 300, \"assets/figures/path-to-poly.png\") # hide\nbackground(\"white\") # hide\nfontsize(60) # hide\ntranslate(-300, -50) # hide\ntextpath(\"get polygons from paths\")\nplist = pathtopoly()\nsetline(0.5) # hide\nfor (n, pgon) in enumerate(plist)\n    randomhue()\n    prettypoly(pgon, :stroke, close=true)\n    gsave()\n    translate(0, 100)\n    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)The pathtopoly() function calls getpathflat() to convert the current path to an array of polygons, with each curved section flattened to line segments.The getpath() function gets the current path as an array of elements, lines and unflattened curves.pathtopoly\ngetpath\ngetpathflat"
 },
 
 {
