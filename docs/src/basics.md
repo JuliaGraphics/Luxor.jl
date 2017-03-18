@@ -36,7 +36,7 @@ Point(12.0, 13.0)
 
 It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
-`Drawing` is how you create new drawings. And you can divide up the drawing area into tiles, using `Tiler`.
+`Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using .
 
 ## Drawings and files
 
@@ -731,7 +731,7 @@ juliacircles
 
 ### Hypotrochoids
 
-`hypotrochoid()` makes hypotrochoids. The result is a polygon. You can either it directly, or pass it on for further polygon fun, as here, which uses `offsetpoly()` to trace round it a few times.
+`hypotrochoid()` makes hypotrochoids. The result is a polygon. You can either draw it directly, or pass it on for further polygon fun, as here, which uses `offsetpoly()` to trace round it a few times.
 
 ```@example
 using Luxor # hide
@@ -740,7 +740,7 @@ origin()
 background("grey15")
 sethue("antiquewhite")
 setline(1)
-p = hypotrochoid(100, 25, 55, :stroke, stepby=pi/325, vertices=true)
+p = hypotrochoid(100, 25, 55, :stroke, stepby=0.01, vertices=true)
 for i in 0:3:15
     poly(offsetpoly(p, i), :stroke, close=true)
 end
@@ -756,9 +756,9 @@ hypotrochoid
 
 ### Grids
 
-If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you need it.
+If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
 
-Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`, and get the next grid point from it with `nextgridpoint(grid)`.
+Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`. Get the next grid point from a grid with `nextgridpoint(grid)`.
 
 ```@example
 using Luxor # hide
