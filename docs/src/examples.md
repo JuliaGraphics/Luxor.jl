@@ -107,7 +107,7 @@ If you want to work interactively, you can use an environment such as a Jupyter 
 
 Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and tries to render them literally as radiating sectors. The larger the sector, the slower the performance, so it's difficult to see the Julia scores sometimes...!
 
-[link to PDF original](assets/figures/sector-chart.pdf) | [link to Julia source](examples/sector-chart.jl)
+[link to PDF original](assets/figures/sector-chart.pdf) | [link to Julia source](assets/examples/sector-chart.jl)
 
 ### Star chart
 

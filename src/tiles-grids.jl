@@ -23,12 +23,12 @@ You can access the calculated tile width and height like this:
     for (pos, n) in tiles
         ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
     end
-    
+
 It's sometimes useful to know which row and column you're currently on:
-    
+
     tiles.currentrow
     tiles.currentcol
-    
+
 should have that information for you.
 """
 type Tiler
@@ -92,17 +92,24 @@ end
 
 """
     GridRect(startpoint, xspacing, yspacing, width, height)
-    
-Define a rectangular grid, to start at `startpoint` and proceed along the x-axis in 
-steps of `xspacing`, then along the y-axis in steps of `yspacing`. 
 
-    Grid(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
+Define a rectangular grid, to start at `startpoint` and proceed along the x-axis in
+steps of `xspacing`, then along the y-axis in steps of `yspacing`.
+
+    GridRect(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)
 
 For a column, set the `xspacing` to 0:
 
-    grid = Grid(O, 0, 40)
+    grid = GridRect(O, 0, 40)
 
 To get points from the grid, use `nextgridpoint(g::Grid)`.
+
+    julia> grid = GridRect(O, 0, 40);
+    julia> nextgridpoint(grid)
+    Luxor.Point(0.0,0.0)
+
+    julia> nextgridpoint(grid)
+    Luxor.Point(0.0,40.0)
 
 When you run out of grid points, you'll wrap round and start again.
 """
@@ -119,7 +126,7 @@ type GridRect
         rownumber = 1
         colnumber = 0
         # find the "previous" point, so that the first call gets the real first point
-        xspacing == 0 ? sp = startpoint.y - yspacing : sp = startpoint.y 
+        xspacing == 0 ? sp = startpoint.y - yspacing : sp = startpoint.y
         currentpoint = Point(startpoint.x - xspacing, sp)
         new(startpoint, currentpoint, xspacing, yspacing, width, height, rownumber, colnumber)
     end
@@ -128,7 +135,7 @@ end
 doc"""
     GridHex(startpoint, radius, width=1200.0, height=1200.0)
 
-Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis and 
+Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis and
 then along the y-axis, `radius` is the radius of a circle that encloses each hexagon.
 The distance in `x` between the centers of successive hexagons is:
 
@@ -171,7 +178,7 @@ function nextgridpoint(g::GridRect)
     else
         g.colnumber += 1
         g.currentpoint = temp
-    end    
+    end
     if g.currentpoint.x > g.width # next row
         g.rownumber += 1
         g.colnumber = 1
@@ -200,7 +207,7 @@ function nextgridpoint(g::GridHex)
             g.currentpoint = Point(g.startpoint.x + (sqrt(3) * g.radius)/2, g.currentpoint.y + (3/2) * g.radius)
         else
             g.currentpoint = Point(g.startpoint.x, g.currentpoint.y + (3/2) * g.radius)
-        end        
+        end
     end
     if g.currentpoint.y >= g.height     # finished?
         g.rownumber = 1                 # start again...

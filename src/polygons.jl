@@ -469,12 +469,14 @@ point (!). There are a number of issues to be aware of:
 
 - very short lines tend to make the algorithm 'flip' and produce larger lines
 
-- small polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original
+- small polygons that are counterclockwise and larger offsets may make the new polygon appear
+  the wrong side of the original
 
-- very sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity
+- very sharp vertices will produce even sharper offsets, as the calculated intersection point
+  veers off to infinity
 
 - duplicated adjacent points might cause the routine to scratch its head and wonder how to
-draw a line parallel to them
+  draw a line parallel to them
 """
 function offsetpoly(path::Array, d)
     # don't try to calculate offset of two identical points
