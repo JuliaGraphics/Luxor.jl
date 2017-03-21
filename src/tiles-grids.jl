@@ -12,6 +12,12 @@ A Tiler is an iterator that, for each iteration, returns a tuple of:
 are the number of rows and columns required, and `margin` is applied to all four
 edges of the area before the function calculates the tile sizes required.
 
+Tiler and Partition are similar:
+
+- Partition lets you specify the width and height of a cell
+
+- Tiler lets you specify how many rows and columns of cells you want
+
     tiles = Tiler(1000, 800, 4, 5, margin=20)
     for (pos, n) in tiles
         # the point pos is the center of the tile
@@ -215,4 +221,104 @@ function nextgridpoint(g::GridHex)
         g.currentpoint = Point(g.startpoint.x, g.startpoint.y)
     end
     return g.currentpoint
+end
+
+"""
+    p = Partition(areawidth, areaheight, tilewidth, tileheight)
+
+A Partition is an iterator that, for each iteration, returns a tuple of:
+
+- the `x`/`y` point of the center of each tile in a set of tiles that divide up a
+rectangular space such as a page into rows and columns (relative to current 0/0)
+
+- the number of the tile
+
+`areawidth` and `areaheight` are the dimensions of the area to be tiled,
+`tilewidth`/`tileheight` are the dimensions of the tiles.
+
+Tiler and Partition are similar:
+
+- Partition lets you specify the width and height of a cell
+
+- Tiler lets you specify how many rows and columns of cells you want
+
+
+    tiles = Partition(1200, 1200, 30, 30)
+    for (pos, n) in tiles
+        # the point pos is the center of the tile
+    end
+
+You can access the calculated tile width and height like this:
+
+    tiles = Partition(1200, 1200, 30, 30)
+    for (pos, n) in tiles
+        ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+    end
+
+It's sometimes useful to know which row and column you're currently on:
+
+    tiles.currentrow
+    tiles.currentcol
+
+should have that information for you.
+
+Unless the tilewidth and tileheight are exact multiples of the area width and height, you'll
+see a border at the right and bottom where the tiles won't fit.
+"""
+type Partition
+    areawidth::Real
+    areaheight::Real
+    tilewidth::Real
+    tileheight::Real
+    nrows::Int
+    ncols::Int
+    currentrow::Int
+    currentcol::Int
+    function Partition(areawidth, areaheight, tilewidth, tileheight)
+        ncols = areawidth  / tilewidth  |> floor |> Integer
+        nrows = areaheight / tileheight |> floor |> Integer
+        currentrow = 1
+        currentcol = 1
+        new(areawidth, areaheight, tilewidth, tileheight, nrows, ncols, currentrow, currentcol)
+    end
+end
+
+function Base.start(pt::Partition)
+    # return the initial state
+    x = -(pt.areawidth/2)  + (pt.tilewidth/2)
+    y = -(pt.areaheight/2) + (pt.tileheight/2)
+    return (Point(x, y), 1)
+end
+
+function Base.next(pt::Partition, state)
+    # Returns the item and the next state
+    # state[1] is the Point
+    x = state[1].x
+    y = state[1].y
+    # state[2] is the tilenumber
+    tilenumber = state[2]
+    x1 = x + pt.tilewidth
+    y1 = y
+    if x1 > (pt.areawidth/2)
+        y1 += pt.tileheight
+        x1 = -(pt.areawidth/2) + (pt.tilewidth/2)
+    end
+    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
+end
+
+function Base.done(pt::Partition, state)
+    # Tests if there are any items remaining
+    state[2] > (pt.nrows * pt.ncols)
+end
+
+function Base.length(pt::Partition)
+    pt.nrows * pt.ncols
+end
+
+function Base.getindex(pt::Partition, i::Int)
+    1 <= i <= pt.ncols *  pt.nrows || throw(BoundsError(pt, i))
+    xcoord = -pt.areawidth/2  + mod1(i, pt.ncols) * pt.tilewidth  - pt.tilewidth/2
+    ycoord = -pt.areaheight/2 + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
+    return (Point(xcoord, ycoord), i)
 end

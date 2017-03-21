@@ -99,7 +99,62 @@ If you want to work interactively, you can use an environment such as a Jupyter 
 
 ![Jupyter](assets/figures/jupyter-hypo.png)
 
-## More complex examples
+## More examples
+
+### Maps
+
+Luxor can read simple polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid. 
+
+!["simple world map detail"](assets/figures/airport-map-detail.png)
+
+Coordinates used latitude and longitude converted to drawing coordinates. Latitude coordinates have to be inverted because y-coordinates in Luxor typically increase down the page, whereas latitude values increase as you travel North.
+
+This is the full map:
+
+!["simple world map"](assets/figures/airport-map.png)
+
+You'll need to install the [Shapefile.jl](https://github.com/JuliaGeo/Shapefile.jl) package before running the code:
+    
+```julia
+using Shapefile, Luxor
+include(Pkg.dir("Luxor") * "/src/readshapefiles.jl")
+function drawairportmap(outputfilename, countryoutlines, airportdata)
+    Drawing(4000, 2000, outputfilename)
+    origin()
+    scale(10, 10)
+    setline(1.0)
+    fontsize(0.075)
+    gsave()
+    setopacity(0.25)
+    for shape in countryoutlines.shapes
+        randomhue()
+        pgons, bbox = convert(Array{Luxor.Point, 1}, shape)
+        for pgon in pgons
+            poly(pgon, :fill)
+        end
+    end
+    grestore()
+    sethue("black")
+    for airport in airportdata
+        city, country, lat, long = split(chomp(airport), ",")
+        location = Point(parse(long), -parse(lat)) # flip y-coordinate
+        circle(location, .01, :fill)
+        text(string(city), location.x, location.y - 0.02)
+    end
+    finish()
+    preview()
+end
+
+worldshapefile = Pkg.dir("Luxor") * "/docs/src/assets/examples/outlines-of-world-countries.shp"
+airportdata = readlines(Pkg.dir("Luxor") * "/docs/src/assets/examples/airports.csv")
+worldshapes = open(worldshapefile) do f
+    read(f, Handle)
+end
+drawairportmap("/tmp/airport-map.pdf", worldshapes, airportdata)
+```
+
+[link to Julia source](assets/examples/make-airport-world-map.jl) | 
+[link to PDF map](assets/examples/airport-map.pdf)
 
 ### Sector chart
 
@@ -108,20 +163,6 @@ If you want to work interactively, you can use an environment such as a Jupyter 
 Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and tries to render them literally as radiating sectors. The larger the sector, the slower the performance, so it's difficult to see the Julia scores sometimes...!
 
 [link to PDF original](assets/figures/sector-chart.pdf) | [link to Julia source](assets/examples/sector-chart.jl)
-
-### Star chart
-
-Looking further afield, here's a straightforward chart rendering stars from the Astronexus HYG database catalog available on [github](https://github.com/astronexus/HYG-Database) and read into a DataFrame. There are a lot of challenges with representing so many stars—sizes, colors, constellation boundaries. It takes about 4 seconds to load the data, and 7 seconds to draw it— about 120,000 stars, using still-to-be-optimized code.
-
-A small detail:
-
-!["benchmark sector chart"](assets/figures/star-chart-detail.png)
-
-A more complete version:
-
-!["benchmark sector chart"](assets/figures/star-chart.png)
-
-[link to PDF original](assets/figures/star-chart.pdf) | [link to Julia source](assets/examples/star-chart.jl)
 
 ### Ampersands
 

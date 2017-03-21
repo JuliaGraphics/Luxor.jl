@@ -32,6 +32,7 @@ include("juliagraphics.jl")
 include("colors_styles.jl")
 include("images.jl")
 include("animate.jl")
+#include("shapefile.jl")
 
 @deprecate fill() fillpath()
 @deprecate stroke() strokepath()
@@ -39,7 +40,7 @@ include("animate.jl")
 export Drawing, currentdrawing,
     cm, inch, mm,
     paper_sizes,
-    Tiler,
+    Tiler, Partition,
     rescale,
 
     finish, preview,
@@ -72,7 +73,7 @@ export Drawing, currentdrawing,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
 
-    getpath, getpathflat, pathtopoly, 
+    getpath, getpathflat, pathtopoly,
 
     fontface, fontsize, text, textpath,
     textextents, textcurve, textcentred, textcentered, textright, textcurvecentered,
