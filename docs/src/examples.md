@@ -107,7 +107,7 @@ Luxor can read simple polygons from shapefiles, so you can create simple maps. F
 
 !["simple world map detail"](assets/figures/airport-map-detail.png)
 
-Coordinates used latitude and longitude converted to drawing coordinates. Latitude coordinates have to be inverted because y-coordinates in Luxor typically increase down the page, whereas latitude values increase as you travel North.
+The latitude and longitude coordinates are converted directly to drawing coordinates. The latitude coordinates have to be negated because y-coordinates in Luxor typically increase down the page, whereas latitude values increase as you travel North.
 
 This is the full map:
 
