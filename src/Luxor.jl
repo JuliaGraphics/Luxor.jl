@@ -140,6 +140,16 @@ type Drawing
     end
 end
 
+function Base.show(io::IO, d::Luxor.Drawing)
+  print(io, """
+\twidth:    $(d.width) 
+\theight:   $(d.height)
+\tfilename: $(d.filename)
+\ttype:     $(d.surfacetype)
+\tcolor:    ($(d.redvalue), $(d.greenvalue), $(d.bluevalue), $(d.alpha))
+""")
+end
+
 """
 The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default is Portrait:
 
