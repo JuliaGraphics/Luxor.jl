@@ -36,7 +36,7 @@ Point(12.0, 13.0)
 
 It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
-`Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using .
+`Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using `GridRect` and `GridHex`.
 
 ## Drawings and files
 
@@ -157,6 +157,7 @@ nothing # hide
 
 ```@docs
 Tiler
+Partition
 ```
 
 ## Save and restore
