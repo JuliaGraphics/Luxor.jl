@@ -17,6 +17,13 @@ Use `sethue()` for changing colors without changing current opacity level.
     julia> sethue(setcolor("red")[1:3]...)
 
     (1.0,0.0,0.0)
+
+You can also do:
+
+    using Colors
+    sethue(colorant"red")
+
+See also [`setcolor`](@ref).
 """
 function setcolor(col::String)
     temp = parse(RGBA, col)
@@ -46,6 +53,8 @@ Examples:
        setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))
        ...
     end
+
+See also [`sethue`](@ref).
 """
 function setcolor(col::ColorTypes.Colorant)
   temp = convert(RGBA, col)
@@ -61,7 +70,7 @@ function setcolor(r, g, b, a=1)
 end
 
 """
-Set the current color to a string.
+Set the current color to a string using a macro.
 
 For example:
 
@@ -88,6 +97,8 @@ Set the color without changing opacity.
 `sethue()` is like `setcolor()`, but we sometimes want to change the current color without
 changing alpha/opacity. Using `sethue()` rather than `setcolor()` doesn't change the current
 alpha opacity.
+
+See also [`setcolor`](@ref).
 """
 function sethue(col::String)
     temp = parse(RGBA,  col)
@@ -144,7 +155,6 @@ end
     setgrey(n)
 
 Set the color to a gray level of `n`, where `n` is between 0 and 1.
-
 """
 setgray(n) = sethue(n, n, n)
 setgrey(n) = setgray(n)

@@ -141,12 +141,11 @@ type Drawing
 end
 
 function Base.show(io::IO, d::Luxor.Drawing)
-  print(io, """
-\twidth:    $(d.width) 
-\theight:   $(d.height)
-\tfilename: $(d.filename)
-\ttype:     $(d.surfacetype)
-\tcolor:    ($(d.redvalue), $(d.greenvalue), $(d.bluevalue), $(d.alpha))
+  print(io, """    width:    $(d.width) 
+    height:   $(d.height)
+    filename: $(d.filename)
+    type:     $(d.surfacetype)
+    color:    ($(d.redvalue), $(d.greenvalue), $(d.bluevalue), $(d.alpha))
 """)
 end
 
