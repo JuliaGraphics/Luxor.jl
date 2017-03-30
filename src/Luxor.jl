@@ -259,7 +259,7 @@ end
 If working in Jupyter (IJUlia), display a PNG file in the notebook.
 On macOS, open the file, which probably uses the default, Preview.app.
 On Unix, open the file with `xdg-open`.
-On Windows, pass the filename to the shell.
+On Windows, pass the filename to `explorer`.
 """
 function preview()
     if isdefined(Main, :IJulia) && Main.IJulia.inited && currentdrawing.surfacetype == "png"
@@ -267,7 +267,7 @@ function preview()
     elseif @compat is_apple()
         run(`open $(currentdrawing.filename)`)
     elseif @compat is_windows()
-        run(`$(currentdrawing.filename)`)
+        run(ignorestatus(`explorer $(currentdrawing.filename)`))
     elseif @compat is_unix()
         run(`xdg-open $(currentdrawing.filename)`)
     end
