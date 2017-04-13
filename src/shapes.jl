@@ -161,3 +161,56 @@ star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientat
     vertices = false,
     reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio,
     orientation, action; vertices = vertices, reversepath=reversepath)
+
+"""
+    cropmarks(center, width, height)
+
+Draw cropmarks (also known as trim marks).
+"""
+function cropmarks(center, width, height)
+    gap = 5
+    crop = 15
+    gsave()
+        setcolor("black")
+        setline(0.5)
+        # horizontal top left
+        line(Point(-width/2 - gap - crop, -height/2),
+             Point(-width/2 - gap, -height/2),
+             :stroke)
+
+        # horizontal bottom left
+        line(Point(-width/2 - gap - crop, height/2),
+             Point(-width/2 - gap, height/2),
+             :stroke)
+
+        # horizontal top right
+        line(Point(width/2 + gap, -height/2),
+             Point(width/2 + gap + crop, -height/2),
+             :stroke)
+
+        # horizontal bottom right
+        line(Point(width/2 + gap, height/2),
+             Point(width/2 + gap + crop, height/2),
+             :stroke)
+
+        # vertical top left
+        line(Point(-width/2, -height/2 - gap - crop),
+             Point(-width/2, -height/2 - gap),
+             :stroke)
+
+        # vertical bottom left
+        line(Point(-width/2, height/2 + gap),
+             Point(-width/2, height/2 + gap + crop),
+             :stroke)
+
+        # vertical top right
+        line(Point(width/2, -height/2 - gap - crop),
+             Point(width/2, -height/2 - gap),
+             :stroke)
+
+        # vertical bottom right
+        line(Point(width/2, height/2 + gap),
+             Point(width/2, height/2 + gap + crop),
+             :stroke)
+    grestore()
+end

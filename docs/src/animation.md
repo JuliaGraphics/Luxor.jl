@@ -19,11 +19,11 @@ using Luxor
 
 demo = Sequence(400, 400, "test")
 
-function backdropf(demo, framenumber, framerange)
+function backdropf(seq::Sequence, framenumber, framerange)
     background("black")
 end
 
-function framef(demo, framenumber, framerange)
+function framef(seq::Sequence, framenumber, framerange)
     xpos = 100 * cos(framenumber/100)
     ypos = 100 * sin(framenumber/100)
     sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))

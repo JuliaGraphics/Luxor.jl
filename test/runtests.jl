@@ -111,6 +111,7 @@ function run_all_tests()
         include("rules.jl")
         include("unit-conversions.jl")
         include("hex-grid-test.jl")
+        include("cropmarkstest.jl")
     end
 end
 
