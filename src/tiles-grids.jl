@@ -299,7 +299,7 @@ function Base.next(pt::Partition, state)
     tilenumber = state[2]
     x1 = x + pt.tilewidth
     y1 = y
-    if x1 > (pt.areawidth/2)
+    if (x1 + pt.tilewidth/2) > (pt.areawidth/2)
         y1 += pt.tileheight
         x1 = -(pt.areawidth/2) + (pt.tilewidth/2)
     end

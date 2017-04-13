@@ -50,14 +50,15 @@ export Drawing, currentdrawing,
 
     strokepath, fillpath, # stroke, fill are now deprecated
 
-    rect, box, setantialias, setline, setlinecap, setlinejoin, setdash,
+    rect, box, cropmarks,
+
+    setantialias, setline, setlinecap, setlinejoin, setdash,
 
     move, rmove, line, rule, rline, arrow,
 
     circle, circlepath, ellipse, hypotrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r,
     sector,
-
 
     ngon, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,
@@ -141,7 +142,7 @@ type Drawing
 end
 
 function Base.show(io::IO, d::Luxor.Drawing)
-  print(io, """    width:    $(d.width) 
+  print(io, """    width:    $(d.width)
     height:   $(d.height)
     filename: $(d.filename)
     type:     $(d.surfacetype)
