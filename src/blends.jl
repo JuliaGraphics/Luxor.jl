@@ -80,7 +80,7 @@ linear blends, the control vector is from the start point to the end point. For 
 blends, the control vector is from any point on the start circle, to the corresponding point
 on the end circle.
 
-Example:
+Examples:
 
     blendredblue = blend(Point(0, 0), 0, Point(0, 0), 1)
     addstop(blendredblue, 0, setcolor(sethue("red")..., .2))
