@@ -590,4 +590,71 @@ function pathtopoly()
     return polygonlist
 end
 
+"""
+    polydistances(p::Array{Point, 1}; closed=true)
+
+Return an array of the cumulative lengths of a polygon.
+"""
+function polydistances(p::Array{Point, 1}; closed=true)
+    r = Real[]
+    t = 0.0
+    for i in 1:length(p) - 1
+        t += norm(p[i], p[i + 1])
+        push!(r, t)
+    end
+    if closed
+        t += norm(p[end], p[1])
+        push!(r, t)
+    end
+    return r
+end
+
+"""
+    polyperimeter(p::Array{Point, 1}; closed=true)
+
+Find the total length of the sides of polygon `p`.
+"""
+function polyperimeter(p::Array{Point, 1}; closed=true)
+    return polydistances(p, closed=closed)[end]
+end
+
+"""
+    nearestindex(polydistancearray, value)
+
+Return a tuple of the index of the nearestindex value in `polydistancearray`, an array
+of distances made by `polydistances`, to the `value`, and the excess value.
+"""
+function nearestindex(a::Array, val)
+    ind = findfirst(v -> (v > val), a)
+    if ind == 0
+        # too far
+        return (length(a), 0.0)
+    end
+    surplus = a[ind] - val
+    return (ind, surplus)
+end
+
+"""
+    polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
+
+Return a reduced version of the polygon, where portion is a value between 0.0 and 1.0.
+
+If you already know them, you can pass the polygon distances in `pdist`, otherwise
+they'll be calculated afresh, using `polydistances(p, closed=closed)`.
+"""
+function polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
+    # portion is 0 to 1
+    if isempty(pdist)
+        pdist = polydistances(p, closed=closed)
+    end
+    portion == 1.0 && return p  # don't bother to do 1.0
+    ind, d = nearestindex(pdist, portion * pdist[end])
+    if d != 0.0
+        overshootpoint = between(p[ind], p[mod1(ind + 1, length(p))], d/norm(p[ind], p[mod1(ind + 1, length(p))]))
+        return vcat(p[1:ind], overshootpoint)
+    else
+        return p[1:end]
+    end
+end
+
 # end
