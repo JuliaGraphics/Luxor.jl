@@ -67,7 +67,11 @@ export Drawing, currentdrawing,
     intersection_line_circle, pointlinedistance, getnearestpointonline, isinside,
     perpendicular, crossproduct,
     prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
-    polysortbyangle, polysortbydistance, offsetpoly, polyfit, @polar, polar,
+    polysortbyangle, polysortbydistance, offsetpoly, polyfit,
+
+    polyperimeter, polydistances, polyportion, nearestindex,
+
+    @polar, polar,
 
     strokepreserve, fillpreserve,
     gsave, grestore,
