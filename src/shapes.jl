@@ -173,6 +173,7 @@ function cropmarks(center, width, height)
     gsave()
         setcolor("black")
         setline(0.5)
+        setdash("solid")
         # horizontal top left
         line(Point(-width/2 - gap - crop, -height/2),
              Point(-width/2 - gap, -height/2),

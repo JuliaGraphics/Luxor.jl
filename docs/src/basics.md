@@ -810,3 +810,28 @@ GridRect
 GridHex
 nextgridpoint
 ```
+
+### Cropmarks
+
+If you want cropmarks (aka trim marks), use the `cropmarks()` function, supplying the centerpoint, followed by the width and height:
+
+    cropmarks(O, 1200, 1600)
+    cropmarks(O, paper_sizes["A0"]...)
+
+```@example
+using Luxor # hide
+Drawing(700, 250, "assets/figures/cropmarks.png")  # hide
+origin() # hide
+background("white") # hide
+sethue("red")
+box(O, 50, 50, :stroke)
+cropmarks(O, 150, 150)
+finish() # hide
+nothing # hide
+```
+
+![cropmarks](assets/figures/cropmarks.png)
+
+```@docs
+cropmarks
+```
