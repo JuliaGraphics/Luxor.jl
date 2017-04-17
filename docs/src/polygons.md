@@ -433,6 +433,90 @@ The function is intended for simple cases, and it can go wrong if pushed too far
 offsetpoly
 ```
 
+### Perimeter utilities
+
+`polyperimeter` calculates the distance of a polygon.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/polyperimeter.png") # hide
+origin() # hide
+background("white") # hide
+srand(42) # hide
+setline(1.5) # hide
+sethue("black") # hide
+fontsize(20) # hide
+p = box(O, 50, 50, 0, vertices=true)
+poly(p, :stroke)
+text(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)
+
+translate(200, 0)
+
+poly(p, :stroke, close=true)
+text(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)
+
+finish() # hide
+nothing # hide
+```
+
+![polyperimeter](assets/figures/polyperimeter.png)
+
+`polyportion` returns part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns a new polygon tracing the first half of a polygon.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/polyportion.png") # hide
+origin() # hide
+background("white") # hide
+srand(42) # hide
+setline(1.5) # hide
+sethue("black") # hide
+fontsize(20) # hide
+
+p = ngon(O, 100, 7, 0, vertices=true)
+poly(p, :stroke, close=true)
+setopacity(0.75)
+
+setline(15)
+sethue("red")
+poly(polyportion(p, 0.25), :stroke)
+
+setline(10)
+sethue("green")
+poly(polyportion(p, 0.5), :stroke)
+
+setline(5)
+sethue("blue")
+poly(polyportion(p, 0.75), :stroke)
+
+finish() # hide
+nothing # hide
+```
+
+![polyportion](assets/figures/polyportion.png)
+
+`polydistances` returns an array of the accumulated side lengths of a polygon.
+
+    julia> p = ngon(O, 100, 7, 0, vertices=true);
+    julia> polydistances(p)
+    7-element Array{Real,1}:
+      86.7767
+     173.553
+     260.33  
+     347.107
+     433.884
+     520.66  
+     607.437
+
+`nearestindex` returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.
+
+```@docs
+polyperimeter
+polyportion
+polydistances
+nearestindex
+```
+
 ### Fitting splines
 
 The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
