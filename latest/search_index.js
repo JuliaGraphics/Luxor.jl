@@ -697,6 +697,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.cropmarks",
+    "page": "Basic graphics",
+    "title": "Luxor.cropmarks",
+    "category": "Function",
+    "text": "cropmarks(center, width, height)\n\nDraw cropmarks (also known as trim marks).\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Cropmarks-1",
+    "page": "Basic graphics",
+    "title": "Cropmarks",
+    "category": "section",
+    "text": "If you want cropmarks (aka trim marks), use the cropmarks() function, supplying the centerpoint, followed by the width and height:cropmarks(O, 1200, 1600)\ncropmarks(O, paper_sizes[\"A0\"]...)using Luxor # hide\nDrawing(700, 250, \"assets/figures/cropmarks.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\nbox(O, 50, 50, :stroke)\ncropmarks(O, 150, 150)\nfinish() # hide\nnothing # hide(Image: cropmarks)cropmarks"
+},
+
+{
     "location": "colors-styles.html#",
     "page": "Colors and styles",
     "title": "Colors and styles",
@@ -1094,6 +1110,46 @@ var documenterSearchIndex = {"docs": [
     "title": "Offsetting polygons",
     "category": "section",
     "text": "The experimental offsetpoly() function constructs an outline polygon outside or inside an existing polygon. In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use poly() to draw the result returned by offsetpoly().using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyoffset-simple.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\n\np = star(O, 45, 5, 0.5, 0, vertices=true)\nsethue(\"red\")\nsetdash(\"dot\")\npoly(p, :stroke, close=true)\nsetdash(\"solid\")\nsethue(\"black\")\n\npoly(offsetpoly(p, 20), :stroke, close=true)\npoly(offsetpoly(p, 25), :stroke, close=true)\npoly(offsetpoly(p, 30), :stroke, close=true)\npoly(offsetpoly(p, 35), :stroke, close=true)\n\nsethue(\"darkcyan\")\n\npoly(offsetpoly(p, -10), :stroke, close=true)\npoly(offsetpoly(p, -15), :stroke, close=true)\npoly(offsetpoly(p, -20), :stroke, close=true)\nfinish() # hide\nnothing # hide(Image: offset poly)The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.(Image: offset poly problem)offsetpoly"
+},
+
+{
+    "location": "polygons.html#Luxor.polyperimeter",
+    "page": "Polygons",
+    "title": "Luxor.polyperimeter",
+    "category": "Function",
+    "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polyportion",
+    "page": "Polygons",
+    "title": "Luxor.polyportion",
+    "category": "Function",
+    "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a reduced version of the polygon, where portion is a value between 0.0 and 1.0.\n\nIf you already know them, you can pass the polygon distances in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polydistances",
+    "page": "Polygons",
+    "title": "Luxor.polydistances",
+    "category": "Function",
+    "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.nearestindex",
+    "page": "Polygons",
+    "title": "Luxor.nearestindex",
+    "category": "Function",
+    "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the nearestindex value in polydistancearray, an array of distances made by polydistances, to the value, and the excess value.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Perimeter-utilities-1",
+    "page": "Polygons",
+    "title": "Perimeter utilities",
+    "category": "section",
+    "text": "polyperimeter calculates the distance of a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, 0, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion returns part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns a new polygon tracing the first half of a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(15)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n7-element Array{Real,1}:\n  86.7767\n 173.553\n 260.33  \n 347.107\n 433.884\n 520.66  \n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.polyperimeter\npolyportion\npolydistances\nnearestindex"
 },
 
 {
