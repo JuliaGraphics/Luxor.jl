@@ -824,7 +824,7 @@ Drawing(700, 250, "assets/figures/cropmarks.png")  # hide
 origin() # hide
 background("white") # hide
 sethue("red")
-box(O, 50, 50, :stroke)
+box(O, 150, 150, :stroke)
 cropmarks(O, 150, 150)
 finish() # hide
 nothing # hide

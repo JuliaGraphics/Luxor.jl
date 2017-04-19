@@ -596,7 +596,7 @@ end
 Return an array of the cumulative lengths of a polygon.
 """
 function polydistances(p::Array{Point, 1}; closed=true)
-    r = Real[]
+    r = Real[0.0]
     t = 0.0
     for i in 1:length(p) - 1
         t += norm(p[i], p[i + 1])
@@ -625,12 +625,8 @@ Return a tuple of the index of the nearestindex value in `polydistancearray`, an
 of distances made by `polydistances`, to the `value`, and the excess value.
 """
 function nearestindex(a::Array, val)
-    ind = findfirst(v -> (v > val), a)
-    if ind == 0
-        # too far
-        return (length(a), 0.0)
-    end
-    surplus = a[ind] - val
+    ind = findlast(v -> (v < val), a)
+    surplus = val - a[ind]
     return (ind, surplus)
 end
 

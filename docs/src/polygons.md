@@ -499,7 +499,8 @@ nothing # hide
 
     julia> p = ngon(O, 100, 7, 0, vertices=true);
     julia> polydistances(p)
-    7-element Array{Real,1}:
+    8-element Array{Real,1}:
+       0.0000
       86.7767
      173.553
      260.33  
