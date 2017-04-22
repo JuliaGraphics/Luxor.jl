@@ -1821,15 +1821,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Animation helper functions",
     "category": "section",
-    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence, framenumber, framerange) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define a constant background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of the frame numbered framenumber. The total framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates all the frames in the given framerange and saves them in a temporary directory."
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Movie to create a Movie object which determines the title and dimensions.2 Define functions that draw the graphics.3 Define Scenes that display the functions for specific frames.4 Call the animate(movie::Movie, scenes) function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for ffmpeg to make an animated GIF."
 },
 
 {
-    "location": "animation.html#Luxor.Sequence",
+    "location": "animation.html#Luxor.Movie",
     "page": "Animation",
-    "title": "Luxor.Sequence",
+    "title": "Luxor.Movie",
     "category": "Type",
-    "text": "The Sequence type and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\nProvide width, height, and a title to the Sequence constructor:\n\ndemo = Sequence(400, 400, \"test\")\n\nThen define suitable backdrop and frame functions.\n\nFinally run the animate() function, calling those functions.\n\n\n\n"
+    "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\nProvide width, height, title, and frame range to the Movie constructor:\ndemo = Sequence(400, 400, \"test\", 1:100)\nThen define Scenes and scene-drawing functions.\nFinally, run the animate() function, calling those functions.\n\n\n\n"
+},
+
+{
+    "location": "animation.html#Luxor.Scene",
+    "page": "Animation",
+    "title": "Luxor.Scene",
+    "category": "Type",
+    "text": "The Scene type defines which function should be used to render specific frames in a movie.\n\n\n\n"
 },
 
 {
@@ -1837,7 +1845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "Function",
-    "text": "animate(seq::Sequence, frames::Range, backdrop_func, frame_func;\n        createanimation = true)\n\nCreate frames in the range frames, using a backdrop function and a frame function.\n\nThe backdrop function is called for every frame.\n\nfunction backdropf(demo, framenumber, framerange)\n...\nend\n\nThe frame generating function draws the graphics for a single frame.\n\nfunction framef(demo, framenumber, framerange)\n...\nend\n\nThen call animate() like this:\n\nanimate(demo, 1:100, backdropf, framef)\n\nIf createanimation is true, the function tries to call ffmpeg on the resulting frames to build the animation.\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        framerate=30)\n\nCreate frames from scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation.\n\n\n\n"
 },
 
 {
@@ -1845,7 +1853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Example",
     "category": "section",
-    "text": "using Luxor\n\ndemo = Sequence(400, 400, \"test\")\n\nfunction backdropf(seq::Sequence, framenumber, framerange)\n    background(\"black\")\nend\n\nfunction framef(seq::Sequence, framenumber, framerange)\n    xpos = 100 * cos(framenumber/100)\n    ypos = 100 * sin(framenumber/100)\n    sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))\n    circle(xpos, ypos, 90, :stroke)\n    gsave()\n    translate(xpos, ypos)\n    juliacircles(50)\n    grestore()\n    text(string(\"frame $framenumber of $(length(framerange))\"), O)\nend\n\nanimate(demo, 1:630, backdropf, framef, createanimation=true)(Image: animation example)Sequence\nanimate"
+    "text": "using Luxor\n\ndemo = Movie(400, 400, \"test\", 0:359)\n\nfunction backdrop(movie, framenumber)\n    background(\"black\")\nend\n\nfunction frame(movie, framenumber)\n    sethue(Colors.HSV(framenumber, 1, 1))\n    circle(polar(100, -pi/2 - (framenumber/360) * 2pi), 80, :fill)\n    text(string(\"frame $framenumber of $(length(movie.movieframerange))\"), Point(O.x, O.y-190))\nend\n\nanimate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=true)(Image: animation example)Movie\nScene\nanimate"
 },
 
 {
@@ -1857,11 +1865,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "animation.html#Passing-information-to-later-frames-1",
+    "location": "animation.html#Using-scenes-1",
     "page": "Animation",
-    "title": "Passing information to later frames",
+    "title": "Using scenes",
     "category": "section",
-    "text": "Sometimes you want some information to be passed from frame to frame, such as the updated position of a graphical shape. Currently, the only way to do this is to store things in the sequence's parameters dictionary.For example, for a \"bouncing ball\" animation, you can store the current position and direction of the ball in the Sequence.parameters dictionary at the end of a frame, and then recall them at the start of the next frame.function frameF(seq::Sequence, framenumber, framerange)\n    pos          = seq.parameters[\"pos\"]\n    direction    = seq.parameters[\"direction\"]\n    spriteradius = seq.parameters[\"spriteradius\"]\n\n    # ... code to modify position, direction, and radius\n\n    seq.parameters[\"pos\"]          = newpos\n    seq.parameters[\"direction\"]    = newdirection\n    seq.parameters[\"spriteradius\"] = spriteradius\nend(Image: bouncing ball)"
+    "text": "Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, specify scenes that are drawn only for specific frames.As an example, consider a simple example showing the sun during a 24 hour day.sun24demo = Movie(400, 400, \"sun24\", 0:23)The backgroundfunction draws a background that's used for all frames:function backgroundfunction(movie::Movie, framenumber)\n    background(\"black\")\nendA nightskyfunction draws the night sky:function nightskyfunction(movie::Movie, framenumber)\n    sethue(\"midnightblue\")\n    box(O, 400, 400, :fill)\nendA dayskyfunction draws the daytime sky:function dayskyfunction(movie::Movie, framenumber)\n    sethue(\"skyblue\")\n    box(O, 400, 400, :fill)\nendThe sunfunction draws a sun at 24 positions during the day:function sunfunction(movie::Movie, framenumber)\n    i = rescale(framenumber, 0, 23, 2pi, 0)\n    gsave()\n    sethue(\"yellow\")\n    circle(polar(150, i), 20, :fill)\n    grestore()\nendFinally a groundfunction draws the ground:function groundfunction(movie::Movie, framenumber)\n    gsave()\n    sethue(\"brown\")\n    box(Point(O.x, O.y + 100), 400, 200, :fill)\n    grestore()\n    sethue(\"white\")\nendNow define a group of Scenes. These specify which functions are to be used to create graphics, and for which frames:backdrop  = Scene(sun24demo, 0:23,  backgroundfunction)\nnightsky  = Scene(sun24demo, 0:6,   nightskyfunction)\nnightsky1 = Scene(sun24demo, 17:23, nightskyfunction)\ndaysky    = Scene(sun24demo, 5:19,  dayskyfunction)\nsun       = Scene(sun24demo, 6:18,  sunfunction)\nground    = Scene(sun24demo, 0:23,  groundfunction)Finally, the animate function calls the functions for each frame:animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],\n    framerate=5,\n    creategif=true)(Image: sun24 animation)Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, five functions are called."
 },
 
 {
