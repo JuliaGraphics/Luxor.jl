@@ -9,22 +9,20 @@ else
     const Test = BaseTestNext
 end
 
-demo = Sequence(400, 400, "test")
+demo = Movie(400, 400, "test", 0:359)
 
-function backdrop_f(demo, framenumber, framerange)
+function backdrop(movie, framenumber)
     background("black")
 end
 
-function frame_f(demo, framenumber, framerange)
-    xpos = 100 * cos(framenumber/100)
-    ypos = 100 * sin(framenumber/100)
-    sethue(Colors.HSV(rescale(framenumber, 0, 628, 0, 360), 1, 1))
-    circle(xpos, ypos, 80, :fill)
-    text(string("frame $framenumber of $(length(framerange))"), O)
+function frame(movie, framenumber)
+    sethue(Colors.HSV(framenumber, 1, 1))
+    circle(polar(100, -pi/2 - (framenumber/360) * 2pi), 80, :fill)
+    text(string("frame $framenumber of $(length(movie.movieframerange))"), Point(O.x, O.y-190))
 end
 
 mktempdir() do tmpdir
-    @test animate(demo, 1:2:6, backdrop_f, frame_f, createanimation=false) == true
+    @test animate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=true) == true
 end
 
 println("...finished animation test")
