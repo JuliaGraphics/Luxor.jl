@@ -22,7 +22,7 @@ function frame(movie, framenumber)
 end
 
 mktempdir() do tmpdir
-    @test animate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=true) == true
+    @test animate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=false) == true
 end
 
 println("...finished animation test")
