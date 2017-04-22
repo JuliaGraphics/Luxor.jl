@@ -1,15 +1,83 @@
 """
-The `Sequence` type and the `animate()` function are designed to help you create the frames
+The `Movie` and `Scene` types and the `animate()` function are designed to help you create the frames
 that can be used to make an animated GIF or movie.
 
-Provide width, height, and a title to the Sequence constructor:
+- Provide width, height, title, and frame range to the Movie constructor:
 
-    demo = Sequence(400, 400, "test")
+    demo = Sequence(400, 400, "test", 1:100)
 
-Then define suitable backdrop and frame functions.
+- Then define Scenes and scene-drawing functions.
 
-Finally run the `animate()` function, calling those functions.
+- Finally, run the `animate()` function, calling those functions.
 """
+type Movie
+    width::Float64
+    height::Float64
+    movietitle::String
+    movieframerange::Range
+end
+
+"""
+The Scene type defines which function should be used to render specific frames in a movie.
+"""
+type Scene
+    movie::Movie
+    framerange::Range
+    framefunction::Function
+end
+
+"""
+    animate(movie::Movie, scenelist::Array{Scene, 1};
+            creategif=false,
+            framerate=30)
+
+Create frames from scenes in `scenelist`.
+
+If `creategif` is `true`, the function tries to call `ffmpeg` on the resulting frames to
+build a GIF animation.
+"""
+function animate(movie::Movie, scenelist::Array{Scene, 1};
+        creategif=false,
+        framerate=30)
+    tempdirectory = mktempdir()
+    info(" frames for animation \"$(movie.movietitle)\" are being stored in directory $(tempdirectory)")
+    filecounter = 1
+    rangelist = 0:-1
+    for scene in scenelist
+        rangelist = vcat(rangelist, collect(scene.framerange))
+    end
+    rangelist = unique(rangelist) # remove shared frames
+    if rangelist[end] > movie.movieframerange.stop
+        error("Movie too short. movie: $(movie.movieframerange) last scene frame: $(rangelist[end])")
+    end
+    if rangelist[end] < movie.movieframerange.stop
+        warn("Movie is too long. movie: $(movie.movieframerange) last scene frame: $(rangelist[end])")
+    end
+    for currentframe in rangelist[1]:rangelist[end]
+        Drawing(movie.width, movie.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
+        origin()
+        # this frame needs doing, see if each of the scenes defines it
+        for scene in scenelist
+            if currentframe in scene.framerange
+                # use invoke()? TODO change for v0.6?
+                invoke(scene.framefunction, Tuple{typeof(movie), typeof(currentframe)}, movie, currentframe)
+            end
+        end
+        finish()
+        filecounter += 1
+    end
+    info("... $(filecounter) frames stored in directory $(tempdirectory)")
+    if is_unix() && (creategif == true)
+        # these two commands create a palette and then create animated GIF from the resulting images
+        run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
+        run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
+        info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
+    end
+    return true
+end
+
+# deprecated types
+
 type Sequence
     width::Float64
     height::Float64
@@ -20,34 +88,9 @@ type Sequence
     end
 end
 
-"""
-    animate(seq::Sequence, frames::Range, backdrop_func, frame_func;
-            createanimation = true)
-
-Create frames in the range `frames`, using a backdrop function and a frame function.
-
-The backdrop function is called for every frame.
-
-    function backdropf(demo, framenumber, framerange)
-    ...
-    end
-
-The frame generating function draws the graphics for a single frame.
-
-    function framef(demo, framenumber, framerange)
-    ...
-    end
-
-Then call `animate()` like this:
-
-    animate(demo, 1:100, backdropf, framef)
-
-If `createanimation` is `true`, the function tries to call `ffmpeg` on the resulting frames to
-build the animation.
-"""
-
 function animate(seq::Sequence, frames::Range, backdropfunc, framefunc;
         createanimation = true)
+    warn("The sequence-based animate() function is deprecated.")
     tempdirectory = mktempdir()
     info("storing \"$(seq.stitle)\" in directory; $(tempdirectory)")
     info( "ffmpeg will $(createanimation ? "" : "not ")process the frames.")

@@ -8,7 +8,9 @@
 
 ## Luxor
 
-Luxor is for procedural drawing. It provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. The focus of Luxor is on simplicity: it should be easier to use than plain [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. The idea is that your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then saves it into a PDF or PNG file.
+Luxor is a Julia package for drawing simple vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles. The focus of Luxor is on simplicity and ease of use: it should be easier to use than plain [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions.
+
+Luxor is thoroughly procedural: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved it into a PDF, PNG, SVG, or EPS file.
 
 For interactive graphics, try [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl) or [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl).
 

@@ -4,44 +4,39 @@ Luxor provides some functions to help you create animations—at least, it provi
 
 There are four steps to creating an animation.
 
-1 Use `Sequence` to create a Sequence object which determines the title and dimensions.
+1 Use `Movie` to create a Movie object which determines the title and dimensions.
 
-2 Define a suitable `backdrop(seq::Sequence, framenumber, framerange)` function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define a constant background color.
+2 Define functions that draw the graphics.
 
-3 Define a suitable `frame(seq::Sequence, framenumber, framerange)` function that constructs the contents of the frame numbered `framenumber`. The total `framerange` is available for possible reference inside the function.
+3 Define Scenes that display the functions for specific frames.
 
-4 Call the `animate(seq::Sequence, framerange, backdrop, frame)` function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates all the frames in the given `framerange` and saves them in a temporary directory.
+4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for `ffmpeg` to make an animated GIF.
 
 ## Example
 
 ```julia
 using Luxor
 
-demo = Sequence(400, 400, "test")
+demo = Movie(400, 400, "test", 0:359)
 
-function backdropf(seq::Sequence, framenumber, framerange)
+function backdrop(movie, framenumber)
     background("black")
 end
 
-function framef(seq::Sequence, framenumber, framerange)
-    xpos = 100 * cos(framenumber/100)
-    ypos = 100 * sin(framenumber/100)
-    sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))
-    circle(xpos, ypos, 90, :stroke)
-    gsave()
-    translate(xpos, ypos)
-    juliacircles(50)
-    grestore()
-    text(string("frame $framenumber of $(length(framerange))"), O)
+function frame(movie, framenumber)
+    sethue(Colors.HSV(framenumber, 1, 1))
+    circle(polar(100, -pi/2 - (framenumber/360) * 2pi), 80, :fill)
+    text(string("frame $framenumber of $(length(movie.movieframerange))"), Point(O.x, O.y-190))
 end
 
-animate(demo, 1:630, backdropf, framef, createanimation=true)
+animate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=true)
 ```
 
 ![animation example](assets/figures/animation.gif)
 
 ```@docs
-Sequence
+Movie
+Scene
 animate
 ```
 
@@ -54,25 +49,69 @@ run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitl
 
 run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)
 ```
+## Using scenes
 
-## Passing information to later frames
+Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, specify scenes that are drawn only for specific frames.
 
-Sometimes you want some information to be passed from frame to frame, such as the updated position of a graphical shape. Currently, the only way to do this is to store things in the sequence's `parameters` dictionary.
+As an example, consider a simple example showing the sun during a 24 hour day.
 
-For example, for a "bouncing ball" animation, you can store the current position and direction of the ball in the `Sequence.parameters` dictionary at the end of a frame, and then recall them at the start of the next frame.
+    sun24demo = Movie(400, 400, "sun24", 0:23)
 
-```julia
-function frameF(seq::Sequence, framenumber, framerange)
-    pos          = seq.parameters["pos"]
-    direction    = seq.parameters["direction"]
-    spriteradius = seq.parameters["spriteradius"]
+The `backgroundfunction` draws a background that's used for all frames:
 
-    # ... code to modify position, direction, and radius
+    function backgroundfunction(movie::Movie, framenumber)
+        background("black")
+    end
 
-    seq.parameters["pos"]          = newpos
-    seq.parameters["direction"]    = newdirection
-    seq.parameters["spriteradius"] = spriteradius
-end
-```
+A `nightskyfunction` draws the night sky:
 
-![bouncing ball](assets/figures/bouncingball.gif)
+    function nightskyfunction(movie::Movie, framenumber)
+        sethue("midnightblue")
+        box(O, 400, 400, :fill)
+    end
+
+A `dayskyfunction` draws the daytime sky:
+
+    function dayskyfunction(movie::Movie, framenumber)
+        sethue("skyblue")
+        box(O, 400, 400, :fill)
+    end
+
+The `sunfunction` draws a sun at 24 positions during the day:
+
+    function sunfunction(movie::Movie, framenumber)
+        i = rescale(framenumber, 0, 23, 2pi, 0)
+        gsave()
+        sethue("yellow")
+        circle(polar(150, i), 20, :fill)
+        grestore()
+    end
+
+Finally a `groundfunction` draws the ground:
+
+    function groundfunction(movie::Movie, framenumber)
+        gsave()
+        sethue("brown")
+        box(Point(O.x, O.y + 100), 400, 200, :fill)
+        grestore()
+        sethue("white")
+    end
+
+Now define a group of Scenes. These specify which functions are to be used to create graphics, and for which frames:
+
+    backdrop  = Scene(sun24demo, 0:23,  backgroundfunction)
+    nightsky  = Scene(sun24demo, 0:6,   nightskyfunction)
+    nightsky1 = Scene(sun24demo, 17:23, nightskyfunction)
+    daysky    = Scene(sun24demo, 5:19,  dayskyfunction)
+    sun       = Scene(sun24demo, 6:18,  sunfunction)
+    ground    = Scene(sun24demo, 0:23,  groundfunction)
+
+Finally, the `animate` function calls the functions for each frame:
+
+    animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],
+        framerate=5,
+        creategif=true)
+
+![sun24 animation](assets/figures/sun24.gif)
+
+Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, five functions are called.

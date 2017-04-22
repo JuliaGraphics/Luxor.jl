@@ -100,7 +100,7 @@ export Drawing, currentdrawing,
 
     julialogo, juliacircles,
 
-    Sequence, animate
+    Sequence, Movie, Scene, animate
 
 
 # basic unit conversion to Cairo/PostScript points
