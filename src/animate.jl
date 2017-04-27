@@ -2,13 +2,13 @@
 The `Movie` and `Scene` types and the `animate()` function are designed to help you create
 the frames that can be used to make an animated GIF or movie.
 
-1 Provide width, height, title, and frame range to the Movie constructor:
+1 Provide width, height, title, and optionally frame range to the Movie constructor:
 
-    demo = Movie(400, 400, "test", 1:100)
+    demo = Movie(400, 400, "test", 1:250)
 
-2 Then define Scenes and scene-drawing functions.
+2 Define Scenes and scene-drawing functions.
 
-2 Finally, run the `animate()` function, calling those functions.
+3 Run the `animate()` function, calling those scenes.
 """
 
 type Movie
@@ -25,7 +25,7 @@ Define a movie, specifying the width, height, and a title. The title will be use
 the output file name. The range defaults to `1:100`.
 """
 
-Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:100)
+Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:1000)
 
 """default linear transition - no easing, no acceleration"""
 function lineartween(t, b, c, d)
@@ -35,10 +35,10 @@ end
 """
 The Scene type defines a function to be used to render a range of frames in a movie.
 
-- `movie` created by Movie()
-- `framefunction` is a function taking two arguments: the movie and the framenumber.
-- `framerange` determines which frames are processed by the function. Defaults to the entire movie.
-- `easingfunction` can be accessed by the framefunction to vary the transition speed
+- the `movie` created by Movie()
+- the `framefunction` is a function taking two arguments: the movie and the framenumber.
+- the `framerange` determines which frames are processed by the function. Defaults to the entire movie.
+- the optional `easingfunction` can be accessed by the framefunction to vary the transition speed
 """
 type Scene
     movie::Movie
@@ -114,21 +114,6 @@ end
 Create the movie defined in `movie` by rendering the frames define in `scene`.
 """
 animate(movie::Movie, scene::Scene; kwargs...) = animate(movie, [scene]; kwargs...)
-
-# """
-# ## Easing functions
-#
-#     function animatepoly(scene, framenumber)
-#         background("white")
-#         ...
-#         easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
-#     ...
-#
-# `t` is the current framenumber of the transition.
-# `b` is the beginning value of the property.
-# `c` is the change between the beginning and destination value of the property.
-# `d` is the total time of the transition.
-# """
 
 """quadratic easing in - accelerating from zero velocity"""
 function easeinquad(t, b, c, d)

@@ -26,4 +26,36 @@ mktempdir() do tmpdir
     @test animate(demomovie, [Scene(demomovie, backdrop), Scene(demomovie, frame, 0:359, easingfunction=easeinoutquad)], creategif=false) == true
 end
 
-println("...finished animation test")
+demo = Movie(400, 100, "test")
+
+backdrop(scene, framenumber) =  background("black")
+
+function frame1(scene, framenumber)
+    sethue("purple")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), -20), 10, :fill)
+end
+
+function frame2(scene, framenumber)
+    sethue("green")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 0), 10, :fill)
+end
+
+function frame3(scene, framenumber)
+    sethue("red")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 20), 10, :fill)
+end
+
+mktempdir() do tmpdir
+    @test animate(demo, [
+        Scene(demo, backdrop, 0:200),
+        Scene(demo, frame1,   0:200, easingfunction=easeinsine),
+        Scene(demo, frame2,   0:200, easingfunction=easeinoutcubic),
+        Scene(demo, frame3,   0:200, easingfunction=easeinoutquint)
+        ],
+        creategif=false) == true
+end
+
+println("...finished animation tests")
