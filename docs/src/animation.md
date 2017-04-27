@@ -122,8 +122,70 @@ Finally, the `animate` function scans the scenes in the scenelist for a movie, a
 
 ![sun24 animation](assets/figures/sun24.gif)
 
-Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, five functions are called.
+Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. The order of scenes and the use of backgrounds can be important.
 
 ## Easing functions
 
-Transitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some basic easing functions and they're listed in the array `Luxor.easingfunctions`.
+Transitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some of the basic easing functions and they're listed in the (unexported) array `Luxor.easingfunctions`. Each scene can have one easing function.
+
+Most easing functions have names constructed like this:
+
+    ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
+
+One way to use an easing function in a frame-making function is like this:
+
+     function moveobject(scene, framenumber)
+        background("white")
+        ...
+        easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+        ...
+
+This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.
+
+In the next example, the purple dot has sinusoidal motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.
+
+![animation easing example](assets/figures/animation-easing.gif)
+
+```julia
+fastandfurious = Movie(400, 100, "easingtests")
+backdrop(scene, framenumber) =  background("black")
+function frame1(scene, framenumber)
+    sethue("purple")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), -20), 10, :fill)
+end
+function frame2(scene, framenumber)
+    sethue("green")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 0), 10, :fill)
+end
+function frame3(scene, framenumber)
+    sethue("red")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 20), 10, :fill)
+end
+animate(fastandfurious, [
+    Scene(fastandfurious, backdrop, 0:200),
+    Scene(fastandfurious, frame1,   0:200, easingfunction=easeinsine),
+    Scene(fastandfurious, frame2,   0:200, easingfunction=easeinoutcubic),
+    Scene(fastandfurious, frame3,   0:200, easingfunction=easeinoutquint)
+    ],
+    creategif=true)
+```
+
+A typical easing function is this one:
+
+    function easeoutquad(t, b, c, d)
+       t /= d
+       return -c * t * (t - 2) + b
+    end
+
+Here:
+
+- `t` is the current framenumber of the transition
+
+- `b` is the beginning value of the property
+
+- `c` is the change between the beginning and destination value of the property
+
+- `d` is the total time of the transition
