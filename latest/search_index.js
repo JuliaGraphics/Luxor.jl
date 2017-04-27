@@ -1821,7 +1821,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Animation helper functions",
     "category": "section",
-    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Movie to create a Movie object which determines the title and dimensions.2 Define functions that draw the graphics.3 Define Scenes that display the functions for specific frames.4 Call the animate(movie::Movie, scenes) function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for ffmpeg to make an animated GIF."
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Movie to create a Movie object which determines the title and dimensions.2 Define some functions that draw the graphics for specific frames.3 Define one or more Scenes that call the functions.4 Call the animate(movie::Movie, scenes) function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for ffmpeg to make an animated GIF."
 },
 
 {
@@ -1829,7 +1829,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.Movie",
     "category": "Type",
-    "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\nProvide width, height, title, and frame range to the Movie constructor:\ndemo = Sequence(400, 400, \"test\", 1:100)\nThen define Scenes and scene-drawing functions.\nFinally, run the animate() function, calling those functions.\n\n\n\n"
+    "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\n1 Provide width, height, title, and frame range to the Movie constructor:\n\ndemo = Movie(400, 400, \"test\", 1:100)\n\n2 Then define Scenes and scene-drawing functions.\n\n2 Finally, run the animate() function, calling those functions.\n\n\n\n"
 },
 
 {
@@ -1837,7 +1837,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.Scene",
     "category": "Type",
-    "text": "The Scene type defines which function should be used to render specific frames in a movie.\n\n\n\n"
+    "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nmovie created by Movie()\nframefunction is a function taking two arguments: the movie and the framenumber.\nframerange determines which frames are processed by the function. Defaults to the entire movie.\neasingfunction can be accessed by the framefunction to vary the transition speed\n\n\n\n"
 },
 
 {
@@ -1845,7 +1845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "Function",
-    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        framerate=30)\n\nCreate frames from scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation.\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation.\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
 },
 
 {
@@ -1853,7 +1853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Example",
     "category": "section",
-    "text": "using Luxor\n\ndemo = Movie(400, 400, \"test\", 0:359)\n\nfunction backdrop(movie, framenumber)\n    background(\"black\")\nend\n\nfunction frame(movie, framenumber)\n    sethue(Colors.HSV(framenumber, 1, 1))\n    circle(polar(100, -pi/2 - (framenumber/360) * 2pi), 80, :fill)\n    text(string(\"frame $framenumber of $(length(movie.movieframerange))\"), Point(O.x, O.y-190))\nend\n\nanimate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=true)(Image: animation example)Movie\nScene\nanimate"
+    "text": "using Luxor\n\ndemo = Movie(400, 400, \"test\")\n\nfunction backdrop(scene, framenumber)\n    background(\"black\")\nend\n\nfunction frame(scene, framenumber)\n    sethue(Colors.HSV(framenumber, 1, 1))\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(polar(100, -pi/2 - (eased_n * 2pi)), 80, :fill)\n    text(string(\"frame $framenumber of $(scene.framerange.stop)\"),\n        Point(O.x, O.y-190),\n        halign=:center)\nend\n\nanimate(demo, [\n    Scene(demo, backdrop, 0:359),\n    Scene(demo, frame, 0:359, easingfunction=easeinoutcubic)\n    ],\n    creategif=true)(Image: animation example)Movie\nScene\nanimate"
 },
 
 {
@@ -1869,7 +1869,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Using scenes",
     "category": "section",
-    "text": "Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, specify scenes that are drawn only for specific frames.As an example, consider a simple example showing the sun during a 24 hour day.sun24demo = Movie(400, 400, \"sun24\", 0:23)The backgroundfunction draws a background that's used for all frames:function backgroundfunction(movie::Movie, framenumber)\n    background(\"black\")\nendA nightskyfunction draws the night sky:function nightskyfunction(movie::Movie, framenumber)\n    sethue(\"midnightblue\")\n    box(O, 400, 400, :fill)\nendA dayskyfunction draws the daytime sky:function dayskyfunction(movie::Movie, framenumber)\n    sethue(\"skyblue\")\n    box(O, 400, 400, :fill)\nendThe sunfunction draws a sun at 24 positions during the day:function sunfunction(movie::Movie, framenumber)\n    i = rescale(framenumber, 0, 23, 2pi, 0)\n    gsave()\n    sethue(\"yellow\")\n    circle(polar(150, i), 20, :fill)\n    grestore()\nendFinally a groundfunction draws the ground:function groundfunction(movie::Movie, framenumber)\n    gsave()\n    sethue(\"brown\")\n    box(Point(O.x, O.y + 100), 400, 200, :fill)\n    grestore()\n    sethue(\"white\")\nendNow define a group of Scenes. These specify which functions are to be used to create graphics, and for which frames:backdrop  = Scene(sun24demo, 0:23,  backgroundfunction)\nnightsky  = Scene(sun24demo, 0:6,   nightskyfunction)\nnightsky1 = Scene(sun24demo, 17:23, nightskyfunction)\ndaysky    = Scene(sun24demo, 5:19,  dayskyfunction)\nsun       = Scene(sun24demo, 6:18,  sunfunction)\nground    = Scene(sun24demo, 0:23,  groundfunction)Finally, the animate function calls the functions for each frame:animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],\n    framerate=5,\n    creategif=true)(Image: sun24 animation)Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, five functions are called."
+    "text": "Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, specify scenes that are drawn only for specific frames.As an example, consider a simple example showing the sun during a 24 hour day.sun24demo = Movie(400, 400, \"sun24\", 0:23)The backgroundfunction draws a background that's used for all frames:function backgroundfunction(scene::Scene, framenumber)\n    background(\"black\")\nendA nightskyfunction draws the night sky:function nightskyfunction(scene::Scene, framenumber)\n    sethue(\"midnightblue\")\n    box(O, 400, 400, :fill)\nendA dayskyfunction draws the daytime sky:function dayskyfunction(scene::Scene, framenumber)\n    sethue(\"skyblue\")\n    box(O, 400, 400, :fill)\nendThe sunfunction draws a sun at 24 positions during the day:function sunfunction(scene::Scene, framenumber)\n    i = rescale(framenumber, 0, 23, 2pi, 0)\n    gsave()\n    sethue(\"yellow\")\n    circle(polar(150, i), 20, :fill)\n    grestore()\nendFinally a groundfunction draws the ground:function groundfunction(scene::Scene, framenumber)\n    gsave()\n    sethue(\"brown\")\n    box(Point(O.x, O.y + 100), 400, 200, :fill)\n    grestore()\n    sethue(\"white\")\nendNow define a group of Scenes that make up the movie. The scenes specify which functions are to be used to create graphics, and for which frames:backdrop  = Scene(sun24demo, backgroundfunction, 0:23)\nnightsky  = Scene(sun24demo, nightskyfunction, 0:6)\nnightsky1 = Scene(sun24demo, nightskyfunction, 17:23)\ndaysky    = Scene(sun24demo, dayskyfunction, 5:19)\nsun       = Scene(sun24demo, sunfunction, 6:18)\nground    = Scene(sun24demo, groundfunction, 0:23)Finally, the animate function scans the scenes in the scenelist for a movie, and calls the functions for each frame to build the animation:animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],\n    framerate=5,\n    creategif=true)(Image: sun24 animation)Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, five functions are called."
+},
+
+{
+    "location": "animation.html#Easing-functions-1",
+    "page": "Animation",
+    "title": "Easing functions",
+    "category": "section",
+    "text": "Transitions for animations often use non-constant and non-linear motions, and these are usually provided by easing functions. Luxor defines some basic easing functions and they're listed in the array Luxor.easingfunctions."
 },
 
 {
