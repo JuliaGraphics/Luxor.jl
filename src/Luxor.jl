@@ -100,8 +100,13 @@ export Drawing, currentdrawing,
 
     julialogo, juliacircles,
 
-    Sequence, Movie, Scene, animate
+    # animation
+    Sequence, Movie, Scene, animate,
 
+    lineartween, easeinquad, easeoutquad, easeinoutquad, easeincubic, easeoutcubic,
+    easeinoutcubic, easeinquart, easeoutquart, easeinoutquart, easeinquint, easeoutquint,
+    easeinoutquint, easeinsine, easeoutsine, easeinoutsine, easeinexpo, easeoutexpo,
+    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

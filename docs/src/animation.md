@@ -6,9 +6,9 @@ There are four steps to creating an animation.
 
 1 Use `Movie` to create a Movie object which determines the title and dimensions.
 
-2 Define functions that draw the graphics.
+2 Define some functions that draw the graphics for specific frames.
 
-3 Define Scenes that display the functions for specific frames.
+3 Define one or more Scenes that call the functions.
 
 4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for `ffmpeg` to make an animated GIF.
 
@@ -17,19 +17,26 @@ There are four steps to creating an animation.
 ```julia
 using Luxor
 
-demo = Movie(400, 400, "test", 0:359)
+demo = Movie(400, 400, "test")
 
-function backdrop(movie, framenumber)
+function backdrop(scene, framenumber)
     background("black")
 end
 
-function frame(movie, framenumber)
+function frame(scene, framenumber)
     sethue(Colors.HSV(framenumber, 1, 1))
-    circle(polar(100, -pi/2 - (framenumber/360) * 2pi), 80, :fill)
-    text(string("frame $framenumber of $(length(movie.movieframerange))"), Point(O.x, O.y-190))
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(polar(100, -pi/2 - (eased_n * 2pi)), 80, :fill)
+    text(string("frame $framenumber of $(scene.framerange.stop)"),
+        Point(O.x, O.y-190),
+        halign=:center)
 end
 
-animate(demo, [Scene(demo, 0:359,  backdrop), Scene(demo, 0:359,  frame)], creategif=true)
+animate(demo, [
+    Scene(demo, backdrop, 0:359),
+    Scene(demo, frame, 0:359, easingfunction=easeinoutcubic)
+    ],
+    creategif=true)
 ```
 
 ![animation example](assets/figures/animation.gif)
@@ -49,6 +56,7 @@ run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitl
 
 run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)
 ```
+
 ## Using scenes
 
 Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, specify scenes that are drawn only for specific frames.
@@ -59,27 +67,27 @@ As an example, consider a simple example showing the sun during a 24 hour day.
 
 The `backgroundfunction` draws a background that's used for all frames:
 
-    function backgroundfunction(movie::Movie, framenumber)
+    function backgroundfunction(scene::Scene, framenumber)
         background("black")
     end
 
 A `nightskyfunction` draws the night sky:
 
-    function nightskyfunction(movie::Movie, framenumber)
+    function nightskyfunction(scene::Scene, framenumber)
         sethue("midnightblue")
         box(O, 400, 400, :fill)
     end
 
 A `dayskyfunction` draws the daytime sky:
 
-    function dayskyfunction(movie::Movie, framenumber)
+    function dayskyfunction(scene::Scene, framenumber)
         sethue("skyblue")
         box(O, 400, 400, :fill)
     end
 
 The `sunfunction` draws a sun at 24 positions during the day:
 
-    function sunfunction(movie::Movie, framenumber)
+    function sunfunction(scene::Scene, framenumber)
         i = rescale(framenumber, 0, 23, 2pi, 0)
         gsave()
         sethue("yellow")
@@ -89,7 +97,7 @@ The `sunfunction` draws a sun at 24 positions during the day:
 
 Finally a `groundfunction` draws the ground:
 
-    function groundfunction(movie::Movie, framenumber)
+    function groundfunction(scene::Scene, framenumber)
         gsave()
         sethue("brown")
         box(Point(O.x, O.y + 100), 400, 200, :fill)
@@ -97,16 +105,16 @@ Finally a `groundfunction` draws the ground:
         sethue("white")
     end
 
-Now define a group of Scenes. These specify which functions are to be used to create graphics, and for which frames:
+Now define a group of Scenes that make up the movie. The scenes specify which functions are to be used to create graphics, and for which frames:
 
-    backdrop  = Scene(sun24demo, 0:23,  backgroundfunction)
-    nightsky  = Scene(sun24demo, 0:6,   nightskyfunction)
-    nightsky1 = Scene(sun24demo, 17:23, nightskyfunction)
-    daysky    = Scene(sun24demo, 5:19,  dayskyfunction)
-    sun       = Scene(sun24demo, 6:18,  sunfunction)
-    ground    = Scene(sun24demo, 0:23,  groundfunction)
+    backdrop  = Scene(sun24demo, backgroundfunction, 0:23)
+    nightsky  = Scene(sun24demo, nightskyfunction, 0:6)
+    nightsky1 = Scene(sun24demo, nightskyfunction, 17:23)
+    daysky    = Scene(sun24demo, dayskyfunction, 5:19)
+    sun       = Scene(sun24demo, sunfunction, 6:18)
+    ground    = Scene(sun24demo, groundfunction, 0:23)
 
-Finally, the `animate` function calls the functions for each frame:
+Finally, the `animate` function scans the scenes in the scenelist for a movie, and calls the functions for each frame to build the animation:
 
     animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],
         framerate=5,
@@ -115,3 +123,7 @@ Finally, the `animate` function calls the functions for each frame:
 ![sun24 animation](assets/figures/sun24.gif)
 
 Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, five functions are called.
+
+## Easing functions
+
+Transitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some basic easing functions and they're listed in the array `Luxor.easingfunctions`.
