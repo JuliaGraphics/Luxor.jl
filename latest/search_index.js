@@ -1821,7 +1821,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Animation helper functions",
     "category": "section",
-    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Movie to create a Movie object which determines the title and dimensions.2 Define some functions that draw the graphics for specific frames.3 Define one or more Scenes that call the functions.4 Call the animate(movie::Movie, scenes) function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for ffmpeg to make an animated GIF."
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Movie to create a Movie object which determines the title and dimensions.2 Define some functions that draw the graphics for specific frames.3 Define one or more Scenes that call these functions for specific frames.4 Call the animate(movie::Movie, scenes) function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for ffmpeg (if it's installed) to make an animated GIF for you."
 },
 
 {
@@ -1829,7 +1829,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.Movie",
     "category": "Type",
-    "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\n1 Provide width, height, title, and optionally frame range to the Movie constructor:\n\ndemo = Movie(400, 400, \"test\", 1:250)\n\n2 Define Scenes and scene-drawing functions.\n\n3 Run the animate() function, calling those scenes.\n\n\n\n"
+    "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\n1 Provide width, height, title, and optionally a frame range to the Movie constructor:\n\ndemo = Movie(400, 400, \"test\", 1:250)\n\n2 Define one or more Scenes and scene-drawing functions.\n\n3 Run the animate() function, calling those scenes.\n\n\n\n"
 },
 
 {
@@ -1837,7 +1837,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.Scene",
     "category": "Type",
-    "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nthe movie created by Movie()\nthe framefunction is a function taking two arguments: the movie and the framenumber.\nthe framerange determines which frames are processed by the function. Defaults to the entire movie.\nthe optional easingfunction can be accessed by the framefunction to vary the transition speed\n\n\n\n"
+    "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nthe movie created by Movie()\nthe framefunction is a function taking two arguments: the scene and the framenumber.\nthe framerange determines which frames are processed by the function. Defaults to the entire movie.\nthe optional easingfunction can be accessed by the framefunction to vary the transition speed\n\n\n\n"
 },
 
 {
@@ -1845,7 +1845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "Function",
-    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation.\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
 },
 
 {
