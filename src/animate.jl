@@ -2,11 +2,11 @@
 The `Movie` and `Scene` types and the `animate()` function are designed to help you create
 the frames that can be used to make an animated GIF or movie.
 
-1 Provide width, height, title, and optionally frame range to the Movie constructor:
+1 Provide width, height, title, and optionally a frame range to the Movie constructor:
 
     demo = Movie(400, 400, "test", 1:250)
 
-2 Define Scenes and scene-drawing functions.
+2 Define one or more Scenes and scene-drawing functions.
 
 3 Run the `animate()` function, calling those scenes.
 """
@@ -22,10 +22,10 @@ end
     Movie(width, height, movietitle)
 
 Define a movie, specifying the width, height, and a title. The title will be used to make
-the output file name. The range defaults to `1:100`.
+the output file name. The range defaults to `1:250`.
 """
 
-Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:1000)
+Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:250)
 
 """default linear transition - no easing, no acceleration"""
 function lineartween(t, b, c, d)
@@ -36,7 +36,7 @@ end
 The Scene type defines a function to be used to render a range of frames in a movie.
 
 - the `movie` created by Movie()
-- the `framefunction` is a function taking two arguments: the movie and the framenumber.
+- the `framefunction` is a function taking two arguments: the scene and the framenumber.
 - the `framerange` determines which frames are processed by the function. Defaults to the entire movie.
 - the optional `easingfunction` can be accessed by the framefunction to vary the transition speed
 """
@@ -45,27 +45,29 @@ type Scene
     framefunction::Function
     framerange::Range
     easingfunction::Function
-    Scene(movie, framefunction, framerange; easingfunction=lineartween) = new(movie, framefunction, framerange, easingfunction)
-    # no specific range, use movie's range
-    Scene(movie::Movie, framefunction::Function; easingfunction=lineartween) = Scene(movie, framefunction, movie.movieframerange, easingfunction)
-    # no specific range or function
-    Scene(movie::Movie, framefunction::Function) = Scene(movie, framefunction, movie.movieframerange, easingfunction=lineartween)
 end
+
+Scene(movie::Movie, framefunction::Function; easingfunction=lineartween) = Scene(movie, framefunction, movie.movieframerange, easingfunction)
+Scene(movie, framefunction, framerange; easingfunction=lineartween) = Scene(movie, framefunction, framerange, easingfunction)
+# Scene(movie::Movie, framefunction::Function) = Scene(movie, framefunction, movie.movieframerange, easingfunction=lineartween)
 
 """
     animate(movie::Movie, scenelist::Array{Scene, 1};
             creategif=false,
+            pathname=""
             framerate=30)
 
 Create the movie defined in `movie` by rendering the frames define in the array of scenes
 in `scenelist`.
 
 If `creategif` is `true`, the function tries to call `ffmpeg` on the resulting frames to
-build a GIF animation.
+build a GIF animation. This will be stored in `pathname` (an existing file will be
+overwritten; use a ".gif" suffix), or in `(movietitle).gif` in a temporary directory.
 """
 function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
-        framerate=30)
+        framerate=30,
+        pathname="")
     tempdirectory = mktempdir()
     info(" frames for animation \"$(movie.movietitle)\" are being stored in directory $(tempdirectory)")
     filecounter = 1
@@ -74,11 +76,8 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         rangelist = vcat(rangelist, collect(scene.framerange))
     end
     rangelist = unique(rangelist) # remove shared frames
-    #    if rangelist[end] > movie.movieframerange.stop
-    #        error("Movie too short. movie: $(movie.movieframerange) last scene frame: $(rangelist[end])")
-    #    end
     if rangelist[end] < movie.movieframerange.stop
-        warn("Movie is too long. movie: $(movie.movieframerange) last scene frame: $(rangelist[end])")
+        warn("Movie framerange is longer than scene frame range: $(movie.movieframerange) > $(rangelist[end])")
     end
     for currentframe in rangelist[1]:rangelist[end]
         Drawing(movie.width, movie.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
@@ -86,12 +85,6 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         # this frame needs doing, see if each of the scenes defines it
         for scene in scenelist
             if currentframe in scene.framerange
-                # use invoke(), no - changing for v0.6
-                # invoke(scene.framefunction,
-                #     Tuple{typeof(movie), typeof(currentframe), typeof(easingfunction)},
-                #     movie,
-                #     currentframe,
-                #     easingfunction=scene.easingfunction)
                 scene.framefunction(scene, currentframe)
             end
         end
@@ -99,11 +92,16 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         filecounter += 1
     end
     info("... $(filecounter) frames stored in directory $(tempdirectory)")
-    if is_unix() && (creategif == true)
+    if creategif == true
         # these two commands create a palette and then create animated GIF from the resulting images
         run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
         run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
-        info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
+        if ! isempty(pathname)
+            mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, remove_destination=true)
+            info("GIF is: $pathname")
+        else
+            info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
+        end
     end
     return true
 end
@@ -296,7 +294,6 @@ easingfunctions = [lineartween,
                     easeoutcirc,
                     easeinoutcirc,
                     easingflat]
-
 
 """deprecated types"""
 
