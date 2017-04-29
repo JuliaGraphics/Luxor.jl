@@ -8,9 +8,9 @@ There are four steps to creating an animation.
 
 2 Define some functions that draw the graphics for specific frames.
 
-3 Define one or more Scenes that call the functions.
+3 Define one or more Scenes that call these functions for specific frames.
 
-4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for `ffmpeg` to make an animated GIF.
+4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for `ffmpeg` (if it's installed) to make an animated GIF for you.
 
 ## Example
 
