@@ -16,7 +16,7 @@ Tiler and Partition are similar:
 
 - Partition lets you specify the width and height of a cell
 
-- Tiler lets you specify how many rows and columns of cells you want
+- Tiler lets you specify how many rows and columns of cells you want, and a margin
 
     tiles = Tiler(1000, 800, 4, 5, margin=20)
     for (pos, n) in tiles
@@ -240,7 +240,7 @@ Tiler and Partition are similar:
 
 - Partition lets you specify the width and height of a cell
 
-- Tiler lets you specify how many rows and columns of cells you want
+- Tiler lets you specify how many rows and columns of cells you want, and a margin
 
 
     tiles = Partition(1200, 1200, 30, 30)

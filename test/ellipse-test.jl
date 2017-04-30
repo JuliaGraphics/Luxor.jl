@@ -17,7 +17,7 @@ function test_ellipse(fname)
   setopacity(0.5)
   setline(0.3)
 
-  pagetiles = Tiler(pagewidth, pageheight, 4, 5, margin=50)
+  pagetiles = Partition(pagewidth, pageheight, 200, 200)
   for (pos, n) in pagetiles
     randomhue()
     ellipse(pos, rand(50:pagetiles.tilewidth), rand(50:pagetiles.tileheight), :strokepreserve)

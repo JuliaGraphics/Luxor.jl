@@ -4,7 +4,7 @@ the frames that can be used to make an animated GIF or movie.
 
 1 Provide width, height, title, and optionally a frame range to the Movie constructor:
 
-    demo = Movie(400, 400, "test", 1:250)
+    demo = Movie(400, 400, "test", 1:500)
 
 2 Define one or more Scenes and scene-drawing functions.
 
@@ -49,7 +49,6 @@ end
 
 Scene(movie::Movie, framefunction::Function; easingfunction=lineartween) = Scene(movie, framefunction, movie.movieframerange, easingfunction)
 Scene(movie, framefunction, framerange; easingfunction=lineartween) = Scene(movie, framefunction, framerange, easingfunction)
-# Scene(movie::Movie, framefunction::Function) = Scene(movie, framefunction, movie.movieframerange, easingfunction=lineartween)
 
 """
     animate(movie::Movie, scenelist::Array{Scene, 1};
@@ -69,7 +68,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         framerate=30,
         pathname="")
     tempdirectory = mktempdir()
-    info(" frames for animation \"$(movie.movietitle)\" are being stored in directory $(tempdirectory)")
+    info("Frames for animation \"$(movie.movietitle)\" are being stored in directory: \n\t $(tempdirectory)")
     filecounter = 1
     rangelist = 0:-1
     for scene in scenelist
@@ -77,7 +76,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
     end
     rangelist = unique(rangelist) # remove shared frames
     if rangelist[end] < movie.movieframerange.stop
-        warn("Movie framerange is longer than scene frame range: $(movie.movieframerange) > $(rangelist[end])")
+        warn("Movie framerange is longer than scene frame range: \n\t $(movie.movieframerange) > $(rangelist[end])")
     end
     for currentframe in rangelist[1]:rangelist[end]
         Drawing(movie.width, movie.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
@@ -91,7 +90,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         finish()
         filecounter += 1
     end
-    info("... $(filecounter) frames stored in directory $(tempdirectory)")
+    info("... $(filecounter) frames saved in directory:\n\t $(tempdirectory)")
     if creategif == true
         # these two commands create a palette and then create animated GIF from the resulting images
         run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
@@ -128,7 +127,7 @@ end
 """quadratic easing in/out - acceleration until halfway, then deceleration"""
 function easeinoutquad(t, b, c, d)
    t /= d/2
-   if (t < 1)
+   if t < 1
       return  (c/2) * t * t + b
     end
    t -= 1
@@ -138,70 +137,70 @@ end
 """cubic easing in - accelerating from zero velocity"""
 function easeincubic(t, b, c, d)
    t /= d
-   return c*t*t*t + b
+   return c * t * t * t + b
 end
 
 """cubic easing out - decelerating to zero velocity"""
 function easeoutcubic(t, b, c, d)
    t /= d
    t -= 1
-   return c*(t*t*t + 1) + b
+   return c * (t * t * t + 1) + b
 end
 
 """cubic easing in/out - acceleration until halfway, then deceleration"""
 function easeinoutcubic(t, b, c, d)
    t /= d/2
-   if (t < 1)
-       return c/2*t*t*t + b
+   if t < 1
+       return c/2 * t * t * t + b
    end
    t -= 2
-   return c/2 * (t*t*t + 2) + b
+   return c/2 * (t * t * t + 2) + b
 end
 
 """quartic easing in - accelerating from zero velocity"""
 function easeinquart(t, b, c, d)
    t /= d
-   return c*t*t*t*t + b
+   return c * t * t * t * t + b
 end
 
 """quartic easing out - decelerating to zero velocity"""
 function easeoutquart(t, b, c, d)
    t /= d
    t -= 1
-   return -c * (t*t*t*t - 1) + b
+   return -c * (t * t * t * t - 1) + b
 end
 
 """quartic easing in/out - acceleration until halfway, then deceleration"""
 function easeinoutquart(t, b, c, d)
    t /= d/2
-   if (t < 1)
-       return c/2*t*t*t*t + b
+   if t < 1
+       return c/2 * t * t * t * t + b
    end
    t -= 2
-   return -c/2 * (t*t*t*t - 2) + b
+   return -c/2 * (t * t * t * t - 2) + b
 end
 
 """quintic easing in - accelerating from zero velocity"""
 function easeinquint(t, b, c, d)
    t /= d
-   return c*t*t*t*t*t + b
+   return c * t * t * t * t * t + b
 end
 
 """quintic easing out - decelerating to zero velocity"""
 function easeoutquint(t, b, c, d)
    t /= d
    t -= 1
-   return c*(t*t*t*t*t + 1) + b
+   return c * (t * t * t * t * t + 1) + b
 end
 
 """quintic easing in/out - acceleration until halfway, then deceleration"""
 function easeinoutquint(t, b, c, d)
    t /= d/2
-   if (t < 1)
-       return c/2*t*t*t*t*t + b
+   if t < 1
+       return c/2 * t * t * t * t * t + b
    end
    t -= 2
-   return c/2*(t*t*t*t*t + 2) + b
+   return c/2 * (t * t * t * t * t + 2) + b
 end
 
 """sinusoidal easing in - accelerating from zero velocity"""
@@ -216,12 +215,12 @@ end
 
 """sinusoidal easing in/out - accelerating until halfway, then decelerating"""
 function easeinoutsine(t, b, c, d)
-   return -c/2 * (cos(pi*t/d) - 1) + b
+   return -c/2 * (cos(pi * t/d) - 1) + b
 end
 
 """exponential easing in - accelerating from zero velocity"""
 function easeinexpo(t, b, c, d)
-    if isapprox(t, 0.0)
+    if isapprox(t, 0.0, atol=1e-3)
         return 0.0
     else
         return c * 2 ^ (10 * (t/d - 1)) + b
@@ -237,7 +236,7 @@ end
 function easeinoutexpo(t, b, c, d)
    t /= d/2
    if t < 1
-       return c/2 * 2^(10 * (t - 1)) + b
+       return c/2 * 2 ^ (10 * (t - 1)) + b
    end
    t -= 1
    return c/2 * (-(2 ^ (-10 * t)) + 2) + b
@@ -246,27 +245,27 @@ end
 """circular easing in - accelerating from zero velocity"""
 function easeincirc(t, b, c, d)
    t /= d
-   return -c * (sqrt(abs((1 - t*t))) - 1) + b
+   return -c * (sqrt(abs((1 - t * t))) - 1) + b
 end
 
 """circular easing out - decelerating to zero velocity"""
 function easeoutcirc(t, b, c, d)
    t /= d
    t -= 1
-   return c * sqrt(abs((1 - t*t))) + b
+   return c * sqrt(abs((1 - t * t))) + b
 end
 
 """circular easing in/out - acceleration until halfway, then deceleration"""
 function easeinoutcirc(t, b, c, d)
    t /= d/2
    if (t < 1)
-       return -c/2 * ((sqrt(abs(1 - t*t))) - 1) + b
+       return -c/2 * ((sqrt(abs(1 - t * t))) - 1) + b
    end
    t -= 2
-   return c/2 * (sqrt(abs(1 - t*t)) + 1) + b
+   return c/2 * (sqrt(abs(1 - t * t)) + 1) + b
 end
 
-"""easingflat, same as linear tween"""
+"""easingflat, same as lineartween()"""
 function easingflat(t, b, c, d)
     return c * t / d + b
 end
@@ -295,7 +294,7 @@ easingfunctions = [lineartween,
                     easeinoutcirc,
                     easingflat]
 
-"""deprecated types"""
+# deprecated as of Luxor 0.8.3+
 
 type Sequence
     width::Float64

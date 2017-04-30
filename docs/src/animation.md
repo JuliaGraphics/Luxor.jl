@@ -49,7 +49,7 @@ animate
 
 ## Making the animation
 
-Building an animation such as a GIF or MOV file is best done outside Julia, using something like `ffmpeg`, with its thousands of options, which include frame-rate adjustment and color palette tweaking. The `animate` function has a go at running it on Unix platforms, and assumes that `ffmpeg` is installed. Inside `animate()`, the first pass creates a color palette, the second builds the file:
+For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selction, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's installed. Inside `animate()`, the first pass creates a GIF color palette, the second builds the file:
 
 ```julia
 run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)
@@ -57,35 +57,37 @@ run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitl
 run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)
 ```
 
+Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.
+
 ## Using scenes
 
-Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, specify scenes that are drawn only for specific frames.
+Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, you can specify scenes that are drawn only for specific frames.
 
-As an example, consider a simple example showing the sun during a 24 hour day.
+As an example, consider a simple example showing the sun for each hour of a 24 hour day.
 
     sun24demo = Movie(400, 400, "sun24", 0:23)
 
-The `backgroundfunction` draws a background that's used for all frames:
+The `backgroundfunction()` draws a background that's used for all frames:
 
     function backgroundfunction(scene::Scene, framenumber)
         background("black")
     end
 
-A `nightskyfunction` draws the night sky:
+A `nightskyfunction()` draws the night sky:
 
     function nightskyfunction(scene::Scene, framenumber)
         sethue("midnightblue")
         box(O, 400, 400, :fill)
     end
 
-A `dayskyfunction` draws the daytime sky:
+A `dayskyfunction()` draws the daytime sky:
 
     function dayskyfunction(scene::Scene, framenumber)
         sethue("skyblue")
         box(O, 400, 400, :fill)
     end
 
-The `sunfunction` draws a sun at 24 positions during the day:
+The `sunfunction()` draws a sun at 24 positions during the day:
 
     function sunfunction(scene::Scene, framenumber)
         i = rescale(framenumber, 0, 23, 2pi, 0)
@@ -95,7 +97,7 @@ The `sunfunction` draws a sun at 24 positions during the day:
         grestore()
     end
 
-Finally a `groundfunction` draws the ground:
+Finally a `groundfunction()` draws the ground:
 
     function groundfunction(scene::Scene, framenumber)
         gsave()
@@ -105,7 +107,7 @@ Finally a `groundfunction` draws the ground:
         sethue("white")
     end
 
-Now define a group of Scenes that make up the movie. The scenes specify which functions are to be used to create graphics, and for which frames:
+Now define a group of Scenes that make up the movie. The scenes specify which functions are to be used, and for which frames:
 
     backdrop  = Scene(sun24demo, backgroundfunction, 0:23)
     nightsky  = Scene(sun24demo, nightskyfunction, 0:6)
@@ -122,7 +124,7 @@ Finally, the `animate` function scans the scenes in the scenelist for a movie, a
 
 ![sun24 animation](assets/figures/sun24.gif)
 
-Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. The order of scenes and the use of backgrounds can be important.
+Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. Also notice that the order of scenes and the use of backgrounds can be important.
 
 ## Easing functions
 
@@ -131,6 +133,8 @@ Transitions for animations often use non-constant and non-linear motions, and th
 Most easing functions have names constructed like this:
 
     ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
+
+and there's an `easingflat()` linear transition.
 
 One way to use an easing function in a frame-making function is like this:
 
@@ -142,7 +146,7 @@ One way to use an easing function in a frame-making function is like this:
 
 This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.
 
-In the next example, the purple dot has sinusoidal motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.
+In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.
 
 ![animation easing example](assets/figures/animation-easing.gif)
 
@@ -173,7 +177,7 @@ animate(fastandfurious, [
     creategif=true)
 ```
 
-A typical easing function is this one:
+Here's the definition of one of the easing functions:
 
     function easeoutquad(t, b, c, d)
        t /= d
@@ -182,10 +186,10 @@ A typical easing function is this one:
 
 Here:
 
-- `t` is the current framenumber of the transition
+- `t` is the current time (framenumber) of the transition
 
 - `b` is the beginning value of the property
 
 - `c` is the change between the beginning and destination value of the property
 
-- `d` is the total time of the transition
+- `d` is the total length of the transition
