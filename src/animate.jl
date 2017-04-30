@@ -69,7 +69,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         pathname="")
     tempdirectory = mktempdir()
     info("Frames for animation \"$(movie.movietitle)\" are being stored in directory: \n\t $(tempdirectory)")
-    filecounter = 1
+    filecounter = 0
     rangelist = 0:-1
     for scene in scenelist
         rangelist = vcat(rangelist, collect(scene.framerange))

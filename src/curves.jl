@@ -232,7 +232,7 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     # attempts to prevent pathological cases
     cornerradius = min(cornerradius, abs(outerradius-innerradius)/2)
     if endangle < startangle
-        startangle, endangle = endangle, startangle
+       endangle = mod2pi(endangle + 2pi)
     end
 
     # TODO reduce given corner radius to prevent messes when spanning angle too small
