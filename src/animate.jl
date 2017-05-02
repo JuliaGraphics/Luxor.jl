@@ -69,7 +69,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         pathname="")
     tempdirectory = mktempdir()
     info("Frames for animation \"$(movie.movietitle)\" are being stored in directory: \n\t $(tempdirectory)")
-    filecounter = 0
+    filecounter = 1
     rangelist = 0:-1
     for scene in scenelist
         rangelist = vcat(rangelist, collect(scene.framerange))
@@ -90,7 +90,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         finish()
         filecounter += 1
     end
-    info("... $(filecounter) frames saved in directory:\n\t $(tempdirectory)")
+    info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
     if creategif == true
         # these two commands create a palette and then create animated GIF from the resulting images
         run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
