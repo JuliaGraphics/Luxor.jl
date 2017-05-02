@@ -266,14 +266,24 @@ end
 """
     preview()
 
-If working in Jupyter (IJUlia), display a PNG file in the notebook.
-On macOS, open the file, which probably uses the default, Preview.app.
+If working in Jupyter (IJulia), display a PNG or SVG file in the notebook.
+
+On macOS, open the file in the default application, which is probably
+the Preview.app for PNG and PDF, and Safari for SVG.
+
 On Unix, open the file with `xdg-open`.
+
 On Windows, pass the filename to `explorer`.
 """
 function preview()
-    if isdefined(Main, :IJulia) && Main.IJulia.inited && currentdrawing.surfacetype == "png"
-        display(load(currentdrawing.filename))
+    if (isdefined(Main, :IJulia) && Main.IJulia.inited)
+        if currentdrawing.surfacetype == "png"
+            display("image/png", load(currentdrawing.filename))
+        elseif currentdrawing.surfacetype == "svg"
+            open(currentdrawing.filename) do f
+                display("image/svg+xml", readstring(f))
+            end
+        end
     elseif @compat is_apple()
         run(`open $(currentdrawing.filename)`)
     elseif @compat is_windows()
