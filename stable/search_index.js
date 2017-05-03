@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.preview",
     "category": "Function",
-    "text": "preview()\n\nIf working in Jupyter (IJUlia), display a PNG file in the notebook. On macOS, open the file, which probably uses the default, Preview.app. On Unix, open the file with xdg-open. On Windows, pass the filename to explorer.\n\n\n\n"
+    "text": "preview()\n\nIf working in Jupyter (IJulia), display a PNG or SVG file in the notebook.\n\nOn macOS, open the file in the default application, which is probably the Preview.app for PNG and PDF, and Safari for SVG.\n\nOn Unix, open the file with xdg-open.\n\nOn Windows, pass the filename to explorer.\n\n\n\n"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() displays PNG files in the notebook.(Image: jupyter)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
 },
 
 {
@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.Tiler",
     "category": "Type",
-    "text": "tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nA Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, nrows/ncols are the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want\ntiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt's sometimes useful to know which row and column you're currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\n\n\n"
+    "text": "tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nA Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, nrows/ncols are the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\ntiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt's sometimes useful to know which row and column you're currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\n\n\n"
 },
 
 {
@@ -237,7 +237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.Partition",
     "category": "Type",
-    "text": "p = Partition(areawidth, areaheight, tilewidth, tileheight)\n\nA Partition is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a\n\nrectangular space such as a page into rows and columns (relative to current 0/0)\n\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, tilewidth/tileheight are the dimensions of the tiles.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    # the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt's sometimes useful to know which row and column you're currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nUnless the tilewidth and tileheight are exact multiples of the area width and height, you'll see a border at the right and bottom where the tiles won't fit.\n\n\n\n"
+    "text": "p = Partition(areawidth, areaheight, tilewidth, tileheight)\n\nA Partition is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a\n\nrectangular space such as a page into rows and columns (relative to current 0/0)\n\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, tilewidth/tileheight are the dimensions of the tiles.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    # the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt's sometimes useful to know which row and column you're currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nUnless the tilewidth and tileheight are exact multiples of the area width and height, you'll see a border at the right and bottom where the tiles won't fit.\n\n\n\n"
 },
 
 {
@@ -697,6 +697,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "basics.html#Luxor.cropmarks",
+    "page": "Basic graphics",
+    "title": "Luxor.cropmarks",
+    "category": "Function",
+    "text": "cropmarks(center, width, height)\n\nDraw cropmarks (also known as trim marks).\n\n\n\n"
+},
+
+{
+    "location": "basics.html#Cropmarks-1",
+    "page": "Basic graphics",
+    "title": "Cropmarks",
+    "category": "section",
+    "text": "If you want cropmarks (aka trim marks), use the cropmarks() function, supplying the centerpoint, followed by the width and height:cropmarks(O, 1200, 1600)\ncropmarks(O, paper_sizes[\"A0\"]...)using Luxor # hide\nDrawing(700, 250, \"assets/figures/cropmarks.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\nbox(O, 150, 150, :stroke)\ncropmarks(O, 150, 150)\nfinish() # hide\nnothing # hide(Image: cropmarks)cropmarks"
+},
+
+{
     "location": "colors-styles.html#",
     "page": "Colors and styles",
     "title": "Colors and styles",
@@ -885,7 +901,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Colors and styles",
     "title": "Luxor.addstop",
     "category": "Function",
-    "text": "addstop(b::Blend, offset, col)\naddstop(b::Blend, offset, (r, g, b, a))\naddstop(b::Blend, offset, string)\n\nAdd a color stop to a blend. The offset specifies the location along the blend's 'control vector', which varies between 0 (beginning of the blend) and 1 (end of the blend). For linear blends, the control vector is from the start point to the end point. For radial blends, the control vector is from any point on the start circle, to the corresponding point on the end circle.\n\nExample:\n\nblendredblue = blend(Point(0, 0), 0, Point(0, 0), 1)\naddstop(blendredblue, 0, setcolor(sethue(\"red\")..., .2))\naddstop(blendredblue, 1, setcolor(sethue(\"blue\")..., .2))\naddstop(blendredblue, 0.5, sethue(randomhue()...))\naddstop(blendredblue, 0.5, setcolor(randomcolor()...))\n\n\n\n"
+    "text": "addstop(b::Blend, offset, col)\naddstop(b::Blend, offset, (r, g, b, a))\naddstop(b::Blend, offset, string)\n\nAdd a color stop to a blend. The offset specifies the location along the blend's 'control vector', which varies between 0 (beginning of the blend) and 1 (end of the blend). For linear blends, the control vector is from the start point to the end point. For radial blends, the control vector is from any point on the start circle, to the corresponding point on the end circle.\n\nExamples:\n\nblendredblue = blend(Point(0, 0), 0, Point(0, 0), 1)\naddstop(blendredblue, 0, setcolor(sethue(\"red\")..., .2))\naddstop(blendredblue, 1, setcolor(sethue(\"blue\")..., .2))\naddstop(blendredblue, 0.5, sethue(randomhue()...))\naddstop(blendredblue, 0.5, setcolor(randomcolor()...))\n\n\n\n"
 },
 
 {
@@ -1094,6 +1110,46 @@ var documenterSearchIndex = {"docs": [
     "title": "Offsetting polygons",
     "category": "section",
     "text": "The experimental offsetpoly() function constructs an outline polygon outside or inside an existing polygon. In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use poly() to draw the result returned by offsetpoly().using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyoffset-simple.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\n\np = star(O, 45, 5, 0.5, 0, vertices=true)\nsethue(\"red\")\nsetdash(\"dot\")\npoly(p, :stroke, close=true)\nsetdash(\"solid\")\nsethue(\"black\")\n\npoly(offsetpoly(p, 20), :stroke, close=true)\npoly(offsetpoly(p, 25), :stroke, close=true)\npoly(offsetpoly(p, 30), :stroke, close=true)\npoly(offsetpoly(p, 35), :stroke, close=true)\n\nsethue(\"darkcyan\")\n\npoly(offsetpoly(p, -10), :stroke, close=true)\npoly(offsetpoly(p, -15), :stroke, close=true)\npoly(offsetpoly(p, -20), :stroke, close=true)\nfinish() # hide\nnothing # hide(Image: offset poly)The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.(Image: offset poly problem)offsetpoly"
+},
+
+{
+    "location": "polygons.html#Luxor.polyperimeter",
+    "page": "Polygons",
+    "title": "Luxor.polyperimeter",
+    "category": "Function",
+    "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polyportion",
+    "page": "Polygons",
+    "title": "Luxor.polyportion",
+    "category": "Function",
+    "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a reduced version of the polygon, where portion is a value between 0.0 and 1.0.\n\nIf you already know them, you can pass the polygon distances in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polydistances",
+    "page": "Polygons",
+    "title": "Luxor.polydistances",
+    "category": "Function",
+    "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.nearestindex",
+    "page": "Polygons",
+    "title": "Luxor.nearestindex",
+    "category": "Function",
+    "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the nearestindex value in polydistancearray, an array of distances made by polydistances, to the value, and the excess value.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Perimeter-utilities-1",
+    "page": "Polygons",
+    "title": "Perimeter utilities",
+    "category": "section",
+    "text": "polyperimeter calculates the distance of a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, 0, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion returns part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns a new polygon tracing the first half of a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(15)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n8-element Array{Real,1}:\n   0.0000\n  86.7767\n 173.553\n 260.33  \n 347.107\n 433.884\n 520.66  \n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.polyperimeter\npolyportion\npolydistances\nnearestindex"
 },
 
 {
@@ -1765,15 +1821,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Animation helper functions",
     "category": "section",
-    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Sequence to create a Sequence object which determines the title and dimensions.2 Define a suitable backdrop(seq::Sequence, framenumber, framerange) function that contains graphics functions that are used on every frame of an animation sequence. For example, this is a good place to define a constant background color.3 Define a suitable frame(seq::Sequence, framenumber, framerange) function that constructs the contents of the frame numbered framenumber. The total framerange is available for possible reference inside the function.4 Call the animate(seq::Sequence, framerange, backdrop, frame) function, passing in your two functions (which don't have to be called anything special, but which should have the arguments shown above). This creates all the frames in the given framerange and saves them in a temporary directory."
+    "text": "Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.There are four steps to creating an animation.1 Use Movie to create a Movie object which determines the title and dimensions.2 Define some functions that draw the graphics for specific frames.3 Define one or more Scenes that call these functions for specific frames.4 Call the animate(movie::Movie, scenes) function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for ffmpeg (if it's installed) to make an animated GIF for you."
 },
 
 {
-    "location": "animation.html#Luxor.Sequence",
+    "location": "animation.html#Luxor.Movie",
     "page": "Animation",
-    "title": "Luxor.Sequence",
+    "title": "Luxor.Movie",
     "category": "Type",
-    "text": "The Sequence type and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\nProvide width, height, and a title to the Sequence constructor:\n\ndemo = Sequence(400, 400, \"test\")\n\nThen define suitable backdrop and frame functions.\n\nFinally run the animate() function, calling those functions.\n\n\n\n"
+    "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\n1 Provide width, height, title, and optionally a frame range to the Movie constructor:\n\ndemo = Movie(400, 400, \"test\", 1:500)\n\n2 Define one or more Scenes and scene-drawing functions.\n\n3 Run the animate() function, calling those scenes.\n\n\n\n"
+},
+
+{
+    "location": "animation.html#Luxor.Scene",
+    "page": "Animation",
+    "title": "Luxor.Scene",
+    "category": "Type",
+    "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nthe movie created by Movie()\nthe framefunction is a function taking two arguments: the scene and the framenumber.\nthe framerange determines which frames are processed by the function. Defaults to the entire movie.\nthe optional easingfunction can be accessed by the framefunction to vary the transition speed\n\n\n\n"
 },
 
 {
@@ -1781,7 +1845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "Function",
-    "text": "animate(seq::Sequence, frames::Range, backdrop_func, frame_func;\n        createanimation = true)\n\nCreate frames in the range frames, using a backdrop function and a frame function.\n\nThe backdrop function is called for every frame.\n\nfunction backdropf(demo, framenumber, framerange)\n...\nend\n\nThe frame generating function draws the graphics for a single frame.\n\nfunction framef(demo, framenumber, framerange)\n...\nend\n\nThen call animate() like this:\n\nanimate(demo, 1:100, backdropf, framef)\n\nIf createanimation is true, the function tries to call ffmpeg on the resulting frames to build the animation.\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
 },
 
 {
@@ -1789,7 +1853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Example",
     "category": "section",
-    "text": "using Luxor\n\ndemo = Sequence(400, 400, \"test\")\n\nfunction backdropf(demo, framenumber, framerange)\n    background(\"black\")\nend\n\nfunction framef(demo, framenumber, framerange)\n    xpos = 100 * cos(framenumber/100)\n    ypos = 100 * sin(framenumber/100)\n    sethue(Colors.HSV(rescale(framenumber, 0, length(framerange), 0, 360), 1, 1))\n    circle(xpos, ypos, 90, :stroke)\n    gsave()\n    translate(xpos, ypos)\n    juliacircles(50)\n    grestore()\n    text(string(\"frame $framenumber of $(length(framerange))\"), O)\nend\n\nanimate(demo, 1:630, backdropf, framef, createanimation=true)(Image: animation example)Sequence\nanimate"
+    "text": "using Luxor\n\ndemo = Movie(400, 400, \"test\")\n\nfunction backdrop(scene, framenumber)\n    background(\"black\")\nend\n\nfunction frame(scene, framenumber)\n    sethue(Colors.HSV(framenumber, 1, 1))\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(polar(100, -pi/2 - (eased_n * 2pi)), 80, :fill)\n    text(string(\"frame $framenumber of $(scene.framerange.stop)\"),\n        Point(O.x, O.y-190),\n        halign=:center)\nend\n\nanimate(demo, [\n    Scene(demo, backdrop, 0:359),\n    Scene(demo, frame, 0:359, easingfunction=easeinoutcubic)\n    ],\n    creategif=true)(Image: animation example)Movie\nScene\nanimate"
 },
 
 {
@@ -1797,15 +1861,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Making the animation",
     "category": "section",
-    "text": "Building an animation such as a GIF or MOV file is best done outside Julia, using something like ffmpeg, with its thousands of options, which include frame-rate adjustment and color palette tweaking. The animate function has a go at running it on Unix platforms, and assumes that ffmpeg is installed. Inside animate(), the first pass creates a color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)"
+    "text": "For best results, you'll have to learn how to use something like ffmpeg, with its hundreds of options, which include codec selction, framerate adjustment and color palette tweaking. The creategif option for the animate function makes an attempt at running ffmpeg and assumes that it's installed. Inside animate(), the first pass creates a GIF color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline."
 },
 
 {
-    "location": "animation.html#Passing-information-to-later-frames-1",
+    "location": "animation.html#Using-scenes-1",
     "page": "Animation",
-    "title": "Passing information to later frames",
+    "title": "Using scenes",
     "category": "section",
-    "text": "Sometimes you want some information to be passed from frame to frame, such as the updated position of a graphical shape. Currently, the only way to do this is to store things in the sequence's parameters dictionary.For example, for a \"bouncing ball\" animation, you can store the current position and direction of the ball in the Sequence.parameters dictionary at the end of a frame, and then recall them at the start of the next frame.function frameF(seq::Sequence, framenumber, framerange)\n    pos          = seq.parameters[\"pos\"]\n    direction    = seq.parameters[\"direction\"]\n    spriteradius = seq.parameters[\"spriteradius\"]\n\n    # ... code to modify position, direction, and radius\n\n    seq.parameters[\"pos\"]          = newpos\n    seq.parameters[\"direction\"]    = newdirection\n    seq.parameters[\"spriteradius\"] = spriteradius\nend(Image: bouncing ball)"
+    "text": "Sometimes you want to construct an animation that has different components, layers, or scenes. To do this, you can specify scenes that are drawn only for specific frames.As an example, consider a simple example showing the sun for each hour of a 24 hour day.sun24demo = Movie(400, 400, \"sun24\", 0:23)The backgroundfunction() draws a background that's used for all frames:function backgroundfunction(scene::Scene, framenumber)\n    background(\"black\")\nendA nightskyfunction() draws the night sky:function nightskyfunction(scene::Scene, framenumber)\n    sethue(\"midnightblue\")\n    box(O, 400, 400, :fill)\nendA dayskyfunction() draws the daytime sky:function dayskyfunction(scene::Scene, framenumber)\n    sethue(\"skyblue\")\n    box(O, 400, 400, :fill)\nendThe sunfunction() draws a sun at 24 positions during the day:function sunfunction(scene::Scene, framenumber)\n    i = rescale(framenumber, 0, 23, 2pi, 0)\n    gsave()\n    sethue(\"yellow\")\n    circle(polar(150, i), 20, :fill)\n    grestore()\nendFinally a groundfunction() draws the ground:function groundfunction(scene::Scene, framenumber)\n    gsave()\n    sethue(\"brown\")\n    box(Point(O.x, O.y + 100), 400, 200, :fill)\n    grestore()\n    sethue(\"white\")\nendNow define a group of Scenes that make up the movie. The scenes specify which functions are to be used, and for which frames:backdrop  = Scene(sun24demo, backgroundfunction, 0:23)\nnightsky  = Scene(sun24demo, nightskyfunction, 0:6)\nnightsky1 = Scene(sun24demo, nightskyfunction, 17:23)\ndaysky    = Scene(sun24demo, dayskyfunction, 5:19)\nsun       = Scene(sun24demo, sunfunction, 6:18)\nground    = Scene(sun24demo, groundfunction, 0:23)Finally, the animate function scans the scenes in the scenelist for a movie, and calls the functions for each frame to build the animation:animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],\n    framerate=5,\n    creategif=true)(Image: sun24 animation)Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. Also notice that the order of scenes and the use of backgrounds can be important."
+},
+
+{
+    "location": "animation.html#Easing-functions-1",
+    "page": "Animation",
+    "title": "Easing functions",
+    "category": "section",
+    "text": "Transitions for animations often use non-constant and non-linear motions, and these are usually provided by easing functions. Luxor defines some of the basic easing functions and they're listed in the (unexported) array Luxor.easingfunctions. Each scene can have one easing function.Most easing functions have names constructed like this:ease[in|out|inout][expo|circ|quad|cubic|quart|quint]and there's an easingflat() linear transition.One way to use an easing function in a frame-making function is like this: function moveobject(scene, framenumber)\n    background(\"white\")\n    ...\n    easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    ...This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.(Image: animation easing example)fastandfurious = Movie(400, 100, \"easingtests\")\nbackdrop(scene, framenumber) =  background(\"black\")\nfunction frame1(scene, framenumber)\n    sethue(\"purple\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(Point(-180 + (360 * eased_n), -20), 10, :fill)\nend\nfunction frame2(scene, framenumber)\n    sethue(\"green\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(Point(-180 + (360 * eased_n), 0), 10, :fill)\nend\nfunction frame3(scene, framenumber)\n    sethue(\"red\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(Point(-180 + (360 * eased_n), 20), 10, :fill)\nend\nanimate(fastandfurious, [\n    Scene(fastandfurious, backdrop, 0:200),\n    Scene(fastandfurious, frame1,   0:200, easingfunction=easeinsine),\n    Scene(fastandfurious, frame2,   0:200, easingfunction=easeinoutcubic),\n    Scene(fastandfurious, frame3,   0:200, easingfunction=easeinoutquint)\n    ],\n    creategif=true)Here's the definition of one of the easing functions:function easeoutquad(t, b, c, d)\n   t /= d\n   return -c * t * (t - 2) + b\nendHere:t is the current time (framenumber) of the transition\nb is the beginning value of the property\nc is the change between the beginning and destination value of the property\nd is the total length of the transition"
 },
 
 {
