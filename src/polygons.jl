@@ -643,7 +643,9 @@ function polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
     if isempty(pdist)
         pdist = polydistances(p, closed=closed)
     end
-    portion == 1.0 && return p  # don't bother to do 1.0
+    portion = clamp(portion, 0.0, 1.0)
+    isapprox(portion, 0.0, atol=0.00001) && return p[1:1]  # don't bother to do 0.0
+    isapprox(portion, 1.0, atol=0.00001) && return p  # don't bother to do 1.0
     ind, d = nearestindex(pdist, portion * pdist[end])
     if d != 0.0
         overshootpoint = between(p[ind], p[mod1(ind + 1, length(p))], d/norm(p[ind], p[mod1(ind + 1, length(p))]))

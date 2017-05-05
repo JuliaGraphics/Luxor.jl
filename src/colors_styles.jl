@@ -137,6 +137,34 @@ function sethue(r, g, b)
 end
 
 """
+    sethue((r, g, b))
+
+Set the color to the tuple's values.
+"""
+sethue(col::NTuple{3,Number}) = sethue(col...)
+
+"""
+    sethue((r, g, b, a))
+
+Set the color to the tuple's values.
+"""
+sethue(col::NTuple{4,Number}) = sethue(col...)
+
+"""
+    setcolor((r, g, b))
+
+Set the color to the tuple's values.
+"""
+setcolor(col::NTuple{3,Number}) = setcolor(col...)
+
+"""
+    setcolor((r, g, b, a))
+
+Set the color to the tuple's values.
+"""
+setcolor(col::NTuple{4,Number}) = setcolor(col...)
+
+"""
     setopacity(alpha)
 
 Set the current opacity to a value between 0 and 1. This modifies the alpha value of the
