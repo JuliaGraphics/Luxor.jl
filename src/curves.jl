@@ -480,4 +480,54 @@ function hypotrochoid(R, r, d, action=:none;
         return points
     end
 end
+
+"""
+    epitrochoid(R, r, d, action=:none;
+            stepby=0.01,
+            period=0,
+            vertices=false)
+
+Make a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
+point attached to a circle of radius `r` rolling around the outside of a fixed circle of
+radius `R`, where the point is a distance `d` from the center of the circle.
+Things get interesting if you supply non-integral values.
+
+`stepby`, the angular step value, controls the amount of detail, ie the smoothness of the
+polygon.
+
+If `period` is not supplied, or 0, the lowest period is calculated for you.
+
+The function can return a polygon (a list of points), or draw the points directly using
+the supplied `action`. If the points are drawn, the function returns a tuple showing how
+many points were drawn and what the period was (as a multiple of `pi`).
+"""
+function epitrochoid(R, r, d, action=:none;
+        stepby   = 0.01,
+        period   = 0,
+        vertices = false)
+    function nextposition(t)
+        x = (R + r) * cos(t) - (d * cos(((R - r)/r) * t))
+        y = (R + r) * sin(t) - (d * sin(((R - r)/r) * t))
+        return Point(x, y)
+    end
+    # try to calculate the period exactly
+    if isapprox(period, 0)
+        period = 2pi * (r/gcd(convert(Int, floor(R)), convert(Int, floor(r))))
+    end
+    counter=1
+    points=Point[]
+    for t = 0:stepby:period
+        push!(points, nextposition(t))
+    end
+    # don't repeat end point if it's more or less the same as the start point
+    if isapprox(points[1], points[end])
+        pop!(points)
+    end
+    if vertices == false
+        poly(points, action)
+        return (length(points), period/pi)
+    else
+        return points
+    end
+end
 # eof
