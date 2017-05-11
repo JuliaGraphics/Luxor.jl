@@ -61,6 +61,9 @@ function draw_luxor_demo(fname)
 
     textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, O)
     @test finish() == true
+
+    # Test that calling finish() twice doesn't segfault.
+    @test finish() == false
 end
 
 fname = "luxor-test1.png"

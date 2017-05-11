@@ -252,14 +252,17 @@ Finish the drawing, and close the file. You may be able to open it in an externa
 application with `preview()`.
 """
 function finish()
+    if currentdrawing.surface.ptr == C_NULL
+        # Already finished
+        return false
+    end
     if currentdrawing.surfacetype == "png"
         Cairo.write_to_png(currentdrawing.surface, currentdrawing.filename)
-        Cairo.finish(currentdrawing.surface)
-        Cairo.destroy(currentdrawing.surface)
-    else
-        Cairo.finish(currentdrawing.surface)
-        Cairo.destroy(currentdrawing.surface)
     end
+
+    Cairo.finish(currentdrawing.surface)
+    Cairo.destroy(currentdrawing.surface)
+
     return true
 end
 
