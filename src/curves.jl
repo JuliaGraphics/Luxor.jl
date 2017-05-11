@@ -452,6 +452,7 @@ the supplied `action`. If the points are drawn, the function returns a tuple sho
 many points were drawn and what the period was (as a multiple of `pi`).
 """
 function hypotrochoid(R, r, d, action=:none;
+        close=true,
         stepby   = 0.01,
         period   = 0,
         vertices = false)
@@ -474,7 +475,7 @@ function hypotrochoid(R, r, d, action=:none;
         pop!(points)
     end
     if vertices == false
-        poly(points, action)
+        poly(points, action, close=close)
         return (length(points), period/pi)
     else
         return points
@@ -502,6 +503,7 @@ the supplied `action`. If the points are drawn, the function returns a tuple sho
 many points were drawn and what the period was (as a multiple of `pi`).
 """
 function epitrochoid(R, r, d, action=:none;
+        close    = true,
         stepby   = 0.01,
         period   = 0,
         vertices = false)
@@ -524,7 +526,7 @@ function epitrochoid(R, r, d, action=:none;
         pop!(points)
     end
     if vertices == false
-        poly(points, action)
+        poly(points, action, close=close)
         return (length(points), period/pi)
     else
         return points

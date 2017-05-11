@@ -626,7 +626,12 @@ of distances made by `polydistances`, to the `value`, and the excess value.
 """
 function nearestindex(a::Array, val)
     ind = findlast(v -> (v < val), a)
-    surplus = val - a[ind]
+    if ind != 0
+        surplus = val - a[ind]
+    else
+        surplus = 0
+        ind = 1
+    end
     return (ind, surplus)
 end
 

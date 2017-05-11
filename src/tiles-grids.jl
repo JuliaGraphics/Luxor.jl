@@ -185,7 +185,7 @@ function nextgridpoint(g::GridRect)
         g.colnumber += 1
         g.currentpoint = temp
     end
-    if g.currentpoint.x > g.width # next row
+    if abs(g.startpoint.x - temp.x) >= g.width # next row?
         g.rownumber += 1
         g.colnumber = 1
         g.currentpoint = Point(g.startpoint.x, temp.y + g.yspacing)

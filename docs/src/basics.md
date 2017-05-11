@@ -751,8 +751,11 @@ nothing # hide
 
 ![hypotrochoid](assets/figures/hypotrochoid.png)
 
+There's a matching `epitrochoid()` function.
+
 ```@docs
 hypotrochoid
+epitrochoid
 ```
 
 ### Grids
