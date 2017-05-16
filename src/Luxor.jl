@@ -15,7 +15,7 @@ if isdefined(Base, :scale)
     import Base: scale
 end
 
-using Colors, Cairo, Compat, FileIO
+using Colors, Cairo, Compat, FileIO, Juno
 
 include("point.jl")
 include("basics.jl")
@@ -266,26 +266,33 @@ function finish()
     return true
 end
 
+# Juno support
+
+include("atom.jl")
+
 """
     preview()
 
 If working in Jupyter (IJulia), display a PNG or SVG file in the notebook.
 
-On macOS, open the file in the default application, which is probably
-the Preview.app for PNG and PDF, and Safari for SVG.
-
-On Unix, open the file with `xdg-open`.
-
-On Windows, pass the filename to `explorer`.
+If working in Juno, display a PNG or SVG file in the Plot pane.
+;
+Otherwise: on macOS, open the file in the default application, which is probably
+the Preview.app for PNG and PDF, and Safari for SVG on Unix, open the file with `xdg-open`;
+on Windows, pass the filename to `explorer`.
 """
 function preview()
-    if (isdefined(Main, :IJulia) && Main.IJulia.inited)
+    if (isdefined(Main, :IJulia) && Main.IJulia.inited && in(currentdrawing.surfacetype, ["png", "svg"]))
         if currentdrawing.surfacetype == "png"
             display("image/png", load(currentdrawing.filename))
         elseif currentdrawing.surfacetype == "svg"
             open(currentdrawing.filename) do f
                 display("image/svg+xml", readstring(f))
             end
+        end
+    elseif Juno.isactive()
+        if in(currentdrawing.surfacetype, ["png", "svg"])
+            display(currentdrawing)
         end
     elseif @compat is_apple()
         run(`open $(currentdrawing.filename)`)

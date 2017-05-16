@@ -48,7 +48,7 @@ Drawing
 
 To finish a drawing and close the file, use `finish()`, and, to launch an external application to view it, use `preview()`.
 
-If you're using Jupyter (IJulia), `preview()` tries to display PNG and SVG files in the next notebook cell.
+If you're using Jupyter (IJulia), `preview()` tries to display PNG and SVG files in the next notebook cell. If you're using Juno, then PNG and SVG files will appear in the Plots pane.
 
 ![jupyter](assets/figures/jupyter.png)
 
