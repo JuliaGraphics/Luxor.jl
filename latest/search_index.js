@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.preview",
     "category": "Function",
-    "text": "preview()\n\nIf working in Jupyter (IJulia), display a PNG or SVG file in the notebook.\n\nIf working in Juno, display a PNG or SVG file in the Plot pane. ; Otherwise: on macOS, open the file in the default application, which is probably the Preview.app for PNG and PDF, and Safari for SVG on Unix, open the file with xdg-open; on Windows, pass the filename to explorer.\n\n\n\n"
+    "text": "preview()\n\nIf working in Jupyter (IJulia), display a PNG or SVG file in the notebook.\n\nIf working in Juno, display a PNG or SVG file in the Plot pane.\n\nOtherwise:\n\non macOS, open the file in the default application, which is probably the Preview.app for PNG and PDF, and Safari for SVG\non Unix, open the file with xdg-open\non Windows, pass the filename to explorer.\n\n\n\n"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell. If you're using Juno, then PNG and SVG files will appear in the Plots pane.(Image: jupyter)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files will appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
 },
 
 {
