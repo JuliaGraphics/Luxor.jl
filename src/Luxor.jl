@@ -276,10 +276,13 @@ include("atom.jl")
 If working in Jupyter (IJulia), display a PNG or SVG file in the notebook.
 
 If working in Juno, display a PNG or SVG file in the Plot pane.
-;
-Otherwise: on macOS, open the file in the default application, which is probably
-the Preview.app for PNG and PDF, and Safari for SVG on Unix, open the file with `xdg-open`;
-on Windows, pass the filename to `explorer`.
+
+Otherwise:
+
+- on macOS, open the file in the default application, which is probably the Preview.app for
+  PNG and PDF, and Safari for SVG
+- on Unix, open the file with `xdg-open`
+- on Windows, pass the filename to `explorer`.
 """
 function preview()
     if (isdefined(Main, :IJulia) && Main.IJulia.inited && in(currentdrawing.surfacetype, ["png", "svg"]))
