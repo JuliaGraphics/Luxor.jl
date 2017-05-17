@@ -285,7 +285,10 @@ Otherwise:
 - on Windows, pass the filename to `explorer`.
 """
 function preview()
-    if (isdefined(Main, :IJulia) && Main.IJulia.inited && in(currentdrawing.surfacetype, ["png", "svg"]))
+    in(currentdrawing.surfacetype, ["png", "svg"]) ? candisplay = true : candisplay = false
+    (isdefined(Main, :IJulia) && Main.IJulia.inited) ? jupyter = true : jupyter = false
+    Juno.isactive() ? juno = true : juno = false
+    if candisplay && jupyter
         if currentdrawing.surfacetype == "png"
             display("image/png", load(currentdrawing.filename))
         elseif currentdrawing.surfacetype == "svg"
@@ -293,10 +296,8 @@ function preview()
                 display("image/svg+xml", readstring(f))
             end
         end
-    elseif Juno.isactive()
-        if in(currentdrawing.surfacetype, ["png", "svg"])
-            display(currentdrawing)
-        end
+    elseif candisplay && juno
+        display(currentdrawing)
     elseif @compat is_apple()
         run(`open $(currentdrawing.filename)`)
     elseif @compat is_windows()
