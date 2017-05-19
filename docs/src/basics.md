@@ -398,7 +398,23 @@ nothing # hide
 squircle
 ```
 
-Or for a simple rounded rectangle, smooth the corners of a box, like so:
+To draw a simple rounded rectangle, supply a corner radius:
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/round-rect-1.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(4)
+box(O, 200, 150, 10, :stroke)
+finish() # hide
+nothing # hide
+```
+
+![rounded rect 1](assets/figures/round-rect-1.png)
+
+Or you could smooth the corners of a box, like so:
 
 ```@example
 using Luxor # hide

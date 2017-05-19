@@ -7,7 +7,7 @@ do an action.
 See `box()` for more ways to do similar things, such as supplying two opposite corners,
 placing by centerpoint and dimensions.
 """
-function rect(xmin, ymin, w, h, action=:nothing)
+function rect(xmin, ymin, w, h, action::Symbol=:nothing)
     if action != :path
         newpath()
     end
@@ -21,7 +21,7 @@ end
 Create a rectangle with one corner at `cornerpoint` with width `w` and height `h` and do an
 action.
 """
-function rect(cornerpoint::Point, w, h, action)
+function rect(cornerpoint::Point, w, h, action::Symbol)
     rect(cornerpoint.x, cornerpoint.y, w, h, action)
 end
 
@@ -30,7 +30,7 @@ end
 
 Create a rectangle between two points and do an action.
 """
-function box(corner1::Point, corner2::Point, action=:nothing)
+function box(corner1::Point, corner2::Point, action::Symbol=:nothing)
     rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
 end
 
@@ -40,7 +40,7 @@ end
 Create a box/rectangle using the first two points of an array of Points to defined
 opposite corners.
 """
-function box(bbox::Array, action=:nothing)
+function box(bbox::Array, action::Symbol=:nothing)
     box(bbox[1], bbox[2], action)
 end
 
@@ -50,7 +50,7 @@ end
 Create a box/rectangle centered at point `pt` with width and height. Use `vertices=true` to
 return an array of the four corner points rather than draw the box.
 """
-function box(pt::Point, width, height, action=:nothing; vertices=false)
+function box(pt::Point, width, height, action::Symbol=:nothing; vertices=false)
     if vertices
         return [Point(pt.x - width/2, pt.y + height/2),
                 Point(pt.x - width/2, pt.y - height/2),
@@ -65,8 +65,58 @@ end
 
 Create a box/rectangle centered at point `x/y` with width and height.
 """
-function box(x, y, width, height, action=:nothing)
+function box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing)
     rect(x - width/2.0, y - height/2.0, width, height, action)
+end
+
+"""
+    box(x, y, width, height, cornerradius, action=:nothing)
+
+Create a box/rectangle centered at point `x/y` with `width` and `height`. Round each corner
+by `cornerradius`.
+"""
+function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:stroke)
+    gsave()
+    translate(centerpoint)
+    # go clockwise around box
+    p1center = Point(O.x + width/2 - cornerradius, O.y + height/2 - cornerradius) # bottom right
+    p1start  = Point(O.x + width/2, O.y + height/2 - cornerradius)
+    p1end    = Point(O.x + width/2 - cornerradius, O.y + height/2)
+
+    p2center = Point(O.x - width/2 + cornerradius, O.y + height/2 - cornerradius) # bottom left
+    p2start  = Point(O.x - width/2 + cornerradius, O.y + height/2)
+    p2end    = Point(O.x - width/2, O.y + height/2 - cornerradius)
+
+    p3center = Point(O.x - width/2 + cornerradius, O.y - height/2 + cornerradius) # top left
+    p3start  = Point(O.x - width/2, O.y - height/2 + cornerradius)
+    p3end    = Point(O.x - width/2 + cornerradius, O.y - height/2)
+
+    p4center = Point(O.x + width/2 - cornerradius, O.y - height/2 + cornerradius) # top right
+    p4start  = Point(O.x + width/2 - cornerradius, O.y - height/2)
+    p4end    = Point(O.x + width/2, O.y - height/2 + cornerradius)
+
+    newpath()
+    move(Point(O.x + width/2, O.y))
+    line(p1start)
+    arc(p1center, cornerradius, 0, pi/2, :none)
+    line(p1end)
+    line(p2start)
+
+    arc(p2center, cornerradius, pi/2, pi, :none)
+    line(p2end)
+    line(p3start)
+
+    arc(p3center, cornerradius, pi, (3pi)/2, :none)
+    line(p3end)
+    line(p4start)
+
+    arc(p4center, cornerradius, (3pi)/2, 2pi, :none)
+    line(p4end)
+    line(p1start)
+
+    closepath()
+    do_action(action)
+    grestore()
 end
 
 """
