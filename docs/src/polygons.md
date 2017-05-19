@@ -446,7 +446,7 @@ srand(42) # hide
 setline(1.5) # hide
 sethue("black") # hide
 fontsize(20) # hide
-p = box(O, 50, 50, 0, vertices=true)
+p = box(O, 50, 50, vertices=true)
 poly(p, :stroke)
 text(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)
 
