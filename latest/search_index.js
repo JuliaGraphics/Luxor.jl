@@ -437,7 +437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic graphics",
     "title": "Luxor.rule",
     "category": "Function",
-    "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the x-axis. Returns the two points.\n\nTODO: I don't know how to calculate the end points exactly, so this just throws two points way outside the current drawing and hopes that it will stay outside.\n\n\n\n"
+    "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the x-axis. Returns the two points.\n\nThe end points are not calculated exactly, they're just a long way apart.\n\n\n\n"
 },
 
 {
