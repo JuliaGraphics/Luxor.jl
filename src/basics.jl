@@ -356,19 +356,14 @@ rline(pt)       = rline(pt.x, pt.y)
 Draw a line across the entire drawing passing through `pos`, at an angle of `theta` to the
 x-axis. Returns the two points.
 
-TODO: I don't know how to calculate the end points exactly, so this just throws two points
-way outside the current drawing and hopes that it will stay outside.
+The end points are not calculated exactly, they're just a long way apart.
 """
 function rule(pos::Point, theta=0.0)
-    # TODO stop cheating :)
-    cheatfactor = 20.0
-    lengthx = cheatfactor * currentdrawing.width
-    lengthy = cheatfactor * currentdrawing.height
-    (pt1, pt2) = (Point(pos.x + (-lengthx * cos(theta)),
-                        pos.y + (-lengthy * sin(theta))),
-                  Point(pos.x + (lengthx * cos(theta)),
-                        pos.y + (lengthy * sin(theta))))
-    line(pt1, pt2, :stroke)
+    diagonal = hypot(currentdrawing.width, currentdrawing.height)
+    postarget  = Point(pos.x + (diagonal * cos(theta)), pos.y + (diagonal * sin(theta)))
+    pt1 = between(pos, postarget, -2)
+    pt2 = between(pos, postarget, 3)
+    line(pt1, pt2, :stroke)    
     return (pt1, pt2)
 end
 
