@@ -53,7 +53,7 @@ function draw_luxor_demo(fname)
     fontface("Optima-ExtraBlack")
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
-    textcentred("Luxor", 0, 300)
+    textcentered("Luxor", 0, 300)
 
     # text on curve
     fontsize(18)

@@ -191,7 +191,7 @@ textcurve("this spiral contains every word in julia names(Base): " * textstring,
     spiral_ring_step = 0)
 fontsize(35)
 fontface("Agenda-Black")
-textcentred("julia names(Base)", 0, 0)
+textcentered("julia names(Base)", 0, 0)
 finish()
 preview()
 ```

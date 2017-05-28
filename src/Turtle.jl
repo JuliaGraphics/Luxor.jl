@@ -99,7 +99,7 @@ end
 """
     Circle(t::Turtle, radius)
 
-Draw a filled circle centred at the current position with the given radius.
+Draw a filled circle centered at the current position with the given radius.
 """
 function Circle(t::Turtle, radius)
     gsave()
@@ -111,7 +111,7 @@ end
 """
     Rectangle(t::Turtle, width, height)
 
-Draw a filled rectangle centred at the current position with the given radius.
+Draw a filled rectangle centered at the current position with the given radius.
 """
 function Rectangle(t::Turtle, width, height)
     gsave()

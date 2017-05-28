@@ -3,14 +3,14 @@
 """
     circle(x, y, r, action=:nothing)
 
-Make a circle of radius `r` centred at `x`/`y`.
+Make a circle of radius `r` centered at `x`/`y`.
 
 `action` is one of the actions applied by `do_action`, defaulting to `:nothing`. You can
 also use `ellipse()` to draw circles and place them by their centerpoint.
 """
 function circle(x, y, r, action=:nothing)
     if action != :path
-      newpath()
+        newpath()
     end
     Cairo.circle(currentdrawing.cr, x, y, r)
     do_action(action)
@@ -19,10 +19,10 @@ end
 """
     circle(pt, r, action)
 
-Make a circle centred at `pt`.
+Make a circle centered at `pt`.
 """
 circle(centerpoint::Point, r, action=:nothing) =
-  circle(centerpoint.x, centerpoint.y, r, action)
+    circle(centerpoint.x, centerpoint.y, r, action)
 
 """
     circle(pt1::Point, pt2::Point, action=:nothing)
@@ -30,9 +30,9 @@ circle(centerpoint::Point, r, action=:nothing) =
 Make a circle that passes through two points that define the diameter:
 """
 function circle(pt1::Point, pt2::Point, action=:nothing)
-  center = midpoint(pt1, pt2)
-  radius = norm(pt1, pt2)/2
-  circle(center, radius, action)
+    center = midpoint(pt1, pt2)
+    radius = norm(pt1, pt2)/2
+    circle(center, radius, action)
 end
 
 """
@@ -107,16 +107,16 @@ function squircle(center::Point, hradius, vradius, action=:none;
     rt = 0.5,
     vertices=false,
     reversepath=false)
-  points = Point[]
-  for theta in 0:pi/40:2pi
-      xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
-      ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
-      push!(points, Point(xpos, ypos))
-  end
-  if vertices
-    return points
-  end
-  poly(points, action, close=true, reversepath=reversepath)
+    points = Point[]
+    for theta in 0:pi/40:2pi
+        xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
+        ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
+        push!(points, Point(xpos, ypos))
+    end
+    if vertices
+        return points
+    end
+    poly(points, action, close=true, reversepath=reversepath)
 end
 
 """
@@ -127,8 +127,8 @@ Add an arc to the current path from `angle1` to `angle2` going clockwise.
 Angles are defined relative to the x-axis, positive clockwise.
 """
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
-  Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-  do_action(action)
+    Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+    do_action(action)
 end
 
 """
@@ -137,7 +137,7 @@ Arc with centerpoint.
     arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
 """
 arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
-  arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
+    arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
 Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
@@ -147,13 +147,13 @@ Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
 Angles are defined relative to the x-axis, positive clockwise.
 """
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
-  Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
-  do_action(action)
+    Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+    do_action(action)
 end
 
 " Add an arc centered at `centerpoint` to the current path from `angle1` to `angle2` going counterclockwise."
 carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
-  carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
+    carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
       arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
@@ -167,7 +167,7 @@ function arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
     if endangle < startangle
-       endangle = mod2pi(endangle + 2pi)
+        endangle = mod2pi(endangle + 2pi)
     end
     arc(c1, r, startangle, endangle, action)
 end
@@ -184,7 +184,7 @@ function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
     if startangle < startangle
-       startangle = mod2pi(startangle + 2pi)
+        startangle = mod2pi(startangle + 2pi)
     end
     carc(c1, r, startangle, endangle, action)
 end
@@ -195,7 +195,7 @@ end
 Draw an annular sector centered at `centerpoint`.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
-      endangle::Real, action::Symbol=:none)
+                endangle::Real, action::Symbol=:none)
     gsave()
     translate(centerpoint)
     newpath()
@@ -210,7 +210,8 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
 end
 
 "Draw an annular sector centered at the origin."
-sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol=:none) =
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
+       action::Symbol=:none) =
     sector(O, innerradius, outerradius, startangle, endangle, action)
 
 """
@@ -224,7 +225,7 @@ the curves join.
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
-    endangle::Real, cornerradius::Real, action::Symbol=:none)
+                endangle::Real, cornerradius::Real, action::Symbol=:none)
     gsave()
     translate(centerpoint)
     # some work is done using polar coords to calculate the points
@@ -232,14 +233,14 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     # attempts to prevent pathological cases
     cornerradius = min(cornerradius, abs(outerradius-innerradius)/2)
     if endangle < startangle
-       endangle = mod2pi(endangle + 2pi)
+        endangle = mod2pi(endangle + 2pi)
     end
 
     # TODO reduce given corner radius to prevent messes when spanning angle too small
     # 4 is a magic number
-        while abs(endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
-            cornerradius *= 0.75
-        end
+    while abs(endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
+        cornerradius *= 0.75
+    end
 
     # first inner corner
     alpha1 = asin(cornerradius/(innerradius+cornerradius))
@@ -264,17 +265,21 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     move(@polar(p1))
     newpath()
     # inner corner
-    arc(@polar(p1p2center), cornerradius, slope(@polar(p1p2center), @polar(p1)), slope(@polar(p1p2center), @polar(p2)), :none)
+    arc(@polar(p1p2center), cornerradius, slope(@polar(p1p2center), @polar(p1)),
+        slope(@polar(p1p2center), @polar(p2)), :none)
     line(@polar(p3))
     # outer corner
-    arc(@polar(p3p4center), cornerradius, slope(@polar(p3p4center), @polar(p3)), slope(@polar(p3p4center), @polar(p4)), :none)
+    arc(@polar(p3p4center), cornerradius, slope(@polar(p3p4center), @polar(p3)),
+        slope(@polar(p3p4center), @polar(p4)), :none)
     # outside arc
     arc(O, outerradius, slope(O, @polar(p4)), slope(O, @polar(p5)), :none)
     # last outside corner
-    arc(@polar(p5p6center), cornerradius, slope(@polar(p5p6center), @polar(p5)), slope(@polar(p5p6center), @polar(p6)), :none)
+    arc(@polar(p5p6center), cornerradius, slope(@polar(p5p6center), @polar(p5)),
+        slope(@polar(p5p6center), @polar(p6)), :none)
     line(@polar(p7))
     # last inner corner
-    arc(@polar(p7p8center), cornerradius, slope(@polar(p7p8center), @polar(p7)), slope(@polar(p7p8center), @polar(p8)), :none)
+    arc(@polar(p7p8center), cornerradius, slope(@polar(p7p8center), @polar(p7)),
+        slope(@polar(p7p8center), @polar(p8)), :none)
     s1, s2 = slope(O, @polar(p8)), slope(O, @polar(p1))
     if s1 < s2
         s2 = mod2pi(s2 + 2pi)
@@ -287,7 +292,7 @@ end
 
 "Draw an annular sector with rounded corners, centered at the current origin."
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
-    cornerradius::Real, action::Symbol=:none) =
+       cornerradius::Real, action::Symbol=:none) =
     sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)
 
 """
@@ -399,18 +404,18 @@ end
 
 """
     ellipse(focus1::Point, focus2::Point, k, action=:none;
-             stepvalue=pi/100,
-             vertices=false,
-             reversepath=false)
+            stepvalue=pi/100,
+            vertices=false,
+            reversepath=false)
 
 Build a polygon approximation to an ellipse, given two points and a distance, `k`, which is
 the sum of the distances to the focii of any points on the ellipse (or the shortest length
 of string required to go from one focus to the perimeter and on to the other focus).
 """
 function ellipse(focus1::Point, focus2::Point, k, action=:none;
-        stepvalue=pi/100,
-        vertices=false,
-        reversepath=false)
+                 stepvalue=pi/100,
+                 vertices=false,
+                 reversepath=false)
     a = k/2  # a = ellipse's major axis, the widest part
     cpoint = midpoint(focus1, focus2)
     dc = norm(focus1, cpoint)
@@ -452,10 +457,10 @@ the supplied `action`. If the points are drawn, the function returns a tuple sho
 many points were drawn and what the period was (as a multiple of `pi`).
 """
 function hypotrochoid(R, r, d, action=:none;
-        close=true,
-        stepby   = 0.01,
-        period   = 0,
-        vertices = false)
+                      close=true,
+                      stepby   = 0.01,
+                      period   = 0,
+                      vertices = false)
     function nextposition(t)
         x = (R - r) * cos(t) + (d * cos(((R - r)/r) * t))
         y = (R - r) * sin(t) - (d * sin(((R - r)/r) * t))
@@ -503,10 +508,10 @@ the supplied `action`. If the points are drawn, the function returns a tuple sho
 many points were drawn and what the period was (as a multiple of `pi`).
 """
 function epitrochoid(R, r, d, action=:none;
-        close    = true,
-        stepby   = 0.01,
-        period   = 0,
-        vertices = false)
+                     close    = true,
+                     stepby   = 0.01,
+                     period   = 0,
+                     vertices = false)
     function nextposition(t)
         x = (R + r) * cos(t) - (d * cos(((R - r)/r) * t))
         y = (R + r) * sin(t) - (d * sin(((R - r)/r) * t))

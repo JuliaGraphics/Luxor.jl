@@ -117,7 +117,7 @@ function boxtext(p, t)
     sethue("grey30")
     box(p, 30, 50, :fill)
     sethue("white")
-    textcentred(t, p)
+    textcentered(t, p)
 end
 
 for i in 0:5
