@@ -15,8 +15,8 @@ Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
 the string at the point. If you omit the point, it's placed at the current `0/0`. In Luxor,
 placing text doesn't affect the current point.
 
-Horizontal alignment `halign` can be `:left`, `:center`, or `:right`. Vertical alignment
-`valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
+Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or `:right`.
+Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
 
 The default alignment is `:left`, `:baseline`.
 """
@@ -34,11 +34,13 @@ function text(t, pt::Point; halign=:left, valign=:baseline)
     =#
 
     xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(t)
-    halignment = findfirst([:left, :center, :right], halign)
+    halignment = findfirst([:left, :center, :right, :centre], halign)
 
-    # if unspecified or wrong, default to left
+    # if unspecified or wrong, default to left, also treat UK spelling centre as center
     if halignment == 0
         halignment = 1
+    elseif halignment == 4
+        halignment = 2
     end
 
     textpointx = pt.x - [xbearing, (textwidth-xbearing)/2, textwidth][halignment]
@@ -61,21 +63,20 @@ text(t; kwargs...) = text(t, O; kwargs...)
 text(t, xpos, ypos; kwargs...) = text(t, Point(xpos, ypos); kwargs...)
 
 """
-    textcentred(str)
-    textcentred(str, x, y)
-    textcentred(str, pt)
+    textcentered(str)
+    textcentered(str, x, y)
+    textcentered(str, pt)
 
 Draw text in the string `str` centered at `x`/`y` or `pt`. If you omit the point, it's
 placed at 0/0.
 
 Text doesn't affect the current point!
-"""
-function textcentred(t, x=0, y=0)
-  text(t, x, y, halign=:center)
-end
 
-textcentred(t, pt::Point) = textcentred(t, pt.x, pt.y)
-textcentered = textcentred
+textcentred (UK spelling) is a synonym.
+"""
+textcentered(t, x=0, y=0) = text(t, x, y, halign=:center)
+textcentered(t, pt::Point) = textcentered(t, pt.x, pt.y)
+textcentred = textcentered
 
 """
     textright(str)
@@ -87,10 +88,7 @@ If you omit the point, it's placed at 0/0.
 
 Text doesn't affect the current point!
 """
-function textright(t, x=0, y=0)
-  text(t, x, y, halign=:right)
-end
-
+textright(t, x=0, y=0) = text(t, x, y, halign=:right)
 textright(t, pt::Point) = textright(t, pt.x, pt.y)
 
 """
@@ -98,7 +96,10 @@ textright(t, pt::Point) = textright(t, pt.x, pt.y)
 
 Select a font to use. (Toy API)
 """
-fontface(f) = Cairo.select_font_face(currentdrawing.cr, f, Cairo.FONT_SLANT_NORMAL, Cairo.FONT_WEIGHT_NORMAL)
+fontface(f) =
+    Cairo.select_font_face(currentdrawing.cr, f,
+                           Cairo.FONT_SLANT_NORMAL,
+                           Cairo.FONT_WEIGHT_NORMAL)
 
 """
     fontsize(n)
@@ -166,7 +167,7 @@ textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
           )
 ```
 
-`start_angle` is relative to +ve x-axis, arc/circle is centred on `(x_pos,y_pos)` with
+`start_angle` is relative to +ve x-axis, arc/circle is centered on `(x_pos,y_pos)` with
 radius `start_radius`.
 """
 function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
@@ -206,14 +207,14 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
         else
             rotate(-pi/2 + refangle)
         end
-        textcentred(glyph, 0, 0)
+        textcentered(glyph, 0, 0)
         grestore()
         current_radius < 10 && break
     end
 end
 
-textcurve(the_text, start_angle, start_radius, centre::Point; kwargs...) =
-  textcurve(the_text, start_angle, start_radius, centre.x, centre.y; kwargs...)
+textcurve(the_text, start_angle, start_radius, center::Point; kwargs...) =
+    textcurve(the_text, start_angle, start_radius, center.x, center.y; kwargs...)
 
 """
     textcurvecentered(the_text, the_angle, the_radius, center::Point;
@@ -227,18 +228,20 @@ retronauts.)
 
 `letter_spacing` adjusts the tracking/space between chars, tighter is (-), looser is (+)).
 `baselineshift` moves the text up or down away from the baseline.
+
+textcurvecentred (UK spelling) is a synonym
 """
 function textcurvecentered(the_text, the_angle, the_radius, center::Point;
-      clockwise = true,
-      letter_spacing = 0,
-      baselineshift = 0
+                           clockwise = true,
+                           letter_spacing = 0,
+                           baselineshift = 0
       )
     atextbox = textextents(the_text)
     atextwidth = atextbox[3]                         # width of text
     if clockwise
-      baselineradius = the_radius + baselineshift  # could be adjusted if we knew font height
+        baselineradius = the_radius + baselineshift  # could be adjusted if we knew font height
     else
-      baselineradius = the_radius - baselineshift  # could be adjusted if we knew font height
+        baselineradius = the_radius - baselineshift  # could be adjusted if we knew font height
     end
 
     # hack to adjust starting angle for the letter spacing
@@ -254,9 +257,11 @@ function textcurvecentered(the_text, the_angle, the_radius, center::Point;
     end
     starttextxpos = baselineradius * cos(starttextangle)
     starttextypos = baselineradius * sin(starttextangle)
-    textcurve(the_text, starttextangle, baselineradius, center, clockwise=clockwise, letter_spacing=letter_spacing)
+    textcurve(the_text, starttextangle, baselineradius, center,
+              clockwise=clockwise, letter_spacing=letter_spacing)
 end
 
+textcurvecentred = textcurvecentered
 
 # the professional interface
 
@@ -303,9 +308,8 @@ The `<span>` tag can contains things like this:
 
     <span font='26' background='green' foreground='red'>unreadable text</span>
 """
-function settext(text::AbstractString, pos::Point; kwargs...)
+settext(text::AbstractString, pos::Point; kwargs...) =
     Cairo.text(currentdrawing.cr, pos.x, pos.y, text; kwargs...)
-end
 
 settext(text; kwargs...) = settext(text, O; kwargs...)
 
