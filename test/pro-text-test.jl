@@ -49,6 +49,8 @@ function test_pro_text(fname)
         text("hello in Georgia $i using the Toy API", Point(col2, row))
         row += 30
     end
+    settext("Test with no row, col", halign="left", valign="top", angle=0, markup=true)
+
     @test finish() == true
 end
 

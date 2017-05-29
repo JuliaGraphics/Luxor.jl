@@ -104,19 +104,16 @@ Make a squircle (basically a rectangle with rounded corners). Specify the center
 The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.
 """
 function squircle(center::Point, hradius, vradius, action=:none;
-    rt = 0.5,
-    vertices=false,
-    reversepath=false)
+                  rt = 0.5,
+                  vertices=false,
+                  reversepath=false)
     points = Point[]
     for theta in 0:pi/40:2pi
         xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
         ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
         push!(points, Point(xpos, ypos))
     end
-    if vertices
-        return points
-    end
-    poly(points, action, close=true, reversepath=reversepath)
+    vertices ? points : poly(points, action, close=true, reversepath=reversepath)
 end
 
 """
@@ -428,10 +425,7 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
         yt = cpoint.y + a * cos(t) * sin(phi) + b * sin(t) * cos(phi)
         push!(points, Point(xt, yt))
     end
-    if vertices
-        return points
-    end
-    poly(points, action, close=true, reversepath=reversepath)
+    vertices ? points : poly(points, action, close=true, reversepath=reversepath)
 end
 
 """
@@ -457,7 +451,7 @@ the supplied `action`. If the points are drawn, the function returns a tuple sho
 many points were drawn and what the period was (as a multiple of `pi`).
 """
 function hypotrochoid(R, r, d, action=:none;
-                      close=true,
+                      close    = true,
                       stepby   = 0.01,
                       period   = 0,
                       vertices = false)
@@ -476,15 +470,8 @@ function hypotrochoid(R, r, d, action=:none;
         push!(points, nextposition(t))
     end
     # don't repeat end point if it's more or less the same as the start point
-    if isapprox(points[1], points[end])
-        pop!(points)
-    end
-    if vertices == false
-        poly(points, action, close=close)
-        return (length(points), period/pi)
-    else
-        return points
-    end
+    isapprox(points[1], points[end]) && pop!(points)
+    vertices ? points : (poly(points, action, close=close); (length(points), period/pi))
 end
 
 """
@@ -527,14 +514,7 @@ function epitrochoid(R, r, d, action=:none;
         push!(points, nextposition(t))
     end
     # don't repeat end point if it's more or less the same as the start point
-    if isapprox(points[1], points[end])
-        pop!(points)
-    end
-    if vertices == false
-        poly(points, action, close=close)
-        return (length(points), period/pi)
-    else
-        return points
-    end
+    isapprox(points[1], points[end]) && pop!(points)
+    vertices ? points : (poly(points, action, close=close); (length(points), period/pi))
 end
 # eof
