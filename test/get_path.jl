@@ -35,7 +35,8 @@ function get_path(str)
             circle(x2, y2, 1, :stroke)
             circle(x3, y3, 1, :stroke)
             move(x, y)
-            curve(x1, y1, x2, y2, x3, y3)
+            # Use point interface, to make sure that is also tested
+            curve(Point(x1, y1), Point(x2, y2), Point(x3, y3))
             strokepath()
             (x, y) = (x3, y3) # update current point
         elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
