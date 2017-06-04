@@ -17,6 +17,12 @@ setopacity(0.8)
 origin()
 background("black")
 
+# Test endangle < angle
+randomhue()
+sector(O, 0, 20, pi/12, 0, :fill)
+sethue("black")
+sector(0, 20, pi/12, 0, :stroke)
+
 # normal
 for inner in 0:20:600
     for a in 0:pi/12:2pi

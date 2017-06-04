@@ -151,7 +151,7 @@ for (pos, n) in tiles
         grestore()
     end
     sethue("white")
-    textcentred(string(n), pos + Point(0, 5))
+    textcentered(string(n), pos + Point(0, 5))
 end
 finish() # hide
 nothing # hide
