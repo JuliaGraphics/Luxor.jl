@@ -9,7 +9,7 @@ else
     const Test = BaseTestNext
 end
 
-function draw_luxor_demo(fname)
+function draw_luxor_demo(fname, flag)
     Drawing("A2landscape", fname)
 
     origin() # move 0/0 to center
@@ -53,7 +53,16 @@ function draw_luxor_demo(fname)
     fontface("Optima-ExtraBlack")
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
-    textcentred("Luxor", 0, 300)
+    flag ? textcentered("Luxor", 0, 300) :  textcentred("Luxor", 0, 300)
+    # check that using a Point instead of x,y works
+    pnt = Point(0, 330)
+    flag ? textcentered("Centered", pnt) :  textcentred("Centred", pnt)
+
+    textright("Right", 0, 360)
+    textright("Right Point", Point(0, 390))
+
+    # Check that this just takes default (:baseline)
+    text("Invalid valign", Point(0, 420), valign=:foobar)
 
     # text on curve
     fontsize(18)
@@ -67,5 +76,7 @@ function draw_luxor_demo(fname)
 end
 
 fname = "luxor-test1.png"
-draw_luxor_demo(fname)
+# Try both synonyms of textcentered/textcentred
+draw_luxor_demo(fname, false)
+draw_luxor_demo(fname, true)
 println("...finished test: output in $(fname)")
