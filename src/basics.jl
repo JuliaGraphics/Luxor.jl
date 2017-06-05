@@ -363,7 +363,7 @@ function rule(pos::Point, theta=0.0)
     postarget  = Point(pos.x + (diagonal * cos(theta)), pos.y + (diagonal * sin(theta)))
     pt1 = between(pos, postarget, -2)
     pt2 = between(pos, postarget, 3)
-    line(pt1, pt2, :stroke)    
+    line(pt1, pt2, :stroke)
     return (pt1, pt2)
 end
 
@@ -407,6 +407,18 @@ function grestore()
 end
 
 """
+    The ⊞ (`\boxplus`) macro is a shortcut for `gsave()` ... `grestore()`.
+"""
+
+macro ⊞(a)
+    quote
+        gsave()
+        $(esc(a))
+        grestore()
+    end
+end
+
+"""
     scale(x, y)
 
 Scale workspace by `x` and `y`.
@@ -416,15 +428,20 @@ Example:
     scale(0.2, 0.3)
 
 """
-
 scale(sx::Real, sy::Real) = Cairo.scale(currentdrawing.cr, sx, sy)
+
+"""
+    scale(f)
+
+Scale workspace by `f` in both `x` and `y`.
+"""
+scale(f::Real) = Cairo.scale(currentdrawing.cr, f, f)
 
 """
     rotate(a::Float64)
 
 Rotate workspace by `a` radians clockwise (from positive x-axis to positive y-axis).
 """
-
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 
 """
@@ -433,7 +450,6 @@ rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 
 Translate the workspace by `x` and `y` or by moving the origin to `pt`.
 """
-
 translate(tx::Real, ty::Real)        = Cairo.translate(currentdrawing.cr, tx, ty)
 translate(pt::Point)     = translate(pt.x, pt.y)
 

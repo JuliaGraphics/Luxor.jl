@@ -9,7 +9,11 @@ else
     const Test = BaseTestNext
 end
 
-macro g(a)
+"""
+    \boxplus
+"""
+
+macro ⊞(a)
     quote
         gsave()
         $(esc(a))
@@ -30,7 +34,7 @@ function poly_fit(fname)
     tiles = Tiler(2400, 2400, 5, 5, margin=20)
     setline(1)
     for (pos, n) in tiles
-        @g  begin
+        @⊞  begin
             translate(pos)
             randomhue()
             box(O, -tiles.tilewidth, tiles.tilewidth, :fill)
