@@ -1405,7 +1405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Base.scale",
     "category": "Function",
-    "text": "scale(x, y)\n\nScale workspace by x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\n"
+    "text": "scale(x, y)\n\nScale workspace by x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\nscale(f)\n\nScale workspace by f in both x and y.\n\n\n\n"
 },
 
 {
