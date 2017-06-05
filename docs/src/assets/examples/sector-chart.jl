@@ -151,7 +151,7 @@ function main()
   fontsize(40)
   gsave()
   translate(0, -height/2 + 100)
-  textcentred("Julia benchmarks")
+  textcentered("Julia benchmarks")
   grestore()
 
   # footnotes
@@ -159,9 +159,9 @@ function main()
   fontface("Monaco")
   fontsize(6)
   translate(0, height/2 - 50)
-  textcentred("plotted $(Dates.format(now(), "e, dd u yyyy HH:MM")) Bigger areas mean slower. Humans are bad at comparing areas. Benchmarks are taken from the http://julialang.org web site.")
+  textcentered("plotted $(Dates.format(now(), "e, dd u yyyy HH:MM")) Bigger areas mean slower. Humans are bad at comparing areas. Benchmarks are taken from the http://julialang.org web site.")
   translate(0, 10)
-  textcentred("Terms and conditions apply. Objects may appear smaller than they actually are. The value of investments may go up as well as down.")
+  textcentered("Terms and conditions apply. Objects may appear smaller than they actually are. The value of investments may go up as well as down.")
   grestore()
 
   # legend

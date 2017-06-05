@@ -21,18 +21,16 @@ end
 Create a rectangle with one corner at `cornerpoint` with width `w` and height `h` and do an
 action.
 """
-function rect(cornerpoint::Point, w, h, action::Symbol)
+rect(cornerpoint::Point, w, h, action::Symbol) =
     rect(cornerpoint.x, cornerpoint.y, w, h, action)
-end
 
 """
     box(cornerpoint1, cornerpoint2, action=:nothing)
 
 Create a rectangle between two points and do an action.
 """
-function box(corner1::Point, corner2::Point, action::Symbol=:nothing)
+box(corner1::Point, corner2::Point, action::Symbol=:nothing) =
     rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
-end
 
 """
     box(points::Array, action=:nothing)
@@ -40,9 +38,7 @@ end
 Create a box/rectangle using the first two points of an array of Points to defined
 opposite corners.
 """
-function box(bbox::Array, action::Symbol=:nothing)
-    box(bbox[1], bbox[2], action)
-end
+box(bbox::Array, action::Symbol=:nothing) = box(bbox[1], bbox[2], action)
 
 """
     box(pt::Point, width, height, action=:nothing; vertices=false)
@@ -65,9 +61,8 @@ end
 
 Create a box/rectangle centered at point `x/y` with width and height.
 """
-function box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing)
+box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing) =
     rect(x - width/2.0, y - height/2.0, width, height, action)
-end
 
 """
     box(x, y, width, height, cornerradius, action=:nothing)
@@ -123,7 +118,7 @@ end
     ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
         vertices=false, reversepath=false)
 
-Find the vertices of a regular n-sided polygon centred at `x`, `y`:
+Find the vertices of a regular n-sided polygon centered at `x`, `y`:
 
 `ngon()` draws the shapes: if you just want the raw points, use keyword argument
 `vertices=true`, which returns the array of points instead. Compare:
@@ -145,12 +140,12 @@ ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
 function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0, action=:nothing;
-    vertices=false,
-    reversepath=false)
+              vertices=false,
+              reversepath=false)
     ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
-                  y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
+                    y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
     if vertices
-        return ptlist
+        ptlist
     else
         poly(ptlist, action, close=true, reversepath=reversepath)
     end
@@ -161,10 +156,11 @@ end
         vertices=false,
         reversepath=false)
 
-Draw a regular polygon centred at point `p`:
+Draw a regular polygon centered at point `p`:
 """
 
-ngon(centrepoint::Point, radius::Real, sides::Int=5, orientation=0, action=:nothing; kwargs...) = ngon(centrepoint.x, centrepoint.y, radius, sides, orientation, action; kwargs...)
+ngon(centerpoint::Point, radius::Real, sides::Int=5, orientation=0, action=:nothing; kwargs...) =
+    ngon(centerpoint.x, centerpoint.y, radius, sides, orientation, action; kwargs...)
 
 """
     star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
@@ -193,9 +189,9 @@ function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
         result = reverse(result)
     end
     if vertices
-      return result
+        result
     else
-      poly(result, action, close=true)
+        poly(result, action, close=true)
     end
 end
 
@@ -206,11 +202,13 @@ end
 Draw a star centered at a position:
 """
 
-star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0,
-    action=:nothing;
-    vertices = false,
-    reversepath=false) = star(centerpoint.x, centerpoint.y, radius, npoints, ratio,
-    orientation, action; vertices = vertices, reversepath=reversepath)
+function star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0,
+              action=:nothing;
+              vertices=false,
+              reversepath=false)
+    star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action;
+         vertices = vertices, reversepath=reversepath)
+end
 
 """
     cropmarks(center, width, height)
@@ -221,47 +219,48 @@ function cropmarks(center, width, height)
     gap = 5
     crop = 15
     gsave()
-        setcolor("black")
-        setline(0.5)
-        setdash("solid")
-        # horizontal top left
-        line(Point(-width/2 - gap - crop, -height/2),
-             Point(-width/2 - gap, -height/2),
-             :stroke)
+    setcolor("black")
+    setline(0.5)
+    setdash("solid")
+    # horizontal top left
+    line(Point(-width/2 - gap - crop, -height/2),
+         Point(-width/2 - gap, -height/2),
+         :stroke)
 
-        # horizontal bottom left
-        line(Point(-width/2 - gap - crop, height/2),
-             Point(-width/2 - gap, height/2),
-             :stroke)
+    # horizontal bottom left
+    line(Point(-width/2 - gap - crop, height/2),
+         Point(-width/2 - gap, height/2),
+         :stroke)
 
-        # horizontal top right
-        line(Point(width/2 + gap, -height/2),
-             Point(width/2 + gap + crop, -height/2),
-             :stroke)
+    # horizontal top right
+    line(Point(width/2 + gap, -height/2),
+         Point(width/2 + gap + crop, -height/2),
+         :stroke)
 
-        # horizontal bottom right
-        line(Point(width/2 + gap, height/2),
-             Point(width/2 + gap + crop, height/2),
-             :stroke)
+    # horizontal bottom right
+    line(Point(width/2 + gap, height/2),
+         Point(width/2 + gap + crop, height/2),
+         :stroke)
 
-        # vertical top left
-        line(Point(-width/2, -height/2 - gap - crop),
-             Point(-width/2, -height/2 - gap),
-             :stroke)
+    # vertical top left
+    line(Point(-width/2, -height/2 - gap - crop),
+         Point(-width/2, -height/2 - gap),
+         :stroke)
 
-        # vertical bottom left
-        line(Point(-width/2, height/2 + gap),
-             Point(-width/2, height/2 + gap + crop),
-             :stroke)
+    # vertical bottom left
+    line(Point(-width/2, height/2 + gap),
+         Point(-width/2, height/2 + gap + crop),
+         :stroke)
 
-        # vertical top right
-        line(Point(width/2, -height/2 - gap - crop),
-             Point(width/2, -height/2 - gap),
-             :stroke)
+    # vertical top right
+    line(Point(width/2, -height/2 - gap - crop),
+         Point(width/2, -height/2 - gap),
+         :stroke)
 
-        # vertical bottom right
-        line(Point(width/2, height/2 + gap),
-             Point(width/2, height/2 + gap + crop),
-             :stroke)
+    # vertical bottom right
+    line(Point(width/2, height/2 + gap),
+         Point(width/2, height/2 + gap + crop),
+         :stroke)
+
     grestore()
 end

@@ -57,7 +57,7 @@ function placefonts(fontlist, str, background="white")
         end
         # draw character at the size we found
         fontsize(fsize)
-        textcentred(str, x, y)
+        textcentered(str, x, y)
         # underneath, draw its name
         fontface("BellCentennialStd-Address")
         fontsize(6)
@@ -70,7 +70,7 @@ function placefonts(fontlist, str, background="white")
         rect(x - te[3]/2 - te[1], y + te[4], te[3] + te[1], -te[4] - te[2] + 12, :fill)
         grestore()
         # show font name
-        textcentred(fontnamemodified, x, y + 12)
+        textcentered(fontnamemodified, x, y + 12)
         # room for another one?
         nextxpos = x + te[3]/2 + xstep
         if nextxpos > (pagewidth - hmargin - xstep - xstep)
