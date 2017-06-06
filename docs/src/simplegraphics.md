@@ -559,7 +559,6 @@ nothing # hide
 getnearestpointonline
 pointlinedistance
 slope
-rescale
 perpendicular
 @polar
 polar
