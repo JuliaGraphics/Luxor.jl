@@ -25,7 +25,7 @@ nothing # hide
 
 ![translate](assets/figures/translate.png)
 
-`scale()` scales the current workspace by the specified amounts in x and y. Again, it's relative to the current scale, not to the document's original.
+`scale(x, y)` or `scale(n)` scales the current workspace by the specified amounts. Again, it's relative to the current scale, not to the document's original.
 
 ```@example
 using Luxor, Colors # hide
