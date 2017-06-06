@@ -227,7 +227,7 @@ Use the `log=true` option to draw logarithmic spirals.
 
 ```@example
 using Luxor # hide
-Drawing(500, 400) # , "assets/figures/spiral-log.png") # hide
+Drawing(500, 400, "assets/figures/spiral-log.png") # hide
 background("white") # hide
 origin() # hide
 sethue("magenta") # hide
@@ -244,7 +244,7 @@ finish() # hide
 nothing # hide
 ```
 
-![spiral](assets/figures/spiral-log.png)
+![spiral log](assets/figures/spiral-log.png)
 
 ```@docs
 spiral
