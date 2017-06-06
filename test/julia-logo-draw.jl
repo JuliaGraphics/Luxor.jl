@@ -9,9 +9,9 @@ else
     const Test = BaseTestNext
 end
 
-function spiral()
+function spirals()
     gsave()
-    scale(.3, .3)
+    scale(.3)
     r = 200
     setcolor("gray")
     for i in 0:pi/8:2pi
@@ -25,14 +25,14 @@ function spiral()
     juliacircles(20)
 end
 
-function expandingspiral()
+function expandingspirals()
     gsave()
-    scale(.3, .3)
+    scale(.3)
     r = 200
     for i in pi:pi/12:6pi
         gsave()
         translate(i/3 * r * cos(i), i/3 * r * sin(i))
-        scale(0.8, 0.8)
+        scale(0.8)
         rotate(i)
         julialogo()
         grestore()
@@ -69,7 +69,7 @@ function colorgrid()
       gsave()
       setcolor(color(cols[n]))
       translate(pos)
-      scale(0.3, 0.3)
+      scale(0.3)
       julialogo(color=false)
       grestore()
     end
@@ -95,10 +95,10 @@ function draw_julia_logos(fname)
     background("white")
 
     translate(-500,-200)
-    spiral()
+    spirals()
 
     translate(750,0)
-    expandingspiral()
+    expandingspirals()
 
     translate(-1000,500)
     dropshadow()

@@ -31,7 +31,7 @@ origin()
 background("white")
 for theta in range(0, pi/8, 16)
     gsave()
-    scale(0.25, 0.25)
+    scale(0.25)
     rotate(theta)
     translate(250, 0)
     randomhue()
@@ -39,11 +39,11 @@ for theta in range(0, pi/8, 16)
     grestore()
 end
 gsave()
-scale(0.3, 0.3)
+scale(0.3)
 juliacircles()
 grestore()
 translate(200, -150)
-scale(0.3, 0.3)
+scale(0.3)
 julialogo()
 finish()
 nothing # hide
@@ -103,7 +103,7 @@ If you want to work interactively, you can use an environment such as a Jupyter 
 
 ### Maps
 
-Luxor can read simple polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid. 
+Luxor can read simple polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid.
 
 !["simple world map detail"](assets/figures/airport-map-detail.png)
 
@@ -114,7 +114,7 @@ This is the full map:
 !["simple world map"](assets/figures/airport-map.png)
 
 You'll need to install the [Shapefile.jl](https://github.com/JuliaGeo/Shapefile.jl) package before running the code:
-    
+
 ```julia
 using Shapefile, Luxor
 include(Pkg.dir("Luxor") * "/src/readshapefiles.jl")
@@ -153,7 +153,7 @@ end
 drawairportmap("/tmp/airport-map.pdf", worldshapes, airportdata)
 ```
 
-[link to Julia source](assets/examples/make-airport-world-map.jl) | 
+[link to Julia source](assets/examples/make-airport-world-map.jl) |
 [link to PDF map](assets/examples/airport-map.pdf)
 
 ### Sector chart

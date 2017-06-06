@@ -180,7 +180,7 @@ function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     r = norm(c1, p2)
     startangle = atan2(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
-    if startangle < startangle
+    if startangle < endangle
         startangle = mod2pi(startangle + 2pi)
     end
     carc(c1, r, startangle, endangle, action)
@@ -516,5 +516,70 @@ function epitrochoid(R, r, d, action=:none;
     # don't repeat end point if it's more or less the same as the start point
     isapprox(points[1], points[end]) && pop!(points)
     vertices ? points : (poly(points, action, close=close); (length(points), period/pi))
+end
+
+"""
+    spiral(a, b, action::Symbol=:none;
+                     stepby = 0.01,
+                     period = 4pi,
+                     vertices = false,
+                     log=false)
+
+Make a spiral. The two primary parameters `a` and `b` determine the start radius, and the
+tightness.
+
+For linear spirals (`log=false`), `b` values are:
+
+    lituus: -2
+
+    hyperbolic spiral: -1
+
+    Archimedes' spiral: 1
+
+    Fermat's spiral: 2
+
+For logarithmic spirals (`log=true`):
+
+    golden spiral: b = ln(phi)/ (pi/2) (about 0.30)
+
+Values of `b` around 0.1 produce tighter, staircase-like spirals.
+"""
+function spiral(a, b, action::Symbol=:none;
+                 stepby = 0.01,
+                 period = 4pi,
+                 vertices = false,
+                 log=false)
+    function nextpositionlog(t)
+        ebt = exp(t * b)
+        if abs(ebt) < 10^8 # arbitrary cutoff to avoid NaNs and Infs
+            x = a * ebt * cos(t)
+            y = a * ebt * sin(t)
+            return Point(x, y)
+        else
+            return nothing
+        end
+    end
+    function nextpositionlin(t)
+        tpn = t ^ (1/b)
+        if tpn < 10^8
+            x = a * tpn * cos(t)
+            y = a * tpn * sin(t)
+            return Point(x, y)
+        else
+            return nothing
+        end
+    end
+    log ? nextpos=nextpositionlog : nextpos = nextpositionlin
+    points = Point[]
+    for t = 0:stepby:period
+        pt = nextpos(t)
+        if isa(nextpos(t), Point)
+            push!(points, pt)
+        end
+    end
+    if vertices == false
+        poly(points, action) # no close by default :)
+    end
+    return points
 end
 # eof

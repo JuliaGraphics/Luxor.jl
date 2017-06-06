@@ -20,6 +20,7 @@ function draw_luxor_demo(fname, flag)
     setline(20)         # line width
     # graphics functions use :fill, :stroke, :fillstroke, :clip, or leave blank
     rect(-400,-400,800,800, :fill)
+    srand(42)
     randomhue()
     circle(0, 0, 460, :stroke)
 
@@ -48,12 +49,12 @@ function draw_luxor_demo(fname, flag)
     clipreset()
 
     # here using Mac OS X fonts
-    fontsize(60)
+    fontsize(20)
     setcolor"turquoise"
     fontface("Optima-ExtraBlack")
     textwidth = textextents("Luxor")[5]
     # move the text by half the width
-    flag ? textcentered("Luxor", 0, 300) :  textcentred("Luxor", 0, 300)
+    flag ? textcentered("Luxor centered", 0, 300) :  textcentred("Luxor centred", 0, 300)
     # check that using a Point instead of x,y works
     pnt = Point(0, 330)
     flag ? textcentered("Centered", pnt) :  textcentred("Centred", pnt)
@@ -75,8 +76,10 @@ function draw_luxor_demo(fname, flag)
     @test finish() == false
 end
 
-fname = "luxor-test1.png"
 # Try both synonyms of textcentered/textcentred
+fname = "luxor-test1.png"
 draw_luxor_demo(fname, false)
+println("...basic test: output in $(fname)")
+fname = "luxor-test2.png"
 draw_luxor_demo(fname, true)
-println("...finished test: output in $(fname)")
+println("...finished basic test: output in $(fname)")
