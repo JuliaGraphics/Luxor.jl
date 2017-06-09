@@ -621,11 +621,13 @@ end
 """
     nearestindex(polydistancearray, value)
 
-Return a tuple of the index of the nearestindex value in `polydistancearray`, an array
-of distances made by `polydistances`, to the `value`, and the excess value.
+Return a tuple of the index of the largest value in `polydistancearray` less than `value`,
+and the difference value. Array is assumed to be sorted.
+
+(Designed for use with `polydistances()`).
 """
 function nearestindex(a::Array, val)
-    ind = findlast(v -> (v < val), a)
+    ind = searchsortedlast(a, val, lt=<)
     if ind != 0
         surplus = val - a[ind]
     else
