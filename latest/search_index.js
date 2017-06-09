@@ -1165,7 +1165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.nearestindex",
     "category": "Function",
-    "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the nearestindex value in polydistancearray, an array of distances made by polydistances, to the value, and the excess value.\n\n\n\n"
+    "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the largest value in polydistancearray less than value, and the difference value. Array is assumed to be sorted.\n\n(Designed for use with polydistances()).\n\n\n\n"
 },
 
 {
