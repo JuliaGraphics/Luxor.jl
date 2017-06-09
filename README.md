@@ -8,11 +8,14 @@
 
 ## Luxor
 
-Luxor is a Julia package for drawing simple vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles. The focus of Luxor is on simplicity and ease of use: it should be easier to use than plain [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions.
+Luxor is a Julia package for drawing simple static vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles.
 
-Luxor is thoroughly procedural: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
+The focus of Luxor is on simplicity and ease of use: it should be easier to use than plain [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions.
 
-For interactive graphics, try [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl) or [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl).
+Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
+
+For interactive graphics, you'll find [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl),  [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), and the Julia version of the
+[Processing](https://github.com/rennis250/Processing.jl) language worth investigating.
 
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
 [docs-latest-url]: http://juliagraphics.github.io/Luxor.jl/latest/
