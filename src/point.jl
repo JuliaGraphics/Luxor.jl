@@ -16,6 +16,7 @@ O is a shortcut for the current origin, `0/0`
 """
 const O = Point(0, 0)
 
+# basics
 +(z::Number, p1::Point)              = Point(p1.x + z,    p1.y + z)
 +(p1::Point, z::Number)              = Point(p1.x + z,    p1.y + z)
 +(p1::Point, p2::Point)              = Point(p1.x + p2.x, p1.y + p2.y)
@@ -29,6 +30,13 @@ const O = Point(0, 0)
 *(p1::Point, p2::Point)              = Point(p1.x * p2.x, p1.y * p2.y)
 ^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
 ^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
+
+# some refinements
+# modifying points with tuples
++(p1, shift::NTuple{2, Real}) = Point(p1.x + shift[1], p1.y + shift[2])
+-(p1, shift::NTuple{2, Real}) = Point(p1.x - shift[1], p1.y - shift[2])
+*(p1, shift::NTuple{2, Real}) = Point(p1.x * shift[1], p1.y * shift[2])
+/(p1, shift::NTuple{2, Real}) = Point(p1.x / shift[1], p1.y / shift[2])
 
 # for broadcasting
 Base.size(::Point) = 2
