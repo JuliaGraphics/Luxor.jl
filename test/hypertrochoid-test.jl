@@ -18,7 +18,7 @@ function test_hypotrochoid(fname)
     tiles = Tiler(1200, 1200, 6, 6)
     for (pos, n) in tiles
         gsave()
-        setline(.5)
+        setline(1.5)
         translate(pos)
 
         R = 45; r = n; d = 20
@@ -34,14 +34,20 @@ function test_hypotrochoid(fname)
         sethue("orange")
         (R == r) && (r += 1)
         p = hypotrochoid(R, r, d, :none, stepby=pi/305, vertices=true)
-        polydistances(p)
-        text(string("R = $(R), r = $(r), d = $(d)"), halign=:center, O.x, O.y+tiles.tileheight/2 + 10)
+        polydistances(p) # just testing
         poly(p, :stroke, close=true)
+        text(string("R = $(R), r = $(r), d = $(d)"), halign=:center, O.x, O.y+tiles.tileheight/2 + 10)
 
         # testing portions of polys
-        sethue("magenta")
         portion = rand()
-        poly(polyportion(p, portion), :stroke, close=false)
+        setline(.25)
+        sethue("magenta")
+        section = polyportion(p, portion)
+        poly(section, :stroke, close=false)
+        sethue("green")
+        circle(section[end], 2, :stroke)
+        poly(polyremainder(p, portion), :stroke, close=false)
+
         text(string("portion ", round(portion, 2)), halign=:center, O.x, O.y+tiles.tileheight/2 + 30)
 
         sethue("cyan")

@@ -461,7 +461,7 @@ nothing # hide
 
 ![polyperimeter](assets/figures/polyperimeter.png)
 
-`polyportion` returns part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns a new polygon tracing the first half of a polygon.
+`polyportion()` and `polyremainder()` return part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns the first half of polygon `p`, `polyremainder(p, .75)` returns the last quarter of it.
 
 ```@example
 using Luxor # hide
@@ -477,7 +477,7 @@ p = ngon(O, 100, 7, 0, vertices=true)
 poly(p, :stroke, close=true)
 setopacity(0.75)
 
-setline(15)
+setline(20)
 sethue("red")
 poly(polyportion(p, 0.25), :stroke)
 
@@ -488,6 +488,9 @@ poly(polyportion(p, 0.5), :stroke)
 setline(5)
 sethue("blue")
 poly(polyportion(p, 0.75), :stroke)
+
+setline(1)
+circle(polyremainder(p, 0.75)[1], 5, :stroke)
 
 finish() # hide
 nothing # hide
