@@ -11,6 +11,13 @@ end
 
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)
+
+    # arithmetic with tuples
+    @test pt1 + (5, 8) == Point(pt1.x + 5, pt1.y + 8)
+    @test pt1 * (5, 8) == Point(pt1.x * 5, pt1.y * 8)
+    @test pt1 - (5, 8) == Point(pt1.x - 5, pt1.y - 8)
+    @test pt1 / (5, 8) == Point(pt1.x / 5, pt1.y / 8)
+
     @test -pt1 == Point(-pt1.x, -pt1.y)
 
     # is point/4 inside a box
@@ -112,12 +119,13 @@ function point_arithmetic_test(fname, npoints=20)
     # ^ FAILS
     # pl8 = map(pt -> ^(pt, 1.2), randompoints)
 
-# bug in v0.6 at the moment
-#    sethue("red")
-#    for p in zip(pl1, pl1a, pl2, pl2a, pl3, pl3a, pl4, pl5, pl5a, pl5b, pl6, pl6a, pl7)
-#        map(pt -> circle(pt, 3, :fill), p)
-#        poly(collect(p), :stroke)
-#    end
+
+    # issue #20615 now fixed in v0.6
+    sethue("red")
+    for p in zip(pl1, pl1a, pl2, pl2a, pl3, pl3a, pl4, pl5, pl5a, pl5b, pl6, pl6a, pl7)
+       map(pt -> circle(pt, 3, :fill), p)
+       poly(collect(p), :stroke)
+    end
 
     # comparisons
     testfunctions = [isequal, isless, <, >, ==]
