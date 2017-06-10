@@ -627,11 +627,11 @@ and the difference value. Array is assumed to be sorted.
 (Designed for use with `polydistances()`).
 """
 function nearestindex(a::Array, val)
-    ind = searchsortedlast(a, val, lt=<)
-    if ind != 0
+    ind = findlast(v -> (v < val), a)
+    if ind > 0.0
         surplus = val - a[ind]
     else
-        surplus = 0
+        surplus = 0.0
         ind = 1
     end
     return (ind, surplus)
@@ -640,10 +640,11 @@ end
 """
     polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
 
-Return a reduced version of the polygon, where portion is a value between 0.0 and 1.0.
+Return a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.
 
-If you already know them, you can pass the polygon distances in `pdist`, otherwise
-they'll be calculated afresh, using `polydistances(p, closed=closed)`.
+If you already have a list of the distances between each point in the polygon (the "polydistances"), you can pass them in `pdist`, otherwise they'll be calculated afresh, using `polydistances(p, closed=closed)`.
+
+Use the complementary `polyremainder()` function to return the other part.
 """
 function polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
     # portion is 0 to 1
@@ -651,12 +652,52 @@ function polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
         pdist = polydistances(p, closed=closed)
     end
     portion = clamp(portion, 0.0, 1.0)
-    isapprox(portion, 0.0, atol=0.00001) && return p[1:1]  # don't bother to do 0.0
-    isapprox(portion, 1.0, atol=0.00001) && return p  # don't bother to do 1.0
-    ind, d = nearestindex(pdist, portion * pdist[end])
-    if d != 0.0
-        overshootpoint = between(p[ind], p[mod1(ind + 1, length(p))], d/norm(p[ind], p[mod1(ind + 1, length(p))]))
+    # don't bother to do 0.0
+    isapprox(portion, 0.0, atol=0.00001) && return p[1:1]
+    # don't bother to do 1.0
+    if closed == false && isapprox(portion, 1.0, atol=0.00001)
+        return p[1:1]
+    elseif isapprox(portion, 1.0, atol=0.00001)
+        return p[1:1]
+    end
+    ind, surplus = nearestindex(pdist, portion * pdist[end])
+    if surplus > 0.0
+        nextind = mod1(ind + 1, length(p))
+        overshootpoint = between(p[ind], p[nextind], surplus/norm(p[ind], p[nextind]))
         return vcat(p[1:ind], overshootpoint)
+    else
+        return p[1:end]
+    end
+end
+
+"""
+    polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
+
+Return the rest of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three quarters, 0.75 the last quarter, and so on.
+
+If you already have a list of the distances between each point in the polygon (the "polydistances"), you can pass them in `pdist`, otherwise they'll be calculated afresh, using `polydistances(p, closed=closed)`.
+
+Use the complementary `polyportion()` function to return the other part.
+"""
+function polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
+    # portion is 0 to 1
+    if isempty(pdist)
+        pdist = polydistances(p, closed=closed)
+    end
+    portion = clamp(portion, 0.0, 1.0)
+
+    # don't bother to do 0.0
+    isapprox(portion, 0.0, atol=0.00001) && return p
+
+    # don't bother to do 1.0
+    if isapprox(portion, 1.0, atol=0.00001)
+        return p[1:1]
+    end
+    ind, surplus = nearestindex(pdist, portion * pdist[end])
+    if surplus > 0.0
+        nextind = mod1(ind + 1, length(p))
+        overshootpoint = between(p[ind], p[nextind], surplus/norm(p[ind], p[nextind]))
+        return vcat(overshootpoint, p[ind:end])
     else
         return p[1:end]
     end

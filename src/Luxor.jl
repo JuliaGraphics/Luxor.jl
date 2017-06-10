@@ -68,7 +68,7 @@ export Drawing, currentdrawing,
     prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
-    polyperimeter, polydistances, polyportion, nearestindex,
+    polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
 
     @polar, polar,
 
