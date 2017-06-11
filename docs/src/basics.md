@@ -6,11 +6,78 @@ DocTestSetup = quote
 
 # The basics
 
-The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already added.
+The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already drawn.
+
+A position is specified either by a `Point(x, y)` or by separate x and y coordinates.
+
+The default origin is at the top left of the drawing area, but you can reposition it at any time.
 
 Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
-Positions are specified either by x and y coordinates or a `Point(x, y)`. The default origin is at the top left of the drawing area.
+The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using `GridRect` and `GridHex`.
+
+## Points and coordinates
+
+The Point type holds two coordinates, `x` and `y`. For example:
+
+```
+julia> P = Point(12.0, 13.0)
+Luxor.Point(12.0, 13.0)
+
+julia> P.x
+12.0
+
+julia> P.y
+13.0
+```
+
+Like all Points, P is immutable, so you can't change its x or y coordinate directly. But it's easy to make new points based on existing ones.
+
+Points can be added together:
+
+```
+julia> Q = Point(4, 5)
+Luxor.Point(4.0, 5.0)
+
+julia> P + Q
+Luxor.Point(16.0, 18.0)
+```
+
+You can add or multiply Points and scalars:
+
+```
+julia> 10P
+Luxor.Point(120.0, 130.0)
+
+julia> P + 100
+Luxor.Point(112.0, 113.0)
+```
+
+You can make new points by mixing Points and tuples:
+
+```
+julia> P + (10, 0)
+Luxor.Point(22.0, 13.0)
+
+julia> Q * (0.5, 0.5)
+Luxor.Point(2.0, 2.5)
+```
+
+You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/point-ex.png") # hide
+background("white") # hide
+origin() # hide
+sethue("blue") # hide
+axes()
+box.([O + (i, 0) for i in linspace(0, 200, 5)], 20, 20, :stroke)
+finish() # hide
+nothing # hide
+```
+
+![background](assets/figures/point-ex.png)
 
 Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').
 
@@ -24,19 +91,9 @@ Because Julia allows you to combine numbers and variables directly, you can supp
 
 For example:
 
-    rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
-
-## Types
-
-The main defined types are `Point`, `Drawing`, and `Tiler`. The Point type holds two coordinates, `x` and `y`:
-
 ```
-Point(12.0, 13.0)
+rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 ```
-
-It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
-
-`Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using `GridRect` and `GridHex`.
 
 ## Drawings and files
 
@@ -52,7 +109,7 @@ If you're using Jupyter (IJulia), `preview()` tries to display PNG and SVG files
 
 ![jupyter](assets/figures/jupyter.png)
 
-If you're using Juno, then PNG and SVG files will appear in the Plots pane.
+If you're using Juno, then PNG and SVG files should appear in the Plots pane.
 
 ![juno](assets/figures/juno.png)
 
@@ -123,7 +180,7 @@ axes
 origin
 ```
 
-## Tiles
+## Tiles and partitions
 
 The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile in turn.
 
@@ -167,6 +224,8 @@ Partition
 ## Save and restore
 
 `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
+
+As a convenient shorthand, you can use the macro `@layer begin ... end` to enclose graphics commands.
 
 ```@docs
 gsave

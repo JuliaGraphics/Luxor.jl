@@ -22,7 +22,7 @@ end
 fname = "axes-test.pdf"
 width, height = 2000, 2000
 Drawing(width, height, fname)
-origin()
+origin(1000, 1000)
 background("ivory")
 pagetiles = Tiler(width, height, 5, 5, margin=50)
 for (pos, n) in pagetiles

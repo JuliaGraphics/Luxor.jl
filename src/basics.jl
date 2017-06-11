@@ -12,6 +12,16 @@ function origin()
 end
 
 """
+    origin(x, y)
+
+Move the `0/0` position relative to the top left corner of the drawing.
+"""
+function origin(x, y)
+    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
+    Cairo.translate(currentdrawing.cr, x, y)
+end
+
+"""
     rescale(x, from_min, from_max, to_min, to_max)
 
 Convert `x` from one linear scale (`from_min` to `from_max`) to another (`to_min` to `to_max`).
@@ -407,10 +417,10 @@ function grestore()
 end
 
 """
-    The ⊞ (`\boxplus`) macro is a shortcut for `gsave()` ... `grestore()`.
+    The `layer` macro is a shortcut for `gsave()` ... `grestore()`.
 """
 
-macro ⊞(a)
+macro layer(a)
     quote
         gsave()
         $(esc(a))

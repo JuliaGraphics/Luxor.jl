@@ -78,7 +78,7 @@ function outlined_heart()
     heart_with_julias()
     heart()
     setline(4)
-    setcolor(1,0,0)
+    setcolor(1, 0, 0)
     strokepath()
     grestore()
 end

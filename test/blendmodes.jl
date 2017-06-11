@@ -17,7 +17,7 @@ function blend_mode_test(fname)
     setline(1)
     tiles = Tiler(600, 600, 4, 5, margin=30)
     modes = length(Luxor.blendingmodes)
-    setcolor("black")
+    setgrey(0.15)
     for (pos, n) in tiles
         n > modes && break
         gsave()
@@ -35,7 +35,7 @@ function blend_mode_test(fname)
         circle(upper, tiles.tilewidth/4, :fill)
 
         # second blue shape shows results of blend operator
-        setcolor(0, 0, 0.9, 0.4)
+        setcolor((0, 0, 0.9, 0.4))
         blendingmode = Luxor.blendingmodes[mod1(n, modes)]
         setmode(blendingmode)
         circle(lower, tiles.tilewidth/4, :fill)

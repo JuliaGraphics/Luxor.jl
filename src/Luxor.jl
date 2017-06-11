@@ -73,7 +73,7 @@ export Drawing, currentdrawing,
     @polar, polar,
 
     strokepreserve, fillpreserve,
-    gsave, grestore, @⊞,
+    gsave, grestore, @layer,
     scale, rotate, translate,
     clip, clippreserve, clipreset,
 
