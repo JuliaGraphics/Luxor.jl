@@ -149,15 +149,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "The basics",
     "category": "section",
-    "text": "The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already added.Many of the drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.Positions are specified either by x and y coordinates or a Point(x, y). The default origin is at the top left of the drawing area.Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points (assuming the current scale is 1:1):inch (in is unavailable, being used by for syntax)\ncm   (centimeters)\nmm   (millimeters)For example:rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)"
+    "text": "The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already drawn.A position is specified either by a Point(x, y) or by separate x and y coordinates.The default origin is at the top left of the drawing area, but you can reposition it at any time.Many of the drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.The main defined types are Point, Drawing, and Tiler.  Drawing is how you create new drawings. You can divide up the drawing area into tiles, using Tiler, and define grids, using GridRect and GridHex."
 },
 
 {
-    "location": "basics.html#Types-1",
+    "location": "basics.html#Points-and-coordinates-1",
     "page": "Basic concepts",
-    "title": "Types",
+    "title": "Points and coordinates",
     "category": "section",
-    "text": "The main defined types are Point, Drawing, and Tiler. The Point type holds two coordinates, x and y:Point(12.0, 13.0)It's immutable, so you want to avoid trying to change the x or y coordinate directly. You can use the letter O as a shortcut to refer to the current Origin, Point(0, 0).Drawing is how you create new drawings. You can divide up the drawing area into tiles, using Tiler, and define grids, using GridRect and GridHex."
+    "text": "The Point type holds two coordinates, x and y. For example:julia> P = Point(12.0, 13.0)\nLuxor.Point(12.0, 13.0)\n\njulia> P.x\n12.0\n\njulia> P.y\n13.0Like all Points, P is immutable, so you can't change its x or y coordinate directly. But it's easy to make new points based on existing ones.Points can be added together:julia> Q = Point(4, 5)\nLuxor.Point(4.0, 5.0)\n\njulia> P + Q\nLuxor.Point(16.0, 18.0)You can add or multiply Points and scalars:julia> 10P\nLuxor.Point(120.0, 130.0)\n\njulia> P + 100\nLuxor.Point(112.0, 113.0)You can make new points by mixing Points and tuples:julia> P + (10, 0)\nLuxor.Point(22.0, 13.0)\n\njulia> Q * (0.5, 0.5)\nLuxor.Point(2.0, 2.5)You can use the letter O as a shortcut to refer to the current Origin, Point(0, 0).using Luxor # hide\nDrawing(600, 400, \"assets/figures/point-ex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"blue\") # hide\naxes()\nbox.([O + (i, 0) for i in linspace(0, 200, 5)], 20, 20, :stroke)\nfinish() # hide\nnothing # hide(Image: background)Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points (assuming the current scale is 1:1):inch (in is unavailable, being used by for syntax)\ncm   (centimeters)\nmm   (millimeters)For example:rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files will appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files should appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.origin",
     "category": "Function",
-    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\n"
+    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\norigin(x, y)\n\nMove the 0/0 position relative to the top left corner of the drawing.\n\n\n\n"
 },
 
 {
@@ -241,9 +241,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "basics.html#Tiles-1",
+    "location": "basics.html#Tiles-and-partitions-1",
     "page": "Basic concepts",
-    "title": "Tiles",
+    "title": "Tiles and partitions",
     "category": "section",
     "text": "The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the Tiler iterator, which returns the center point and tile number of each tile in turn.In this example, every third tile is divided up into subtiles and colored:using Luxor # hide\nDrawing(400, 300, \"assets/figures/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\nfontsize(20) # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n    randomhue()\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    if n % 3 == 0\n        gsave()\n        translate(pos)\n        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)\n        for (pos1, n1) in subtiles\n            randomhue()\n            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)\n        end\n        grestore()\n    end\n    sethue(\"white\")\n    textcentered(string(n), pos + Point(0, 5))\nend\nfinish() # hide\nnothing # hide(Image: tiler)Tiler\nPartition"
 },
@@ -269,7 +269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Save and restore",
     "category": "section",
-    "text": "gsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used gsave(). gsave() and grestore() should always be balanced in pairs.gsave\ngrestore"
+    "text": "gsave() saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next grestore() is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used gsave(). gsave() and grestore() should always be balanced in pairs.As a convenient shorthand, you can use the macro @layer begin ... end to enclose graphics commands.gsave\ngrestore"
 },
 
 {
@@ -757,7 +757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Colors and styles",
     "title": "Luxor.sethue",
     "category": "Function",
-    "text": "sethue(\"black\")\nsethue(0.3,0.7,0.9)\nsetcolor(sethue(\"red\")..., .2)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current color without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\nSee also setcolor.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing the current alpha/opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color's r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\nsethue((r, g, b))\n\nSet the color to the tuple's values.\n\n\n\nsethue((r, g, b, a))\n\nSet the color to the tuple's values.\n\n\n\n"
+    "text": "sethue(\"black\")\nsethue(0.3, 0.7, 0.9)\nsetcolor(sethue(\"red\")..., .2)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current color without changing alpha/opacity. Using sethue() rather than setcolor() doesn't change the current alpha opacity.\n\nSee also setcolor.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing the current alpha/opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color's r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\nsethue((r, g, b))\n\nSet the color to the tuple's values.\n\n\n\nsethue((r, g, b, a))\n\nSet the color to the tuple's values.\n\n\n\n"
 },
 
 {
