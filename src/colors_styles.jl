@@ -62,7 +62,7 @@ function setcolor(col::ColorTypes.Colorant)
   return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
-function setcolor(r, g, b, a=1)
+function setcolor(r, g, b, a=1.0)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
       currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
@@ -89,7 +89,7 @@ end
 
 """
     sethue("black")
-    sethue(0.3,0.7,0.9)
+    sethue(0.3, 0.7, 0.9)
     setcolor(sethue("red")..., .2)
 
 Set the color without changing opacity.
@@ -257,8 +257,8 @@ end
 """
     getmode()
 
-Get the compositing/blending mode.
+Return the current compositing/blending mode as a string.
 """
 function getmode()
-    return findfirst(blendingmodes, Cairo.get_operator(currentdrawing.cr))
+    return blendingmodes[Cairo.get_operator(currentdrawing.cr) + 1]
 end

@@ -10,7 +10,7 @@ else
 end
 
 function draw_color_bars(x, y, n, colmap, label)
-    setcolor(1,1,1)
+    setcolor(1, 1, 1)
     fontsize(8)
 
     number_of_colours = n
@@ -21,7 +21,7 @@ function draw_color_bars(x, y, n, colmap, label)
     for c in colmap
         setcolor(c)
         rect(x, y, tilesize, tilesize, :fill)
-        setcolor(1,1,1)
+        setcolor((1, 1, 1))
         text(string(@sprintf(" %2.2f ",c.r), @sprintf("%2.2f ",c.g),@sprintf("%2.2f ",c.b)), x + tilesize + 5, y + tilesize/2)
         y +=tilesize
     end
