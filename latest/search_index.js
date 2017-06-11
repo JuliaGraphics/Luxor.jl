@@ -1417,9 +1417,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "transforms.html#Base.scale",
+    "location": "transforms.html#Luxor.scale",
     "page": "Transforms and matrices",
-    "title": "Base.scale",
+    "title": "Luxor.scale",
     "category": "Function",
     "text": "scale(x, y)\n\nScale workspace by x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\nscale(f)\n\nScale workspace by f in both x and y.\n\n\n\n"
 },
