@@ -77,7 +77,7 @@ finish() # hide
 nothing # hide
 ```
 
-![background](assets/figures/point-ex.png)
+![point example](assets/figures/point-ex.png)
 
 Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').
 
