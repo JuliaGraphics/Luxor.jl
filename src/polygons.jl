@@ -656,9 +656,9 @@ function polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
     isapprox(portion, 0.0, atol=0.00001) && return p[1:1]
     # don't bother to do 1.0
     if closed == false && isapprox(portion, 1.0, atol=0.00001)
-        return p[1:1]
+        return p
     elseif isapprox(portion, 1.0, atol=0.00001)
-        return p[1:1]
+        return p
     end
     ind, surplus = nearestindex(pdist, portion * pdist[end])
     if surplus > 0.0
