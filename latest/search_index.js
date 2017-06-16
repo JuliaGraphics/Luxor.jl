@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.origin",
     "category": "Function",
-    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\norigin(x, y)\n\nMove the 0/0 position relative to the top left corner of the drawing.\n\n\n\n"
+    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\norigin(x, y)\n\nReset the current matrix, then move the 0/0 position relative to the top left corner of the drawing.\n\n\n\norigin(pt:Point)\n\nReset the current matrix, then move the 0/0 position to pt.\n\n\n\n"
 },
 
 {
@@ -1629,7 +1629,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Images",
     "title": "Luxor.placeimage",
     "category": "Function",
-    "text": "placeimage(img, xpos, ypos)\n\nPlace a PNG image on the drawing at (xpos/ypos). The image img has been previously loaded using readpng().\n\n\n\nplaceimage(img, pos)\n\nPlace a PNG image on the drawing at pos.\n\n\n\nplaceimage(img, xpos, ypos, a)\n\nPlace a PNG image on the drawing at (xpos/ypos) with transparency a.\n\n\n\nplaceimage(img, pos, a)\n\nPlace a PNG image on the drawing at pos with transparency a.\n\n\n\n"
+    "text": "placeimage(img, xpos, ypos; centered=false)\n\nPlace a PNG image on the drawing at (xpos/ypos). The image img has been previously loaded using readpng().\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\nplaceimage(img, pos; centered=false)\n\nPlace the top left corner of the PNG image on the drawing at pos.\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\nplaceimage(img, xpos, ypos, a; centered=false)\n\nPlace a PNG image on the drawing at (xpos/ypos) with transparency a.\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\nplaceimage(img, pos, a; centered=false)\n\nPlace a PNG image on the drawing at pos with transparency a.\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\n"
 },
 
 {
