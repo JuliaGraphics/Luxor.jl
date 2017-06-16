@@ -41,12 +41,12 @@ function addimagetile(imgfile, xcenter, ycenter, tilewidth, tileheight; cropping
     end
     translate(xcenter, ycenter)
     scale(scalefactor, scalefactor)
-    placeimage(img, Point(-w/2, -h/2))
+    placeimage(img, O, centered=true)
     clipreset()
     grestore()
 end
 
-imagelist = get_png_files("./")
+imagelist = get_png_files(".")
 
 shuffle!(imagelist)
 

@@ -19,38 +19,54 @@ function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
 end
 
 """
-    placeimage(img, xpos, ypos)
+    placeimage(img, xpos, ypos; centered=false)
 
 Place a PNG image on the drawing at (`xpos`/`ypos`). The image `img` has been previously
 loaded using `readpng()`.
+
+Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(img::Cairo.CairoSurface, xpos, ypos)
+function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered=false)
+    if centered == true
+        w, h = img.width, img.height
+        xpos, ypos = xpos-w/2, ypos-h/2
+    end
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     # no alpha
     Cairo.paint(currentdrawing.cr)
 end
 
 """
-    placeimage(img, pos)
+    placeimage(img, pos; centered=false)
 
-Place a PNG image on the drawing at `pos`.
+Place the top left corner of the PNG image on the drawing at `pos`.
+
+Use keyword `centered=true` to place the center of the image at the position.
 """
-placeimage(img::Cairo.CairoSurface, pt::Point) = placeimage(img, pt.x, pt.y)
+placeimage(img::Cairo.CairoSurface, pt::Point; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
 
 """
-    placeimage(img, xpos, ypos, a)
+    placeimage(img, xpos, ypos, a; centered=false)
 
 Place a PNG image on the drawing at (`xpos`/`ypos`) with transparency `a`.
+
+Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha)
+function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered=false)
+    if centered == true
+        w, h = img.width, img.height
+        xpos, ypos = xpos-w/2, ypos-h/2
+    end
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     paint_with_alpha(currentdrawing.cr, alpha)
 end
 
 """
-    placeimage(img, pos, a)
+    placeimage(img, pos, a; centered=false)
 
 Place a PNG image on the drawing at `pos` with transparency `a`.
+
+Use keyword `centered=true` to place the center of the image at the position.
 """
-placeimage(img::Cairo.CairoSurface, pt::Point, alpha) =
-  placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha)
+placeimage(img::Cairo.CairoSurface, pt::Point, alpha; kwargs...) =
+  placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha; kwargs...)

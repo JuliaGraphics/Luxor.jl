@@ -29,13 +29,13 @@ function image_testing(fname)
         translate(pos)
         scale(25, 25)
         rotate(rand(0.0:pi/8:2pi))
-        placeimage(image, -w/2, -h/2)
+        placeimage(image, O, centered=true)
         grestore()
         clipreset()
     end
     @test finish() == true
 end
 
-fname = "test-image.pdf"
+fname = "test-image.png"
 image_testing(fname)
 println("...finished test: output in $(fname)")

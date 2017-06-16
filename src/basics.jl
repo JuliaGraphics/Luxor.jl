@@ -14,11 +14,22 @@ end
 """
     origin(x, y)
 
-Move the `0/0` position relative to the top left corner of the drawing.
+Reset the current matrix, then move the `0/0` position relative to the top left corner of
+the drawing.
 """
 function origin(x, y)
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
     Cairo.translate(currentdrawing.cr, x, y)
+end
+
+"""
+    origin(pt:Point)
+
+Reset the current matrix, then move the `0/0` position to `pt`.
+"""
+function origin(pt)
+    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
+    Cairo.translate(currentdrawing.cr, pt.x, pt.y)
 end
 
 """
