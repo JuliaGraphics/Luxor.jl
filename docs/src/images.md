@@ -64,7 +64,7 @@ for (pos, n) in pagetiles
     translate(pos)
     scale(.95, .95)
     rotate(rand(0.0:pi/8:2pi))
-    placeimage(image, -w/2, -h/2)
+    placeimage(image, O, centered=true)
     grestore()
     clipreset()
 end

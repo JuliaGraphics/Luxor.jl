@@ -29,7 +29,7 @@ Use keyword `centered=true` to place the center of the image at the position.
 function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered=false)
     if centered == true
         w, h = img.width, img.height
-        xpos, ypos = xpos-w/2, ypos-h/2
+        xpos, ypos = xpos - (w/2), ypos - (h/2)
     end
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     # no alpha
@@ -55,7 +55,7 @@ Use keyword `centered=true` to place the center of the image at the position.
 function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered=false)
     if centered == true
         w, h = img.width, img.height
-        xpos, ypos = xpos-w/2, ypos-h/2
+        xpos, ypos = xpos - (w/2), ypos - (h/2)
     end
     Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
     paint_with_alpha(currentdrawing.cr, alpha)
