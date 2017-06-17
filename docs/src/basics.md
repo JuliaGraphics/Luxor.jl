@@ -67,7 +67,7 @@ You can use the letter **O** as a shortcut to refer to the current Origin, `Poin
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/point-ex.png") # hide
+Drawing(600, 300, "assets/figures/point-ex.png") # hide
 background("white") # hide
 origin() # hide
 sethue("blue") # hide
