@@ -4,9 +4,9 @@ using Luxor, Colors, ColorSchemes
 
 width = 225  # pts
 height = 225 # pts
-Drawing(width, height, "/tmp/logo.pdf")
+Drawing(width, height) #, "/tmp/logo.pdf")
 
-function spiral(colscheme)
+function wheel(colscheme)
   circle(0, 0, 90, :clip)
   for theta in pi/2 - pi/8:pi/8: (19 * pi)/8
     sethue(get(colscheme, rescale(theta, pi/2, (19 * pi)/8, 0, 1)))
@@ -26,6 +26,6 @@ background("white")
 scale(1.3, 1.3)
 using ColorSchemes.solar
 colschememirror = vcat(solar, reverse(solar))
-spiral(colschememirror)
+wheel(colschememirror)
 finish()
 preview()
