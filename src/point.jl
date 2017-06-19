@@ -33,10 +33,10 @@ const O = Point(0, 0)
 
 # some refinements
 # modifying points with tuples
-+(p1, shift::NTuple{2, Real}) = Point(p1.x + shift[1], p1.y + shift[2])
--(p1, shift::NTuple{2, Real}) = Point(p1.x - shift[1], p1.y - shift[2])
-*(p1, shift::NTuple{2, Real}) = Point(p1.x * shift[1], p1.y * shift[2])
-/(p1, shift::NTuple{2, Real}) = Point(p1.x / shift[1], p1.y / shift[2])
++(p1::Point, shift::NTuple{2, Real}) = Point(p1.x + shift[1], p1.y + shift[2])
+-(p1::Point, shift::NTuple{2, Real}) = Point(p1.x - shift[1], p1.y - shift[2])
+*(p1::Point, shift::NTuple{2, Real}) = Point(p1.x * shift[1], p1.y * shift[2])
+/(p1::Point, shift::NTuple{2, Real}) = Point(p1.x / shift[1], p1.y / shift[2])
 
 # for broadcasting
 Base.size(::Point) = 2
