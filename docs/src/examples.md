@@ -57,11 +57,19 @@ You can change the extension of the file name, for example "julia-logos.png" to 
 
 ## Something a bit more complicated: a Sierpinski triangle
 
-Here's a version of the Sierpinski recursive triangle, clipped to a circle. (This and subsequent examples assume that the drawing has been created, the origin and background set.)
+Here's a version of the Sierpinski recursive triangle, clipped to a circle.
+
 
 ![Sierpinski](assets/figures/sierpinski.png)
 
 ```julia
+# Subsequent examples will omit these setup and finishing functions:
+#
+# using Luxor, Colors
+# Drawing()
+# background("white")
+# origin()
+
 function triangle(points, degree)
     sethue(cols[degree])
     poly(points, :fill)
@@ -89,6 +97,9 @@ end
 depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
 cols = distinguishable_colors(depth)
 draw(depth)
+
+# finish()
+# preview()
 ```
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
