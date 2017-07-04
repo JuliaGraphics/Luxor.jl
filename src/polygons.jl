@@ -596,7 +596,7 @@ end
 Return an array of the cumulative lengths of a polygon.
 """
 function polydistances(p::Array{Point, 1}; closed=true)
-    r = Real[0.0]
+    r = Float64[0.0]
     t = 0.0
     for i in 1:length(p) - 1
         t += norm(p[i], p[i + 1])
