@@ -159,7 +159,7 @@ end
 worldshapefile = Pkg.dir("Luxor") * "/docs/src/assets/examples/outlines-of-world-countries.shp"
 airportdata = readlines(Pkg.dir("Luxor") * "/docs/src/assets/examples/airports.csv")
 worldshapes = open(worldshapefile) do f
-    read(f, Handle)
+    read(f, Shapefile.Handle)
 end
 drawairportmap("/tmp/airport-map.pdf", worldshapes, airportdata)
 ```

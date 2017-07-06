@@ -205,12 +205,12 @@ Create a new drawing, and optionally specify file type (PNG, PDF, SVG, or EPS) a
 creates a drawing, defaulting to PNG format, default filename "luxor-drawing.png",
 default size 800 pixels square.
 
-You can specify dimensions, and use the default target filename:
+You can specify the dimensions, and assume the default output filename:
 
     Drawing(400, 300)
 
-creates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename
-"luxor-drawing.png".
+creates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default
+filename "luxor-drawing.png".
 
     Drawing(400, 300, "my-drawing.pdf")
 
@@ -222,11 +222,14 @@ creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
     Drawing(1200, 1200/golden, "my-drawing.eps")
 
-creates an EPS drawing in the file "my-drawing.eps", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high.
+creates an EPS drawing in the file "my-drawing.eps", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ)
+high. Only for PNG files must the dimensions be integers.
 
     Drawing("A4", "my-drawing.pdf")
 
-creates a drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf". Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal", "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
+creates a drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf".
+Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal",
+"A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
     Drawing("A4landscape")
 

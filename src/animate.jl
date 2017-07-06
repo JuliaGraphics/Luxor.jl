@@ -1,14 +1,36 @@
 """
-The `Movie` and `Scene` types and the `animate()` function are designed to help you create
-the frames that can be used to make an animated GIF or movie.
+The `Movie` and `Scene` types and the `animate()` function are designed to help you
+create the frames that can be used to make an animated GIF or movie.
 
 1 Provide width, height, title, and optionally a frame range to the Movie constructor:
 
     demo = Movie(400, 400, "test", 1:500)
 
-2 Define one or more Scenes and scene-drawing functions.
+2 Define one or more scenes and scene-drawing functions.
 
 3 Run the `animate()` function, calling those scenes.
+
+Example
+
+```
+bang = Movie(400, 100, "bang")
+
+backdrop(scene, framenumber) =  background("black")
+
+function frame1(scene, framenumber)
+    background("white")
+    sethue("black")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(O, 40 * eased_n, :fill)
+end
+
+animate(bang, [
+    Scene(bang, backdrop, 0:200),
+    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],
+    creategif=true,
+    pathname="/tmp/animationtest.gif")
+
+```
 """
 
 type Movie
@@ -21,8 +43,8 @@ end
 """
     Movie(width, height, movietitle)
 
-Define a movie, specifying the width, height, and a title. The title will be used to make
-the output file name. The range defaults to `1:250`.
+Define a movie, specifying the width, height, and a title. The title will be used to
+make the output file name. The range defaults to `1:250`.
 """
 
 Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:250)
@@ -62,6 +84,16 @@ in `scenelist`.
 If `creategif` is `true`, the function tries to call `ffmpeg` on the resulting frames to
 build a GIF animation. This will be stored in `pathname` (an existing file will be
 overwritten; use a ".gif" suffix), or in `(movietitle).gif` in a temporary directory.
+
+Example
+
+```
+animate(bang, [
+    Scene(bang, backdrop, 0:200),
+    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],
+    creategif=true,
+    pathname="/tmp/animationtest.gif")
+```
 """
 function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
