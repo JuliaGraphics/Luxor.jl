@@ -111,6 +111,7 @@ function run_all_tests()
     @testset "misc" begin
         include("luxor-test1.jl")
         include("rules.jl")
+        include("barstest.jl")
         include("unit-conversions.jl")
         include("hex-grid-test.jl")
         include("cropmarkstest.jl")
