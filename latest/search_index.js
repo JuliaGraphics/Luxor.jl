@@ -737,6 +737,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "simplegraphics.html#Luxor.bars",
+    "page": "Simple graphics",
+    "title": "Luxor.bars",
+    "category": "Function",
+    "text": "bars(values::Array;\n    yscale = 100,\n    xwidth = 10)\n\nDraw some bars where each bar is the height of a value in the array.\n\nTo control the drawing of the text and bars, define the functions:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nand pass them like this:\n\nbars(v, yscale=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yscale=10, labelfunction=(x, y, z) -> ())\n\nemptylabelfunction(args...) = nothing\nbars(v, xwidth=15, yscale=10, labelfunction=emptylabelfunction)\n\n\n\n"
+},
+
+{
+    "location": "simplegraphics.html#Bars-1",
+    "page": "Simple graphics",
+    "title": "Bars",
+    "category": "section",
+    "text": "For simple bars, use the bars() function, supplying an array of numbers:using Luxor # hide\nDrawing(800, 250, \"assets/figures/bars.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(7)\nsethue(\"black\")\ntranslate(-350, 0) # hide\nv = rand(-100:100, 60)\nbars(v)\nfinish() # hide\nnothing # hide(Image: bars)bars"
+},
+
+{
     "location": "colors-styles.html#",
     "page": "Colors and styles",
     "title": "Colors and styles",
