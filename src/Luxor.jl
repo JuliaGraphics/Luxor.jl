@@ -32,6 +32,7 @@ include("juliagraphics.jl")
 include("colors_styles.jl")
 include("images.jl")
 include("animate.jl")
+include("bars.jl")
 #include("shapefile.jl")
 
 @deprecate fill() fillpath()
@@ -99,6 +100,8 @@ export Drawing, currentdrawing,
     readpng, placeimage,
 
     julialogo, juliacircles,
+
+    bars,
 
     # animation
     Sequence, Movie, Scene, animate,
