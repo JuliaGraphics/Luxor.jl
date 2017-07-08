@@ -736,3 +736,27 @@ nothing # hide
 ```@docs
 cropmarks
 ```
+
+### Bars
+
+For simple bars, use the `bars()` function, supplying an array of numbers:
+
+```@example
+using Luxor # hide
+Drawing(800, 250, "assets/figures/bars.png")  # hide
+origin() # hide
+background("white") # hide
+fontsize(7)
+sethue("black")
+translate(-350, 0) # hide
+v = rand(-100:100, 60)
+bars(v)
+finish() # hide
+nothing # hide
+```
+
+![bars](assets/figures/bars.png)
+
+```@docs
+bars
+```
