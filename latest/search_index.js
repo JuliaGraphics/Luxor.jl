@@ -741,7 +741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.bars",
     "category": "Function",
-    "text": "bars(values::Array;\n    yscale = 100,\n    xwidth = 10)\n\nDraw some bars where each bar is the height of a value in the array.\n\nTo control the drawing of the text and bars, define the functions:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nand pass them like this:\n\nbars(v, yscale=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yscale=10, labelfunction=(x, y, z) -> ())\n\nemptylabelfunction(args...) = nothing\nbars(v, xwidth=15, yscale=10, labelfunction=emptylabelfunction)\n\n\n\n"
+    "text": "bars(values::Array;\n    yscale = 100,\n    xwidth = 10)\n\nDraw some bars where each bar is the height of a value in the array.\n\nTo control the drawing of the text and bars, define functions that process the end points. For example:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nand pass them like this:\n\nbars(v, yscale=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yscale=10, labelfunction=(x, y, z) -> ())\n\nTo suppress text labels, pass an empty function:\n\nbars(v, xwidth=15, yscale=10, labelfunction = (a...; extremes=[]) -> ())\n\n\n\n"
 },
 
 {
@@ -749,7 +749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Bars",
     "category": "section",
-    "text": "For simple bars, use the bars() function, supplying an array of numbers:using Luxor # hide\nDrawing(800, 250, \"assets/figures/bars.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(7)\nsethue(\"black\")\ntranslate(-350, 0) # hide\nv = rand(-100:100, 60)\nbars(v)\nfinish() # hide\nnothing # hide(Image: bars)bars"
+    "text": "For simple bars, use the bars() function, supplying an array of numbers:using Luxor # hide\nDrawing(800, 250, \"assets/figures/bars.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(7)\nsethue(\"black\")\ntranslate(-350, 0) # hide\nv = rand(-100:100, 60)\nbars(v)\nfinish() # hide\nnothing # hide(Image: bars)To change the way the bars and labels are drawn, define functions and pass them to bars():using Luxor # hide\nDrawing(800, 350, \"assets/figures/bars1.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(8) # hide\nsethue(\"black\") # hide\ntranslate(-350, 0) # hide\n\nfunction mybarfunction(low::Point, high::Point, value; extremes=[0, 1])\n    @layer begin\n        sethue(rescale(value, extremes[1], extremes[2], 0, 1), 0.0, 1.0)\n        circle(high, 8, :fill)\n        setline(1)\n        sethue(\"blue\")\n        line(low, high + (0, 8), :stroke)\n        sethue(\"white\")\n        text(string(value), high, halign=:center, valign=:middle)\n    end\nend\n\nfunction mylabelfunction(low::Point, high::Point, value; extremes=[0, 1])\n    @layer begin\n        translate(low)\n        rotate(-pi/2)\n        text(string(value,\"/\", extremes[2]), O - (10, 0), halign=:right, valign=:middle)\n    end\nend\n\nv = rand(1:200, 30)\nbars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)\n\nfinish() # hide\nnothing # hide(Image: bars 1)bars"
 },
 
 {
