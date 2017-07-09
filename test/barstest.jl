@@ -29,7 +29,7 @@ function barfunc2(low, high, value; extremes=extrema(values))
     end
 end
 
-emptylabelfunction(args...) = nothing
+emptylabelfunction(args...; extremes=[]) = nothing
 
 function mylabelfunction(bottom::Point, top::Point, value;
         extremes=[])
