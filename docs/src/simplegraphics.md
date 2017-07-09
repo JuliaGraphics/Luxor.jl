@@ -757,6 +757,46 @@ nothing # hide
 
 ![bars](assets/figures/bars.png)
 
+To change the way the bars and labels are drawn, define functions and pass them to `bars()`:
+
+```@example
+using Luxor # hide
+Drawing(800, 350, "assets/figures/bars1.png")  # hide
+origin() # hide
+background("white") # hide
+fontsize(8) # hide
+sethue("black") # hide
+translate(-350, 0) # hide
+
+function mybarfunction(low::Point, high::Point, value; extremes=[0, 1])
+    @layer begin
+        sethue(rescale(value, extremes[1], extremes[2], 0, 1), 0.0, 1.0)
+        circle(high, 8, :fill)
+        setline(1)
+        sethue("blue")
+        line(low, high + (0, 8), :stroke)
+        sethue("white")
+        text(string(value), high, halign=:center, valign=:middle)
+    end
+end
+
+function mylabelfunction(low::Point, high::Point, value; extremes=[0, 1])
+    @layer begin
+        translate(low)
+        rotate(-pi/2)
+        text(string(value,"/", extremes[2]), O - (10, 0), halign=:right, valign=:middle)
+    end
+end
+
+v = rand(1:200, 30)
+bars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)
+
+finish() # hide
+nothing # hide
+```
+
+![bars 1](assets/figures/bars1.png)
+
 ```@docs
 bars
 ```

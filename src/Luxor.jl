@@ -295,6 +295,7 @@ function preview()
     (isdefined(Main, :IJulia) && Main.IJulia.inited) ? jupyter = true : jupyter = false
     Juno.isactive() ? juno = true : juno = false
     if candisplay && jupyter
+        Main.IJulia.clear_output(true)
         if currentdrawing.surfacetype == "png"
             display("image/png", load(currentdrawing.filename))
         elseif currentdrawing.surfacetype == "svg"
