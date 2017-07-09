@@ -22,7 +22,7 @@ bars(v, xwidth=15, yscale=10, labelfunction=(x, y, z) -> ())
 To suppress text labels, pass an empty function:
 
 ```julia
-bars(v, xwidth=15, yscale=10, labelfunction = (a...) -> ())
+bars(v, xwidth=15, yscale=10, labelfunction = (a...; extremes=[]) -> ())
 ```
 """
 
