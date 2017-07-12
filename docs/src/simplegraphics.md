@@ -691,8 +691,6 @@ translate(100, 100) # hide
 radius = 70
 grid = GridHex(O, radius, 600)
 
-arrow(O, Point(O.x + (sqrt(3) * radius)/2, 0))
-
 for i in 1:15
     randomhue()
     p = nextgridpoint(grid)
@@ -757,7 +755,7 @@ nothing # hide
 
 ![bars](assets/figures/bars.png)
 
-To change the way the bars and labels are drawn, define functions and pass them to `bars()`:
+To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to `bars()`:
 
 ```@example
 using Luxor # hide

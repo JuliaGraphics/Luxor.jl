@@ -20,6 +20,21 @@ preview()
 
 `Drawing(1000, 1000, "hello-world.png")` defines the size of the image, and the location and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg Preview on macOS).
 
+The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewing graphics without having to provide the set-up and finish instructions:
+
+```julia
+# using Luxor
+
+@png begin
+        fontsize(50)
+        circle(O, 150, :stroke)
+        text("hello world", halign=:center, valign=:middle)
+     end
+```
+
+![background](assets/figures/hello-world-macro.png)
+
+
 ## The Julia logos
 
 Luxor contains two functions that draw the Julia logo, either in color or a single color, and the three Julia circles.
@@ -38,10 +53,12 @@ for theta in range(0, pi/8, 16)
     julialogo(action=:fill, color=false)
     grestore()
 end
+
 gsave()
 scale(0.3)
 juliacircles()
 grestore()
+
 translate(200, -150)
 scale(0.3)
 julialogo()
@@ -108,7 +125,7 @@ The main type (apart from the Drawing) is the Point, an immutable composite type
 
 If you want to work interactively, you can use an environment such as a Jupyter notebook, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work, of course. And if you're working in the REPL, after your first drawing subsequent drawings will be much quicker.)
 
-![Jupyter](assets/figures/jupyter-hypo.png)
+![Jupyter](assets/figures/jupyter-star.png)
 
 ## More examples
 
