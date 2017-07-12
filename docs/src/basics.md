@@ -231,3 +231,42 @@ As a convenient shorthand, you can use the macro `@layer begin ... end` to enclo
 gsave
 grestore
 ```
+
+## Quick drawings with macros
+
+The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:
+
+```
+@svg circle(O, 20, :stroke) 50 50
+```
+
+expands to
+
+```
+Drawing(50, 50, "luxor-drawing.png")
+origin()
+background("white")
+sethue("black")
+circle(O, 20, :stroke) 50 50
+finish()
+preview()
+```
+
+They just save a bit of typing. For multiple lines, use either:
+
+```
+@svg begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end 600 600
+```
+
+or
+
+```
+@svg (setline(10);
+      sethue("purple");
+      circle(O, 20, :fill);
+     ) 600 600
+```

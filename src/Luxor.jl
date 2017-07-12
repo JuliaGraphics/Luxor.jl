@@ -47,6 +47,8 @@ export Drawing, currentdrawing,
     finish, preview,
     origin, axes, background,
 
+    @png, @pdf, @svg,
+
     newpath, closepath, newsubpath,
 
     strokepath, fillpath, # stroke, fill are now deprecated
@@ -311,6 +313,125 @@ function preview()
         run(ignorestatus(`explorer $(currentdrawing.filename)`))
     elseif @compat is_unix()
         run(`xdg-open $(currentdrawing.filename)`)
+    end
+end
+
+"""
+    @svg drawing-instructions [width] [height]
+
+Create and preview an SVG drawing, optionally specifying width and height (the default is
+600 by 600). The file is saved in the current working directory as `luxor-drawing.svg`.
+
+Examples
+
+    @svg circle(O, 20, :fill)
+
+    @svg circle(O, 20, :fill) 400
+
+    @svg circle(O, 20, :fill) 400 1200
+
+    @svg begin
+            setline(10)
+            sethue("purple")
+            circle(O, 20, :fill)
+         end
+
+
+    @svg begin
+            setline(10)
+            sethue("purple")
+            circle(O, 20, :fill)
+         end 1200, 1200
+"""
+
+macro svg(body, width=600, height=600)
+     quote
+        Drawing($width, $height, "luxor-drawing.svg")
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        preview()
+    end
+end
+
+"""
+    @png drawing-instructions [width] [height]
+
+Create and preview an PNG drawing, optionally specifying width and height (the default is
+600 by 600). The file is saved in the current working directory as `luxor-drawing.png`.
+
+Examples
+
+    @png circle(O, 20, :fill)
+
+    @png circle(O, 20, :fill) 400
+
+    @png circle(O, 20, :fill) 400 1200
+
+    @png begin
+            setline(10)
+            sethue("purple")
+            circle(O, 20, :fill)
+         end
+
+
+    @png begin
+            setline(10)
+            sethue("purple")
+            circle(O, 20, :fill)
+         end 1200, 1200
+"""
+
+macro png(body, width=600, height=600)
+     quote
+        Drawing($width, $height, "luxor-drawing.png")
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        preview()
+    end
+end
+
+"""
+    @pdf drawing-instructions [width] [height]
+
+Create and preview an PDF drawing, optionally specifying width and height (the default is
+600 by 600). The file is saved in the current working directory as `luxor-drawing.pdf`.
+
+Examples
+
+    @pdf circle(O, 20, :fill)
+
+    @pdf circle(O, 20, :fill) 400
+
+    @pdf circle(O, 20, :fill) 400 1200
+
+    @pdf begin
+            setline(10)
+            sethue("purple")
+            circle(O, 20, :fill)
+         end
+
+
+    @pdf begin
+            setline(10)
+            sethue("purple")
+            circle(O, 20, :fill)
+         end 1200, 1200
+"""
+macro pdf(body, width=600, height=600)
+     quote
+        Drawing($width, $height, "luxor-drawing.pdf")
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        preview()
     end
 end
 
