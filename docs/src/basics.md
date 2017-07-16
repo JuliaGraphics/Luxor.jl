@@ -247,7 +247,7 @@ Drawing(50, 50, "luxor-drawing.png")
 origin()
 background("white")
 sethue("black")
-circle(O, 20, :stroke) 50 50
+circle(O, 20, :stroke)
 finish()
 preview()
 ```

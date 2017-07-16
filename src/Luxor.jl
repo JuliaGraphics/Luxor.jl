@@ -72,6 +72,7 @@ export Drawing, currentdrawing,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
+    polyarea,
 
     @polar, polar,
 

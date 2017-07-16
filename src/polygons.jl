@@ -703,4 +703,22 @@ function polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
     end
 end
 
+"""
+    polyarea(p::Array)
+
+Find the area of a simple polygon. It works only for polygons that don't
+self-intersect.
+"""
+function polyarea(plist::Array)
+    n = length(plist)
+    area = 0.0
+    for i in eachindex(plist)
+        j = mod1(i + 1, n)
+        area += plist[i].x * plist[j].y
+        area -= plist[j].x * plist[i].y
+    end
+    area = abs(area) / 2.0
+    return area
+end
+
 # end
