@@ -277,7 +277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Quick drawings with macros",
     "category": "section",
-    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing.png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke) 50 50\nfinish()\npreview()They just save a bit of typing. For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 600 600or@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     ) 600 600"
+    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing.png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke)\nfinish()\npreview()They just save a bit of typing. For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 600 600or@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     ) 600 600"
 },
 
 {
