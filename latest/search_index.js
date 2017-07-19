@@ -1013,7 +1013,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.ngon",
     "category": "Function",
-    "text": "ngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nFind the vertices of a regular n-sided polygon centered at x, y:\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false,\n    reversepath=false)\n\nDraw a regular polygon centered at point p:\n\n\n\n"
+    "text": "ngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nFind the vertices of a regular n-sided polygon centered at x, y with circumradius radius.\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false,\n    reversepath=false)\n\nDraw a regular polygon centered at point centerpos:\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.ngonside",
+    "page": "Polygons",
+    "title": "Luxor.ngonside",
+    "category": "Function",
+    "text": "ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,\n    action=:nothing; kwargs...)\n\nDraw a regular polygon centered at centerpoint with sides sides of length sidelength.\n\n\n\n"
 },
 
 {
@@ -1021,7 +1029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Regular polygons (\"ngons\")",
     "category": "section",
-    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon().(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n    for x in -500:50:500\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n    end\nend\n\nfinish()\npreview()ngon"
+    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon().(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\n# circumradius of 500\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n    for x in -500:50:500\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n    end\nend\n\nfinish()\npreview()If you want to specify the side length rather than the circumradius, use ngonside().using Luxor # hide\nDrawing(500, 600, \"assets/figures/ngonside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\nsetline(2) # hide\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 0.7)\n    ngonside(O, 75, i, 0, :fill)\n    sethue(\"black\")\n    ngonside(O, 75, i, 0, :stroke)\nend\n\nfinish() # hide\nnothing # hide(Image: stars)ngon\nngonside"
 },
 
 {
@@ -1029,7 +1037,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons",
     "title": "Luxor.star",
     "category": "Function",
-    "text": "star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false,\n    reversepath=false)\n\nMake a star.  ratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nDraw a star centered at a position:\n\n\n\n"
+    "text": "star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false,\n    reversepath=false)\n\nMake a star. ratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nDraw a star centered at a position:\n\n\n\n"
 },
 
 {
