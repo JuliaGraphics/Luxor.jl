@@ -118,7 +118,7 @@ end
     ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
         vertices=false, reversepath=false)
 
-Find the vertices of a regular n-sided polygon centered at `x`, `y`:
+Find the vertices of a regular n-sided polygon centered at `x`, `y` with circumradius `radius`.
 
 `ngon()` draws the shapes: if you just want the raw points, use keyword argument
 `vertices=true`, which returns the array of points instead. Compare:
@@ -156,18 +156,30 @@ end
         vertices=false,
         reversepath=false)
 
-Draw a regular polygon centered at point `p`:
+Draw a regular polygon centered at point `centerpos`:
 """
 
 ngon(centerpoint::Point, radius::Real, sides::Int=5, orientation=0, action=:nothing; kwargs...) =
     ngon(centerpoint.x, centerpoint.y, radius, sides, orientation, action; kwargs...)
 
 """
+    ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
+        action=:nothing; kwargs...)
+
+Draw a regular polygon centered at `centerpoint` with `sides` sides of length `sidelength`.
+"""
+function ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
+    action=:nothing; kwargs...)
+    radius = 0.5 * sidelength * csc(pi/sides)
+    ngon(centerpoint, radius, sides, orientation, action; kwargs...)
+end
+
+"""
     star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
         vertices = false,
         reversepath=false)
 
-Make a star.  `ratio` specifies the height of the smaller radius of the star relative to the
+Make a star. `ratio` specifies the height of the smaller radius of the star relative to the
 larger.
 
 Use `vertices=true` to return the vertices of a star instead of drawing it.

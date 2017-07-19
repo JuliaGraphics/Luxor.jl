@@ -18,6 +18,7 @@ background(cols[1])
 setopacity(0.7)
 setline(2)
 
+# circumradius of 500
 ngon(0, 0, 500, 8, 0, :clip)
 
 for y in -500:50:500
@@ -33,8 +34,31 @@ finish()
 preview()
 ```
 
+If you want to specify the side length rather than the circumradius, use `ngonside()`.
+
+```@example
+using Luxor # hide
+Drawing(500, 600, "assets/figures/ngonside.png") # hide
+background("white") # hide
+origin() # hide
+
+setline(2) # hide
+for i in 20:-1:3
+    sethue(i/20, 0.5, 0.7)
+    ngonside(O, 75, i, 0, :fill)
+    sethue("black")
+    ngonside(O, 75, i, 0, :stroke)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![stars](assets/figures/ngonside.png)
+
 ```@docs
 ngon
+ngonside
 ```
 
 ## Stars
