@@ -62,7 +62,7 @@ export Drawing, currentdrawing,
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, spiral, sector,
 
-    ngon, star, pie,
+    ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,
 
     Point, O, randompoint, randompointarray, midpoint, between, slope, intersection,

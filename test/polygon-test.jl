@@ -9,6 +9,13 @@ else
     const Test = BaseTestNext
 end
 
+function poly_areas()
+    # test area calculations
+    @test polyarea(ngon(O, 100, 4, 0, vertices=true)) ≈ 20_000
+    @test polyarea(ngonside(O, 100, 4, 0, vertices=true)) < polyarea(ngonside(O, 100, 5, 0, vertices=true))
+    @test polyarea(ngonside(O, 100, 3, 0, vertices=true)) ≈ 2500sqrt(3)
+end
+
 function simple_polys()
     gsave()
     sethue(0,0,0)
@@ -87,6 +94,9 @@ function polygon_test(fname)
 
     origin()
     background("antiquewhite")
+
+    # test polyareas
+    poly_areas()
 
     global foregroundcolors = diverging_palette(230, 280, 200, s = 0.99, b=0.8)
     global backgroundcolors = diverging_palette(200, 260, 280, s = 0.8, b=0.5)
