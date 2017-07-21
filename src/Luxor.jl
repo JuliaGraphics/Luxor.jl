@@ -60,7 +60,7 @@ export Drawing, currentdrawing,
     move, rmove, line, rule, rline, arrow,
 
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
-    arc, carc, arc2r, carc2r, spiral, sector,
+    arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
 
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,

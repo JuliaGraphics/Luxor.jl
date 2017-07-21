@@ -534,9 +534,39 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection_line_circle.png)
 
+```@example
+using Luxor # hide
+Drawing(700, 300, "assets/figures/intersection2circles.png") # hide
+origin() # hide
+background("white") # hide
+fontsize(14) # hide
+
+c1 = (O, 150)
+c2 = (O + (100, 0), 150)
+
+circle(c1... , :stroke)
+circle(c2... , :stroke)
+
+sethue("purple")
+circle(c1... , :clip)
+circle(c2... , :fill)
+clipreset()
+
+sethue("black")
+
+text(string(150^2 * pi |> round), c1[1] - (125, 0))
+text(string(150^2 * pi |> round), c2[1] + (100, 0))
+sethue("white")
+text(string(intersection2circles(c1..., c2...) |> round), midpoint(c1[1], c2[1]), halign=:center)
+finish() # hide
+nothing # hide
+```
+![intersetion of two circles](assets/figures/intersection2circles.png)
+
 ```@docs
 intersection
 intersection_line_circle
+intersection2circles
 ```
 `getnearestpointonline()` finds perpendiculars.
 
