@@ -1,10 +1,10 @@
 """
     bars(values::Array;
-        yscale = 100,
-        xwidth = 10,
-        labels = true,
-        barfunction = ,
-        labelfunction = ,
+            yscale = 100,
+            xwidth = 10,
+            labels = true,
+            barfunction = f,
+            labelfunction = f,
         )
 
 Draw some bars where each bar is the height of a value in the array.

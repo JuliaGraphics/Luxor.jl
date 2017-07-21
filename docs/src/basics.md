@@ -252,14 +252,16 @@ finish()
 preview()
 ```
 
-They just save a bit of typing. For multiple lines, use either:
+They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600).
+
+For multiple lines, use either:
 
 ```
 @svg begin
         setline(10)
         sethue("purple")
         circle(O, 20, :fill)
-     end 600 600
+     end
 ```
 
 or
@@ -268,5 +270,5 @@ or
 @svg (setline(10);
       sethue("purple");
       circle(O, 20, :fill);
-     ) 600 600
+     )
 ```
