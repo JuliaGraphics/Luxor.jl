@@ -385,7 +385,7 @@ end
 
 Convert point in polar form (radius and angle) to a Point.
 
-    polar(10, pi/4)                                                                   09:19:38  v5   src
+    polar(10, pi/4)
 
 produces
 
