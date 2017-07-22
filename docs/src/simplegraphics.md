@@ -534,12 +534,15 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection_line_circle.png)
 
+`intersection2circles()` finds the area of the intersection of two circles. This example shows the areas of two circles, and the area of their intersection.
+
 ```@example
 using Luxor # hide
 Drawing(700, 300, "assets/figures/intersection2circles.png") # hide
 origin() # hide
 background("white") # hide
 fontsize(14) # hide
+sethue("black") # hide
 
 c1 = (O, 150)
 c2 = (O + (100, 0), 150)
@@ -557,7 +560,8 @@ sethue("black")
 text(string(150^2 * pi |> round), c1[1] - (125, 0))
 text(string(150^2 * pi |> round), c2[1] + (100, 0))
 sethue("white")
-text(string(intersection2circles(c1..., c2...) |> round), midpoint(c1[1], c2[1]), halign=:center)
+text(string(intersection2circles(c1..., c2...) |> round),
+     midpoint(c1[1], c2[1]), halign=:center)
 finish() # hide
 nothing # hide
 ```
