@@ -1177,46 +1177,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "polygons.html#Luxor.polyperimeter",
-    "page": "Polygons",
-    "title": "Luxor.polyperimeter",
-    "category": "Function",
-    "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.polyportion",
-    "page": "Polygons",
-    "title": "Luxor.polyportion",
-    "category": "Function",
-    "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.polydistances",
-    "page": "Polygons",
-    "title": "Luxor.polydistances",
-    "category": "Function",
-    "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.nearestindex",
-    "page": "Polygons",
-    "title": "Luxor.nearestindex",
-    "category": "Function",
-    "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the largest value in polydistancearray less than value, and the difference value. Array is assumed to be sorted.\n\n(Designed for use with polydistances()).\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Perimeter-utilities-1",
-    "page": "Polygons",
-    "title": "Perimeter utilities",
-    "category": "section",
-    "text": "polyperimeter calculates the distance of a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n8-element Array{Real,1}:\n   0.0000\n  86.7767\n 173.553\n 260.33  \n 347.107\n 433.884\n 520.66  \n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.polyperimeter\npolyportion\npolydistances\nnearestindex"
-},
-
-{
     "location": "polygons.html#Luxor.polyfit",
     "page": "Polygons",
     "title": "Luxor.polyfit",
@@ -1262,6 +1222,62 @@ var documenterSearchIndex = {"docs": [
     "title": "Converting paths to polygons",
     "category": "section",
     "text": "You can convert the current path to an array of polygons, using pathtopoly().In the next example, the path consists of a number of paths, some of which are subpaths, which form the holes.using Luxor # hide\nDrawing(800, 300, \"assets/figures/path-to-poly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(60) # hide\ntranslate(-300, -50) # hide\ntextpath(\"get polygons from paths\")\nplist = pathtopoly()\nsetline(0.5) # hide\nfor (n, pgon) in enumerate(plist)\n    randomhue()\n    prettypoly(pgon, :stroke, close=true)\n    gsave()\n    translate(0, 100)\n    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)The pathtopoly() function calls getpathflat() to convert the current path to an array of polygons, with each curved section flattened to line segments.The getpath() function gets the current path as an array of elements, lines, and unflattened curves.pathtopoly\ngetpath\ngetpathflat"
+},
+
+{
+    "location": "polygons.html#Polygon-information-1",
+    "page": "Polygons",
+    "title": "Polygon information",
+    "category": "section",
+    "text": "polyperimeter calculates the length of a polygon's perimeter.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n8-element Array{Real,1}:\n   0.0000\n  86.7767\n 173.553\n 260.33  \n 347.107\n 433.884\n 520.66  \n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value."
+},
+
+{
+    "location": "polygons.html#Luxor.polyperimeter",
+    "page": "Polygons",
+    "title": "Luxor.polyperimeter",
+    "category": "Function",
+    "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polyportion",
+    "page": "Polygons",
+    "title": "Luxor.polyportion",
+    "category": "Function",
+    "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polydistances",
+    "page": "Polygons",
+    "title": "Luxor.polydistances",
+    "category": "Function",
+    "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.nearestindex",
+    "page": "Polygons",
+    "title": "Luxor.nearestindex",
+    "category": "Function",
+    "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the largest value in polydistancearray less than value, and the difference value. Array is assumed to be sorted.\n\n(Designed for use with polydistances()).\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polyarea",
+    "page": "Polygons",
+    "title": "Luxor.polyarea",
+    "category": "Function",
+    "text": "polyarea(p::Array)\n\nFind the area of a simple polygon. It works only for polygons that don't self-intersect.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Area-of-polygon-1",
+    "page": "Polygons",
+    "title": "Area of polygon",
+    "category": "section",
+    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\ng = GridRect(O + (200, -200), 80, 20, 85)\ntext(\"#sides\", nextgridpoint(g), halign=:right)\ntext(\"area\", nextgridpoint(g), halign=:right)\n\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    ngonside(O, 50, i, 0, :fill)\n    sethue(\"grey40\")\n    ngonside(O, 50, i, 0, :stroke)\n    p = ngonside(O, 50, i, 0, vertices=true)\n    text(string(i), nextgridpoint(g), halign=:right)\n    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)\nend\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolydistances\nnearestindex\npolyarea"
 },
 
 {
