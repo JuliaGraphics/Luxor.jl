@@ -457,9 +457,78 @@ The function is intended for simple cases, and it can go wrong if pushed too far
 offsetpoly
 ```
 
-### Perimeter utilities
 
-`polyperimeter` calculates the distance of a polygon.
+### Fitting splines
+
+The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/polyfit.png") # hide
+origin() # hide
+background("white") # hide
+srand(42) # hide
+
+pts = [Point(x, rand(-100:100)) for x in -280:30:280]
+setopacity(0.7)
+sethue("red")
+prettypoly(pts, :none, () -> circle(O, 5, :fill))
+sethue("darkmagenta")
+poly(polyfit(pts, 200), :stroke)
+
+finish() # hide
+nothing # hide
+```
+
+![offset poly](assets/figures/polyfit.png)
+
+```@docs
+polyfit
+```
+
+## Converting paths to polygons
+
+You can convert the current path to an array of polygons, using `pathtopoly()`.
+
+In the next example, the path consists of a number of paths, some of which are subpaths, which form the holes.
+
+```@example
+using Luxor # hide
+Drawing(800, 300, "assets/figures/path-to-poly.png") # hide
+background("white") # hide
+origin() # hide
+fontsize(60) # hide
+translate(-300, -50) # hide
+textpath("get polygons from paths")
+plist = pathtopoly()
+setline(0.5) # hide
+for (n, pgon) in enumerate(plist)
+    randomhue()
+    prettypoly(pgon, :stroke, close=true)
+    gsave()
+    translate(0, 100)
+    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)
+    grestore()
+end
+finish() # hide
+nothing # hide
+```
+
+![path to polygon](assets/figures/path-to-poly.png)
+
+The `pathtopoly()` function calls `getpathflat()` to convert the current path to an array of polygons, with each curved section flattened to line segments.
+
+The `getpath()` function gets the current path as an array of elements, lines, and unflattened curves.
+
+```@docs
+pathtopoly
+getpath
+getpathflat
+```
+
+## Polygon information
+
+`polyperimeter` calculates the length of a polygon's perimeter.
 
 ```@example
 using Luxor # hide
@@ -538,77 +607,40 @@ nothing # hide
 
 `nearestindex` returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.
 
-```@docs
-polyperimeter
-polyportion
-polydistances
-nearestindex
-```
+### Area of polygon
 
-### Fitting splines
-
-The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
+Use `polyarea()` to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/polyfit.png") # hide
+Drawing(600, 500, "assets/figures/polyarea.png") # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+fontsize(12) # hide
 
-pts = [Point(x, rand(-100:100)) for x in -280:30:280]
-setopacity(0.7)
-sethue("red")
-prettypoly(pts, :none, () -> circle(O, 5, :fill))
-sethue("darkmagenta")
-poly(polyfit(pts, 200), :stroke)
+g = GridRect(O + (200, -200), 80, 20, 85)
+text("#sides", nextgridpoint(g), halign=:right)
+text("area", nextgridpoint(g), halign=:right)
 
-finish() # hide
-nothing # hide
-```
-
-![offset poly](assets/figures/polyfit.png)
-
-```@docs
-polyfit
-```
-
-## Converting paths to polygons
-
-You can convert the current path to an array of polygons, using `pathtopoly()`.
-
-In the next example, the path consists of a number of paths, some of which are subpaths, which form the holes.
-
-```@example
-using Luxor # hide
-Drawing(800, 300, "assets/figures/path-to-poly.png") # hide
-background("white") # hide
-origin() # hide
-fontsize(60) # hide
-translate(-300, -50) # hide
-textpath("get polygons from paths")
-plist = pathtopoly()
-setline(0.5) # hide
-for (n, pgon) in enumerate(plist)
-    randomhue()
-    prettypoly(pgon, :stroke, close=true)
-    gsave()
-    translate(0, 100)
-    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)
-    grestore()
+for i in 20:-1:3
+    sethue(i/20, 0.5, 1 - i/20)
+    ngonside(O, 50, i, 0, :fill)
+    sethue("grey40")
+    ngonside(O, 50, i, 0, :stroke)
+    p = ngonside(O, 50, i, 0, vertices=true)
+    text(string(i), nextgridpoint(g), halign=:right)
+    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)
 end
 finish() # hide
 nothing # hide
 ```
 
-![path to polygon](assets/figures/path-to-poly.png)
-
-The `pathtopoly()` function calls `getpathflat()` to convert the current path to an array of polygons, with each curved section flattened to line segments.
-
-The `getpath()` function gets the current path as an array of elements, lines, and unflattened curves.
+![poly area](assets/figures/polyarea.png)
 
 ```@docs
-pathtopoly
-getpath
-getpathflat
+polyperimeter
+polyportion
+polydistances
+nearestindex
+polyarea
 ```
