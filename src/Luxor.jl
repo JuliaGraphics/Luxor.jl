@@ -33,6 +33,7 @@ include("colors_styles.jl")
 include("images.jl")
 include("animate.jl")
 include("bars.jl")
+include("bezierpath.jl")
 #include("shapefile.jl")
 
 @deprecate fill() fillpath()
@@ -50,6 +51,8 @@ export Drawing, currentdrawing,
     @png, @pdf, @svg,
 
     newpath, closepath, newsubpath,
+
+    makebezierpath, drawbezierpath,
 
     strokepath, fillpath, # stroke, fill are now deprecated
 

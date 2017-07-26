@@ -10,7 +10,7 @@ makedocs(
         "Basic concepts"          => "basics.md",
         "Simple graphics"         => "simplegraphics.md",
         "Colors and styles"       => "colors-styles.md",
-        "Polygons"                => "polygons.md",
+        "Polygons and paths"      => "polygons.md",
         "Text"                    => "text.md",
         "Transforms and matrices" => "transforms.md",
         "Clipping"                => "clipping.md",

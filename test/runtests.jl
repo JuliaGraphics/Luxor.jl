@@ -54,6 +54,7 @@ function run_all_tests()
         include("hypertrochoid-test.jl")
         include("epitrochoid-test.jl")
         include("pie-test.jl")
+        include("bezierpath.jl")
     end
 
     @testset "color" begin
