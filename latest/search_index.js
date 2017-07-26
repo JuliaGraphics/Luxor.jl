@@ -1002,23 +1002,23 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#",
-    "page": "Polygons",
-    "title": "Polygons",
+    "page": "Polygons and paths",
+    "title": "Polygons and paths",
     "category": "page",
     "text": ""
 },
 
 {
-    "location": "polygons.html#Polygons-and-shapes-1",
-    "page": "Polygons",
-    "title": "Polygons and shapes",
+    "location": "polygons.html#Polygons-and-paths-1",
+    "page": "Polygons and paths",
+    "title": "Polygons and paths",
     "category": "section",
-    "text": "A polygon is an array of points. The points can be joined with straight lines."
+    "text": ""
 },
 
 {
     "location": "polygons.html#Luxor.ngon",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.ngon",
     "category": "Function",
     "text": "ngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nFind the vertices of a regular n-sided polygon centered at x, y with circumradius radius.\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false,\n    reversepath=false)\n\nDraw a regular polygon centered at point centerpos:\n\n\n\n"
@@ -1026,7 +1026,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.ngonside",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.ngonside",
     "category": "Function",
     "text": "ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,\n    action=:nothing; kwargs...)\n\nDraw a regular polygon centered at centerpoint with sides sides of length sidelength.\n\n\n\n"
@@ -1034,15 +1034,15 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Regular-polygons-(\"ngons\")-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Regular polygons (\"ngons\")",
     "category": "section",
-    "text": "You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon().(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\n# circumradius of 500\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n    for x in -500:50:500\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n    end\nend\n\nfinish()\npreview()If you want to specify the side length rather than the circumradius, use ngonside().using Luxor # hide\nDrawing(500, 600, \"assets/figures/ngonside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\nsetline(2) # hide\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 0.7)\n    ngonside(O, 75, i, 0, :fill)\n    sethue(\"black\")\n    ngonside(O, 75, i, 0, :stroke)\nend\n\nfinish() # hide\nnothing # hide(Image: stars)ngon\nngonside"
+    "text": "A polygon is an array of points. The points can be joined with straight lines.You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with ngon().(Image: n-gons)using Luxor, Colors\nDrawing(1200, 1400)\n\norigin()\ncols = diverging_palette(60, 120, 20) # hue 60 to hue 120\nbackground(cols[1])\nsetopacity(0.7)\nsetline(2)\n\n# circumradius of 500\nngon(0, 0, 500, 8, 0, :clip)\n\nfor y in -500:50:500\n    for x in -500:50:500\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(20:25), rand(3:12), 0, :fill)\n        setcolor(cols[rand(1:20)])\n        ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)\n    end\nend\n\nfinish()\npreview()If you want to specify the side length rather than the circumradius, use ngonside().using Luxor # hide\nDrawing(500, 600, \"assets/figures/ngonside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\nsetline(2) # hide\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 0.7)\n    ngonside(O, 75, i, 0, :fill)\n    sethue(\"black\")\n    ngonside(O, 75, i, 0, :stroke)\nend\n\nfinish() # hide\nnothing # hide(Image: stars)ngon\nngonside"
 },
 
 {
     "location": "polygons.html#Luxor.star",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.star",
     "category": "Function",
     "text": "star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false,\n    reversepath=false)\n\nMake a star. ratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nDraw a star centered at a position:\n\n\n\n"
@@ -1050,7 +1050,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Stars-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Stars",
     "category": "section",
     "text": "Use star() to make a star. You can draw it immediately, or use the points it can create.using Luxor # hide\nDrawing(500, 300, \"assets/figures/stars.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntiles = Tiler(400, 300, 4, 6, margin=5)\nfor (pos, n) in tiles\n    randomhue()\n    star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)\nend\nfinish() # hide\nnothing # hide(Image: stars)The ratio determines the length of the inner radius compared with the outer.using Luxor # hide\nDrawing(500, 250, \"assets/figures/star-ratios.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(2) # hide\ntiles = Tiler(500, 250, 1, 6, margin=10)\nfor (pos, n) in tiles\n    star(pos, tiles.tilewidth/2, 5, rescale(n, 1, 6, 1, 0), 0, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: stars)star"
@@ -1058,7 +1058,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.poly",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.poly",
     "category": "Function",
     "text": "Draw a polygon.\n\npoly(pointlist::Array, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
@@ -1066,7 +1066,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.prettypoly",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.prettypoly",
     "category": "Function",
     "text": "prettypoly(points, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);\n    close=false,\n    reversepath=false,\n    vertexlabels = (n, l) -> ()\n    )\n\nDraw the polygon defined by points, possibly closing and reversing it, using the current parameters, and then evaluate the vertexfunction function at every vertex of the polygon.\n\nThe default vertexfunction draws a 2 pt radius circle.\n\nTo mark each vertex of a polygon with a randomly colored filled circle:\n\np = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(p, :fill, () ->\n    begin\n        randomhue()\n        circle(O, 10, :fill)\n    end,\n    close=true)\n\nThe optional keyword argument vertexlabels lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle \"1 of 3\", \"2 of 3\", and \"3 of 3\" using:\n\nprettypoly(triangle, :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l))))\n\n\n\n"
@@ -1074,7 +1074,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.simplify",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.simplify",
     "category": "Function",
     "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n"
@@ -1082,7 +1082,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.isinside",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.isinside",
     "category": "Function",
     "text": "isinside(p, pol)\n\nIs a point p inside a polygon pol? Returns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm\n\n\n\n"
@@ -1090,7 +1090,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.randompoint",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.randompoint",
     "category": "Function",
     "text": "randompoint(lowpt, highpt)\n\nReturn a random point somewhere inside the rectangle defined by the two points.\n\n\n\nrandompoint(lowx, lowy, highx, highy)\n\nReturn a random point somewhere inside a rectangle defined by the four values.\n\n\n\n"
@@ -1098,7 +1098,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.randompointarray",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.randompointarray",
     "category": "Function",
     "text": "randompointarray(lowpt, highpt, n)\n\nReturn an array of n random points somewhere inside the rectangle defined by two points.\n\n\n\nrandompointarray(lowx, lowy, highx, highy, n)\n\nReturn an array of n random points somewhere inside the rectangle defined by the four coordinates.\n\n\n\n"
@@ -1106,7 +1106,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polysplit",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polysplit",
     "category": "Function",
     "text": "polysplit(p, p1, p2)\n\nSplit a polygon into two where it intersects with a line. It returns two polygons:\n\n(poly1, poly2)\n\nThis doesn't always work, of course. For example, a polygon the shape of the letter \"E\" might end up being divided into more than two parts.\n\n\n\n"
@@ -1114,7 +1114,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polysortbydistance",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polysortbydistance",
     "category": "Function",
     "text": "Sort a polygon by finding the nearest point to the starting point, then the nearest point to that, and so on.\n\npolysortbydistance(p, starting::Point)\n\nYou can end up with convex (self-intersecting) polygons, unfortunately.\n\n\n\n"
@@ -1122,7 +1122,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polysortbyangle",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polysortbyangle",
     "category": "Function",
     "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::Array, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
@@ -1130,7 +1130,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polycentroid",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polycentroid",
     "category": "Function",
     "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons.\n\nYou could test the point using isinside().\n\n\n\n"
@@ -1138,7 +1138,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Polygons-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Polygons",
     "category": "section",
     "text": "Use poly() to draw lines connecting the points or just fill the area:using Luxor # hide\nDrawing(600, 250, \"assets/figures/simplepoly.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\nsethue(\"orchid4\") # hide\ntiles = Tiler(600, 250, 1, 2, margin=20)\ntile1, tile2 = collect(tiles)\n\nrandompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]\n\ngsave()\ntranslate(tile1[1])\npoly(randompoints, :stroke)\ngrestore()\n\ngsave()\ntranslate(tile2[1])\npoly(randompoints, :fill)\ngrestore()\n\nfinish() # hide\nnothing # hide(Image: simple poly)polyA polygon can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor # hide\nDrawing(400, 250, \"assets/figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(5)\nsethue(\"gold\")\nline(Point(-200, 0), Point(200, 0), :stroke)\nsethue(\"orchid4\")\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide\nnothing # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the supplied vertexfunction function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolybasic.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () ->\n        begin\n            randomhue()\n            circle(O, 10, :fill)\n        end,\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)An optional keyword argument vertexlabels lets you pass a function that can number each vertex. The function can use two arguments, the current vertex number, and the total number of points in the polygon:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolyvertex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 80, 5, 0.6, 0, vertices=true)\nprettypoly(apoly,\n    :stroke,  \n    vertexlabels = (n, l) -> (text(string(n, \" of \", l), halign=:center)),\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)prettypolyRecursive decoration is possible:using Luxor # hide\nDrawing(400, 260, \"assets/figures/prettypolyrecursive.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\nsethue(\"magenta\") # hide\nsetopacity(0.5) # hide\n\ndecorate(pos, p, level) = begin\n    if level < 4\n        randomhue();\n        scale(0.25, 0.25)\n        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)\n    end\nend\n\napoly = star(O, 100, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor # hide\nDrawing(600, 500, \"assets/figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve = [Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi]\nprettypoly(collect(sincurve), :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke,     \n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide\nnothing # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.5)\napolygon = star(O, 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n    apoint = randompoint(Point(-200, -150), Point(200, 150))\n    randomhue()\n    isinside(apoint, apolygon) ? circle(apoint, 3, :fill) : circle(apoint, .5, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: isinside)isinsideYou can use randompoint() and randompointarray() to create a random Point or list of Points.using Luxor # hide\nDrawing(400, 250, \"assets/figures/randompoints.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\n\npt1 = Point(-100, -100)\npt2 = Point(100, 100)\n\nsethue(\"gray80\")\nmap(pt -> circle(pt, 6, :fill), (pt1, pt2))\nbox(pt1, pt2, :stroke)\n\nsethue(\"red\")\ncircle(randompoint(pt1, pt2), 7, :fill)\n\nsethue(\"blue\")\nmap(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))\n\nfinish() # hide\nnothing # hide(Image: isinside)randompoint\nrandompointarrayThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's polysplit():using Luxor # hide\nDrawing(400, 150, \"assets/figures/polysplit.png\") # hide\norigin() # hide\nsetopacity(0.7) # hide\nsrand(42) # hide\nsethue(\"black\") # hide\ns = squircle(O, 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide\nnothing # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid"
@@ -1146,7 +1146,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polysmooth",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polysmooth",
     "category": "Function",
     "text": "polysmooth(points, radius, action=:action; debug=false)\n\nMake a closed path from the points and round the corners by making them arcs with the given radius. Execute the action when finished.\n\nThe arcs are sometimes different sizes: if the given radius is bigger than the length of the shortest side, the arc can't be drawn at its full radius and is therefore drawn as large as possible (as large as the shortest side allows).\n\nThe debug option also draws the construction circles at each corner.\n\n\n\n"
@@ -1154,7 +1154,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Smoothing-polygons-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Smoothing polygons",
     "category": "section",
     "text": "Because polygons can have sharp corners, the experimental polysmooth() function attempts to insert arcs at the corners and draw the result.The original polygon is shown in red; the smoothed polygon is shown on top:using Luxor # hide\nDrawing(600, 250, \"assets/figures/polysmooth.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetopacity(0.5) # hide\nsrand(42) # hide\nsetline(0.7) # hide\ntiles = Tiler(600, 250, 1, 5, margin=10)\nfor (pos, n) in tiles\n    p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)\n    setdash(\"dot\")\n    sethue(\"red\")\n    prettypoly(p, close=true, :stroke)\n    setdash(\"solid\")\n    sethue(\"black\")\n    polysmooth(p, n * 2, :fill)\nend\n\nfinish() # hide\nnothing # hide(Image: polysmooth)The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The debug=true option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polysmooth-pathological.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetopacity(0.75) # hide\nsrand(42) # hide\nsetline(1) # hide\np = star(O, 60, 5, 0.35, 0, vertices=true)\nsetdash(\"dot\")\nsethue(\"red\")\nprettypoly(p, close=true, :stroke)\nsetdash(\"solid\")\nsethue(\"black\")\npolysmooth(p, 40, :fill, debug=true)\nfinish() # hide\nnothing # hide(Image: polysmooth)polysmooth"
@@ -1162,7 +1162,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.offsetpoly",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.offsetpoly",
     "category": "Function",
     "text": "offsetpoly(path::Array, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them\n\n\n\n"
@@ -1170,7 +1170,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Offsetting-polygons-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Offsetting polygons",
     "category": "section",
     "text": "The experimental offsetpoly() function constructs an outline polygon outside or inside an existing polygon. In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use poly() to draw the result returned by offsetpoly().using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyoffset-simple.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\n\np = star(O, 45, 5, 0.5, 0, vertices=true)\nsethue(\"red\")\nsetdash(\"dot\")\npoly(p, :stroke, close=true)\nsetdash(\"solid\")\nsethue(\"black\")\n\npoly(offsetpoly(p, 20), :stroke, close=true)\npoly(offsetpoly(p, 25), :stroke, close=true)\npoly(offsetpoly(p, 30), :stroke, close=true)\npoly(offsetpoly(p, 35), :stroke, close=true)\n\nsethue(\"darkcyan\")\n\npoly(offsetpoly(p, -10), :stroke, close=true)\npoly(offsetpoly(p, -15), :stroke, close=true)\npoly(offsetpoly(p, -20), :stroke, close=true)\nfinish() # hide\nnothing # hide(Image: offset poly)The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.(Image: offset poly problem)offsetpoly"
@@ -1178,7 +1178,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polyfit",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polyfit",
     "category": "Function",
     "text": "polyfit(plist::Array, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n"
@@ -1186,7 +1186,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Fitting-splines-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Fitting splines",
     "category": "section",
     "text": "The experimental polyfit() function constructs a B-spline that follows the points approximately.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyfit.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\n\npts = [Point(x, rand(-100:100)) for x in -280:30:280]\nsetopacity(0.7)\nsethue(\"red\")\nprettypoly(pts, :none, () -> circle(O, 5, :fill))\nsethue(\"darkmagenta\")\npoly(polyfit(pts, 200), :stroke)\n\nfinish() # hide\nnothing # hide(Image: offset poly)polyfit"
@@ -1194,7 +1194,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.pathtopoly",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.pathtopoly",
     "category": "Function",
     "text": "pathtopoly()\n\nConvert the current path to an array of polygons.\n\nReturns an array of polygons.\n\n\n\n"
@@ -1202,7 +1202,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.getpath",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.getpath",
     "category": "Function",
     "text": "getpath()\n\nGet the current path and return a CairoPath object, which is an array of element_type and points objects. With the results you can step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          strokepath()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          strokepath()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
@@ -1210,7 +1210,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.getpathflat",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.getpathflat",
     "category": "Function",
     "text": "getpathflat()\n\nGet the current path, like getpath() but flattened so that there are no Bèzier curves.\n\nReturns a CairoPath which is an array of element_type and points objects.\n\n\n\n"
@@ -1218,15 +1218,39 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Converting-paths-to-polygons-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Converting paths to polygons",
     "category": "section",
     "text": "You can convert the current path to an array of polygons, using pathtopoly().In the next example, the path consists of a number of paths, some of which are subpaths, which form the holes.using Luxor # hide\nDrawing(800, 300, \"assets/figures/path-to-poly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(60) # hide\ntranslate(-300, -50) # hide\ntextpath(\"get polygons from paths\")\nplist = pathtopoly()\nsetline(0.5) # hide\nfor (n, pgon) in enumerate(plist)\n    randomhue()\n    prettypoly(pgon, :stroke, close=true)\n    gsave()\n    translate(0, 100)\n    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)The pathtopoly() function calls getpathflat() to convert the current path to an array of polygons, with each curved section flattened to line segments.The getpath() function gets the current path as an array of elements, lines, and unflattened curves.pathtopoly\ngetpath\ngetpathflat"
 },
 
 {
+    "location": "polygons.html#Luxor.makebezierpath",
+    "page": "Polygons and paths",
+    "title": "Luxor.makebezierpath",
+    "category": "Function",
+    "text": "makebezierpath(pgon::Array; smoothing=1)\n\nReturn a Bèzier path that follows an array of points. The Bèzier path is an array of tuples; each tuple contains the four points that make up a section of the path.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.drawbezierpath",
+    "page": "Polygons and paths",
+    "title": "Luxor.drawbezierpath",
+    "category": "Function",
+    "text": "drawbezierpath(bezierpath, action=:none;\n    close=true)\n\nDraw a Bèzier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Polygons-to-Bèzier-paths-1",
+    "page": "Polygons and paths",
+    "title": "Polygons to Bèzier paths",
+    "category": "section",
+    "text": "Use the makebezierpath() and drawbezierpath() functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points.makebezierpath() takes the points in a polygon and converts each line segment into a Bèzier curve. drawbezierpath() draws the resulting sequence.using Luxor # hide\nDrawing(600, 300, \"assets/figures/bezierpaths.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\ntiles = Tiler(600, 300, 1, 4, margin=20)\nfor (pos, n) in tiles\n    @layer begin\n        translate(pos)\n        pts = polysortbyangle(\n                randompointarray(\n                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),\n                    Point(tiles.tilewidth/2, tiles.tilewidth/2),\n                    4))\n        setopacity(0.7)\n        sethue(\"black\")\n        prettypoly(pts, :stroke, close=true)\n        randomhue()\n        drawbezierpath(makebezierpath(pts), :fill)\n    end\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)makebezierpath\ndrawbezierpath"
+},
+
+{
     "location": "polygons.html#Polygon-information-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Polygon information",
     "category": "section",
     "text": "polyperimeter calculates the length of a polygon's perimeter.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n8-element Array{Real,1}:\n   0.0000\n  86.7767\n 173.553\n 260.33  \n 347.107\n 433.884\n 520.66  \n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value."
@@ -1234,7 +1258,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polyperimeter",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polyperimeter",
     "category": "Function",
     "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
@@ -1242,7 +1266,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polyportion",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polyportion",
     "category": "Function",
     "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n"
@@ -1250,7 +1274,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polydistances",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polydistances",
     "category": "Function",
     "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
@@ -1258,7 +1282,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.nearestindex",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.nearestindex",
     "category": "Function",
     "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the largest value in polydistancearray less than value, and the difference value. Array is assumed to be sorted.\n\n(Designed for use with polydistances()).\n\n\n\n"
@@ -1266,7 +1290,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Luxor.polyarea",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Luxor.polyarea",
     "category": "Function",
     "text": "polyarea(p::Array)\n\nFind the area of a simple polygon. It works only for polygons that don't self-intersect.\n\n\n\n"
@@ -1274,7 +1298,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "polygons.html#Area-of-polygon-1",
-    "page": "Polygons",
+    "page": "Polygons and paths",
     "title": "Area of polygon",
     "category": "section",
     "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\ng = GridRect(O + (200, -200), 80, 20, 85)\ntext(\"#sides\", nextgridpoint(g), halign=:right)\ntext(\"area\", nextgridpoint(g), halign=:right)\n\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    ngonside(O, 50, i, 0, :fill)\n    sethue(\"grey40\")\n    ngonside(O, 50, i, 0, :stroke)\n    p = ngonside(O, 50, i, 0, vertices=true)\n    text(string(i), nextgridpoint(g), halign=:right)\n    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)\nend\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolydistances\nnearestindex\npolyarea"
