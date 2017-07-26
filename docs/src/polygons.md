@@ -1,8 +1,8 @@
-# Polygons and shapes
-
-A polygon is an array of points. The points can be joined with straight lines.
+# Polygons and paths
 
 ## Regular polygons ("ngons")
+
+A polygon is an array of points. The points can be joined with straight lines.
 
 You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
 
@@ -524,6 +524,44 @@ The `getpath()` function gets the current path as an array of elements, lines, a
 pathtopoly
 getpath
 getpathflat
+```
+
+## Polygons to Bèzier paths
+
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points.
+
+`makebezierpath()` takes the points in a polygon and converts each line segment into a Bèzier curve. `drawbezierpath()` draws the resulting sequence.
+
+```@example
+using Luxor # hide
+Drawing(600, 300, "assets/figures/bezierpaths.png") # hide
+background("white") # hide
+origin() # hide
+srand(3) # hide
+tiles = Tiler(600, 300, 1, 4, margin=20)
+for (pos, n) in tiles
+    @layer begin
+        translate(pos)
+        pts = polysortbyangle(
+                randompointarray(
+                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),
+                    Point(tiles.tilewidth/2, tiles.tilewidth/2),
+                    4))
+        setopacity(0.7)
+        sethue("black")
+        prettypoly(pts, :stroke, close=true)
+        randomhue()
+        drawbezierpath(makebezierpath(pts), :fill)
+    end
+end
+finish() # hide
+nothing # hide
+```
+![path to polygon](assets/figures/bezierpaths.png)
+
+```@docs
+makebezierpath
+drawbezierpath
 ```
 
 ## Polygon information

@@ -2,9 +2,8 @@
 
 | **Documentation**                       | [**Package Evaluator**][pkgeval-link] | **Build Status**                          | **Code Coverage**               |
 |:---------------------------------------:|:-------------------------------------:|:-----------------------------------------:|:-------------------------------:|
-| [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.4-img]][pkg-0.4-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
-| [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
-|                                         | [![][pkg-0.6-img]][pkg-0.6-url]       |                                           |                                 |
+| [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
+| [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.6-img]][pkg-0.6-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
 
 ## Luxor
 
@@ -24,9 +23,6 @@ For interactive graphics, you'll find [Gtk.jl](https://github.com/JuliaGraphics/
 [docs-stable-url]: http://juliagraphics.github.io/Luxor.jl/stable/
 
 [pkgeval-link]: http://pkg.julialang.org/?pkg=Luxor
-
-[pkg-0.4-img]: http://pkg.julialang.org/badges/Luxor_0.4.svg
-[pkg-0.4-url]: http://pkg.julialang.org/detail/Luxor.html
 
 [pkg-0.5-img]: http://pkg.julialang.org/badges/Luxor_0.5.svg
 [pkg-0.5-url]: http://pkg.julialang.org/detail/Luxor.html
