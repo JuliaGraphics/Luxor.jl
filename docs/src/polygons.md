@@ -457,7 +457,6 @@ The function is intended for simple cases, and it can go wrong if pushed too far
 offsetpoly
 ```
 
-
 ### Fitting splines
 
 The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
@@ -528,9 +527,33 @@ getpathflat
 
 ## Polygons to Bèzier paths
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points.
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.
 
 `makebezierpath()` takes the points in a polygon and converts each line segment into a Bèzier curve. `drawbezierpath()` draws the resulting sequence.
+
+```@example
+using Luxor # hide
+Drawing(600, 300, "assets/figures/abezierpath.png") # hide
+background("white") # hide
+origin() # hide
+setline(1.5) # hide
+setgray(0.5) # hide
+pts = ngon(O, 150, 3, pi/6, vertices=true)
+bezpath = makebezierpath(pts)
+poly(pts, :stroke)
+for (p1, c1, c2, p2) in bezpath[1:end-1]
+    circle.([p1, p2], 4, :stroke)
+    circle.([c1, c2], 2, :fill)
+    line(p1, c1, :stroke)
+    line(p2, c2, :stroke)
+end
+sethue("black")
+setline(3)
+drawbezierpath(bezpath, :stroke, close=false)
+finish() # hide
+nothing # hide
+```
+![path to polygon](assets/figures/abezierpath.png)
 
 ```@example
 using Luxor # hide
