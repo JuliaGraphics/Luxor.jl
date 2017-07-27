@@ -13,7 +13,7 @@ The focus of Luxor is on simplicity and ease of use: it should be easier to use 
 
 Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
 
-For interactive graphics, you'll find [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl),  [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), and the Julia version of the
+For interactive graphics, you'll find [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), and the Julia version of the
 [Processing](https://github.com/rennis250/Processing.jl) language worth investigating.
 
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg

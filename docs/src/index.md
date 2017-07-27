@@ -26,7 +26,7 @@ Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraph
 
 ## Current status
 
-Luxor currently runs on Julia versions 0.4, 0.5, and 0.6, and uses Cairo.jl and Colors.jl.
+Luxor currently runs on Julia versions 0.5 and 0.6, and uses Cairo.jl and Colors.jl.
 
 !!! warning "Deprecations"
 
