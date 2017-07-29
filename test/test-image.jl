@@ -2,12 +2,9 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Base.Test
+
+
 
 function image_testing(fname)
     width, height = 4000, 4000

@@ -33,7 +33,7 @@ animate(bang, [
 ```
 """
 
-type Movie
+struct Movie
     width::Float64
     height::Float64
     movietitle::String
@@ -62,7 +62,7 @@ The Scene type defines a function to be used to render a range of frames in a mo
 - the `framerange` determines which frames are processed by the function. Defaults to the entire movie.
 - the optional `easingfunction` can be accessed by the framefunction to vary the transition speed
 """
-type Scene
+struct Scene
     movie::Movie
     framefunction::Function
     framerange::Range
@@ -161,7 +161,7 @@ function easeinoutquad(t, b, c, d)
    t /= d/2
    if t < 1
       return  (c/2) * t * t + b
-    end
+   end
    t -= 1
    return -(c/2) * (t * (t - 2) - 1) + b
 end
@@ -290,7 +290,7 @@ end
 """circular easing in/out - acceleration until halfway, then deceleration"""
 function easeinoutcirc(t, b, c, d)
    t /= d/2
-   if (t < 1)
+   if t < 1
        return -c/2 * ((sqrt(abs(1 - t * t))) - 1) + b
    end
    t -= 2
@@ -328,7 +328,7 @@ easingfunctions = [lineartween,
 
 # deprecated as of Luxor 0.8.3+
 
-type Sequence
+struct Sequence
     width::Float64
     height::Float64
     stitle::String
@@ -343,7 +343,7 @@ function animate(seq::Sequence, frames::Range, backdropfunc, framefunc;
     warn("The sequence-based animate() function is deprecated.")
     tempdirectory = mktempdir()
     info("storing \"$(seq.stitle)\" in directory; $(tempdirectory)")
-    info( "ffmpeg will $(createanimation ? "" : "not ")process the frames.")
+    info("ffmpeg will $(createanimation ? "" : "not ")process the frames.")
     filecounter = 1
     for currentframe in frames
         Drawing(seq.width, seq.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")

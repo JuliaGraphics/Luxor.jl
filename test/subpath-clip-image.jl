@@ -2,12 +2,9 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Base.Test
+
+
 
 function subpath_clipping(fname)
     width, height = 1000, 1000

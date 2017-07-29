@@ -6,7 +6,7 @@ The Point type holds two coordinates. Currently it's immutable, so remember not 
 change the values of the x and y values directly.
 """
 
-immutable Point
+struct Point
    x::Float64
    y::Float64
 end
@@ -55,21 +55,6 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 <(p1::Point, p2::Point)               = isless(p1,p2)
 >(p1::Point, p2::Point)               = p2 < p1
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
-
-# These have been replaced in v0.6 with broadcasting syntax
-# fix from https://github.com/JuliaLang/Compat.jl/issues/308
-if VERSION < v"0.6.0-dev.1632" # julia#17623
-    include_string("""
-    import Base: .*, ./, .<, .>, .>=, .<=
-    .*(k::Number, p2::Point)              = Point(k * p2.x,    k * p2.y)
-    .*(p2::Point, k::Number)              = Point(k * p2.x,    k * p2.y)
-    ./(p2::Point, k::Number)              = Point(p2.x/k,      p2.y/k)
-    .<(p1::Point, p2::Point)              = p1 < p2
-    .>(p1::Point, p2::Point)              = p2 < p1
-    .<=(p1::Point, p2::Point)             = p1 <= p2
-    .>=(p1::Point, p2::Point)             = p2 <= p1
-    """, string(@__FILE__, ':', @__LINE__))
-end
 
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 

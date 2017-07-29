@@ -65,7 +65,7 @@ default the path is closed.
 """
 function drawbezierpath(bezierpath::Array{NTuple{4,Luxor.Point}}, action=:none; close=true)
     move(bezierpath[1][1])
-    for i in 1:length(bezierpath) -1
+    for i in 1:length(bezierpath) - 1
         c = bezierpath[i]
         curve(c[2], c[3], c[4])
     end

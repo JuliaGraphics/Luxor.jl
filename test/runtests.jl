@@ -1,16 +1,13 @@
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Base.Test
+
+
 
 using Compat
 
 function run_all_tests()
 
     @testset "animation (Unix only)" begin
-        if !  @compat is_windows()
+        if !  Sys.iswindows()
             include("animation-test.jl")
         end
     end

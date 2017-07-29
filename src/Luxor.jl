@@ -5,17 +5,13 @@ The Luxor package provides a set of vector drawing functions for creating graphi
 """
 module Luxor
 
-# as of Julia version 0.4, we still have to share fill() and scale() with Base.
-# as of Julia version 0.6, we still have to share fill() with Base.
-# fill() is deprecated, replaced with fillpath()
-
 import Base: fill
 
 if isdefined(Base, :scale)
     import Base: scale
 end
 
-using Colors, Cairo, Compat, FileIO, Juno
+using Colors, Cairo, FileIO, Juno
 
 include("point.jl")
 include("basics.jl")
@@ -35,9 +31,6 @@ include("animate.jl")
 include("bars.jl")
 include("bezierpath.jl")
 #include("shapefile.jl")
-
-@deprecate fill() fillpath()
-@deprecate stroke() strokepath()
 
 export Drawing, currentdrawing,
     cm, inch, mm,
@@ -122,7 +115,7 @@ const inch = 72.0
 const cm = 28.3464566929
 const mm = 2.83464566929
 
-type Drawing
+mutable struct Drawing
     width::Float64
     height::Float64
     filename::String
@@ -311,11 +304,11 @@ function preview()
         end
     elseif candisplay && juno
         display(currentdrawing)
-    elseif @compat is_apple()
+    elseif Sys.isapple()
         run(`open $(currentdrawing.filename)`)
-    elseif @compat is_windows()
+    elseif Sys.iswindows()
         run(ignorestatus(`explorer $(currentdrawing.filename)`))
-    elseif @compat is_unix()
+    elseif Sys.isunix()
         run(`xdg-open $(currentdrawing.filename)`)
     end
 end

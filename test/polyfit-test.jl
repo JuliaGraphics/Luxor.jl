@@ -2,12 +2,9 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Base.Test
+
+
 
 function poly_fit(fname)
     currentwidth = 2400 # pts

@@ -1,11 +1,8 @@
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Base.Test
+
+
 
 function text_path_clip(fname)
     currentwidth = 1250 # pts

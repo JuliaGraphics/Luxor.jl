@@ -25,10 +25,10 @@ end
 
 #=
 
-results of version of 2017-02-02 13:54:56 
+results of version of 2017-02-02 13:54:56
 macOS, Luxor release 0.7.5, Julia release 0.5
 
-BenchmarkTools.Trial: 
+BenchmarkTools.Trial:
   memory estimate:  90.02 kb
   allocs estimate:  3793
   --------------
@@ -42,7 +42,7 @@ BenchmarkTools.Trial:
   time tolerance:   5.00%
   memory tolerance: 1.00%
 
-BenchmarkTools.Trial: 
+BenchmarkTools.Trial:
   memory estimate:  163.45 kb
   allocs estimate:  6293
   --------------
@@ -57,10 +57,10 @@ BenchmarkTools.Trial:
   memory tolerance: 1.00%
 
 
-results of version of 2017-02-18 08:46:03 
+results of version of 2017-02-18 08:46:03
 macOS, Luxor release 0.8, Julia release 0.5
 
-BenchmarkTools.Trial: 
+BenchmarkTools.Trial:
   memory estimate:  90.02 KiB
   allocs estimate:  3793
   --------------
@@ -74,7 +74,7 @@ BenchmarkTools.Trial:
   time tolerance:   5.00%
   memory tolerance: 1.00%
 
-BenchmarkTools.Trial: 
+BenchmarkTools.Trial:
   memory estimate:  163.45 KiB
   allocs estimate:  6293
   --------------
@@ -91,7 +91,7 @@ BenchmarkTools.Trial:
 results of version of 2017-02-18 08:51:01
 macOS, Luxor release 0.8, Julia release 0.6
 
-BenchmarkTools.Trial: 
+BenchmarkTools.Trial:
   memory estimate:  89.92 KiB
   allocs estimate:  3792
   --------------
@@ -105,7 +105,7 @@ BenchmarkTools.Trial:
   time tolerance:   5.00%
   memory tolerance: 1.00%
 
-BenchmarkTools.Trial: 
+BenchmarkTools.Trial:
   memory estimate:  158.67 KiB
   allocs estimate:  6392
   --------------
@@ -118,5 +118,21 @@ BenchmarkTools.Trial:
   evals/sample:     1
   time tolerance:   5.00%
   memory tolerance: 1.00%
+
+results of version of 2017-07-29 18:07:01
+macOS, Luxor release 0.9, Julia release 0.7
+
+BenchmarkTools.Trial:
+  memory estimate:  149.31 KiB
+  allocs estimate:  5793
+  --------------
+  minimum time:     1.968 ms (0.00% GC)
+  median time:      2.363 ms (0.00% GC)
+  mean time:        4.024 ms (1.69% GC)
+  maximum time:     846.859 ms (0.00% GC)
+  --------------
+  samples:          1241
+  evals/sample:     1
+
 
 =#

@@ -37,7 +37,7 @@ It's sometimes useful to know which row and column you're currently on:
 
 should have that information for you.
 """
-type Tiler
+mutable struct Tiler
     areawidth::Real
     areaheight::Real
     tilewidth::Real
@@ -119,7 +119,7 @@ To get points from the grid, use `nextgridpoint(g::Grid)`.
 
 When you run out of grid points, you'll wrap round and start again.
 """
-type GridRect
+mutable struct GridRect
     startpoint::Point
     currentpoint::Point
     xspacing::Float64
@@ -153,7 +153,7 @@ To get the next point from the grid, use `nextgridpoint(g::Grid)`.
 
 When you run out of grid points, you'll wrap round and start again.
 """
-type GridHex
+mutable struct GridHex
     startpoint::Point
     radius::Float64
     currentpoint::Point
@@ -265,7 +265,7 @@ should have that information for you.
 Unless the tilewidth and tileheight are exact multiples of the area width and height, you'll
 see a border at the right and bottom where the tiles won't fit.
 """
-type Partition
+mutable struct Partition
     areawidth::Real
     areaheight::Real
     tilewidth::Real

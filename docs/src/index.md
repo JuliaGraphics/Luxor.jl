@@ -26,13 +26,7 @@ Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraph
 
 ## Current status
 
-Luxor currently runs on Julia versions 0.5 and 0.6, and uses Cairo.jl and Colors.jl.
-
-!!! warning "Deprecations"
-
-    The functions `fill()` and `stroke()` are deprecated in this release, and will be removed in a future release. They should be replaced with `fillpath()` and `strokepath()` respectively.
-
-    The change is because `fill()` clashes with `Base.fill()`, used to fill arrays.
+This version of Luxor runs on Julia version 0.7, and uses Cairo.jl and Colors.jl.
 
 ## Installation and basic usage
 
