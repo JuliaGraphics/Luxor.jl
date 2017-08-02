@@ -525,11 +525,11 @@ getpath
 getpathflat
 ```
 
-## Polygons to Bèzier paths
+## Polygons to Beziér paths
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.
 
-`makebezierpath()` takes the points in a polygon and converts each line segment into a Bèzier curve. `drawbezierpath()` draws the resulting sequence.
+`makebezierpath()` takes the points in a polygon and converts each line segment into a Bézier curve. `drawbezierpath()` draws the resulting sequence.
 
 ```@example
 using Luxor # hide

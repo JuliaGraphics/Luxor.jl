@@ -115,7 +115,7 @@ circle
 ellipse
 ```
 
-`circlepath()` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
+`circlepath()` constructs a circular path from Bézier curves, which allows you to use circles as paths.
 
 ```@example
 using Luxor # hide
@@ -364,7 +364,7 @@ rule
 
 There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`.
 
-`curve()` constructs Bèzier curves from control points:
+`curve()` constructs Bézier curves from control points:
 
 ```@example
 using Luxor # hide

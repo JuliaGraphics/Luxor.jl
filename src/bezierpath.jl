@@ -1,7 +1,7 @@
 """
    findbeziercontrolpoints(previouspt::Point, pt1::Point, pt2::Point, nextpt::Point; smooth_value=0.5)
 
-Find the Bèzier control points for a curve between `pt1` and `pt2`. We'll refer to the previous point before `pt1` and the next point after `pt2`.
+Find the Bézier control points for a curve between `pt1` and `pt2`. We'll refer to the previous point before `pt1` and the next point after `pt2`.
 """
 function findbeziercontrolpoints(previouspt::Point, pt1::Point, pt2::Point, nextpt::Point;
     smoothing=0.5)
@@ -13,9 +13,7 @@ function findbeziercontrolpoints(previouspt::Point, pt1::Point, pt2::Point, next
     xc3 = (pt2.x + nextpt.x) / 2.0
     yc3 = (pt2.y + nextpt.y) / 2.0
 
-    len1 = sqrt((pt1.x-previouspt.x) * (pt1.x-previouspt.x) + (pt1.y-previouspt.y) * (pt1.y-previouspt.y))
-    len2 = sqrt((pt2.x-pt1.x) * (pt2.x-pt1.x) + (pt2.y-pt1.y) * (pt2.y-pt1.y))
-    len3 = sqrt((nextpt.x-pt2.x) * (nextpt.x-pt2.x) + (nextpt.y-pt2.y) * (nextpt.y-pt2.y))
+    len1, len2, len3 = norm(previouspt, pt1), norm(pt2, pt1), norm(nextpt, pt2)
 
     k1 = len1 / (len1 + len2)
     k2 = len2 / (len2 + len3)
@@ -38,7 +36,7 @@ end
 """
     makebezierpath(pgon::Array; smoothing=1)
 
-Return a Bèzier path that follows an array of points. The Bèzier path is an array of
+Return a Bézier path that follows an array of points. The Bézier path is an array of
 tuples; each tuple contains the four points that make up a section of the
 path.
 """
@@ -60,7 +58,7 @@ end
     drawbezierpath(bezierpath, action=:none;
         close=true)
 
-Draw a Bèzier path, and apply the action, such as `:none`, `:stroke`, `:fill`, etc. By
+Draw a Bézier path, and apply the action, such as `:none`, `:stroke`, `:fill`, etc. By
 default the path is closed.
 """
 function drawbezierpath(bezierpath::Array{NTuple{4,Luxor.Point}}, action=:none; close=true)
