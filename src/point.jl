@@ -5,7 +5,6 @@ import Base: isequal, isless, isapprox, cmp, dot, size, getindex
 The Point type holds two coordinates. Currently it's immutable, so remember not try to
 change the values of the x and y values directly.
 """
-
 struct Point
    x::Float64
    y::Float64
@@ -308,9 +307,7 @@ end
 
 Find the intersection points of a line (extended through points `p1` and `p2`) and a circle.
 
-Return a tuple of `(n, pt1, pt2)`
-
-where
+Return a tuple of `(n, pt1, pt2)`, where:
 
 - `n` is the number of intersections, `0`, `1`, or `2`
 - `pt1` is first intersection point, or `Point(0, 0)` if none
@@ -377,5 +374,3 @@ produces
     Luxor.Point(7.071067811865475,7.0710678118654755)
 """
 polar(r, theta) = Point(r * sin(theta), r * cos(theta))
-
-# end

@@ -94,6 +94,8 @@ animate(bang, [
     creategif=true,
     pathname="/tmp/animationtest.gif")
 ```
+
+Available easing functions are listed in `easingfunctions`.
 """
 function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,

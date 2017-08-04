@@ -17,9 +17,9 @@ function poly(pointlist::Array, action = :nothing; close=false, reversepath=fals
     if reversepath
         reverse!(pointlist)
     end
-    move(pointlist[1].x, pointlist[1].y)
+    move(pointlist[1])
     for p in pointlist[2:end]
-        line(p.x, p.y)
+        line(p)
     end
     if close
         closepath()
@@ -55,12 +55,12 @@ Returns a point. This only works for simple (non-intersecting) polygons.
 
 You could test the point using `isinside()`.
 """
-function polycentroid(pointlist)
+function polycentroid(pointlist::Array)
     # Points are immutable, use separate variables for these calculations
     centroid_x = 0.0
     centroid_y = 0.0
     signedArea = 0.0
-    vertexCount = length(pointlist)
+    vertexcount = length(pointlist)
     x0 = 0.0 # Current vertex X
     y0 = 0.0 # Current vertex Y
     x1 = 0.0 # Next vertex X
@@ -68,8 +68,7 @@ function polycentroid(pointlist)
     a  = 0.0  # Partial signed area
 
     # For all vertices except last
-    i = 1
-    for i in 1:vertexCount-1
+    for i in 1:vertexcount-1
         x0 = pointlist[i].x
         y0 = pointlist[i].y
         x1 = pointlist[i+1].x
@@ -78,11 +77,11 @@ function polycentroid(pointlist)
         signedArea += a
         centroid_x += (x0 + x1) * a
         centroid_y += (y0 + y1) * a
-   end
+    end
     # Do last vertex separately to avoid performing an expensive
     # modulus operation in each iteration.
-    x0 = pointlist[vertexCount].x
-    y0 = pointlist[vertexCount].y
+    x0 = pointlist[vertexcount].x
+    y0 = pointlist[vertexcount].y
     x1 = pointlist[1].x
     y1 = pointlist[1].y
     a = x0 * y1 - x1 * y0
@@ -377,7 +376,7 @@ function drawroundedcorner(cornerpoint, p1, p2, radius, path; debug=false)
 
     # this prevents impossible constructions; Cairo will crash if L is 0
     if isapprox(L, 0.0)
-        L= 0.01
+        L = 0.01
     end
 
     circlepoint = getproportionpoint(cornerpoint, d, L, dx, dy)
@@ -419,7 +418,7 @@ function drawroundedcorner(cornerpoint, p1, p2, radius, path; debug=false)
 end
 
 """
-    polysmooth(points, radius, action=:action; debug=false)
+    polysmooth(points::Array, radius, action=:action; debug=false)
 
 Make a closed path from the `points` and round the corners by making them arcs with the
 given radius. Execute the action when finished.
@@ -430,7 +429,7 @@ possible (as large as the shortest side allows).
 
 The `debug` option also draws the construction circles at each corner.
 """
-function polysmooth(points, radius, action=:action; debug=false)
+function polysmooth(points::Array, radius, action=:action; debug=false)
     temppath = Tuple[]
     l = length(points)
     # perhaps should check that l >= 3?
@@ -561,7 +560,6 @@ end
 Convert the current path to an array of polygons.
 
 Returns an array of polygons.
-
 """
 function pathtopoly()
     originalpath = getpathflat()
@@ -720,5 +718,3 @@ function polyarea(plist::Array)
     area = abs(area) / 2.0
     return area
 end
-
-# end

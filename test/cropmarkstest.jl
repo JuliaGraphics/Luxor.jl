@@ -4,15 +4,13 @@ using Luxor
 
 using Base.Test
 
-
-
 function cropmarkstest(fname)
     Drawing(1300, 1300, fname)
     origin()
     background("ivory")
     sethue("grey80")
     box(O, 1200, 1200, :fill)
-    tiles = Tiler(600, 600, 3, 3, margin=30)
+    tiles = Tiler(1100, 1100, 6, 6, margin=60)
     for (pos, n) in tiles
         gsave()
         translate(pos)
@@ -20,7 +18,6 @@ function cropmarkstest(fname)
         setopacity(rand())
         box(O, tiles.tilewidth - 25, tiles.tileheight - 25, :fill)
         cropmarks(O, tiles.tilewidth - 25, tiles.tileheight - 25)
-        clipreset()
         grestore()
     end
     cropmarks(O, 1200, 1200)

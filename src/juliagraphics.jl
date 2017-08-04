@@ -24,7 +24,6 @@ To use the logo as a clipping mask:
     julialogo(action=:clip)
 
 (In this case the `color` setting is automatically ignored.)
-
 """
 function julialogo(;action=:fill, color=true)
     # save current color
@@ -51,7 +50,7 @@ function julialogo(;action=:fill, color=true)
     line(72.872, 177.311)
     newsubpath()
 
-    "u"
+    # "u"
     move(109.739, 92.416)
     line(109.739, 152.215)
     curve(109.739, 153.874, 110.06, 155.437, 110.7, 156.907)
@@ -75,7 +74,7 @@ function julialogo(;action=:fill, color=true)
     line(109.739, 92.416)
     newsubpath()
 
-    "l"
+    # "l"
     move(197.881, 177.311)
     line(172.221, 177.311)
     line(172.221, 58.278)
@@ -83,7 +82,7 @@ function julialogo(;action=:fill, color=true)
     line(197.881, 177.311)
     newsubpath()
 
-    "i"
+    # "i"
     move(208.603, 97.051)
     line(234.376, 89.929)
     line(234.376, 177.311)
@@ -91,7 +90,7 @@ function julialogo(;action=:fill, color=true)
     line(208.603, 97.051)
     newsubpath()
 
-    "a"
+    # "a"
     move(288.225, 133.451)
     curve(285.738, 134.506, 283.232, 135.731, 280.707, 137.124)
     curve(278.183, 138.519, 275.884, 140.045, 273.812, 141.703)
@@ -191,19 +190,19 @@ end
 Draw the three Julia circles in color centered at the origin.
 
 The distance of the centers of the circles from the origin is `radius`.
-The optional keyword arguments `outercircleratio` (default 0.75) and `innercircleratio` 
-(default 0.65) control the radius of the individual colored circles relative to the `radius`. 
+The optional keyword arguments `outercircleratio` (default 0.75) and `innercircleratio`
+(default 0.65) control the radius of the individual colored circles relative to the `radius`.
 So you can get relatively smaller or larger circles by adjusting the ratios.
 """
 function juliacircles(radius=100; outercircleratio=0.75, innercircleratio=0.65)
-    darker_blue = (0.251, 0.388, 0.847)    # the darker blue not used
-    lighter_blue = (0.4, 0.51, 0.878)      # the lighter blue not used
-    darker_purple = (0.584, 0.345, 0.698)
-    lighter_purple  = (0.667, 0.475, 0.757)
-    darker_green  = (0.22, 0.596, 0.149)
+    darker_blue    = (0.251, 0.388, 0.847)    # the darker blue not used
+    lighter_blue   = (0.4, 0.51, 0.878)      # the lighter blue not used
+    darker_purple  = (0.584, 0.345, 0.698)
+    lighter_purple = (0.667, 0.475, 0.757)
+    darker_green   = (0.22, 0.596, 0.149)
     lighter_green  = (0.376, 0.678, 0.318)
-    darker_red  = (0.796, 0.235, 0.2)
-    lighter_red  = (0.835, 0.388, 0.361)
+    darker_red     = (0.796, 0.235, 0.2)
+    lighter_red    = (0.835, 0.388, 0.361)
 
     purples = (darker_purple, lighter_purple)
     greens = (darker_green, lighter_green)

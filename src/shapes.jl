@@ -47,13 +47,15 @@ Create a box/rectangle centered at point `pt` with width and height. Use `vertic
 return an array of the four corner points rather than draw the box.
 """
 function box(pt::Point, width, height, action::Symbol=:nothing; vertices=false)
+    wover2 = width/2
+    hover2 = height/2
     if vertices
-        return [Point(pt.x - width/2, pt.y + height/2),
-                Point(pt.x - width/2, pt.y - height/2),
-                Point(pt.x + width/2, pt.y - height/2),
-                Point(pt.x + width/2, pt.y + height/2)]
+        return [Point(pt.x - wover2, pt.y + hover2),
+                Point(pt.x - wover2, pt.y - hover2),
+                Point(pt.x + wover2, pt.y - hover2),
+                Point(pt.x + wover2, pt.y + hover2)]
     end
-    rect(pt.x - width/2, pt.y - height/2, width, height, action)
+    rect(pt.x - wover2, pt.y - hover2, width, height, action)
 end
 
 """
@@ -73,25 +75,27 @@ by `cornerradius`.
 function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:stroke)
     gsave()
     translate(centerpoint)
+    wover2 = width/2
+    hover2 = height/2
     # go clockwise around box
-    p1center = Point(O.x + width/2 - cornerradius, O.y + height/2 - cornerradius) # bottom right
-    p1start  = Point(O.x + width/2, O.y + height/2 - cornerradius)
-    p1end    = Point(O.x + width/2 - cornerradius, O.y + height/2)
+    p1center = Point(O.x + wover2 - cornerradius, O.y + hover2 - cornerradius) # bottom right
+    p1start  = Point(O.x + wover2, O.y + hover2 - cornerradius)
+    p1end    = Point(O.x + wover2 - cornerradius, O.y + hover2)
 
-    p2center = Point(O.x - width/2 + cornerradius, O.y + height/2 - cornerradius) # bottom left
-    p2start  = Point(O.x - width/2 + cornerradius, O.y + height/2)
-    p2end    = Point(O.x - width/2, O.y + height/2 - cornerradius)
+    p2center = Point(O.x - wover2 + cornerradius, O.y + hover2 - cornerradius) # bottom left
+    p2start  = Point(O.x - wover2 + cornerradius, O.y + hover2)
+    p2end    = Point(O.x - wover2, O.y + hover2 - cornerradius)
 
-    p3center = Point(O.x - width/2 + cornerradius, O.y - height/2 + cornerradius) # top left
-    p3start  = Point(O.x - width/2, O.y - height/2 + cornerradius)
-    p3end    = Point(O.x - width/2 + cornerradius, O.y - height/2)
+    p3center = Point(O.x - wover2 + cornerradius, O.y - hover2 + cornerradius) # top left
+    p3start  = Point(O.x - wover2, O.y - hover2 + cornerradius)
+    p3end    = Point(O.x - wover2 + cornerradius, O.y - hover2)
 
-    p4center = Point(O.x + width/2 - cornerradius, O.y - height/2 + cornerradius) # top right
-    p4start  = Point(O.x + width/2 - cornerradius, O.y - height/2)
-    p4end    = Point(O.x + width/2, O.y - height/2 + cornerradius)
+    p4center = Point(O.x + wover2 - cornerradius, O.y - hover2 + cornerradius) # top right
+    p4start  = Point(O.x + wover2 - cornerradius, O.y - hover2)
+    p4end    = Point(O.x + wover2, O.y - hover2 + cornerradius)
 
     newpath()
-    move(Point(O.x + width/2, O.y))
+    move(Point(O.x + wover2, O.y))
     line(p1start)
     arc(p1center, cornerradius, 0, pi/2, :none)
     line(p1end)
@@ -142,8 +146,8 @@ ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0, action=:nothing;
               vertices=false,
               reversepath=false)
-    ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
-                    y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
+    ptlist = [Point(x + cos(orientation + n * 2pi/sides) * radius,
+                    y + sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
     if vertices
         ptlist
     else
@@ -169,7 +173,7 @@ ngon(centerpoint::Point, radius::Real, sides::Int=5, orientation=0, action=:noth
 Draw a regular polygon centered at `centerpoint` with `sides` sides of length `sidelength`.
 """
 function ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
-    action=:nothing; kwargs...)
+    action = :nothing; kwargs...)
     radius = 0.5 * sidelength * csc(pi/sides)
     ngon(centerpoint, radius, sides, orientation, action; kwargs...)
 end
@@ -188,10 +192,10 @@ function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
     orientation=0, action=:nothing;
     vertices = false,
     reversepath=false)
-    outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
-                         y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
-    innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
-                         y+sin(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio)) for n in 1:npoints]
+    outerpoints = [Point(x + cos(orientation + n * 2pi/npoints) * radius,
+                         y + sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
+    innerpoints = [Point(x + cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
+                         y + sin(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio)) for n in 1:npoints]
     result = Point[]
     for i in eachindex(outerpoints)
         push!(result, outerpoints[i])
@@ -223,55 +227,56 @@ function star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5,
 end
 
 """
-    cropmarks(center, width, height)
+    cropmarks(center, width, height; gap = 5, crop = 15)
 
 Draw cropmarks (also known as trim marks).
 """
-function cropmarks(center, width, height)
-    gap = 5
-    crop = 15
+function cropmarks(center, width, height; gap = 5, crop = 15)
+    wover2 = width/2
+    hover2 = height/2
+
     gsave()
     setcolor("black")
     setline(0.5)
     setdash("solid")
     # horizontal top left
-    line(Point(-width/2 - gap - crop, -height/2),
-         Point(-width/2 - gap, -height/2),
+    line(Point(-wover2 - gap - crop, -hover2),
+         Point(-wover2 - gap, -hover2),
          :stroke)
 
     # horizontal bottom left
-    line(Point(-width/2 - gap - crop, height/2),
-         Point(-width/2 - gap, height/2),
+    line(Point(-wover2 - gap - crop, hover2),
+         Point(-wover2 - gap, hover2),
          :stroke)
 
     # horizontal top right
-    line(Point(width/2 + gap, -height/2),
-         Point(width/2 + gap + crop, -height/2),
+    line(Point(wover2 + gap, -hover2),
+         Point(wover2 + gap + crop, -hover2),
          :stroke)
 
     # horizontal bottom right
-    line(Point(width/2 + gap, height/2),
-         Point(width/2 + gap + crop, height/2),
+    line(Point(wover2 + gap, hover2),
+         Point(wover2 + gap + crop, hover2),
          :stroke)
 
     # vertical top left
-    line(Point(-width/2, -height/2 - gap - crop),
-         Point(-width/2, -height/2 - gap),
+    line(Point(-wover2, -hover2 - gap - crop),
+         Point(-wover2, -hover2 - gap),
          :stroke)
 
     # vertical bottom left
-    line(Point(-width/2, height/2 + gap),
-         Point(-width/2, height/2 + gap + crop),
+    line(Point(-wover2, hover2 + gap),
+         Point(-wover2, hover2 + gap + crop),
          :stroke)
 
     # vertical top right
-    line(Point(width/2, -height/2 - gap - crop),
-         Point(width/2, -height/2 - gap),
+    line(Point(wover2, -hover2 - gap - crop),
+         Point(wover2, -hover2 - gap),
          :stroke)
 
     # vertical bottom right
-    line(Point(width/2, height/2 + gap),
-         Point(width/2, height/2 + gap + crop),
+    line(Point(wover2, hover2 + gap),
+         Point(wover2, hover2 + gap + crop),
          :stroke)
 
     grestore()

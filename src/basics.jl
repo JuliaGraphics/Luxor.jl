@@ -73,15 +73,16 @@ current positive x and y axes.
 """
 function axes()
     # draw axes
+    cdw = currentdrawing.width/2.0 * 0.6
     gsave()
     setline(1)
     fontsize(20)
     sethue("gray")
-    arrow(O, Point(currentdrawing.width/2.0 * 0.6, 0.0))
-    text("x", Point(currentdrawing.width/2.0 * 0.6, -15.0))
+    arrow(O, Point(cdw, 0.0))
+    text("x", Point(cdw, -15.0))
     text("x", Point(30, -15))
     arrow(O, Point(0, currentdrawing.height/2.0 * 0.6))
-    text("y", Point(5, currentdrawing.width/2.0 * 0.6))
+    text("y", Point(5, cdw))
     text("y", Point(5, 30))
     grestore()
 end
@@ -133,7 +134,7 @@ function background(r, g, b, a)
     return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
-# I don't think this has a visible effect
+# I don't think this has a visible effect:
 
 """
     setantialias(n)
@@ -225,8 +226,7 @@ end
     do_action(action)
 
 This is usually called by other graphics functions. Actions for graphics commands include
-`:fill`, `:stroke`, `:clip`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:none`, and
-`:path`.
+`:fill`, `:stroke`, `:clip`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, and `:none`.
 """
 function do_action(action)
     if action == :fill
@@ -319,8 +319,8 @@ function setdash(dashing)
 end
 
 """
-    move(x, y)
     move(pt)
+    move(x, y)
 
 Move to a point.
 """
@@ -328,23 +328,24 @@ move(x, y)      = Cairo.move_to(currentdrawing.cr,x, y)
 move(pt)        = move(pt.x, pt.y)
 
 """
+    rmove(pt)
+
+Move relative to current position by the `pt`'s x and y.
+
     rmove(x, y)
 
-Move by an amount from the current point. Move relative to current position by `x` and `y`:
+Move relative to current position by `x` and `y`:
 
-Move relative to current position by the `pt`'s x and y:
-
-    rmove(pt)
 """
 rmove(x, y)     = Cairo.rel_move_to(currentdrawing.cr,x, y)
 rmove(pt)       = rmove(pt.x, pt.y)
 
 """
+    line(pt)
     line(x, y)
     line(x, y, :action)
-    line(pt)
 
-Create a line from the current position to the `x/y` position and optionally apply an action:
+Add a line from the current position to the `x/y` position and optionally apply an action:
 """
 line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
 line(pt)        = line(pt.x, pt.y)
@@ -377,7 +378,7 @@ rline(pt)       = rline(pt.x, pt.y)
 Draw a line across the entire drawing passing through `pos`, at an angle of `theta` to the
 x-axis. Returns the two points.
 
-The end points are not calculated exactly, they're just a long way apart.
+The end points are not calculated exactly, they're just a long way apart... :)
 """
 function rule(pos::Point, theta=0.0)
     diagonal = hypot(currentdrawing.width, currentdrawing.height)
@@ -418,17 +419,25 @@ Replace the current graphics state with the one on top of the stack.
 function grestore()
     Cairo.restore(currentdrawing.cr)
     try
-    (currentdrawing.redvalue,
-     currentdrawing.greenvalue,
-     currentdrawing.bluevalue,
-     currentdrawing.alpha) = pop!(saved_colors)
+        (currentdrawing.redvalue,
+         currentdrawing.greenvalue,
+         currentdrawing.bluevalue,
+         currentdrawing.alpha) = pop!(saved_colors)
      catch err
-         println("$err Not enough colors on the stack to restore.")
+        println("$err Not enough colors on the stack to restore.")
     end
 end
 
 """
-    The `layer` macro is a shortcut for `gsave()` ... `grestore()`.
+    The `layer` macro is a shortcut for `gsave()` ... `grestore()`:
+
+```
+@layer begin
+#
+# ...
+#
+end
+```
 """
 
 macro layer(a)
@@ -440,7 +449,7 @@ macro layer(a)
 end
 
 """
-    scale(x, y)
+    scale(x::Real, y::Real)
 
 Scale workspace by `x` and `y`.
 
@@ -452,7 +461,7 @@ Example:
 scale(sx::Real, sy::Real) = Cairo.scale(currentdrawing.cr, sx, sy)
 
 """
-    scale(f)
+    scale(f::Real)
 
 Scale workspace by `f` in both `x` and `y`.
 """
@@ -467,7 +476,7 @@ rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 
 """
     translate(x::Real, y::Real)
-    translate(point)
+    translate(point::Point)
 
 Translate the workspace by `x` and `y` or by moving the origin to `pt`.
 """
@@ -478,7 +487,7 @@ translate(pt::Point)     = translate(pt.x, pt.y)
     getpath()
 
 Get the current path and return a CairoPath object, which is an array of `element_type` and
-`points` objects. With the results you can step through and examine each entry:
+`points` objects. With the results you can step through and examine each entry. For example:
 
 ```
 o = getpath()

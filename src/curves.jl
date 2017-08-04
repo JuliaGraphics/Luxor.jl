@@ -72,15 +72,17 @@ Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `
     ellipse(xc, yc, w, h, action=:none)
 """
 function ellipse(xc, yc, w, h, action=:none)
-    x  = xc - w/2
-    y  = yc - h/2
+    wover2 = w/2
+    hover2 = h/2
+    x  = xc - wover2
+    y  = yc - hover2
     kappa = .5522848 # ??? http://www.whizkidtech.redprince.net/bezier/circle/kappa/
-    ox = (w / 2) * kappa  # control point offset horizontal
-    oy = (h / 2) * kappa  # control point offset vertical
+    ox = wover2 * kappa  # control point offset horizontal
+    oy = hover2 * kappa  # control point offset vertical
     xe = x + w            # x-end
     ye = y + h            # y-end
-    xm = x + w / 2        # x-middle
-    ym = y + h / 2        # y-middle
+    xm = x + wover2        # x-middle
+    ym = y + hover2        # y-middle
     move(x, ym)
     curve(x, ym - oy, xm - ox, y, xm, y)
     curve(xm + ox, y, xe, ym - oy, xe, ym)
@@ -419,7 +421,6 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
     b = sqrt(abs(a^2 - dc^2)) # minor axis, hopefuly not 0
     phi = slope(O, focus2) # angle between the major axis and the x-axis
     points = Point[]
-    drawing = false
     for t in 0:stepvalue:2pi
         xt = cpoint.x + a * cos(t) * cos(phi) - b * sin(t) * sin(phi)
         yt = cpoint.y + a * cos(t) * sin(phi) + b * sin(t) * cos(phi)
@@ -578,7 +579,7 @@ function spiral(a, b, action::Symbol=:none;
         end
     end
     if vertices == false
-        poly(points, action) # no close by default :)
+        poly(points, action) # default is not closed, sounds ideal :)
     end
     return points
 end
@@ -594,7 +595,7 @@ function intersection2circles(pt1, r1, pt2, r2)
     r2squared = r2^2
     d = norm(pt1, pt2)
     intersectionarea = 0
-    if (d > r2 + r1)
+    if d > (r2 + r1)
         # circles do not overlap
         intersectionarea = 0
     elseif (d <= abs(r1 - r2) && r1 >= r2)
@@ -616,5 +617,3 @@ function intersection2circles(pt1, r1, pt2, r2)
     end
     return intersectionarea
 end
-
-# eof

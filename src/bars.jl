@@ -24,25 +24,24 @@ bars(v, xwidth=15, yscale=10, labelfunction=mylabelfunction)
 
 To suppress the text labels, use optional keyword `labels=false`.
 """
-
 function bars(values::Array;
-    barfunction   = (bottom::Point, top::Point, value;
-        extremes=extrema(values)) -> line(bottom, top, :stroke),
-    labels::Bool=true,
-    labelfunction = (bottom::Point, top::Point, value;
-        extremes=extrema(values)) -> begin
-            t = string(round(value, 1))
-            textoffset = textextents(t)[4]
-            if top.y < 0
-                tp = Point(top.x, min(top.y, bottom.y) - textoffset)
-            else
-                tp = Point(top.x, max(top.y, bottom.y) + textoffset)
-            end
-            text(t, tp, halign=:center, valign=:middle)
-            end,
-    yscale = 100,
-    xwidth = 10)
-    x = O.x
+        barfunction   = (bottom::Point, top::Point, value;
+            extremes=extrema(values)) -> line(bottom, top, :stroke),
+        labels::Bool=true,
+        labelfunction = (bottom::Point, top::Point, value;
+            extremes=extrema(values)) -> begin
+                t = string(round(value, 1))
+                textoffset = textextents(t)[4]
+                if top.y < 0
+                    tp = Point(top.x, min(top.y, bottom.y) - textoffset)
+                else
+                    tp = Point(top.x, max(top.y, bottom.y) + textoffset)
+                end
+                text(t, tp, halign=:center, valign=:middle)
+                end,
+        yscale = 100,
+        xwidth = 10)
+    x      = O.x # need mutable
     mn, mx = extrema(values)
     isapprox(mn, mx, atol=0.00001) && (mx = mn + 100) # better show something than nothing
     for v in values

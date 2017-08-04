@@ -11,7 +11,6 @@ sloping side of the arrowhead and the arrow's shaft.
 Arrows don't use the current linewidth setting (`setline()`), and defaults to 1, but you can
 specify another value. It doesn't need stroking/filling, the shaft is stroked and the
 head filled with the current color.
-
 """
 function arrow(startpoint::Point, endpoint::Point;
         linewidth=1.0,
@@ -29,9 +28,9 @@ function arrow(startpoint::Point, endpoint::Point;
     max_undershoot = shaftlength - ((linewidth/2) / tan(arrowheadangle))
     true_arrowheadlength = arrowheadlength * cos(arrowheadangle)
     if true_arrowheadlength < max_undershoot
-    ratio = (shaftlength - true_arrowheadlength)/shaftlength
+        ratio = (shaftlength - true_arrowheadlength)/shaftlength
     else
-    ratio = max_undershoot/shaftlength
+        ratio = max_undershoot/shaftlength
     end
     tox = startpoint.x + (endpoint.x - startpoint.x) * ratio
     toy = startpoint.y + (endpoint.y - startpoint.y) * ratio
@@ -40,7 +39,7 @@ function arrow(startpoint::Point, endpoint::Point;
 
     # draw the shaft of the arrow
     newpath()
-    line(Point(fromx, fromy), Point(tox, toy), :stroke)
+    line(startpoint, Point(tox, toy), :stroke)
 
     # draw the arrowhead
     topx = endpoint.x + cos(arrowheadtopsideangle) * arrowheadlength
@@ -48,7 +47,7 @@ function arrow(startpoint::Point, endpoint::Point;
     arrowheadbottomsideangle = shaftangle - arrowheadangle
     botx = endpoint.x + cos(arrowheadbottomsideangle) * arrowheadlength
     boty = endpoint.y + sin(arrowheadbottomsideangle) * arrowheadlength
-    poly([Point(topx,topy), endpoint, Point(botx,boty)], :fill)
+    poly([Point(topx, topy), endpoint, Point(botx, boty)], :fill)
     grestore()
 end
 
@@ -65,9 +64,9 @@ x-axis.
 Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
 """
 function arrow(centerpos::Point, radius, startangle, endangle;
-        linewidth=1.0,
-        arrowheadlength=10,
-        arrowheadangle=pi/8)
+        linewidth = 1.0,
+        arrowheadlength = 10,
+        arrowheadangle = pi/8)
     gsave()
     setlinejoin("butt")
     setline(linewidth)
@@ -104,7 +103,7 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     newendpoint =              Point(radius * cos(newendangle), radius * sin(newendangle))
     shaftangle =               mod2pi(-pi/2 + atan2(0 - newendpoint.y, 0 - newendpoint.x))
     #
-    arrowheadoutersideangle = shaftangle + pi - arrowheadangle
+    arrowheadoutersideangle   = shaftangle + pi - arrowheadangle
     arrowheadinnersideangle    = shaftangle + pi + arrowheadangle
     topx =                     endpoint.x + cos(arrowheadinnersideangle) * arrowheadlength
     topy =                     endpoint.y + sin(arrowheadinnersideangle) * arrowheadlength

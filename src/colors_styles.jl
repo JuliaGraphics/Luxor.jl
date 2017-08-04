@@ -31,7 +31,8 @@ function setcolor(col::String)
         currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
     Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
         currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
+        currentdrawing.alpha)
 end
 
 """
