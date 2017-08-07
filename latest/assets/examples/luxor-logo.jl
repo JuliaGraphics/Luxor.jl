@@ -15,7 +15,7 @@ function wheel(colscheme)
     move(5,0)
     curve(Point(40, 40), Point(50, -40), Point(80, 30))
     closepath()
-    fill()
+    fillpath()
     grestore()
   end
   clipreset()
