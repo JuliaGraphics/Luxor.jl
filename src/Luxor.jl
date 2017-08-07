@@ -79,7 +79,7 @@ export Drawing, currentdrawing,
 
     getpath, getpathflat, pathtopoly,
 
-    fontface, fontsize, text, textpath,
+    fontface, fontsize, text, textpath, label,
     textextents, textcurve, textcentred, textcentered, textright,
     textcurvecentred, textcurvecentered,
     setcolor, setopacity, sethue, setgrey, setgray,

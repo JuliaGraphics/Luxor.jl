@@ -313,4 +313,40 @@ settext(text::AbstractString, pos::Point; kwargs...) =
 
 settext(text; kwargs...) = settext(text, O; kwargs...)
 
+"""
+    label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
+
+Add a text label at a point, positioned relative to that point, for example, `:N` signifies
+North and places the text directly above that point.
+
+Use one of `:N`, `:S`, `:E`, `:W`, `:NE`, `:SE`, `:SW`, `:NW` to position the label
+relative to that point.
+
+    label("text")          # positions text at North (above), relative to the origin
+    label("text", :S)      # positions text at South (below), relative to the origin
+    label("text", :S, pt)  # positions text South of pt
+    label("text", :N, pt, offset=20)  # positions text North of pt, offset by 20
+
+The default offset is 5 units.
+"""
+function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
+    # alignment one of :N, :S, :E, ;W, ;NE; :SE, :SW, :NW
+    if in(alignment, [:N, :n])
+        text(txt, Point(pos.x, pos.y - offset), halign = :center, valign = :bottom)
+    elseif in(alignment, [:E, :e])
+        text(txt, Point(pos.x + offset, pos.y), halign = :left, valign = :middle)
+    elseif in(alignment, [:S, :s])
+        text(txt, Point(pos.x, pos.y + offset), halign = :center, valign = :top)
+    elseif in(alignment, [:W, :w])
+        text(txt, Point(pos.x - offset, pos.y), halign = :right, valign = :middle)
+    elseif in(alignment, [:NE, :ne])
+        text(txt, Point(pos.x + (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :left, valign = :bottom)
+    elseif in(alignment, [:SE, :se])
+        text(txt, Point(pos.x + (offset * cos(pi/4)), pos.y + (offset * sin(pi/4))), halign = :left, valign = :top)
+    elseif in(alignment, [:SW, :sw])
+        text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y + (offset * sin(pi/4))), halign = :right, valign = :top)
+    elseif in(alignment, [:NW, :nw])
+        text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :right, valign = :bottom)
+    end
+end
 # end

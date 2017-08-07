@@ -4,7 +4,7 @@
 |:---------------------------------------:|:-------------------------------------:|:-----------------------------------------:|:-------------------------------:|
 | [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
 | [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.6-img]][pkg-0.6-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
-|                                         | [![][pkg-0.7-img]][pkg-0.7-url]       |                                           |                                 |
+|                                         |                                       |                                           |                                 |
 
 ## Luxor
 

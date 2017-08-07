@@ -373,4 +373,4 @@ produces
 
     Luxor.Point(7.071067811865475,7.0710678118654755)
 """
-polar(r, theta) = Point(r * sin(theta), r * cos(theta))
+polar(r, theta) = Point(r * cos(theta), r * sin(theta))

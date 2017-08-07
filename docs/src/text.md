@@ -21,12 +21,14 @@ background("white") # hide
 sethue("black") # hide
 fontsize(18)
 fontface("Georgia-Bold")
-text("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
+text("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
 finish() # hide
 nothing # hide
 ```
 
 ![text placement](assets/figures/toy-text-example.png)
+
+The `label()` function also uses the Toy API.
 
 #### The Pro API
 
@@ -42,7 +44,7 @@ origin() # hide
 background("white") # hide
 sethue("black") # hide
 setfont("Georgia Bold", 18)
-settext("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign="center")
+settext("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign="center")
 finish() # hide
 nothing # hide
 ```
@@ -166,6 +168,36 @@ The green dot is the text placement point and reference point for the font, the 
 
 ```@docs
 textextents
+```
+## Labels
+
+The `label()` function places text relative to a specific point, and you can use compass
+points to indicate where it should be. So `:N` (for North) places a text label directly above the point.
+
+```@example
+using Luxor # hide
+Drawing(400, 250, "assets/figures/labels.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black")
+fontsize(15)
+octagon = ngon(O, 100, 8, 0, vertices=true)
+
+compass = [:SE, :S, :SW, :W, :NW, :N, :NE, :E, :SE]
+
+for i in 1:8
+    circle(octagon[i], 2, :fill)
+    label(string(compass[i]), compass[i], octagon[i])
+end
+
+finish() # hide
+nothing # hide
+```
+
+![labels](assets/figures/labels.png)
+
+```@docs
+label
 ```
 
 ## Text on a curve
