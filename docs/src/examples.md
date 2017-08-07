@@ -34,6 +34,15 @@ The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewin
 
 ![background](assets/figures/hello-world-macro.png)
 
+```julia
+@svg begin
+    g = [Point(3x, 3y) for x in 1:10:100, y in 1:10:100]
+    circle.(g, 4, :fill)
+    label.(string.([(y - 1) * 10 + x for x in 1:10, y in 1:10]), :E, g)
+end
+```
+![background](assets/figures/circle-dots.png)
+
 ## The Julia logos
 
 Luxor contains two functions that draw the Julia logo, either in color or a single color, and the three Julia circles.
