@@ -2,19 +2,33 @@
 DocTestSetup = quote
     using Luxor
     function get_os()
-           if Sys.isapple()
-               osname = "macOS"
-           elseif Sys.isunix()
-               osname = "UNIX"
-           elseif Sys.islinux()
-               osname = "Linux"
-           elseif Sys.iswindows()
-               osname = "Windows"
-           else
-               osname = "unspecified"
-           end
-           return osname
-       end
+        if is_apple()
+           osname = "macOS"
+        elseif is_unix()
+           osname = "UNIX"
+        elseif is_linux()
+           osname = "Linux"
+        elseif is_windows()
+           osname = "Windows"
+        else
+           osname = "unspecified"
+        end
+        return osname
+    end
+    function get_os_7()
+        if Sys.isapple()
+           osname = "macOS"
+        elseif Sys.isunix()
+           osname = "UNIX"
+        elseif Sys.islinux()
+           osname = "Linux"
+        elseif Sys.iswindows()
+           osname = "Windows"
+        else
+           osname = "unspecified"
+        end
+        return osname
+    end
 end
 ```
 
@@ -49,19 +63,34 @@ Original version by [cormullion](https://github.com/cormullion).
 The documentation was built using [Documenter.jl](https://github.com/JuliaDocs).
 
 ```@example
-function get_os() # hide
-    if Sys.isapple() # hide
-        osname = "macOS" # hide
-    elseif Sys.isunix() # hide
-        osname = "UNIX" # hide
-    elseif Sys.islinux() # hide
-        osname = "Linux" # hide
-    elseif Sys.iswindows() # hide
-        osname = "Windows" # hide
-    else # hide
-        osname = "unspecified" # hide
-    end # hide
-    return osname # hide
-end # hide
+using Luxor
+function get_os()
+    if is_apple()
+       osname = "macOS"
+    elseif is_unix()
+       osname = "UNIX"
+    elseif is_linux()
+       osname = "Linux"
+    elseif is_windows()
+       osname = "Windows"
+    else
+       osname = "unspecified"
+    end
+    return osname
+end
+function get_os_7()
+    if Sys.isapple()
+       osname = "macOS"
+    elseif Sys.isunix()
+       osname = "UNIX"
+    elseif Sys.islinux()
+       osname = "Linux"
+    elseif Sys.iswindows()
+       osname = "Windows"
+    else
+       osname = "unspecified"
+    end
+    return osname
+end
 println("Build date: $(now()), built with Julia $(VERSION) on $(get_os()).") # hide
 ```
