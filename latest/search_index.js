@@ -5,7 +5,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Introduction to Luxor",
     "category": "page",
-    "text": "DocTestSetup = quote\n    using Luxor\n    function get_os()\n           if Sys.isapple()\n               osname = \"macOS\"\n           elseif Sys.isunix()\n               osname = \"UNIX\"\n           elseif Sys.islinux()\n               osname = \"Linux\"\n           elseif Sys.iswindows()\n               osname = \"Windows\"\n           else\n               osname = \"unspecified\"\n           end\n           return osname\n       end\nend"
+    "text": "DocTestSetup = quote\n    using Luxor\n    function get_os()\n        if is_apple()\n           osname = \"macOS\"\n        elseif is_unix()\n           osname = \"UNIX\"\n        elseif is_linux()\n           osname = \"Linux\"\n        elseif is_windows()\n           osname = \"Windows\"\n        else\n           osname = \"unspecified\"\n        end\n        return osname\n    end\n    function get_os_7()\n        if Sys.isapple()\n           osname = \"macOS\"\n        elseif Sys.isunix()\n           osname = \"UNIX\"\n        elseif Sys.islinux()\n           osname = \"Linux\"\n        elseif Sys.iswindows()\n           osname = \"Windows\"\n        else\n           osname = \"unspecified\"\n        end\n        return osname\n    end\nend"
 },
 
 {
@@ -37,7 +37,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Documentation",
     "category": "section",
-    "text": "The documentation was built using Documenter.jl.function get_os() # hide\n    if Sys.isapple() # hide\n        osname = \"macOS\" # hide\n    elseif Sys.isunix() # hide\n        osname = \"UNIX\" # hide\n    elseif Sys.islinux() # hide\n        osname = \"Linux\" # hide\n    elseif Sys.iswindows() # hide\n        osname = \"Windows\" # hide\n    else # hide\n        osname = \"unspecified\" # hide\n    end # hide\n    return osname # hide\nend # hide\nprintln(\"Build date: $(now()), built with Julia $(VERSION) on $(get_os()).\") # hide"
+    "text": "The documentation was built using Documenter.jl.using Luxor\nfunction get_os()\n    if is_apple()\n       osname = \"macOS\"\n    elseif is_unix()\n       osname = \"UNIX\"\n    elseif is_linux()\n       osname = \"Linux\"\n    elseif is_windows()\n       osname = \"Windows\"\n    else\n       osname = \"unspecified\"\n    end\n    return osname\nend\nfunction get_os_7()\n    if Sys.isapple()\n       osname = \"macOS\"\n    elseif Sys.isunix()\n       osname = \"UNIX\"\n    elseif Sys.islinux()\n       osname = \"Linux\"\n    elseif Sys.iswindows()\n       osname = \"Windows\"\n    else\n       osname = \"unspecified\"\n    end\n    return osname\nend\nprintln(\"Build date: $(now()), built with Julia $(VERSION) on $(get_os()).\") # hide"
 },
 
 {
