@@ -4,7 +4,7 @@ using Luxor
 
 using Base.Test
 
-
+srand(42)
 
 function test_circles(fname)
     pagewidth, pageheight = 1200, 1400

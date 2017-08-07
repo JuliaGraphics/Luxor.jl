@@ -2,13 +2,13 @@
 DocTestSetup = quote
     using Luxor
     function get_os()
-           if is_apple()
+           if Sys.isapple()
                osname = "macOS"
-           elseif is_unix()
+           elseif Sys.isunix()
                osname = "UNIX"
-           elseif is_linux()
+           elseif Sys.islinux()
                osname = "Linux"
-           elseif is_windows()
+           elseif Sys.iswindows()
                osname = "Windows"
            else
                osname = "unspecified"
@@ -50,13 +50,13 @@ The documentation was built using [Documenter.jl](https://github.com/JuliaDocs).
 
 ```@example
 function get_os() # hide
-    if is_apple() # hide
+    if Sys.isapple() # hide
         osname = "macOS" # hide
-    elseif is_unix() # hide
+    elseif Sys.isunix() # hide
         osname = "UNIX" # hide
-    elseif is_linux() # hide
+    elseif Sys.islinux() # hide
         osname = "Linux" # hide
-    elseif is_windows() # hide
+    elseif Sys.iswindows() # hide
         osname = "Windows" # hide
     else # hide
         osname = "unspecified" # hide

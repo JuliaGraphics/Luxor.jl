@@ -34,7 +34,6 @@ The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewin
 
 ![background](assets/figures/hello-world-macro.png)
 
-
 ## The Julia logos
 
 Luxor contains two functions that draw the Julia logo, either in color or a single color, and the three Julia circles.
@@ -75,7 +74,6 @@ You can change the extension of the file name, for example "julia-logos.png" to 
 ## Something a bit more complicated: a Sierpinski triangle
 
 Here's a version of the Sierpinski recursive triangle, clipped to a circle.
-
 
 ![Sierpinski](assets/figures/sierpinski.png)
 
