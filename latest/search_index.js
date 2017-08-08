@@ -37,7 +37,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Documentation",
     "category": "section",
-    "text": "The documentation was built using Documenter.jl.using Luxor\nfunction get_os()\n    if is_apple()\n       osname = \"macOS\"\n    elseif is_unix()\n       osname = \"UNIX\"\n    elseif is_linux()\n       osname = \"Linux\"\n    elseif is_windows()\n       osname = \"Windows\"\n    else\n       osname = \"unspecified\"\n    end\n    return osname\nend\nfunction get_os_7()\n    if Sys.isapple()\n       osname = \"macOS\"\n    elseif Sys.isunix()\n       osname = \"UNIX\"\n    elseif Sys.islinux()\n       osname = \"Linux\"\n    elseif Sys.iswindows()\n       osname = \"Windows\"\n    else\n       osname = \"unspecified\"\n    end\n    return osname\nend\nprintln(\"Build date: $(now()), built with Julia $(VERSION) on $(get_os()).\") # hide"
+    "text": "The documentation was built using Documenter.jl.using Luxor # hide\nfunction get_os() # hide\n    if is_apple() # hide\n       osname = \"macOS\" # hide\n    elseif is_unix() # hide\n       osname = \"UNIX\" # hide\n    elseif is_linux() # hide\n       osname = \"Linux\" # hide\n    elseif is_windows() # hide\n       osname = \"Windows\" # hide\n    else # hide\n       osname = \"unspecified\" # hide\n    end # hide\n    return osname # hide\nend # hide\nfunction get_os_7() # hide\n    if Sys.isapple() # hide\n       osname = \"macOS\" # hide\n    elseif Sys.isunix() # hide\n       osname = \"UNIX\" # hide\n    elseif Sys.islinux() # hide\n       osname = \"Linux\" # hide\n    elseif Sys.iswindows() # hide\n       osname = \"Windows\" # hide\n    else # hide\n       osname = \"unspecified\" # hide\n    end # hide\n    return osname # hide\nend # hide\nprintln(\"Build date: $(now()), built with Julia $(VERSION) on $(get_os()).\") # hide"
 },
 
 {
@@ -189,7 +189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files should appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files should appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(typeof(currentdrawing))\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
 },
 
 {
@@ -1241,11 +1241,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "polygons.html#Polygons-to-Beziér-paths-1",
+    "location": "polygons.html#Luxor.bezierpathtopoly",
     "page": "Polygons and paths",
-    "title": "Polygons to Beziér paths",
+    "title": "Luxor.bezierpathtopoly",
+    "category": "Function",
+    "text": "bezierpathtopoly(bezierpath::Array{NTuple{4,Luxor.Point}}; steps=10)\n\nConvert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.\n\nThe steps optional keyword determines how many line sections are used for each path.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.beziertopoly",
+    "page": "Polygons and paths",
+    "title": "Luxor.beziertopoly",
+    "category": "Function",
+    "text": "beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)\n\nConvert a Bezier segment (a tuple of four points: anchor1, control1, control2, anchor2) to a polygon (an array of points).\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Polygons-to-Bézier-paths-and-back-again-1",
+    "page": "Polygons and paths",
+    "title": "Polygons to Bézier paths and back again",
     "category": "section",
-    "text": "Use the makebezierpath() and drawbezierpath() functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.makebezierpath() takes the points in a polygon and converts each line segment into a Bézier curve. drawbezierpath() draws the resulting sequence.using Luxor # hide\nDrawing(600, 300, \"assets/figures/abezierpath.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(1.5) # hide\nsetgray(0.5) # hide\npts = ngon(O, 150, 3, pi/6, vertices=true)\nbezpath = makebezierpath(pts)\npoly(pts, :stroke)\nfor (p1, c1, c2, p2) in bezpath[1:end-1]\n    circle.([p1, p2], 4, :stroke)\n    circle.([c1, c2], 2, :fill)\n    line(p1, c1, :stroke)\n    line(p2, c2, :stroke)\nend\nsethue(\"black\")\nsetline(3)\ndrawbezierpath(bezpath, :stroke, close=false)\nfinish() # hide\nnothing # hide(Image: path to polygon)using Luxor # hide\nDrawing(600, 300, \"assets/figures/bezierpaths.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\ntiles = Tiler(600, 300, 1, 4, margin=20)\nfor (pos, n) in tiles\n    @layer begin\n        translate(pos)\n        pts = polysortbyangle(\n                randompointarray(\n                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),\n                    Point(tiles.tilewidth/2, tiles.tilewidth/2),\n                    4))\n        setopacity(0.7)\n        sethue(\"black\")\n        prettypoly(pts, :stroke, close=true)\n        randomhue()\n        drawbezierpath(makebezierpath(pts), :fill)\n    end\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)makebezierpath\ndrawbezierpath"
+    "text": "Use the makebezierpath() and drawbezierpath() functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't contain straight line segments.makebezierpath() takes the points in a polygon and converts each line segment into a Bézier curve. drawbezierpath() draws the resulting sequence.using Luxor # hide\nDrawing(600, 320, \"assets/figures/abezierpath.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(1.5) # hide\nsetgray(0.5) # hide\npts = ngon(O, 150, 3, pi/6, vertices=true)\nbezpath = makebezierpath(pts)\npoly(pts, :stroke)\nfor (p1, c1, c2, p2) in bezpath[1:end-1]\n    circle.([p1, p2], 4, :stroke)\n    circle.([c1, c2], 2, :fill)\n    line(p1, c1, :stroke)\n    line(p2, c2, :stroke)\nend\nsethue(\"black\")\nsetline(3)\ndrawbezierpath(bezpath, :stroke, close=false)\nfinish() # hide\nnothing # hide(Image: path to polygon)using Luxor # hide\nDrawing(600, 320, \"assets/figures/bezierpaths.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\ntiles = Tiler(600, 300, 1, 4, margin=20)\nfor (pos, n) in tiles\n    @layer begin\n        translate(pos)\n        pts = polysortbyangle(\n                randompointarray(\n                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),\n                    Point(tiles.tilewidth/2, tiles.tilewidth/2),\n                    4))\n        setopacity(0.7)\n        sethue(\"black\")\n        prettypoly(pts, :stroke, close=true)\n        randomhue()\n        drawbezierpath(makebezierpath(pts), :fill)\n    end\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)You can convert a Bézier path to a polygon (an array of points), using the bezierpathtopoly() function. This chops up the curves into a series of straight line segments. An optional steps keyword lets you specify how many line segments are used for each Bézier curve segment.In this example, the grey star is first rendered as a Bézier path, then the Bézier path is converted to a polygon but offset by 20 units before being drawn.using Luxor # hide\nDrawing(600, 600, \"assets/figures/bezierpathtopoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\n\npgon = star(O, 250, 5, 0.6, 0, vertices=true)\n\n@layer begin\n setgrey(0.5)\n setdash(\"dot\")\n poly(pgon, :stroke, close=true)\n setline(5)\nend\n\nsetline(4)\n\nsethue(\"coral\")\nnp = makebezierpath(pgon)    \ndrawbezierpath(np, :stroke)\n\nsethue(\"steelblue\")\np = bezierpathtopoly(np, steps=3)    \nq1 = offsetpoly(p, 20)\nprettypoly(q1, :stroke, close=true)\n\nfinish() # hide\nnothing # hide(Image: path to polygon)makebezierpath\ndrawbezierpath\nbezierpathtopoly\nbeziertopoly"
 },
 
 {
