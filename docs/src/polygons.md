@@ -588,7 +588,7 @@ In this example, the grey star is first rendered as a Bézier path, then the Bé
 
 ```@example
 using Luxor # hide
-Drawing(600, 320, "assets/figures/bezierpathtopoly.png") # hide
+Drawing(600, 600, "assets/figures/bezierpathtopoly.png") # hide
 background("white") # hide
 origin() # hide
 srand(3) # hide
@@ -596,13 +596,14 @@ srand(3) # hide
 pgon = star(O, 250, 5, 0.6, 0, vertices=true)
 
 @layer begin
-setgrey(0.5)
-setdash("dot")
-poly(pgon, :stroke, close=true)
-setline(5)
+ setgrey(0.5)
+ setdash("dot")
+ poly(pgon, :stroke, close=true)
+ setline(5)
 end
 
 setline(4)
+
 sethue("coral")
 np = makebezierpath(pgon)    
 drawbezierpath(np, :stroke)
