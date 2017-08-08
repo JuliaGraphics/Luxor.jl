@@ -121,7 +121,7 @@ preview
 The global variable `currentdrawing` (of type Drawing) stores some parameters related to the current drawing:
 
 ```
-julia> fieldnames(currentdrawing)
+julia> fieldnames(typeof(currentdrawing))
 10-element Array{Symbol,1}:
 :width
 :height

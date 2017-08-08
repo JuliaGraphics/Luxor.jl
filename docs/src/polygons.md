@@ -525,15 +525,15 @@ getpath
 getpathflat
 ```
 
-## Polygons to Beziér paths
+## Polygons to Bézier paths and back again
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't contain straight line segments.
 
 `makebezierpath()` takes the points in a polygon and converts each line segment into a Bézier curve. `drawbezierpath()` draws the resulting sequence.
 
 ```@example
 using Luxor # hide
-Drawing(600, 300, "assets/figures/abezierpath.png") # hide
+Drawing(600, 320, "assets/figures/abezierpath.png") # hide
 background("white") # hide
 origin() # hide
 setline(1.5) # hide
@@ -557,7 +557,7 @@ nothing # hide
 
 ```@example
 using Luxor # hide
-Drawing(600, 300, "assets/figures/bezierpaths.png") # hide
+Drawing(600, 320, "assets/figures/bezierpaths.png") # hide
 background("white") # hide
 origin() # hide
 srand(3) # hide
@@ -582,9 +582,46 @@ nothing # hide
 ```
 ![path to polygon](assets/figures/bezierpaths.png)
 
+You can convert a Bézier path to a polygon (an array of points), using the `bezierpathtopoly()` function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used for each Bézier curve segment.
+
+In this example, the grey star is first rendered as a Bézier path, then the Bézier path is converted to a polygon but offset by 20 units before being drawn.
+
+```@example
+using Luxor # hide
+Drawing(600, 320, "assets/figures/bezierpathtopoly.png") # hide
+background("white") # hide
+origin() # hide
+srand(3) # hide
+
+pgon = star(O, 250, 5, 0.6, 0, vertices=true)
+
+@layer begin
+setgrey(0.5)
+setdash("dot")
+poly(pgon, :stroke, close=true)
+setline(5)
+end
+
+setline(4)
+sethue("coral")
+np = makebezierpath(pgon)    
+drawbezierpath(np, :stroke)
+
+sethue("steelblue")
+p = bezierpathtopoly(np, steps=3)    
+q1 = offsetpoly(p, 20)
+prettypoly(q1, :stroke, close=true)
+
+finish() # hide
+nothing # hide
+```
+![path to polygon](assets/figures/bezierpathtopoly.png)
+
 ```@docs
 makebezierpath
 drawbezierpath
+bezierpathtopoly
+beziertopoly
 ```
 
 ## Polygon information

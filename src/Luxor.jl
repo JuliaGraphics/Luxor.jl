@@ -45,7 +45,7 @@ export Drawing, currentdrawing,
 
     newpath, closepath, newsubpath,
 
-    makebezierpath, drawbezierpath,
+    makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly,
 
     strokepath, fillpath, # stroke, fill are now deprecated
 
