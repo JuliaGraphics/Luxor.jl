@@ -349,4 +349,98 @@ function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
         text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :right, valign = :bottom)
     end
 end
-# end
+
+"""
+    splittext(s)
+
+Split the text in string `s` into an array, but keep all the separators
+attached to the preceding word.
+"""
+function splittext(s::String)
+    # split text into array, keeping all separators
+    # hyphens stay with first word
+    result = Array{String, 1}()
+    iobuffer = IOBuffer()
+    for c in s
+        if in(c, ['-', ' '])
+            print(iobuffer, c)
+            push!(result, String(take!(iobuffer)))
+            iobuffer = IOBuffer()
+        elseif in(c, ['\n', '\r', '\t'])
+            # forget newlines etc.
+        else
+            print(iobuffer, c)
+        end
+    end
+    push!(result, String(take!(iobuffer)))
+    return result
+end
+
+"""
+    textlines(s::String, width::Real;
+         rightgutter=5)
+
+Split text into lines up to `width` units wide (in the current font).
+
+Return an array of strings. Use `textwrap` to draw an array of strings.
+
+TODO: A `rightgutter` optional keyword adds some padding to the right hand side of the
+column. This appears to be needed sometimes -— perhaps the algorithm needs improving to take
+account  of the interaction of `textextents` and spaces?
+"""
+function textlines(s::String, width::Real; rightgutter=5)
+    result = String[]
+    for line in split(s, "\n")
+        fields = splittext(line)
+        if length(fields) % 2 == 1
+            push!(fields, "")
+        end
+        x = ""
+        for i in 1:2:length(fields)
+            # lookahead
+            wsofar =  textextents(x * fields[i])
+            wtocome = textextents(fields[i+1])
+            # does it fit?
+            if (wsofar[3] + wsofar[6]) > width - rightgutter - (wtocome[3] - wtocome[6])
+                if x == ""
+                    push!(result, fields[i])
+                    x = ""
+                    continue
+                else
+                    push!(result, x)
+                    x = ""
+                end
+            end
+            x = x * fields[i] * fields[i + 1]
+        end
+        if x != ""
+            push!(result, x)
+        end
+    end
+    # strip remaining spaces
+    for i in 1:length(result)
+        result[i] = strip(result[i])
+    end
+    return result
+end
+
+"""
+    textwrap(s::String, width::Real, pos::Point=O)
+
+Draw the string in `s` by splitting it into lines, so that each line is no longer than
+`width` units. The text starts at `pos` such that the first line of text is drawn entirely
+below a line drawn  horizontally through that position. Each line is aligned on the left
+side, below `pos`.
+
+"""
+function textwrap(s::String, width::Real, pos::Point=O; rightgutter=5)
+    lines = textlines(s, width; rightgutter=rightgutter)
+    # pos is top left corner, not baseline, so move first line down
+    height = textextents(lines[1])[4] - textextents(lines[1])[2]
+    cpos = Point(pos.x, pos.y + height)
+    for l in lines
+        height = textextents(l)[4] - textextents(l)[2]
+        text(l, cpos)
+        cpos = Point(cpos.x, cpos.y + height)
+    end
+end

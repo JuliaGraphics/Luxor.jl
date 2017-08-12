@@ -235,7 +235,6 @@ using Luxor # hide
 Drawing(400, 250, "assets/figures/text-centered.png") # hide
 origin() # hide
 background("white") # hide
-background("white") # hide
 fontface("Arial-Black")
 fontsize(24) # hide
 sethue("black") # hide
@@ -312,4 +311,42 @@ end
 
 finish()
 preview()
+```
+
+## Text wrapping
+
+Longer lines of text can be made to wrap inside an imaginary rectangle with `textwrap()`. Specify the required width of the rectangle, and the location of the top left corner.
+
+```@example
+using Luxor # hide
+Drawing(500, 300, "assets/figures/text-wrapping.png") # hide
+origin() # hide
+background("white") # hide
+fontface("Georgia")
+fontsize(12) # hide
+sethue("black") # hide
+
+loremipsum = """Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Nunc placerat lorem ullamcorper,
+sagittis massa et, elementum dui. Sed dictum ipsum vel
+commodo pellentesque. Aliquam erat volutpat. Nam est
+dolor, vulputate a molestie aliquet, rutrum quis lectus.
+Sed lectus mauris, tristique et tempor id, accumsan
+pharetra lacus. Donec quam magna, accumsan a quam
+quis, mattis hendrerit nunc. Nullam vehicula leo ac
+leo tristique, a condimentum tortor faucibus."""
+
+setdash("dot")
+box(O, 200, 200, :stroke)
+textwrap(loremipsum, 200, O - (200/2, 200/2))
+
+finish() # hide
+nothing # hide
+```
+
+![text centered on curve](assets/figures/text-wrapping.png)
+
+```@docs
+textwrap
+splittext
 ```
