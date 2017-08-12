@@ -1509,7 +1509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Text on a curve",
     "category": "section",
-    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring,\n    -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentered(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n    clockwise = true,\n    letter_spacing = 0,\n    baselineshift = -20\n    )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n    clockwise = false,\n    letter_spacing = 0,\n    baselineshift = 10\n    )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
+    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring,\n    -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentered(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n    clockwise = true,\n    letter_spacing = 0,\n    baselineshift = -20\n    )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n    clockwise = false,\n    letter_spacing = 0,\n    baselineshift = 10\n    )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
 },
 
 {
@@ -1518,6 +1518,30 @@ var documenterSearchIndex = {"docs": [
     "title": "Text clipping",
     "category": "section",
     "text": "You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:(Image: text clipping)using Luxor\n\ncurrentwidth = 1250 # pts\ncurrentheight = 800 # pts\nDrawing(currentwidth, currentheight, \"/tmp/text-path-clipping.png\")\n\norigin()\nbackground(\"darkslategray3\")\n\nfontsize(600)                             # big fontsize to use for clipping\nfontface(\"Agenda-Black\")\nstr = \"julia\"                             # string to be clipped\nw, h = textextents(str)[3:4]              # get width and height\n\ntranslate(-(currentwidth/2) + 50, -(currentheight/2) + h)\n\ntextpath(str)                             # make text into a path\nsetline(3)\nsetcolor(\"black\")\nfillpreserve()                            # fill but keep\nclip()                                    # and use for clipping region\n\nfontface(\"Monaco\")\nfontsize(10)\nnamelist = map(x->string(x), names(Base)) # get list of function names in Base.\n\nx = -20\ny = -h\nwhile y < currentheight\n    sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)\n    s = namelist[rand(1:end)]\n    text(s, x, y)\n    se = textextents(s)\n    x += se[5]                            # move to the right\n    if x > w\n       x = -20                            # next row\n       y += 10\n    end\nend\n\nfinish()\npreview()"
+},
+
+{
+    "location": "text.html#Luxor.textwrap",
+    "page": "Text",
+    "title": "Luxor.textwrap",
+    "category": "Function",
+    "text": "textwrap(s::String, width::Real, pos::Point=O)\n\nDraw the string in s by splitting it into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn  horizontally through that position. Each line is aligned on the left side, below pos.\n\n\n\n"
+},
+
+{
+    "location": "text.html#Luxor.splittext",
+    "page": "Text",
+    "title": "Luxor.splittext",
+    "category": "Function",
+    "text": "splittext(s)\n\nSplit the text in string s into an array, but keep all the separators attached to the preceding word.\n\n\n\n"
+},
+
+{
+    "location": "text.html#Text-wrapping-1",
+    "page": "Text",
+    "title": "Text wrapping",
+    "category": "section",
+    "text": "Longer lines of text can be made to wrap inside an imaginary rectangle with textwrap(). Specify the required width of the rectangle, and the location of the top left corner.using Luxor # hide\nDrawing(500, 300, \"assets/figures/text-wrapping.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Georgia\")\nfontsize(12) # hide\nsethue(\"black\") # hide\n\nloremipsum = \"\"\"Lorem ipsum dolor sit amet, consectetur\nadipiscing elit. Nunc placerat lorem ullamcorper,\nsagittis massa et, elementum dui. Sed dictum ipsum vel\ncommodo pellentesque. Aliquam erat volutpat. Nam est\ndolor, vulputate a molestie aliquet, rutrum quis lectus.\nSed lectus mauris, tristique et tempor id, accumsan\npharetra lacus. Donec quam magna, accumsan a quam\nquis, mattis hendrerit nunc. Nullam vehicula leo ac\nleo tristique, a condimentum tortor faucibus.\"\"\"\n\nsetdash(\"dot\")\nbox(O, 200, 200, :stroke)\ntextwrap(loremipsum, 200, O - (200/2, 200/2))\n\nfinish() # hide\nnothing # hide(Image: text centered on curve)textwrap\nsplittext"
 },
 
 {
