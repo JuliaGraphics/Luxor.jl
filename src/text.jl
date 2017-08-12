@@ -356,18 +356,19 @@ end
 Split the text in string `s` into an array, but keep all the separators
 attached to the preceding word.
 """
-function splittext(s::String)
+function splittext(s)
     # split text into array, keeping all separators
     # hyphens stay with first word
     result = Array{String, 1}()
     iobuffer = IOBuffer()
     for c in s
-        if in(c, ['-', ' '])
+        if isspace(c)
+            push!(result, String(take!(iobuffer)))
+            iobuffer = IOBuffer()
+        elseif c == '-' # hyphen splits words but needs keeping
             print(iobuffer, c)
             push!(result, String(take!(iobuffer)))
             iobuffer = IOBuffer()
-        elseif in(c, ['\n', '\r', '\t'])
-            # forget newlines etc.
         else
             print(iobuffer, c)
         end
@@ -390,36 +391,35 @@ account  of the interaction of `textextents` and spaces?
 """
 function textlines(s::String, width::Real; rightgutter=5)
     result = String[]
-    for line in split(s, "\n")
-        fields = splittext(line)
-        if length(fields) % 2 == 1
-            push!(fields, "")
+    fields = splittext(s)
+    textwidth = width - rightgutter
+    # how to get the width of a space?
+    spacewidth = textextents("m m")[3] - textextents("mm")[3]
+    spaceleft = textwidth
+    currentline = String[]
+    for word in fields
+        word == "" && continue
+        wordextents =  textextents(word)
+        widthofword = wordextents[3] + wordextents[6]
+        isapprox(widthofword, 0.0, atol=0.1) && continue
+        if (widthofword + spacewidth) > spaceleft
+            # start a new line
+            push!(result, strip(join(currentline)))
+            currentline=[]
+            spaceleft = textwidth
         end
-        x = ""
-        for i in 1:2:length(fields)
-            # lookahead
-            wsofar =  textextents(x * fields[i])
-            wtocome = textextents(fields[i+1])
-            # does it fit?
-            if (wsofar[3] + wsofar[6]) > width - rightgutter - (wtocome[3] - wtocome[6])
-                if x == ""
-                    push!(result, fields[i])
-                    x = ""
-                    continue
-                else
-                    push!(result, x)
-                    x = ""
-                end
-            end
-            x = x * fields[i] * fields[i + 1]
+        if endswith(word, "-")
+            push!(currentline, word)
+        else
+            push!(currentline, word * " ")
         end
-        if x != ""
-            push!(result, x)
-        end
+        spaceleft -= (widthofword + spacewidth)
     end
-    # strip remaining spaces
+    push!(result, strip(join(currentline)))
+
+    # strip trailing spaces
     for i in 1:length(result)
-        result[i] = strip(result[i])
+       result[i] = strip(result[i])
     end
     return result
 end
@@ -439,7 +439,6 @@ function textwrap(s::String, width::Real, pos::Point=O; rightgutter=5)
     height = textextents(lines[1])[4] - textextents(lines[1])[2]
     cpos = Point(pos.x, pos.y + height)
     for l in lines
-        height = textextents(l)[4] - textextents(l)[2]
         text(l, cpos)
         cpos = Point(cpos.x, cpos.y + height)
     end
