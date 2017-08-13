@@ -319,7 +319,7 @@ Longer lines of text can be made to wrap inside an imaginary rectangle with `tex
 
 ```@example
 using Luxor # hide
-Drawing(500, 300, "assets/figures/text-wrapping.png") # hide
+Drawing(500, 400, "assets/figures/text-wrapping.png") # hide
 origin() # hide
 background("white") # hide
 fontface("Georgia")
