@@ -1,5 +1,15 @@
 # Polygons and paths
 
+For drawing shapes, Luxor provides polygons and paths.
+
+A polygon is an ordered collection of Points stored in an array.
+
+A path is one or more straight and curved (Bézier) lines placed on the drawing. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
+
+Luxor also provides a Bézier-path type, which is an array of four-point tuples, each of which is a Bézier curve section.
+
+Functions are provided for converting between polygons and paths.
+
 ## Regular polygons ("ngons")
 
 A polygon is an array of points. The points can be joined with straight lines.
@@ -527,9 +537,30 @@ getpathflat
 
 ## Polygons to Bézier paths and back again
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't contain straight line segments.
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and their control points.
 
-`makebezierpath()` takes the points in a polygon and converts each line segment into a Bézier curve. `drawbezierpath()` draws the resulting sequence.
+```
+NTuple{4,Point}[
+    (Point(-129.904, 75.0),        # start point
+     Point(-162.38, 18.75),        # ^ control point
+     Point(-64.9519, -150.0),      # v control point
+     Point(-2.75546e-14, -150.0)), # end point
+    (Point(-2.75546e-14, -150.0),
+     Point(64.9519, -150.0),
+     Point(162.38, 18.75),
+     Point(129.904, 75.0)),
+    (Point(129.904, 75.0),
+     Point(97.4279, 131.25),
+     Point(-97.4279, 131.25),
+     Point(-129.904, 75.0)
+     ),
+     ...
+     ]
+```
+
+Bézier paths are slightly different from ordinary paths in that they don't usually contain straight line segments. (By setting the two control points to be the same as the nearest start/end points, you create straight line sections.)
+
+`makebezierpath()` takes the points in a polygon and converts each line segment into one Bézier curve. `drawbezierpath()` draws the resulting sequence.
 
 ```@example
 using Luxor # hide

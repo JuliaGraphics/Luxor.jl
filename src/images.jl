@@ -43,7 +43,7 @@ Place the top left corner of the PNG image on the drawing at `pos`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-placeimage(img::Cairo.CairoSurface, pt::Point; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
+placeimage(img::Cairo.CairoSurface, pt::Point=O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
 
 """
     placeimage(img, xpos, ypos, a; centered=false)

@@ -152,6 +152,8 @@ The distance in `x` between the centers of successive hexagons is:
 To get the next point from the grid, use `nextgridpoint(g::Grid)`.
 
 When you run out of grid points, you'll wrap round and start again.
+
+`rownumber` and `colnumber` are kept up to date.
 """
 mutable struct GridHex
     startpoint::Point
@@ -248,19 +250,14 @@ Tiler and Partition are similar:
         # the point pos is the center of the tile
     end
 
-You can access the calculated tile width and height like this:
-
-    tiles = Partition(1200, 1200, 30, 30)
-    for (pos, n) in tiles
-        ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
-    end
+You can access the calculated number of rows and columns using `nrows` and `ncols`.
 
 It's sometimes useful to know which row and column you're currently on:
 
     tiles.currentrow
     tiles.currentcol
 
-should have that information for you.
+keeps that information for you.
 
 Unless the tilewidth and tileheight are exact multiples of the area width and height, you'll
 see a border at the right and bottom where the tiles won't fit.
