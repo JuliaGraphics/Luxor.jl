@@ -7,6 +7,7 @@ makedocs(
     pages    = Any[
         "Introduction to Luxor"   => "index.md",
         "A few examples"          => "examples.md",
+        "Tutorial"                => "tutorial.md",
         "Basic concepts"          => "basics.md",
         "Simple graphics"         => "simplegraphics.md",
         "Colors and styles"       => "colors-styles.md",
