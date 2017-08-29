@@ -313,4 +313,133 @@ settext(text::AbstractString, pos::Point; kwargs...) =
 
 settext(text; kwargs...) = settext(text, O; kwargs...)
 
-# end
+"""
+    label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
+
+Add a text label at a point, positioned relative to that point, for example, `:N` signifies
+North and places the text directly above that point.
+
+Use one of `:N`, `:S`, `:E`, `:W`, `:NE`, `:SE`, `:SW`, `:NW` to position the label
+relative to that point.
+
+    label("text")          # positions text at North (above), relative to the origin
+    label("text", :S)      # positions text at South (below), relative to the origin
+    label("text", :S, pt)  # positions text South of pt
+    label("text", :N, pt, offset=20)  # positions text North of pt, offset by 20
+
+The default offset is 5 units.
+"""
+function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
+    # alignment one of :N, :S, :E, ;W, ;NE; :SE, :SW, :NW
+    if in(alignment, [:N, :n])
+        text(txt, Point(pos.x, pos.y - offset), halign = :center, valign = :bottom)
+    elseif in(alignment, [:E, :e])
+        text(txt, Point(pos.x + offset, pos.y), halign = :left, valign = :middle)
+    elseif in(alignment, [:S, :s])
+        text(txt, Point(pos.x, pos.y + offset), halign = :center, valign = :top)
+    elseif in(alignment, [:W, :w])
+        text(txt, Point(pos.x - offset, pos.y), halign = :right, valign = :middle)
+    elseif in(alignment, [:NE, :ne])
+        text(txt, Point(pos.x + (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :left, valign = :bottom)
+    elseif in(alignment, [:SE, :se])
+        text(txt, Point(pos.x + (offset * cos(pi/4)), pos.y + (offset * sin(pi/4))), halign = :left, valign = :top)
+    elseif in(alignment, [:SW, :sw])
+        text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y + (offset * sin(pi/4))), halign = :right, valign = :top)
+    elseif in(alignment, [:NW, :nw])
+        text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :right, valign = :bottom)
+    end
+end
+
+"""
+    splittext(s)
+
+Split the text in string `s` into an array, but keep all the separators
+attached to the preceding word.
+"""
+function splittext(s)
+    # split text into array, keeping all separators
+    # hyphens stay with first word
+    result = Array{String, 1}()
+    iobuffer = IOBuffer()
+    for c in s
+        if isspace(c)
+            push!(result, String(take!(iobuffer)))
+            iobuffer = IOBuffer()
+        elseif c == '-' # hyphen splits words but needs keeping
+            print(iobuffer, c)
+            push!(result, String(take!(iobuffer)))
+            iobuffer = IOBuffer()
+        else
+            print(iobuffer, c)
+        end
+    end
+    push!(result, String(take!(iobuffer)))
+    return result
+end
+
+"""
+    textlines(s::String, width::Real;
+         rightgutter=5)
+
+Split text into lines up to `width` units wide (in the current font).
+
+Return an array of strings. Use `textwrap` to draw an array of strings.
+
+TODO: A `rightgutter` optional keyword adds some padding to the right hand side of the
+column. This appears to be needed sometimes -— perhaps the algorithm needs improving to take
+account  of the interaction of `textextents` and spaces?
+"""
+function textlines(s::String, width::Real; rightgutter=5)
+    result = String[]
+    fields = splittext(s)
+    textwidth = width - rightgutter
+    # how to get the width of a space?
+    spacewidth = textextents("m m")[3] - textextents("mm")[3]
+    spaceleft = textwidth
+    currentline = String[]
+    for word in fields
+        word == "" && continue
+        wordextents =  textextents(word)
+        widthofword = wordextents[3] + wordextents[6]
+        isapprox(widthofword, 0.0, atol=0.1) && continue
+        if (widthofword + spacewidth) > spaceleft
+            # start a new line
+            push!(result, strip(join(currentline)))
+            currentline=[]
+            spaceleft = textwidth
+        end
+        if endswith(word, "-")
+            push!(currentline, word)
+        else
+            push!(currentline, word * " ")
+        end
+        spaceleft -= (widthofword + spacewidth)
+    end
+    push!(result, strip(join(currentline)))
+
+    # strip trailing spaces
+    for i in 1:length(result)
+       result[i] = strip(result[i])
+    end
+    return result
+end
+
+"""
+    textwrap(s::String, width::Real, pos::Point=O)
+
+Draw the string in `s` by splitting it into lines, so that each line is no longer than
+`width` units. The text starts at `pos` such that the first line of text is drawn entirely
+below a line drawn  horizontally through that position. Each line is aligned on the left
+side, below `pos`.
+
+"""
+function textwrap(s::String, width::Real, pos::Point=O; rightgutter=5)
+    lines = textlines(s, width; rightgutter=rightgutter)
+    # pos is top left corner, not baseline, so move first line down
+    height = textextents(lines[1])[4] - textextents(lines[1])[2]
+    cpos = Point(pos.x, pos.y + height)
+    for l in lines
+        text(l, cpos)
+        cpos = Point(cpos.x, cpos.y + height)
+    end
+end
