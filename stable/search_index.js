@@ -1229,7 +1229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.makebezierpath",
     "category": "Function",
-    "text": "makebezierpath(pgon::Array; smoothing=1)\n\nReturn a Bèzier path that follows an array of points. The Bèzier path is an array of tuples; each tuple contains the four points that make up a section of the path.\n\n\n\n"
+    "text": "makebezierpath(pgon::Array; smoothing=1)\n\nReturn a Bézier path that follows an array of points. The Bézier path is an array of tuples; each tuple contains the four points that make up a section of the path.\n\n\n\n"
 },
 
 {
@@ -1237,7 +1237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.drawbezierpath",
     "category": "Function",
-    "text": "drawbezierpath(bezierpath, action=:none;\n    close=true)\n\nDraw a Bèzier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n"
+    "text": "drawbezierpath(bezierpath, action=:none;\n    close=true)\n\nDraw a Bézier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n"
 },
 
 {
