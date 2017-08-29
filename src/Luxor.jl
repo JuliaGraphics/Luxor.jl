@@ -52,7 +52,7 @@ export Drawing, currentdrawing,
 
     newpath, closepath, newsubpath,
 
-    makebezierpath, drawbezierpath,
+    makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly,
 
     strokepath, fillpath, # stroke, fill are now deprecated
 
@@ -86,9 +86,11 @@ export Drawing, currentdrawing,
 
     getpath, getpathflat, pathtopoly,
 
-    fontface, fontsize, text, textpath,
+    fontface, fontsize, text, textpath, label,
     textextents, textcurve, textcentred, textcentered, textright,
     textcurvecentred, textcurvecentered,
+    textwrap, textlines, splittext,
+
     setcolor, setopacity, sethue, setgrey, setgray,
     randomhue, randomcolor, @setcolor_str,
     getmatrix, setmatrix, transform,
