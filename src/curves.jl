@@ -589,6 +589,8 @@ end
 
 Find the area of intersection between two circles, the first centered at `pt1` with radius
 `r1`, the second centered at `pt2` with radius `r2`.
+
+Use `intersectioncirclecircle()` to find the points where two circles intersect.
 """
 function intersection2circles(pt1, r1, pt2, r2)
     r1squared = r1^2
@@ -617,3 +619,49 @@ function intersection2circles(pt1, r1, pt2, r2)
     end
     return intersectionarea
 end
+
+"""
+    intersectioncirclecircle(cp1, r1, cp2, r2)
+
+Find the two points where two circles intersect, if they do. The first circle is centered
+at `cp1` with radius `r1`, and the second is centered at `cp1` with radius `r1`.
+
+Returns
+
+    (flag, ip1, ip2)
+
+where `flag` is a Boolean `true` if the circles intersect at the points `ip1` and `ip2`. If
+the circles don't intersect at all, or one is completely inside the other, `flag` is `false`
+and the points are both Point(0, 0).
+
+Use `intersection2circles()` to find the area of two overlapping circles.
+
+In the pure world of maths, it must be possible that two circles 'kissing' only have a
+single intersection point. At present, this unromantic function reports that two kissing
+circles have no intersection points.
+"""
+function intersectioncirclecircle(cp1, r1, cp2, r2)
+    r1squared = r1^2
+    r2squared = r2^2
+    d = norm(cp1, cp2)
+    if d > (r2 + r1) # circles do not overlap
+        return (false, O, O)
+    elseif (d <= abs(r1 - r2)) && (r1 >= r2)
+        # second circle is completely inside first circle
+        return (false, O, O)
+    elseif (d <= abs(r1 - r2)) && (r1 < r2)
+        # first circle is completely inside second circle
+        return (false, O, O)
+    end
+    a = (r1squared - r2squared + d^2) / 2d
+    h = sqrt(r1squared - a^2)
+    p0 = cp1 + a * (cp2 - cp1)/d
+    p3 = Point(
+            p0.x + h * (cp2.y - cp1.y )/d,
+            p0.y - h * (cp2.x - cp1.x )/d)
+    p4 = Point(
+            p0.x - h * (cp2.y - cp1.y )/d,
+            p0.y + h * (cp2.x - cp1.x )/d)
+    return (true, p3, p4)
+end
+

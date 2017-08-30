@@ -534,7 +534,9 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection_line_circle.png)
 
-`intersection2circles()` finds the area of the intersection of two circles. This example shows the areas of two circles, and the area of their intersection.
+`intersection2circles()` finds the area of the intersection of two circles, and `intersectioncirclecircle() finds the points where they cross.
+
+This example shows the areas of two circles, and the area of their intersection.
 
 ```@example
 using Luxor # hide
@@ -562,15 +564,22 @@ text(string(150^2 * pi |> round), c2[1] + (100, 0))
 sethue("white")
 text(string(intersection2circles(c1..., c2...) |> round),
      midpoint(c1[1], c2[1]), halign=:center)
+
+sethue("red")
+flag, C, D = intersectioncirclecircle(c1..., c2...)
+if flag
+    circle.([C, D], 2, :fill)
+end
 finish() # hide
 nothing # hide
 ```
-![intersetion of two circles](assets/figures/intersection2circles.png)
+![intersection of two circles](assets/figures/intersection2circles.png)
 
 ```@docs
 intersection
 intersection_line_circle
 intersection2circles
+intersectioncirclecircle
 ```
 `getnearestpointonline()` finds perpendiculars.
 

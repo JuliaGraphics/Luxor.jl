@@ -10,7 +10,7 @@ If you've already downloaded Julia, and have added the Luxor package successfull
 Pkg.add("Luxor")
 ```
 
-then you're ready to start. 
+then you're ready to start.
 
 Presumably you'll be working in a Jupyter notebook, or perhaps using the Juno development environment. It's also possible to work in a text editor (you'll need to know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
 
@@ -24,7 +24,7 @@ Have you started a Julia session? Excellent. We'll have to load just one package
 using Luxor
 ```
 
-Here's an easy shortcut for making drawings in Luxor. It's a Julia macro, and it's a good way to test that your system's working. Evaluate this code: 
+Here's an easy shortcut for making drawings in Luxor. It's a Julia macro, and it's a good way to test that your system's working. Evaluate this code:
 
 ```
 @png begin
@@ -50,7 +50,7 @@ What happened? Can you see this image somewhere?
 
 If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as "luxor-drawing.png"). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
-Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs are good because they show up in Juno and Jupyter. PDF documents usually open up in a separate application.
+Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. PDF documents are often higher quality, and usually open up in a separate application.
 
 This example illustrates a few things about Luxor drawings:
 
@@ -126,7 +126,7 @@ nothing
 
 ### Labels and dots
 
-It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using points of the compass.
+It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using points of the compass, so `:N` places the label to the north of a position.
 
 ```
 @png begin
@@ -722,4 +722,3 @@ end
 finish()
 ```
 ![point example](assets/figures/tutorial-egg-9.png)
-
