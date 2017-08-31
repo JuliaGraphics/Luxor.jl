@@ -38,10 +38,6 @@ Luxor provides basic vector drawing functions and utilities for working with sha
 
 Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl).
 
-## Current status
-
-This version of Luxor runs on Julia version 0.7, and uses Cairo.jl and Colors.jl.
-
 ## Installation and basic usage
 
 Install the package as follows:
@@ -50,7 +46,9 @@ Install the package as follows:
 Pkg.add("Luxor")
 ```
 
-and to use it:
+Cairo.jl and Colors.jl will be installed if necessary.
+
+To use Luxor, type:
 
 ```
 using Luxor
