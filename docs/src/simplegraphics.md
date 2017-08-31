@@ -4,7 +4,32 @@ In Luxor, there are different ways of working with graphical items. Some, such a
 
 ## Rectangles and boxes
 
+The simple rectangle and box shapes can be made in different ways.
+
+```@example
+using Luxor # hide
+Drawing(400, 220, "assets/figures/basicrects.png") # hide
+background("white") # hide
+origin() # hide
+axes()
+sethue("red")
+rect(O, 100, 100, :stroke)
+sethue("blue")
+box(O, 100, 100, :stroke)
+finish() # hide
+nothing # hide
+```
+
+![rect vs box](assets/figures/basicrects.png)
+
+Whereas `rect()` rectangles are positioned at one corner, a box made with `box()` can either be defined by its center and dimensions, or by two opposite corners.
+
 ![rects](assets/figures/rects.png)
+
+If you want the coordinates of the corners of a box, use this form of `box()`:
+
+    box(centerpoint, width, height, vertices=false)
+
 
 ```@docs
 rect

@@ -715,7 +715,7 @@ For a final experiment with our `egg()` function, here's Luxor's `offsetpoly()` 
         pgon[pt] = between(pc, pgon[pt], 0.8)  
     end
 
-    for i in 30:-3:-15
+    for i in 30:-3:-8
         randomhue()
         op = offsetpoly(pgon, i)
         poly(op, :stroke, close=true)
@@ -765,7 +765,7 @@ for pt in 1:2:length(pgon)
     pgon[pt] = between(pc, pgon[pt], 0.8)  
 end
 
-for i in 30:-3:-15
+for i in 30:-3:-8
     randomhue()
     op = offsetpoly(pgon, i)
     poly(op, :stroke, close=true)
