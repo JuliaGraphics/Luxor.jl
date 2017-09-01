@@ -96,7 +96,7 @@ For now, you can continue to store all the drawing instructions between the `@pn
 @png begin
 ```
 
-To start off, define the variable `radius` to hold a value of 100 units (there are 72 units in a traditional inch):
+To start off, define the variable `radius` to hold a value of 80 units (there are 72 units in a traditional inch):
 
 ```
     radius=80
@@ -173,7 +173,7 @@ end
 
 ```@setup te2
 using Luxor
-Drawing(725, 300, "assets/figures/tutorial-egg-2.png")
+Drawing(725, 400, "assets/figures/tutorial-egg-2.png")
 background("white")
 origin()
 radius=80
@@ -266,7 +266,7 @@ Now for the trickiest part of this construction: a small circle whose center poi
 
 Finding this new center point C1 is easy enough, because we can again use `intersection_line_circle()` to find the point where the central circle crosses a line from O to D.
 
-Add four lines to your code:
+Add a few more lines to your code:
 
 ```
 @png begin
@@ -317,7 +317,7 @@ finish()
 
 The two other points that can define this circle lie on the intersections of lines from points A and B passing through the centerpoint C1.
 
-Add the following text to your previous code:
+Add some more lines at the end of your code:
 
 ```
 @png begin
@@ -330,7 +330,7 @@ Add the following text to your previous code:
     circle.([I1, I2, I3, I4], 2, :stroke
 ```
 
-There are four intersection points but we want just the top ones. The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
+There are four intersection points but we want just the top two. The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
 
 ```
     if norm(C1, I1) < norm(C1, I2)
@@ -605,22 +605,21 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-7.png)
 
-The loop runs 12 times, with `theta` increasing from 0 upwards in steps of pi/6. But before each egg is drawn, the entire drawing environment is rotated to `theta` radians and then shifted 'upwards' in the y direction by 150 units ('upwards' because normally the y-axis increases down the drawing; and that's in quotes because when `theta` is π, the direction looks like it's downwards). The `randomhue()` function does what it says, and the `egg()` function is passed the `:fill` action and the radius.
+The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated to `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so when theta is 0 a shift of -150 looks like an upwards shift). The `randomhue()` function does what it says, and the `egg()` function is passed the `:fill` action and the radius.
 
-Notice that the four drawing instructions are encased in a `@layer begin...end` 'shell'. Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to scale, orientation, etc. and discard them easily once the shapes have been placed.
+Notice that the four drawing instructions are encased in a `@layer begin...end` 'shell'. Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
 
-Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and positive angles are clockwise. So the second egg in the previous example was drawn after the axes were rotatated pi/6 radians clockwise.
+Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and positive angles are clockwise. So the second egg in the previous example was drawn after the axes were rotatated π/6 radians clockwise.
 
 You can tell which egg was drawn first — it's overlapped on each side by subsequent eggs.
 
-
 #### Thought experiments
 
-1. What would happen if you translated each egg before you rotated the drawing environment?
+1. What would happen if the translation was `translate(0, 150)` rather than `translate(0, -150)`?
 
-2. What would happen if the translation was `translate(0, 150)` rather than `translate(0, -150)`?
+2. What would happen if the translation was `translate(150, 0)` rather than `translate(0, -150)`?
 
-3. What would happen if the translation was `translate(150, 0)` rather than `translate(0, -150)`?
+3. What would happen if you translated each egg before you rotated the drawing environment?
 
 As well as stroke and fill actions, you can use the path as a clipping region (`:clip`), or as the basis for more shape shifting.
 
@@ -632,7 +631,6 @@ The `egg()` function creates a path and lets you apply an action to it. It's als
 @png begin
     egg(160, :path)
     pgon = first(pathtopoly())
-
 ```
 
 The `pathtopoly()` function converts the current path made by `egg(160, :path)` into a polygon. Those smooth curves have been approximated by a series of straight line segments. The `first()` function is used because `pathtopoly()` returns an array of one or more polygons (paths can consist of a series of loops), and we know that we need only the single path here.
@@ -775,5 +773,5 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-9.png)
 
-The polygon functions are designed to work with simple, non-overlapping and non-self-intersecting polygons. Even then, there are edge cases and situations where things don't always work as well as they might. Luxor is "for simple graphics"!
+The polygon functions are designed to work with simple, non-overlapping and non-self-intersecting polygons. Even then, there are edge cases and situations where things don't always work as well as they might. Luxor is, for the present, "for simple graphics"!
 
