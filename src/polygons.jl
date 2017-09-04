@@ -508,7 +508,7 @@ function offsetpoly(path::Array, d)
             Point(x1p, y1p),
             Point(x2p, y2p),
             Point(x3p, y3p),
-            Point(x4p, y4p), crossingonly=false)
+            Point(x4p, y4p), crossingonly=false, collinearintersect=true)
 
         if intersectionpoint[1]
             resultpoly[i] = intersectionpoint[2]

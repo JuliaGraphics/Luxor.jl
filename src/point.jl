@@ -203,9 +203,36 @@ function randompointarray(lowx, lowy, highx, highy, n)
     end
     array
 end
+"""
+    ispointonline(pt::Point, pt1::Point, pt2::Point; atol=10E-5)
+
+Return `true` if the point `pt` lies on a straight line between `pt1` and `pt2`.
+"""
+function ispointonline(pt::Point, pt1::Point, pt2::Point; atol=10E-5)
+    dxc = pt.x - pt1.x
+    dyc = pt.y - pt1.y
+    dxl = pt2.x - pt1.x
+    dyl = pt2.y - pt1.y
+    cpr = (dxc * dyl) - (dyc * dxl)
+    if ! isapprox(cpr, 0.0, atol=atol)
+        return false
+    end
+    if (abs(dxl) >= abs(dyl))
+        return dxl > 0 ?
+            pt1.x <= pt.x && pt.x <= pt2.x :
+            pt2.x <= pt.x && pt.x <= pt1.x
+    else
+        return dyl > 0 ?
+            pt1.y <= pt.y && pt.y <= pt2.y :
+            pt2.y <= pt.y && pt.y <= pt1.y
+    end
+end
 
 """
-    intersection(p1::Point, p2::Point, p3::Point, p4::Point)
+    intersection(p1::Point, p2::Point, p3::Point, p4::Point;
+        commonendpoints = false,
+        crossingonly = false,
+        collinearintersect = false)
 
 Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
@@ -215,73 +242,76 @@ Keyword options and default values:
 
     crossingonly = false
 
-returns `(true, Point(x, y))` if the lines intersect somewhere. If `crossingonly = true`,
-returns `(false, intersectionpoint)` if the lines don't cross, but would intersect at
-`intersectionpoint` if continued beyond their current endpoints.
+If `crossingonly = true`, lines must actually cross. The function returns
+`(false, intersectionpoint)` if the lines don't actually cross, but would eventually
+intersect at `intersectionpoint` if continued beyond their current endpoints.
+
+If `false`, the function returns `(true, Point(x, y))` if the lines intersect somewhere
+eventually at `intersectionpoint`.
 
     commonendpoints = false
 
 If `commonendpoints= true`, will return `(false, Point(0, 0))` if the lines share a common
 end point (because that's not so much an intersection, more a meeting).
 
-Function returns `(false, Point(0, 0))` if the lines are undefined,
+Function returns `(false, Point(0, 0))` if the lines are undefined.
+
+If you want collinear points to be considered to intersect, set `collinearintersect` to
+`true`, although it defaults to `false`.
 """
 function intersection(A::Point, B::Point, C::Point, D::Point;
         commonendpoints = false,
-        crossingonly = false
+        crossingonly = false,
+        collinearintersect = false
         )
-    # will fail if either line is undefined
+    # false if either line is undefined
     if (A == B) || (C == D)
         return (false, Point(0, 0))
     end
 
-    # can fail if the lines share a common end point
+    # false if the lines share a common end point
     if commonendpoints
         if (A == C) || (B == C) || (A == D) || (B == D)
             return (false, Point(0, 0))
         end
     end
 
-    # (1) Translate the system so that point A is on the origin.
-    # since points are immutable, do it with temps
-    Bx = B.x - A.x
-    By = B.y - A.y
-    Cx = C.x - A.x
-    Cy = C.y - A.y
-    Dx = D.x - A.x
-    Dy = D.y - A.y
+    # Cramer's ?
+    A1 = (A.y - B.y)
+    B1 = (B.x - A.x)
+    C1 = (A.x * B.y - B.x * A.y)
 
-    # length of segment A-B.
-    distAB = hypot(Bx, By)
+    L1 = (A1, B1, -C1)
 
-    # (2) Rotate the system so that point B is on the positive X axis.
-    the_cos = Bx / distAB
-    the_sin = By / distAB
-    newX = (Cx * the_cos) + (Cy * the_sin)
-    Cy = (Cy * the_cos) - (Cx * the_sin)
-    Cx = newX
-    newX = (Dx * the_cos) + (Dy * the_sin)
-    Dy = (Dy * the_cos) - (Dx * the_sin)
-    Dx = newX
+    A2 = (C.y - D.y)
+    B2 = (D.x - C.x)
+    C2 = (C.x * D.y - D.x * C.y)
 
-    # will fail if the lines are parallel
-    if isapprox(Cy, Dy)
+    L2 = (A2, B2, -C2)
+
+    d  = L1[1] * L2[2] - L1[2] * L2[1]
+    dx = L1[3] * L2[2] - L1[2] * L2[3]
+    dy = L1[1] * L2[3] - L1[3] * L2[1]
+
+    # if you ask me collinear points don't really intersect
+    if C1 == C2
         return (false, Point(0, 0))
     end
 
-    # (3) discover the position of the intersection point along line A-B.
-    ABpos = Dx + (Cx - Dx) * Dy / (Dy - Cy)
-
-    # (4) apply the discovered position to line A-B in the original coordinate system.
-    intersectionpoint = Point(A.x + (ABpos * the_cos), A.y + (ABpos * the_sin))
-
-    # (5) return false + ip if segments A-B and C-D don't cross.
-    if crossingonly
-        if (ABpos < 0.0) || (ABpos > distAB)
-            return (false, Point(0, 0))
+    if d != 0
+        pt = Point(dx/d, dy/d)
+        if crossingonly == true
+            if ispointonline(pt, A, B) && ispointonline(pt, C, D)
+               return (true, pt)
+            else
+               return (false, pt)
+            end
+        else
+            return (true, pt)
         end
+    else
+        return (false, Point(0, 0))
     end
-    return (true, intersectionpoint)
 end
 
 """
@@ -307,13 +337,12 @@ end
 
 Find the intersection points of a line (extended through points `p1` and `p2`) and a circle.
 
-Return a tuple of `(n, pt1, pt2)`, where:
 
 - `n` is the number of intersections, `0`, `1`, or `2`
 - `pt1` is first intersection point, or `Point(0, 0)` if none
 - `pt2` is the second intersection point, or `Point(0, 0)` if none
 
-The calculated intersection points wont necessarily lie on the line segment between `p1` and `p2`.
+The calculated intersection points won't necessarily lie on the line segment between `p1` and `p2`.
 """
 function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
     a = (p2.x - p1.x)^2 + (p2.y - p1.y)^2
@@ -374,3 +403,26 @@ produces
     Luxor.Point(7.071067811865475,7.0710678118654755)
 """
 polar(r, theta) = Point(r * cos(theta), r * sin(theta))
+
+"""
+    bboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)
+
+Return true if the two bounding boxes defined by acorner1:acorner2 and bcorner1:bcorner2 intersect.
+
+Each pair of points is assumed to define the two opposite corners of a bounding box.
+
+"""
+function bboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)
+    minax, maxax = minmax(acorner1.x, acorner2.x)
+    minay, maxay = minmax(acorner1.y, acorner2.y)
+
+    minbx, maxbx = minmax(bcorner1.x, bcorner2.x)
+    minby, maxby = minmax(bcorner1.y, bcorner2.y)
+
+    maxax < minbx && return false
+    maxbx < minax && return false
+
+    maxay < minby && return false
+    maxby < minay && return false
+    return true # boxes overlap
+end

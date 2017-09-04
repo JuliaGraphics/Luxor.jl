@@ -773,5 +773,5 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-9.png)
 
-The polygon functions are designed to work with simple, non-overlapping and non-self-intersecting polygons. Even then, there are edge cases and situations where things don't always work as well as they might. Luxor is, for the present, "for simple graphics"!
+The slight changes in the regularity of the points (originally created by the path-to-polygon conversion) are continually amplified in successive outlinings. Also, there are edge cases when dealing with polygons, and you might well encounter situations where things don't always work as well as they might. Good luck with your explorations!
 
