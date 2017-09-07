@@ -65,6 +65,7 @@ export Drawing, currentdrawing,
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
     intersection_line_circle, intersectioncirclecircle, bboxesintersect, ispointonline,
+    intersectlinepoly, polyintersections,
 
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,
