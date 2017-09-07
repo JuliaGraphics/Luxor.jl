@@ -1181,7 +1181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.isinside",
     "category": "Function",
-    "text": "isinside(p, pol)\n\nIs a point p inside a polygon pol? Returns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm\n\n\n\n"
+    "text": "isinside(p, pol; allowonedge=false)\n\nIs a point p inside a polygon pol? Returns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.\n\nSet allowonedge to false to suppress point-on-edge errors.\n\n\n\n"
 },
 
 {
