@@ -183,13 +183,16 @@ function simplify(pointlist, detail=0.1)
 end
 
 """
-    isinside(p, pol)
+    isinside(p, pol; allowonedge=false)
 
 Is a point `p` inside a polygon `pol`? Returns true or false.
 
-This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm
+This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.
+
+Set `allowonedge` to `false` to suppress point-on-edge errors.
 """
-function isinside(p::Point, pointlist::Array)
+function isinside(p::Point, pointlist::Array;
+        allowonedge=false)
     c = false
     detq(q1, q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
     @inbounds for counter in 1:length(pointlist)
@@ -201,13 +204,13 @@ function isinside(p::Point, pointlist::Array)
             q2 = pointlist[counter + 1]
         end
         if q1 == p
-            error("VertexException")
+            allowonedge || error("VertexException a")
         end
         if q2.y == p.y
             if q2.x == p.x
-                error("VertexException")
+                allowonedge || error("VertexException b")
             elseif (q1.y == p.y) && ((q2.x > p.x) == (q1.x < p.x))
-                error("EdgeException")
+                allowonedge || error("EdgeException")
             end
         end
         if (q1.y < p.y) != (q2.y < p.y) # crossing
@@ -717,4 +720,41 @@ function polyarea(plist::Array)
     end
     area = abs(area) / 2.0
     return area
+end
+
+"""
+    intersectlinepoly(pt1::Point, pt2::Point, C)
+
+Return an array of the points where a line between pt1 and pt2 crosses polygon C.
+"""
+function intersectlinepoly(pt1::Point, pt2::Point, C)
+    intersectingpoints = Point[]
+    for j in 1:length(C)
+        Cpointpair = (C[j], C[mod1(j+1, length(C))])
+        flag, pt = intersection(pt1, pt2, Cpointpair..., crossingonly=true)
+        if flag
+            push!(intersectingpoints, pt)
+        end
+    end
+    # sort by distance from pt1
+    sort!(intersectingpoints, lt = (p1, p2) -> norm(p1, pt1) < norm(p2, pt1))
+    return intersectingpoints
+end
+
+"""
+    polyintersections(S, C)
+
+    Return an array of the points where polygon S crosses polygon C cross. Calls `intersectlinepoly()`.
+
+"""
+function polyintersections(S, C)
+    Splusintersectionpoints = Point[]
+    for i in 1:length(S)
+        Spointpair = (S[i], S[mod1(i+1, length(S))])
+        push!(Splusintersectionpoints, S[i])
+        for pt in intersectlinepoly(Spointpair..., C)
+            push!(Splusintersectionpoints, pt)
+        end
+    end
+    return Splusintersectionpoints
 end
