@@ -192,7 +192,7 @@ This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorit
 
 Set `allowonedge` to `false` to suppress point-on-edge errors.
 """
-function isinside1(p::Point, pointlist::Array;
+function isinside(p::Point, pointlist::Array;
         allowonedge=false)
     c = false
     detq(q1, q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
