@@ -6,7 +6,7 @@ Experienced Julia users and programmers fluent in other languages and graphics s
 
 If you've already downloaded Julia, and have added the Luxor package successfully (like this):
 
-```
+```julia
 Pkg.add("Luxor")
 ```
 
@@ -20,13 +20,13 @@ Ready? Let's begin. The goal of this tutorial is to do a bit of basic 'compass a
 
 Have you started a Julia session? Excellent. We'll have to load just one package for this tutorial:
 
-```
+```julia
 using Luxor
 ```
 
 Here's an easy shortcut for making drawings in Luxor. It's a Julia macro, and it's a good way to test that your system's working. Evaluate this code:
 
-```
+```julia
 @png begin
     text("Hello world")
     circle(Point(0, 0), 200, :stroke)
@@ -66,7 +66,7 @@ This example illustrates a few things about Luxor drawings:
 
 Once more, with more black:
 
-```
+```julia
 @png begin
     text("Hello again, world!", Point(0, 250))
     circle(Point(0, 0), 200, :fill)
@@ -92,19 +92,19 @@ For the main section of this tutorial, we'll attempt to draw Euclid's egg, which
 
 For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions) isn't considered to be "best practice".
 
-```
+```julia
 @png begin
 ```
 
 To start off, define the variable `radius` to hold a value of 80 units (there are 72 units in a traditional inch):
 
-```
+```julia
     radius=80
 ```
 
 Select gray dotted lines. You can use the named colors that Colors.jl provides. `gray0` is black, and `gray100` is white. 
 
-```
+```julia
     setdash("dot")
     sethue("gray40")
 ```
@@ -113,19 +113,19 @@ Next, make two points, A and B, which will lie either side of the origin point.
 
 The outer square brackets are an array comprehension. `x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points. But it shows how you can assign more than one variable at the same time, and also how to generate more than two points...
 
-```
+```julia
     A, B = [Point(x, 0) for x in [-radius, radius]]
 ```
 
 With two points defined, draw a line from A to B, and "stroke" it. 
 
-```
+```julia
     line(A, B, :stroke)
 ```
 
 Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter "O" as a short cut for Origin, ie the `Point(0, 0)`.
 
-```
+```julia
     circle(O, radius, :stroke)
 end
 ```
@@ -153,7 +153,7 @@ It's a good idea to label points in geometrical constructions, and to draw small
 
 Edit your previous code by adding some labels and circles:
 
-```
+```julia
 @png begin
     radius=80
     setdash("dot")
@@ -198,7 +198,7 @@ While we could have drawn all the circles as usual, we've taken the opportunity 
 
 We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersection_line_circle` that finds the point or points where a line intersects a circle. So we can find the points where one of the circles crosses a vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
 
-```
+```julia
 @png begin
     radius=80
     setdash("dot")
@@ -219,7 +219,7 @@ The `intersection_line_circle()` takes four arguments: two points to define the 
 
 The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia's math-friendly style. The circle is centered at A and has a radius of AB. Assuming that there are two intersections, we feed these to `circle()` and `label()` for drawing and labeling using our new broadcasting superpowers.
 
-```
+```julia
     nints, C, D =
         intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
@@ -268,7 +268,7 @@ Finding this new center point C1 is easy enough, because we can again use `inter
 
 Add a few more lines to your code:
 
-```
+```julia
 @png begin
 
     # ...
@@ -319,7 +319,7 @@ The two other points that can define this circle lie on the intersections of lin
 
 Add some more lines at the end of your code:
 
-```
+```julia
 @png begin
 
     # ...
@@ -332,7 +332,7 @@ Add some more lines at the end of your code:
 
 There are four intersection points but we want just the top two. The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
 
-```
+```julia
     if norm(C1, I1) < norm(C1, I2)
        ip1 = I1
     else
@@ -414,7 +414,7 @@ We now know all the points on the egg's perimeter, and the centers of the circul
 
 The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:stroke` action would, this action adds a section to the current path (which is initially empty). 
 
-```
+```julia
 @png begin
 
     # ... as before
@@ -511,7 +511,7 @@ finish()
 
 To be more generally useful, the above code can be boiled into a function.
 
-```
+```julia
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
@@ -547,7 +547,7 @@ This keeps all the intermediate code and calculations safely hidden away, and it
 
 Notice that, when called, the function inherits a lot of the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:
 
-```
+```julia
 @png begin
     for theta in range(0, pi/6, 12)
         @layer begin
@@ -627,7 +627,7 @@ As well as stroke and fill actions, you can use the path as a clipping region (`
 
 The `egg()` function creates a path and lets you apply an action to it. It's also possible to convert the path into a polygon (an array of points), which lets you do more things with it. The following code converts the egg's path into a polygon, and then moves every other point of the polygon halfway towards the centroid.
 
-```
+```julia
 @png begin
     egg(160, :path)
     pgon = first(pathtopoly())
@@ -635,7 +635,7 @@ The `egg()` function creates a path and lets you apply an action to it. It's als
 
 The `pathtopoly()` function converts the current path made by `egg(160, :path)` into a polygon. Those smooth curves have been approximated by a series of straight line segments. The `first()` function is used because `pathtopoly()` returns an array of one or more polygons (paths can consist of a series of loops), and we know that we need only the single path here.
 
-```
+```julia
     pc = polycentroid(pgon)
     circle(pc, 5, :fill)
 ```
@@ -644,7 +644,7 @@ The `pathtopoly()` function converts the current path made by `egg(160, :path)` 
 
 This loop steps through the points and moves every odd-numbered one halfway towards the centroid. `between()` finds a point midway between two specified points. The `poly()` function draws the array of points.
 
-```
+```julia
     for pt in 1:2:length(pgon)
         pgon[pt] = between(pc, pgon[pt], 0.5)  
     end
@@ -702,7 +702,7 @@ The uneven appearance of the interior points here looks to be a result of the de
 
 For a final experiment with our `egg()` function, here's Luxor's `offsetpoly()` function struggling to draw around the spiky egg-based polygon.
 
-```
+```julia
 @png begin
     egg(80, :path)
     pgon = first(pathtopoly())
