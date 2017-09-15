@@ -210,7 +210,8 @@ end
 """
     randompointarray(lowx, lowy, highx, highy, n)
 
-Return an array of `n` random points somewhere inside the rectangle defined by the four coordinates.
+Return an array of `n` random points somewhere inside the rectangle defined by the four
+coordinates.
 """
 function randompointarray(lowx, lowy, highx, highy, n)
     array = Point[]
@@ -219,21 +220,34 @@ function randompointarray(lowx, lowy, highx, highy, n)
     end
     array
 end
-
 """
-    ispointonline(pt::Point, pt1::Point, pt2::Point; atol=10E-5)
+    ispointonline(pt::Point, pt1::Point, pt2::Point;
+        extended = false,
+        atol = 10E-5)
 
 Return `true` if the point `pt` lies on a straight line between `pt1` and `pt2`.
+
+If `extended` is false (the default) the point must lie on the line segment between
+`pt1` and `pt2`. If `extended` is true, the point lies on the line if extended in
+either direction.
 """
-function ispointonline(pt::Point, pt1::Point, pt2::Point; atol=10E-5)
+function ispointonline(pt::Point, pt1::Point, pt2::Point;
+        atol=10E-5,
+        extended=false)
     dxc = pt.x - pt1.x
     dyc = pt.y - pt1.y
     dxl = pt2.x - pt1.x
     dyl = pt2.y - pt1.y
     cpr = (dxc * dyl) - (dyc * dxl)
-    if ! isapprox(cpr, 0.0, atol=atol)
+
+    if !isapprox(cpr, 0.0, atol=atol)
         return false
     end
+
+    if extended == true
+        return true
+    end
+
     if (abs(dxl) >= abs(dyl))
         return dxl > 0 ?
             pt1.x <= pt.x && pt.x <= pt2.x :
@@ -310,8 +324,8 @@ function intersection(A::Point, B::Point, C::Point, D::Point;
     dx = L1[3] * L2[2] - L1[2] * L2[3]
     dy = L1[1] * L2[3] - L1[3] * L2[1]
 
-    # collinear points
-    if C1 == C2 && collinearintersect == false
+    # if you ask me collinear points don't really intersect
+    if C1 == C2
         return (false, Point(0, 0))
     end
 
@@ -324,7 +338,11 @@ function intersection(A::Point, B::Point, C::Point, D::Point;
                return (false, pt)
             end
         else
-            return (true, pt)
+            if ispointonline(pt, A, B, extended=true) && ispointonline(pt, C, D, extended=true)
+                return (true, pt)
+            else
+               return (false, pt)
+            end
         end
     else
         return (false, Point(0, 0))
