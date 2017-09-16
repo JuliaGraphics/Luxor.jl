@@ -522,8 +522,10 @@ origin() # hide
 background("white") # hide
 sethue("darkmagenta") # hide
 pt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)
+text.(string.[pt1, pt2, pt3, pt4], [pt1, pt2, pt3, pt4])
 line(pt1, pt2, :stroke)
-line(pt3, pt4, :stroke)
+line(pt4, pt3, :stroke)
+
 flag, ip =  intersection(pt1, pt2, pt3, pt4)
 if flag
     circle(ip, 5, :fill)

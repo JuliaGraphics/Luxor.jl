@@ -773,5 +773,80 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-9.png)
 
-The slight changes in the regularity of the points (originally created by the path-to-polygon conversion) are continually amplified in successive outlinings. Also, there are edge cases when dealing with polygons, and you might well encounter situations where things don't always work as well as they might. Good luck with your explorations!
+The slight changes in the regularity of the points (originally created by the path-to-polygon conversion and the varying number of samples it made) are continually amplified in successive outlinings. 
+
+## Clipping
+
+A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.
+
+In this example, the egg (assuming you're still in the same session in which you've defined the `egg()` function) isn't drawn, but is defined to be act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the `:clip` action which is passed to the `doaction()` function at the end of the `egg()`. 
+
+Here, the graphics are provided by the `ngon()` function, which draws regular polygons.
+
+```julia
+using Luxor, Colors
+@svg begin
+    setopacity(0.5)
+    gsave()
+    egg(150, :clip)
+    for i in 360:-4:1
+        sethue(Colors.HSV(i, 1.0, 0.8))
+        rotate(pi/30)
+        ngon(O, i, 5, 0, :fill)
+    end
+    grestore()
+    clipreset()
+end
+```
+
+```@setup te10
+using Luxor, Colors
+Drawing(725, 600, "assets/figures/tutorial-egg-10.png")
+origin()
+background("white")
+function egg(radius, action=:none)
+    A, B = [Point(x, 0) for x in [-radius, radius]]
+    nints, C, D =
+        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+
+    flag, C1 = intersection_line_circle(C, D, O, radius)
+    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
+    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+
+    if norm(C1, I1) < norm(C1, I2)
+        ip1 = I1
+    else
+        ip1 = I2
+    end
+    if norm(C1, I3) < norm(C1, I4)
+        ip2    = I3
+    else
+        ip2 = I4
+    end
+
+    arc2r(B, A, ip1, :path)
+    arc2r(C1, ip1, ip2, :path)
+    arc2r(A, ip2, B, :path)
+    arc2r(O, B, A, :path)
+    closepath()
+    do_action(action)
+end
+
+setopacity(0.5)
+gsave()
+egg(150, :clip)
+for i in 360:-4:1
+    sethue(Colors.HSV(i, 1.0, 0.8))
+    rotate(pi/30)
+    ngon(O, i, 5, 0, :fill)
+end
+grestore()
+clipreset()
+finish()
+```
+![clip example](assets/figures/tutorial-egg-10.png)
+
+It's usually good practice to add a matching `clipreset()` after the clipping has been completed.
+
+Good luck with your explorations!
 
