@@ -240,14 +240,17 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
     dyl = pt2.y - pt1.y
     cpr = (dxc * dyl) - (dyc * dxl)
 
+    # point not on line
     if !isapprox(cpr, 0.0, atol=atol)
         return false
     end
 
+    # point somewhere on extended line
     if extended == true
         return true
     end
 
+    # point on the line
     if (abs(dxl) >= abs(dyl))
         return dxl > 0 ?
             pt1.x <= pt.x && pt.x <= pt2.x :
@@ -325,7 +328,7 @@ function intersection(A::Point, B::Point, C::Point, D::Point;
     dy = L1[1] * L2[3] - L1[3] * L2[1]
 
     # if you ask me collinear points don't really intersect
-    if C1 == C2
+    if (C1 == C2) && (collinearintersect == false)
         return (false, Point(0, 0))
     end
 
