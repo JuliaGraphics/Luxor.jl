@@ -102,14 +102,14 @@ To start off, define the variable `radius` to hold a value of 80 units (there ar
     radius=80
 ```
 
-Select gray dotted lines. You can use the named colors that Colors.jl provides. `gray0` is black, and `gray100` is white. 
+Select gray dotted lines. You can use the named colors that Colors.jl provides. `gray0` is black, and `gray100` is white.
 
 ```julia
     setdash("dot")
     sethue("gray40")
 ```
 
-Next, make two points, A and B, which will lie either side of the origin point. 
+Next, make two points, A and B, which will lie either side of the origin point.
 
 The outer square brackets are an array comprehension. `x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points. But it shows how you can assign more than one variable at the same time, and also how to generate more than two points...
 
@@ -117,7 +117,7 @@ The outer square brackets are an array comprehension. `x` uses two values from t
     A, B = [Point(x, 0) for x in [-radius, radius]]
 ```
 
-With two points defined, draw a line from A to B, and "stroke" it. 
+With two points defined, draw a line from A to B, and "stroke" it.
 
 ```julia
     line(A, B, :stroke)
@@ -151,7 +151,7 @@ nothing
 
 It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using points of the compass, so `:N` places the label to the north of a position.
 
-Edit your previous code by adding some labels and circles:
+Edit your previous code by adding instructions to draw some labels and circles:
 
 ```julia
 @png begin
@@ -196,10 +196,11 @@ While we could have drawn all the circles as usual, we've taken the opportunity 
 
 ### Intersect this
 
-We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersection_line_circle` that finds the point or points where a line intersects a circle. So we can find the points where one of the circles crosses a vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
+We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersection_line_circle` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
 
 ```julia
 @png begin
+    # as before
     radius=80
     setdash("dot")
     sethue("gray40")
@@ -213,13 +214,15 @@ We've now ready to tackle the job of finding the coordinates of the two points w
 
     circle.([A, O, B], 2, :fill)
     circle.([A, B], 2radius, :stroke)
+
 ```
 
-The `intersection_line_circle()` takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns a Boolean success/failure flag followed by the two points. 
+The `intersection_line_circle()` takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.
 
-The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia's math-friendly style. The circle is centered at A and has a radius of AB. Assuming that there are two intersections, we feed these to `circle()` and `label()` for drawing and labeling using our new broadcasting superpowers.
+The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia's math-friendly style. The circle is centered at A and has a radius of AB (which is `2radius`). Assuming that there are two intersections, we feed these to `circle()` and `label()` for drawing and labeling using our new broadcasting superpowers.
 
 ```julia
+
     nints, C, D =
         intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
@@ -259,14 +262,13 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-3.png)
 
-
 ### The upper circle
 
-Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that touches the two larger circles near the point D.
+Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.
 
 Finding this new center point C1 is easy enough, because we can again use `intersection_line_circle()` to find the point where the central circle crosses a line from O to D.
 
-Add a few more lines to your code:
+Add some more lines to your code:
 
 ```julia
 @png begin
@@ -315,9 +317,9 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-4.png)
 
-The two other points that can define this circle lie on the intersections of lines from points A and B passing through the centerpoint C1.
+The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the centerpoint C1.
 
-Add some more lines at the end of your code:
+To find (and draw) these points is straighforward, but we'll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:
 
 ```julia
 @png begin
@@ -330,7 +332,7 @@ Add some more lines at the end of your code:
     circle.([I1, I2, I3, I4], 2, :stroke
 ```
 
-There are four intersection points but we want just the top two. The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
+The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
 
 ```julia
     if norm(C1, I1) < norm(C1, I2)
@@ -407,12 +409,11 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-5.png)
 
-
 ### Eggs at the ready
 
-We now know all the points on the egg's perimeter, and the centers of the circular arcs. To draw the outline, we'll use the `arc2r()` function four times. The function takes a center point and two points on a circular arc, plus an action.
+We now know all the points on the egg's perimeter, and the centers of the circular arcs. To draw the outline, we'll use the `arc2r()` function four times. This function takes a center point and two points on a circular arc, plus an action.
 
-The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:stroke` action would, this action adds a section to the current path (which is initially empty). 
+The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:stroke` action would, this action adds a section to the current path (which is initially empty).
 
 ```julia
 @png begin
@@ -431,7 +432,7 @@ The shape consists of four curves, so we'll use the `:path` action. Instead of i
 
 Once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a 'preserve' version of the first action. This applies the action but keeps the path around for further actions.
 
-``` 
+```
     strokepreserve()
     setopacity(0.8)
     sethue("ivory")
@@ -532,29 +533,37 @@ function egg(radius, action=:none)
         ip2 = I4
     end
 
+    newpath()
     arc2r(B, A, ip1, :path)
     arc2r(C1, ip1, ip2, :path)
     arc2r(A, ip2, B, :path)
     arc2r(O, B, A, :path)
     closepath()
+
     do_action(action)
 end
 ```
 
 This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required radius, and `:stroke` is one of the available actions.
 
-(Of course, there's no error checking. This should be fixed if the function is to be used for any serious applications...!)
+(Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)
 
-Notice that, when called, the function inherits a lot of the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:
+Notice that this function doesn't define anything about what the shape looks like or where it's placed. When called, the function inherits a lot of the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:
 
 ```julia
 @png begin
+    setopacity(0.7)
     for theta in range(0, pi/6, 12)
         @layer begin
             rotate(theta)
-            translate(0, -150)
+            translate(0, -150)         
+            egg(50, :path)
+            setline(10)
             randomhue()
-            egg(50, :fill)
+            fillpreserve()
+
+            randomhue()
+            strokepath()
         end
     end
 end
@@ -562,6 +571,7 @@ end
 
 ```@setup te7
 using Luxor
+srand(42)
 Drawing(725, 500, "assets/figures/tutorial-egg-7.png")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
@@ -583,6 +593,7 @@ function egg(radius, action=:none)
         ip2 = I4
     end
 
+    newpath()
     arc2r(B, A, ip1, :path)
     arc2r(C1, ip1, ip2, :path)
     arc2r(A, ip2, B, :path)
@@ -592,20 +603,25 @@ function egg(radius, action=:none)
 end
 background("white")
 origin()
-srand(42)
+setopacity(0.7)
 for theta in range(0, pi/6, 12)
     @layer begin
         rotate(theta)
-        translate(0, -150)
+        translate(0, -150)         
+        egg(50, :path)
+        setline(10)
         randomhue()
-        egg(50, :fill)
+        fillpreserve()
+
+        randomhue()
+        strokepath()
     end
 end
 finish()
 ```
 ![point example](assets/figures/tutorial-egg-7.png)
 
-The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated to `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so when theta is 0 a shift of -150 looks like an upwards shift). The `randomhue()` function does what it says, and the `egg()` function is passed the `:fill` action and the radius.
+The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated to `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so when `theta` is 0 a shift of -150 looks like an upwards shift). The `randomhue()` function does what it says, and the `egg()` function is passed the `:fill` action and the radius.
 
 Notice that the four drawing instructions are encased in a `@layer begin...end` 'shell'. Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
 
@@ -640,7 +656,7 @@ The `pathtopoly()` function converts the current path made by `egg(160, :path)` 
     circle(pc, 5, :fill)
 ```
 
-`polycentroid()` finds the centroid of the new polygon. 
+`polycentroid()` finds the centroid of the new polygon.
 
 This loop steps through the points and moves every odd-numbered one halfway towards the centroid. `between()` finds a point midway between two specified points. The `poly()` function draws the array of points.
 
@@ -675,6 +691,7 @@ function egg(radius, action=:none)
         ip2 = I4
     end
 
+    newpath()
     arc2r(B, A, ip1, :path)
     arc2r(C1, ip1, ip2, :path)
     arc2r(A, ip2, B, :path)
@@ -744,6 +761,7 @@ function egg(radius, action=:none)
         ip2 = I4
     end
 
+    newpath()
     arc2r(B, A, ip1, :path)
     arc2r(C1, ip1, ip2, :path)
     arc2r(A, ip2, B, :path)
@@ -773,13 +791,13 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-9.png)
 
-The slight changes in the regularity of the points (originally created by the path-to-polygon conversion and the varying number of samples it made) are continually amplified in successive outlinings. 
+The slight changes in the regularity of the points (originally created by the path-to-polygon conversion and the varying number of samples it made) are continually amplified in successive outlinings.
 
 ## Clipping
 
 A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.
 
-In this example, the egg (assuming you're still in the same session in which you've defined the `egg()` function) isn't drawn, but is defined to be act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the `:clip` action which is passed to the `doaction()` function at the end of the `egg()`. 
+In this example, the egg (assuming you're still in the same session in which you've defined the `egg()` function) isn't drawn, but is defined to be act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the `:clip` action which is passed to the `doaction()` function at the end of the `egg()`.
 
 Here, the graphics are provided by the `ngon()` function, which draws regular polygons.
 
@@ -787,14 +805,14 @@ Here, the graphics are provided by the `ngon()` function, which draws regular po
 using Luxor, Colors
 @svg begin
     setopacity(0.5)
-    gsave()
     egg(150, :clip)
-    for i in 360:-4:1
-        sethue(Colors.HSV(i, 1.0, 0.8))
-        rotate(pi/30)
-        ngon(O, i, 5, 0, :fill)
+    @layer begin
+        for i in 360:-4:1
+            sethue(Colors.HSV(i, 1.0, 0.8))
+            rotate(pi/30)
+            ngon(O, i, 5, 0, :fill)
+        end
     end
-    grestore()
     clipreset()
 end
 ```
@@ -824,6 +842,7 @@ function egg(radius, action=:none)
         ip2 = I4
     end
 
+    newpath()
     arc2r(B, A, ip1, :path)
     arc2r(C1, ip1, ip2, :path)
     arc2r(A, ip2, B, :path)
@@ -833,13 +852,13 @@ function egg(radius, action=:none)
 end
 
 setopacity(0.5)
-gsave()
 egg(150, :clip)
-for i in 360:-4:1
-    sethue(Colors.HSV(i, 1.0, 0.8))
-    rotate(pi/30)
-    ngon(O, i, 5, 0, :fill)
-end
+gsave()
+    for i in 360:-4:1
+        sethue(Colors.HSV(i, 1.0, 0.8))
+        rotate(pi/30)
+        ngon(O, i, 5, 0, :fill)
+    end
 grestore()
 clipreset()
 finish()
@@ -849,4 +868,3 @@ finish()
 It's usually good practice to add a matching `clipreset()` after the clipping has been completed.
 
 Good luck with your explorations!
-
