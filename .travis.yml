@@ -19,9 +19,11 @@ after_failure:
 - julia -e 'Pkg.add("Documenter")'
 - julia -e 'Pkg.add("ColorSchemes")'
 - julia -e 'cd(Pkg.dir("Luxor")); include(joinpath("docs", "make.jl"))'
-- julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+- if [ $TRAVIS_JULIA_VERSION = "nightly" ]; then julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'; fi
 
 after_success:
+- if [ $TRAVIS_JULIA_VERSION = "nightly" ]; then julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'; fi
+
 #- julia -e 'Pkg.add("Documenter")'
 #- julia -e 'Pkg.add("ColorSchemes")'
 #- julia -e 'cd(Pkg.dir("Luxor")); include(joinpath("docs", "make.jl"))'
