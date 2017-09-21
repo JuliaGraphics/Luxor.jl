@@ -48,7 +48,7 @@ What happened? Can you see this image somewhere?
 
 ![point example](assets/figures/tutorial-hello-world.png)
 
-If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as "luxor-drawing.png"). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
+If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing.png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
 Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. PDF documents are often higher quality, and usually open up in a separate application.
 
@@ -60,7 +60,7 @@ This example illustrates a few things about Luxor drawings:
 
 - The text was placed at the origin point (0,0), and by default it's left aligned.
 
-- The circle wasn't filled, but "stroked". We passed the `:stroke` symbol as an action to the `circle()` function. Many drawing functions expect some action, such as `:fill` or `:stroke`, and sometimes `:clip` or `:fillstroke`.
+- The circle wasn't filled, but `stroked`. We passed the `:stroke` symbol as an action to the `circle()` function. Many drawing functions expect some action, such as `:fill` or `:stroke`, and sometimes `:clip` or `:fillstroke`.
 
 - Did the first drawing takes a few seconds to appear? The Cairo drawing engine has to warm up. Once it's running, it's much faster.
 
@@ -90,7 +90,7 @@ finish()
 
 For the main section of this tutorial, we'll attempt to draw Euclid's egg, which involves a bit of geometry.
 
-For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions) isn't considered to be "best practice".
+For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions) isn't considered to be 'best practice'.
 
 ```julia
 @png begin
@@ -102,16 +102,14 @@ To start off, define the variable `radius` to hold a value of 80 units (there ar
     radius=80
 ```
 
-Select gray dotted lines. You can use the named colors that Colors.jl provides. `gray0` is black, and `gray100` is white.
+Select gray dotted lines. To specify a color you can supply RGB values or use the named colors that Colors.jl provides. `gray0` is black, and `gray100` is white.
 
 ```julia
     setdash("dot")
-    sethue("gray40")
+    sethue("gray30")
 ```
 
-Next, make two points, A and B, which will lie either side of the origin point.
-
-The outer square brackets are an array comprehension. `x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points. But it shows how you can assign more than one variable at the same time, and also how to generate more than two points...
+Next, make two points, A and B, which will lie either side of the origin point. This line uses an array comprehension - notice the square brackets enclosing a `for` loop. `x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points. But it shows how you can assign more than one variable at the same time, and also how to generate more than two points...
 
 ```julia
     A, B = [Point(x, 0) for x in [-radius, radius]]
@@ -123,7 +121,7 @@ With two points defined, draw a line from A to B, and "stroke" it.
     line(A, B, :stroke)
 ```
 
-Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter "O" as a short cut for Origin, ie the `Point(0, 0)`.
+Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter 'O' as a short cut for Origin, ie the `Point(0, 0)`.
 
 ```julia
     circle(O, radius, :stroke)
@@ -137,7 +135,7 @@ background("white")
 origin()
 radius=80
 setdash("dot")
-sethue("gray40")
+sethue("gray30")
 A, B = [Point(x, 0) for x in [-radius, radius]]
 line(A, B, :stroke)
 circle(O, radius, :stroke)
@@ -157,7 +155,7 @@ Edit your previous code by adding instructions to draw some labels and circles:
 @png begin
     radius=80
     setdash("dot")
-    sethue("gray40")
+    sethue("gray30")
     A, B = [Point(x, 0) for x in [-radius, radius]]
     line(A, B, :stroke)
     circle(O, radius, :stroke)
@@ -178,7 +176,7 @@ background("white")
 origin()
 radius=80
 setdash("dot")
-sethue("gray40")
+sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
 line(A, B, :stroke)
@@ -192,7 +190,7 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-2.png)
 
-While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called "broadcasting". The dot ("`.`") just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radiuses or an array of actions — in each case Julia did the necessary broadcasting for us.
+While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot ('`.`') just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting for us.
 
 ### Intersect this
 
@@ -203,7 +201,7 @@ We've now ready to tackle the job of finding the coordinates of the two points w
     # as before
     radius=80
     setdash("dot")
-    sethue("gray40")
+    sethue("gray30")
     A, B = [Point(x, 0) for x in [-radius, radius]]
     line(A, B, :stroke)
     circle(O, radius, :stroke)
@@ -241,7 +239,7 @@ background("white")
 origin()
 radius=80
 setdash("dot")
-sethue("gray40")
+sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
 line(A, B, :stroke)
@@ -291,7 +289,7 @@ background("white")
 origin()
 radius=80
 setdash("dot")
-sethue("gray40")
+sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
 line(A, B, :stroke)
@@ -317,9 +315,9 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-4.png)
 
-The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the centerpoint C1.
+The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1.
 
-To find (and draw) these points is straighforward, but we'll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:
+To find (and draw) these points is straightforward, but we'll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:
 
 ```julia
 @png begin
@@ -329,7 +327,7 @@ To find (and draw) these points is straighforward, but we'll mark these as inter
     nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
     nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
 
-    circle.([I1, I2, I3, I4], 2, :stroke
+    circle.([I1, I2, I3, I4], 2, :fill)
 ```
 
 The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
@@ -360,7 +358,7 @@ background("white")
 origin()
 radius=80
 setdash("dot")
-sethue("gray40")
+sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
 line(A, B, :stroke)
@@ -388,7 +386,7 @@ end
 nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
 nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
 
-circle.([I1, I2, I3, I4], 2, :stroke)
+circle.([I1, I2, I3, I4], 2, :fill)
 
 if norm(C1, I1) < norm(C1, I2)
     ip1 = I1
@@ -447,7 +445,7 @@ background("white")
 origin()
 radius=80
 setdash("dot")
-sethue("gray40")
+sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
 line(A, B, :stroke)
@@ -625,7 +623,7 @@ The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6.
 
 Notice that the four drawing instructions are encased in a `@layer begin...end` 'shell'. Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
 
-Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and positive angles are clockwise. So the second egg in the previous example was drawn after the axes were rotatated π/6 radians clockwise.
+Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and positive angles are clockwise. So the second egg in the previous example was drawn after the axes were rotated π/6 radians clockwise.
 
 You can tell which egg was drawn first — it's overlapped on each side by subsequent eggs.
 
@@ -797,9 +795,9 @@ The slight changes in the regularity of the points (originally created by the pa
 
 A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.
 
-In this example, the egg (assuming you're still in the same session in which you've defined the `egg()` function) isn't drawn, but is defined to be act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the `:clip` action which is passed to the `doaction()` function at the end of the `egg()`.
+In this example, the egg (assuming you're still in the same Julia session in which you've defined the `egg()` function) isn't drawn, but is defined to act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the `:clip` action which is passed to the `doaction()` function at the end of the `egg()`.
 
-Here, the graphics are provided by the `ngon()` function, which draws regular polygons.
+Here, the graphics are provided by the `ngon()` function, which draws regular `n`-sided polygons.
 
 ```julia
 using Luxor, Colors
