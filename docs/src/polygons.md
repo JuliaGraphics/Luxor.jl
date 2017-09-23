@@ -558,7 +558,7 @@ NTuple{4,Point}[
      ]
 ```
 
-Bézier paths are slightly different from ordinary paths in that they don't usually contain straight line segments. (By setting the two control points to be the same as the nearest start/end points, you create straight line sections.)
+Bézier paths are slightly different from ordinary paths in that they don't usually contain straight line segments. (Although by setting the two control points to be the same as their matching start/end points, you create straight line sections.)
 
 `makebezierpath()` takes the points in a polygon and converts each line segment into one Bézier curve. `drawbezierpath()` draws the resulting sequence.
 
@@ -615,7 +615,7 @@ nothing # hide
 
 You can convert a Bézier path to a polygon (an array of points), using the `bezierpathtopoly()` function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used for each Bézier curve segment.
 
-In this example, the grey star is first rendered as a Bézier path, then the Bézier path is converted to a polygon but offset by 20 units before being drawn.
+In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).
 
 ```@example
 using Luxor # hide
@@ -635,7 +635,7 @@ end
 
 setline(4)
 
-sethue("coral")
+sethue("orangered")
 np = makebezierpath(pgon)    
 drawbezierpath(np, :stroke)
 
