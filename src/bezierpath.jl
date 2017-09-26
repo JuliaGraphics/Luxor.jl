@@ -146,6 +146,8 @@ end
 
 Convert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.
 
+To make a Bezier path, use `makebezierpath()` on a polygon.
+
 The `steps` optional keyword determines how many line sections are used for each path.
 """
 function bezierpathtopoly(bezierpath::Array{NTuple{4,Luxor.Point}}; steps=10)
