@@ -593,10 +593,10 @@ function intersection2circles(pt1, r1, pt2, r2)
     r1squared = r1^2
     r2squared = r2^2
     d = norm(pt1, pt2)
-    intersectionarea = 0
+    intersectionarea = 0.0
     if (d > r2 + r1)
         # circles do not overlap
-        intersectionarea = 0
+        intersectionarea = 0.0
     elseif (d <= abs(r1 - r2) && r1 >= r2)
         # circle1 is completely inside circle0
         # return area of circle1
@@ -663,6 +663,3 @@ function intersectioncirclecircle(cp1, r1, cp2, r2)
 end
 
 # eof
-
-
-

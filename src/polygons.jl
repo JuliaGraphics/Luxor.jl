@@ -10,18 +10,18 @@ Draw a polygon.
 A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
 to allow for clipping.
 """
-function poly(pointlist::Array, action = :nothing; close=false, reversepath=false)
+function poly(pointlist::Array{Point, 1}, action::Symbol = :nothing; close::Bool=false, reversepath::Bool=false)
     if action != :path
         newpath()
     end
-    if reversepath
+    if reversepath == true
         reverse!(pointlist)
     end
     move(pointlist[1].x, pointlist[1].y)
     for p in pointlist[2:end]
         line(p.x, p.y)
     end
-    if close
+    if close==true
         closepath()
     end
     do_action(action)
@@ -34,7 +34,7 @@ Find the bounding box of a polygon (array of points).
 
 Return the two opposite corners (suitable for `box()`, for example).
 """
-function polybbox(pointlist::Array)
+function polybbox(pointlist::Array{Point, 1})
     lowx, lowy = pointlist[1].x, pointlist[1].y
     highx, highy = pointlist[end].x, pointlist[end].y
     for p in pointlist
@@ -55,7 +55,7 @@ Returns a point. This only works for simple (non-intersecting) polygons.
 
 You could test the point using `isinside()`.
 """
-function polycentroid(pointlist)
+function polycentroid(pointlist::Array{Point, 1})
     # Points are immutable, use separate variables for these calculations
     centroid_x = 0.0
     centroid_y = 0.0
@@ -105,7 +105,7 @@ The `refpoint` can be chosen, but the minimum point is usually OK too:
 
     polysortbyangle(parray, polycentroid(parray))
 """
-function polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
+function polysortbyangle(pointlist::Array{Point, 1}, refpoint=minimum(pointlist))
     angles = Float64[]
     for pt in pointlist
         push!(angles, atan2(refpoint.y - pt.y, refpoint.x - pt.x))
@@ -121,7 +121,7 @@ the nearest point to that, and so on.
 
 You can end up with convex (self-intersecting) polygons, unfortunately.
 """
-function polysortbydistance(pointlist, starting::Point)
+function polysortbydistance(pointlist::Array{Point, 1}, starting::Point)
     route = [starting]
     # start with the first point in pointlist
     remaining = setdiff(pointlist, route)
@@ -140,8 +140,8 @@ Use a non-recursive Douglas-Peucker algorithm to simplify a polygon. Used by `si
 
     douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
 """
-function douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
-    temp_stack = Tuple{Int,Int}[] # version 0.4 only?
+function douglas_peucker(pointlist::Array{Point, 1}, start_index, last_index, epsilon)
+    temp_stack = Tuple{Int, Int}[]
     push!(temp_stack, (start_index, last_index))
     global_start_index = start_index
     keep_list = trues(length(pointlist))
@@ -179,8 +179,12 @@ Simplify a polygon:
 
 `detail` is the smallest permitted distance between two points in pixels.
 """
-function simplify(pointlist, detail=0.1)
+function simplify(pointlist::Array{Point, 1}, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
+end
+
+function det3p(q1::Point, q2::Point, p::Point)
+    (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
 end
 
 """
@@ -192,10 +196,9 @@ This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorit
 
 Set `allowonedge` to `false` to suppress point-on-edge errors.
 """
-function isinside(p::Point, pointlist::Array;
-        allowonedge=false)
+function isinside(p::Point, pointlist::Array{Point, 1};
+        allowonedge::Bool=false)
     c = false
-    detq(q1, q2) = (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
     @inbounds for counter in 1:length(pointlist)
         q1 = pointlist[counter]
         # if reached last point, set "next point" to first point
@@ -218,11 +221,11 @@ function isinside(p::Point, pointlist::Array;
             if q1.x >= p.x
                 if q2.x > p.x
                     c = !c
-                elseif ((detq(q1,q2) > 0) == (q2.y > q1.y)) # right crossing
+                elseif ((det3p(q1, q2, p) > 0) == (q2.y > q1.y)) # right crossing
                     c = !c
                 end
             elseif q2.x > p.x
-                if ((detq(q1,q2) > 0) == (q2.y > q1.y))     # right crossing
+                if ((det3p(q1, q2, p) > 0) == (q2.y > q1.y))     # right crossing
                     c = !c
                 end
             end
@@ -241,10 +244,10 @@ Split a polygon into two where it intersects with a line. It returns two polygon
 This doesn't always work, of course. For example, a polygon the shape of the letter "E"
 might end up being divided into more than two parts.
 """
-function polysplit(pointlist, p1, p2)
+function polysplit(pointlist::Array{Point, 1}, p1::Point, p2::Point)
     # the two-pass version
     # TODO should be one-pass
-    newpointlist = []
+    newpointlist = Point[]
     l = length(pointlist)
     vertex1 = Point(0, 0)
     vertex2 = Point(0, 0)
@@ -260,8 +263,8 @@ function polysplit(pointlist, p1, p2)
     # close?
     # push!(newpointlist, vertex2)
     # now sort points
-    poly1 = []
-    poly2 = []
+    poly1 = Point[]
+    poly2 = Point[]
     l = length(newpointlist)
     for i in 1:l
         vertex1 = newpointlist[mod1(i, l)]
@@ -279,7 +282,7 @@ function polysplit(pointlist, p1, p2)
 end
 
 """
-    prettypoly(points, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
+    prettypoly(points::Array{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
         close=false,
         reversepath=false,
         vertexlabels = (n, l) -> ()
@@ -308,7 +311,7 @@ and "3 of 3" using:
     prettypoly(triangle, :stroke,
         vertexlabels = (n, l) -> (text(string(n, " of ", l))))
 """
-function prettypoly(pointlist::Array, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
+function prettypoly(pointlist::Array{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
     close=false,
     reversepath=false,
     vertexlabels = (n, l) -> ()
@@ -344,7 +347,7 @@ function getproportionpoint(point::Point, segment, length, dx, dy)
     return Point((point.x - dx * scalefactor), (point.y - dy * scalefactor))
 end
 
-function drawroundedcorner(cornerpoint, p1, p2, radius, path; debug=false)
+function drawroundedcorner(cornerpoint::Point, p1::Point, p2::Point, radius, path; debug=false)
     dx1 = cornerpoint.x - p1.x     # vector 1
     dy1 = cornerpoint.y - p1.y
     dx2 = cornerpoint.x - p2.x     # vector 2
@@ -433,7 +436,7 @@ possible (as large as the shortest side allows).
 
 The `debug` option also draws the construction circles at each corner.
 """
-function polysmooth(points, radius, action=:action; debug=false)
+function polysmooth(points::Array{Point, 1}, radius, action=:action; debug=false)
     temppath = Tuple[]
     l = length(points)
     # perhaps should check that l >= 3?
@@ -459,7 +462,7 @@ function polysmooth(points, radius, action=:action; debug=false)
 end
 
 """
-    offsetpoly(path::Array, d)
+    offsetpoly(path::Array{Point, 1}, d)
 
 Return a polygon that is offset from a polygon by `d` units.
 
@@ -481,7 +484,7 @@ point (!). There are a number of issues to be aware of:
 - duplicated adjacent points might cause the routine to scratch its head and wonder how to
   draw a line parallel to them
 """
-function offsetpoly(path::Array, d)
+function offsetpoly(path::Array{Point, 1}, d)
     # don't try to calculate offset of two identical points
     if path[1] == path[end]
         shift!(path)
@@ -527,7 +530,7 @@ end
 Build a polygon that constructs a B-spine approximation to it. The resulting list of points
 makes a smooth path that runs between the first and last points.
 """
-function polyfit(plist::Array, npoints=30)
+function polyfit(plist::Array{Point, 1}, npoints=30)
     l = length(plist)
     resultpoly = Array{Point}(0)
     # start at first point
@@ -629,12 +632,12 @@ and the difference value. Array is assumed to be sorted.
 
 (Designed for use with `polydistances()`).
 """
-function nearestindex(a::Array, val)
+function nearestindex(a::Array{T, 1} where T <: Real, val)
     ind = findlast(v -> (v < val), a)
+    surplus = 0.0
     if ind > 0.0
         surplus = val - a[ind]
     else
-        surplus = 0.0
         ind = 1
     end
     return (ind, surplus)
