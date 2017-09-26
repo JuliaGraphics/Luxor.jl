@@ -29,9 +29,9 @@ function arrow(startpoint::Point, endpoint::Point;
     max_undershoot = shaftlength - ((linewidth/2) / tan(arrowheadangle))
     true_arrowheadlength = arrowheadlength * cos(arrowheadangle)
     if true_arrowheadlength < max_undershoot
-    ratio = (shaftlength - true_arrowheadlength)/shaftlength
+        ratio = (shaftlength - true_arrowheadlength)/shaftlength
     else
-    ratio = max_undershoot/shaftlength
+        ratio = max_undershoot/shaftlength
     end
     tox = startpoint.x + (endpoint.x - startpoint.x) * ratio
     toy = startpoint.y + (endpoint.y - startpoint.y) * ratio
