@@ -166,6 +166,17 @@ function Base.show(io::IO, d::Luxor.Drawing)
 """)
 end
 
+Base.mimewritable(::MIME"image/svg+xml",d::Luxor.Drawing) = d.surfacetype == "svg"
+Base.mimewritable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == "png"
+
+function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
+    write(f, readstring(d.filename))
+end
+
+function Base.show(f::IO, ::MIME"image/png", d::Luxor.Drawing)
+    write(f, read(d.filename))
+end
+
 """
 The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default is Portrait:
 
