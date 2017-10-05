@@ -21,12 +21,14 @@ background("white") # hide
 sethue("black") # hide
 fontsize(18)
 fontface("Georgia-Bold")
-text("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
+text("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
 finish() # hide
 nothing # hide
 ```
 
 ![text placement](assets/figures/toy-text-example.png)
+
+The `label()` function also uses the Toy API.
 
 #### The Pro API
 
@@ -42,7 +44,7 @@ origin() # hide
 background("white") # hide
 sethue("black") # hide
 setfont("Georgia Bold", 18)
-settext("Georgia is a serif typeface designed in 1993 by Matthew Carter.", halign="center")
+settext("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign="center")
 finish() # hide
 nothing # hide
 ```
@@ -167,6 +169,36 @@ The green dot is the text placement point and reference point for the font, the 
 ```@docs
 textextents
 ```
+## Labels
+
+The `label()` function places text relative to a specific point, and you can use compass
+points to indicate where it should be. So `:N` (for North) places a text label directly above the point.
+
+```@example
+using Luxor # hide
+Drawing(400, 250, "assets/figures/labels.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black")
+fontsize(15)
+octagon = ngon(O, 100, 8, 0, vertices=true)
+
+compass = [:SE, :S, :SW, :W, :NW, :N, :NE, :E, :SE]
+
+for i in 1:8
+    circle(octagon[i], 2, :fill)
+    label(string(compass[i]), compass[i], octagon[i])
+end
+
+finish() # hide
+nothing # hide
+```
+
+![labels](assets/figures/labels.png)
+
+```@docs
+label
+```
 
 ## Text on a curve
 
@@ -202,7 +234,6 @@ For shorter strings, `textcurvecentered()` tries to place the text on a circular
 using Luxor # hide
 Drawing(400, 250, "assets/figures/text-centered.png") # hide
 origin() # hide
-background("white") # hide
 background("white") # hide
 fontface("Arial-Black")
 fontsize(24) # hide
@@ -280,4 +311,42 @@ end
 
 finish()
 preview()
+```
+
+## Text wrapping
+
+Longer lines of text can be made to wrap inside an imaginary rectangle with `textwrap()`. Specify the required width of the rectangle, and the location of the top left corner.
+
+```@example
+using Luxor # hide
+Drawing(500, 400, "assets/figures/text-wrapping.png") # hide
+origin() # hide
+background("white") # hide
+fontface("Georgia")
+fontsize(12) # hide
+sethue("black") # hide
+
+loremipsum = """Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Nunc placerat lorem ullamcorper,
+sagittis massa et, elementum dui. Sed dictum ipsum vel
+commodo pellentesque. Aliquam erat volutpat. Nam est
+dolor, vulputate a molestie aliquet, rutrum quis lectus.
+Sed lectus mauris, tristique et tempor id, accumsan
+pharetra lacus. Donec quam magna, accumsan a quam
+quis, mattis hendrerit nunc. Nullam vehicula leo ac
+leo tristique, a condimentum tortor faucibus."""
+
+setdash("dot")
+box(O, 200, 200, :stroke)
+textwrap(loremipsum, 200, O - (200/2, 200/2))
+
+finish() # hide
+nothing # hide
+```
+
+![text centered on curve](assets/figures/text-wrapping.png)
+
+```@docs
+textwrap
+splittext
 ```

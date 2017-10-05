@@ -121,7 +121,7 @@ preview
 The global variable `currentdrawing` (of type Drawing) stores some parameters related to the current drawing:
 
 ```
-julia> fieldnames(currentdrawing)
+julia> fieldnames(typeof(currentdrawing))
 10-element Array{Symbol,1}:
 :width
 :height
@@ -133,6 +133,44 @@ julia> fieldnames(currentdrawing)
 :greenvalue
 :bluevalue
 :alpha
+```
+## Quick drawings with macros
+
+The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
+
+```
+@svg circle(O, 20, :stroke) 50 50
+```
+
+expands to
+
+```
+Drawing(50, 50, "luxor-drawing.png")
+origin()
+background("white")
+sethue("black")
+circle(O, 20, :stroke)
+finish()
+preview()
+```
+
+They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:
+
+```
+@svg begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end
+```
+
+or
+
+```
+@svg (setline(10);
+      sethue("purple");
+      circle(O, 20, :fill);
+     )
 ```
 
 ## The drawing surface
@@ -230,45 +268,4 @@ As a convenient shorthand, you can use the macro `@layer begin ... end` to enclo
 ```@docs
 gsave
 grestore
-```
-
-## Quick drawings with macros
-
-The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:
-
-```
-@svg circle(O, 20, :stroke) 50 50
-```
-
-expands to
-
-```
-Drawing(50, 50, "luxor-drawing.png")
-origin()
-background("white")
-sethue("black")
-circle(O, 20, :stroke)
-finish()
-preview()
-```
-
-They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600).
-
-For multiple lines, use either:
-
-```
-@svg begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
-```
-
-or
-
-```
-@svg (setline(10);
-      sethue("purple");
-      circle(O, 20, :fill);
-     )
 ```

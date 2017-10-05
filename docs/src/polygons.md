@@ -1,5 +1,15 @@
 # Polygons and paths
 
+For drawing shapes, Luxor provides polygons and paths.
+
+A polygon is an ordered collection of Points stored in an array.
+
+A path is one or more straight and curved (Bézier) lines placed on the drawing. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
+
+Luxor also provides a Bézier-path type, which is an array of four-point tuples, each of which is a Bézier curve section.
+
+Functions are provided for converting between polygons and paths.
+
 ## Regular polygons ("ngons")
 
 A polygon is an array of points. The points can be joined with straight lines.
@@ -195,7 +205,7 @@ sethue("steelblue4") # hide
 
 apoly = star(O, 80, 5, 0.6, 0, vertices=true)
 prettypoly(apoly,
-    :stroke,  
+    :stroke,
     vertexlabels = (n, l) -> (text(string(n, " of ", l), halign=:center)),
     close=true)
 finish() # hide
@@ -256,7 +266,7 @@ prettypoly(collect(sincurve), :stroke,
 text(string("number of points: ", length(collect(sincurve))), 0, 100)
 translate(0, 200)
 simplercurve = simplify(collect(sincurve), 0.5)
-prettypoly(simplercurve, :stroke,     
+prettypoly(simplercurve, :stroke,
     () -> begin
             sethue("red")
             circle(O, 3, :fill)
@@ -525,15 +535,36 @@ getpath
 getpathflat
 ```
 
-## Polygons to Bèzier paths
+## Polygons to Bézier paths and back again
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and their control points.
 
-`makebezierpath()` takes the points in a polygon and converts each line segment into a Bèzier curve. `drawbezierpath()` draws the resulting sequence.
+```
+NTuple{4,Point}[
+    (Point(-129.904, 75.0),        # start point
+     Point(-162.38, 18.75),        # ^ control point
+     Point(-64.9519, -150.0),      # v control point
+     Point(-2.75546e-14, -150.0)), # end point
+    (Point(-2.75546e-14, -150.0),
+     Point(64.9519, -150.0),
+     Point(162.38, 18.75),
+     Point(129.904, 75.0)),
+    (Point(129.904, 75.0),
+     Point(97.4279, 131.25),
+     Point(-97.4279, 131.25),
+     Point(-129.904, 75.0)
+     ),
+     ...
+     ]
+```
+
+Bézier paths are slightly different from ordinary paths in that they don't usually contain straight line segments. (Although by setting the two control points to be the same as their matching start/end points, you create straight line sections.)
+
+`makebezierpath()` takes the points in a polygon and converts each line segment into one Bézier curve. `drawbezierpath()` draws the resulting sequence.
 
 ```@example
 using Luxor # hide
-Drawing(600, 300, "assets/figures/abezierpath.png") # hide
+Drawing(600, 320, "assets/figures/abezierpath.png") # hide
 background("white") # hide
 origin() # hide
 setline(1.5) # hide
@@ -557,7 +588,7 @@ nothing # hide
 
 ```@example
 using Luxor # hide
-Drawing(600, 300, "assets/figures/bezierpaths.png") # hide
+Drawing(600, 320, "assets/figures/bezierpaths.png") # hide
 background("white") # hide
 origin() # hide
 srand(3) # hide
@@ -582,9 +613,47 @@ nothing # hide
 ```
 ![path to polygon](assets/figures/bezierpaths.png)
 
+You can convert a Bézier path to a polygon (an array of points), using the `bezierpathtopoly()` function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used for each Bézier curve segment.
+
+In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/bezierpathtopoly.png") # hide
+background("white") # hide
+origin() # hide
+srand(3) # hide
+
+pgon = star(O, 250, 5, 0.6, 0, vertices=true)
+
+@layer begin
+ setgrey(0.5)
+ setdash("dot")
+ poly(pgon, :stroke, close=true)
+ setline(5)
+end
+
+setline(4)
+
+sethue("orangered")
+np = makebezierpath(pgon)
+drawbezierpath(np, :stroke)
+
+sethue("steelblue")
+p = bezierpathtopoly(np, steps=3)
+q1 = offsetpoly(p, 20)
+prettypoly(q1, :stroke, close=true)
+
+finish() # hide
+nothing # hide
+```
+![path to polygon](assets/figures/bezierpathtopoly.png)
+
 ```@docs
 makebezierpath
 drawbezierpath
+bezierpathtopoly
+beziertopoly
 ```
 
 ## Polygon information
@@ -660,10 +729,10 @@ nothing # hide
        0.0000
       86.7767
      173.553
-     260.33  
+     260.33
      347.107
      433.884
-     520.66  
+     520.66
      607.437
 
 `nearestindex` returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.

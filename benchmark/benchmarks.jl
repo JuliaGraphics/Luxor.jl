@@ -147,4 +147,20 @@ macOS, Luxor release 0.9.1, Julia release 0.6
     samples:          1331
     evals/sample:     1
 
+results of version of 2017-07-29 18:07:01
+macOS, Luxor release 0.9, Julia release 0.7
+
+BenchmarkTools.Trial:
+  memory estimate:  149.31 KiB
+  allocs estimate:  5793
+  --------------
+  minimum time:     1.968 ms (0.00% GC)
+  median time:      2.363 ms (0.00% GC)
+  mean time:        4.024 ms (1.69% GC)
+  maximum time:     846.859 ms (0.00% GC)
+  --------------
+  samples:          1241
+  evals/sample:     1
+
+
 =#

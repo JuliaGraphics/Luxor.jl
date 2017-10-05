@@ -4,7 +4,32 @@ In Luxor, there are different ways of working with graphical items. Some, such a
 
 ## Rectangles and boxes
 
+The simple rectangle and box shapes can be made in different ways.
+
+```@example
+using Luxor # hide
+Drawing(400, 220, "assets/figures/basicrects.png") # hide
+background("white") # hide
+origin() # hide
+axes()
+sethue("red")
+rect(O, 100, 100, :stroke)
+sethue("blue")
+box(O, 100, 100, :stroke)
+finish() # hide
+nothing # hide
+```
+
+![rect vs box](assets/figures/basicrects.png)
+
+Whereas `rect()` rectangles are positioned at one corner, a box made with `box()` can either be defined by its center and dimensions, or by two opposite corners.
+
 ![rects](assets/figures/rects.png)
+
+If you want the coordinates of the corners of a box, use this form of `box()`:
+
+    box(centerpoint, width, height, vertices=true)
+
 
 ```@docs
 rect
@@ -115,7 +140,7 @@ circle
 ellipse
 ```
 
-`circlepath()` constructs a circular path from Bèzier curves, which allows you to use circles as paths.
+`circlepath()` constructs a circular path from Bézier curves, which allows you to use circles as paths.
 
 ```@example
 using Luxor # hide
@@ -364,7 +389,7 @@ rule
 
 There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`.
 
-`curve()` constructs Bèzier curves from control points:
+`curve()` constructs Bézier curves from control points:
 
 ```@example
 using Luxor # hide
@@ -395,7 +420,7 @@ nothing # hide
 
 ![curve](assets/figures/curve.png)
 
-`arc2r()` draws a circular arc that joins two points:  
+`arc2r()` draws a circular arc that joins two points:
 
 ```@example
 using Luxor # hide
@@ -497,9 +522,11 @@ origin() # hide
 background("white") # hide
 sethue("darkmagenta") # hide
 pt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)
+text.(["pt1", "pt2", "pt3", "pt4"], [pt1, pt2, pt3, pt4])
 line(pt1, pt2, :stroke)
-line(pt3, pt4, :stroke)
-flag, ip =  intersection(pt1, pt2, pt3, pt4)
+line(pt4, pt3, :stroke)
+
+flag, ip =  intersection(pt1, pt2, pt4, pt3)
 if flag
     circle(ip, 5, :fill)
 end
@@ -534,7 +561,9 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection_line_circle.png)
 
-`intersection2circles()` finds the area of the intersection of two circles. This example shows the areas of two circles, and the area of their intersection.
+`intersection2circles()` finds the area of the intersection of two circles, and `intersectioncirclecircle() finds the points where they cross.
+
+This example shows the areas of two circles, and the area of their intersection.
 
 ```@example
 using Luxor # hide
@@ -562,15 +591,22 @@ text(string(150^2 * pi |> round), c2[1] + (100, 0))
 sethue("white")
 text(string(intersection2circles(c1..., c2...) |> round),
      midpoint(c1[1], c2[1]), halign=:center)
+
+sethue("red")
+flag, C, D = intersectioncirclecircle(c1..., c2...)
+if flag
+    circle.([C, D], 2, :fill)
+end
 finish() # hide
 nothing # hide
 ```
-![intersetion of two circles](assets/figures/intersection2circles.png)
+![intersection of two circles](assets/figures/intersection2circles.png)
 
 ```@docs
 intersection
 intersection_line_circle
 intersection2circles
+intersectioncirclecircle
 ```
 `getnearestpointonline()` finds perpendiculars.
 
