@@ -421,7 +421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Rectangles and boxes",
     "category": "section",
-    "text": "The simple rectangle and box shapes can be made in different ways.using Luxor # hide\nDrawing(400, 220, \"assets/figures/basicrects.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\naxes()\nsethue(\"red\")\nrect(O, 100, 100, :stroke)\nsethue(\"blue\")\nbox(O, 100, 100, :stroke)\nfinish() # hide\nnothing # hide(Image: rect vs box)Whereas rect() rectangles are positioned at one corner, a box made with box() can either be defined by its center and dimensions, or by two opposite corners.(Image: rects)If you want the coordinates of the corners of a box, use this form of box():box(centerpoint, width, height, vertices=false)rect\nbox\npolybboxFor regular polygons, see the next section on Polygons."
+    "text": "The simple rectangle and box shapes can be made in different ways.using Luxor # hide\nDrawing(400, 220, \"assets/figures/basicrects.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\naxes()\nsethue(\"red\")\nrect(O, 100, 100, :stroke)\nsethue(\"blue\")\nbox(O, 100, 100, :stroke)\nfinish() # hide\nnothing # hide(Image: rect vs box)Whereas rect() rectangles are positioned at one corner, a box made with box() can either be defined by its center and dimensions, or by two opposite corners.(Image: rects)If you want the coordinates of the corners of a box, use this form of box():box(centerpoint, width, height, vertices=true)rect\nbox\npolybboxFor regular polygons, see the next section on Polygons."
 },
 
 {
