@@ -6,13 +6,9 @@ DocTestSetup = quote
 
 # The basics
 
-The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already drawn.
+The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the current drawing environment by transforming/rotating/scaling it. This affects subsequent graphics but not the ones you've already drawn.
 
-A position is specified either by a `Point(x, y)` or by separate x and y coordinates.
-
-The default origin is at the top left of the drawing area, but you can reposition it at any time.
-
-Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
+Specify points (positions) using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
 The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using `GridRect` and `GridHex`.
 
@@ -31,7 +27,7 @@ julia> P.y
 13.0
 ```
 
-Like all Points, P is immutable, so you can't change its x or y coordinate directly. But it's easy to make new points based on existing ones.
+Points are immutable, so you can't change P's x or y coordinate directly. But it's easy to make new points based on existing ones.
 
 Points can be added together:
 
@@ -53,7 +49,7 @@ julia> P + 100
 Luxor.Point(112.0, 113.0)
 ```
 
-You can make new points by mixing Points and tuples:
+You can also make new points by mixing Points and tuples:
 
 ```
 julia> P + (10, 0)
@@ -79,7 +75,7 @@ nothing # hide
 
 ![point example](assets/figures/point-ex.png)
 
-Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').
+Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise'). (Turtle graphics conventionally let you supply angles in degrees.)
 
 Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
 
@@ -95,7 +91,9 @@ For example:
 rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 ```
 
-## Drawings and files
+## Drawings
+
+### Drawings and files
 
 To create a drawing, and optionally specify the filename and type, and dimensions, use the `Drawing` constructor function.
 
@@ -171,6 +169,71 @@ or
       sethue("purple");
       circle(O, 20, :fill);
      )
+```
+
+#### Quick drawings with macros
+
+The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:
+
+```
+@svg circle(O, 20, :stroke) 50 50
+```
+
+expands to
+
+```
+Drawing(50, 50, "luxor-drawing.png")
+origin()
+background("white")
+sethue("black")
+circle(O, 20, :stroke)
+finish()
+preview()
+```
+
+They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:
+
+```
+@svg begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end
+```
+
+or
+
+```
+@svg (setline(10);
+      sethue("purple");
+      circle(O, 20, :fill);
+     )
+```
+
+### Drawings in memory
+
+You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
+
+    Drawing(width, height, surfacetype, [filename])
+
+lets you supply `surfacetype` as a symbol (`:svg` `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
+
+In a Jupyter notebook you can use Interact.jl to provide faster manipulations:
+
+```
+using Interact
+
+function makecircle(r)
+    d = Drawing(100, 100, :svg, "test.svg")
+    origin()
+    circle(O, r, :stroke)
+    finish()
+    return d
+end
+
+@manipulate for r in 5:50
+    makecircle(r)
+end
 ```
 
 ## The drawing surface

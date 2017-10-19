@@ -48,9 +48,9 @@ What happened? Can you see this image somewhere?
 
 ![point example](assets/figures/tutorial-hello-world.png)
 
-If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing.png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
+If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing.png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
-Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. PDF documents are often higher quality, and usually open up in a separate application.
+Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. PDF documents are often higher quality, but usually open up in a separate application.
 
 This example illustrates a few things about Luxor drawings:
 
@@ -706,7 +706,7 @@ pc = polycentroid(pgon)
 circle(pc, 5, :fill)
 
 for pt in 1:2:length(pgon)
-    pgon[pt] = between(pc, pgon[pt], 0.5)  
+    pgon[pt] = between(pc, pgon[pt], 0.5)
 end
 poly(pgon, :stroke)
 finish()

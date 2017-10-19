@@ -38,16 +38,6 @@ Luxor provides basic vector drawing functions and utilities for working with sha
 
 Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl).
 
-## Current status
-
-Luxor currently runs on Julia versions 0.5 and 0.6, and uses Cairo.jl and Colors.jl.
-
-!!! warning "Deprecations"
-
-    The functions `fill()` and `stroke()` are deprecated in this release, and will be removed in a future release. They should be replaced with `fillpath()` and `strokepath()` respectively.
-
-    The change is because `fill()` clashes with `Base.fill()`, used to fill arrays.
-
 ## Installation and basic usage
 
 Install the package as follows:
@@ -80,6 +70,20 @@ function get_os() # hide
     elseif is_linux() # hide
        osname = "Linux" # hide
     elseif is_windows() # hide
+       osname = "Windows" # hide
+    else # hide
+       osname = "unspecified" # hide
+    end # hide
+    return osname # hide
+end # hide
+function get_os_7() # hide
+    if Sys.isapple() # hide
+       osname = "macOS" # hide
+    elseif Sys.isunix() # hide
+       osname = "UNIX" # hide
+    elseif Sys.islinux() # hide
+       osname = "Linux" # hide
+    elseif Sys.iswindows() # hide
        osname = "Windows" # hide
     else # hide
        osname = "unspecified" # hide

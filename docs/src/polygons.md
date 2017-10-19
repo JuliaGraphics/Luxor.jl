@@ -636,6 +636,13 @@ end
 setline(4)
 
 sethue("orangered")
+
+np = makebezierpath(pgon)    
+drawbezierpath(np, :stroke)
+
+sethue("steelblue")
+p = bezierpathtopoly(np, steps=3)    
+
 np = makebezierpath(pgon)
 drawbezierpath(np, :stroke)
 

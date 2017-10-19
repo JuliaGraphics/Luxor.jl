@@ -34,13 +34,13 @@ function findbeziercontrolpoints(previouspt::Point, pt1::Point, pt2::Point, next
 end
 
 """
-    makebezierpath(pgon::Array; smoothing=1)
+makebezierpath(pgon::Array{Point, 1}; smoothing=1)
 
 Return a Bézier path that follows an array of points. The Bézier path is an array of
 tuples; each tuple contains the four points that make up a section of the
 path.
 """
-function makebezierpath(pgon::Array; smoothing=1.0)
+function makebezierpath(pgon::Array{Point, 1}; smoothing=1.0)
     lpg = length(pgon)
     newpath = NTuple{4,Luxor.Point}[]
     for i in 1:lpg
@@ -80,6 +80,7 @@ end
 Convert a Bezier segment (a tuple of four points: anchor1, control1, control2, anchor2) to a polygon (an array of points).
 """
 function beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)
+    path = Point[]
     anchor1, control1, control2, anchor2 = bpseg
     x1 = anchor1.x
     y1 = anchor1.y
@@ -125,7 +126,7 @@ function beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)
     dddfy = tmp2y * pre5
 
     step = steps
-    path = [Point(x1, y1)]
+    push!(path, Point(x1, y1))
     while step > 0
         fx   += dfx
         fy   += dfy
@@ -151,7 +152,7 @@ To make a Bezier path, use `makebezierpath()` on a polygon.
 The `steps` optional keyword determines how many line sections are used for each path.
 """
 function bezierpathtopoly(bezierpath::Array{NTuple{4,Luxor.Point}}; steps=10)
-    resultpoly = []
+    resultpoly = Point[]
     for bp in bezierpath
         p = beziertopoly(bp, steps=steps)
         append!(resultpoly, p)

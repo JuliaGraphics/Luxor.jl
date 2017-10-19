@@ -18,7 +18,7 @@ finish()
 preview()
 ```
 
-`Drawing(1000, 1000, "hello-world.png")` defines the size of the image, and the location and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg Preview on macOS).
+`Drawing(1000, 1000, "hello-world.png")` defines the width, height, location, and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name as well as by numeric value: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 and left-justified if you don't specify otherwise. `finish()` completes the drawing and saves the image in the file. `preview()` tries to open the saved file using some other application (eg Preview on macOS).
 
 The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewing graphics without having to provide the set-up and finish instructions:
 
@@ -45,7 +45,7 @@ end
 
 ## The Julia logos
 
-Luxor contains two functions that draw the Julia logo, either in color or a single color, and the three Julia circles.
+Luxor contains two functions that draw: the Julia logo, either in color or a single color; and the three Julia circles.
 
 ```@example
 using Luxor
@@ -78,7 +78,7 @@ nothing # hide
 
 The `gsave()` function saves the current drawing parameters, and any subsequent changes such as the `scale()` and `rotate()` operations are discarded by the next `grestore()` function.
 
-You can change the extension of the file name, for example "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps", to produce alternative formats.
+Use the extension to specify the format: for example change "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps", to produce different formats.
 
 ## Something a bit more complicated: a Sierpinski triangle
 
@@ -138,7 +138,7 @@ If you want to work interactively, you can use an environment such as a Jupyter 
 
 ### Maps
 
-Luxor can read simple polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid.
+Luxor can read polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid.
 
 !["simple world map detail"](assets/figures/airport-map-detail.png)
 
