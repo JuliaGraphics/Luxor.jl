@@ -89,14 +89,16 @@ test_hypotrochoid_at_pdf() ; println("output PDF")
 using Interact
 
 function makecircle(r)
-    d = Drawing(100,100,"test.svg")
+    d = Drawing(300, 300, :svg)
+    sethue("black")
+    setline(0.1)
     origin()
-    circle(O,r,:stroke)
+    hypotrochoid(150, r, 35, :stroke)
     finish()
     return d
 end
 
-@manipulate for r in 5:50
+@manipulate for r in 5:150
     makecircle(r)
 end
 

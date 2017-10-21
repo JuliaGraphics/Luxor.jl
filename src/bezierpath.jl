@@ -162,3 +162,91 @@ function bezierpathtopoly(bezierpath::Array{NTuple{4,Luxor.Point}}; steps=10)
     end
     return resultpoly
 end
+
+"""
+    pathtobezierpaths()
+
+Convert the current path (which may consist of one or more paths) to an array of 
+Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path
+segment is a tuple of four points. A straight line is converted to a Bezier segment
+in which the control points are set to be the the same as the end points.
+
+# Example
+
+This code draws the Bezier segments and shows the control points as "handles", like
+a vector-editing program might.
+
+```
+@svg begin
+    fontface("MyanmarMN-Bold")
+    st = "goo"
+    thefontsize = 100
+    fontsize(thefontsize)
+    sethue("red")
+    fontsize(thefontsize)
+    textpath(st)     
+    nbps = pathtobezierpaths()
+    for nbp in nbps
+        setline(.15)
+        sethue("grey50")
+        drawbezierpath(nbp, :stroke)
+        for p in nbp
+            sethue("red")
+            circle(p[2], 0.16, :fill)
+            circle(p[3], 0.16, :fill)
+            line(p[2], p[1], :stroke)
+            line(p[3], p[4], :stroke)
+            if p[1] != p[4]
+                sethue("black")
+                circle(p[1], 0.26, :fill)
+                circle(p[4], 0.26, :fill)
+            end
+        end
+    end
+end
+```
+
+"""
+function pathtobezierpaths()
+    originalpath = getpath()
+    # to store all the Bezier paths
+    result = Array{NTuple{4,Luxor.Point}, 1}[]
+    # to store a Bezier path
+    newbezpath = NTuple{4,Luxor.Point}[]
+    # to store a Bezier segment
+    bezsegment = ()
+    currentpos = Point(0, 0)
+    if length(originalpath) > 0
+        for e in originalpath
+            if e.element_type == Cairo.CAIRO_PATH_MOVE_TO                # 0
+                currentpos = Point(e.points[1], e.points[2])
+                if length(result) > 0
+                    push!(result, newbezpath)
+                    newbezpath = NTuple{4,Luxor.Point}[]
+                end
+            elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO            # 1
+                # add a straight line segment in the form of a bezsegment
+                bezsegment = (currentpos,
+                              currentpos,
+                              Point(e.points[1], e.points[2]),
+                              Point(e.points[1], e.points[2]))
+                push!(newbezpath, bezsegment)
+                currentpos = Point(e.points[1], e.points[2])
+            elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO           # 2
+                bezsegment = (currentpos,
+                              Point(e.points[1], e.points[2]),
+                              Point(e.points[3], e.points[4]),
+                              Point(e.points[5], e.points[6]))
+                currentpos = Point(e.points[5], e.points[6])
+                push!(newbezpath, bezsegment)
+            elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH         # 3
+                # finish this path and store it away
+                push!(result, newbezpath)
+            else
+                error("unknown CairoPathEntry " * repr(e.element_type))
+                error("unknown CairoPathEntry " * repr(e.points))
+            end
+        end
+    end
+    return result
+end
