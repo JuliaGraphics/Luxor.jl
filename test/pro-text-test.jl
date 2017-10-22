@@ -10,7 +10,7 @@ else
 end
 
 function test_pro_text(fname)
-    Drawing(1600, 1200, fname)
+    Drawing(1600, 1800, fname)
     sethue("black")
     strings = [
     "<b>This is bold.</b>",
@@ -33,7 +33,7 @@ function test_pro_text(fname)
     counter = 1
     for i in 4:30
         # pro api:
-        setfont("Georgia", i)
+        setfont("Georgia $i", i)
         settext(
             strings[mod1(counter, length(strings))],
             Point(col1, row),
@@ -48,6 +48,13 @@ function test_pro_text(fname)
         fontsize(i)
         text("hello in Georgia $i using the Toy API", Point(col2, row))
         row += 30
+
+        # TODO: A weird bug: the markup is applied when I don't think it should be
+        # pro api again
+        # setfont("Georgia $i", i)
+        #settext("hello in Georgia $i using the Pro API", Point(col2, row))
+
+        # row += 30
     end
     settext("Test with no row, col", halign="left", valign="top", angle=0, markup=true)
 

@@ -34,11 +34,11 @@ function findbeziercontrolpoints(previouspt::Point, pt1::Point, pt2::Point, next
 end
 
 """
-makebezierpath(pgon::Array{Point, 1}; smoothing=1)
+    makebezierpath(pgon::Array{Point, 1}; smoothing=1)
 
-Return a Bézier path that follows an array of points. The Bézier path is an array of
-tuples; each tuple contains the four points that make up a section of the
-path.
+Return a Bézier path that follows a polygon (an array of points). The Bézier path is an
+array of tuples; each tuple contains the four points that make up a segment of the
+Bézier path.
 """
 function makebezierpath(pgon::Array{Point, 1}; smoothing=1.0)
     lpg = length(pgon)
@@ -166,7 +166,7 @@ end
 """
     pathtobezierpaths()
 
-Convert the current path (which may consist of one or more paths) to an array of 
+Convert the current path (which may consist of one or more paths) to an array of
 Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path
 segment is a tuple of four points. A straight line is converted to a Bezier segment
 in which the control points are set to be the the same as the end points.
@@ -184,7 +184,7 @@ a vector-editing program might.
     fontsize(thefontsize)
     sethue("red")
     fontsize(thefontsize)
-    textpath(st)     
+    textpath(st)
     nbps = pathtobezierpaths()
     for nbp in nbps
         setline(.15)

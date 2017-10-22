@@ -1,42 +1,22 @@
 ```@meta
 DocTestSetup = quote
     using Luxor
-    function get_os()
-        if is_apple()
-           osname = "macOS"
-        elseif is_unix()
-           osname = "UNIX"
-        elseif is_linux()
-           osname = "Linux"
-        elseif is_windows()
-           osname = "Windows"
-        else
-           osname = "unspecified"
-        end
-        return osname
-    end
-    function get_os_7()
-        if Sys.isapple()
-           osname = "macOS"
-        elseif Sys.isunix()
-           osname = "UNIX"
-        elseif Sys.islinux()
-           osname = "Linux"
-        elseif Sys.iswindows()
-           osname = "Windows"
-        else
-           osname = "unspecified"
-        end
-        return osname
-    end
 end
 ```
 
 # Introduction to Luxor
 
-Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to [Cairo.jl](https://github.com/JuliaLang/Cairo.jl).
+Luxor is a Julia package for drawing simple static vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles.
 
-Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl).
+The focus of Luxor is on simplicity and ease of use: it should be easier to use than plain [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions.
+
+Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
+
+There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg).
+
+For interactive graphics, you'll find [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), and the Julia version of the [Processing](https://github.com/rennis250/Processing.jl) language worth investigating.
+
+Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl). Original version by [cormullion](https://github.com/cormullion), much improved with contributions from the Julia community.
 
 ## Installation and basic usage
 
@@ -54,55 +34,16 @@ To use Luxor, type:
 using Luxor
 ```
 
-Original version by [cormullion](https://github.com/cormullion).
+To test:
+
+```
+julia> @png juliacircles()
+```
 
 ## Documentation
 
 The documentation was built using [Documenter.jl](https://github.com/JuliaDocs).
 
 ```@example
-using Luxor # hide
-function get_os() # hide
-    if is_apple() # hide
-       osname = "macOS" # hide
-    elseif is_unix() # hide
-       osname = "UNIX" # hide
-    elseif is_linux() # hide
-       osname = "Linux" # hide
-    elseif is_windows() # hide
-       osname = "Windows" # hide
-    else # hide
-       osname = "unspecified" # hide
-    end # hide
-    return osname # hide
-end # hide
-function get_os_7() # hide
-    if Sys.isapple() # hide
-       osname = "macOS" # hide
-    elseif Sys.isunix() # hide
-       osname = "UNIX" # hide
-    elseif Sys.islinux() # hide
-       osname = "Linux" # hide
-    elseif Sys.iswindows() # hide
-       osname = "Windows" # hide
-    else # hide
-       osname = "unspecified" # hide
-    end # hide
-    return osname # hide
-end # hide
-function get_os_7() # hide
-    if Sys.isapple() # hide
-       osname = "macOS" # hide
-    elseif Sys.isunix() # hide
-       osname = "UNIX" # hide
-    elseif Sys.islinux() # hide
-       osname = "Linux" # hide
-    elseif Sys.iswindows() # hide
-       osname = "Windows" # hide
-    else # hide
-       osname = "unspecified" # hide
-    end # hide
-    return osname # hide
-end # hide
-println("Build date: $(now()), built with Julia $(VERSION) on $(get_os()).") # hide
+println("Documentation built $(now()) with Julia $(VERSION).") # hide
 ```
