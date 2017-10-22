@@ -522,7 +522,7 @@ origin() # hide
 background("white") # hide
 sethue("darkmagenta") # hide
 pt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)
-text.(["pt1", "pt2", "pt3", "pt4"], [pt1, pt2, pt3, pt4])
+text.(["pt 1", "pt 2", "pt 3", "pt 4"], [pt1, pt2, pt3, pt4])
 line(pt1, pt2, :stroke)
 line(pt4, pt3, :stroke)
 
@@ -567,7 +567,7 @@ This example shows the areas of two circles, and the area of their intersection.
 
 ```@example
 using Luxor # hide
-Drawing(700, 300, "assets/figures/intersection2circles.png") # hide
+Drawing(700, 310, "assets/figures/intersection2circles.png") # hide
 origin() # hide
 background("white") # hide
 fontsize(14) # hide

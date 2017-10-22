@@ -655,27 +655,25 @@ nothing # hide
 
 You can convert the current path to an array of Bézier paths using the `pathtobezierpaths()` function.
 
-In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each path is drawn first of all in gray, then each segment is drawn (in orange) showing how the control points affect the curvature of the Bézier segments.
+In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then each segment is drawn (in orange) showing how the control points affect the curvature of the Bézier segments.
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/pathtobezierpaths.png")
+Drawing(600, 400, "assets/figures/pathtobezierpaths.png") # hide
 background("ivory") # hide
 origin() # hide
 st = "a"
 thefontsize = 500
 fontsize(thefontsize)
 sethue("red")
-fontsize(thefontsize)
 tex = textextents(st)
 move(-tex[3]/2, tex[4]/2)
 textpath(st)
 nbps = pathtobezierpaths()
+setline(1.5)
 for nbp in nbps
-    setline(1.5)
     sethue("grey80")
     drawbezierpath(nbp, :stroke)
-    setline(1.5)
     for p in nbp
         sethue("darkorange")
         circle(p[2], 2.0, :fill)

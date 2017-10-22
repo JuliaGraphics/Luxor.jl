@@ -276,8 +276,9 @@ Example:
     settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
 """
 function setfont(family::AbstractString, fontsize)
-    # why is the size of the output set relative to 96dpi???
-    fsize = fontsize * 72/96
+    # once the size of the output was set relative to 96dpi
+    # mysteriously has changed Oct 2017
+    fsize = fontsize # was * 72/96
     set_font_face(currentdrawing.cr, string(family, " ", fsize))
 end
 
