@@ -535,7 +535,7 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection.png)
 
-`intersection_line_circle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
+`intersectionlinecircle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
 
 ```@example
 using Luxor # hide
@@ -550,7 +550,7 @@ cpoint = Point(0, 0)
 line(l1, l2, :stroke)
 sethue("darkgreen") # hide
 circle(cpoint, rad, :stroke)
-nints, ip1, ip2 =  intersection_line_circle(l1, l2, cpoint, rad)
+nints, ip1, ip2 =  intersectionlinecircle(l1, l2, cpoint, rad)
 sethue("black")
 if nints == 2
     circle(ip1, 8, :stroke)
@@ -604,9 +604,10 @@ nothing # hide
 
 ```@docs
 intersection
-intersection_line_circle
+intersectionlinecircle
 intersection2circles
 intersectioncirclecircle
+bboxesintersect
 ```
 `getnearestpointonline()` finds perpendiculars.
 

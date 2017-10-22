@@ -537,7 +537,9 @@ getpathflat
 
 ## Polygons to Bézier paths and back again
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths. A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and their control points.
+Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths, and `pathtobezierpaths()` to convert the current path to an array of Bézier paths.  
+
+A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and their control points.
 
 ```
 NTuple{4,Point}[
@@ -651,12 +653,57 @@ nothing # hide
 ```
 ![path to polygon](assets/figures/bezierpathtopoly.png)
 
+You can convert the current path to an array of Bézier paths using the `pathtobezierpaths()` function.
+
+In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each path is drawn first of all in gray, then each segment is drawn (in orange) showing how the control points affect the curvature of the Bézier segments.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/pathtobezierpaths.png")
+background("ivory") # hide
+origin() # hide
+st = "a"
+thefontsize = 500
+fontsize(thefontsize)
+sethue("red")
+fontsize(thefontsize)
+tex = textextents(st)
+move(-tex[3]/2, tex[4]/2)
+textpath(st)
+nbps = pathtobezierpaths()
+for nbp in nbps
+    setline(1.5)
+    sethue("grey80")
+    drawbezierpath(nbp, :stroke)
+    setline(1.5)
+    for p in nbp
+        sethue("darkorange")
+        circle(p[2], 2.0, :fill)
+        circle(p[3], 2.0, :fill)
+        line(p[2], p[1], :stroke)
+        line(p[3], p[4], :stroke)
+        if p[1] != p[4]
+            sethue("black")
+            circle(p[1], 2.0, :fill)
+            circle(p[4], 2.0, :fill)
+        end
+    end
+end
+finish() # hide
+nothing # hide
+```
+![path to polygon](assets/figures/pathtobezierpaths.png)
+
 ```@docs
 makebezierpath
 drawbezierpath
 bezierpathtopoly
 beziertopoly
+pathtobezierpaths
 ```
+
+
+
 
 ## Polygon information
 
@@ -772,6 +819,7 @@ nothing # hide
 ```@docs
 polyperimeter
 polyportion
+polyremainder
 polydistances
 nearestindex
 polyarea

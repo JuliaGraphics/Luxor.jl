@@ -41,7 +41,7 @@ function test_intersections(fname)
         grestore()
 
         sethue("red")
-        n, int1, int2 = intersection_line_circle(p1, p3, p2, rad)
+        n, int1, int2 = intersectionlinecircle(p1, p3, p2, rad)
         if n == 1
             circle(int1, 10, :fill)
         elseif n == 2
@@ -56,9 +56,9 @@ function test_intersections(fname)
     l1 = Luxor.Point(-100.0,-100.0)
     l2 = Luxor.Point(300.0,200.0)
     cpoint = Point(0, 0)
-    @test intersection_line_circle(l1, l2, cpoint, 15)[1] == 0
-    @test intersection_line_circle(l1, l2, cpoint, 20)[1] == 1
-    @test intersection_line_circle(l1, l2, cpoint, 25)[1] == 2
+    @test intersectionlinecircle(l1, l2, cpoint, 15)[1] == 0
+    @test intersectionlinecircle(l1, l2, cpoint, 20)[1] == 1
+    @test intersectionlinecircle(l1, l2, cpoint, 25)[1] == 2
     @test finish() == true
 end
 

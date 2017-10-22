@@ -31,6 +31,51 @@ function bezierpathtest(fname)
     @test finish() == true
 end
 
+function pathtobezierpath(fname)
+    srand(3)
+    currentwidth = 800
+    currentheight = 800
+    Drawing(currentwidth, currentheight, fname)
+    origin()
+    background("white")
+    fontface("MyanmarMN-Bold")
+    st = "julia"
+    setopacity(0.7)
+    thefontsize = 200
+    sethue("red")
+    fontsize(thefontsize)
+    move(Point(-350, 0))
+    textpath(st)     
+    nbps = pathtobezierpaths()
+    for nbp in nbps
+        setline(.25)
+        sethue("grey50")
+        drawbezierpath(nbp, :stroke)
+        # exaggerate position of Bezier control points
+        for p in nbp
+            sethue("magenta")
+            exthandle1 = between(p[2], p[1], -3)
+            exthandle2 = between(p[3], p[4], -3) 
+            circle(exthandle1, 1, :fill)
+            circle(exthandle2, 1, :fill)
+            line(p[1], exthandle1, :stroke)
+            line(exthandle2, p[4], :stroke)
+            if p[1] != p[4]
+                sethue("black")
+                circle(p[1], 1, :fill)
+                circle(p[4], 1, :fill)
+            end
+        end
+    end
+    @test finish() == true
+end
+
 fname = "bezierpath.png"
 bezierpathtest(fname)
-println("...finished test: output in $(fname)")
+
+println("...bezier test: output in $(fname)")
+
+fname = "pathtobezierpath.svg"
+pathtobezierpath(fname)
+
+println("...finished bezier tests: output in $(fname)")
