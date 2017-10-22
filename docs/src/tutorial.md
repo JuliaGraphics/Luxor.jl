@@ -194,7 +194,7 @@ While we could have drawn all the circles as usual, we've taken the opportunity 
 
 ### Intersect this
 
-We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersection_line_circle` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
+We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersectionlinecircle` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
 
 ```julia
 @png begin
@@ -215,14 +215,14 @@ We've now ready to tackle the job of finding the coordinates of the two points w
 
 ```
 
-The `intersection_line_circle()` takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.
+The `intersectionlinecircle()` takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.
 
 The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia's math-friendly style. The circle is centered at A and has a radius of AB (which is `2radius`). Assuming that there are two intersections, we feed these to `circle()` and `label()` for drawing and labeling using our new broadcasting superpowers.
 
 ```julia
 
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
     if nints == 2
         circle.([C, D], 2, :fill)
@@ -250,7 +250,7 @@ label("B", :NE, B)
 circle.([A, O, B], 2, :fill)
 circle.([A, B], 2radius, :stroke)
 
-nints, C, D = intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+nints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
     circle.([C, D], 2, :fill)
     label.(["D", "C"], :N, [D, C])
@@ -264,7 +264,7 @@ finish()
 
 Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.
 
-Finding this new center point C1 is easy enough, because we can again use `intersection_line_circle()` to find the point where the central circle crosses a line from O to D.
+Finding this new center point C1 is easy enough, because we can again use `intersectionlinecircle()` to find the point where the central circle crosses a line from O to D.
 
 Add some more lines to your code:
 
@@ -273,7 +273,7 @@ Add some more lines to your code:
 
     # ...
 
-    nints, C1, C2 = intersection_line_circle(O, D, O, radius)
+    nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
     if nints == 2
         circle(C1, 3, :fill)
         label("C1", :N, C1)
@@ -300,13 +300,13 @@ label("B", :NE, B)
 circle.([A, O, B], 2, :fill)
 circle.([A, B], 2radius, :stroke)
 
-nints, C, D = intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+nints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
     circle.([C, D], 2, :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
-nints, C1, C2 = intersection_line_circle(O, D, O, radius)
+nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
 if nints == 2
     circle(C1, 3, :fill)
     label("C1", :N, C1)
@@ -324,8 +324,8 @@ To find (and draw) these points is straightforward, but we'll mark these as inte
 
     # ...
 
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     circle.([I1, I2, I3, I4], 2, :fill)
 ```
@@ -369,13 +369,13 @@ label("B", :NE, B)
 circle.([A, O, B], 2, :fill)
 circle.([A, B], 2radius, :stroke)
 
-nints, C, D = intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+nints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
     circle.([C, D], 2, :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
-nints, C1, C2 = intersection_line_circle(O, D, O, radius)
+nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
 if nints == 2
     circle(C1, 3, :fill)
     label("C1", :N, C1)
@@ -383,8 +383,8 @@ end
 
 # finding two more points on the circumference
 
-nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
 circle.([I1, I2, I3, I4], 2, :fill)
 
@@ -457,13 +457,13 @@ circle.([A, O, B], 2, :fill)
 circle.([A, B], 2radius, :stroke)
 
 nints, C, D =
-    intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+    intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
     circle.([C, D], 2, :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
-nints, C1, C2 = intersection_line_circle(O, D, O, radius)
+nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
 if nints == 2
     circle(C1, 3, :fill)
     label("C1", :N, C1)
@@ -471,8 +471,8 @@ end
 
 # finding two more points on the circumference
 
-nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
 circle.([I1, I2, I3, I4], 2, :fill)
 
@@ -514,11 +514,11 @@ To be more generally useful, the above code can be boiled into a function.
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
-    flag, C1 = intersection_line_circle(C, D, O, radius)
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     if norm(C1, I1) < norm(C1, I2)
         ip1 = I1
@@ -574,11 +574,11 @@ Drawing(725, 500, "assets/figures/tutorial-egg-7.png")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
-    flag, C1 = intersection_line_circle(C, D, O, radius)
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     if norm(C1, I1) < norm(C1, I2)
         ip1 = I1
@@ -672,11 +672,11 @@ Drawing(725, 500, "assets/figures/tutorial-egg-8.png")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
-    flag, C1 = intersection_line_circle(C, D, O, radius)
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     if norm(C1, I1) < norm(C1, I2)
         ip1 = I1
@@ -742,11 +742,11 @@ Drawing(725, 600, "assets/figures/tutorial-egg-9.png")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
-    flag, C1 = intersection_line_circle(C, D, O, radius)
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     if norm(C1, I1) < norm(C1, I2)
         ip1 = I1
@@ -823,11 +823,11 @@ background("white")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
-    flag, C1 = intersection_line_circle(C, D, O, radius)
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     if norm(C1, I1) < norm(C1, I2)
         ip1 = I1

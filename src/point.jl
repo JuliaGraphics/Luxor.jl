@@ -370,21 +370,6 @@ function slope(pointA, pointB)
     return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
 end
 
-"""
-    intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
-
-Find the intersection points of a line (extended through points `p1` and `p2`) and a circle.
-
-Return a tuple of `(n, pt1, pt2)`
-
-where
-
-- `n` is the number of intersections, `0`, `1`, or `2`
-- `pt1` is first intersection point, or `Point(0, 0)` if none
-- `pt2` is the second intersection point, or `Point(0, 0)` if none
-
-The calculated intersection points won't necessarily lie on the line segment between `p1` and `p2`.
-"""
 function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
     a = (p2.x - p1.x)^2 + (p2.y - p1.y)^2
     b = 2.0 * ((p2.x - p1.x) * (p1.x - cpoint.x) +
@@ -413,6 +398,24 @@ function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
     end
     return number_of_intersections, intpoint1, intpoint2
 end
+
+"""
+    intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r)
+
+Find the intersection points of a line (extended through points `p1` and `p2`) and a circle.
+
+Return a tuple of `(n, pt1, pt2)`
+
+where
+
+- `n` is the number of intersections, `0`, `1`, or `2`
+- `pt1` is first intersection point, or `Point(0, 0)` if none
+- `pt2` is the second intersection point, or `Point(0, 0)` if none
+
+The calculated intersection points won't necessarily lie on the line segment between `p1` and `p2`.
+"""
+intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r) =
+    intersection_line_circle(p1, p2, cpoint, r)
 
 """
     @polar (p)
