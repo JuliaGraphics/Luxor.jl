@@ -21,7 +21,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-1.png" alt="
 
     circle.([A, O, B], 2, :fill)
     circle.([A, B], 2radius, :stroke)
-end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-2.png" alt="point example"/></p><p>While we could have drawn all the circles as usual, we&#39;ve taken the opportunity to introduce a powerful Julia feature called &#39;broadcasting&#39;. The dot (&#39;<code>.</code>&#39;) just after the function name in the last two <code>circle()</code> function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn&#39;t have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting for us.</p><h3><a class="nav-anchor" id="Intersect-this-1" href="#Intersect-this-1">Intersect this</a></h3><p>We&#39;ve now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There&#39;s a Luxor function called <code>intersection_line_circle</code> that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we&#39;ll only have to do circle A.</p><pre><code class="language-julia">@png begin
+end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-2.png" alt="point example"/></p><p>While we could have drawn all the circles as usual, we&#39;ve taken the opportunity to introduce a powerful Julia feature called &#39;broadcasting&#39;. The dot (&#39;<code>.</code>&#39;) just after the function name in the last two <code>circle()</code> function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn&#39;t have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting for us.</p><h3><a class="nav-anchor" id="Intersect-this-1" href="#Intersect-this-1">Intersect this</a></h3><p>We&#39;ve now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There&#39;s a Luxor function called <code>intersectionlinecircle</code> that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we&#39;ll only have to do circle A.</p><pre><code class="language-julia">@png begin
     # as before
     radius=80
     setdash(&quot;dot&quot;)
@@ -36,20 +36,20 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-2.png" alt="
 
     circle.([A, O, B], 2, :fill)
     circle.([A, B], 2radius, :stroke)
-</code></pre><p>The <code>intersection_line_circle()</code> takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.</p><p>The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia&#39;s math-friendly style. The circle is centered at A and has a radius of AB (which is <code>2radius</code>). Assuming that there are two intersections, we feed these to <code>circle()</code> and <code>label()</code> for drawing and labeling using our new broadcasting superpowers.</p><pre><code class="language-julia">
+</code></pre><p>The <code>intersectionlinecircle()</code> takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.</p><p>The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia&#39;s math-friendly style. The circle is centered at A and has a radius of AB (which is <code>2radius</code>). Assuming that there are two intersections, we feed these to <code>circle()</code> and <code>label()</code> for drawing and labeling using our new broadcasting superpowers.</p><pre><code class="language-julia">
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
     if nints == 2
         circle.([C, D], 2, :fill)
         label.([&quot;D&quot;, &quot;C&quot;], :N, [D, C])
     end
 
-end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-3.png" alt="point example"/></p><h3><a class="nav-anchor" id="The-upper-circle-1" href="#The-upper-circle-1">The upper circle</a></h3><p>Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.</p><p>Finding this new center point C1 is easy enough, because we can again use <code>intersection_line_circle()</code> to find the point where the central circle crosses a line from O to D.</p><p>Add some more lines to your code:</p><pre><code class="language-julia">@png begin
+end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-3.png" alt="point example"/></p><h3><a class="nav-anchor" id="The-upper-circle-1" href="#The-upper-circle-1">The upper circle</a></h3><p>Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.</p><p>Finding this new center point C1 is easy enough, because we can again use <code>intersectionlinecircle()</code> to find the point where the central circle crosses a line from O to D.</p><p>Add some more lines to your code:</p><pre><code class="language-julia">@png begin
 
     # ...
 
-    nints, C1, C2 = intersection_line_circle(O, D, O, radius)
+    nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
     if nints == 2
         circle(C1, 3, :fill)
         label(&quot;C1&quot;, :N, C1)
@@ -59,8 +59,8 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-4.png" alt="
 
     # ...
 
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     circle.([I1, I2, I3, I4], 2, :fill)</code></pre><p>The <code>norm()</code> function returns the distance between two points, and it&#39;s simple enough to compare the distances.</p><pre><code class="language-julia">    if norm(C1, I1) &lt; norm(C1, I2)
        ip1 = I1
@@ -95,11 +95,11 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-5.png" alt="
 end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-6.png" alt="point example"/></p><h2><a class="nav-anchor" id="Egg-stroke-1" href="#Egg-stroke-1">Egg stroke</a></h2><p>To be more generally useful, the above code can be boiled into a function.</p><pre><code class="language-julia">function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
     nints, C, D =
-        intersection_line_circle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
-    flag, C1 = intersection_line_circle(C, D, O, radius)
-    nints, I3, I4 = intersection_line_circle(A, C1, A, 2radius)
-    nints, I1, I2 = intersection_line_circle(B, C1, B, 2radius)
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
     if norm(C1, I1) &lt; norm(C1, I2)
         ip1 = I1
