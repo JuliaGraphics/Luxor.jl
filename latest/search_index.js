@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tutorial",
     "title": "Clipping",
     "category": "section",
-    "text": "A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.In this example, the egg (assuming you're still in the same Julia session in which you've defined the egg() function) isn't drawn, but is defined to act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the :clip action which is passed to the doaction() function at the end of the egg().Here, the graphics are provided by the ngon() function, which draws regular n-sided polygons.using Luxor, Colors\n@svg begin\n    setopacity(0.5)\n    egg(150, :clip)\n    @layer begin\n        for i in 360:-4:1\n            sethue(Colors.HSV(i, 1.0, 0.8))\n            rotate(pi/30)\n            ngon(O, i, 5, 0, :fill)\n        end\n    end\n    clipreset()\nendusing Luxor, Colors\nDrawing(725, 600, \"assets/figures/tutorial-egg-10.png\")\norigin()\nbackground(\"white\")\nfunction egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2    = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n    do_action(action)\nend\n\nsetopacity(0.5)\negg(150, :clip)\ngsave()\n    for i in 360:-4:1\n        sethue(Colors.HSV(i, 1.0, 0.8))\n        rotate(pi/30)\n        ngon(O, i, 5, 0, :fill)\n    end\ngrestore()\nclipreset()\nfinish()(Image: clip example)It's usually good practice to add a matching clipreset() after the clipping has been completed.Good luck with your explorations!"
+    "text": "A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.In this example, the egg (assuming you're still in the same Julia session in which you've defined the egg() function) isn't drawn, but is defined to act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the :clip action which is passed to the doaction() function at the end of the egg().Here, the graphics are provided by the ngon() function, which draws regular n-sided polygons.using Luxor, Colors\n@svg begin\n    setopacity(0.5)\n    egg(150, :clip)\n    @layer begin\n        for i in 360:-4:1\n            sethue(Colors.HSV(i, 1.0, 0.8))\n            rotate(pi/30)\n            ngon(O, i, 5, 0, :fill)\n        end\n    end\n    clipreset()\nendusing Luxor, Colors\nDrawing(725, 620, \"assets/figures/tutorial-egg-10.png\")\norigin()\nbackground(\"white\")\nfunction egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2    = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n    do_action(action)\nend\n\nsetopacity(0.5)\negg(150, :clip)\ngsave()\n    for i in 360:-4:1\n        sethue(Colors.HSV(i, 1.0, 0.8))\n        rotate(pi/30)\n        ngon(O, i, 5, 0, :fill)\n    end\ngrestore()\nclipreset()\nfinish()(Image: clip example)It's usually good practice to add a matching clipreset() after the clipping has been completed.Good luck with your explorations!"
 },
 
 {
@@ -305,19 +305,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "basics.html#Quick-drawings-with-macros-2",
-    "page": "Basic concepts",
-    "title": "Quick drawings with macros",
-    "category": "section",
-    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing.png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke)\nfinish()\npreview()They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     endor@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     )"
-},
-
-{
     "location": "basics.html#Drawings-in-memory-1",
     "page": "Basic concepts",
     "title": "Drawings in memory",
     "category": "section",
-    "text": "You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the Drawing() function:Drawing(width, height, surfacetype, [filename])lets you supply surfacetype as a symbol (:svg :png). This creates a new drawing of the given surface type and stores the image only in memory if no filename is supplied.In a Jupyter notebook you can use Interact.jl to provide faster manipulations:using Interact\n\nfunction makecircle(r)\n    d = Drawing(100, 100, :svg, \"test.svg\")\n    origin()\n    circle(O, r, :stroke)\n    finish()\n    return d\nend\n\n@manipulate for r in 5:50\n    makecircle(r)\nend"
+    "text": "You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the Drawing() function:Drawing(width, height, surfacetype, [filename])lets you supply surfacetype as a symbol (:svg or :png). This creates a new drawing of the given surface type and stores the image only in memory if no filename is supplied. In a Jupyter notebook you can use Interact.jl to provide faster manipulations:using Interact\n\nfunction makecircle(r)\n    d = Drawing(300, 300, :svg)\n    sethue(\"black\")\n    origin()\n    setline(0.5)\n    hypotrochoid(150, 100, r, :stroke)\n    finish()\n    return d\nend\n\n@manipulate for r in 5:150\n    makecircle(r)\nend"
 },
 
 {
@@ -1197,7 +1189,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.poly",
     "category": "Function",
-    "text": "Draw a polygon.\n\npoly(pointlist::Array, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
+    "text": "Draw a polygon.\n\npoly(pointlist::Array{Point, 1}, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
 },
 
 {
@@ -1470,6 +1462,22 @@ var documenterSearchIndex = {"docs": [
     "title": "Area of polygon",
     "category": "section",
     "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\ng = GridRect(O + (200, -200), 80, 20, 85)\ntext(\"#sides\", nextgridpoint(g), halign=:right)\ntext(\"area\", nextgridpoint(g), halign=:right)\n\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    ngonside(O, 50, i, 0, :fill)\n    sethue(\"grey40\")\n    ngonside(O, 50, i, 0, :stroke)\n    p = ngonside(O, 50, i, 0, vertices=true)\n    text(string(i), nextgridpoint(g), halign=:right)\n    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)\nend\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolyremainder\npolydistances\nnearestindex\npolyarea"
+},
+
+{
+    "location": "polygons.html#Luxor.polyintersections",
+    "page": "Polygons and paths",
+    "title": "Luxor.polyintersections",
+    "category": "Function",
+    "text": "polyintersections(S::Array{Point, 1}, C::Array{Point, 1})\n\nReturn an array of the points in polygon S plus the points where polygon S crosses polygon C. Calls intersectlinepoly().\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Polygon-intersections-(WIP)-1",
+    "page": "Polygons and paths",
+    "title": "Polygon intersections (WIP)",
+    "category": "section",
+    "text": "polyintersections calculates the intersection points of two polygons.using Luxor # hide\nDrawing(600, 550, \"assets/figures/polyintersections.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"grey60\") # hide\nsetopacity(0.8) # hide\npentagon = ngon(O, 250, 5, vertices=true)\nsquare = box(O + (80, 20), 280, 280, vertices=true)\n\npoly(pentagon, :stroke, close=true)\npoly(square, :stroke, close=true)\n\nsethue(\"orange\")\ncircle.(polyintersections(pentagon, square), 8, :fill)\n\nsethue(\"green\")\ncircle.(polyintersections(square, pentagon), 4, :fill)\n\nfinish() # hide\nnothing # hide(Image: polygon intersections)The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.polyintersections"
 },
 
 {
