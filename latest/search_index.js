@@ -1213,7 +1213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.isinside",
     "category": "Function",
-    "text": "isinside(p, pol; allowonedge=false)\n\nIs a point p inside a polygon pol? Returns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.\n\nSet allowonedge to false to suppress point-on-edge errors.\n\n\n\n"
+    "text": "isinside(p, pol; allowonedge=false)\n\nIs a point p inside a polygon pol? Returns true if it does, or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.\n\nThe classification of points lying on the edges of the target polygon, or coincident with its vertices is not clearly defined, due to rounding errors or arithmetical inadequacy. By default these will generate errors, but you can suppress these by setting allowonedge to true.\n\n\n\n"
 },
 
 {
