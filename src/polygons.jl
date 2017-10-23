@@ -3,7 +3,7 @@
 """
 Draw a polygon.
 
-    poly(pointlist::Array, action = :nothing;
+    poly(pointlist::Array{Point, 1}, action = :nothing;
         close=false,
         reversepath=false)
 
@@ -715,7 +715,7 @@ end
 Find the area of a simple polygon. It works only for polygons that don't
 self-intersect.
 """
-function polyarea(plist::Array)
+function polyarea(plist::Array{Point, 1})
     n = length(plist)
     area = 0.0
     for i in eachindex(plist)
@@ -732,7 +732,7 @@ end
 
 Return an array of the points where a line between pt1 and pt2 crosses polygon C.
 """
-function intersectlinepoly(pt1::Point, pt2::Point, C)
+function intersectlinepoly(pt1::Point, pt2::Point, C::Array{Point, 1})
     intersectingpoints = Point[]
     for j in 1:length(C)
         Cpointpair = (C[j], C[mod1(j+1, length(C))])
@@ -747,12 +747,13 @@ function intersectlinepoly(pt1::Point, pt2::Point, C)
 end
 
 """
-    polyintersections(S, C)
+    polyintersections(S::Array{Point, 1}, C::Array{Point, 1})
 
-    Return an array of the points where polygon S crosses polygon C cross. Calls `intersectlinepoly()`.
+Return an array of the points in polygon S plus the points where polygon S crosses
+polygon C. Calls `intersectlinepoly()`.
 
 """
-function polyintersections(S, C)
+function polyintersections(S::Array{Point, 1}, C::Array{Point, 1})
     Splusintersectionpoints = Point[]
     for i in 1:length(S)
         Spointpair = (S[i], S[mod1(i+1, length(S))])

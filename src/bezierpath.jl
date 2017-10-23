@@ -220,10 +220,6 @@ function pathtobezierpaths()
         for e in originalpath
             if e.element_type == Cairo.CAIRO_PATH_MOVE_TO                # 0
                 currentpos = Point(e.points[1], e.points[2])
-                if length(result) > 0
-                    push!(result, newbezpath)
-                    newbezpath = NTuple{4,Luxor.Point}[]
-                end
             elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO            # 1
                 # add a straight line segment in the form of a bezsegment
                 bezsegment = (currentpos,
@@ -241,7 +237,11 @@ function pathtobezierpaths()
                 push!(newbezpath, bezsegment)
             elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH         # 3
                 # finish this path and store it away
-                push!(result, newbezpath)
+                if length(newbezpath) > 0
+                    push!(result, newbezpath)
+                end
+                # make new path
+                newbezpath = NTuple{4,Luxor.Point}[]
             else
                 error("unknown CairoPathEntry " * repr(e.element_type))
                 error("unknown CairoPathEntry " * repr(e.points))

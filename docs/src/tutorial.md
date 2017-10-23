@@ -817,7 +817,7 @@ end
 
 ```@setup te10
 using Luxor, Colors
-Drawing(725, 600, "assets/figures/tutorial-egg-10.png")
+Drawing(725, 620, "assets/figures/tutorial-egg-10.png")
 origin()
 background("white")
 function egg(radius, action=:none)
