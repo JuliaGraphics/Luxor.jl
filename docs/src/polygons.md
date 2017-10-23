@@ -700,9 +700,6 @@ beziertopoly
 pathtobezierpaths
 ```
 
-
-
-
 ## Polygon information
 
 `polyperimeter` calculates the length of a polygon's perimeter.
@@ -821,4 +818,39 @@ polyremainder
 polydistances
 nearestindex
 polyarea
+```
+
+## Polygon intersections (WIP)
+
+`polyintersections` calculates the intersection points of two polygons.
+
+```@example
+using Luxor # hide
+Drawing(600, 550, "assets/figures/polyintersections.png") # hide
+origin() # hide
+background("white") # hide
+sethue("grey60") # hide
+setopacity(0.8) # hide
+pentagon = ngon(O, 250, 5, vertices=true)
+square = box(O + (80, 20), 280, 280, vertices=true)
+
+poly(pentagon, :stroke, close=true)
+poly(square, :stroke, close=true)
+
+sethue("orange")
+circle.(polyintersections(pentagon, square), 8, :fill)
+
+sethue("green")
+circle.(polyintersections(square, pentagon), 4, :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![polygon intersections](assets/figures/polyintersections.png)
+
+The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.
+
+```@docs
+polyintersections
 ```

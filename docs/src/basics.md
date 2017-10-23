@@ -171,67 +171,28 @@ or
      )
 ```
 
-#### Quick drawings with macros
-
-The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:
-
-```
-@svg circle(O, 20, :stroke) 50 50
-```
-
-expands to
-
-```
-Drawing(50, 50, "luxor-drawing.png")
-origin()
-background("white")
-sethue("black")
-circle(O, 20, :stroke)
-finish()
-preview()
-```
-
-They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:
-
-```
-@svg begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
-```
-
-or
-
-```
-@svg (setline(10);
-      sethue("purple");
-      circle(O, 20, :fill);
-     )
-```
-
 ### Drawings in memory
 
 You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
 
     Drawing(width, height, surfacetype, [filename])
 
-lets you supply `surfacetype` as a symbol (`:svg` `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
-
-In a Jupyter notebook you can use Interact.jl to provide faster manipulations:
+lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. In a Jupyter notebook you can use Interact.jl to provide faster manipulations:
 
 ```
 using Interact
 
 function makecircle(r)
-    d = Drawing(100, 100, :svg, "test.svg")
+    d = Drawing(300, 300, :svg)
+    sethue("black")
     origin()
-    circle(O, r, :stroke)
+    setline(0.5)
+    hypotrochoid(150, 100, r, :stroke)
     finish()
     return d
 end
 
-@manipulate for r in 5:50
+@manipulate for r in 5:150
     makecircle(r)
 end
 ```
