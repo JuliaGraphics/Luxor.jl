@@ -190,12 +190,16 @@ end
 """
     isinside(p, pol; allowonedge=false)
 
-Is a point `p` inside a polygon `pol`? Returns true or false.
+Is a point `p` inside a polygon `pol`? Returns true if it does, or false.
 
 This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.
 
-Set `allowonedge` to `false` to suppress point-on-edge errors.
+The classification of points lying on the edges of the target polygon, or coincident with
+its vertices is not clearly defined, due to rounding errors or arithmetical
+inadequacy. By default these will generate errors, but you can suppress these by setting
+`allowonedge` to `true`.
 """
+
 function isinside(p::Point, pointlist::Array{Point, 1};
         allowonedge::Bool=false)
     c = false
@@ -209,23 +213,26 @@ function isinside(p::Point, pointlist::Array{Point, 1};
         end
         if q1 == p
             allowonedge || error("VertexException a")
+            continue
         end
         if q2.y == p.y
             if q2.x == p.x
                 allowonedge || error("VertexException b")
+                continue
             elseif (q1.y == p.y) && ((q2.x > p.x) == (q1.x < p.x))
                 allowonedge || error("EdgeException")
+                continue
             end
         end
         if (q1.y < p.y) != (q2.y < p.y) # crossing
             if q1.x >= p.x
                 if q2.x > p.x
                     c = !c
-                elseif ((det3p(q1, q2, p) > 0) == (q2.y > q1.y)) # right crossing
+                elseif ((det3p(q1, q2, p) > 0) == (q2.y > q1.y))
                     c = !c
                 end
             elseif q2.x > p.x
-                if ((det3p(q1, q2, p) > 0) == (q2.y > q1.y))     # right crossing
+                if ((det3p(q1, q2, p) > 0) == (q2.y > q1.y))
                     c = !c
                 end
             end
