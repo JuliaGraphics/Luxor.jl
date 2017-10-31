@@ -33,12 +33,12 @@ box(corner1::Point, corner2::Point, action::Symbol=:nothing) =
     rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
 
 """
-    box(points::Array, action=:nothing)
+    box(points::AbstractArray, action=:nothing)
 
 Create a box/rectangle using the first two points of an array of Points to defined
 opposite corners.
 """
-box(bbox::Array, action::Symbol=:nothing) = box(bbox[1], bbox[2], action)
+box(bbox::AbstractArray, action::Symbol=:nothing) = box(bbox[1], bbox[2], action)
 
 """
     box(pt::Point, width, height, action=:nothing; vertices=false)

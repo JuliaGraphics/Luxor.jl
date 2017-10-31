@@ -128,7 +128,7 @@ midpoint(p1::Point, p2::Point) = Point((p1.x + p2.x) / 2.0, (p1.y + p2.y) / 2.0)
 
 Find midpoint between the first two elements of an array of points.
 """
-midpoint(pt::Array) = midpoint(pt[1], pt[2])
+midpoint(pt::AbstractArray) = midpoint(pt[1], pt[2])
 
 """
     between(p1::Point, p2::Point, x)

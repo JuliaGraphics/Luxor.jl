@@ -75,11 +75,11 @@ function getmatrix()
 end
 
 """
-    setmatrix(m::Array)
+    setmatrix(m::AbstractArray)
 
 Change the current matrix to matrix `m`. Use `getmatrix()` to get the current matrix.
 """
-function setmatrix(m::Array)
+function setmatrix(m::AbstractArray)
     if eltype(m) != Float64
         m = map(Float64,m)
     end
@@ -95,7 +95,7 @@ function setmatrix(m::Array)
 end
 
 """
-    transform(a::Array)
+    transform(a::AbstractArray)
 
 Modify the current matrix by multiplying it by matrix `a`.
 
@@ -105,7 +105,7 @@ For example, to skew the current state by 45 degrees in x and move by 20 in y di
 
 Use `getmatrix()` to get the current matrix.
 """
-function transform(a::Array)
+function transform(a::AbstractArray)
     b = Cairo.get_matrix(currentdrawing.cr)
     setmatrix([
         (a[1] * b.xx)  + a[2]  * b.xy,             # xx
@@ -155,7 +155,7 @@ end
 
 Return a 3x3 Julia matrix that's the equivalent of the six-element matrix in `c`.
 """
-function cairotojuliamatrix(c::Array)
+function cairotojuliamatrix(c::AbstractArray)
     return [c[1] c[3] c[5] ; c[2] c[4] c[6] ; 0.0 0.0 1.0]
 end
 
