@@ -138,7 +138,7 @@ type Drawing
     bluevalue::Float64
     alpha::Float64
     buffer::IOBuffer # Keeping both buffer and data because I think the buffer might get GC'ed otherwise
-    bufferdata::Array{UInt8,1} # Direct access to data
+    bufferdata::AbstractArray{UInt8,1} # Direct access to data
 
     function Drawing(w, h, stype::Symbol, f::AbstractString="")
         global currentdrawing

@@ -1,5 +1,5 @@
 """
-    bars(values::Array;
+    bars(values::AbstractArray;
             yscale = 100,
             xwidth = 10,
             labels = true,
@@ -25,7 +25,7 @@ bars(v, xwidth=15, yscale=10, labelfunction=mylabelfunction)
 To suppress the text labels, use optional keyword `labels=false`.
 """
 
-function bars(values::Array;
+function bars(values::AbstractArray;
     barfunction   = (bottom::Point, top::Point, value;
         extremes=extrema(values)) -> line(bottom, top, :stroke),
     labels::Bool=true,
