@@ -1,0 +1,8 @@
+julia 0.6
+Compat 0.9.1
+Colors
+Cairo
+FileIO
+Juno
+Hiccup
+@linux ImageMagick
