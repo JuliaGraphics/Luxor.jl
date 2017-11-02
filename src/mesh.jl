@@ -45,8 +45,9 @@ function mesh(bezierpath::AbstractArray{NTuple{4,Point}},
     end
     if length(colors) > 0
         for (n, c) in enumerate(colors)
-            col = parse(Colors.Colorant, colors[mod1(n, length(colors))])
-            Cairo.mesh_pattern_set_corner_color_rgb(pattern, n - 1, col.r, col.g, col.b)
+            # always use RGBA
+            col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
+            Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
         end
     end
 	Cairo.mesh_pattern_end_patch(pattern)
@@ -88,8 +89,8 @@ function mesh(plist::AbstractArray{Point},
     end
     if length(colors) > 0
         for (n, c) in enumerate(colors)
-            col = parse(Colors.Colorant, colors[mod1(n, length(colors))])
-            Cairo.mesh_pattern_set_corner_color_rgb(pattern, n - 1, col.r, col.g, col.b)
+            col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
+            Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
         end
     end
 	Cairo.mesh_pattern_end_patch(pattern)
