@@ -945,14 +945,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "colors-styles.html#Luxor.setblend",
-    "page": "Colors and styles",
-    "title": "Luxor.setblend",
-    "category": "Function",
-    "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
-},
-
-{
     "location": "colors-styles.html#Luxor.randomhue",
     "page": "Colors and styles",
     "title": "Luxor.randomhue",
@@ -969,11 +961,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "colors-styles.html#Luxor.setblend",
+    "page": "Colors and styles",
+    "title": "Luxor.setblend",
+    "category": "Function",
+    "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
+},
+
+{
     "location": "colors-styles.html#Color-and-opacity-1",
     "page": "Colors and styles",
     "title": "Color and opacity",
     "category": "section",
-    "text": "For color definitions and conversions, you can use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.Named colors, such as \"gold\", or \"lavender\", can be found in Colors.color_names. This code shows the first 625 colors.using Luxor, Colors # hide\nDrawing(800, 500, \"assets/figures/colors.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(5) # hide\ncols = collect(Colors.color_names)\ntiles = Tiler(800, 500, 25, 25)\nfor (pos, n) in tiles\n    sethue(cols[n][1])\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    clab = convert(Lab, parse(Colorant, cols[n][1]))\n    labelbrightness = 100 - clab.l\n    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))\n    text(string(cols[n][1]), pos, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: line endings)Some fiddling with Lab colors adjusts the label color to make it stand out against the background.sethue\nsetcolor\nsetgray\nsetopacity\nsetblend\nrandomhue\nrandomcolor"
+    "text": "For color definitions and conversions, you can use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors. setmesh applies a color mesh.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.Named colors, such as \"gold\", or \"lavender\", can be found in Colors.color_names. This code shows the first 625 colors.using Luxor, Colors # hide\nDrawing(800, 500, \"assets/figures/colors.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(5) # hide\ncols = collect(Colors.color_names)\ntiles = Tiler(800, 500, 25, 25)\nfor (pos, n) in tiles\n    sethue(cols[n][1])\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    clab = convert(Lab, parse(Colorant, cols[n][1]))\n    labelbrightness = 100 - clab.l\n    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))\n    text(string(cols[n][1]), pos, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: line endings)Some fiddling with Lab colors adjusts the label color to make it stand out against the background.sethue\nsetcolor\nsetgray\nsetopacity\nrandomhue\nrandomcolor\nsetblend"
 },
 
 {
@@ -1126,6 +1126,30 @@ var documenterSearchIndex = {"docs": [
     "title": "Blending (compositing) operators",
     "category": "section",
     "text": "Graphics software provides ways to modify how the virtual \"ink\" is applied to existing graphic elements. In PhotoShop and other software products the compositing process is done using blend modes.Use setmode() to set the blending mode of subsequent graphics.using Luxor # hide\nDrawing(600, 600, \"assets/figures/blendmodes.png\") # hide\norigin()\n# transparent, no background\nfontsize(15)\nsetline(1)\ntiles = Tiler(600, 600, 4, 5, margin=30)\nmodes = length(Luxor.blendingmodes)\nsetcolor(\"black\")\nfor (pos, n) in tiles\n    n > modes && break\n    gsave()\n    translate(pos)\n    box(O, tiles.tilewidth-10, tiles.tileheight-10, :clip)\n\n    # calculate points for circles\n    diag = (Point(-tiles.tilewidth/2, -tiles.tileheight/2),\n            Point(tiles.tilewidth/2,  tiles.tileheight/2))\n    upper = between(diag, 0.4)\n    lower = between(diag, 0.6)\n\n    # first red shape uses default blend operator\n    setcolor(0.7, 0, 0, .8)\n    circle(upper, tiles.tilewidth/4, :fill)\n\n    # second blue shape shows results of blend operator\n    setcolor(0, 0, 0.9, 0.4)\n    blendingmode = Luxor.blendingmodes[mod1(n, modes)]\n    setmode(blendingmode)\n    circle(lower, tiles.tilewidth/4, :fill)\n\n    clipreset()\n    grestore()\n\n    gsave()\n    translate(pos)\n    text(Luxor.blendingmodes[mod1(n, modes)], O.x, O.y + tiles.tilewidth/2, halign=:center)\n    grestore()\nend\nfinish() # hide\nnothing # hide(Image: blend modes)Notice in this example that clipping was used to restrict the area affected by the blending process.In Cairo these blend modes are called operators. A source for a more detailed explanation can be found here.You can access the list of modes with the unexported symbol Luxor.blendingmodes.setmode"
+},
+
+{
+    "location": "colors-styles.html#Luxor.mesh",
+    "page": "Colors and styles",
+    "title": "Luxor.mesh",
+    "category": "Function",
+    "text": "mesh(bezierpath::AbstractArray{NTuple{4,Point}},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh. The first four (or three) points of the bezierpath define the four curves that define the shape of the mesh.\n\nThe colors array define the color of each corner point.\n\nUse setmesh() to select the mesh, which will be used to fill shapes.\n\nExample\n\n@svg begin\n    bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))\n    mesh1 = mesh(bp, [\n        \"red\",\n        Colors.RGB(0, 1, 0),\n        Colors.RGB(0, 1, 1),\n        Colors.RGB(1, 0, 1)\n        ])\n    setmesh(mesh1)\n    box(O, 500, 500, :fill)\nend\n\n\n\nmesh(points::AbstractArray{Point},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh. The points define the sides that define the shape of the mesh.\n\nExample\n\n@svg begin\n    pl = ngon(O, 250, 3, pi/6, vertices=true)\n    mesh1 = mesh(pl, [\n        \"purple\",\n        \"green\",\n        \"yellow\"\n        ])\n    setmesh(mesh1)\n    setline(180)\n    ngon(O, 250, 3, pi/6, :strokepreserve)\n    setline(5)\n    sethue(\"black\")\n    strokepath()\nend\n\n\n\n"
+},
+
+{
+    "location": "colors-styles.html#Luxor.setmesh",
+    "page": "Colors and styles",
+    "title": "Luxor.setmesh",
+    "category": "Function",
+    "text": "setmesh(mesh::Mesh)\n\nSelect a mesh previously created with mesh() for filling shapes.\n\n\n\n"
+},
+
+{
+    "location": "colors-styles.html#Meshes-1",
+    "page": "Colors and styles",
+    "title": "Meshes",
+    "category": "section",
+    "text": "A mesh is a Cairo feature that provides smooth shading between three or more colors across a region defined by lines or curves.To create a mesh, use the mesh() function and save the result as a mesh object. To use a mesh, supply the mesh object to the setmesh() function.The mesh() function accepts either an array of Bezier paths or a polygon.The first example uses a Bezier path conversion of a square as the outline of the mesh. Because the box is larger than the mesh, only part of the box is filled.using Luxor, Colors # hide\nDrawing(600, 600, \"assets/figures/mesh1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nbp = makebezierpath(ngon(O, 250, 4, pi/4, vertices=true), smoothing=.4)\nmesh1 = mesh(bp, [\n    \"red\",\n    Colors.RGB(0, 1, 0),\n    Colors.RGB(0, 1, 1),\n    Colors.RGB(1, 0, 1)\n    ])\nsetmesh(mesh1)\nbox(O, 500, 500, :fillpreserve)\nsethue(\"grey50\")\nstrokepath()\nfinish() # hide\nnothing # hide(Image: mesh 1)The second example uses a polygon defined by ngon() as the outline of the mesh. The mesh is drawn when the path is stroked.using Luxor # hide\nDrawing(600, 600, \"assets/figures/mesh2.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\npl = ngon(O, 250, 3, pi/6, vertices=true)\nmesh1 = mesh(pl, [\n    \"purple\",\n    \"green\",\n    \"yellow\"\n    ])\nsetmesh(mesh1)\nsetline(180)\npoly(pl, :strokepreserve, close=true)\nsetline(5)\nsethue(\"black\")\nstrokepath()\nfinish() # hide\nnothing # hide(Image: mesh 2)mesh\nsetmesh"
 },
 
 {
