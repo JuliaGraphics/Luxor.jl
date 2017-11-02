@@ -4,7 +4,7 @@
 
 For color definitions and conversions, you can use Colors.jl.
 
-`setcolor()` and `sethue()` apply a single solid or transparent color to shapes. `setblend()` applies a smooth transition between two or more colors.
+`setcolor()` and `sethue()` apply a single solid or transparent color to shapes. `setblend()` applies a smooth transition between two or more colors. `setmesh` applies a color mesh.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
 
@@ -39,9 +39,9 @@ sethue
 setcolor
 setgray
 setopacity
-setblend
 randomhue
 randomcolor
+setblend
 ```
 
 ## Line styles
@@ -344,4 +344,66 @@ You can access the list of modes with the unexported symbol `Luxor.blendingmodes
 
 ```@docs
 setmode
+```
+
+## Meshes
+
+A mesh is a Cairo feature that provides smooth shading between three or more colors across a region defined by lines or curves.
+
+To create a mesh, use the `mesh()` function and save the result as a mesh object. To use a mesh, supply the mesh object to the `setmesh()` function.
+
+The `mesh()` function accepts either an array of Bezier paths or a polygon.
+
+The first example uses a Bezier path conversion of a square as the outline of the mesh. Because the box is larger than the mesh, only part of the box is filled.
+
+```@example
+using Luxor, Colors # hide
+Drawing(600, 600, "assets/figures/mesh1.png") # hide
+origin() # hide
+background("white") # hide
+bp = makebezierpath(ngon(O, 250, 4, pi/4, vertices=true), smoothing=.4)
+mesh1 = mesh(bp, [
+    "red",
+    Colors.RGB(0, 1, 0),
+    Colors.RGB(0, 1, 1),
+    Colors.RGB(1, 0, 1)
+    ])
+setmesh(mesh1)
+box(O, 500, 500, :fillpreserve)
+sethue("grey50")
+strokepath()
+finish() # hide
+nothing # hide
+```
+
+![mesh 1](assets/figures/mesh1.png)
+
+The second example uses a polygon defined by `ngon()` as the outline of the mesh. The mesh is drawn when the path is stroked.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/mesh2.png") # hide
+origin() # hide
+background("white") # hide
+pl = ngon(O, 250, 3, pi/6, vertices=true)
+mesh1 = mesh(pl, [
+    "purple",
+    "green",
+    "yellow"
+    ])
+setmesh(mesh1)
+setline(180)
+poly(pl, :strokepreserve, close=true)
+setline(5)
+sethue("black")
+strokepath()
+finish() # hide
+nothing # hide
+```
+
+![mesh 2](assets/figures/mesh2.png)
+
+```@docs
+mesh
+setmesh
 ```
