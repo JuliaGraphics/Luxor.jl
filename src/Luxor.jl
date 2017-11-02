@@ -34,6 +34,7 @@ include("images.jl")
 include("animate.jl")
 include("bars.jl")
 include("bezierpath.jl")
+include("mesh.jl")
 #include("shapefile.jl")
 
 @deprecate fill() fillpath()
@@ -113,6 +114,8 @@ export Drawing, currentdrawing,
 
     bars,
 
+    mesh, setmesh,
+    
     # animation
     Sequence, Movie, Scene, animate,
 

@@ -62,6 +62,7 @@ function run_all_tests()
         include("color-blend-test.jl")
         include("blendmodes.jl")
         include("palette_test.jl")
+        include("meshtest.jl")
     end
 
     @testset "images" begin
