@@ -1,5 +1,17 @@
 # the current julia logo and graphics
 
+const darker_blue = (0.251, 0.388, 0.847)
+const lighter_blue = (0.4, 0.51, 0.878)
+const darker_purple = (0.584, 0.345, 0.698)
+const lighter_purple  = (0.667, 0.475, 0.757)
+const darker_green  = (0.22, 0.596, 0.149)
+const lighter_green  = (0.376, 0.678, 0.318)
+const darker_red  = (0.796, 0.235, 0.2)
+const lighter_red  = (0.835, 0.388, 0.361)
+const purples = (darker_purple, lighter_purple)
+const greens = (darker_green, lighter_green)
+const reds = (darker_red, lighter_red)
+
 """
     julialogo(;action=:fill, color=true)
 
@@ -191,24 +203,11 @@ end
 Draw the three Julia circles in color centered at the origin.
 
 The distance of the centers of the circles from the origin is `radius`.
-The optional keyword arguments `outercircleratio` (default 0.75) and `innercircleratio` 
-(default 0.65) control the radius of the individual colored circles relative to the `radius`. 
+The optional keyword arguments `outercircleratio` (default 0.75) and `innercircleratio`
+(default 0.65) control the radius of the individual colored circles relative to the `radius`.
 So you can get relatively smaller or larger circles by adjusting the ratios.
 """
 function juliacircles(radius=100; outercircleratio=0.75, innercircleratio=0.65)
-    darker_blue = (0.251, 0.388, 0.847)    # the darker blue not used
-    lighter_blue = (0.4, 0.51, 0.878)      # the lighter blue not used
-    darker_purple = (0.584, 0.345, 0.698)
-    lighter_purple  = (0.667, 0.475, 0.757)
-    darker_green  = (0.22, 0.596, 0.149)
-    lighter_green  = (0.376, 0.678, 0.318)
-    darker_red  = (0.796, 0.235, 0.2)
-    lighter_red  = (0.835, 0.388, 0.361)
-
-    purples = (darker_purple, lighter_purple)
-    greens = (darker_green, lighter_green)
-    reds = (darker_red, lighter_red)
-
     # clockwise, from bottom left
     color_sequence = [reds, greens, purples]
 
