@@ -348,30 +348,34 @@ setmode
 
 ## Meshes
 
-A mesh is a Cairo feature that provides smooth shading between three or more colors across a region defined by lines or curves.
+A mesh is a Cairo feature that provides smooth shading between three or four colors across a region defined by lines or curves.
 
 To create a mesh, use the `mesh()` function and save the result as a mesh object. To use a mesh, supply the mesh object to the `setmesh()` function.
 
-The `mesh()` function accepts either an array of Bezier paths or a polygon.
+The `mesh()` function accepts either an array of Bézier paths or a polygon.
 
-The first example uses a Bezier path conversion of a square as the outline of the mesh. Because the box is larger than the mesh, only part of the box is filled.
+The first example uses a Bézier path conversion of a square as the outline of the mesh. Because the box to be filled is larger than the mesh's outlines, not all the box is filled.
 
 ```@example
 using Luxor, Colors # hide
 Drawing(600, 600, "assets/figures/mesh1.png") # hide
 origin() # hide
 background("white") # hide
+
+setcolor("grey50")
+circle.([Point(x, y) for x in -200:25:200, y in -200:25:200], 10, :fill)
 bp = makebezierpath(ngon(O, 250, 4, pi/4, vertices=true), smoothing=.4)
 mesh1 = mesh(bp, [
-    "red",
-    Colors.RGB(0, 1, 0),
-    Colors.RGB(0, 1, 1),
-    Colors.RGB(1, 0, 1)
+    Colors.RGBA(1, 0, 0, 1),   # bottom left, red
+    Colors.RGBA(1, 1, 1, 0.0), # top left, transparent
+    Colors.RGB(0, 0, 1),      # top right, blue
+    Colors.RGB(1, 0, 1)        # bottom right, purple
     ])
 setmesh(mesh1)
 box(O, 500, 500, :fillpreserve)
 sethue("grey50")
 strokepath()
+
 finish() # hide
 nothing # hide
 ```

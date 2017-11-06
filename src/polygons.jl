@@ -710,7 +710,7 @@ function polyremainder(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdi
     if surplus > 0.0
         nextind = mod1(ind + 1, length(p))
         overshootpoint = between(p[ind], p[nextind], surplus/norm(p[ind], p[nextind]))
-        return vcat(overshootpoint, p[ind:end])
+        return vcat(overshootpoint, p[nextind:end])
     else
         return p[1:end]
     end
