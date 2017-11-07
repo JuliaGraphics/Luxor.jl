@@ -318,6 +318,8 @@ preview()
 Longer lines of text can be made to wrap inside an imaginary rectangle with `textwrap()`. Specify the required width of the rectangle, and the location of the top left corner.
 
 ```@example
+
+
 using Luxor # hide
 Drawing(500, 400, "assets/figures/text-wrapping.png") # hide
 origin() # hide
@@ -344,7 +346,41 @@ finish() # hide
 nothing # hide
 ```
 
-![text centered on curve](assets/figures/text-wrapping.png)
+![text wrapping](assets/figures/text-wrapping.png)
+
+`textwrap()` accepts a function that allows you to insert code that responds to the next line's linenumber, contents, position, and height.
+
+```@example
+using Luxor, Colors # hide
+Drawing(500, 400, "assets/figures/text-wrapping-1.png") # hide
+origin() # hide
+background("white") # hide
+fontface("Georgia")
+fontsize(12) # hide
+sethue("black") # hide
+
+loremipsum = """Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Nunc placerat lorem ullamcorper,
+sagittis massa et, elementum dui. Sed dictum ipsum vel
+commodo pellentesque. Aliquam erat volutpat. Nam est
+dolor, vulputate a molestie aliquet, rutrum quis lectus.
+Sed lectus mauris, tristique et tempor id, accumsan
+pharetra lacus. Donec quam magna, accumsan a quam
+quis, mattis hendrerit nunc. Nullam vehicula leo ac
+leo tristique, a condimentum tortor faucibus."""
+
+textwrap(loremipsum, 200, O - (200/2, 200/2), 
+    (lnumber, str, pt, h) -> begin
+        sethue(Colors.HSB(rescale(lnumber, 1, 15, 0, 360), 1, 1))
+        text(string("line ", lnumber), pt - (50, 0))
+    end)
+
+finish() # hide
+nothing # hide
+```
+
+![text wrapped](assets/figures/text-wrapping-1.png)
+
 
 ```@docs
 textwrap

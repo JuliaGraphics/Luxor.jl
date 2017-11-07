@@ -37,7 +37,7 @@ function text_wrap_tests(fname)
                 tiles.tilewidth,
                 O - (tiles.tilewidth/2 - 2,  tiles.tileheight/2 - 2),
                 # l is the text of a line, p is the position of the start of the line, h is the interline height
-                (l, p, h) -> begin
+                (n, l, p, h) -> begin
                         text(string(length(l)), p + (tiles.tilewidth - 20, 0))
                         opacity *= 0.8
                         setopacity(opacity)
