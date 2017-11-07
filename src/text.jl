@@ -11,14 +11,15 @@
     text(str, valign=:baseline, halign=:left)
     text(str, pos, valign=:baseline, halign=:left)
 
-Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of
-the string at the point. If you omit the point, it's placed at the current `0/0`. In Luxor,
-placing text doesn't affect the current point.
+Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
+string at the point. If you omit the point, it's placed at the current `0/0`. In
+Luxor, placing text doesn't affect the current point.
 
-Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or `:right`.
-Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or `:bottom`.
+Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
+`:right`.  Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or
+`:bottom`.
 
-The default alignment is `:left`, `:baseline`.
+The default alignment is `:left`, `:baseline`.  
 """
 function text(t, pt::Point; halign=:left, valign=:baseline)
     #= text can aligned by one of the following points
@@ -111,8 +112,8 @@ fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
 """
     textextents(str)
 
-Return an array of six Float64s containing the measurements of the string `str` when set
-using the current font settings (Toy API):
+Return an array of six Float64s containing the measurements of the string `str`
+when set using the current font settings (Toy API):
 
 1 x_bearing
 
@@ -126,14 +127,15 @@ using the current font settings (Toy API):
 
 6 y_advance
 
-The x and y bearings are the displacement from the reference point to the upper-left corner
-of the bounding box. It is often zero or a small positive value for x displacement, but can
-be negative x for characters like "j"; it's almost always a negative value for y displacement.
+The x and y bearings are the displacement from the reference point to the
+upper-left corner of the bounding box. It is often zero or a small positive
+value for x displacement, but can be negative x for characters like "j"; it's
+almost always a negative value for y displacement.
 
-The width and height then describe the size of the bounding box. The advance takes you to
-the suggested reference point for the next letter. Note that bounding boxes for subsequent
-blocks of text can overlap if the bearing is negative, or the advance is smaller than the
-width would suggest.
+The width and height then describe the size of the bounding box. The advance
+takes you to the suggested reference point for the next letter. Note that
+bounding boxes for subsequent blocks of text can overlap if the bearing is
+negative, or the advance is smaller than the width would suggest.
 
 Example:
 
@@ -222,12 +224,13 @@ textcurve(the_text, start_angle, start_radius, center::Point; kwargs...) =
           letter_spacing = 0,
           baselineshift = 0
 
-This version of the `textcurve()` function is designed for shorter text strings that need
-positioning around a circle. (A cheesy effect much beloved of hipster brands and
-retronauts.)
+This version of the `textcurve()` function is designed for shorter text strings
+that need positioning around a circle. (A cheesy effect much beloved of hipster
+brands and retronauts.)
 
-`letter_spacing` adjusts the tracking/space between chars, tighter is (-), looser is (+)).
-`baselineshift` moves the text up or down away from the baseline.
+`letter_spacing` adjusts the tracking/space between chars, tighter is (-),
+looser is (+)).  `baselineshift` moves the text up or down away from the
+baseline.
 
 textcurvecentred (UK spelling) is a synonym
 """
@@ -292,16 +295,16 @@ end
     settext(text;
         kwargs)
 
-Draw the `text` at `pos` (if omitted defaults to `0/0`). If no font is specified, on macOS
-the default font is Times Roman.
+Draw the `text` at `pos` (if omitted defaults to `0/0`). If no font is
+specified, on macOS the default font is Times Roman.
 
-To align the text, use `halign`, one of "left", "center", or "right", and `valign`, one of
-"top", "center", or "bottom".
+To align the text, use `halign`, one of "left", "center", or "right", and
+`valign`, one of "top", "center", or "bottom".
 
 `angle` is the rotation - in counterclockwise degrees.
 
-If `markup` is `true`, then the string can contain some HTML-style markup. Supported tags
-include:
+If `markup` is `true`, then the string can contain some HTML-style markup.
+Supported tags include:
 
     <b>, <i>, <s>, <sub>, <sup>, <small>, <big>, <u>, <tt>, and <span>
 
@@ -386,9 +389,9 @@ Split text into lines up to `width` units wide (in the current font).
 
 Return an array of strings. Use `textwrap` to draw an array of strings.
 
-TODO: A `rightgutter` optional keyword adds some padding to the right hand side of the
-column. This appears to be needed sometimes -— perhaps the algorithm needs improving to take
-account  of the interaction of `textextents` and spaces?
+TODO: A `rightgutter` optional keyword adds some padding to the right hand side
+of the column. This appears to be needed sometimes -— perhaps the algorithm
+needs improving to take account of the interaction of `textextents` and spaces?
 """
 function textlines(s::String, width::Real; rightgutter=5)
     result = String[]
@@ -428,10 +431,10 @@ end
 """
     textwrap(s::String, width::Real, pos::Point; rightgutter=5)
 
-Draw the string in `s` by splitting it into lines, so that each line is no longer than
-`width` units. The text starts at `pos` such that the first line of text is drawn entirely
-below a line drawn horizontally through that position. Each line is aligned on the left
-side, below `pos`.
+Draw the string in `s` by splitting it into lines, so that each line is no
+longer than `width` units. The text starts at `pos` such that the first line of
+text is drawn entirely below a line drawn horizontally through that position.
+Each line is aligned on the left side, below `pos`.
 """
 function textwrap(s::String, width::Real, pos::Point; rightgutter=5)
     lines = textlines(s, width; rightgutter=rightgutter)
@@ -447,18 +450,19 @@ end
 """
     textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
 
-Draw the string in `s` by splitting it into lines, so that each line is no longer than
-`width` units. After each line, run the function `linefunc(linetext, startpos, height)`,
-which lets you run a function responding to the text, postion, and linespacing of the line
-that's about to be drawn.
+Draw the string in `s` by splitting it into lines, so that each line is no
+longer than `width` units. Before each line, run a function
+`linefunc(linenumber, linetext, startpos, lineheight)`, with arguments
+`linenumber`, `linetext`, `startpos`, and `lineheight` of the line that's about
+to be drawn.
 """
 function textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
     lines = textlines(s, width; rightgutter=rightgutter)
     # pos is top left corner, not baseline, so move first line down
     height = textextents(lines[1])[4] - textextents(lines[1])[2]
     cpos = Point(pos.x, pos.y + height)
-    for l in lines
-        linefunc(l, cpos, height)
+    for (n, l) in enumerate(lines)
+        linefunc(n, l, cpos, height)
         text(l, cpos)
         cpos = Point(cpos.x, cpos.y + height)
     end
