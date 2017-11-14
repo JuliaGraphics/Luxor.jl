@@ -2005,7 +2005,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Turtle",
     "category": "Type",
-    "text": "Turtle(xpos=0, ypos=0, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))\n\nWith a Turtle you can command a turtle to move and draw: turtle graphics.\n\nThe functions that start with a capital letter are: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.\n\nThere are also some other functions. To see how they might be used, see Lindenmayer.jl.\n\n\n\n"
+    "text": "Turtle()\nTurtle(O)\nTurtle(0, 0)\nTurtle(O, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))\n\nCreate a Turtle. You can command a turtle to move and draw \"turtle graphics\".\n\nThe commands (unusually for Julia) start with a capital letter, and angles are specified in degrees.\n\nBasic commands are Forward(), Turn(), Pendown(), Penup(), Pencolor(), Penwidth(), Circle(), Orientation(), Rectangle(), and Reposition().\n\nOthers include Push(), Pop(), Message(), HueShift(), Randomize_saturation(), Reposition(), and Pen_opacity_random().\n\n\n\n"
 },
 
 {
@@ -2013,7 +2013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Forward",
     "category": "Function",
-    "text": "Forward(t::Turtle, d)\n\nMove the turtle forward by d units. The stored position is updated.\n\n\n\n"
+    "text": "Forward(t::Turtle, d=1)\n\nMove the turtle forward by d units. The stored position is updated.\n\n\n\n"
 },
 
 {
@@ -2021,7 +2021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Turn",
     "category": "Function",
-    "text": "Turn(t::Turtle, r)\n\nIncrease the turtle's rotation by r degrees. See also Orientation.\n\n\n\n"
+    "text": "Turn(t::Turtle, r=5.0)\n\nIncrease the turtle's rotation by r degrees. See also Orientation.\n\n\n\n"
 },
 
 {
@@ -2029,7 +2029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Circle",
     "category": "Function",
-    "text": "Circle(t::Turtle, radius)\n\nDraw a filled circle centered at the current position with the given radius.\n\n\n\n"
+    "text": "Circle(t::Turtle, radius=1.0)\n\nDraw a filled circle centered at the current position with the given radius.\n\n\n\n"
 },
 
 {
@@ -2037,7 +2037,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.HueShift",
     "category": "Function",
-    "text": "HueShift(t::Turtle, inc = 1)\n\nShift the Hue of the turtle's pen forward by inc.\n\n\n\n"
+    "text": "HueShift(t::Turtle, inc=1.0)\n\nShift the Hue of the turtle's pen forward by inc. Hue values range between 0 and 360.\n\n\n\n"
 },
 
 {
@@ -2045,7 +2045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Message",
     "category": "Function",
-    "text": "Message(t::Turtle, txt)\n\nWrite some text at the current position.\n\n\n\n"
+    "text": "Message(t::Turtle, txt=\"\")\n\nWrite some text at the current position.\n\n\n\n"
 },
 
 {
@@ -2053,7 +2053,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Orientation",
     "category": "Function",
-    "text": "Orientation(t::Turtle, r)\n\nSet the turtle's orientation to r degrees. See also Turn.\n\n\n\n"
+    "text": "Orientation(t::Turtle, r=0.0)\n\nSet the turtle's orientation to r degrees. See also Turn.\n\n\n\n"
 },
 
 {
@@ -2061,7 +2061,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Randomize_saturation",
     "category": "Function",
-    "text": "Randomize_saturation(t::Turtle)\n\nRandomize saturation of the turtle's pen color.\n\n\n\n"
+    "text": "Randomize_saturation(t::Turtle)\n\nRandomize the saturation of the turtle's pen color.\n\n\n\n"
 },
 
 {
@@ -2069,7 +2069,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Rectangle",
     "category": "Function",
-    "text": "Rectangle(t::Turtle, width, height)\n\nDraw a filled rectangle centered at the current position with the given radius.\n\n\n\n"
+    "text": "Rectangle(t::Turtle, width=10.0, height=10.0)\n\nDraw a filled rectangle centered at the current position with the given radius.\n\n\n\n"
 },
 
 {
@@ -2149,7 +2149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Turtle graphics",
     "category": "section",
-    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.(Image: Turtle)using Luxor\n\nDrawing(1200, 1200, \"/tmp/turtles.png\")\norigin()\nbackground(\"black\")\n\n# let's have two turtles\nraphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))\n\nsetopacity(0.95)\nsetline(6)\n\nPencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)\nReposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)\nMessage(raphael, \"Raphael\");            Message(michaelangelo, \"Michaelangelo\")\nReposition(raphael, 0, -200);           Reposition(michaelangelo, 0, 200)\n\npace = 10\nfor i in 1:5:400\n    for turtle in [raphael, michaelangelo]\n        Circle(turtle, 3)\n        HueShift(turtle, rand())\n        Forward(turtle, pace)\n        Turn(turtle, 30 - rand())\n        Message(turtle, string(i))\n        pace += 1\n    end\nend\n\nfinish()\npreview()Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
+    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.using Luxor, Colors # hide\nDrawing(600, 400, \"assets/figures/turtles.png\") # hide\norigin() # hide\nbackground(\"midnightblue\") # hide\n\n🐢 = Turtle() # you can type the turtle emoji with \\:turtle:\nPencolor(🐢, \"cyan\")\nPenwidth(🐢, 1.5)\nn = 5\nfor i in 1:400\n    Forward(🐢, n)\n    Turn(🐢, 89.5)\n    HueShift(🐢)\n    n += 0.75\nend\nfontsize(20)\nMessage(🐢, \"finished\")\nfinish() # hide\nnothing # hide(Image: text placement)Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
 },
 
 {
