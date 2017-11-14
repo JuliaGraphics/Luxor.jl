@@ -2045,7 +2045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Message",
     "category": "Function",
-    "text": "Message(t::Turtle, txt=\"\")\n\nWrite some text at the current position.\n\n\n\n"
+    "text": "Message(t::Turtle, txt)\n\nWrite some text at the current position.\n\n\n\n"
 },
 
 {
@@ -2141,7 +2141,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Reposition",
     "category": "Function",
-    "text": "Reposition(t::Turtle, x, y)\n\nReposition: pick the turtle up and place it at another position.\n\n\n\n"
+    "text": "Reposition(t::Turtle, pos::Point)\nReposition(t::Turtle, x, y)\n\nReposition: pick the turtle up and place it at another position.\n\n\n\n"
 },
 
 {
@@ -2149,7 +2149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Turtle graphics",
     "category": "section",
-    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.using Luxor, Colors # hide\nDrawing(600, 400, \"assets/figures/turtles.png\") # hide\norigin() # hide\nbackground(\"midnightblue\") # hide\n\n🐢 = Turtle() # you can type the turtle emoji with \\:turtle:\nPencolor(🐢, \"cyan\")\nPenwidth(🐢, 1.5)\nn = 5\nfor i in 1:400\n    Forward(🐢, n)\n    Turn(🐢, 89.5)\n    HueShift(🐢)\n    n += 0.75\nend\nfontsize(20)\nMessage(🐢, \"finished\")\nfinish() # hide\nnothing # hide(Image: text placement)Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
+    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.using Luxor, Colors\nDrawing(600, 400, \"assets/figures/turtles.png\")  \norigin()  \nbackground(\"midnightblue\")  \n\n🐢 = Turtle() # you can type the turtle emoji with \\:turtle:\nPencolor(🐢, \"cyan\")\nPenwidth(🐢, 1.5)\nn = 5\nfor i in 1:400\n    Forward(🐢, n)\n    Turn(🐢, 89.5)\n    HueShift(🐢)\n    n += 0.75\nend\nfontsize(20)\nMessage(🐢, \"finished\")\nfinish()  \nnothing # hide(Image: text placement)The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji :)), and you can have any number of turtles active at a time.using Luxor, Colors # hide\nDrawing(800, 800, \"assets/figures/manyturtles.png\") # hide\norigin() # hide\nbackground(\"ivory\") # hide\nquantity = 9\nturtles = [Turtle(O, true, rand(), (rand(), rand(), 0.5)...) for i in 1:quantity]\nReposition.(turtles, first.(collect(Tiler(800, 800, 3, 3))))\nn = 10\nPenwidth.(turtles, 0.2)\nfor i in 1:200\n    Forward.(turtles, n)\n    HueShift.(turtles)\n    Turn.(turtles, 119)\n    n += 1\nend\nfinish() # hide  \nnothing # hide(Image: text placement)Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
 },
 
 {
