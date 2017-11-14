@@ -9,6 +9,14 @@ else
     const Test = BaseTestNext
 end
 
+function subroutine(🐢::Turtle)
+    for i in 1:10
+        Forward(🐢, 40)
+        Turn(🐢, 51)
+        Circle(🐢, 1)
+    end
+end
+
 function test_turtles(fname)
     Drawing(1200, 1200, fname)
     origin()
@@ -18,51 +26,35 @@ function test_turtles(fname)
     raphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
     michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))
 
-    setopacity(0.95)
-    setline(6)
-
     Pencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)
-    Penwidth(raphael, 0.75);                 Penwidth(michaelangelo, 1.5)
+    Penwidth(raphael, 0.75);                Penwidth(michaelangelo, 1.5)
+    Reposition(raphael, -400, -300);        Reposition(michaelangelo, 0, 200)
 
-    Reposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)
-    Message(raphael, "Raphael");            Message(michaelangelo, "Michaelangelo")
-    Reposition(raphael, 0, 0);              Reposition(michaelangelo, 0, 0)
-    Orientation(raphael, pi);                Orientation(michaelangelo, -pi)
+    Orientation(raphael, pi);               Orientation(michaelangelo, -pi)
 
-    pace = 5
-    for i in 1:2:400
-        for turtle in [raphael, michaelangelo]
-            Circle(turtle, 3)
-            Push(turtle)
-            Pop(turtle)
-            Penup(turtle)
-            Forward(turtle, 1)
-            Turn(turtle, 180)
-            Pen_opacity_random(turtle)
-            Forward(turtle, 1)
-            Turn(turtle, 180)
-            Pendown(turtle)
-            HueShift(turtle, rand())
-            Forward(turtle, pace)
-            Randomize_saturation(turtle)
-            Push(turtle)
-            Rectangle(turtle, 6, 2)
-            Pop(turtle)
-            turtle == raphael       && Turn(turtle, 30.0)
-            turtle == michaelangelo && Turn(turtle, -30.0)
-            Message(turtle, string(i))
-            pace += 1//2
+    for 🐢 in [raphael, michaelangelo]
+        setlinecap("round")
+        setopacity(0.5)
+        Penwidth(🐢, .5)
+        n = 400
+        for i in 1:200
+            Forward(🐢, n)
+            Turn(🐢, 29)
+            🐢 == raphael && HueShift(🐢, 1)
+            n += 1.25
+            subroutine(🐢)
         end
     end
 
-    Reposition(raphael, 500, -180);         Reposition(michaelangelo, 500, 180)
-    Message(raphael, "Raphael");            Message(michaelangelo, "Michaelangelo")
+    fontsize(30)
+    Reposition(raphael, 400, -100);   Reposition(michaelangelo, 400, -50)
+    Message(raphael, "Raphael");      Message(michaelangelo, "Michaelangelo")
 
     Push(raphael)
     Pop(raphael)
 
     # test warnings
-    Pop(michaelangelo) # warning!
+    Pop(michaelangelo) # should get warning!
     @test finish() == true
 end
 
