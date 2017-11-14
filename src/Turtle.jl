@@ -17,14 +17,20 @@ export  Turtle,
         Reposition
 
 """
-    Turtle(xpos=0, ypos=0, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))
+    Turtle()
+    Turtle(O)
+    Turtle(0, 0)
+    Turtle(O, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))
 
-With a Turtle you can command a turtle to move and draw: turtle graphics.
+Create a Turtle. You can command a turtle to move and draw "turtle graphics".
 
-The functions that start with a capital letter are: Forward, Turn,
-Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.
+The commands (unusually for Julia) start with a capital letter, and angles are specified in degrees.
 
-There are also some other functions. To see how they might be used, see Lindenmayer.jl.
+Basic commands are `Forward()`, `Turn()`, `Pendown()`, `Penup()`, `Pencolor()`,
+`Penwidth()`, `Circle()`, `Orientation()`, `Rectangle()`, and `Reposition()`.
+
+Others include `Push()`, `Pop()`, `Message()`, `HueShift()`, `Randomize_saturation()`,
+`Reposition()`, and `Pen_opacity_random()`.
 """
 type Turtle
     xpos::Float64
@@ -32,20 +38,24 @@ type Turtle
     pendown::Bool
     orientation::Float64 # stored in radians but set in degrees
     pencolor::Tuple{Float64,Float64,Float64} # it's an RGB turtle
-    function Turtle(xpos, ypos, pendown, orientation, pencolor)
+    function Turtle(xpos, ypos, pendown::Bool, orientation, pencolor=(0.0, 0.0, 0.0))
         new(xpos, ypos, pendown, orientation, pencolor)
     end
 end
 
-# a stack to hold turtle positions
+Turtle(x, y) = Turtle(x, y, true, 0, (0, 0, 0))
+Turtle(pos::Point=O) = Turtle(pos.x, pos.y, true, 0, (0, 0, 0))
+Turtle(pos::Point, pendown::Bool) = Turtle(pos.x, pos.y, pendown, 0, (0, 0, 0))
+
+# a stack to hold pushed/popped turtle positions
 const queue = Array{Array{Float64,1},1}()
 
 """
-    Forward(t::Turtle, d)
+    Forward(t::Turtle, d=1)
 
 Move the turtle forward by `d` units. The stored position is updated.
 """
-function Forward(t::Turtle, d)
+function Forward(t::Turtle, d=1)
     move(t.xpos, t.ypos)
     t.xpos = t.xpos + (d * cos(t.orientation))
     t.ypos = t.ypos + (d * sin(t.orientation))
@@ -61,20 +71,20 @@ function Forward(t::Turtle, d)
 end
 
 """
-    Turn(t::Turtle, r)
+    Turn(t::Turtle, r=5.0)
 
 Increase the turtle's rotation by `r` degrees. See also `Orientation`.
 """
-function Turn(t::Turtle, r)
+function Turn(t::Turtle, r=5.0)
     t.orientation = mod2pi(t.orientation + deg2rad(r))
 end
 
 """
-    Orientation(t::Turtle, r)
+    Orientation(t::Turtle, r=0.0)
 
 Set the turtle's orientation to `r` degrees. See also `Turn`.
 """
-function Orientation(t::Turtle, r)
+function Orientation(t::Turtle, r=0.0)
     t.orientation = mod2pi(deg2rad(r))
 end
 
@@ -97,11 +107,11 @@ function Penup(t::Turtle)
 end
 
 """
-    Circle(t::Turtle, radius)
+    Circle(t::Turtle, radius=1.0)
 
 Draw a filled circle centered at the current position with the given radius.
 """
-function Circle(t::Turtle, radius)
+function Circle(t::Turtle, radius=1.0)
     gsave()
     sethue(t.pencolor...)
     circle(t.xpos, t.ypos, radius, :fill)
@@ -109,11 +119,11 @@ function Circle(t::Turtle, radius)
 end
 
 """
-    Rectangle(t::Turtle, width, height)
+    Rectangle(t::Turtle, width=10.0, height=10.0)
 
 Draw a filled rectangle centered at the current position with the given radius.
 """
-function Rectangle(t::Turtle, width, height)
+function Rectangle(t::Turtle, width=10.0, height=10.0)
     gsave()
     sethue(t.pencolor...)
     rect(t.xpos-width/2, t.ypos-height/2, width, height, :fill)
@@ -148,7 +158,7 @@ function Pop(t::Turtle)
 end
 
 """
-    Message(t::Turtle, txt)
+    Message(t::Turtle, txt="")
 
 Write some text at the current position.
 """
@@ -160,15 +170,16 @@ function Message(t::Turtle, txt)
 end
 
 """
-    HueShift(t::Turtle, inc = 1)
+    HueShift(t::Turtle, inc=1.0)
 
-Shift the Hue of the turtle's pen forward by `inc`.
+Shift the Hue of the turtle's pen forward by `inc`. Hue values range between
+0 and 360.
 """
-function HueShift(t::Turtle, inc = 1)
+function HueShift(t::Turtle, inc=1.0)
     r, g, b = t.pencolor
     hsv = convert(Colors.HSV, Colors.RGB(r, g, b))
-    newhsv = ((hsv.h + inc) % 360, hsv.s, hsv.v)
-    newrgb= convert(Colors.RGB, Colors.HSV(newhsv[1], newhsv[2], newhsv[3]))
+    newhsv = (mod(hsv.h + inc, 360), hsv.s, hsv.v)
+    newrgb = convert(Colors.RGB, Colors.HSV(newhsv[1], newhsv[2], newhsv[3]))
     sethue(newrgb)
     t.pencolor = (newrgb.r, newrgb.g, newrgb.b)
 end
@@ -176,7 +187,7 @@ end
 """
     Randomize_saturation(t::Turtle)
 
-Randomize saturation of the turtle's pen color.
+Randomize the saturation of the turtle's pen color.
 """
 function Randomize_saturation(t::Turtle)
     r, g, b = t.pencolor
@@ -196,6 +207,18 @@ function Pencolor(t::Turtle, r, g, b)
     sethue(r, g, b)
     t.pencolor = (r, g, b)
 end
+
+function Pencolor(t::Turtle, col::ColorTypes.Colorant)
+    temp = convert(RGBA, col)
+    Pencolor(t::Turtle, temp.r, temp.g, temp.b)
+end
+
+function Pencolor(t::Turtle, col::String)
+    temp = parse(RGBA, col)
+    Pencolor(t::Turtle, temp.r, temp.g, temp.b)
+end
+
+Pencolor(t::Turtle, col::NTuple{3,Number}) = Pencolor(t, col...)
 
 """
     Reposition(t::Turtle, x, y)
