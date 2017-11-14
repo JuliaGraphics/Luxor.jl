@@ -46,6 +46,9 @@ end
 Turtle(x, y) = Turtle(x, y, true, 0, (0, 0, 0))
 Turtle(pos::Point=O) = Turtle(pos.x, pos.y, true, 0, (0, 0, 0))
 Turtle(pos::Point, pendown::Bool) = Turtle(pos.x, pos.y, pendown, 0, (0, 0, 0))
+Turtle(pos::Point, pendown::Bool, orientation) = Turtle(pos.x, pos.y, pendown, orientation, (0, 0, 0))
+Turtle(pos::Point, pendown::Bool, orientation, col::NTuple{3,Number}) = Turtle(pos.x, pos.y, pendown, orientation, col)
+Turtle(pos::Point, pendown::Bool, orientation, r, g, b) = Turtle(pos.x, pos.y, pendown, orientation, (r, g, b))
 
 # a stack to hold pushed/popped turtle positions
 const queue = Array{Array{Float64,1},1}()
@@ -158,7 +161,7 @@ function Pop(t::Turtle)
 end
 
 """
-    Message(t::Turtle, txt="")
+    Message(t::Turtle, txt)
 
 Write some text at the current position.
 """
@@ -221,6 +224,7 @@ end
 Pencolor(t::Turtle, col::NTuple{3,Number}) = Pencolor(t, col...)
 
 """
+    Reposition(t::Turtle, pos::Point)
     Reposition(t::Turtle, x, y)
 
 Reposition: pick the turtle up and place it at another position.
@@ -229,6 +233,8 @@ function Reposition(t::Turtle, x, y)
     t.xpos = x
     t.ypos = y
 end
+
+Reposition(t::Turtle, pos::Point) = Reposition(t, pos.x, pos.y)
 
 """
     Penwidth(t::Turtle, w)
