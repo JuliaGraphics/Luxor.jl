@@ -36,6 +36,12 @@ It's sometimes useful to know which row and column you're currently on:
     tiles.currentcol
 
 should have that information for you.
+
+To use a Tiler to make grid points:
+
+    first.(collect(Tiler(800, 800, 4, 4))
+
+which returns an array of points that are the center points of the grid.
 """
 type Tiler
     areawidth::Real

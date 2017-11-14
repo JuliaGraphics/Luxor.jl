@@ -59,17 +59,14 @@ const queue = Array{Array{Float64,1},1}()
 Move the turtle forward by `d` units. The stored position is updated.
 """
 function Forward(t::Turtle, d=1)
-    move(t.xpos, t.ypos)
-    t.xpos = t.xpos + (d * cos(t.orientation))
-    t.ypos = t.ypos + (d * sin(t.orientation))
+    oldx, oldy = t.xpos, t.ypos
+    t.xpos += (d * cos(t.orientation))
+    t.ypos += (d * sin(t.orientation))
     if t.pendown
         gsave()
-        line(t.xpos, t.ypos)
         sethue(t.pencolor...)
-        strokepath()
+        line(Point(oldx, oldy), Point(t.xpos, t.ypos), :stroke)
         grestore()
-    else
-        move(t.xpos, t.ypos)
     end
 end
 
