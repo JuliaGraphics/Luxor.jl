@@ -369,7 +369,7 @@ pharetra lacus. Donec quam magna, accumsan a quam
 quis, mattis hendrerit nunc. Nullam vehicula leo ac
 leo tristique, a condimentum tortor faucibus."""
 
-textwrap(loremipsum, 200, O - (200/2, 200/2), 
+textwrap(loremipsum, 200, O - (200/2, 200/2),
     (lnumber, str, pt, h) -> begin
         sethue(Colors.HSB(rescale(lnumber, 1, 15, 0, 360), 1, 1))
         text(string("line ", lnumber), pt - (50, 0))
@@ -381,8 +381,42 @@ nothing # hide
 
 ![text wrapped](assets/figures/text-wrapping-1.png)
 
+The `textbox()` function doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The `leading` argument specifies the distance between the lines, so should be set relative to the current font size (as set with `fontsize()`).
+
+```@example
+using Luxor, Colors # hide
+Drawing(500, 400, "assets/figures/textbox.png") # hide
+origin() # hide
+background("ivory") # hide
+sethue("black") # hide
+fontface("Georgia")
+fontsize(30)
+
+loremipsum = """Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Nunc placerat lorem ullamcorper,
+sagittis massa et, elementum dui. Sed dictum ipsum vel
+commodo pellentesque. Aliquam erat volutpat. Nam est
+dolor, vulputate a molestie aliquet, rutrum quis lectus.
+Sed lectus mauris, tristique et tempor id, accumsan
+pharetra lacus. Donec quam magna, accumsan a quam
+quis, mattis hendrerit nunc. Nullam vehicula leo ac
+leo tristique, a condimentum tortor faucibus."""
+
+translate(Point(-600/2, -600/2) + (50, 50))
+textbox(split(loremipsum, r"\.|,"),
+    O,
+    leading = 34,
+    linefunc = (lnumber, str, pt, h) -> begin
+        fontsize(rescale(length(str), 1, 45, 50, 10))
+    end)
+finish() # hide
+nothing # hide
+```
+
+![textbox](assets/figures/textbox.png)
 
 ```@docs
 textwrap
+textbox
 splittext
 ```
