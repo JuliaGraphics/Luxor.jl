@@ -433,8 +433,11 @@ end
         leading = 12,
         linefunc::Function = (linenumber, linetext, startpos, height) -> ())
 
-"""
+Draw the text in the array of strings `lines` in a box. `leading` controls
+the spacing between each line.
 
+Before each line, execute the function `linefunc(linenumber, linetext, startpos, height)`.
+"""
 function textbox(lines::Array, pos::Point=O;
     leading = 12,
     linefunc::Function = (linenumber, linetext, startpos, height) -> ())
@@ -467,13 +470,10 @@ function textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightg
 end
 
 """
-    textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
+    textwrap(s::String, width::Real, pos::Point; rightgutter=5)
 
 Draw the string in `s` by splitting it into lines, so that each line is no
-longer than `width` units. Before each line, run a function
-`linefunc(linenumber, linetext, startpos, lineheight)`, with arguments
-`linenumber`, `linetext`, `startpos`, and `lineheight` of the line that's about
-to be drawn.
+longer than `width` units, and then drawing each line.
 """
 textwrap(s::String, width::Real, pos::Point; kwargs...) =
     textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> (); kwargs...)

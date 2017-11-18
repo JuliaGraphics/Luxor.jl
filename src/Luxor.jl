@@ -92,7 +92,7 @@ export Drawing, currentdrawing,
     fontface, fontsize, text, textpath, label,
     textextents, textcurve, textcentred, textcentered, textright,
     textcurvecentred, textcurvecentered,
-    textwrap, textlines, splittext, textbox, 
+    textwrap, textlines, splittext, textbox,
 
     setcolor, setopacity, sethue, setgrey, setgray,
     randomhue, randomcolor, @setcolor_str,

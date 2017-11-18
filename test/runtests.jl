@@ -42,6 +42,7 @@ function run_all_tests()
         include("text-curve-centered.jl")
         include("text-path-clipping.jl")
         include("text-wrapping.jl")
+        include("text-boxes.jl")
     end
 
     @testset "curves" begin
