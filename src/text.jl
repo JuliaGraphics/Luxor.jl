@@ -429,7 +429,7 @@ function textlines(s::String, width::Real; rightgutter=5)
 end
 
 """
-    textbox(lines::Array, pos::Point=O;
+    textbox(lines, pos=O;
         leading = 12,
         linefunc::Function = (linenumber, linetext, startpos, height) -> ())
 
@@ -451,7 +451,7 @@ function textbox(lines::Array, pos::Point=O;
     end
 end
 
-textbox(s, pos=O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s, pos; kwargs...) = textbox([s], pos; kwargs...)
 textbox(s; kwargs...) = textbox([s], O; kwargs...)
 
 """
