@@ -435,7 +435,7 @@ end
 
 """
 
-function textbox(lines::Array, pos::Point=O; 
+function textbox(lines::Array, pos::Point=O;
     leading = 12,
     linefunc::Function = (linenumber, linetext, startpos, height) -> ())
     # pos is top left corner, not baseline, so move first line down
@@ -448,9 +448,8 @@ function textbox(lines::Array, pos::Point=O;
     end
 end
 
-textbox(s::String, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
-textbox(s::String, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
-textbox(s::String; kwargs...) = textbox([s], O; kwargs...)
+textbox(s, pos=O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s; kwargs...) = textbox([s], O; kwargs...)
 
 """
     textwrap(s::String, width::Real, pos::Point; rightgutter=5)
@@ -477,4 +476,4 @@ longer than `width` units. Before each line, run a function
 to be drawn.
 """
 textwrap(s::String, width::Real, pos::Point; kwargs...) =
-    textwrap1(s, width, pos, (linenumber, linetext, startpos, height) -> (); kwargs...)
+    textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> (); kwargs...)
