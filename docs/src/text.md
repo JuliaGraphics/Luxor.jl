@@ -158,7 +158,7 @@ Cairo (and hence Luxor) doesn't support emoji currently. 😢
 textpath
 ```
 
-## Font dimensions ("toy" API)
+## Font dimensions ("Toy" API)
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
@@ -313,12 +313,11 @@ finish()
 preview()
 ```
 
-## Text wrapping
+## Text blocks, boxes, and wrapping
 
 Longer lines of text can be made to wrap inside an imaginary rectangle with `textwrap()`. Specify the required width of the rectangle, and the location of the top left corner.
 
 ```@example
-
 
 using Luxor # hide
 Drawing(500, 400, "assets/figures/text-wrapping.png") # hide
@@ -381,11 +380,13 @@ nothing # hide
 
 ![text wrapped](assets/figures/text-wrapping-1.png)
 
-The `textbox()` function doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The `leading` argument specifies the distance between the lines, so should be set relative to the current font size (as set with `fontsize()`).
+The `textbox()` function also draws text inside a box, but doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The `leading` argument specifies the distance between the lines, so should be set relative to the current font size (as set with `fontsize()`).
+
+This example counts the number of characters drawn, using a simple closure.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(500, 400, "assets/figures/textbox.png") # hide
+Drawing(600, 300, "assets/figures/textbox.png") # hide
 origin() # hide
 background("ivory") # hide
 sethue("black") # hide
@@ -402,13 +403,24 @@ pharetra lacus. Donec quam magna, accumsan a quam
 quis, mattis hendrerit nunc. Nullam vehicula leo ac
 leo tristique, a condimentum tortor faucibus."""
 
-translate(Point(-600/2, -600/2) + (50, 50))
-textbox(split(loremipsum, r"\.|,"),
+_counter() = (a = 0; (n) -> a += n)
+counter = _counter()
+
+translate(Point(-600/2, -300/2) + (50, 50))
+fontface("Georgia")
+fontsize(20)
+
+textbox(filter(!isempty, split(loremipsum, "\n")),
     O,
-    leading = 34,
+    leading = 28,
     linefunc = (lnumber, str, pt, h) -> begin
-        fontsize(rescale(length(str), 1, 45, 50, 10))
+        text(string(lnumber), pt - (30, 0))
+        counter(length(str))
     end)
+
+fontsize(10)
+text(string(counter(0), " characters"), O + (0, 230))
+
 finish() # hide
 nothing # hide
 ```
