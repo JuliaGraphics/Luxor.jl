@@ -19,7 +19,7 @@ Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
 `:right`.  Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or
 `:bottom`.
 
-The default alignment is `:left`, `:baseline`.  
+The default alignment is `:left`, `:baseline`.
 """
 function text(t, pt::Point; halign=:left, valign=:baseline)
     #= text can aligned by one of the following points
@@ -429,6 +429,30 @@ function textlines(s::String, width::Real; rightgutter=5)
 end
 
 """
+    textbox(lines::Array, pos::Point=O;
+        leading = 12,
+        linefunc::Function = (linenumber, linetext, startpos, height) -> ())
+
+"""
+
+function textbox(lines::Array, pos::Point=O; 
+    leading = 12,
+    linefunc::Function = (linenumber, linetext, startpos, height) -> ())
+    # pos is top left corner, not baseline, so move first line down
+    height = leading - textextents(lines[1])[4] - textextents(lines[1])[2]
+    startpos = Point(pos.x, pos.y + height)
+    for (linenumber, linetext) in enumerate(lines)
+        linefunc(linenumber, linetext, startpos, height)
+        text(linetext, startpos)
+        startpos = Point(startpos.x, startpos.y + height)
+    end
+end
+
+textbox(s::String, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s::String, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s::String; kwargs...) = textbox([s], O; kwargs...)
+
+"""
     textwrap(s::String, width::Real, pos::Point; rightgutter=5)
 
 Draw the string in `s` by splitting it into lines, so that each line is no
@@ -436,15 +460,11 @@ longer than `width` units. The text starts at `pos` such that the first line of
 text is drawn entirely below a line drawn horizontally through that position.
 Each line is aligned on the left side, below `pos`.
 """
-function textwrap(s::String, width::Real, pos::Point; rightgutter=5)
+function textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
     lines = textlines(s, width; rightgutter=rightgutter)
     # pos is top left corner, not baseline, so move first line down
     height = textextents(lines[1])[4] - textextents(lines[1])[2]
-    cpos = Point(pos.x, pos.y + height)
-    for l in lines
-        text(l, cpos)
-        cpos = Point(cpos.x, cpos.y + height)
-    end
+    textbox(lines, pos, linefunc=linefunc, leading=height)
 end
 
 """
@@ -456,14 +476,5 @@ longer than `width` units. Before each line, run a function
 `linenumber`, `linetext`, `startpos`, and `lineheight` of the line that's about
 to be drawn.
 """
-function textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
-    lines = textlines(s, width; rightgutter=rightgutter)
-    # pos is top left corner, not baseline, so move first line down
-    height = textextents(lines[1])[4] - textextents(lines[1])[2]
-    cpos = Point(pos.x, pos.y + height)
-    for (n, l) in enumerate(lines)
-        linefunc(n, l, cpos, height)
-        text(l, cpos)
-        cpos = Point(cpos.x, cpos.y + height)
-    end
-end
+textwrap(s::String, width::Real, pos::Point; kwargs...) =
+    textwrap1(s, width, pos, (linenumber, linetext, startpos, height) -> (); kwargs...)
