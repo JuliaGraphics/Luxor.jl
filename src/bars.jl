@@ -9,7 +9,8 @@
 
 Draw some bars where each bar is the height of a value in the array.
 
-To control the drawing of the text and bars, define functions that process the end points:
+To control the drawing of the text and bars, define functions that process the
+end points:
 
 `mybarfunction(bottom::Point, top::Point, value; extremes=[a, b])`
 
@@ -27,12 +28,16 @@ To suppress the text labels, use optional keyword `labels=false`.
 
 function bars(values::AbstractArray;
     barfunction   = (bottom::Point, top::Point, value;
-        extremes=extrema(values)) -> line(bottom, top, :stroke),
+        extremes=extrema(values)) -> begin
+                setline(xwidth)
+                line(bottom, top, :stroke)
+            end,
     labels::Bool=true,
     labelfunction = (bottom::Point, top::Point, value;
         extremes=extrema(values)) -> begin
-            t = string(round(value, 1))
+            t = string(round(value, 2))
             textoffset = textextents(t)[4]
+            fontsize(10)
             if top.y < 0
                 tp = Point(top.x, min(top.y, bottom.y) - textoffset)
             else
@@ -40,8 +45,8 @@ function bars(values::AbstractArray;
             end
             text(t, tp, halign=:center, valign=:middle)
             end,
-    yscale = 100,
-    xwidth = 10)
+    yscale = 200,
+    xwidth = 25)
     x = O.x
     mn, mx = extrema(values)
     isapprox(mn, mx, atol=0.00001) && (mx = mn + 100) # better show something than nothing

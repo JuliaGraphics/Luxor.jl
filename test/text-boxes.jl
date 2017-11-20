@@ -14,7 +14,7 @@ function textbox_tests(fname)
     origin()
     setopacity(0.8)
     sethue("black")
-    fontface("Georgia")
+    fontface("Georgia-Bold")
     tiles = Tiler(1000, 1000, 4, 3, margin=50)
     for (pos, n) in tiles
         fsize = 10
@@ -47,7 +47,7 @@ function textbox_tests(fname)
                 linefunc = (l, t, p, h) ->
                     begin
                         text(string(l), p + (tiles.tilewidth - 20, 0))
-                        setopacity(1/l)
+                        setopacity(1/(l/3))
                     end,
                     leading=12)
             end
