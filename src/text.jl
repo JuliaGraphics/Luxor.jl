@@ -385,9 +385,9 @@ end
     textlines(s::String, width::Real;
          rightgutter=5)
 
-Split text into lines up to `width` units wide (in the current font).
+Split the text in `s` into lines up to `width` units wide (in the current font).
 
-Return an array of strings. Use `textwrap` to draw an array of strings.
+Returns an array of strings. Use `textwrap` to draw an array of strings.
 
 TODO: A `rightgutter` optional keyword adds some padding to the right hand side
 of the column. This appears to be needed sometimes -— perhaps the algorithm
@@ -429,24 +429,30 @@ function textlines(s::String, width::Real; rightgutter=5)
 end
 
 """
-    textbox(lines, pos=O;
+    textbox(lines::Array, pos::Point=O;
         leading = 12,
-        linefunc::Function = (linenumber, linetext, startpos, height) -> ())
+        linefunc::Function = (linenumber, linetext, startpos, height) -> (),
+        alignment=:left)
 
-Draw the text in the array of strings `lines` in a box. `leading` controls
-the spacing between each line.
+Draw the strings in the array `lines` vertically downwards. `leading` controls
+the spacing between each line, and `alignment` determines the horizontal alignment.
 
-Before each line, execute the function `linefunc(linenumber, linetext, startpos, height)`.
+Optionally, before each line, execute the function
+`linefunc(linenumber, linetext, startpos, height)`.
+
+See also `textwrap()`, which modifies the text so that the lines fit into a
+specified width.
 """
 function textbox(lines::Array, pos::Point=O;
     leading = 12,
-    linefunc::Function = (linenumber, linetext, startpos, height) -> ())
+    linefunc::Function = (linenumber, linetext, startpos, height) -> (),
+    alignment=:left)
     # pos is top left corner, not baseline, so move first line down
     height = leading - textextents(lines[1])[4] - textextents(lines[1])[2]
     startpos = Point(pos.x, pos.y + height)
     for (linenumber, linetext) in enumerate(lines)
         linefunc(linenumber, linetext, startpos, height)
-        text(linetext, startpos)
+        text(linetext, startpos, halign=alignment)
         startpos = Point(startpos.x, startpos.y + height)
     end
 end
@@ -455,25 +461,24 @@ textbox(s, pos; kwargs...) = textbox([s], pos; kwargs...)
 textbox(s; kwargs...) = textbox([s], O; kwargs...)
 
 """
-    textwrap(s::String, width::Real, pos::Point; rightgutter=5)
+    textwrap(s::String, width::Real, pos::Point;
+        rightgutter=5)
+    textwrap(s::String, width::Real, pos::Point, linefunc::Function;
+        rightgutter=5)
 
 Draw the string in `s` by splitting it into lines, so that each line is no
 longer than `width` units. The text starts at `pos` such that the first line of
 text is drawn entirely below a line drawn horizontally through that position.
 Each line is aligned on the left side, below `pos`.
 """
-function textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
+function textwrap(s::String, width::Real, pos::Point, linefunc::Function;
+        rightgutter=5)
     lines = textlines(s, width; rightgutter=rightgutter)
     # pos is top left corner, not baseline, so move first line down
     height = textextents(lines[1])[4] - textextents(lines[1])[2]
     textbox(lines, pos, linefunc=linefunc, leading=height)
 end
 
-"""
-    textwrap(s::String, width::Real, pos::Point; rightgutter=5)
-
-Draw the string in `s` by splitting it into lines, so that each line is no
-longer than `width` units, and then drawing each line.
-"""
 textwrap(s::String, width::Real, pos::Point; kwargs...) =
-    textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> (); kwargs...)
+    textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> ();
+             kwargs...)
