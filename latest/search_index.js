@@ -1709,7 +1709,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textwrap",
     "category": "Function",
-    "text": "textwrap(s::String, width::Real, pos::Point; rightgutter=5)\n\nDraw the string in s by splitting it into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\n\n\ntextwrap(s::String, width::Real, pos::Point; rightgutter=5)\n\nDraw the string in s by splitting it into lines, so that each line is no longer than width units, and then drawing each line.\n\n\n\n"
+    "text": "textwrap(s::String, width::Real, pos::Point;\n    rightgutter=5)\ntextwrap(s::String, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5)\n\nDraw the string in s by splitting it into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\n\n\n"
 },
 
 {
@@ -1717,7 +1717,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textbox",
     "category": "Function",
-    "text": "textbox(lines, pos=O;\n    leading = 12,\n    linefunc::Function = (linenumber, linetext, startpos, height) -> ())\n\nDraw the text in the array of strings lines in a box. leading controls the spacing between each line.\n\nBefore each line, execute the function linefunc(linenumber, linetext, startpos, height).\n\n\n\n"
+    "text": "textbox(lines::Array, pos::Point=O;\n    leading = 12,\n    linefunc::Function = (linenumber, linetext, startpos, height) -> (),\n    alignment=:left)\n\nDraw the strings in the array lines vertically downwards. leading controls the spacing between each line, and alignment determines the horizontal alignment.\n\nOptionally, before each line, execute the function linefunc(linenumber, linetext, startpos, height).\n\nSee also textwrap(), which modifies the text so that the lines fit into a specified width.\n\n\n\n"
 },
 
 {
