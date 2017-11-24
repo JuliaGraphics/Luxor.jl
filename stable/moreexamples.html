@@ -97,6 +97,13 @@ end
 strange(.3, 800)</code></pre><pre><code class="language-none">WARNING: --output requested, but no modules defined during run
 WARNING: The call to compilecache failed to create a usable precompiled cache file for module FFTW. Got:
 WARNING: Cache file &quot;/Users/travis/.julia/lib/v0.6/FFTW.ji&quot; not found.
+WARNING: eval from module Main to ImageCore:
+Expr(:call, Expr(:., :Base, :include_from_node1)::Any, &quot;/Users/travis/.julia/v0.6/FFTW/src/FFTW.jl&quot;)::Any
+  ** incremental compilation may be broken for this module **
+
+WARNING: --output requested, but no modules defined during run
+WARNING: The call to compilecache failed to create a usable precompiled cache file for module FFTW. Got:
+WARNING: Cache file &quot;/Users/travis/.julia/lib/v0.6/FFTW.ji&quot; not found.
 WARNING: eval from module Main to FFTViews:
 Expr(:call, Expr(:., :Base, :include_from_node1)::Any, &quot;/Users/travis/.julia/v0.6/FFTW/src/FFTW.jl&quot;)::Any
   ** incremental compilation may be broken for this module **</code></pre></div><p><img src="assets/figures/strange-vector.png" alt="strange attractor in vectors"/></p><h2><a class="nav-anchor" id="Hipster-logo:-text-on-curves-1" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></h2><div><pre><code class="language-julia">using Luxor
