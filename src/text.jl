@@ -463,8 +463,9 @@ function textbox(lines::Array, pos::Point=O;
     end
 end
 
-textbox(s, pos; kwargs...) = textbox([s], pos; kwargs...)
-textbox(s; kwargs...) = textbox([s], O; kwargs...)
+textbox(s::String, pos; kwargs...) = textbox([s], pos; kwargs...)
+
+#textbox(s; kwargs...) = textbox([s], O; kwargs...)
 
 """
     textwrap(s::String, width::Real, pos::Point;
