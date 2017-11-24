@@ -435,7 +435,8 @@ end
         alignment=:left)
 
 Draw the strings in the array `lines` vertically downwards. `leading` controls
-the spacing between each line, and `alignment` determines the horizontal alignment.
+the spacing between each line (default 12), and `alignment` determines the
+horizontal alignment (default `:left`).
 
 Optionally, before each line, execute the function
 `linefunc(linenumber, linetext, startpos, height)`.
@@ -447,8 +448,13 @@ function textbox(lines::Array, pos::Point=O;
     leading = 12,
     linefunc::Function = (linenumber, linetext, startpos, height) -> (),
     alignment=:left)
+
+    # find height of first non-empty line
+    firstrealline = filter(!isempty, lines)[1]
+    te = textextents(firstrealline)
+
+    height = leading - te[4] - te[2]
     # pos is top left corner, not baseline, so move first line down
-    height = leading - textextents(lines[1])[4] - textextents(lines[1])[2]
     startpos = Point(pos.x, pos.y + height)
     for (linenumber, linetext) in enumerate(lines)
         linefunc(linenumber, linetext, startpos, height)
@@ -466,16 +472,20 @@ textbox(s; kwargs...) = textbox([s], O; kwargs...)
     textwrap(s::String, width::Real, pos::Point, linefunc::Function;
         rightgutter=5)
 
-Draw the string in `s` by splitting it into lines, so that each line is no
-longer than `width` units. The text starts at `pos` such that the first line of
-text is drawn entirely below a line drawn horizontally through that position.
-Each line is aligned on the left side, below `pos`.
+Draw the string in `s` by splitting it at whitespace characters into lines, so that each
+line is no longer than `width` units. The text starts at `pos` such that the first line of
+text is drawn entirely below a line drawn horizontally through that position. Each line is
+aligned on the left side, below `pos`.
+
+See also `textbox()`.
 """
 function textwrap(s::String, width::Real, pos::Point, linefunc::Function;
         rightgutter=5)
     lines = textlines(s, width; rightgutter=rightgutter)
-    # pos is top left corner, not baseline, so move first line down
-    height = textextents(lines[1])[4] - textextents(lines[1])[2]
+    # find height of first non-empty line
+    firstrealline = filter(!isempty, lines)[1]
+    te = textextents(firstrealline)
+    height = te[4] - te[2]
     textbox(lines, pos, linefunc=linefunc, leading=height)
 end
 
