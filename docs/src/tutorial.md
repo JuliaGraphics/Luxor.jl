@@ -102,7 +102,7 @@ To start off, define the variable `radius` to hold a value of 80 units (there ar
     radius=80
 ```
 
-Select gray dotted lines. To specify a color you can supply RGB values or use the named colors that Colors.jl provides. `gray0` is black, and `gray100` is white.
+Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB or LUV) values or use named colors, such as "red", "gray0" is black, and "gray100" is white. (For more details about colors, see [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).)
 
 ```julia
     setdash("dot")
@@ -141,7 +141,6 @@ line(A, B, :stroke)
 circle(O, radius, :stroke)
 finish()
 nothing
-
 ```
 ![point example](assets/figures/tutorial-egg-1.png)
 
@@ -212,7 +211,6 @@ We've now ready to tackle the job of finding the coordinates of the two points w
 
     circle.([A, O, B], 2, :fill)
     circle.([A, B], 2radius, :stroke)
-
 ```
 
 The `intersectionlinecircle()` takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.
@@ -542,11 +540,11 @@ function egg(radius, action=:none)
 end
 ```
 
-This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required radius, and `:stroke` is one of the available actions.
+This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is one of the available actions.
 
 (Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)
 
-Notice that this function doesn't define anything about what the shape looks like or where it's placed. When called, the function inherits a lot of the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:
+Notice that this function doesn't define anything about what the shape looks like or where it's placed. When called, the function inherits the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:
 
 ```julia
 @png begin
