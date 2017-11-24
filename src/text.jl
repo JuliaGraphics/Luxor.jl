@@ -393,7 +393,7 @@ TODO: A `rightgutter` optional keyword adds some padding to the right hand side
 of the column. This appears to be needed sometimes -— perhaps the algorithm
 needs improving to take account of the interaction of `textextents` and spaces?
 """
-function textlines(s::String, width::Real; rightgutter=5)
+function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
     result = String[]
     fields = splittext(s)
     textwidth = width - rightgutter
@@ -463,14 +463,13 @@ function textbox(lines::Array, pos::Point=O;
     end
 end
 
-textbox(s::String, pos; kwargs...) = textbox([s], pos; kwargs...)
-
+# inference fails with this one defined.
 #textbox(s; kwargs...) = textbox([s], O; kwargs...)
 
 """
-    textwrap(s::String, width::Real, pos::Point;
+    textwrap(s::T where T<:AbstractString, width::Real, pos::Point;
         rightgutter=5)
-    textwrap(s::String, width::Real, pos::Point, linefunc::Function;
+    textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
         rightgutter=5)
 
 Draw the string in `s` by splitting it at whitespace characters into lines, so that each
@@ -479,8 +478,10 @@ text is drawn entirely below a line drawn horizontally through that position. Ea
 aligned on the left side, below `pos`.
 
 See also `textbox()`.
+
+Text with no whitespace characters won't wrap.
 """
-function textwrap(s::String, width::Real, pos::Point, linefunc::Function;
+function textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
         rightgutter=5)
     lines = textlines(s, width; rightgutter=rightgutter)
     # find height of first non-empty line
@@ -490,6 +491,6 @@ function textwrap(s::String, width::Real, pos::Point, linefunc::Function;
     textbox(lines, pos, linefunc=linefunc, leading=height)
 end
 
-textwrap(s::String, width::Real, pos::Point; kwargs...) =
+textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =
     textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> ();
              kwargs...)
