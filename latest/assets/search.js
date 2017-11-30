@@ -200,19 +200,19 @@ require(["jquery", "lunr", "lodash"], function($, lunr, _) {
                         fields: ["title"],
                         boost: 10,
                         usePipeline: false,
-                        editDistance: 2,
+                        editDistance: 0,
                         wildcard: lunr.Query.wildcard.NONE
                     })
                     q.term(t.toString(), {
                         fields: ["text"],
                         boost: 1,
                         usePipeline: true,
-                        editDistance: 2,
+                        editDistance: 0,
                         wildcard: lunr.Query.wildcard.NONE
                     })
                 })
             })
-            $('#search-info').text("Number of results: " + results.length)
+            $('#search-info').text("I found " + results.length + " results for \"" + querystring + "\"")
             $('#search-results').empty()
             results.forEach(function(result) {
                 data = store[result.ref]
@@ -223,6 +223,7 @@ require(["jquery", "lunr", "lodash"], function($, lunr, _) {
                 li = $('<li>').append(link).append(cat)
                 $('#search-results').append(li)
             })
+            $('#search-results').append("<p>You can use * as a wildcard character.</p>")
         }
 
         function update_search_box() {
