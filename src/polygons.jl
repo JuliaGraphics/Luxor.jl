@@ -632,7 +632,7 @@ and the difference value. Array is assumed to be sorted.
 
 (Designed for use with `polydistances()`).
 """
-function nearestindex(a::Array{T, 1} where T <: Real, val)
+function nearestindex(a::Array{Float64, 1}, val)
     ind = findlast(v -> (v < val), a)
     surplus = 0.0
     if ind > 0.0
