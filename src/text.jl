@@ -44,7 +44,8 @@ function text(t, pt::Point; halign=:left, valign=:baseline)
         halignment = 2
     end
 
-    textpointx = pt.x - [xbearing, (textwidth-xbearing)/2, textwidth][halignment]
+    textpointx = pt.x - [0, textwidth/2, textwidth][halignment]
+
     valignment = findfirst([:top, :middle, :baseline, :bottom], valign)
 
     # if unspecified or wrong, default to baseline
