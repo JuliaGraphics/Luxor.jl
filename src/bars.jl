@@ -12,9 +12,9 @@ Draw some bars where each bar is the height of a value in the array.
 To control the drawing of the text and bars, define functions that process the
 end points:
 
-`mybarfunction(bottom::Point, top::Point, value; extremes=[a, b])`
+`mybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)`
 
-`mylabelfunction(bottom::Point, top::Point, value; extremes=[a, b])`
+`mylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)`
 
 and pass them like this:
 
@@ -50,12 +50,12 @@ function bars(values::AbstractArray;
     x = O.x
     mn, mx = extrema(values)
     isapprox(mn, mx, atol=0.00001) && (mx = mn + 100) # better show something than nothing
-    for v in values
+    for (n, v) in enumerate(values)
         # remember y increases downwards by default
         bottom = Point(x, -rescale(min(v, 0) + mn, mn, mx, 0, yscale))
         top    = Point(x, -rescale(max(v, 0) + mn, mn, mx, 0, yscale))
-        barfunction(bottom, top, v, extremes=extrema(values))
-        labels && labelfunction(bottom, top, v, extremes=extrema(values))
+        barfunction(bottom, top, v, extremes=extrema(values), barnumber=n, bartotal=length(values))
+        labels && labelfunction(bottom, top, v, extremes=extrema(values), barnumber=n, bartotal=length(values))
         x += xwidth
     end
 end
