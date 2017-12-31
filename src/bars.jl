@@ -28,13 +28,13 @@ To suppress the text labels, use optional keyword `labels=false`.
 
 function bars(values::AbstractArray;
     barfunction   = (bottom::Point, top::Point, value;
-        extremes=extrema(values)) -> begin
+        extremes=extrema(values), barnumber=0, bartotal=0) -> begin
                 setline(xwidth)
                 line(bottom, top, :stroke)
             end,
     labels::Bool=true,
     labelfunction = (bottom::Point, top::Point, value;
-        extremes=extrema(values)) -> begin
+        extremes=extrema(values), barnumber=0, bartotal=0) -> begin
             t = string(round(value, 2))
             textoffset = textextents(t)[4]
             fontsize(10)
