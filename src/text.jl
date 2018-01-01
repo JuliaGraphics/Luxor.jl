@@ -480,7 +480,10 @@ aligned on the left side, below `pos`.
 
 See also `textbox()`.
 
-Text with no whitespace characters won't wrap.
+Text with no whitespace characters won't wrap. You can write a simple chunking function
+to split a string or array into chunks:
+
+    chunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]
 """
 function textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
         rightgutter=5)

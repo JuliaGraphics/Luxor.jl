@@ -9,7 +9,7 @@ else
     const Test = BaseTestNext
 end
 
-function barfunc1(low, high, v; extremes=extrema(values), mvalue=0)
+function barfunc1(low, high, v; extremes=extrema(values), barnumber=0, bartotal=0, mvalue=0)
     @layer begin
         sethue(rescale(v, 0, extremes[2], 0, 1), rand(), rand())
         circle(low, 2, :fill)
@@ -24,7 +24,7 @@ function barfunc1(low, high, v; extremes=extrema(values), mvalue=0)
     end
 end
 
-function barfunc2(low, high, value; extremes=extrema(values))
+function barfunc2(low, high, value; extremes=extrema(values), barnumber=0, bartotal=0)
     @layer begin
         sethue("red")
         randomhue()
@@ -35,10 +35,10 @@ function barfunc2(low, high, value; extremes=extrema(values))
     end
 end
 
-emptylabelfunction(args...; extremes=[]) = nothing
+emptylabelfunction(args...; extremes=[], barnumber=0, bartotal=0) = nothing
 
 function mylabelfunction(bottom::Point, top::Point, value;
-        extremes=[])
+        extremes=[], barnumber=0, bartotal=0)
     t = string(value)
     textoffset = textextents(t)[4]
     if top.y < 0
@@ -67,19 +67,19 @@ function test_bars(fname)
             translate(pos)
             if n % 5 == 1
                 v = randn(15)
-                bars(v, labelfunction = (args...; extremes=[]) ->  setgray(rand()))
+                bars(v, labelfunction = (args...; extremes=[], barnumber=0, bartotal=0) ->  setgray(rand()))
             elseif n % 5 == 2
                 # no labels
                 v = rand(1:10, 100)
-                bars(v, xwidth=rand(2:6), yscale=rand(50:100), labelfunction=emptylabelfunction)
+                bars(v, xwidth=rand(2:6), yheight=rand(50:100), labelfunction=emptylabelfunction)
             elseif n % 5 == 3
                 # a custom label function
                 v = rand(20)
-                bars(v, yscale=rand(10:80), xwidth=rand(5:20), labelfunction=mylabelfunction)
+                bars(v, yheight=rand(10:80), xwidth=rand(5:20), labelfunction=mylabelfunction)
             elseif n % 5 == 4
                 # a custom barfunction
                 v = rand(5:0.1:10, 20)
-                bars(v, yscale=30, xwidth=20, labels=false, barfunction = barfunc1)
+                bars(v, yheight=30, xwidth=20, labels=false, barfunction = barfunc1)
             elseif n % 5 == 5
                 # another custom barfunction
                 v = rand(-20:2:20, 30)
