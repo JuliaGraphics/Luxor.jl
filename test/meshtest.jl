@@ -44,17 +44,40 @@ function meshtest2(fname)
     origin()
     background("ivory")
     setcolor("black")
-    fontsize(80)
+    fontsize(60)
     text("illuminati", halign=:center)
-    pl = ngon(O, 250, 3, pi/6, vertices=true)
+    pl = ngon(O, 300, 3, pi/6, vertices=true)
     mesh1 = mesh(pl, [
         "purple",
         Colors.RGBA(randomcolor()...),
         "yellow"
         ])
     setmesh(mesh1)
-    setline(180)
-    ngon(O, 250, 3, pi/6, :strokepreserve)
+    setline(260)
+    ngon(O, 300, 3, pi/6, :strokepreserve)
+    setline(5)
+    sethue("black")
+    strokepath()
+    @test finish() == true
+end
+
+function meshtest3(fname)
+    Drawing(1200, 1200, fname)
+    origin()
+    background("ivory")
+    setcolor("black")
+    fontsize(60)
+    text("illuminati", halign=:center)
+    bp = makebezierpath(ngon(O, 250, 3, pi/6, vertices=true))
+    mesh1 = mesh(bp, [
+        "purple",
+        Colors.RGBA(randomcolor()...),
+        "yellow"
+        ])
+    setmesh(mesh1)
+    setline(260)
+    drawbezierpath(bp, :strokepreserve)
+
     setline(5)
     sethue("black")
     strokepath()
@@ -68,3 +91,7 @@ println("...finished mesh test 1: output in $(fname)")
 fname = "meshtest2.png"
 meshtest2(fname)
 println("...finished mesh test 2: output in $(fname)")
+
+fname = "meshtest3.png"
+meshtest3(fname)
+println("...finished mesh test 3: output in $(fname)")
