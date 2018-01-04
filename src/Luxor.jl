@@ -335,7 +335,8 @@ function preview()
     if candisplay && jupyter
         Main.IJulia.clear_output(true)
         if currentdrawing.surfacetype == :png
-            display("image/png", load(currentdrawing.filename))
+            # avoid world age errors
+            Base.invokelatest(display, "image/png", load(currentdrawing.filename))
         elseif currentdrawing.surfacetype == :svg
             open(currentdrawing.filename) do f
                 display("image/svg+xml", readstring(f))

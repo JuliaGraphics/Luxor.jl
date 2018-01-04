@@ -837,7 +837,7 @@ fontsize(8) # hide
 sethue("black") # hide
 translate(-350, 0) # hide
 
-function mybarfunction(low::Point, high::Point, value; extremes=[0, 1])
+function mybarfunction(low::Point, high::Point, value; extremes=[0, 1], barnumber=0, bartotal=0)
     @layer begin
         sethue(rescale(value, extremes[1], extremes[2], 0, 1), 0.0, 1.0)
         circle(high, 8, :fill)
@@ -849,7 +849,7 @@ function mybarfunction(low::Point, high::Point, value; extremes=[0, 1])
     end
 end
 
-function mylabelfunction(low::Point, high::Point, value; extremes=[0, 1])
+function mylabelfunction(low::Point, high::Point, value; extremes=[0, 1], barnumber=0, bartotal=0)
     @layer begin
         translate(low)
         rotate(-pi/2)
