@@ -812,13 +812,13 @@ For simple bars, use the `bars()` function, supplying an array of numbers:
 
 ```@example
 using Luxor # hide
-Drawing(800, 250, "assets/figures/bars.png")  # hide
+Drawing(800, 420, "assets/figures/bars.png")  # hide
 origin() # hide
 background("white") # hide
 fontsize(7)
 sethue("black")
 translate(-350, 0) # hide
-v = rand(-100:100, 60)
+v = rand(-100:100, 25)
 bars(v)
 finish() # hide
 nothing # hide
@@ -829,35 +829,40 @@ nothing # hide
 To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to `bars()`:
 
 ```@example
-using Luxor # hide
-Drawing(800, 350, "assets/figures/bars1.png")  # hide
+using Luxor, Colors # hide
+Drawing(800, 450, "assets/figures/bars1.png")  # hide
+srand(2) # hide
 origin() # hide
 background("white") # hide
+setopacity(0.8) # hide
 fontsize(8) # hide
+fontface("Helvetica-Bold") # hide
 sethue("black") # hide
-translate(-350, 0) # hide
+translate(-350, 100) # hide
 
-function mybarfunction(low::Point, high::Point, value; extremes=[0, 1], barnumber=0, bartotal=0)
+function mybarfunction(low::Point, high::Point, value;
+    extremes=[0, 1], barnumber=0, bartotal=0)
     @layer begin
-        sethue(rescale(value, extremes[1], extremes[2], 0, 1), 0.0, 1.0)
-        circle(high, 8, :fill)
+        sethue(Colors.HSB(rescale(value, extremes[1], extremes[2], 0, 360), 1.0, 0.5))
+        csize = rescale(value, extremes[1], extremes[2], 5, 25)
+        circle(high, csize, :fill)
         setline(1)
         sethue("blue")
-        line(low, high + (0, 8), :stroke)
+        line(Point(low.x, 0), high + (0, csize), :stroke)
         sethue("white")
         text(string(value), high, halign=:center, valign=:middle)
     end
 end
 
-function mylabelfunction(low::Point, high::Point, value; extremes=[0, 1], barnumber=0, bartotal=0)
+function mylabelfunction(low::Point, high::Point, value;
+    extremes=[0, 1], barnumber=0, bartotal=0)
     @layer begin
         translate(low)
-        rotate(-pi/2)
-        text(string(value,"/", extremes[2]), O - (10, 0), halign=:right, valign=:middle)
+        text(string(value), O + (0, 10), halign=:center, valign=:middle)
     end
 end
 
-v = rand(1:200, 30)
+v = rand(1:100, 25)
 bars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)
 
 finish() # hide
