@@ -885,7 +885,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.bars",
     "category": "Function",
-    "text": "bars(values::AbstractArray;\n        yscale = 100,\n        xwidth = 10,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array.\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nand pass them like this:\n\nbars(v, yscale=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yscale=10, labelfunction=mylabelfunction)\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n"
+    "text": "bars(values::AbstractArray;\n        yheight = 200,\n        xwidth = 25,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array. The bars will fit in a box yheight high (even if there are negative values).\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nand pass them like this:\n\nbars(v, yheight=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n"
 },
 
 {
@@ -1709,7 +1709,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textwrap",
     "category": "Function",
-    "text": "textwrap(s::T where T<:AbstractString, width::Real, pos::Point;\n    rightgutter=5)\ntextwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5)\n\nDraw the string in s by splitting it at whitespace characters into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\nSee also textbox().\n\nText with no whitespace characters won't wrap.\n\n\n\n"
+    "text": "textwrap(s::T where T<:AbstractString, width::Real, pos::Point;\n    rightgutter=5)\ntextwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5)\n\nDraw the string in s by splitting it at whitespace characters into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\nSee also textbox().\n\nText with no whitespace characters won't wrap. You can write a simple chunking function to split a string or array into chunks:\n\nchunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]\n\n\n\n"
 },
 
 {
