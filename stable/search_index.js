@@ -5,7 +5,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Introduction to Luxor",
     "category": "page",
-    "text": "DocTestSetup = quote\n    using Luxor\n    function get_os()\n           if is_apple()\n               osname = \"macOS\"\n           elseif is_unix()\n               osname = \"UNIX\"\n           elseif is_linux()\n               osname = \"Linux\"\n           elseif is_windows()\n               osname = \"Windows\"\n           else\n               osname = \"unspecified\"\n           end\n           return osname\n       end\nend"
+    "text": "DocTestSetup = quote\n    using Luxor\nend"
 },
 
 {
@@ -13,15 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Introduction to Luxor",
     "category": "section",
-    "text": "Luxor provides basic vector drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, and turtle graphics. It's intended to be an easy interface to Cairo.jl.Please submit issues and pull requests on GitHub."
-},
-
-{
-    "location": "index.html#Current-status-1",
-    "page": "Introduction to Luxor",
-    "title": "Current status",
-    "category": "section",
-    "text": "Luxor currently runs on Julia versions 0.5 and 0.6, and uses Cairo.jl and Colors.jl.warning: Deprecations\nThe functions fill() and stroke() are deprecated in this release, and will be removed in a future release. They should be replaced with fillpath() and strokepath() respectively.The change is because fill() clashes with Base.fill(), used to fill arrays."
+    "text": "Luxor is a Julia package for drawing simple static vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles.The focus of Luxor is on simplicity and ease of use: it should be easier to use than plain Cairo.jl, with shorter names, fewer underscores, default contexts, and simplified functions.Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.There are some Luxor-related videos on YouTube.For interactive graphics, you'll find Gtk.jl, GLVisualize, and the Julia version of the Processing language worth investigating.Please submit issues and pull requests on GitHub. Original version by cormullion, much improved with contributions from the Julia community."
 },
 
 {
@@ -29,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
     "category": "section",
-    "text": "Install the package as follows:Pkg.add(\"Luxor\")and to use it:using LuxorOriginal version by cormullion."
+    "text": "Install the package as follows:Pkg.add(\"Luxor\")Cairo.jl and Colors.jl will be installed if necessary.To use Luxor, type:using LuxorTo test:julia> @png juliacircles()"
 },
 
 {
@@ -37,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Documentation",
     "category": "section",
-    "text": "The documentation was built using Documenter.jl.function get_os() # hide\n    if is_apple() # hide\n        osname = \"macOS\" # hide\n    elseif is_unix() # hide\n        osname = \"UNIX\" # hide\n    elseif is_linux() # hide\n        osname = \"Linux\" # hide\n    elseif is_windows() # hide\n        osname = \"Windows\" # hide\n    else # hide\n        osname = \"unspecified\" # hide\n    end # hide\n    return osname # hide\nend # hide\nprintln(\"Build date: $(now()), built with Julia $(VERSION) on $(get_os()).\") # hide"
+    "text": "The documentation was built using Documenter.jl.println(\"Documentation built $(now()) with Julia $(VERSION).\") # hide"
 },
 
 {
@@ -61,7 +53,7 @@ var documenterSearchIndex = {"docs": [
     "page": "A few examples",
     "title": "The obligatory \"Hello World\"",
     "category": "section",
-    "text": "Here's the \"Hello world\":(Image: \"Hello world\")using Luxor\nDrawing(1000, 1000, \"hello-world.png\")\norigin()\nbackground(\"black\")\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()Drawing(1000, 1000, \"hello-world.png\") defines the size of the image, and the location and type of the finished image. origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to Colors.jl we can specify colors by name: background(\"black\") defines the color of the background of the drawing. text(\"helloworld\") draws the text. It's placed at the current 0/0 if you don't specify otherwise. finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg Preview on macOS).The macros @png, @svg, and @pdf provide shortcuts for making and previewing graphics without having to provide the set-up and finish instructions:# using Luxor\n\n@png begin\n        fontsize(50)\n        circle(O, 150, :stroke)\n        text(\"hello world\", halign=:center, valign=:middle)\n     end(Image: background)"
+    "text": "Here's the \"Hello world\":(Image: \"Hello world\")using Luxor\nDrawing(1000, 1000, \"hello-world.png\")\norigin()\nbackground(\"black\")\nsethue(\"red\")\nfontsize(50)\ntext(\"hello world\")\nfinish()\npreview()Drawing(1000, 1000, \"hello-world.png\") defines the width, height, location, and type of the finished image. origin() moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to Colors.jl we can specify colors by name as well as by numeric value: background(\"black\") defines the color of the background of the drawing. text(\"helloworld\") draws the text. It's placed at the current 0/0 and left-justified if you don't specify otherwise. finish() completes the drawing and saves the image in the file. preview() tries to open the saved file using some other application (eg Preview on macOS).The macros @png, @svg, and @pdf provide shortcuts for making and previewing graphics without having to provide the set-up and finish instructions:# using Luxor\n\n@png begin\n        fontsize(50)\n        circle(O, 150, :stroke)\n        text(\"hello world\", halign=:center, valign=:middle)\n     end(Image: background)@svg begin\n    g = [Point(3x, 3y) for x in 1:10:100, y in 1:10:100]\n    circle.(g, 4, :fill)\n    label.(string.([(y - 1) * 10 + x for x in 1:10, y in 1:10]), :E, g)\nend(Image: background)"
 },
 
 {
@@ -69,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "A few examples",
     "title": "The Julia logos",
     "category": "section",
-    "text": "Luxor contains two functions that draw the Julia logo, either in color or a single color, and the three Julia circles.using Luxor\nDrawing(600, 400, \"assets/figures/julia-logos.png\")\norigin()\nbackground(\"white\")\nfor theta in range(0, pi/8, 16)\n    gsave()\n    scale(0.25)\n    rotate(theta)\n    translate(250, 0)\n    randomhue()\n    julialogo(action=:fill, color=false)\n    grestore()\nend\n\ngsave()\nscale(0.3)\njuliacircles()\ngrestore()\n\ntranslate(200, -150)\nscale(0.3)\njulialogo()\nfinish()\nnothing # hide(Image: background)The gsave() function saves the current drawing parameters, and any subsequent changes such as the scale() and rotate() operations are discarded by the next grestore() function.You can change the extension of the file name, for example \"julia-logos.png\" to \"julia-logos.svg\" or \"julia-logos.pdf\" or \"julia-logos.eps\", to produce alternative formats."
+    "text": "Luxor contains two functions that draw: the Julia logo, either in color or a single color; and the three Julia circles.using Luxor\nDrawing(600, 400, \"assets/figures/julia-logos.png\")\norigin()\nbackground(\"white\")\nfor theta in range(0, pi/8, 16)\n    gsave()\n    scale(0.25)\n    rotate(theta)\n    translate(250, 0)\n    randomhue()\n    julialogo(action=:fill, color=false)\n    grestore()\nend\n\ngsave()\nscale(0.3)\njuliacircles()\ngrestore()\n\ntranslate(200, -150)\nscale(0.3)\njulialogo()\nfinish()\nnothing # hide(Image: background)The gsave() function saves the current drawing parameters, and any subsequent changes such as the scale() and rotate() operations are discarded by the next grestore() function.Use the extension to specify the format: for example change \"julia-logos.png\" to \"julia-logos.svg\" or \"julia-logos.pdf\" or \"julia-logos.eps\", to produce different formats."
 },
 
 {
@@ -101,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "A few examples",
     "title": "Maps",
     "category": "section",
-    "text": "Luxor can read simple polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid.(Image: \"simple world map detail\")The latitude and longitude coordinates are converted directly to drawing coordinates. The latitude coordinates have to be negated because y-coordinates in Luxor typically increase down the page, whereas latitude values increase as you travel North.This is the full map:(Image: \"simple world map\")You'll need to install the Shapefile.jl package before running the code:using Shapefile, Luxor\ninclude(Pkg.dir(\"Luxor\") * \"/src/readshapefiles.jl\")\nfunction drawairportmap(outputfilename, countryoutlines, airportdata)\n    Drawing(4000, 2000, outputfilename)\n    origin()\n    scale(10, 10)\n    setline(1.0)\n    fontsize(0.075)\n    gsave()\n    setopacity(0.25)\n    for shape in countryoutlines.shapes\n        randomhue()\n        pgons, bbox = convert(Array{Luxor.Point, 1}, shape)\n        for pgon in pgons\n            poly(pgon, :fill)\n        end\n    end\n    grestore()\n    sethue(\"black\")\n    for airport in airportdata\n        city, country, lat, long = split(chomp(airport), \",\")\n        location = Point(parse(long), -parse(lat)) # flip y-coordinate\n        circle(location, .01, :fill)\n        text(string(city), location.x, location.y - 0.02)\n    end\n    finish()\n    preview()\nend\n\nworldshapefile = Pkg.dir(\"Luxor\") * \"/docs/src/assets/examples/outlines-of-world-countries.shp\"\nairportdata = readlines(Pkg.dir(\"Luxor\") * \"/docs/src/assets/examples/airports.csv\")\nworldshapes = open(worldshapefile) do f\n    read(f, Shapefile.Handle)\nend\ndrawairportmap(\"/tmp/airport-map.pdf\", worldshapes, airportdata)link to Julia source | link to PDF map"
+    "text": "Luxor can read polygons from shapefiles, so you can create simple maps. For example, here's part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid.(Image: \"simple world map detail\")The latitude and longitude coordinates are converted directly to drawing coordinates. The latitude coordinates have to be negated because y-coordinates in Luxor typically increase down the page, whereas latitude values increase as you travel North.This is the full map:(Image: \"simple world map\")You'll need to install the Shapefile.jl package before running the code:using Shapefile, Luxor\ninclude(Pkg.dir(\"Luxor\") * \"/src/readshapefiles.jl\")\nfunction drawairportmap(outputfilename, countryoutlines, airportdata)\n    Drawing(4000, 2000, outputfilename)\n    origin()\n    scale(10, 10)\n    setline(1.0)\n    fontsize(0.075)\n    gsave()\n    setopacity(0.25)\n    for shape in countryoutlines.shapes\n        randomhue()\n        pgons, bbox = convert(Array{Luxor.Point, 1}, shape)\n        for pgon in pgons\n            poly(pgon, :fill)\n        end\n    end\n    grestore()\n    sethue(\"black\")\n    for airport in airportdata\n        city, country, lat, long = split(chomp(airport), \",\")\n        location = Point(parse(long), -parse(lat)) # flip y-coordinate\n        circle(location, .01, :fill)\n        text(string(city), location.x, location.y - 0.02)\n    end\n    finish()\n    preview()\nend\n\nworldshapefile = Pkg.dir(\"Luxor\") * \"/docs/src/assets/examples/outlines-of-world-countries.shp\"\nairportdata = readlines(Pkg.dir(\"Luxor\") * \"/docs/src/assets/examples/airports.csv\")\nworldshapes = open(worldshapefile) do f\n    read(f, Shapefile.Handle)\nend\ndrawairportmap(\"/tmp/airport-map.pdf\", worldshapes, airportdata)link to Julia source | link to PDF map"
 },
 
 {
@@ -137,6 +129,110 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "tutorial.html#",
+    "page": "Tutorial",
+    "title": "Tutorial",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "tutorial.html#Tutorial-1",
+    "page": "Tutorial",
+    "title": "Tutorial",
+    "category": "section",
+    "text": "Experienced Julia users and programmers fluent in other languages and graphics systems should have no problem using Luxor by referring to the rest of the documentation. For others, here is a short tutorial to help you get started."
+},
+
+{
+    "location": "tutorial.html#What-you-need-1",
+    "page": "Tutorial",
+    "title": "What you need",
+    "category": "section",
+    "text": "If you've already downloaded Julia, and have added the Luxor package successfully (like this):Pkg.add(\"Luxor\")then you're ready to start.Presumably you'll be working in a Jupyter notebook, or perhaps using the Atom/Juno editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.Ready? Let's begin. The goal of this tutorial is to do a bit of basic 'compass and ruler' Euclidean geometry, to introduce the basic concepts of Luxor drawings."
+},
+
+{
+    "location": "tutorial.html#First-steps-1",
+    "page": "Tutorial",
+    "title": "First steps",
+    "category": "section",
+    "text": "Have you started a Julia session? Excellent. We'll have to load just one package for this tutorial:using LuxorHere's an easy shortcut for making drawings in Luxor. It's a Julia macro, and it's a good way to test that your system's working. Evaluate this code:@png begin\n    text(\"Hello world\")\n    circle(Point(0, 0), 200, :stroke)\nendusing Luxor\nDrawing(725, 600, \"assets/figures/tutorial-hello-world.png\")\nbackground(\"white\")\norigin()\nsethue(\"black\")\ntext(\"Hello world\")\ncircle(Point(0, 0), 200, :stroke)\nfinish()What happened? Can you see this image somewhere?(Image: point example)If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as luxor-drawing.png). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...Let's press on. The @png macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the Document(), origin(), finish(), and preview() functions.) There are also @svg and @pdf macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. PDF documents are often higher quality, but usually open up in a separate application.This example illustrates a few things about Luxor drawings:There are default values which you don't have to set if you don't want to (file names, colors, font sizes, etc).\nPositions on the drawing are specified with coordinates stored in the Point datatype, and you can sometimes omit positions altogether.\nThe text was placed at the origin point (0,0), and by default it's left aligned.\nThe circle wasn't filled, but stroked. We passed the :stroke symbol as an action to the circle() function. Many drawing functions expect some action, such as :fill or :stroke, and sometimes :clip or :fillstroke.\nDid the first drawing takes a few seconds to appear? The Cairo drawing engine has to warm up. Once it's running, it's much faster.Once more, with more black:@png begin\n    text(\"Hello again, world!\", Point(0, 250))\n    circle(Point(0, 0), 200, :fill)\nendusing Luxor\nDrawing(725, 500, \"assets/figures/tutorial-hello-world-2.png\")\nbackground(\"white\")\norigin()\nsethue(\"black\")\ntext(\"Hello again, world!\", Point(0, 250))\ncircle(Point(0, 0), 200, :fill)\nfinish()(Image: point example)"
+},
+
+{
+    "location": "tutorial.html#Euclidean-eggs-1",
+    "page": "Tutorial",
+    "title": "Euclidean eggs",
+    "category": "section",
+    "text": "For the main section of this tutorial, we'll attempt to draw Euclid's egg, which involves a bit of geometry.For now, you can continue to store all the drawing instructions between the @png macro's begin and end markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions) isn't considered to be 'best practice'.@png beginTo start off, define the variable radius to hold a value of 80 units (there are 72 units in a traditional inch):    radius=80Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB or LUV) values or use named colors, such as \"red\", \"gray0\" is black, and \"gray100\" is white. (For more details about colors, see Colors.jl.)    setdash(\"dot\")\n    sethue(\"gray30\")Next, make two points, A and B, which will lie either side of the origin point. This line uses an array comprehension - notice the square brackets enclosing a for loop. x uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points. But it shows how you can assign more than one variable at the same time, and also how to generate more than two points...    A, B = [Point(x, 0) for x in [-radius, radius]]With two points defined, draw a line from A to B, and \"stroke\" it.    line(A, B, :stroke)Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter 'O' as a short cut for Origin, ie the Point(0, 0).    circle(O, radius, :stroke)\nendusing Luxor\nDrawing(725, 300, \"assets/figures/tutorial-egg-1.png\")\nbackground(\"white\")\norigin()\nradius=80\nsetdash(\"dot\")\nsethue(\"gray30\")\nA, B = [Point(x, 0) for x in [-radius, radius]]\nline(A, B, :stroke)\ncircle(O, radius, :stroke)\nfinish()\nnothing(Image: point example)"
+},
+
+{
+    "location": "tutorial.html#Labels-and-dots-1",
+    "page": "Tutorial",
+    "title": "Labels and dots",
+    "category": "section",
+    "text": "It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special label() function we can use, which positions a text string close to a point, using points of the compass, so :N places the label to the north of a position.Edit your previous code by adding instructions to draw some labels and circles:@png begin\n    radius=80\n    setdash(\"dot\")\n    sethue(\"gray30\")\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    line(A, B, :stroke)\n    circle(O, radius, :stroke)\n\n    label(\"A\", :NW, A)\n    label(\"O\", :N,  O)\n    label(\"B\", :NE, B)\n\n    circle.([A, O, B], 2, :fill)\n    circle.([A, B], 2radius, :stroke)\nendusing Luxor\nDrawing(725, 400, \"assets/figures/tutorial-egg-2.png\")\nbackground(\"white\")\norigin()\nradius=80\nsetdash(\"dot\")\nsethue(\"gray30\")\n\nA, B = [Point(x, 0) for x in [-radius, radius]]\nline(A, B, :stroke)\ncircle(O, radius, :stroke)\nlabel(\"A\", :NW, A)\nlabel(\"O\", :N, O)\nlabel(\"B\", :NE, B)\ncircle.([A, O, B], 2, :fill)\ncircle.([A, B], 2radius, :stroke)\nfinish()(Image: point example)While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot ('.') just after the function name in the last two circle() function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting for us."
+},
+
+{
+    "location": "tutorial.html#Intersect-this-1",
+    "page": "Tutorial",
+    "title": "Intersect this",
+    "category": "section",
+    "text": "We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called intersectionlinecircle that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.@png begin\n    # as before\n    radius=80\n    setdash(\"dot\")\n    sethue(\"gray30\")\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    line(A, B, :stroke)\n    circle(O, radius, :stroke)\n\n    label(\"A\", :NW, A)\n    label(\"O\", :N,  O)\n    label(\"B\", :NE, B)\n\n    circle.([A, O, B], 2, :fill)\n    circle.([A, B], 2radius, :stroke)The intersectionlinecircle() takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia's math-friendly style. The circle is centered at A and has a radius of AB (which is 2radius). Assuming that there are two intersections, we feed these to circle() and label() for drawing and labeling using our new broadcasting superpowers.\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    if nints == 2\n        circle.([C, D], 2, :fill)\n        label.([\"D\", \"C\"], :N, [D, C])\n    end\n\nendusing Luxor\nDrawing(725, 400, \"assets/figures/tutorial-egg-3.png\")\nbackground(\"white\")\norigin()\nradius=80\nsetdash(\"dot\")\nsethue(\"gray30\")\n\nA, B = [Point(x, 0) for x in [-radius, radius]]\nline(A, B, :stroke)\ncircle(O, radius, :stroke)\nlabel(\"A\", :NW, A)\nlabel(\"O\", :N, O)\nlabel(\"B\", :NE, B)\ncircle.([A, O, B], 2, :fill)\ncircle.([A, B], 2radius, :stroke)\n\nnints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\nif nints == 2\n    circle.([C, D], 2, :fill)\n    label.([\"D\", \"C\"], :N, [D, C])\nend\n\nfinish()(Image: point example)"
+},
+
+{
+    "location": "tutorial.html#The-upper-circle-1",
+    "page": "Tutorial",
+    "title": "The upper circle",
+    "category": "section",
+    "text": "Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.Finding this new center point C1 is easy enough, because we can again use intersectionlinecircle() to find the point where the central circle crosses a line from O to D.Add some more lines to your code:@png begin\n\n    # ...\n\n    nints, C1, C2 = intersectionlinecircle(O, D, O, radius)\n    if nints == 2\n        circle(C1, 3, :fill)\n        label(\"C1\", :N, C1)\n    end\n\nendusing Luxor\nDrawing(725, 400, \"assets/figures/tutorial-egg-4.png\")\nbackground(\"white\")\norigin()\nradius=80\nsetdash(\"dot\")\nsethue(\"gray30\")\n\nA, B = [Point(x, 0) for x in [-radius, radius]]\nline(A, B, :stroke)\ncircle(O, radius, :stroke)\nlabel(\"A\", :NW, A)\nlabel(\"O\", :N, O)\nlabel(\"B\", :NE, B)\ncircle.([A, O, B], 2, :fill)\ncircle.([A, B], 2radius, :stroke)\n\nnints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\nif nints == 2\n    circle.([C, D], 2, :fill)\n    label.([\"D\", \"C\"], :N, [D, C])\nend\n\nnints, C1, C2 = intersectionlinecircle(O, D, O, radius)\nif nints == 2\n    circle(C1, 3, :fill)\n    label(\"C1\", :N, C1)\nend\nfinish()(Image: point example)The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1.To find (and draw) these points is straightforward, but we'll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:@png begin\n\n    # ...\n\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    circle.([I1, I2, I3, I4], 2, :fill)The norm() function returns the distance between two points, and it's simple enough to compare the distances.    if norm(C1, I1) < norm(C1, I2)\n       ip1 = I1\n    else\n       ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n       ip2 = I3\n    else\n       ip2 = I4\n    end\n\n    label(\"ip1\", :N, ip1)\n    label(\"ip2\", :N, ip2)\n    circle(C1, norm(C1, ip1), :stroke)\n\nendusing Luxor\nDrawing(725, 400, \"assets/figures/tutorial-egg-5.png\")\nbackground(\"white\")\norigin()\nradius=80\nsetdash(\"dot\")\nsethue(\"gray30\")\n\nA, B = [Point(x, 0) for x in [-radius, radius]]\nline(A, B, :stroke)\ncircle(O, radius, :stroke)\nlabel(\"A\", :NW, A)\nlabel(\"O\", :N, O)\nlabel(\"B\", :NE, B)\ncircle.([A, O, B], 2, :fill)\ncircle.([A, B], 2radius, :stroke)\n\nnints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\nif nints == 2\n    circle.([C, D], 2, :fill)\n    label.([\"D\", \"C\"], :N, [D, C])\nend\n\nnints, C1, C2 = intersectionlinecircle(O, D, O, radius)\nif nints == 2\n    circle(C1, 3, :fill)\n    label(\"C1\", :N, C1)\nend\n\n# finding two more points on the circumference\n\nnints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\nnints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\ncircle.([I1, I2, I3, I4], 2, :fill)\n\nif norm(C1, I1) < norm(C1, I2)\n    ip1 = I1\nelse\n   ip1 = I2\nend\nif norm(C1, I3) < norm(C1, I4)\n   ip2    = I3\nelse\n   ip2 = I4\nend\n\nlabel(\"ip1\", :N, ip1)\nlabel(\"ip2\", :N, ip2)\ncircle(C1, norm(C1, ip1), :stroke)\n\nfinish()(Image: point example)"
+},
+
+{
+    "location": "tutorial.html#Eggs-at-the-ready-1",
+    "page": "Tutorial",
+    "title": "Eggs at the ready",
+    "category": "section",
+    "text": "We now know all the points on the egg's perimeter, and the centers of the circular arcs. To draw the outline, we'll use the arc2r() function four times. This function takes a center point and two points on a circular arc, plus an action.The shape consists of four curves, so we'll use the :path action. Instead of immediately drawing the shape, like the :stroke action would, this action adds a section to the current path (which is initially empty).@png begin\n\n    # ... as before\n    # Add this:\n\n    setline(5)\n    setdash(\"solid\")\n\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)Once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a 'preserve' version of the first action. This applies the action but keeps the path around for further actions.    strokepreserve()\n    setopacity(0.8)\n    sethue(\"ivory\")\n    fillpath()\nendusing Luxor\nDrawing(725, 400, \"assets/figures/tutorial-egg-6.png\")\nbackground(\"white\")\norigin()\nradius=80\nsetdash(\"dot\")\nsethue(\"gray30\")\n\nA, B = [Point(x, 0) for x in [-radius, radius]]\nline(A, B, :stroke)\ncircle(O, radius, :stroke)\nlabel(\"A\", :NW, A)\nlabel(\"O\", :N, O)\nlabel(\"B\", :NE, B)\ncircle.([A, O, B], 2, :fill)\ncircle.([A, B], 2radius, :stroke)\n\nnints, C, D =\n    intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\nif nints == 2\n    circle.([C, D], 2, :fill)\n    label.([\"D\", \"C\"], :N, [D, C])\nend\n\nnints, C1, C2 = intersectionlinecircle(O, D, O, radius)\nif nints == 2\n    circle(C1, 3, :fill)\n    label(\"C1\", :N, C1)\nend\n\n# finding two more points on the circumference\n\nnints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\nnints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\ncircle.([I1, I2, I3, I4], 2, :fill)\n\nif norm(C1, I1) < norm(C1, I2)\n    ip1 = I1\nelse\n   ip1 = I2\nend\nif norm(C1, I3) < norm(C1, I4)\n   ip2    = I3\nelse\n   ip2 = I4\nend\n\nlabel(\"ip1\", :N, ip1)\nlabel(\"ip2\", :N, ip2)\ncircle(C1, norm(C1, ip1), :stroke)\n\nsetline(5)\nsetdash(\"solid\")\n\narc2r(B, A, ip1, :path)\narc2r(C1, ip1, ip2, :path)\narc2r(A, ip2, B, :path)\narc2r(O, B, A, :path)\nstrokepreserve()\nsetopacity(0.8)\nsethue(\"ivory\")\nfillpath()\nfinish()(Image: point example)"
+},
+
+{
+    "location": "tutorial.html#Egg-stroke-1",
+    "page": "Tutorial",
+    "title": "Egg stroke",
+    "category": "section",
+    "text": "To be more generally useful, the above code can be boiled into a function.function egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2 = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n\n    do_action(action)\nendThis keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling egg(100, :stroke), for example, where 100 is the required width (radius), and :stroke is one of the available actions.(Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)Notice that this function doesn't define anything about what the shape looks like or where it's placed. When called, the function inherits the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:@png begin\n    setopacity(0.7)\n    for theta in range(0, pi/6, 12)\n        @layer begin\n            rotate(theta)\n            translate(0, -150)         \n            egg(50, :path)\n            setline(10)\n            randomhue()\n            fillpreserve()\n\n            randomhue()\n            strokepath()\n        end\n    end\nendusing Luxor\nsrand(42)\nDrawing(725, 500, \"assets/figures/tutorial-egg-7.png\")\nfunction egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2 = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n    do_action(action)\nend\nbackground(\"white\")\norigin()\nsetopacity(0.7)\nfor theta in range(0, pi/6, 12)\n    @layer begin\n        rotate(theta)\n        translate(0, -150)         \n        egg(50, :path)\n        setline(10)\n        randomhue()\n        fillpreserve()\n\n        randomhue()\n        strokepath()\n    end\nend\nfinish()(Image: point example)The loop runs 12 times, with theta increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated to theta radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so when theta is 0 a shift of -150 looks like an upwards shift). The randomhue() function does what it says, and the egg() function is passed the :fill action and the radius.Notice that the four drawing instructions are encased in a @layer begin...end 'shell'. Any change made to the drawing environment inside this shell is discarded after each end. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and positive angles are clockwise. So the second egg in the previous example was drawn after the axes were rotated π/6 radians clockwise.You can tell which egg was drawn first — it's overlapped on each side by subsequent eggs."
+},
+
+{
+    "location": "tutorial.html#Thought-experiments-1",
+    "page": "Tutorial",
+    "title": "Thought experiments",
+    "category": "section",
+    "text": "What would happen if the translation was translate(0, 150) rather than translate(0, -150)?\nWhat would happen if the translation was translate(150, 0) rather than translate(0, -150)?\nWhat would happen if you translated each egg before you rotated the drawing environment?As well as stroke and fill actions, you can use the path as a clipping region (:clip), or as the basis for more shape shifting."
+},
+
+{
+    "location": "tutorial.html#Polyeggs-1",
+    "page": "Tutorial",
+    "title": "Polyeggs",
+    "category": "section",
+    "text": "The egg() function creates a path and lets you apply an action to it. It's also possible to convert the path into a polygon (an array of points), which lets you do more things with it. The following code converts the egg's path into a polygon, and then moves every other point of the polygon halfway towards the centroid.@png begin\n    egg(160, :path)\n    pgon = first(pathtopoly())The pathtopoly() function converts the current path made by egg(160, :path) into a polygon. Those smooth curves have been approximated by a series of straight line segments. The first() function is used because pathtopoly() returns an array of one or more polygons (paths can consist of a series of loops), and we know that we need only the single path here.    pc = polycentroid(pgon)\n    circle(pc, 5, :fill)polycentroid() finds the centroid of the new polygon.This loop steps through the points and moves every odd-numbered one halfway towards the centroid. between() finds a point midway between two specified points. The poly() function draws the array of points.    for pt in 1:2:length(pgon)\n        pgon[pt] = between(pc, pgon[pt], 0.5)  \n    end\n    poly(pgon, :stroke)\nendusing Luxor\nDrawing(725, 500, \"assets/figures/tutorial-egg-8.png\")\nfunction egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2    = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n    do_action(action)\nend\nbackground(\"white\")\norigin()\negg(160, :path)\nsethue(\"black\")\npgon = first(pathtopoly())\npc = polycentroid(pgon)\ncircle(pc, 5, :fill)\n\nfor pt in 1:2:length(pgon)\n    pgon[pt] = between(pc, pgon[pt], 0.5)\nend\npoly(pgon, :stroke)\nfinish()(Image: point example)The uneven appearance of the interior points here looks to be a result of the default line join settings. Experiment with setlinejoin(\"round\") to see if this makes the geometry look tidier.For a final experiment with our egg() function, here's Luxor's offsetpoly() function struggling to draw around the spiky egg-based polygon.@png begin\n    egg(80, :path)\n    pgon = first(pathtopoly())\n    pc = polycentroid(pgon)\n    circle(pc, 5, :fill)\n\n    for pt in 1:2:length(pgon)\n        pgon[pt] = between(pc, pgon[pt], 0.8)  \n    end\n\n    for i in 30:-3:-8\n        randomhue()\n        op = offsetpoly(pgon, i)\n        poly(op, :stroke, close=true)\n    end\nendusing Luxor\nDrawing(725, 600, \"assets/figures/tutorial-egg-9.png\")\nfunction egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2    = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n    do_action(action)\nend\nbackground(\"white\")\norigin()\nsrand(42)\negg(80, :path)\npgon = first(pathtopoly())\npc = polycentroid(pgon)\ncircle(pc, 5, :fill)\n\nfor pt in 1:2:length(pgon)\n    pgon[pt] = between(pc, pgon[pt], 0.8)  \nend\n\nfor i in 30:-3:-8\n    randomhue()\n    op = offsetpoly(pgon, i)\n    poly(op, :stroke, close=true)\nend\n\nfinish()(Image: point example)The slight changes in the regularity of the points (originally created by the path-to-polygon conversion and the varying number of samples it made) are continually amplified in successive outlinings."
+},
+
+{
+    "location": "tutorial.html#Clipping-1",
+    "page": "Tutorial",
+    "title": "Clipping",
+    "category": "section",
+    "text": "A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.In this example, the egg (assuming you're still in the same Julia session in which you've defined the egg() function) isn't drawn, but is defined to act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the :clip action which is passed to the doaction() function at the end of the egg().Here, the graphics are provided by the ngon() function, which draws regular n-sided polygons.using Luxor, Colors\n@svg begin\n    setopacity(0.5)\n    egg(150, :clip)\n    @layer begin\n        for i in 360:-4:1\n            sethue(Colors.HSV(i, 1.0, 0.8))\n            rotate(pi/30)\n            ngon(O, i, 5, 0, :fill)\n        end\n    end\n    clipreset()\nendusing Luxor, Colors\nDrawing(725, 620, \"assets/figures/tutorial-egg-10.png\")\norigin()\nbackground(\"white\")\nfunction egg(radius, action=:none)\n    A, B = [Point(x, 0) for x in [-radius, radius]]\n    nints, C, D =\n        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)\n\n    flag, C1 = intersectionlinecircle(C, D, O, radius)\n    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)\n    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)\n\n    if norm(C1, I1) < norm(C1, I2)\n        ip1 = I1\n    else\n        ip1 = I2\n    end\n    if norm(C1, I3) < norm(C1, I4)\n        ip2    = I3\n    else\n        ip2 = I4\n    end\n\n    newpath()\n    arc2r(B, A, ip1, :path)\n    arc2r(C1, ip1, ip2, :path)\n    arc2r(A, ip2, B, :path)\n    arc2r(O, B, A, :path)\n    closepath()\n    do_action(action)\nend\n\nsetopacity(0.5)\negg(150, :clip)\ngsave()\n    for i in 360:-4:1\n        sethue(Colors.HSV(i, 1.0, 0.8))\n        rotate(pi/30)\n        ngon(O, i, 5, 0, :fill)\n    end\ngrestore()\nclipreset()\nfinish()(Image: clip example)It's usually good practice to add a matching clipreset() after the clipping has been completed.Good luck with your explorations!"
+},
+
+{
     "location": "basics.html#",
     "page": "Basic concepts",
     "title": "Basic concepts",
@@ -149,7 +245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "The basics",
     "category": "section",
-    "text": "The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses, and opacity. You can modify the drawing space by transforming/rotating/scaling it, which affects subsequent graphics but not the ones you've already drawn.A position is specified either by a Point(x, y) or by separate x and y coordinates.The default origin is at the top left of the drawing area, but you can reposition it at any time.Many of the drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.The main defined types are Point, Drawing, and Tiler.  Drawing is how you create new drawings. You can divide up the drawing area into tiles, using Tiler, and define grids, using GridRect and GridHex."
+    "text": "The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current graphics state, which specifies colors, line thicknesses, and opacity. You can modify the current drawing environment by transforming/rotating/scaling it. This affects subsequent graphics but not the ones you've already drawn.Specify points (positions) using Point(x, y). The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an action argument. This can be :nothing, :fill, :stroke, :fillstroke, :fillpreserve, :strokepreserve, :clip. The default is :nothing.The main defined types are Point, Drawing, and Tiler.  Drawing is how you create new drawings. You can divide up the drawing area into tiles, using Tiler, and define grids, using GridRect and GridHex."
 },
 
 {
@@ -157,7 +253,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Points and coordinates",
     "category": "section",
-    "text": "The Point type holds two coordinates, x and y. For example:julia> P = Point(12.0, 13.0)\nLuxor.Point(12.0, 13.0)\n\njulia> P.x\n12.0\n\njulia> P.y\n13.0Like all Points, P is immutable, so you can't change its x or y coordinate directly. But it's easy to make new points based on existing ones.Points can be added together:julia> Q = Point(4, 5)\nLuxor.Point(4.0, 5.0)\n\njulia> P + Q\nLuxor.Point(16.0, 18.0)You can add or multiply Points and scalars:julia> 10P\nLuxor.Point(120.0, 130.0)\n\njulia> P + 100\nLuxor.Point(112.0, 113.0)You can make new points by mixing Points and tuples:julia> P + (10, 0)\nLuxor.Point(22.0, 13.0)\n\njulia> Q * (0.5, 0.5)\nLuxor.Point(2.0, 2.5)You can use the letter O as a shortcut to refer to the current Origin, Point(0, 0).using Luxor # hide\nDrawing(600, 300, \"assets/figures/point-ex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"blue\") # hide\naxes()\nbox.([O + (i, 0) for i in linspace(0, 200, 5)], 20, 20, :stroke)\nfinish() # hide\nnothing # hide(Image: point example)Angles are mostly supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise').Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points (assuming the current scale is 1:1):inch (in is unavailable, being used by for syntax)\ncm   (centimeters)\nmm   (millimeters)For example:rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)"
+    "text": "The Point type holds two coordinates, x and y. For example:julia> P = Point(12.0, 13.0)\nLuxor.Point(12.0, 13.0)\n\njulia> P.x\n12.0\n\njulia> P.y\n13.0Points are immutable, so you can't change P's x or y coordinate directly. But it's easy to make new points based on existing ones.Points can be added together:julia> Q = Point(4, 5)\nLuxor.Point(4.0, 5.0)\n\njulia> P + Q\nLuxor.Point(16.0, 18.0)You can add or multiply Points and scalars:julia> 10P\nLuxor.Point(120.0, 130.0)\n\njulia> P + 100\nLuxor.Point(112.0, 113.0)You can also make new points by mixing Points and tuples:julia> P + (10, 0)\nLuxor.Point(22.0, 13.0)\n\njulia> Q * (0.5, 0.5)\nLuxor.Point(2.0, 2.5)You can use the letter O as a shortcut to refer to the current Origin, Point(0, 0).using Luxor # hide\nDrawing(600, 300, \"assets/figures/point-ex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"blue\") # hide\naxes()\nbox.([O + (i, 0) for i in linspace(0, 200, 5)], 20, 20, :stroke)\nfinish() # hide\nnothing # hide(Image: point example)Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise'). (Turtle graphics conventionally let you supply angles in degrees.)Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points (assuming the current scale is 1:1):inch (in is unavailable, being used by for syntax)\ncm   (centimeters)\nmm   (millimeters)For example:rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)"
+},
+
+{
+    "location": "basics.html#Drawings-1",
+    "page": "Basic concepts",
+    "title": "Drawings",
+    "category": "section",
+    "text": ""
 },
 
 {
@@ -165,7 +269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.Drawing",
     "category": "Type",
-    "text": "Create a new drawing, and optionally specify file type (PNG, PDF, SVG, or EPS) and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"luxor-drawing.png\", default size 800 pixels square.\n\nYou can specify the dimensions, and assume the default output filename:\n\nDrawing(400, 300)\n\ncreates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename \"luxor-drawing.png\".\n\nDrawing(400, 300, \"my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"my-drawing.pdf\", 400 by 300 pixels.\n\nDrawing(1200, 800, \"my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"my-drawing.svg\", 1200 by 800 pixels.\n\nDrawing(1200, 1200/golden, \"my-drawing.eps\")\n\ncreates an EPS drawing in the file \"my-drawing.eps\", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high. Only for PNG files must the dimensions be integers.\n\nDrawing(\"A4\", \"my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size (595 wide by 842 high) in the file \"my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\ncreates the drawing A4 landscape size.\n\nPDF files default to a white background, but PNG defaults to transparent, unless you specify one using background().\n\n\n\n"
+    "text": "Create a new drawing, and optionally specify file type (PNG, PDF, SVG, or EPS) and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"luxor-drawing.png\", default size 800 pixels square.\n\nYou can specify the dimensions, and assume the default output filename:\n\nDrawing(400, 300)\n\ncreates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename \"luxor-drawing.png\".\n\nDrawing(400, 300, \"my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"my-drawing.pdf\", 400 by 300 pixels.\n\nDrawing(1200, 800, \"my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"my-drawing.svg\", 1200 by 800 pixels.\n\nDrawing(width, height, surfacetype, [filename])\n\ncreates a new drawing of the given surface type (e.g. :svg, :png), storing the image only in memory if no filename is provided.\n\nDrawing(1200, 1200/golden, \"my-drawing.eps\")\n\ncreates an EPS drawing in the file \"my-drawing.eps\", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high. Only for PNG files must the dimensions be integers.\n\nDrawing(\"A4\", \"my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size (595 wide by 842 high) in the file \"my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\ncreates the drawing A4 landscape size.\n\nPDF files default to a white background, but PNG defaults to transparent, unless you specify one using background().\n\n\n\n"
 },
 
 {
@@ -189,7 +293,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Drawings and files",
     "category": "section",
-    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files should appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(currentdrawing)\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+    "text": "To create a drawing, and optionally specify the filename and type, and dimensions, use the Drawing constructor function.DrawingTo finish a drawing and close the file, use finish(), and, to launch an external application to view it, use preview().If you're using Jupyter (IJulia), preview() tries to display PNG and SVG files in the next notebook cell.(Image: jupyter)If you're using Juno, then PNG and SVG files should appear in the Plots pane.(Image: juno)finish\npreviewThe global variable currentdrawing (of type Drawing) stores some parameters related to the current drawing:julia> fieldnames(typeof(currentdrawing))\n10-element Array{Symbol,1}:\n:width\n:height\n:filename\n:surface\n:cr\n:surfacetype\n:redvalue\n:greenvalue\n:bluevalue\n:alpha"
+},
+
+{
+    "location": "basics.html#Quick-drawings-with-macros-1",
+    "page": "Basic concepts",
+    "title": "Quick drawings with macros",
+    "category": "section",
+    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing.png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke)\nfinish()\npreview()They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     endor@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     )"
+},
+
+{
+    "location": "basics.html#Drawings-in-memory-1",
+    "page": "Basic concepts",
+    "title": "Drawings in memory",
+    "category": "section",
+    "text": "You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the Drawing() function:Drawing(width, height, surfacetype, [filename])lets you supply surfacetype as a symbol (:svg or :png). This creates a new drawing of the given surface type and stores the image only in memory if no filename is supplied. In a Jupyter notebook you can use Interact.jl to provide faster manipulations:using Interact\n\nfunction makecircle(r)\n    d = Drawing(300, 300, :svg)\n    sethue(\"black\")\n    origin()\n    setline(0.5)\n    hypotrochoid(150, 100, r, :stroke)\n    finish()\n    return d\nend\n\n@manipulate for r in 5:150\n    makecircle(r)\nend"
 },
 
 {
@@ -229,7 +349,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.Tiler",
     "category": "Type",
-    "text": "tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nA Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, nrows/ncols are the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\ntiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt's sometimes useful to know which row and column you're currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\n\n\n"
+    "text": "tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nA Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, nrows/ncols are the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\ntiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt's sometimes useful to know which row and column you're currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nTo use a Tiler to make grid points:\n\nfirst.(collect(Tiler(800, 800, 4, 4))\n\nwhich returns an array of points that are the center points of the grid.\n\n\n\n"
 },
 
 {
@@ -273,14 +393,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "basics.html#Quick-drawings-with-macros-1",
-    "page": "Basic concepts",
-    "title": "Quick drawings with macros",
-    "category": "section",
-    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing.png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke)\nfinish()\npreview()They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600).For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     endor@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     )"
-},
-
-{
     "location": "simplegraphics.html#",
     "page": "Simple graphics",
     "title": "Simple graphics",
@@ -309,7 +421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.box",
     "category": "Function",
-    "text": "box(cornerpoint1, cornerpoint2, action=:nothing)\n\nCreate a rectangle between two points and do an action.\n\n\n\nbox(points::Array, action=:nothing)\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\n\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\n\n\nbox(x, y, width, height, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height.\n\n\n\nbox(x, y, width, height, cornerradius, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height. Round each corner by cornerradius.\n\n\n\n"
+    "text": "box(cornerpoint1, cornerpoint2, action=:nothing)\n\nCreate a rectangle between two points and do an action.\n\n\n\nbox(points::AbstractArray, action=:nothing)\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\n\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\n\n\nbox(x, y, width, height, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height.\n\n\n\nbox(x, y, width, height, cornerradius, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height. Round each corner by cornerradius.\n\n\n\n"
 },
 
 {
@@ -317,7 +429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.polybbox",
     "category": "Function",
-    "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::Array)\n\nReturn the two opposite corners (suitable for box(), for example).\n\n\n\n"
+    "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::AbstractArray)\n\nReturn the two opposite corners (suitable for box(), for example).\n\n\n\n"
 },
 
 {
@@ -325,7 +437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Rectangles and boxes",
     "category": "section",
-    "text": "(Image: rects)rect\nbox\npolybboxFor regular polygons, see the next section on Polygons."
+    "text": "The simple rectangle and box shapes can be made in different ways.using Luxor # hide\nDrawing(400, 220, \"assets/figures/basicrects.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\naxes()\nsethue(\"red\")\nrect(O, 100, 100, :stroke)\nsethue(\"blue\")\nbox(O, 100, 100, :stroke)\nfinish() # hide\nnothing # hide(Image: rect vs box)Whereas rect() rectangles are positioned at one corner, a box made with box() can either be defined by its center and dimensions, or by two opposite corners.(Image: rects)If you want the coordinates of the corners of a box, use this form of box():box(centerpoint, width, height, vertices=true)rect\nbox\npolybboxFor regular polygons, see the next section on Polygons."
 },
 
 {
@@ -357,7 +469,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Circles and ellipses",
     "category": "section",
-    "text": "There are various ways to make circles, including by center and radius, or passing through two points:using Luxor # hide\nDrawing(400, 200, \"assets/figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = O\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(O, Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide\nnothing # hide(Image: circles)Or passing through three points. The center3pts() function returns the center position and radius of a circle passing through three points:using Luxor # hide\nDrawing(400, 200, \"assets/figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide\nnothing # hide(Image: center and radius of 3 points)With ellipse() you can place ellipses (and circles) by defining the center point and the width and height.using Luxor # hide\nDrawing(500, 300, \"assets/figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nsrand(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n    randomhue()\n    ellipse(pos, width, height, :fill)\n    sethue(\"black\")\n    label = string(round(width/height, 2))\n    textcentered(label, pos.x, pos.y + 25)\n    width += 2\nend\nfinish() # hide\nnothing # hide(Image: ellipses)It's also possible to construct polygons that are approximations to ellipses with two focal points and a distance.using Luxor # hide\nDrawing(500, 450, \"assets/figures/ellipses_1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"gray30\") # hide\nsetline(1) # hide\nf1 = Point(-100, 0)\nf2 = Point(100, 0)\nellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)\n[ begin\n    setgray(rescale(c, 150, 1, 0, 1))\n    poly(offsetpoly(ellipsepoly, c), close=true, :fill);\n    rotate(pi/20)\n  end\n     for c in 150:-10:1 ]\nfinish() # hide\nnothing # hide(Image: more ellipses)circle\nellipsecirclepath() constructs a circular path from Bèzier curves, which allows you to use circles as paths.using Luxor # hide\nDrawing(600, 250, \"assets/figures/circle-path.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\ntiles = Tiler(600, 250, 1, 5)\nfor (pos, n) in tiles\n    randomhue()\n    circlepath(pos, tiles.tilewidth/2, :path)\n    newsubpath()\n    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)\nend\nfinish() # hide\nnothing # hide(Image: circles as paths)circlepath"
+    "text": "There are various ways to make circles, including by center and radius, or passing through two points:using Luxor # hide\nDrawing(400, 200, \"assets/figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = O\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(O, Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide\nnothing # hide(Image: circles)Or passing through three points. The center3pts() function returns the center position and radius of a circle passing through three points:using Luxor # hide\nDrawing(400, 200, \"assets/figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\") # hide\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide\nnothing # hide(Image: center and radius of 3 points)With ellipse() you can place ellipses (and circles) by defining the center point and the width and height.using Luxor # hide\nDrawing(500, 300, \"assets/figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nsrand(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n    randomhue()\n    ellipse(pos, width, height, :fill)\n    sethue(\"black\")\n    label = string(round(width/height, 2))\n    textcentered(label, pos.x, pos.y + 25)\n    width += 2\nend\nfinish() # hide\nnothing # hide(Image: ellipses)It's also possible to construct polygons that are approximations to ellipses with two focal points and a distance.using Luxor # hide\nDrawing(500, 450, \"assets/figures/ellipses_1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"gray30\") # hide\nsetline(1) # hide\nf1 = Point(-100, 0)\nf2 = Point(100, 0)\nellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)\n[ begin\n    setgray(rescale(c, 150, 1, 0, 1))\n    poly(offsetpoly(ellipsepoly, c), close=true, :fill);\n    rotate(pi/20)\n  end\n     for c in 150:-10:1 ]\nfinish() # hide\nnothing # hide(Image: more ellipses)circle\nellipsecirclepath() constructs a circular path from Bézier curves, which allows you to use circles as paths.using Luxor # hide\nDrawing(600, 250, \"assets/figures/circle-path.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\ntiles = Tiler(600, 250, 1, 5)\nfor (pos, n) in tiles\n    randomhue()\n    circlepath(pos, tiles.tilewidth/2, :path)\n    newsubpath()\n    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)\nend\nfinish() # hide\nnothing # hide(Image: circles as paths)circlepath"
 },
 
 {
@@ -525,7 +637,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Arcs and curves",
     "category": "section",
-    "text": "There are a few standard arc-drawing commands, such as curve(), arc(), carc(), and arc2r().curve() constructs Bèzier curves from control points:using Luxor # hide\nDrawing(500, 275, \"assets/figures/curve.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetline(.5)\npt1 = Point(0, -125)\npt2 = Point(200, 125)\npt3 = Point(200, -125)\n\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])\n\nline(O, pt1, :stroke)\nline(pt2, pt3, :stroke)\n\nsethue(\"black\")\nsetline(3)\n\nmove(O)\ncurve(pt1, pt2, pt3)\nstrokepath()\nfinish()  # hide\nnothing # hide(Image: curve)arc2r() draws a circular arc that joins two points:  using Luxor # hide\nDrawing(700, 200, \"assets/figures/arc2r.png\") # hide\norigin() # hide\nsrand(42) # hide\nbackground(\"white\") # hide\ntiles = Tiler(700, 200, 1, 6)\nfor (pos, n) in tiles\n    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)\n    sethue(\"black\")\n    map(pt -> circle(pt, 4, :fill), [c1, pt3])\n    sethue(\"red\")\n    circle(pt2, 4, :fill)\n    randomhue()\n    arc2r(c1, pt2, pt3, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)arc\narc2r\ncarc\ncarc2r\ncurve"
+    "text": "There are a few standard arc-drawing commands, such as curve(), arc(), carc(), and arc2r().curve() constructs Bézier curves from control points:using Luxor # hide\nDrawing(500, 275, \"assets/figures/curve.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetline(.5)\npt1 = Point(0, -125)\npt2 = Point(200, 125)\npt3 = Point(200, -125)\n\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])\n\nline(O, pt1, :stroke)\nline(pt2, pt3, :stroke)\n\nsethue(\"black\")\nsetline(3)\n\nmove(O)\ncurve(pt1, pt2, pt3)\nstrokepath()\nfinish()  # hide\nnothing # hide(Image: curve)arc2r() draws a circular arc that joins two points:using Luxor # hide\nDrawing(700, 200, \"assets/figures/arc2r.png\") # hide\norigin() # hide\nsrand(42) # hide\nbackground(\"white\") # hide\ntiles = Tiler(700, 200, 1, 6)\nfor (pos, n) in tiles\n    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)\n    sethue(\"black\")\n    map(pt -> circle(pt, 4, :fill), [c1, pt3])\n    sethue(\"red\")\n    circle(pt2, 4, :fill)\n    randomhue()\n    arc2r(c1, pt2, pt3, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)arc\narc2r\ncarc\ncarc2r\ncurve"
 },
 
 {
@@ -561,11 +673,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "simplegraphics.html#Luxor.intersection_line_circle",
+    "location": "simplegraphics.html#Luxor.intersectionlinecircle",
     "page": "Simple graphics",
-    "title": "Luxor.intersection_line_circle",
+    "title": "Luxor.intersectionlinecircle",
     "category": "Function",
-    "text": "intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)\n\nFind the intersection points of a line (extended through points p1 and p2) and a circle.\n\nReturn a tuple of (n, pt1, pt2)\n\nwhere\n\nn is the number of intersections, 0, 1, or 2\npt1 is first intersection point, or Point(0, 0) if none\npt2 is the second intersection point, or Point(0, 0) if none\n\nThe calculated intersection points won't necessarily lie on the line segment between p1 and p2.\n\n\n\n"
+    "text": "intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r)\n\nFind the intersection points of a line (extended through points p1 and p2) and a circle.\n\nReturn a tuple of (n, pt1, pt2)\n\nwhere\n\nn is the number of intersections, 0, 1, or 2\npt1 is first intersection point, or Point(0, 0) if none\npt2 is the second intersection point, or Point(0, 0) if none\n\nThe calculated intersection points won't necessarily lie on the line segment between p1 and p2.\n\n\n\n"
 },
 
 {
@@ -574,6 +686,22 @@ var documenterSearchIndex = {"docs": [
     "title": "Luxor.intersection2circles",
     "category": "Function",
     "text": "intersection2circles(pt1, r1, pt2, r2)\n\nFind the area of intersection between two circles, the first centered at pt1 with radius r1, the second centered at pt2 with radius r2.\n\n\n\n"
+},
+
+{
+    "location": "simplegraphics.html#Luxor.intersectioncirclecircle",
+    "page": "Simple graphics",
+    "title": "Luxor.intersectioncirclecircle",
+    "category": "Function",
+    "text": "intersectioncirclecircle(cp1, r1, cp2, r2)\n\nFind the two points where two circles intersect, if they do. The first circle is centered at cp1 with radius r1, and the second is centered at cp1 with radius r1.\n\nReturns\n\n(flag, ip1, ip2)\n\nwhere flag is a Boolean true if the circles intersect at the points ip1 and ip2. If the circles don't intersect at all, or one is completely inside the other, flag is false and the points are both Point(0, 0).\n\nUse intersection2circles() to find the area of two overlapping circles.\n\nIn the pure world of maths, it must be possible that two circles 'kissing' only have a single intersection point. At present, this unromantic function reports that two kissing circles have no intersection points.\n\n\n\n"
+},
+
+{
+    "location": "simplegraphics.html#Luxor.bboxesintersect",
+    "page": "Simple graphics",
+    "title": "Luxor.bboxesintersect",
+    "category": "Function",
+    "text": "bboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)\n\nReturn true if the two bounding boxes defined by acorner1:acorner2 and bcorner1:bcorner2 intersect.\n\nEach pair of points is assumed to define the two opposite corners of a bounding box.\n\n\n\n"
 },
 
 {
@@ -629,7 +757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Geometry tools",
     "category": "section",
-    "text": "You can find the midpoint between two points using midpoint().The following code places a small pentagon (using ngon()) at the midpoint of each side of a larger pentagon:using Luxor # hide\nDrawing(700, 220, \"assets/figures/midpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\nngon(O, 100, 5, 0, :stroke)\n\nsethue(\"darkgreen\")\np5 = ngon(O, 100, 5, 0, vertices=true)\n\nfor i in eachindex(p5)\n    pt1 = p5[mod1(i, 5)]\n    pt2 = p5[mod1(i + 1, 5)]\n    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)A more general function, between(), finds for a value x between 0 and 1 the corresponding point on a line defined by two points. So midpoint(p1, p2) and between(p1, p2, 0.5) should return the same point.using Luxor # hide\nDrawing(700, 150, \"assets/figures/betweenpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\np1 = Point(-150, 0)\np2 = Point(150, 40)\nline(p1, p2)\nstrokepath()\nfor i in -0.5:0.1:1.5\n    randomhue()\n    circle(between(p1, p2, i), 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.midpoint\nbetweencenter3pts() finds the radius and center point of a circle passing through three points which you can then use with functions such as circle() or arc2r().center3ptsintersection() finds the intersection of two lines.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\npt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)\nline(pt1, pt2, :stroke)\nline(pt3, pt4, :stroke)\nflag, ip =  intersection(pt1, pt2, pt3, pt4)\nif flag\n    circle(ip, 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection_line_circle() finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection_line_circle.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"chocolate2\") # hide\nl1 = Point(-100.0, -75.0)\nl2 = Point(300.0, 100.0)\nrad = 100\ncpoint = Point(0, 0)\nline(l1, l2, :stroke)\nsethue(\"darkgreen\") # hide\ncircle(cpoint, rad, :stroke)\nnints, ip1, ip2 =  intersection_line_circle(l1, l2, cpoint, rad)\nsethue(\"black\")\nif nints == 2\n    circle(ip1, 8, :stroke)\n    circle(ip2, 8, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection2circles() finds the area of the intersection of two circles. This example shows the areas of two circles, and the area of their intersection.using Luxor # hide\nDrawing(700, 300, \"assets/figures/intersection2circles.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\nsethue(\"black\") # hide\n\nc1 = (O, 150)\nc2 = (O + (100, 0), 150)\n\ncircle(c1... , :stroke)\ncircle(c2... , :stroke)\n\nsethue(\"purple\")\ncircle(c1... , :clip)\ncircle(c2... , :fill)\nclipreset()\n\nsethue(\"black\")\n\ntext(string(150^2 * pi |> round), c1[1] - (125, 0))\ntext(string(150^2 * pi |> round), c2[1] + (100, 0))\nsethue(\"white\")\ntext(string(intersection2circles(c1..., c2...) |> round),\n     midpoint(c1[1], c2[1]), halign=:center)\nfinish() # hide\nnothing # hide(Image: intersetion of two circles)intersection\nintersection_line_circle\nintersection2circlesgetnearestpointonline() finds perpendiculars.using Luxor # hide\nDrawing(700, 200, \"assets/figures/perpendicular.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\nend1, end2, pt3 = ngon(O, 100, 3, vertices=true)\nmap(pt -> circle(pt, 5, :fill), [end1, end2, pt3])\nline(end1, end2, :stroke)\narrow(pt3, getnearestpointonline(end1, end2, pt3))\nfinish() # hide\nnothing # hide(Image: arc)getnearestpointonline\npointlinedistance\nslope\nperpendicular\n@polar\npolar"
+    "text": "You can find the midpoint between two points using midpoint().The following code places a small pentagon (using ngon()) at the midpoint of each side of a larger pentagon:using Luxor # hide\nDrawing(700, 220, \"assets/figures/midpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\nngon(O, 100, 5, 0, :stroke)\n\nsethue(\"darkgreen\")\np5 = ngon(O, 100, 5, 0, vertices=true)\n\nfor i in eachindex(p5)\n    pt1 = p5[mod1(i, 5)]\n    pt2 = p5[mod1(i + 1, 5)]\n    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)A more general function, between(), finds for a value x between 0 and 1 the corresponding point on a line defined by two points. So midpoint(p1, p2) and between(p1, p2, 0.5) should return the same point.using Luxor # hide\nDrawing(700, 150, \"assets/figures/betweenpoint.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"red\")\np1 = Point(-150, 0)\np2 = Point(150, 40)\nline(p1, p2)\nstrokepath()\nfor i in -0.5:0.1:1.5\n    randomhue()\n    circle(between(p1, p2, i), 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.midpoint\nbetweencenter3pts() finds the radius and center point of a circle passing through three points which you can then use with functions such as circle() or arc2r().center3ptsintersection() finds the intersection of two lines.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\npt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)\ntext.([\"pt 1\", \"pt 2\", \"pt 3\", \"pt 4\"], [pt1, pt2, pt3, pt4])\nline(pt1, pt2, :stroke)\nline(pt4, pt3, :stroke)\n\nflag, ip =  intersection(pt1, pt2, pt4, pt3)\nif flag\n    circle(ip, 5, :fill)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersectionlinecircle() finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.using Luxor # hide\nDrawing(700, 220, \"assets/figures/intersection_line_circle.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"chocolate2\") # hide\nl1 = Point(-100.0, -75.0)\nl2 = Point(300.0, 100.0)\nrad = 100\ncpoint = Point(0, 0)\nline(l1, l2, :stroke)\nsethue(\"darkgreen\") # hide\ncircle(cpoint, rad, :stroke)\nnints, ip1, ip2 =  intersectionlinecircle(l1, l2, cpoint, rad)\nsethue(\"black\")\nif nints == 2\n    circle(ip1, 8, :stroke)\n    circle(ip2, 8, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)intersection2circles() finds the area of the intersection of two circles, and `intersectioncirclecircle() finds the points where they cross.This example shows the areas of two circles, and the area of their intersection.using Luxor # hide\nDrawing(700, 310, \"assets/figures/intersection2circles.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\nsethue(\"black\") # hide\n\nc1 = (O, 150)\nc2 = (O + (100, 0), 150)\n\ncircle(c1... , :stroke)\ncircle(c2... , :stroke)\n\nsethue(\"purple\")\ncircle(c1... , :clip)\ncircle(c2... , :fill)\nclipreset()\n\nsethue(\"black\")\n\ntext(string(150^2 * pi |> round), c1[1] - (125, 0))\ntext(string(150^2 * pi |> round), c2[1] + (100, 0))\nsethue(\"white\")\ntext(string(intersection2circles(c1..., c2...) |> round),\n     midpoint(c1[1], c2[1]), halign=:center)\n\nsethue(\"red\")\nflag, C, D = intersectioncirclecircle(c1..., c2...)\nif flag\n    circle.([C, D], 2, :fill)\nend\nfinish() # hide\nnothing # hide(Image: intersection of two circles)intersection\nintersectionlinecircle\nintersection2circles\nintersectioncirclecircle\nbboxesintersectgetnearestpointonline() finds perpendiculars.using Luxor # hide\nDrawing(700, 200, \"assets/figures/perpendicular.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"darkmagenta\") # hide\nend1, end2, pt3 = ngon(O, 100, 3, vertices=true)\nmap(pt -> circle(pt, 5, :fill), [end1, end2, pt3])\nline(end1, end2, :stroke)\narrow(pt3, getnearestpointonline(end1, end2, pt3))\nfinish() # hide\nnothing # hide(Image: arc)getnearestpointonline\npointlinedistance\nslope\nperpendicular\n@polar\npolar"
 },
 
 {
@@ -661,7 +789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.juliacircles",
     "category": "Function",
-    "text": "juliacircles(radius=100)\n\nDraw the three Julia circles in color centered at the origin.\n\nThe distance of the centers of the circles from the origin is radius. The optional keyword arguments outercircleratio (default 0.75) and innercircleratio  (default 0.65) control the radius of the individual colored circles relative to the radius.  So you can get relatively smaller or larger circles by adjusting the ratios.\n\n\n\n"
+    "text": "juliacircles(radius=100)\n\nDraw the three Julia circles in color centered at the origin.\n\nThe distance of the centers of the circles from the origin is radius. The optional keyword arguments outercircleratio (default 0.75) and innercircleratio (default 0.65) control the radius of the individual colored circles relative to the radius. So you can get relatively smaller or larger circles by adjusting the ratios.\n\n\n\n"
 },
 
 {
@@ -757,7 +885,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.bars",
     "category": "Function",
-    "text": "bars(values::Array;\n        yscale = 100,\n        xwidth = 10,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array.\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b])\n\nand pass them like this:\n\nbars(v, yscale=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yscale=10, labelfunction=mylabelfunction)\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n"
+    "text": "bars(values::AbstractArray;\n        yheight = 200,\n        xwidth = 25,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array. The bars will fit in a box yheight high (even if there are negative values).\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nand pass them like this:\n\nbars(v, yheight=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n"
 },
 
 {
@@ -765,7 +893,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Bars",
     "category": "section",
-    "text": "For simple bars, use the bars() function, supplying an array of numbers:using Luxor # hide\nDrawing(800, 250, \"assets/figures/bars.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(7)\nsethue(\"black\")\ntranslate(-350, 0) # hide\nv = rand(-100:100, 60)\nbars(v)\nfinish() # hide\nnothing # hide(Image: bars)To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to bars():using Luxor # hide\nDrawing(800, 350, \"assets/figures/bars1.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(8) # hide\nsethue(\"black\") # hide\ntranslate(-350, 0) # hide\n\nfunction mybarfunction(low::Point, high::Point, value; extremes=[0, 1])\n    @layer begin\n        sethue(rescale(value, extremes[1], extremes[2], 0, 1), 0.0, 1.0)\n        circle(high, 8, :fill)\n        setline(1)\n        sethue(\"blue\")\n        line(low, high + (0, 8), :stroke)\n        sethue(\"white\")\n        text(string(value), high, halign=:center, valign=:middle)\n    end\nend\n\nfunction mylabelfunction(low::Point, high::Point, value; extremes=[0, 1])\n    @layer begin\n        translate(low)\n        rotate(-pi/2)\n        text(string(value,\"/\", extremes[2]), O - (10, 0), halign=:right, valign=:middle)\n    end\nend\n\nv = rand(1:200, 30)\nbars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)\n\nfinish() # hide\nnothing # hide(Image: bars 1)bars"
+    "text": "For simple bars, use the bars() function, supplying an array of numbers:using Luxor # hide\nDrawing(800, 420, \"assets/figures/bars.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(7)\nsethue(\"black\")\ntranslate(-350, 0) # hide\nv = rand(-100:100, 25)\nbars(v)\nfinish() # hide\nnothing # hide(Image: bars)To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to bars():using Luxor, Colors # hide\nDrawing(800, 450, \"assets/figures/bars1.png\")  # hide\nsrand(2) # hide\norigin() # hide\nbackground(\"white\") # hide\nsetopacity(0.8) # hide\nfontsize(8) # hide\nfontface(\"Helvetica-Bold\") # hide\nsethue(\"black\") # hide\ntranslate(-350, 100) # hide\n\nfunction mybarfunction(low::Point, high::Point, value;\n    extremes=[0, 1], barnumber=0, bartotal=0)\n    @layer begin\n        sethue(Colors.HSB(rescale(value, extremes[1], extremes[2], 0, 360), 1.0, 0.5))\n        csize = rescale(value, extremes[1], extremes[2], 5, 25)\n        circle(high, csize, :fill)\n        setline(1)\n        sethue(\"blue\")\n        line(Point(low.x, 0), high + (0, csize), :stroke)\n        sethue(\"white\")\n        text(string(value), high, halign=:center, valign=:middle)\n    end\nend\n\nfunction mylabelfunction(low::Point, high::Point, value;\n    extremes=[0, 1], barnumber=0, bartotal=0)\n    @layer begin\n        translate(low)\n        text(string(value), O + (0, 10), halign=:center, valign=:middle)\n    end\nend\n\nv = rand(1:100, 25)\nbars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)\n\nfinish() # hide\nnothing # hide(Image: bars 1)bars"
 },
 
 {
@@ -817,14 +945,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "colors-styles.html#Luxor.setblend",
-    "page": "Colors and styles",
-    "title": "Luxor.setblend",
-    "category": "Function",
-    "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
-},
-
-{
     "location": "colors-styles.html#Luxor.randomhue",
     "page": "Colors and styles",
     "title": "Luxor.randomhue",
@@ -841,11 +961,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "colors-styles.html#Luxor.setblend",
+    "page": "Colors and styles",
+    "title": "Luxor.setblend",
+    "category": "Function",
+    "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
+},
+
+{
     "location": "colors-styles.html#Color-and-opacity-1",
     "page": "Colors and styles",
     "title": "Color and opacity",
     "category": "section",
-    "text": "For color definitions and conversions, you can use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.Named colors, such as \"gold\", or \"lavender\", can be found in Colors.color_names. This code shows the first 625 colors.using Luxor, Colors # hide\nDrawing(800, 500, \"assets/figures/colors.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(5) # hide\ncols = collect(Colors.color_names)\ntiles = Tiler(800, 500, 25, 25)\nfor (pos, n) in tiles\n    sethue(cols[n][1])\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    clab = convert(Lab, parse(Colorant, cols[n][1]))\n    labelbrightness = 100 - clab.l\n    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))\n    text(string(cols[n][1]), pos, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: line endings)Some fiddling with Lab colors adjusts the label color to make it stand out against the background.sethue\nsetcolor\nsetgray\nsetopacity\nsetblend\nrandomhue\nrandomcolor"
+    "text": "For color definitions and conversions, you can use Colors.jl.setcolor() and sethue() apply a single solid or transparent color to shapes. setblend() applies a smooth transition between two or more colors. setmesh applies a color mesh.The difference between the setcolor() and sethue() functions is that sethue() is independent of alpha opacity, so you can change the hue without changing the current opacity value.Named colors, such as \"gold\", or \"lavender\", can be found in Colors.color_names. This code shows the first 625 colors.using Luxor, Colors # hide\nDrawing(800, 500, \"assets/figures/colors.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(5) # hide\ncols = collect(Colors.color_names)\ntiles = Tiler(800, 500, 25, 25)\nfor (pos, n) in tiles\n    sethue(cols[n][1])\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    clab = convert(Lab, parse(Colorant, cols[n][1]))\n    labelbrightness = 100 - clab.l\n    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))\n    text(string(cols[n][1]), pos, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: line endings)Some fiddling with Lab colors adjusts the label color to make it stand out against the background.sethue\nsetcolor\nsetgray\nsetopacity\nrandomhue\nrandomcolor\nsetblend"
 },
 
 {
@@ -1001,6 +1129,30 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "colors-styles.html#Luxor.mesh",
+    "page": "Colors and styles",
+    "title": "Luxor.mesh",
+    "category": "Function",
+    "text": "mesh(bezierpath::AbstractArray{NTuple{4,Point}},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh. The first three or four elements of the supplied bezierpath define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nUse setmesh() to select the mesh, which will be used to fill shapes.\n\nExample\n\n@svg begin\n    bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))\n    mesh1 = mesh(bp, [\n        \"red\",\n        Colors.RGB(0, 1, 0),\n        Colors.RGB(0, 1, 1),\n        Colors.RGB(1, 0, 1)\n        ])\n    setmesh(mesh1)\n    box(O, 500, 500, :fill)\nend\n\n\n\nmesh(points::AbstractArray{Point},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh.\n\nCreate a mesh. The first three or four sides of the supplied points polygon define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nExample\n\n@svg begin\n    pl = ngon(O, 250, 3, pi/6, vertices=true)\n    mesh1 = mesh(pl, [\n        \"purple\",\n        Colors.RGBA(0.0, 1.0, 0.5, 0.5),\n        \"yellow\"\n        ])\n    setmesh(mesh1)\n    setline(180)\n    ngon(O, 250, 3, pi/6, :strokepreserve)\n    setline(5)\n    sethue(\"black\")\n    strokepath()\nend\n\n\n\n"
+},
+
+{
+    "location": "colors-styles.html#Luxor.setmesh",
+    "page": "Colors and styles",
+    "title": "Luxor.setmesh",
+    "category": "Function",
+    "text": "setmesh(mesh::Mesh)\n\nSelect a mesh previously created with mesh() for filling shapes.\n\n\n\n"
+},
+
+{
+    "location": "colors-styles.html#Meshes-1",
+    "page": "Colors and styles",
+    "title": "Meshes",
+    "category": "section",
+    "text": "A mesh is a Cairo feature that provides smooth shading between three or four colors across a region defined by lines or curves.To create a mesh, use the mesh() function and save the result as a mesh object. To use a mesh, supply the mesh object to the setmesh() function.The mesh() function accepts either an array of Bézier paths or a polygon.The first example uses a Bézier path conversion of a square as the outline of the mesh. Because the box to be filled is larger than the mesh's outlines, not all the box is filled.using Luxor, Colors # hide\nDrawing(600, 600, \"assets/figures/mesh1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetcolor(\"grey50\")\ncircle.([Point(x, y) for x in -200:25:200, y in -200:25:200], 10, :fill)\nbp = makebezierpath(ngon(O, 250, 4, pi/4, vertices=true), smoothing=.4)\nmesh1 = mesh(bp, [\n    Colors.RGBA(1, 0, 0, 1),   # bottom left, red\n    Colors.RGBA(1, 1, 1, 0.0), # top left, transparent\n    Colors.RGB(0, 0, 1),      # top right, blue\n    Colors.RGB(1, 0, 1)        # bottom right, purple\n    ])\nsetmesh(mesh1)\nbox(O, 500, 500, :fillpreserve)\nsethue(\"grey50\")\nstrokepath()\n\nfinish() # hide\nnothing # hide(Image: mesh 1)The second example uses a polygon defined by ngon() as the outline of the mesh. The mesh is drawn when the path is stroked.using Luxor # hide\nDrawing(600, 600, \"assets/figures/mesh2.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\npl = ngon(O, 250, 3, pi/6, vertices=true)\nmesh1 = mesh(pl, [\n    \"purple\",\n    \"green\",\n    \"yellow\"\n    ])\nsetmesh(mesh1)\nsetline(180)\npoly(pl, :strokepreserve, close=true)\nsetline(5)\nsethue(\"black\")\nstrokepath()\nfinish() # hide\nnothing # hide(Image: mesh 2)mesh\nsetmesh"
+},
+
+{
     "location": "polygons.html#",
     "page": "Polygons and paths",
     "title": "Polygons and paths",
@@ -1013,7 +1165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Polygons and paths",
     "category": "section",
-    "text": ""
+    "text": "For drawing shapes, Luxor provides polygons and paths.A polygon is an ordered collection of Points stored in an array.A path is one or more straight and curved (Bézier) lines placed on the drawing. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.Luxor also provides a Bézier-path type, which is an array of four-point tuples, each of which is a Bézier curve section.Functions are provided for converting between polygons and paths."
 },
 
 {
@@ -1061,7 +1213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.poly",
     "category": "Function",
-    "text": "Draw a polygon.\n\npoly(pointlist::Array, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
+    "text": "Draw a polygon.\n\npoly(pointlist::AbstractArray{Point, 1}, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn't close or fill the polygon, to allow for clipping.\n\n\n\n"
 },
 
 {
@@ -1069,7 +1221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.prettypoly",
     "category": "Function",
-    "text": "prettypoly(points::Array{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);\n    close=false,\n    reversepath=false,\n    vertexlabels = (n, l) -> ()\n    )\n\nDraw the polygon defined by points, possibly closing and reversing it, using the current parameters, and then evaluate the vertexfunction function at every vertex of the polygon.\n\nThe default vertexfunction draws a 2 pt radius circle.\n\nTo mark each vertex of a polygon with a randomly colored filled circle:\n\np = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(p, :fill, () ->\n    begin\n        randomhue()\n        circle(O, 10, :fill)\n    end,\n    close=true)\n\nThe optional keyword argument vertexlabels lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle \"1 of 3\", \"2 of 3\", and \"3 of 3\" using:\n\nprettypoly(triangle, :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l))))\n\n\n\n"
+    "text": "prettypoly(points::AbstractArray{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);\n    close=false,\n    reversepath=false,\n    vertexlabels = (n, l) -> ()\n    )\n\nDraw the polygon defined by points, possibly closing and reversing it, using the current parameters, and then evaluate the vertexfunction function at every vertex of the polygon.\n\nThe default vertexfunction draws a 2 pt radius circle.\n\nTo mark each vertex of a polygon with a randomly colored filled circle:\n\np = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(p, :fill, () ->\n    begin\n        randomhue()\n        circle(O, 10, :fill)\n    end,\n    close=true)\n\nThe optional keyword argument vertexlabels lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle \"1 of 3\", \"2 of 3\", and \"3 of 3\" using:\n\nprettypoly(triangle, :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l))))\n\n\n\n"
 },
 
 {
@@ -1077,7 +1229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.simplify",
     "category": "Function",
-    "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n"
+    "text": "Simplify a polygon:\n\nsimplify(pointlist::AbstractArray, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n"
 },
 
 {
@@ -1085,7 +1237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.isinside",
     "category": "Function",
-    "text": "isinside(p, pol; allowonedge=false)\n\nIs a point p inside a polygon pol? Returns true or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.\n\nSet allowonedge to false to suppress point-on-edge errors.\n\n\n\n"
+    "text": "isinside(p, pol; allowonedge=false)\n\nIs a point p inside a polygon pol? Returns true if it does, or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.\n\nThe classification of points lying on the edges of the target polygon, or coincident with its vertices is not clearly defined, due to rounding errors or arithmetical inadequacy. By default these will generate errors, but you can suppress these by setting allowonedge to true.\n\n\n\n"
 },
 
 {
@@ -1125,7 +1277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polysortbyangle",
     "category": "Function",
-    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::Array, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
+    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::AbstractArray, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
 },
 
 {
@@ -1141,7 +1293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Polygons",
     "category": "section",
-    "text": "Use poly() to draw lines connecting the points or just fill the area:using Luxor # hide\nDrawing(600, 250, \"assets/figures/simplepoly.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\nsethue(\"orchid4\") # hide\ntiles = Tiler(600, 250, 1, 2, margin=20)\ntile1, tile2 = collect(tiles)\n\nrandompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]\n\ngsave()\ntranslate(tile1[1])\npoly(randompoints, :stroke)\ngrestore()\n\ngsave()\ntranslate(tile2[1])\npoly(randompoints, :fill)\ngrestore()\n\nfinish() # hide\nnothing # hide(Image: simple poly)polyA polygon can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor # hide\nDrawing(400, 250, \"assets/figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(5)\nsethue(\"gold\")\nline(Point(-200, 0), Point(200, 0), :stroke)\nsethue(\"orchid4\")\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide\nnothing # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the supplied vertexfunction function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolybasic.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () ->\n        begin\n            randomhue()\n            circle(O, 10, :fill)\n        end,\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)An optional keyword argument vertexlabels lets you pass a function that can number each vertex. The function can use two arguments, the current vertex number, and the total number of points in the polygon:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolyvertex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 80, 5, 0.6, 0, vertices=true)\nprettypoly(apoly,\n    :stroke,  \n    vertexlabels = (n, l) -> (text(string(n, \" of \", l), halign=:center)),\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)prettypolyRecursive decoration is possible:using Luxor # hide\nDrawing(400, 260, \"assets/figures/prettypolyrecursive.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\nsethue(\"magenta\") # hide\nsetopacity(0.5) # hide\n\ndecorate(pos, p, level) = begin\n    if level < 4\n        randomhue();\n        scale(0.25, 0.25)\n        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)\n    end\nend\n\napoly = star(O, 100, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor # hide\nDrawing(600, 500, \"assets/figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve = [Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi]\nprettypoly(collect(sincurve), :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke,     \n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide\nnothing # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.5)\napolygon = star(O, 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n    apoint = randompoint(Point(-200, -150), Point(200, 150))\n    randomhue()\n    isinside(apoint, apolygon) ? circle(apoint, 3, :fill) : circle(apoint, .5, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: isinside)isinsideYou can use randompoint() and randompointarray() to create a random Point or list of Points.using Luxor # hide\nDrawing(400, 250, \"assets/figures/randompoints.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\n\npt1 = Point(-100, -100)\npt2 = Point(100, 100)\n\nsethue(\"gray80\")\nmap(pt -> circle(pt, 6, :fill), (pt1, pt2))\nbox(pt1, pt2, :stroke)\n\nsethue(\"red\")\ncircle(randompoint(pt1, pt2), 7, :fill)\n\nsethue(\"blue\")\nmap(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))\n\nfinish() # hide\nnothing # hide(Image: isinside)randompoint\nrandompointarrayThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's polysplit():using Luxor # hide\nDrawing(400, 150, \"assets/figures/polysplit.png\") # hide\norigin() # hide\nsetopacity(0.7) # hide\nsrand(42) # hide\nsethue(\"black\") # hide\ns = squircle(O, 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide\nnothing # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid"
+    "text": "Use poly() to draw lines connecting the points or just fill the area:using Luxor # hide\nDrawing(600, 250, \"assets/figures/simplepoly.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\nsethue(\"orchid4\") # hide\ntiles = Tiler(600, 250, 1, 2, margin=20)\ntile1, tile2 = collect(tiles)\n\nrandompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]\n\ngsave()\ntranslate(tile1[1])\npoly(randompoints, :stroke)\ngrestore()\n\ngsave()\ntranslate(tile2[1])\npoly(randompoints, :fill)\ngrestore()\n\nfinish() # hide\nnothing # hide(Image: simple poly)polyA polygon can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor # hide\nDrawing(400, 250, \"assets/figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(5)\nsethue(\"gold\")\nline(Point(-200, 0), Point(200, 0), :stroke)\nsethue(\"orchid4\")\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide\nnothing # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the supplied vertexfunction function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolybasic.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () ->\n        begin\n            randomhue()\n            circle(O, 10, :fill)\n        end,\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)An optional keyword argument vertexlabels lets you pass a function that can number each vertex. The function can use two arguments, the current vertex number, and the total number of points in the polygon:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolyvertex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 80, 5, 0.6, 0, vertices=true)\nprettypoly(apoly,\n    :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l), halign=:center)),\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)prettypolyRecursive decoration is possible:using Luxor # hide\nDrawing(400, 260, \"assets/figures/prettypolyrecursive.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\nsethue(\"magenta\") # hide\nsetopacity(0.5) # hide\n\ndecorate(pos, p, level) = begin\n    if level < 4\n        randomhue();\n        scale(0.25, 0.25)\n        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)\n    end\nend\n\napoly = star(O, 100, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor # hide\nDrawing(600, 500, \"assets/figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve = [Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi]\nprettypoly(collect(sincurve), :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide\nnothing # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(0.5)\napolygon = star(O, 100, 5, 0.5, 0, vertices=true)\nfor n in 1:10000\n    apoint = randompoint(Point(-200, -150), Point(200, 150))\n    randomhue()\n    isinside(apoint, apolygon) ? circle(apoint, 3, :fill) : circle(apoint, .5, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: isinside)isinsideYou can use randompoint() and randompointarray() to create a random Point or list of Points.using Luxor # hide\nDrawing(400, 250, \"assets/figures/randompoints.png\") # hide\nbackground(\"white\") # hide\nsrand(42) # hide\norigin() # hide\n\npt1 = Point(-100, -100)\npt2 = Point(100, 100)\n\nsethue(\"gray80\")\nmap(pt -> circle(pt, 6, :fill), (pt1, pt2))\nbox(pt1, pt2, :stroke)\n\nsethue(\"red\")\ncircle(randompoint(pt1, pt2), 7, :fill)\n\nsethue(\"blue\")\nmap(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))\n\nfinish() # hide\nnothing # hide(Image: isinside)randompoint\nrandompointarrayThere are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's polysplit():using Luxor # hide\nDrawing(400, 150, \"assets/figures/polysplit.png\") # hide\norigin() # hide\nsetopacity(0.7) # hide\nsrand(42) # hide\nsethue(\"black\") # hide\ns = squircle(O, 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide\nnothing # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid"
 },
 
 {
@@ -1165,7 +1317,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.offsetpoly",
     "category": "Function",
-    "text": "offsetpoly(path::Array{Point, 1}, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them\n\n\n\n"
+    "text": "offsetpoly(path::AbstractArray{Point, 1}, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm 'flip' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them\n\n\n\n"
 },
 
 {
@@ -1181,7 +1333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyfit",
     "category": "Function",
-    "text": "polyfit(plist::Array, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n"
+    "text": "polyfit(plist::AbstractArray, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n"
 },
 
 {
@@ -1229,7 +1381,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.makebezierpath",
     "category": "Function",
-    "text": "makebezierpath(pgon::Array; smoothing=1)\n\nReturn a Bézier path that follows an array of points. The Bézier path is an array of tuples; each tuple contains the four points that make up a section of the path.\n\n\n\n"
+    "text": "makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1)\n\nReturn a Bézier path that follows a polygon (an array of points). The Bézier path is an array of tuples; each tuple contains the four points that make up a segment of the Bézier path.\n\n\n\n"
 },
 
 {
@@ -1241,11 +1393,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "polygons.html#Polygons-to-Bèzier-paths-1",
+    "location": "polygons.html#Luxor.bezierpathtopoly",
     "page": "Polygons and paths",
-    "title": "Polygons to Bèzier paths",
+    "title": "Luxor.bezierpathtopoly",
+    "category": "Function",
+    "text": "bezierpathtopoly(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}; steps=10)\n\nConvert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.\n\nTo make a Bezier path, use makebezierpath() on a polygon.\n\nThe steps optional keyword determines how many line sections are used for each path.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.beziertopoly",
+    "page": "Polygons and paths",
+    "title": "Luxor.beziertopoly",
+    "category": "Function",
+    "text": "beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)\n\nConvert a Bezier segment (a tuple of four points: anchor1, control1, control2, anchor2) to a polygon (an array of points).\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.pathtobezierpaths",
+    "page": "Polygons and paths",
+    "title": "Luxor.pathtobezierpaths",
+    "category": "Function",
+    "text": "pathtobezierpaths()\n\nConvert the current path (which may consist of one or more paths) to an array of Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path segment is a tuple of four points. A straight line is converted to a Bezier segment in which the control points are set to be the the same as the end points.\n\nExample\n\nThis code draws the Bezier segments and shows the control points as \"handles\", like a vector-editing program might.\n\n@svg begin\n    fontface(\"MyanmarMN-Bold\")\n    st = \"goo\"\n    thefontsize = 100\n    fontsize(thefontsize)\n    sethue(\"red\")\n    fontsize(thefontsize)\n    textpath(st)\n    nbps = pathtobezierpaths()\n    for nbp in nbps\n        setline(.15)\n        sethue(\"grey50\")\n        drawbezierpath(nbp, :stroke)\n        for p in nbp\n            sethue(\"red\")\n            circle(p[2], 0.16, :fill)\n            circle(p[3], 0.16, :fill)\n            line(p[2], p[1], :stroke)\n            line(p[3], p[4], :stroke)\n            if p[1] != p[4]\n                sethue(\"black\")\n                circle(p[1], 0.26, :fill)\n                circle(p[4], 0.26, :fill)\n            end\n        end\n    end\nend\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Polygons-to-Bézier-paths-and-back-again-1",
+    "page": "Polygons and paths",
+    "title": "Polygons to Bézier paths and back again",
     "category": "section",
-    "text": "Use the makebezierpath() and drawbezierpath() functions to make and draw Bèzier paths. A Bèzier path is a sequence of Bèzier curves; each curve is defined by four points: two end points and two control points. Bezier paths are slightly different from ordinary paths in that they don't currently contain straight line segments.makebezierpath() takes the points in a polygon and converts each line segment into a Bèzier curve. drawbezierpath() draws the resulting sequence.using Luxor # hide\nDrawing(600, 300, \"assets/figures/abezierpath.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(1.5) # hide\nsetgray(0.5) # hide\npts = ngon(O, 150, 3, pi/6, vertices=true)\nbezpath = makebezierpath(pts)\npoly(pts, :stroke)\nfor (p1, c1, c2, p2) in bezpath[1:end-1]\n    circle.([p1, p2], 4, :stroke)\n    circle.([c1, c2], 2, :fill)\n    line(p1, c1, :stroke)\n    line(p2, c2, :stroke)\nend\nsethue(\"black\")\nsetline(3)\ndrawbezierpath(bezpath, :stroke, close=false)\nfinish() # hide\nnothing # hide(Image: path to polygon)using Luxor # hide\nDrawing(600, 300, \"assets/figures/bezierpaths.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\ntiles = Tiler(600, 300, 1, 4, margin=20)\nfor (pos, n) in tiles\n    @layer begin\n        translate(pos)\n        pts = polysortbyangle(\n                randompointarray(\n                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),\n                    Point(tiles.tilewidth/2, tiles.tilewidth/2),\n                    4))\n        setopacity(0.7)\n        sethue(\"black\")\n        prettypoly(pts, :stroke, close=true)\n        randomhue()\n        drawbezierpath(makebezierpath(pts), :fill)\n    end\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)makebezierpath\ndrawbezierpath"
+    "text": "Use the makebezierpath() and drawbezierpath() functions to make and draw Bézier paths, and pathtobezierpaths() to convert the current path to an array of Bézier paths.  A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and their control points.NTuple{4,Point}[\n    (Point(-129.904, 75.0),        # start point\n     Point(-162.38, 18.75),        # ^ control point\n     Point(-64.9519, -150.0),      # v control point\n     Point(-2.75546e-14, -150.0)), # end point\n    (Point(-2.75546e-14, -150.0),\n     Point(64.9519, -150.0),\n     Point(162.38, 18.75),\n     Point(129.904, 75.0)),\n    (Point(129.904, 75.0),\n     Point(97.4279, 131.25),\n     Point(-97.4279, 131.25),\n     Point(-129.904, 75.0)\n     ),\n     ...\n     ]Bézier paths are slightly different from ordinary paths in that they don't usually contain straight line segments. (Although by setting the two control points to be the same as their matching start/end points, you create straight line sections.)makebezierpath() takes the points in a polygon and converts each line segment into one Bézier curve. drawbezierpath() draws the resulting sequence.using Luxor # hide\nDrawing(600, 320, \"assets/figures/abezierpath.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(1.5) # hide\nsetgray(0.5) # hide\npts = ngon(O, 150, 3, pi/6, vertices=true)\nbezpath = makebezierpath(pts)\npoly(pts, :stroke)\nfor (p1, c1, c2, p2) in bezpath[1:end-1]\n    circle.([p1, p2], 4, :stroke)\n    circle.([c1, c2], 2, :fill)\n    line(p1, c1, :stroke)\n    line(p2, c2, :stroke)\nend\nsethue(\"black\")\nsetline(3)\ndrawbezierpath(bezpath, :stroke, close=false)\nfinish() # hide\nnothing # hide(Image: path to polygon)using Luxor # hide\nDrawing(600, 320, \"assets/figures/bezierpaths.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\ntiles = Tiler(600, 300, 1, 4, margin=20)\nfor (pos, n) in tiles\n    @layer begin\n        translate(pos)\n        pts = polysortbyangle(\n                randompointarray(\n                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),\n                    Point(tiles.tilewidth/2, tiles.tilewidth/2),\n                    4))\n        setopacity(0.7)\n        sethue(\"black\")\n        prettypoly(pts, :stroke, close=true)\n        randomhue()\n        drawbezierpath(makebezierpath(pts), :fill)\n    end\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)You can convert a Bézier path to a polygon (an array of points), using the bezierpathtopoly() function. This chops up the curves into a series of straight line segments. An optional steps keyword lets you specify how many line segments are used for each Bézier curve segment.In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).using Luxor # hide\nDrawing(600, 600, \"assets/figures/bezierpathtopoly.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(3) # hide\n\npgon = star(O, 250, 5, 0.6, 0, vertices=true)\n\n@layer begin\n setgrey(0.5)\n setdash(\"dot\")\n poly(pgon, :stroke, close=true)\n setline(5)\nend\n\nsetline(4)\n\nsethue(\"orangered\")\n\nnp = makebezierpath(pgon)    \ndrawbezierpath(np, :stroke)\n\nsethue(\"steelblue\")\np = bezierpathtopoly(np, steps=3)    \n\nq1 = offsetpoly(p, 20)\nprettypoly(q1, :stroke, close=true)\n\nfinish() # hide\nnothing # hide(Image: path to polygon)You can convert the current path to an array of Bézier paths using the pathtobezierpaths() function.In the next example, the letter \"a\" is placed at the current position (set by move()) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then each segment is drawn (in orange) showing how the control points affect the curvature of the Bézier segments.using Luxor # hide\nDrawing(600, 400, \"assets/figures/pathtobezierpaths.png\") # hide\nbackground(\"ivory\") # hide\norigin() # hide\nst = \"a\"\nthefontsize = 500\nfontsize(thefontsize)\nsethue(\"red\")\ntex = textextents(st)\nmove(-tex[3]/2, tex[4]/2)\ntextpath(st)\nnbps = pathtobezierpaths()\nsetline(1.5)\nfor nbp in nbps\n    sethue(\"grey80\")\n    drawbezierpath(nbp, :stroke)\n    for p in nbp\n        sethue(\"darkorange\")\n        circle(p[2], 2.0, :fill)\n        circle(p[3], 2.0, :fill)\n        line(p[2], p[1], :stroke)\n        line(p[3], p[4], :stroke)\n        if p[1] != p[4]\n            sethue(\"black\")\n            circle(p[1], 2.0, :fill)\n            circle(p[4], 2.0, :fill)\n        end\n    end\nend\nfinish() # hide\nnothing # hide(Image: path to polygon)makebezierpath\ndrawbezierpath\nbezierpathtopoly\nbeziertopoly\npathtobezierpaths"
 },
 
 {
@@ -1253,7 +1429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Polygon information",
     "category": "section",
-    "text": "polyperimeter calculates the length of a polygon's perimeter.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n8-element Array{Real,1}:\n   0.0000\n  86.7767\n 173.553\n 260.33  \n 347.107\n 433.884\n 520.66  \n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value."
+    "text": "polyperimeter calculates the length of a polygon's perimeter.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyperimeter.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\np = box(O, 50, 50, vertices=true)\npoly(p, :stroke)\ntext(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)\n\ntranslate(200, 0)\n\npoly(p, :stroke, close=true)\ntext(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)\n\nfinish() # hide\nnothing # hide(Image: polyperimeter)polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke)\n\nfinish() # hide\nnothing # hide(Image: polyportion)polydistances returns an array of the accumulated side lengths of a polygon.julia> p = ngon(O, 100, 7, 0, vertices=true);\njulia> polydistances(p)\n8-element Array{Real,1}:\n   0.0000\n  86.7767\n 173.553\n 260.33\n 347.107\n 433.884\n 520.66\n 607.437nearestindex returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value."
 },
 
 {
@@ -1261,7 +1437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyperimeter",
     "category": "Function",
-    "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
+    "text": "polyperimeter(p::AbstractArray{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
 },
 
 {
@@ -1269,7 +1445,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyportion",
     "category": "Function",
-    "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n"
+    "text": "polyportion(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.polyremainder",
+    "page": "Polygons and paths",
+    "title": "Luxor.polyremainder",
+    "category": "Function",
+    "text": "polyremainder(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn the rest of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three quarters, 0.75 the last quarter, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they'll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyportion() function to return the other part.\n\n\n\n"
 },
 
 {
@@ -1277,7 +1461,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polydistances",
     "category": "Function",
-    "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
+    "text": "polydistances(p::AbstractArray{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
 },
 
 {
@@ -1293,7 +1477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyarea",
     "category": "Function",
-    "text": "polyarea(p::Array)\n\nFind the area of a simple polygon. It works only for polygons that don't self-intersect.\n\n\n\n"
+    "text": "polyarea(p::AbstractArray)\n\nFind the area of a simple polygon. It works only for polygons that don't self-intersect.\n\n\n\n"
 },
 
 {
@@ -1301,7 +1485,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Area of polygon",
     "category": "section",
-    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\ng = GridRect(O + (200, -200), 80, 20, 85)\ntext(\"#sides\", nextgridpoint(g), halign=:right)\ntext(\"area\", nextgridpoint(g), halign=:right)\n\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    ngonside(O, 50, i, 0, :fill)\n    sethue(\"grey40\")\n    ngonside(O, 50, i, 0, :stroke)\n    p = ngonside(O, 50, i, 0, vertices=true)\n    text(string(i), nextgridpoint(g), halign=:right)\n    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)\nend\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolydistances\nnearestindex\npolyarea"
+    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\ng = GridRect(O + (200, -200), 80, 20, 85)\ntext(\"#sides\", nextgridpoint(g), halign=:right)\ntext(\"area\", nextgridpoint(g), halign=:right)\n\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    ngonside(O, 50, i, 0, :fill)\n    sethue(\"grey40\")\n    ngonside(O, 50, i, 0, :stroke)\n    p = ngonside(O, 50, i, 0, vertices=true)\n    text(string(i), nextgridpoint(g), halign=:right)\n    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)\nend\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolyremainder\npolydistances\nnearestindex\npolyarea"
+},
+
+{
+    "location": "polygons.html#Luxor.polyintersections",
+    "page": "Polygons and paths",
+    "title": "Luxor.polyintersections",
+    "category": "Function",
+    "text": "polyintersections(S::AbstractArray{Point, 1}, C::AbstractArray{Point, 1})\n\nReturn an array of the points in polygon S plus the points where polygon S crosses polygon C. Calls intersectlinepoly().\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Polygon-intersections-(WIP)-1",
+    "page": "Polygons and paths",
+    "title": "Polygon intersections (WIP)",
+    "category": "section",
+    "text": "polyintersections calculates the intersection points of two polygons.using Luxor # hide\nDrawing(600, 550, \"assets/figures/polyintersections.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"grey60\") # hide\nsetopacity(0.8) # hide\npentagon = ngon(O, 250, 5, vertices=true)\nsquare = box(O + (80, 20), 280, 280, vertices=true)\n\npoly(pentagon, :stroke, close=true)\npoly(square, :stroke, close=true)\n\nsethue(\"orange\")\ncircle.(polyintersections(pentagon, square), 8, :fill)\n\nsethue(\"green\")\ncircle.(polyintersections(square, pentagon), 4, :fill)\n\nfinish() # hide\nnothing # hide(Image: polygon intersections)The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.polyintersections"
 },
 
 {
@@ -1333,7 +1533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "The Toy API",
     "category": "section",
-    "text": "Use:text(string, [position]) to place text at a position, otherwise at 0/0, and optionally specify the horizontal and vertical alignment\nfontface(fontname) to specify the fontname\nfontsize(fontsize) to specify the fontsize in pointsusing Luxor # hide\nDrawing(600, 100, \"assets/figures/toy-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nfontsize(18)\nfontface(\"Georgia-Bold\")\ntext(\"Georgia is a serif typeface designed in 1993 by Matthew Carter.\", halign=:center)\nfinish() # hide\nnothing # hide(Image: text placement)"
+    "text": "Use:text(string, [position]) to place text at a position, otherwise at 0/0, and optionally specify the horizontal and vertical alignment\nfontface(fontname) to specify the fontname\nfontsize(fontsize) to specify the fontsize in pointsusing Luxor # hide\nDrawing(600, 100, \"assets/figures/toy-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nfontsize(18)\nfontface(\"Georgia-Bold\")\ntext(\"Georgia: a serif typeface designed in 1993 by Matthew Carter.\", halign=:center)\nfinish() # hide\nnothing # hide(Image: text placement)The label() function also uses the Toy API."
 },
 
 {
@@ -1341,7 +1541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "The Pro API",
     "category": "section",
-    "text": "Use:setfont(fontname, fontsize) to specify the fontname and size in points\nsettext(text, [position]) to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise), and the presence of any Pango-flavored markup.using Luxor # hide\nDrawing(600, 100, \"assets/figures/pro-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetfont(\"Georgia Bold\", 18)\nsettext(\"Georgia is a serif typeface designed in 1993 by Matthew Carter.\", halign=\"center\")\nfinish() # hide\nnothing # hide(Image: text placement)"
+    "text": "Use:setfont(fontname, fontsize) to specify the fontname and size in points\nsettext(text, [position]) to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise), and the presence of any Pango-flavored markup.using Luxor # hide\nDrawing(600, 100, \"assets/figures/pro-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetfont(\"Georgia Bold\", 18)\nsettext(\"Georgia: a serif typeface designed in 1993 by Matthew Carter.\", halign=\"center\")\nfinish() # hide\nnothing # hide(Image: text placement)"
 },
 
 {
@@ -1389,7 +1589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.text",
     "category": "Function",
-    "text": "text(str)\ntext(str, pos)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at the current 0/0. In Luxor, placing text doesn't affect the current point.\n\nHorizontal alignment halign can be :left, :center, (also :centre) or :right. Vertical alignment valign can be :baseline, :top, :middle, or :bottom.\n\nThe default alignment is :left, :baseline.\n\n\n\n"
+    "text": "text(str)\ntext(str, pos)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it's placed at the current 0/0. In Luxor, placing text doesn't affect the current point.\n\nHorizontal alignment halign can be :left, :center, (also :centre) or :right.  Vertical alignment valign can be :baseline, :top, :middle, or :bottom.\n\nThe default alignment is :left, :baseline.\n\n\n\n"
 },
 
 {
@@ -1449,11 +1649,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "text.html#Font-dimensions-(\"toy\"-API)-1",
+    "location": "text.html#Font-dimensions-(\"Toy\"-API)-1",
     "page": "Text",
-    "title": "Font dimensions (\"toy\" API)",
+    "title": "Font dimensions (\"Toy\" API)",
     "category": "section",
     "text": "The textextents(str) function gets an array of dimensions of the string str, given the current font.(Image: textextents)The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.textextents"
+},
+
+{
+    "location": "text.html#Luxor.label",
+    "page": "Text",
+    "title": "Luxor.label",
+    "category": "Function",
+    "text": "label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)\n\nAdd a text label at a point, positioned relative to that point, for example, :N signifies North and places the text directly above that point.\n\nUse one of :N, :S, :E, :W, :NE, :SE, :SW, :NW to position the label relative to that point.\n\nlabel(\"text\")          # positions text at North (above), relative to the origin\nlabel(\"text\", :S)      # positions text at South (below), relative to the origin\nlabel(\"text\", :S, pt)  # positions text South of pt\nlabel(\"text\", :N, pt, offset=20)  # positions text North of pt, offset by 20\n\nThe default offset is 5 units.\n\n\n\n"
+},
+
+{
+    "location": "text.html#Labels-1",
+    "page": "Text",
+    "title": "Labels",
+    "category": "section",
+    "text": "The label() function places text relative to a specific point, and you can use compass points to indicate where it should be. So :N (for North) places a text label directly above the point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/labels.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\")\nfontsize(15)\noctagon = ngon(O, 100, 8, 0, vertices=true)\n\ncompass = [:SE, :S, :SW, :W, :NW, :N, :NE, :E, :SE]\n\nfor i in 1:8\n    circle(octagon[i], 2, :fill)\n    label(string(compass[i]), compass[i], octagon[i])\nend\n\nfinish() # hide\nnothing # hide(Image: labels)label"
 },
 
 {
@@ -1469,7 +1685,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textcurvecentered",
     "category": "Function",
-    "text": "textcurvecentered(the_text, the_angle, the_radius, center::Point;\n      clockwise = true,\n      letter_spacing = 0,\n      baselineshift = 0\n\nThis version of the textcurve() function is designed for shorter text strings that need positioning around a circle. (A cheesy effect much beloved of hipster brands and retronauts.)\n\nletter_spacing adjusts the tracking/space between chars, tighter is (-), looser is (+)). baselineshift moves the text up or down away from the baseline.\n\ntextcurvecentred (UK spelling) is a synonym\n\n\n\n"
+    "text": "textcurvecentered(the_text, the_angle, the_radius, center::Point;\n      clockwise = true,\n      letter_spacing = 0,\n      baselineshift = 0\n\nThis version of the textcurve() function is designed for shorter text strings that need positioning around a circle. (A cheesy effect much beloved of hipster brands and retronauts.)\n\nletter_spacing adjusts the tracking/space between chars, tighter is (-), looser is (+)).  baselineshift moves the text up or down away from the baseline.\n\ntextcurvecentred (UK spelling) is a synonym\n\n\n\n"
 },
 
 {
@@ -1477,7 +1693,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Text on a curve",
     "category": "section",
-    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring,\n    -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentered(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n    clockwise = true,\n    letter_spacing = 0,\n    baselineshift = -20\n    )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n    clockwise = false,\n    letter_spacing = 0,\n    baselineshift = 10\n    )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
+    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring,\n    -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentered(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n    clockwise = true,\n    letter_spacing = 0,\n    baselineshift = -20\n    )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n    clockwise = false,\n    letter_spacing = 0,\n    baselineshift = 10\n    )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
 },
 
 {
@@ -1486,6 +1702,38 @@ var documenterSearchIndex = {"docs": [
     "title": "Text clipping",
     "category": "section",
     "text": "You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:(Image: text clipping)using Luxor\n\ncurrentwidth = 1250 # pts\ncurrentheight = 800 # pts\nDrawing(currentwidth, currentheight, \"/tmp/text-path-clipping.png\")\n\norigin()\nbackground(\"darkslategray3\")\n\nfontsize(600)                             # big fontsize to use for clipping\nfontface(\"Agenda-Black\")\nstr = \"julia\"                             # string to be clipped\nw, h = textextents(str)[3:4]              # get width and height\n\ntranslate(-(currentwidth/2) + 50, -(currentheight/2) + h)\n\ntextpath(str)                             # make text into a path\nsetline(3)\nsetcolor(\"black\")\nfillpreserve()                            # fill but keep\nclip()                                    # and use for clipping region\n\nfontface(\"Monaco\")\nfontsize(10)\nnamelist = map(x->string(x), names(Base)) # get list of function names in Base.\n\nx = -20\ny = -h\nwhile y < currentheight\n    sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)\n    s = namelist[rand(1:end)]\n    text(s, x, y)\n    se = textextents(s)\n    x += se[5]                            # move to the right\n    if x > w\n       x = -20                            # next row\n       y += 10\n    end\nend\n\nfinish()\npreview()"
+},
+
+{
+    "location": "text.html#Luxor.textwrap",
+    "page": "Text",
+    "title": "Luxor.textwrap",
+    "category": "Function",
+    "text": "textwrap(s::T where T<:AbstractString, width::Real, pos::Point;\n    rightgutter=5)\ntextwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5)\n\nDraw the string in s by splitting it at whitespace characters into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\nSee also textbox().\n\nText with no whitespace characters won't wrap. You can write a simple chunking function to split a string or array into chunks:\n\nchunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]\n\n\n\n"
+},
+
+{
+    "location": "text.html#Luxor.textbox",
+    "page": "Text",
+    "title": "Luxor.textbox",
+    "category": "Function",
+    "text": "textbox(lines::Array, pos::Point=O;\n    leading = 12,\n    linefunc::Function = (linenumber, linetext, startpos, height) -> (),\n    alignment=:left)\n\nDraw the strings in the array lines vertically downwards. leading controls the spacing between each line (default 12), and alignment determines the horizontal alignment (default :left).\n\nOptionally, before each line, execute the function linefunc(linenumber, linetext, startpos, height).\n\nSee also textwrap(), which modifies the text so that the lines fit into a specified width.\n\n\n\n"
+},
+
+{
+    "location": "text.html#Luxor.splittext",
+    "page": "Text",
+    "title": "Luxor.splittext",
+    "category": "Function",
+    "text": "splittext(s)\n\nSplit the text in string s into an array, but keep all the separators attached to the preceding word.\n\n\n\n"
+},
+
+{
+    "location": "text.html#Text-blocks,-boxes,-and-wrapping-1",
+    "page": "Text",
+    "title": "Text blocks, boxes, and wrapping",
+    "category": "section",
+    "text": "Longer lines of text can be made to wrap inside an imaginary rectangle with textwrap(). Specify the required width of the rectangle, and the location of the top left corner.\nusing Luxor # hide\nDrawing(500, 400, \"assets/figures/text-wrapping.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Georgia\")\nfontsize(12) # hide\nsethue(\"black\") # hide\n\nloremipsum = \"\"\"Lorem ipsum dolor sit amet, consectetur\nadipiscing elit. Nunc placerat lorem ullamcorper,\nsagittis massa et, elementum dui. Sed dictum ipsum vel\ncommodo pellentesque. Aliquam erat volutpat. Nam est\ndolor, vulputate a molestie aliquet, rutrum quis lectus.\nSed lectus mauris, tristique et tempor id, accumsan\npharetra lacus. Donec quam magna, accumsan a quam\nquis, mattis hendrerit nunc. Nullam vehicula leo ac\nleo tristique, a condimentum tortor faucibus.\"\"\"\n\nsetdash(\"dot\")\nbox(O, 200, 200, :stroke)\ntextwrap(loremipsum, 200, O - (200/2, 200/2))\n\nfinish() # hide\nnothing # hide(Image: text wrapping)textwrap() accepts a function that allows you to insert code that responds to the next line's linenumber, contents, position, and height.using Luxor, Colors # hide\nDrawing(500, 400, \"assets/figures/text-wrapping-1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Georgia\")\nfontsize(12) # hide\nsethue(\"black\") # hide\n\nloremipsum = \"\"\"Lorem ipsum dolor sit amet, consectetur\nadipiscing elit. Nunc placerat lorem ullamcorper,\nsagittis massa et, elementum dui. Sed dictum ipsum vel\ncommodo pellentesque. Aliquam erat volutpat. Nam est\ndolor, vulputate a molestie aliquet, rutrum quis lectus.\nSed lectus mauris, tristique et tempor id, accumsan\npharetra lacus. Donec quam magna, accumsan a quam\nquis, mattis hendrerit nunc. Nullam vehicula leo ac\nleo tristique, a condimentum tortor faucibus.\"\"\"\n\ntextwrap(loremipsum, 200, O - (200/2, 200/2),\n    (lnumber, str, pt, h) -> begin\n        sethue(Colors.HSB(rescale(lnumber, 1, 15, 0, 360), 1, 1))\n        text(string(\"line \", lnumber), pt - (50, 0))\n    end)\n\nfinish() # hide\nnothing # hide(Image: text wrapped)The textbox() function also draws text inside a box, but doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The leading argument specifies the distance between the lines, so should be set relative to the current font size (as set with fontsize()).This example counts the number of characters drawn, using a simple closure.using Luxor, Colors # hide\nDrawing(600, 300, \"assets/figures/textbox.png\") # hide\norigin() # hide\nbackground(\"ivory\") # hide\nsethue(\"black\") # hide\nfontface(\"Georgia\")\nfontsize(30)\n\nloremipsum = \"\"\"Lorem ipsum dolor sit amet, consectetur\nadipiscing elit. Nunc placerat lorem ullamcorper,\nsagittis massa et, elementum dui. Sed dictum ipsum vel\ncommodo pellentesque. Aliquam erat volutpat. Nam est\ndolor, vulputate a molestie aliquet, rutrum quis lectus.\nSed lectus mauris, tristique et tempor id, accumsan\npharetra lacus. Donec quam magna, accumsan a quam\nquis, mattis hendrerit nunc. Nullam vehicula leo ac\nleo tristique, a condimentum tortor faucibus.\"\"\"\n\n_counter() = (a = 0; (n) -> a += n)\ncounter = _counter()\n\ntranslate(Point(-600/2, -300/2) + (50, 50))\nfontface(\"Georgia\")\nfontsize(20)\n\ntextbox(filter(!isempty, split(loremipsum, \"\\n\")),\n    O,\n    leading = 28,\n    linefunc = (lnumber, str, pt, h) -> begin\n        text(string(lnumber), pt - (30, 0))\n        counter(length(str))\n    end)\n\nfontsize(10)\ntext(string(counter(0), \" characters\"), O + (0, 230))\n\nfinish() # hide\nnothing # hide(Image: textbox)textwrap\ntextbox\nsplittext"
 },
 
 {
@@ -1541,7 +1789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.setmatrix",
     "category": "Function",
-    "text": "setmatrix(m::Array)\n\nChange the current matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n"
+    "text": "setmatrix(m::AbstractArray)\n\nChange the current matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
@@ -1549,7 +1797,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.transform",
     "category": "Function",
-    "text": "transform(a::Array)\n\nModify the current matrix by multiplying it by matrix a.\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
+    "text": "transform(a::AbstractArray)\n\nModify the current matrix by multiplying it by matrix a.\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
 },
 
 {
@@ -1765,7 +2013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Turtle",
     "category": "Type",
-    "text": "Turtle(xpos=0, ypos=0, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))\n\nWith a Turtle you can command a turtle to move and draw: turtle graphics.\n\nThe functions that start with a capital letter are: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.\n\nThere are also some other functions. To see how they might be used, see Lindenmayer.jl.\n\n\n\n"
+    "text": "Turtle()\nTurtle(O)\nTurtle(0, 0)\nTurtle(O, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))\n\nCreate a Turtle. You can command a turtle to move and draw \"turtle graphics\".\n\nThe commands (unusually for Julia) start with a capital letter, and angles are specified in degrees.\n\nBasic commands are Forward(), Turn(), Pendown(), Penup(), Pencolor(), Penwidth(), Circle(), Orientation(), Rectangle(), and Reposition().\n\nOthers include Push(), Pop(), Message(), HueShift(), Randomize_saturation(), Reposition(), and Pen_opacity_random().\n\n\n\n"
 },
 
 {
@@ -1773,7 +2021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Forward",
     "category": "Function",
-    "text": "Forward(t::Turtle, d)\n\nMove the turtle forward by d units. The stored position is updated.\n\n\n\n"
+    "text": "Forward(t::Turtle, d=1)\n\nMove the turtle forward by d units. The stored position is updated.\n\n\n\n"
 },
 
 {
@@ -1781,7 +2029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Turn",
     "category": "Function",
-    "text": "Turn(t::Turtle, r)\n\nIncrease the turtle's rotation by r degrees. See also Orientation.\n\n\n\n"
+    "text": "Turn(t::Turtle, r=5.0)\n\nIncrease the turtle's rotation by r degrees. See also Orientation.\n\n\n\n"
 },
 
 {
@@ -1789,7 +2037,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Circle",
     "category": "Function",
-    "text": "Circle(t::Turtle, radius)\n\nDraw a filled circle centered at the current position with the given radius.\n\n\n\n"
+    "text": "Circle(t::Turtle, radius=1.0)\n\nDraw a filled circle centered at the current position with the given radius.\n\n\n\n"
 },
 
 {
@@ -1797,7 +2045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.HueShift",
     "category": "Function",
-    "text": "HueShift(t::Turtle, inc = 1)\n\nShift the Hue of the turtle's pen forward by inc.\n\n\n\n"
+    "text": "HueShift(t::Turtle, inc=1.0)\n\nShift the Hue of the turtle's pen forward by inc. Hue values range between 0 and 360.\n\n\n\n"
 },
 
 {
@@ -1813,7 +2061,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Orientation",
     "category": "Function",
-    "text": "Orientation(t::Turtle, r)\n\nSet the turtle's orientation to r degrees. See also Turn.\n\n\n\n"
+    "text": "Orientation(t::Turtle, r=0.0)\n\nSet the turtle's orientation to r degrees. See also Turn.\n\n\n\n"
 },
 
 {
@@ -1821,7 +2069,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Randomize_saturation",
     "category": "Function",
-    "text": "Randomize_saturation(t::Turtle)\n\nRandomize saturation of the turtle's pen color.\n\n\n\n"
+    "text": "Randomize_saturation(t::Turtle)\n\nRandomize the saturation of the turtle's pen color.\n\n\n\n"
 },
 
 {
@@ -1829,7 +2077,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Rectangle",
     "category": "Function",
-    "text": "Rectangle(t::Turtle, width, height)\n\nDraw a filled rectangle centered at the current position with the given radius.\n\n\n\n"
+    "text": "Rectangle(t::Turtle, width=10.0, height=10.0)\n\nDraw a filled rectangle centered at the current position with the given radius.\n\n\n\n"
 },
 
 {
@@ -1901,7 +2149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Reposition",
     "category": "Function",
-    "text": "Reposition(t::Turtle, x, y)\n\nReposition: pick the turtle up and place it at another position.\n\n\n\n"
+    "text": "Reposition(t::Turtle, pos::Point)\nReposition(t::Turtle, x, y)\n\nReposition: pick the turtle up and place it at another position.\n\n\n\n"
 },
 
 {
@@ -1909,7 +2157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Turtle graphics",
     "category": "section",
-    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition.(Image: Turtle)using Luxor\n\nDrawing(1200, 1200, \"/tmp/turtles.png\")\norigin()\nbackground(\"black\")\n\n# let's have two turtles\nraphael = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25)) ; michaelangelo = Turtle(0, 0, true, 0, (1.0, 0.25, 0.25))\n\nsetopacity(0.95)\nsetline(6)\n\nPencolor(raphael, 1.0, 0.4, 0.2);       Pencolor(michaelangelo, 0.2, 0.9, 1.0)\nReposition(raphael, 500, -200);         Reposition(michaelangelo, 500, 200)\nMessage(raphael, \"Raphael\");            Message(michaelangelo, \"Michaelangelo\")\nReposition(raphael, 0, -200);           Reposition(michaelangelo, 0, 200)\n\npace = 10\nfor i in 1:5:400\n    for turtle in [raphael, michaelangelo]\n        Circle(turtle, 3)\n        HueShift(turtle, rand())\n        Forward(turtle, pace)\n        Turn(turtle, 30 - rand())\n        Message(turtle, string(i))\n        pace += 1\n    end\nend\n\nfinish()\npreview()Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
+    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.using Luxor, Colors\nDrawing(600, 400, \"assets/figures/turtles.png\")  \norigin()  \nbackground(\"midnightblue\")  \n\n🐢 = Turtle() # you can type the turtle emoji with \\:turtle:\nPencolor(🐢, \"cyan\")\nPenwidth(🐢, 1.5)\nn = 5\nfor i in 1:400\n    Forward(🐢, n)\n    Turn(🐢, 89.5)\n    HueShift(🐢)\n    n += 0.75\nend\nfontsize(20)\nMessage(🐢, \"finished\")\nfinish()  \nnothing # hide(Image: text placement)The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!), and you can have any number of turtles active at a time.using Luxor, Colors # hide\nDrawing(800, 800, \"assets/figures/manyturtles.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nquantity = 9\nturtles = [Turtle(O, true, 2pi * rand(), (rand(), rand(), 0.5)...) for i in 1:quantity]\nReposition.(turtles, first.(collect(Tiler(800, 800, 3, 3))))\nn = 10\nPenwidth.(turtles, 0.5)\nfor i in 1:300\n    Forward.(turtles, n)\n    HueShift.(turtles)\n    Turn.(turtles, [60.1, 89.5, 110, 119.9, 120.1, 135.1, 145.1, 176, 190])\n    n += 0.5\nend\nfinish() # hide  \nnothing # hide(Image: text placement)Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
 },
 
 {
@@ -1949,7 +2197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "Function",
-    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::AbstractArray{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
 },
 
 {
