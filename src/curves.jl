@@ -101,7 +101,7 @@ Make a squircle (basically a rectangle with rounded corners). Specify the center
 horizontal radius (distance from center to a side), and vertical radius (distance from
 center to top or bottom):
 
-    squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false)
+    squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, stepby = pi/40, vertices=false)
 
 The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make
 the shape more square. Values above make the shape more round.
@@ -109,9 +109,10 @@ the shape more square. Values above make the shape more round.
 function squircle(center::Point, hradius, vradius, action=:none;
                   rt = 0.5,
                   vertices=false,
+                  stepby = pi/40,
                   reversepath=false)
     points = Point[]
-    for theta in 0:pi/40:2pi
+    for theta in 0:stepby:2pi
         xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
         ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
         push!(points, Point(xpos, ypos))
