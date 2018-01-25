@@ -472,4 +472,7 @@ macro pdf(body, width=600, height=600)
     end
 end
 
+include("precompile.jl")
+_precompile_()
+
 end # module
