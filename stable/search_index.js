@@ -453,7 +453,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.ellipse",
     "category": "Function",
-    "text": "Make an ellipse, centered at xc/yc, fitting in a box of width w and height h.\n\nellipse(xc, yc, w, h, action=:none)\n\n\n\nMake an ellipse, centered at point c, with width w, and height h.\n\nellipse(cpt, w, h, action=:none)\n\n\n\nellipse(focus1::Point, focus2::Point, k, action=:none;\n        stepvalue=pi/100,\n        vertices=false,\n        reversepath=false)\n\nBuild a polygon approximation to an ellipse, given two points and a distance, k, which is the sum of the distances to the focii of any points on the ellipse (or the shortest length of string required to go from one focus to the perimeter and on to the other focus).\n\n\n\n"
+    "text": "ellipse(xc, yc, w, h, action=:none)\n\nMake an ellipse, centered at xc/yc, fitting in a box of width w and height h.\n\n\n\nellipse(cpt, w, h, action=:none)\n\nMake an ellipse, centered at point c, with width w, and height h.\n\n\n\nellipse(focus1::Point, focus2::Point, k, action=:none;\n        stepvalue=pi/100,\n        vertices=false,\n        reversepath=false)\n\nBuild a polygon approximation to an ellipse, given two points and a distance, k, which is the sum of the distances to the focii of any points on the ellipse (or the shortest length of string required to go from one focus to the perimeter and on to the other focus).\n\n\n\n"
 },
 
 {
@@ -477,7 +477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.sector",
     "category": "Function",
-    "text": "sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)\n\nDraw an annular sector centered at centerpoint.\n\n\n\nDraw an annular sector centered at the origin.\n\n\n\nsector(centerpoint::Point, innerradius, outerradius, startangle, endangle, cornerradius, action:none)\n\nDraw an annular sector with rounded corners, basically a bent sausage shape, centered at centerpoint.\n\nTODO: The results aren't 100% accurate at the moment. There are small discontinuities where the curves join.\n\nThe cornerradius is reduced from the supplied value if neceesary to prevent overshoots.\n\n\n\nDraw an annular sector with rounded corners, centered at the current origin.\n\n\n\n"
+    "text": "sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)\n\nDraw an annular sector centered at centerpoint.\n\n\n\nsector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,\n   action::Symbol=:none)\n\nDraw an annular sector centered at the origin.\n\n\n\nsector(centerpoint::Point, innerradius, outerradius, startangle, endangle,\n    cornerradius, action:none)\n\nDraw an annular sector with rounded corners, basically a bent sausage shape, centered at centerpoint.\n\nTODO: The results aren't 100% accurate at the moment. There are small discontinuities where the curves join.\n\nThe cornerradius is reduced from the supplied value if neceesary to prevent overshoots.\n\n\n\nsector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,\n   cornerradius::Real, action::Symbol=:none)\n\nDraw an annular sector with rounded corners, centered at the current origin.\n\n\n\n"
 },
 
 {
@@ -485,7 +485,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.pie",
     "category": "Function",
-    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at x/y. Angles start at the positive x-axis and are measured clockwise.\n\n\n\npie(centerpoint, radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at centerpoint.\n\nAngles start at the positive x-axis and are measured clockwise.\n\n\n\nDraw a pie shape centered at the origin\n\n\n\n"
+    "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at x/y. Angles start at the positive x-axis and are measured clockwise.\n\n\n\npie(centerpoint, radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at centerpoint.\n\nAngles start at the positive x-axis and are measured clockwise.\n\n\n\npie(radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at the origin\n\n\n\n"
 },
 
 {
@@ -501,7 +501,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.squircle",
     "category": "Function",
-    "text": "Make a squircle (basically a rectangle with rounded corners). Specify the center position, horizontal radius (distance from center to a side), and vertical radius (distance from center to top or bottom):\n\nsquircle(center::Point, hradius, vradius, action=:none; rt = 0.5, vertices=false)\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
+    "text": "squircle(center::Point, hradius, vradius, action=:none;\n    rt = 0.5, stepby = pi/40, vertices=false)\n\nMake a squircle (basically a rectangle with rounded corners). Specify the center position, horizontal radius (distance from center to a side), and vertical radius (distance from center to top or bottom):\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
 },
 
 {
@@ -597,7 +597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.arc",
     "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going clockwise.\n\narc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\nArc with centerpoint.\n\narc(centerpoint::Point, radius, angle1, angle2, action=:nothing)\n\n\n\n"
+    "text": "arc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAdd an arc to the current path from angle1 to angle2 going clockwise, centered at xc, yc.\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\narc(centerpoint::Point, radius, angle1, angle2, action=:nothing)\n\nAdd an arc to the current path from angle1 to angle2 going clockwise, centered at centerpoint.\n\n\n\n"
 },
 
 {
@@ -605,7 +605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.arc2r",
     "category": "Function",
-    "text": "  arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nMake a circular arc centered at c1 that starts at p2 and ends at p3, going clockwise.\n\nc1-p2 really determines the radius. If p3 doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.\n\n\n\n"
+    "text": "  arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nMake a circular arc centered at c1 that starts at p2 and ends at p3, going clockwise.\n\nc1-p2 really determines the radius. If p3 doesn't lie on the circular path,  it will be used only as an indication of the arc's length, rather than its position.\n\n\n\n"
 },
 
 {
@@ -613,7 +613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.carc",
     "category": "Function",
-    "text": "Add an arc to the current path from angle1 to angle2 going counterclockwise.\n\ncarc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\nAdd an arc centered at centerpoint to the current path from angle1 to angle2 going counterclockwise.\n\n\n\n"
+    "text": "carc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAdd an arc to the current path from angle1 to angle2 going counterclockwise, centered at xc/yc.\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\ncarc(centerpoint::Point, radius, angle1, angle2, action=:nothing)\n\nAdd an arc centered at centerpoint to the current path from angle1 to angle2, going counterclockwise.\n\n\n\n"
 },
 
 {
@@ -629,7 +629,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.curve",
     "category": "Function",
-    "text": "Add a Bézier curve.\n\n curve(x1, y1, x2, y2, x3, y3)\n curve(p1, p2, p3)\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two  control points x1/y1 (p1) and x2/y2 (p2)\n\n\n\n"
+    "text": "curve(x1, y1, x2, y2, x3, y3)\ncurve(p1, p2, p3)\n\nAdd a Bézier curve.\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2).\n\n\n\n"
 },
 
 {
