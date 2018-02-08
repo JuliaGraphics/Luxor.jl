@@ -12,7 +12,7 @@ function circle(x, y, r, action=:nothing)
     if action != :path
         newpath()
     end
-    Cairo.circle(currentdrawing.cr, x, y, r)
+    Cairo.arc(currentdrawing.cr, x, y, r, 0, 2pi)
     do_action(action)
 end
 
@@ -67,9 +67,9 @@ function center3pts(a::Point, b::Point, c::Point)
 end
 
 """
-Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `h`.
-
     ellipse(xc, yc, w, h, action=:none)
+
+Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `h`.
 """
 function ellipse(xc, yc, w, h, action=:none)
     x  = xc - w/2
@@ -90,18 +90,19 @@ function ellipse(xc, yc, w, h, action=:none)
 end
 
 """
-Make an ellipse, centered at point `c`, with width `w`, and height `h`.
-
     ellipse(cpt, w, h, action=:none)
+
+Make an ellipse, centered at point `c`, with width `w`, and height `h`.
 """
 ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
 
 """
+    squircle(center::Point, hradius, vradius, action=:none;
+        rt = 0.5, stepby = pi/40, vertices=false)
+
 Make a squircle (basically a rectangle with rounded corners). Specify the center position,
 horizontal radius (distance from center to a side), and vertical radius (distance from
 center to top or bottom):
-
-    squircle(center::Point, hradius, vradius, action=:none; rt = 0.5, stepby = pi/40, vertices=false)
 
 The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make
 the shape more square. Values above make the shape more round.
@@ -121,9 +122,10 @@ function squircle(center::Point, hradius, vradius, action=:none;
 end
 
 """
-Add an arc to the current path from `angle1` to `angle2` going clockwise.
-
     arc(xc, yc, radius, angle1, angle2, action=:nothing)
+
+Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
+at xc, yc.
 
 Angles are defined relative to the x-axis, positive clockwise.
 """
@@ -133,17 +135,19 @@ function arc(xc, yc, radius, angle1, angle2, action=:nothing)
 end
 
 """
-Arc with centerpoint.
-
     arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
+
+Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
+at `centerpoint`.
 """
 arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
     arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
-Add an arc to the current path from `angle1` to `angle2` going counterclockwise.
-
     carc(xc, yc, radius, angle1, angle2, action=:nothing)
+
+Add an arc to the current path from `angle1` to `angle2` going counterclockwise,
+centered at `xc`/`yc`.
 
 Angles are defined relative to the x-axis, positive clockwise.
 """
@@ -152,7 +156,12 @@ function carc(xc, yc, radius, angle1, angle2, action=:nothing)
     do_action(action)
 end
 
-" Add an arc centered at `centerpoint` to the current path from `angle1` to `angle2` going counterclockwise."
+"""
+    carc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
+
+Add an arc centered at `centerpoint` to the current path from `angle1` to
+`angle2`, going counterclockwise.
+"""
 carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
     carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
@@ -161,7 +170,8 @@ carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
 
 Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise.
 
-`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
+`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path,
+ it will be used only as an indication of the arc's length, rather than its position.
 """
 function arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     r = norm(c1, p2)
@@ -176,9 +186,11 @@ end
 """
     carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
 
-Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going counterclockwise.
+Make a circular arc centered at `c1` that starts at `p2` and ends at `p3`,
+going counterclockwise.
 
-`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path, it will be used only as an indication of the arc's length, rather than its position.
+`c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular
+path, it will be used only as an indication of the arc's length, rather than its position.
 """
 function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
     r = norm(c1, p2)
@@ -210,18 +222,25 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     grestore()
 end
 
-"Draw an annular sector centered at the origin."
+"""
+    sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
+       action::Symbol=:none)
+
+Draw an annular sector centered at the origin.
+"""
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
        action::Symbol=:none) =
     sector(O, innerradius, outerradius, startangle, endangle, action)
 
 """
-    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, cornerradius, action:none)
+    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle,
+        cornerradius, action:none)
 
-Draw an annular sector with rounded corners, basically a bent sausage shape, centered at `centerpoint`.
+Draw an annular sector with rounded corners, basically a bent sausage shape,
+centered at `centerpoint`.
 
-TODO: The results aren't 100% accurate at the moment. There are small discontinuities where
-the curves join.
+TODO: The results aren't 100% accurate at the moment. There are small
+discontinuities where the curves join.
 
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
@@ -291,7 +310,12 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     grestore()
 end
 
-"Draw an annular sector with rounded corners, centered at the current origin."
+"""
+    sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
+       cornerradius::Real, action::Symbol=:none)
+
+Draw an annular sector with rounded corners, centered at the current origin.
+"""
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
        cornerradius::Real, action::Symbol=:none) =
     sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)
@@ -299,8 +323,8 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
 """
     pie(x, y, radius, startangle, endangle, action=:none)
 
-Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and are measured
-clockwise.
+Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
+are measured clockwise.
 """
 function pie(x, y, radius, startangle, endangle, action=:none)
     gsave()
@@ -324,18 +348,22 @@ Angles start at the positive x-axis and are measured clockwise.
 pie(centerpoint::Point, radius, startangle, endangle, action) =
     pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
 
-"Draw a pie shape centered at the origin"
+"""
+    pie(radius, startangle, endangle, action=:none)
+
+Draw a pie shape centered at the origin
+
+"""
 pie(radius, startangle, endangle, action=:none) = pie(O, radius, startangle, endangle, action)
 
 """
+    curve(x1, y1, x2, y2, x3, y3)
+    curve(p1, p2, p3)
+
 Add a Bézier curve.
 
-     curve(x1, y1, x2, y2, x3, y3)
-     curve(p1, p2, p3)
-
- The spline starts at the current position, finishing at `x3/y3` (`p3`), following two
- control points `x1/y1` (`p1`) and `x2/y2` (`p2`)
-
+The spline starts at the current position, finishing at `x3/y3` (`p3`),
+following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`).
 """
 curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
