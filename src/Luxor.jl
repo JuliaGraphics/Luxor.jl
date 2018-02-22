@@ -35,6 +35,7 @@ include("animate.jl")
 include("bars.jl")
 include("bezierpath.jl")
 include("mesh.jl")
+include("Table.jl")
 #include("shapefile.jl")
 
 @deprecate fill() fillpath()
@@ -108,6 +109,7 @@ export Drawing, currentdrawing,
 
     GridHex, GridRect, nextgridpoint,
 
+    Table, 
     readpng, placeimage,
 
     julialogo, juliacircles,

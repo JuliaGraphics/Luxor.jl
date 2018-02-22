@@ -96,8 +96,9 @@ function run_all_tests()
     @testset "clipping" begin
         include("clipping-test.jl")
     end
-    @testset "tiler" begin
+    @testset "tilerstables" begin
         include("pagetiler-test.jl")
+        include("table-tests.jl")
     end
     @testset "matrix" begin
         include("matrix-tests.jl")
