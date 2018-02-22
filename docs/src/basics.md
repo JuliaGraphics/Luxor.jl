@@ -10,7 +10,7 @@ The underlying drawing model is that you make shapes, or add points to paths, an
 
 Specify points (positions) using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
-The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into tiles, using `Tiler`, and define grids, using `GridRect` and `GridHex`.
+The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into areas, using `Tiler`, `Partition`, and `Table`, and define grids, using `GridRect` and `GridHex`.
 
 ## Points and coordinates
 
@@ -242,46 +242,7 @@ axes
 origin
 ```
 
-## Tiles and partitions
 
-The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` iterator, which returns the center point and tile number of each tile in turn.
-
-In this example, every third tile is divided up into subtiles and colored:
-
-```@example
-using Luxor # hide
-Drawing(400, 300, "assets/figures/tiler.png") # hide
-background("white") # hide
-origin() # hide
-srand(1) # hide
-fontsize(20) # hide
-tiles = Tiler(400, 300, 4, 5, margin=5)
-for (pos, n) in tiles
-    randomhue()
-    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
-    if n % 3 == 0
-        gsave()
-        translate(pos)
-        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
-        for (pos1, n1) in subtiles
-            randomhue()
-            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
-        end
-        grestore()
-    end
-    sethue("white")
-    textcentered(string(n), pos + Point(0, 5))
-end
-finish() # hide
-nothing # hide
-```
-
-![tiler](assets/figures/tiler.png)
-
-```@docs
-Tiler
-Partition
-```
 
 ## Save and restore
 
