@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Grids and tables · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="index.html"><img class="logo" src="assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="index.html">Introduction to Luxor</a></li><li><a class="toctext" href="examples.html">A few examples</a></li><li><a class="toctext" href="tutorial.html">Tutorial</a></li><li><a class="toctext" href="basics.html">Basic concepts</a></li><li><a class="toctext" href="simplegraphics.html">Simple graphics</a></li><li class="current"><a class="toctext" href="tables-grids.html">Grids and tables</a><ul class="internal"><li><a class="toctext" href="#Tiles-and-partitions-1">Tiles and partitions</a></li><li><a class="toctext" href="#Tables-1">Tables</a></li></ul></li><li><a class="toctext" href="colors-styles.html">Colors and styles</a></li><li><a class="toctext" href="polygons.html">Polygons and paths</a></li><li><a class="toctext" href="text.html">Text</a></li><li><a class="toctext" href="transforms.html">Transforms and matrices</a></li><li><a class="toctext" href="clipping.html">Clipping</a></li><li><a class="toctext" href="images.html">Images</a></li><li><a class="toctext" href="turtle.html">Turtle graphics</a></li><li><a class="toctext" href="animation.html">Animation</a></li><li><a class="toctext" href="moreexamples.html">More examples</a></li><li><a class="toctext" href="functionindex.html">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="tables-grids.html">Grids and tables</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/tables-grids.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Grids and tables</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Grids-and-tables-1" href="#Grids-and-tables-1">Grids and tables</a></h1><p>You often want to position graphics at regular locations on the drawing. The positions can be provided by:</p><ul><li><p><code>Tiler</code>: a rectangular grid which you specify by enclosing area, and the number of rows and columns</p></li><li><p><code>Partition</code>: a rectangular grid which you specify by enclosing area, and the width and height of each cell</p></li><li><p><code>Grid</code> and <code>GridHex</code> a rectangular or hexagonal grid, on demand</p></li><li><p><code>Table</code>: a rectangular grid which you specify by providing row and column numbers, row heights and column widths</p></li></ul><p>These are types which act as iterators.</p><h2><a class="nav-anchor" id="Tiles-and-partitions-1" href="#Tiles-and-partitions-1">Tiles and partitions</a></h2><p>The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the <code>Tiler</code> and <code>Partition</code> iterators.</p><p>The <code>Tiler</code> iterator returns the center point and tile number of each tile in turn.</p><p>In this example, every third tile is divided up into subtiles and colored:</p><div><pre><code class="language-julia">tiles = Tiler(400, 300, 4, 5, margin=5)
+for (pos, n) in tiles
+    randomhue()
+    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+    if n % 3 == 0
+        gsave()
+        translate(pos)
+        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
+        for (pos1, n1) in subtiles
+            randomhue()
+            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
+        end
+        grestore()
+    end
+    sethue(&quot;white&quot;)
+    textcentered(string(n), pos + Point(0, 5))
+end</code></pre></div><p><img src="assets/figures/tiler.png" alt="tiler"/></p><p><code>Partition</code> is like <code>Tiler</code>, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.Tiler" href="#Luxor.Tiler"><code>Luxor.Tiler</code></a> — <span class="docstring-category">Type</span>.</div><div><pre><code class="language-none">tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)</code></pre><p>A Tiler is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)</p></li><li><p>the number of the tile</p></li></ul><p><code>areawidth</code> and <code>areaheight</code> are the dimensions of the area to be tiled, <code>nrows</code>/<code>ncols</code> are the number of rows and columns required, and <code>margin</code> is applied to all four edges of the area before the function calculates the tile sizes required.</p><p>Tiler and Partition are similar:</p><ul><li><p>Partition lets you specify the width and height of a cell</p></li><li><p>Tiler lets you specify how many rows and columns of cells you want, and a margin</p><p>tiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end</p></li></ul><p>You can access the calculated tile width and height like this:</p><pre><code class="language-none">tiles = Tiler(1000, 800, 4, 5, margin=20)
+for (pos, n) in tiles
+    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+end</code></pre><p>It&#39;s sometimes useful to know which row and column you&#39;re currently on:</p><pre><code class="language-none">tiles.currentrow
+tiles.currentcol</code></pre><p>should have that information for you.</p><p>To use a Tiler to make grid points:</p><pre><code class="language-none">first.(collect(Tiler(800, 800, 4, 4))</code></pre><p>which returns an array of points that are the center points of the grid.</p></div><a class="source-link" target="_blank" href="https://github.com/JuliaGraphics/Luxor.jl/blob/85b62980a05da38cbedfb2716756c94de6a25a20/src/tiles-grids.jl#L1-L45">source</a></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.Partition" href="#Luxor.Partition"><code>Luxor.Partition</code></a> — <span class="docstring-category">Type</span>.</div><div><pre><code class="language-none">p = Partition(areawidth, areaheight, tilewidth, tileheight)</code></pre><p>A Partition is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of each tile in a set of tiles that divide up a</p></li></ul><p>rectangular space such as a page into rows and columns (relative to current 0/0)</p><ul><li><p>the number of the tile</p></li></ul><p><code>areawidth</code> and <code>areaheight</code> are the dimensions of the area to be tiled, <code>tilewidth</code>/<code>tileheight</code> are the dimensions of the tiles.</p><p>Tiler and Partition are similar:</p><ul><li><p>Partition lets you specify the width and height of a cell</p></li><li><p>Tiler lets you specify how many rows and columns of cells you want, and a margin</p></li></ul><pre><code class="language-none">tiles = Partition(1200, 1200, 30, 30)
+for (pos, n) in tiles
+    # the point pos is the center of the tile
+end</code></pre><p>You can access the calculated tile width and height like this:</p><pre><code class="language-none">tiles = Partition(1200, 1200, 30, 30)
+for (pos, n) in tiles
+    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+end</code></pre><p>It&#39;s sometimes useful to know which row and column you&#39;re currently on:</p><pre><code class="language-none">tiles.currentrow
+tiles.currentcol</code></pre><p>should have that information for you.</p><p>Unless the tilewidth and tileheight are exact multiples of the area width and height, you&#39;ll see a border at the right and bottom where the tiles won&#39;t fit.</p></div><a class="source-link" target="_blank" href="https://github.com/JuliaGraphics/Luxor.jl/blob/85b62980a05da38cbedfb2716756c94de6a25a20/src/tiles-grids.jl#L232-L273">source</a></section><h2><a class="nav-anchor" id="Tables-1" href="#Tables-1">Tables</a></h2><p>The <code>Table</code> iterator can be used to define tables: rectangular grids with a specific number of rows and columns. The columns can have different widths, and the rows can have different heights.</p><p>To create a simple table with 3 rows and 4 columns, using the default width and height (100):</p><pre><code class="language-none">julia&gt; t = Table(3, 4);
+
+julia&gt; t[1]
+Luxor.Point(-150.0, -100.0)
+
+julia&gt; t[2]
+Luxor.Point(-50.0, -100.0)
+
+julia&gt; t[3]
+Luxor.Point(50.0, -100.0)
+
+julia&gt; t[4]
+Luxor.Point(150.0, -100.0)</code></pre><p>This example creates a table with 10 rows and 10 columns, where each cell is t0 units wide and 35 high.</p><div><pre><code class="language-julia">sethue(&quot;black&quot;)
+
+t = Table(10, 10, 50, 35) # 10 rows, 10 columns, 50 wide, 35 high
+
+hundred = reshape(shuffle(1:100), 10, 10)
+
+for n in 1:length(t)
+   text(string(hundred[n]), t[n], halign=:center, valign=:middle)
+end
+
+setopacity(0.5)
+sethue(&quot;pink&quot;)
+circle.(t[3, :], 20, :fill) # row 3, every column</code></pre></div><p><img src="assets/figures/table2.png" alt="table 2"/></p><p>You can access rows or columns in the usual Julian way.</p><p>To specify varying row heights and column widths, supply arrays or ranges. This table has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:</p><div><pre><code class="language-julia">t = Table([50, 100, 150], 15:20:140)
+
+for (pt, n) in t
+    randomhue()
+    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)
+    sethue(&quot;white&quot;)
+    text(string(n), pt, halign=:center)
+end</code></pre></div><p><img src="assets/figures/table1.png" alt="table 1"/></p><p>To fill table cells, it&#39;s useful to be able to access the table&#39;s row and column specifications (using the <code>colwidths</code> and <code>rowheights</code> fields), and iteration can also provide information about the current row and column being processed (<code>currentrow</code> and <code>currentcol</code>). Use a clipping region to ensure that graphic elements don&#39;t stray outside the cell walls.</p><footer><hr/><a class="previous" href="simplegraphics.html"><span class="direction">Previous</span><span class="title">Simple graphics</span></a><a class="next" href="colors-styles.html"><span class="direction">Next</span><span class="title">Colors and styles</span></a></footer></article></body></html>
