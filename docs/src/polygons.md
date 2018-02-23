@@ -792,19 +792,21 @@ origin() # hide
 background("white") # hide
 fontsize(12) # hide
 
-g = GridRect(O + (200, -200), 80, 20, 85)
-text("#sides", nextgridpoint(g), halign=:right)
-text("area", nextgridpoint(g), halign=:right)
-
+setopacity(0.5)
+outertable = Table([400], [400, 150])
+innertable = Table(20, 2, 60, 15, Point(150, 0))
 for i in 20:-1:3
     sethue(i/20, 0.5, 1 - i/20)
-    ngonside(O, 50, i, 0, :fill)
-    sethue("grey40")
-    ngonside(O, 50, i, 0, :stroke)
-    p = ngonside(O, 50, i, 0, vertices=true)
-    text(string(i), nextgridpoint(g), halign=:right)
-    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)
+    p = ngonside(outertable[1], 50, i, 0, vertices=true)
+    poly(p, :fill)
+
+    sethue("grey30")
+    ngonside(outertable[1], 50, i, 0, :stroke)
+
+    text(string(i), innertable[i, 1], halign=:right)
+    text(string(Int(round(polyarea(p), 0))), innertable[i, 2], halign=:right)
 end
+
 finish() # hide
 nothing # hide
 ```
