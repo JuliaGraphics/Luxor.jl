@@ -10,7 +10,7 @@ makedocs(
         "Tutorial"                => "tutorial.md",
         "Basic concepts"          => "basics.md",
         "Simple graphics"         => "simplegraphics.md",
-        "Grids and tables"        => "tables-grids.md",
+        "Tables and grids"        => "tables-grids.md",
         "Colors and styles"       => "colors-styles.md",
         "Polygons and paths"      => "polygons.md",
         "Text"                    => "text.md",

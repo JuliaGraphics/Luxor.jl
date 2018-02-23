@@ -80,14 +80,18 @@ background("white") # hide
 origin() # hide
 fontsize(14) # hide
 sethue("black") # hide
-setline(12)
+
 patterns = ["solid", "dotted", "dot", "dotdashed", "longdashed",
   "shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"]
-tiles =  Tiler(600, 250, 10, 1, margin=10)
-for (pos, n) in tiles
-    setdash(patterns[n])
-    textright(patterns[n], pos.x - 20, pos.y + 4)
-    line(pos, Point(240, pos.y), :stroke)
+setline(12)
+
+table = Table(fill(20, length(patterns)), [50, 300])
+text.(patterns, table[:, 1], halign=:right, valign=:middle)
+
+for p in 1:length(patterns)
+    setdash(patterns[p])
+    pt = table[p, 2]
+    line(pt - (150, 0), pt + (150, 0), :stroke)
 end
 finish() # hide
 nothing # hide

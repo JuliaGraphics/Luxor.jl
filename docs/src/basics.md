@@ -203,16 +203,19 @@ The origin (0/0) starts off at the top left: the x axis runs left to right acros
 
 The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
-`background()` fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. In the next example, the first `background()` fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a tile defined by the `Tiler` iterator:
+`background()` fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. In the next example, the first `background()` fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the `Table` iterator:
 
 ```@example
 using Luxor # hide
 Drawing(600, 400, "assets/figures/backgrounds.png") # hide
 background("magenta")
-origin() # hide
-tiles = Tiler(600, 400, 5, 5, margin=30)
-for (pos, n) in tiles
-    box(pos, tiles.tilewidth, tiles.tileheight, :clip)
+origin()
+table = Table(5, 5, 100, 50)
+for (pos, n) in table
+    box(pos,
+        table.colwidths[table.currentcol],
+        table.rowheights[table.currentrow],
+        :clip)
     background(randomhue()...)
     clipreset()
 end
@@ -241,8 +244,6 @@ background
 axes
 origin
 ```
-
-
 
 ## Save and restore
 

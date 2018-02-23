@@ -1,4 +1,4 @@
-# Grids and tables
+# Tables and grids
 
 You often want to position graphics at regular locations on the drawing. The positions can be provided by:
 
@@ -63,21 +63,51 @@ To create a simple table with 3 rows and 4 columns, using the default width and 
 
 ```
 julia> t = Table(3, 4);
-
-julia> t[1]
-Luxor.Point(-150.0, -100.0)
-
-julia> t[2]
-Luxor.Point(-50.0, -100.0)
-
-julia> t[3]
-Luxor.Point(50.0, -100.0)
-
-julia> t[4]
-Luxor.Point(150.0, -100.0)
 ```
 
-This example creates a table with 10 rows and 10 columns, where each cell is t0 units wide and 35 high.
+When you use this as an iterator, you can get the coordinates of the center of each cell, and its number.
+
+```
+julia> for i in t
+           println("row: $(t.currentrow), column: $(t.currentcol), center: $(i[1])")
+       end
+row: 1, column: 1, center: Luxor.Point(-150.0, -100.0)
+row: 1, column: 2, center: Luxor.Point(-50.0, -100.0)
+row: 1, column: 3, center: Luxor.Point(50.0, -100.0)
+row: 1, column: 4, center: Luxor.Point(150.0, -100.0)
+row: 2, column: 1, center: Luxor.Point(-150.0, 0.0)
+row: 2, column: 2, center: Luxor.Point(-50.0, 0.0)
+row: 2, column: 3, center: Luxor.Point(50.0, 0.0)
+row: 2, column: 4, center: Luxor.Point(150.0, 0.0)
+row: 3, column: 1, center: Luxor.Point(-150.0, 100.0)
+row: 3, column: 2, center: Luxor.Point(-50.0, 100.0)
+row: 3, column: 3, center: Luxor.Point(50.0, 100.0)
+row: 3, column: 4, center: Luxor.Point(150.0, 100.0)
+```
+
+You can also access row and column information:
+
+```
+julia> for r in 1:size(t)[1]
+           for c in 1:size(t)[2]
+               @show t[r, c]
+           end
+       end
+t[r, c] = Luxor.Point(-150.0, -100.0)
+t[r, c] = Luxor.Point(-50.0, -100.0)
+t[r, c] = Luxor.Point(50.0, -100.0)
+t[r, c] = Luxor.Point(150.0, -100.0)
+t[r, c] = Luxor.Point(-150.0, 0.0)
+t[r, c] = Luxor.Point(-50.0, 0.0)
+t[r, c] = Luxor.Point(50.0, 0.0)
+t[r, c] = Luxor.Point(150.0, 0.0)
+t[r, c] = Luxor.Point(-150.0, 100.0)
+t[r, c] = Luxor.Point(-50.0, 100.0)
+t[r, c] = Luxor.Point(50.0, 100.0)
+t[r, c] = Luxor.Point(150.0, 100.0)
+```
+
+The next example creates a table with 10 rows and 10 columns, where each cell is 50 units wide and 35 high.
 
 ```@example
 using Luxor # hide
@@ -108,7 +138,7 @@ nothing # hide
 
 You can access rows or columns in the usual Julian way.
 
-To specify varying row heights and column widths, supply arrays or ranges. This table has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:
+To specify varying row heights and column widths, supply arrays or ranges. The next example has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:
 
 ```@example
 using Luxor # hide
@@ -133,4 +163,60 @@ nothing # hide
 
 ![table 1](assets/figures/table1.png)
 
-To fill table cells, it's useful to be able to access the table's row and column specifications (using the `colwidths` and `rowheights` fields), and iteration can also provide information about the current row and column being processed (`currentrow` and `currentcol`). Use a clipping region to ensure that graphic elements don't stray outside the cell walls.
+To fill table cells, it's useful to be able to access the table's row and column specifications (using the `colwidths` and `rowheights` fields), and iteration can also provide information about the current row and column being processed (`currentrow` and `currentcol`).
+
+To ensure that graphic elements don't stray outside the cell walls, use a clipping region.
+
+### Grids
+
+If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
+
+Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`. Get the next grid point from a grid with `nextgridpoint(grid)`.
+
+```@example
+using Luxor # hide
+Drawing(700, 250, "assets/figures/grids.png")  # hide
+background("white") # hide
+fontsize(14) # hide
+translate(50, 50) # hide
+grid = GridRect(O, 40, 80, (10 - 1) * 40)
+for i in 1:20
+    randomhue()
+    p = nextgridpoint(grid)
+    squircle(p, 20, 20, :fill)
+    sethue("white")
+    text(string(i), p, halign=:center)
+end
+finish() # hide
+nothing # hide
+```
+
+![grids](assets/figures/grids.png)
+
+```@example
+using Luxor # hide
+Drawing(700, 400, "assets/figures/grid-hex.png")  # hide
+background("white") # hide
+fontsize(22) # hide
+translate(100, 100) # hide
+radius = 70
+grid = GridHex(O, radius, 600)
+
+for i in 1:15
+    randomhue()
+    p = nextgridpoint(grid)
+    ngon(p, radius-5, 6, pi/2, :fillstroke)
+    sethue("white")
+    text(string(i), p, halign=:center)
+end
+finish() # hide
+nothing # hide
+```
+
+![grids](assets/figures/grid-hex.png)
+
+```@docs
+GridRect
+GridHex
+nextgridpoint
+```
