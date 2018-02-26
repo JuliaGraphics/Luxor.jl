@@ -341,7 +341,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "The drawing surface",
     "category": "section",
-    "text": "The origin (0/0) starts off at the top left: the x axis runs left to right across the page, and the y axis runs top to bottom down the page.The origin() function moves the 0/0 point to the center of the drawing. It\'s often convenient to do this at the beginning of a program. You can use functions like scale(), rotate(), and translate() to change the coordinate system.background() fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, background() fills just that region. In the next example, the first background() fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a tile defined by the Tiler iterator:using Luxor # hide\nDrawing(600, 400, \"assets/figures/backgrounds.png\") # hide\nbackground(\"magenta\")\norigin() # hide\ntiles = Tiler(600, 400, 5, 5, margin=30)\nfor (pos, n) in tiles\n    box(pos, tiles.tilewidth, tiles.tileheight, :clip)\n    background(randomhue()...)\n    clipreset()\nend\nfinish() # hide\nnothing # hide(Image: background)The axes() function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.using Luxor # hide\nDrawing(400, 400, \"assets/figures/axes.png\") # hide\nbackground(\"gray80\")\norigin()\naxes()\nfinish() # hide\nnothing # hide(Image: axes)background\naxes\norigin"
+    "text": "The origin (0/0) starts off at the top left: the x axis runs left to right across the page, and the y axis runs top to bottom down the page.The origin() function moves the 0/0 point to the center of the drawing. It\'s often convenient to do this at the beginning of a program. You can use functions like scale(), rotate(), and translate() to change the coordinate system.background() fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, background() fills just that region. In the next example, the first background() fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the Table iterator:using Luxor # hide\nDrawing(600, 400, \"assets/figures/backgrounds.png\") # hide\nbackground(\"magenta\")\norigin()\ntable = Table(5, 5, 100, 50)\nfor (pos, n) in table\n    box(pos,\n        table.colwidths[table.currentcol],\n        table.rowheights[table.currentrow],\n        :clip)\n    background(randomhue()...)\n    clipreset()\nend\nfinish() # hide\nnothing # hide(Image: background)The axes() function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.using Luxor # hide\nDrawing(400, 400, \"assets/figures/axes.png\") # hide\nbackground(\"gray80\")\norigin()\naxes()\nfinish() # hide\nnothing # hide(Image: axes)background\naxes\norigin"
 },
 
 {
@@ -809,38 +809,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "simplegraphics.html#Luxor.GridRect",
-    "page": "Simple graphics",
-    "title": "Luxor.GridRect",
-    "category": "Type",
-    "text": "GridRect(startpoint, xspacing, yspacing, width, height)\n\nDefine a rectangular grid, to start at startpoint and proceed along the x-axis in steps of xspacing, then along the y-axis in steps of yspacing.\n\nGridRect(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)\n\nFor a column, set the xspacing to 0:\n\ngrid = GridRect(O, 0, 40)\n\nTo get points from the grid, use nextgridpoint(g::Grid).\n\njulia> grid = GridRect(O, 0, 40);\njulia> nextgridpoint(grid)\nLuxor.Point(0.0,0.0)\n\njulia> nextgridpoint(grid)\nLuxor.Point(0.0,40.0)\n\nWhen you run out of grid points, you\'ll wrap round and start again.\n\n\n\n"
-},
-
-{
-    "location": "simplegraphics.html#Luxor.GridHex",
-    "page": "Simple graphics",
-    "title": "Luxor.GridHex",
-    "category": "Type",
-    "text": "GridHex(startpoint, radius, width=1200.0, height=1200.0)\n\nDefine a hexagonal grid, to start at startpoint and proceed along the x-axis and then along the y-axis, radius is the radius of a circle that encloses each hexagon. The distance in x between the centers of successive hexagons is:\n\nfracsqrt(3) radius2\n\nTo get the next point from the grid, use nextgridpoint(g::Grid).\n\nWhen you run out of grid points, you\'ll wrap round and start again.\n\n\n\n"
-},
-
-{
-    "location": "simplegraphics.html#Luxor.nextgridpoint",
-    "page": "Simple graphics",
-    "title": "Luxor.nextgridpoint",
-    "category": "Function",
-    "text": "nextgridpoint(g::GridRect)\n\nReturns the next available (or even the first) grid point of a grid.\n\n\n\nnextgridpoint(g::GridHex)\n\nReturns the next available grid point of a hexagonal grid.\n\n\n\n"
-},
-
-{
-    "location": "simplegraphics.html#Grids-1",
-    "page": "Simple graphics",
-    "title": "Grids",
-    "category": "section",
-    "text": "If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they\'ll supply the next point on the grid when you ask for it.Define a rectangular grid with GridRect, and a hexagonal grid with GridHex. Get the next grid point from a grid with nextgridpoint(grid).using Luxor # hide\nDrawing(700, 250, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\ntranslate(50, 50) # hide\ngrid = GridRect(O, 40, 80, (10 - 1) * 40)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)using Luxor # hide\nDrawing(700, 400, \"assets/figures/grid-hex.png\")  # hide\nbackground(\"white\") # hide\nfontsize(22) # hide\ntranslate(100, 100) # hide\nradius = 70\ngrid = GridHex(O, radius, 600)\n\nfor i in 1:15\n    randomhue()\n    p = nextgridpoint(grid)\n    ngon(p, radius-5, 6, pi/2, :fillstroke)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)GridRect\nGridHex\nnextgridpoint"
-},
-
-{
     "location": "simplegraphics.html#Luxor.cropmarks",
     "page": "Simple graphics",
     "title": "Luxor.cropmarks",
@@ -874,23 +842,23 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "tables-grids.html#",
-    "page": "Grids and tables",
-    "title": "Grids and tables",
+    "page": "Tables and grids",
+    "title": "Tables and grids",
     "category": "page",
     "text": ""
 },
 
 {
-    "location": "tables-grids.html#Grids-and-tables-1",
-    "page": "Grids and tables",
-    "title": "Grids and tables",
+    "location": "tables-grids.html#Tables-and-grids-1",
+    "page": "Tables and grids",
+    "title": "Tables and grids",
     "category": "section",
     "text": "You often want to position graphics at regular locations on the drawing. The positions can be provided by:Tiler: a rectangular grid which you specify by enclosing area, and the number of rows and columns\nPartition: a rectangular grid which you specify by enclosing area, and the width and height of each cell\nGrid and GridHex a rectangular or hexagonal grid, on demand\nTable: a rectangular grid which you specify by providing row and column numbers, row heights and column widthsThese are types which act as iterators."
 },
 
 {
     "location": "tables-grids.html#Luxor.Tiler",
-    "page": "Grids and tables",
+    "page": "Tables and grids",
     "title": "Luxor.Tiler",
     "category": "Type",
     "text": "tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nA Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, nrows/ncols are the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\ntiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt\'s sometimes useful to know which row and column you\'re currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nTo use a Tiler to make grid points:\n\nfirst.(collect(Tiler(800, 800, 4, 4))\n\nwhich returns an array of points that are the center points of the grid.\n\n\n\n"
@@ -898,7 +866,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "tables-grids.html#Luxor.Partition",
-    "page": "Grids and tables",
+    "page": "Tables and grids",
     "title": "Luxor.Partition",
     "category": "Type",
     "text": "p = Partition(areawidth, areaheight, tilewidth, tileheight)\n\nA Partition is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a\n\nrectangular space such as a page into rows and columns (relative to current 0/0)\n\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, tilewidth/tileheight are the dimensions of the tiles.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    # the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt\'s sometimes useful to know which row and column you\'re currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nUnless the tilewidth and tileheight are exact multiples of the area width and height, you\'ll see a border at the right and bottom where the tiles won\'t fit.\n\n\n\n"
@@ -906,7 +874,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "tables-grids.html#Tiles-and-partitions-1",
-    "page": "Grids and tables",
+    "page": "Tables and grids",
     "title": "Tiles and partitions",
     "category": "section",
     "text": "The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the Tiler and Partition iterators.The Tiler iterator returns the center point and tile number of each tile in turn.In this example, every third tile is divided up into subtiles and colored:using Luxor # hide\nDrawing(400, 300, \"assets/figures/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(1) # hide\nfontsize(20) # hide\ntiles = Tiler(400, 300, 4, 5, margin=5)\nfor (pos, n) in tiles\n    randomhue()\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    if n % 3 == 0\n        gsave()\n        translate(pos)\n        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)\n        for (pos1, n1) in subtiles\n            randomhue()\n            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)\n        end\n        grestore()\n    end\n    sethue(\"white\")\n    textcentered(string(n), pos + Point(0, 5))\nend\nfinish() # hide\nnothing # hide(Image: tiler)Partition is like Tiler, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.Tiler\nPartition"
@@ -914,10 +882,42 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "tables-grids.html#Tables-1",
-    "page": "Grids and tables",
+    "page": "Tables and grids",
     "title": "Tables",
     "category": "section",
-    "text": "The Table iterator can be used to define tables: rectangular grids with a specific number of rows and columns. The columns can have different widths, and the rows can have different heights.To create a simple table with 3 rows and 4 columns, using the default width and height (100):julia> t = Table(3, 4);\n\njulia> t[1]\nLuxor.Point(-150.0, -100.0)\n\njulia> t[2]\nLuxor.Point(-50.0, -100.0)\n\njulia> t[3]\nLuxor.Point(50.0, -100.0)\n\njulia> t[4]\nLuxor.Point(150.0, -100.0)This example creates a table with 10 rows and 10 columns, where each cell is t0 units wide and 35 high.using Luxor # hide\nDrawing(600, 400, \"assets/figures/table2.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(42) # hide\nfontface(\"Helvetica-Bold\") # hide\nfontsize(20) # hide\nsethue(\"black\")\n\nt = Table(10, 10, 50, 35) # 10 rows, 10 columns, 50 wide, 35 high\n\nhundred = reshape(shuffle(1:100), 10, 10)\n\nfor n in 1:length(t)\n   text(string(hundred[n]), t[n], halign=:center, valign=:middle)\nend\n\nsetopacity(0.5)\nsethue(\"pink\")\ncircle.(t[3, :], 20, :fill) # row 3, every column\nfinish() # hide\nnothing # hide(Image: table 2)You can access rows or columns in the usual Julian way.To specify varying row heights and column widths, supply arrays or ranges. This table has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:using Luxor # hide\nDrawing(600, 400, \"assets/figures/table1.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(12) # hide\nsrand(42) # hide\n\nt = Table([50, 100, 150], 15:20:140)\n\nfor (pt, n) in t\n    randomhue()\n    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)\n    sethue(\"white\")\n    text(string(n), pt, halign=:center)\nend\n\nfinish() # hide\nnothing # hide(Image: table 1)To fill table cells, it\'s useful to be able to access the table\'s row and column specifications (using the colwidths and rowheights fields), and iteration can also provide information about the current row and column being processed (currentrow and currentcol). Use a clipping region to ensure that graphic elements don\'t stray outside the cell walls."
+    "text": "The Table iterator can be used to define tables: rectangular grids with a specific number of rows and columns. The columns can have different widths, and the rows can have different heights.To create a simple table with 3 rows and 4 columns, using the default width and height (100):julia> t = Table(3, 4);When you use this as an iterator, you can get the coordinates of the center of each cell, and its number.julia> for i in t\n           println(\"row: $(t.currentrow), column: $(t.currentcol), center: $(i[1])\")\n       end\nrow: 1, column: 1, center: Luxor.Point(-150.0, -100.0)\nrow: 1, column: 2, center: Luxor.Point(-50.0, -100.0)\nrow: 1, column: 3, center: Luxor.Point(50.0, -100.0)\nrow: 1, column: 4, center: Luxor.Point(150.0, -100.0)\nrow: 2, column: 1, center: Luxor.Point(-150.0, 0.0)\nrow: 2, column: 2, center: Luxor.Point(-50.0, 0.0)\nrow: 2, column: 3, center: Luxor.Point(50.0, 0.0)\nrow: 2, column: 4, center: Luxor.Point(150.0, 0.0)\nrow: 3, column: 1, center: Luxor.Point(-150.0, 100.0)\nrow: 3, column: 2, center: Luxor.Point(-50.0, 100.0)\nrow: 3, column: 3, center: Luxor.Point(50.0, 100.0)\nrow: 3, column: 4, center: Luxor.Point(150.0, 100.0)You can also access row and column information:julia> for r in 1:size(t)[1]\n           for c in 1:size(t)[2]\n               @show t[r, c]\n           end\n       end\nt[r, c] = Luxor.Point(-150.0, -100.0)\nt[r, c] = Luxor.Point(-50.0, -100.0)\nt[r, c] = Luxor.Point(50.0, -100.0)\nt[r, c] = Luxor.Point(150.0, -100.0)\nt[r, c] = Luxor.Point(-150.0, 0.0)\nt[r, c] = Luxor.Point(-50.0, 0.0)\nt[r, c] = Luxor.Point(50.0, 0.0)\nt[r, c] = Luxor.Point(150.0, 0.0)\nt[r, c] = Luxor.Point(-150.0, 100.0)\nt[r, c] = Luxor.Point(-50.0, 100.0)\nt[r, c] = Luxor.Point(50.0, 100.0)\nt[r, c] = Luxor.Point(150.0, 100.0)The next example creates a table with 10 rows and 10 columns, where each cell is 50 units wide and 35 high.using Luxor # hide\nDrawing(600, 400, \"assets/figures/table2.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsrand(42) # hide\nfontface(\"Helvetica-Bold\") # hide\nfontsize(20) # hide\nsethue(\"black\")\n\nt = Table(10, 10, 50, 35) # 10 rows, 10 columns, 50 wide, 35 high\n\nhundred = reshape(shuffle(1:100), 10, 10)\n\nfor n in 1:length(t)\n   text(string(hundred[n]), t[n], halign=:center, valign=:middle)\nend\n\nsetopacity(0.5)\nsethue(\"pink\")\ncircle.(t[3, :], 20, :fill) # row 3, every column\nfinish() # hide\nnothing # hide(Image: table 2)You can access rows or columns in the usual Julian way.To specify varying row heights and column widths, supply arrays or ranges. The next example has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:using Luxor # hide\nDrawing(600, 400, \"assets/figures/table1.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(12) # hide\nsrand(42) # hide\n\nt = Table([50, 100, 150], 15:20:140)\n\nfor (pt, n) in t\n    randomhue()\n    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)\n    sethue(\"white\")\n    text(string(n), pt, halign=:center)\nend\n\nfinish() # hide\nnothing # hide(Image: table 1)To fill table cells, it\'s useful to be able to access the table\'s row and column specifications (using the colwidths and rowheights fields), and iteration can also provide information about the current row and column being processed (currentrow and currentcol).To ensure that graphic elements don\'t stray outside the cell walls, use a clipping region."
+},
+
+{
+    "location": "tables-grids.html#Luxor.GridRect",
+    "page": "Tables and grids",
+    "title": "Luxor.GridRect",
+    "category": "Type",
+    "text": "GridRect(startpoint, xspacing, yspacing, width, height)\n\nDefine a rectangular grid, to start at startpoint and proceed along the x-axis in steps of xspacing, then along the y-axis in steps of yspacing.\n\nGridRect(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)\n\nFor a column, set the xspacing to 0:\n\ngrid = GridRect(O, 0, 40)\n\nTo get points from the grid, use nextgridpoint(g::Grid).\n\njulia> grid = GridRect(O, 0, 40);\njulia> nextgridpoint(grid)\nLuxor.Point(0.0,0.0)\n\njulia> nextgridpoint(grid)\nLuxor.Point(0.0,40.0)\n\nWhen you run out of grid points, you\'ll wrap round and start again.\n\n\n\n"
+},
+
+{
+    "location": "tables-grids.html#Luxor.GridHex",
+    "page": "Tables and grids",
+    "title": "Luxor.GridHex",
+    "category": "Type",
+    "text": "GridHex(startpoint, radius, width=1200.0, height=1200.0)\n\nDefine a hexagonal grid, to start at startpoint and proceed along the x-axis and then along the y-axis, radius is the radius of a circle that encloses each hexagon. The distance in x between the centers of successive hexagons is:\n\nfracsqrt(3) radius2\n\nTo get the next point from the grid, use nextgridpoint(g::Grid).\n\nWhen you run out of grid points, you\'ll wrap round and start again.\n\n\n\n"
+},
+
+{
+    "location": "tables-grids.html#Luxor.nextgridpoint",
+    "page": "Tables and grids",
+    "title": "Luxor.nextgridpoint",
+    "category": "Function",
+    "text": "nextgridpoint(g::GridRect)\n\nReturns the next available (or even the first) grid point of a grid.\n\n\n\nnextgridpoint(g::GridHex)\n\nReturns the next available grid point of a hexagonal grid.\n\n\n\n"
+},
+
+{
+    "location": "tables-grids.html#Grids-1",
+    "page": "Tables and grids",
+    "title": "Grids",
+    "category": "section",
+    "text": "If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they\'ll supply the next point on the grid when you ask for it.Define a rectangular grid with GridRect, and a hexagonal grid with GridHex. Get the next grid point from a grid with nextgridpoint(grid).using Luxor # hide\nDrawing(700, 250, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\ntranslate(50, 50) # hide\ngrid = GridRect(O, 40, 80, (10 - 1) * 40)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)using Luxor # hide\nDrawing(700, 400, \"assets/figures/grid-hex.png\")  # hide\nbackground(\"white\") # hide\nfontsize(22) # hide\ntranslate(100, 100) # hide\nradius = 70\ngrid = GridHex(O, radius, 600)\n\nfor i in 1:15\n    randomhue()\n    p = nextgridpoint(grid)\n    ngon(p, radius-5, 6, pi/2, :fillstroke)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)GridRect\nGridHex\nnextgridpoint"
 },
 
 {
@@ -1093,7 +1093,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Colors and styles",
     "title": "Line styles",
     "category": "section",
-    "text": "There are set- functions for controlling subsequent lines\' width, end shapes, join behavior, and dash patterns:using Luxor # hide\nDrawing(400, 250, \"assets/figures/line-ends.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntranslate(-100, -60) # hide\nfontsize(18) # hide\nfor l in 1:3\n    sethue(\"black\")\n    setline(20)\n    setlinecap([\"butt\", \"square\", \"round\"][l])\n    textcentred([\"butt\", \"square\", \"round\"][l], 80l, 80)\n    setlinejoin([\"round\", \"miter\", \"bevel\"][l])\n    textcentred([\"round\", \"miter\", \"bevel\"][l], 80l, 120)\n    poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)\n    sethue(\"white\")\n    setline(1)\n    strokepath()\nend\nfinish() # hide\nnothing # hide(Image: line endings)using Luxor # hide\nDrawing(600, 250, \"assets/figures/dashes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(14) # hide\nsethue(\"black\") # hide\nsetline(12)\npatterns = [\"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\",\n  \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"]\ntiles =  Tiler(600, 250, 10, 1, margin=10)\nfor (pos, n) in tiles\n    setdash(patterns[n])\n    textright(patterns[n], pos.x - 20, pos.y + 4)\n    line(pos, Point(240, pos.y), :stroke)\nend\nfinish() # hide\nnothing # hide(Image: dashes)setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstrokepath\nfillpath\nstrokepreserve\nfillpreserve\npaint\ndo_action"
+    "text": "There are set- functions for controlling subsequent lines\' width, end shapes, join behavior, and dash patterns:using Luxor # hide\nDrawing(400, 250, \"assets/figures/line-ends.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\ntranslate(-100, -60) # hide\nfontsize(18) # hide\nfor l in 1:3\n    sethue(\"black\")\n    setline(20)\n    setlinecap([\"butt\", \"square\", \"round\"][l])\n    textcentred([\"butt\", \"square\", \"round\"][l], 80l, 80)\n    setlinejoin([\"round\", \"miter\", \"bevel\"][l])\n    textcentred([\"round\", \"miter\", \"bevel\"][l], 80l, 120)\n    poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)\n    sethue(\"white\")\n    setline(1)\n    strokepath()\nend\nfinish() # hide\nnothing # hide(Image: line endings)using Luxor # hide\nDrawing(600, 250, \"assets/figures/dashes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(14) # hide\nsethue(\"black\") # hide\n\npatterns = [\"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\",\n  \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"]\nsetline(12)\n\ntable = Table(fill(20, length(patterns)), [50, 300])\ntext.(patterns, table[:, 1], halign=:right, valign=:middle)\n\nfor p in 1:length(patterns)\n    setdash(patterns[p])\n    pt = table[p, 2]\n    line(pt - (150, 0), pt + (150, 0), :stroke)\nend\nfinish() # hide\nnothing # hide(Image: dashes)setline\nsetlinecap\nsetlinejoin\nsetdash\nfillstroke\nstrokepath\nfillpath\nstrokepreserve\nfillpreserve\npaint\ndo_action"
 },
 
 {
@@ -1509,7 +1509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Area of polygon",
     "category": "section",
-    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\ng = GridRect(O + (200, -200), 80, 20, 85)\ntext(\"#sides\", nextgridpoint(g), halign=:right)\ntext(\"area\", nextgridpoint(g), halign=:right)\n\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    ngonside(O, 50, i, 0, :fill)\n    sethue(\"grey40\")\n    ngonside(O, 50, i, 0, :stroke)\n    p = ngonside(O, 50, i, 0, vertices=true)\n    text(string(i), nextgridpoint(g), halign=:right)\n    text(string(round(polyarea(p), 3)), nextgridpoint(g), halign=:right)\nend\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolyremainder\npolydistances\nnearestindex\npolyarea"
+    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.using Luxor # hide\nDrawing(600, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(12) # hide\n\nsetopacity(0.5)\noutertable = Table([400], [400, 150])\ninnertable = Table(20, 2, 60, 15, Point(150, 0))\nfor i in 20:-1:3\n    sethue(i/20, 0.5, 1 - i/20)\n    p = ngonside(outertable[1], 50, i, 0, vertices=true)\n    poly(p, :fill)\n\n    sethue(\"grey30\")\n    ngonside(outertable[1], 50, i, 0, :stroke)\n\n    text(string(i), innertable[i, 1], halign=:right)\n    text(string(Int(round(polyarea(p), 0))), innertable[i, 2], halign=:right)\nend\n\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolyremainder\npolydistances\nnearestindex\npolyarea"
 },
 
 {
