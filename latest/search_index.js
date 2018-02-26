@@ -1749,7 +1749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.textwrap",
     "category": "Function",
-    "text": "textwrap(s::T where T<:AbstractString, width::Real, pos::Point;\n    rightgutter=5)\ntextwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5)\n\nDraw the string in s by splitting it at whitespace characters into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\nSee also textbox().\n\nText with no whitespace characters won\'t wrap. You can write a simple chunking function to split a string or array into chunks:\n\nchunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]\n\n\n\n"
+    "text": "textwrap(s::T where T<:AbstractString, width::Real, pos::Point;\n    rightgutter=5,\n    leading=0)\ntextwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5,\n    leading=0)\n\nDraw the string in s by splitting it at whitespace characters into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\nSee also textbox().\n\nIf you don\'t supply a value for leading, the font\'s built-in extents are used.\n\nText with no whitespace characters won\'t wrap. You can write a simple chunking function to split a string or array into chunks:\n\nchunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]\n\n\n\n"
 },
 
 {
