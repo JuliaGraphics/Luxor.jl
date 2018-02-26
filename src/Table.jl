@@ -12,34 +12,40 @@ end
 
 """
     t = Table(nrows, ncols)
-    t = Table(nrows, ncols, cellwidth, cellheight)
+    t = Table(nrows, ncols, colwidth, rowheight)
     t = Table(rowheights, columnwidths)
+
+Tables are centered at `O`, but you can supply a point after the specifications.
+
+    t = Table(nrows, ncols, centerpoint)
+    t = Table(nrows, ncols, colwidth, rowheight, centerpoint)
+    t = Table(rowheights, columnwidths, centerpoint)
 
 Examples
 
 Simple tables
 
-    t = Table(4, 3) # 4 rows and 3 cols
-    t = Table(4, 3, 80, 30) # 4 rows of 80pts high, 3 cols of 30pts wide
-    t = Table(4, 3, (80, 30)) # 4 rows of 80pts high, 3 cols of 30pts wide
-    t = Table(1, 50, 10, 20) # 1 row 10pts high, 50 columns 20pts wide
+    t = Table(4, 3) # 4 rows and 3 cols, default is 100w, 50 h
+    t = Table(4, 3, 80, 30)   # 4 rows of 30pts high, 3 cols of 80pts wide
+    t = Table(4, 3, (80, 30)) # same
+    t = Table((4, 3), (80, 30)) # same
 
-Specifying heights and widths:
+Specify row heights and column widths instead of quantities:
 
+    t = Table([60, 40, 100], 50) # 3 different height rows, 1 column 50 wide
     t = Table([60, 40, 100], [100, 60, 40]) # 3 rows, 3 columns
-    t = Table([60, 40, 100], 50) # 3 rows, just 1 column 50 wide
     t = Table(fill(30, (10)), [50, 50, 50]) # 10 rows 30 high, 3 columns 10 wide
     t = Table(50, [60, 60, 60]) # just 1 row (50 high), 3 columns 60 wide
     t = Table([50], [50]) # just 1 row, 1 column, both 50 units wide
     t = Table(50, 50, 10, 5) # 50 rows, 50 columns, 10 units wide, 5 units high
+    t = Table([6, 11, 16, 21, 26, 31, 36, 41, 46], [6, 11, 16, 21, 26, 31, 36, 41, 46])
     t = Table(15:5:55, vcat(5:2:15, 15:-2:5))
-     # has 108 cells, with:
+     #  table has 108 cells, with:
      #  row heights: 15 20 25 30 35 40 45 50 55
      #  col widths:  5 7 9 11 13 15 15 13 11 9 7 5
     t = Table(vcat(5:10:60, 60:-10:5), vcat(5:10:60, 60:-10:5))
     t = Table(vcat(5:10:60, 60:-10:5), 50) # 1 column 50 units wide
     t = Table(vcat(5:10:60, 60:-10:5), 1:5:50)
-    t = Table([6, 11, 16, 21, 26, 31, 36, 41, 46], [6, 11, 16, 21, 26, 31, 36, 41, 46])
 
 A Table is an iterator that, for each iteration, returns a tuple of:
 
@@ -49,29 +55,43 @@ A Table is an iterator that, for each iteration, returns a tuple of:
 
 `nrows`/`ncols` are the number of rows and columns required.
 
-It's sometimes useful to know which row and column you're currently on:
+It's sometimes useful to know which row and column you're currently on while iterating:
 
 ```
 t.currentrow
 t.currentcol
 ```
 
-Row heights and column widths are available in
+and row heights and column widths are available in:
 
 ```
 t.rowheights
 t.colheights
 ```
 
-Filling table cells is then possible:
+`box(t::Table, r, c)` can be used to fill table cells:
 
 ```
 @svg begin
     for (pt, n) in (t = Table(8, 3, 30, 15))
         randomhue()
-        box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)
+        box(t, t.currentrow, t.currentcol, :fill)
         sethue("white")
         text(string(n), pt)
+    end
+end
+```
+
+or without iteration, using cellnumber:
+
+```
+@svg begin
+    t = Table(8, 3, 30, 15)
+    for n in 1:length(t)
+        randomhue()
+        box(t, n, :fill)
+        sethue("white")
+        text(string(n), t[n])
     end
 end
 ```
@@ -95,8 +115,8 @@ which returns an array of points that are the center points of the cells in the 
 function Table(nrows::Int, ncols::Int, cellwidth, cellheight, center=O)
     currentrow = 1
     currentcol = 1
-    rowheights = repmat([cellheight], nrows)
-    colwidths  = repmat([cellwidth],  ncols)
+    rowheights = fill(cellheight, nrows)
+    colwidths  = fill(cellwidth, ncols)
     leftmargin = -sum(colwidths)/2
     topmargin  = -sum(rowheights)/2
     Table(rowheights, colwidths, nrows, ncols, currentrow, currentcol, leftmargin, topmargin, center)
@@ -106,10 +126,18 @@ end
 Table(nrows::Int, ncols::Int, wh::NTuple{2, T}, center=O) where T <: Real =
     Table(nrows, ncols, wh[1], wh[2], center)
 
-# simple: nrows, ncols using default of 100
+# simple: (nrows, ncols)
+Table(rc::NTuple{2, T}, center=O) where T <: Int =
+    Table(rc[1], rc[2], center)
+
+# simple: (nrows, ncols), (width, height)
+Table(rc::NTuple{2, T1}, wh::NTuple{2, T2}, center=O) where T1 <: Int where T2 <: Real =
+    Table(rc[1], rc[2], wh[1], wh[2], center)
+
+# simple: nrows, ncols using default of 100w 50 h
 function Table(nrows::Int, ncols::Int, center=O)
     cellwidth  = 100
-    cellheight = 100
+    cellheight = 50
     Table(nrows, ncols, cellwidth, cellheight, center)
 end
 
@@ -213,3 +241,27 @@ Base.getindex(t::Table, r::Int64, ::Colon) = [t[r, n] for n in 1:t.ncols]
 
 # get column: t[:, 3]
 Base.getindex(t::Table, ::Colon, c::Int64) = [t[n, c] for n in 1:t.nrows]
+
+# box extensions
+"""
+    box(t::Table, r::Int, c::Int, action::Symbol=:nothing)
+
+Draw a box in table `t` at row `r` and column `c`.
+"""
+function box(t::Table, r::Int, c::Int, action::Symbol=:nothing)
+    cellw, cellh = t.colwidths[c], t.rowheights[r]
+    box(t[r, c], cellw, cellh, action)
+end
+
+"""
+    box(t::Table, cellnumber::Int, action::Symbol=:nothing)
+
+Draw box `cellnumber` in table `t`.
+"""
+function box(t::Table, cellnumber::Int, action::Symbol=:nothing)
+    r = div(cellnumber - 1, t.ncols) + 1
+    c = mod1(cellnumber, t.ncols)
+
+    cellw, cellh = t.colwidths[c], t.rowheights[r]
+    box(t[r, c], cellw, cellh, action)
+end

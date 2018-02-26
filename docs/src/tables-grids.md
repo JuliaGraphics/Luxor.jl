@@ -57,7 +57,7 @@ Partition
 
 ## Tables
 
-The `Table` iterator can be used to define tables: rectangular grids with a specific number of rows and columns. The columns can have different widths, and the rows can have different heights.
+The `Table` iterator can be used to define tables: rectangular grids with a specific number of rows and columns. The columns can have different widths, and the rows can have different heights. Tables don't store data, but are designed to help you draw tabular data.
 
 To create a simple table with 3 rows and 4 columns, using the default width and height (100):
 
@@ -65,7 +65,7 @@ To create a simple table with 3 rows and 4 columns, using the default width and 
 julia> t = Table(3, 4);
 ```
 
-When you use this as an iterator, you can get the coordinates of the center of each cell, and its number.
+When you use this as an iterator, you can get the coordinates of the center of each cell, and its number:
 
 ```
 julia> for i in t
@@ -121,15 +121,16 @@ sethue("black")
 
 t = Table(10, 10, 50, 35) # 10 rows, 10 columns, 50 wide, 35 high
 
-hundred = reshape(shuffle(1:100), 10, 10)
+hundred = 1:100
 
 for n in 1:length(t)
    text(string(hundred[n]), t[n], halign=:center, valign=:middle)
 end
 
 setopacity(0.5)
-sethue("pink")
+sethue("thistle")
 circle.(t[3, :], 20, :fill) # row 3, every column
+
 finish() # hide
 nothing # hide
 ```
@@ -138,7 +139,11 @@ nothing # hide
 
 You can access rows or columns in the usual Julian way.
 
-To specify varying row heights and column widths, supply arrays or ranges. The next example has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:
+Notice that the table is drawn row by row, whereas 2D Julia arrays are usually accessed column by column.
+
+### Varying row heights and column widths
+
+To specify varying row heights and column widths, supply arrays or ranges to the `Table` constructor. The next example has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:
 
 ```@example
 using Luxor # hide
@@ -167,9 +172,52 @@ To fill table cells, it's useful to be able to access the table's row and column
 
 To ensure that graphic elements don't stray outside the cell walls, use a clipping region.
 
-### Grids
+### Drawing arrays and dataframes
 
-If you have to position items regularly, you might find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
+With a little bit of extra work you can write code that draws objects like arrays and dataframes combining text with graphic features. For example, this code draws arrays visually and numerically.
+
+```@example
+using Luxor # hide
+function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
+    setline(1.5)
+    cellwidth = t.colwidths[column] - 10
+    leftmargin = t[row, column] - (cellwidth/2, 0)
+    sethue("gray70")
+    box(leftmargin - (0, barheight/2), leftmargin + (cellwidth, barheight/2), :fill)
+    boxwidth = rescale(data[row, column], minvalue, maxvalue, 0, cellwidth)
+    sethue("thistle")
+    box(leftmargin - (0, barheight/2), leftmargin + (boxwidth, barheight/2), :fill)
+    sethue("black")
+    line(leftmargin + (boxwidth, -barheight/2),
+         leftmargin + (boxwidth, +barheight/2),
+         :stroke)
+    text(string(round(data[row, column], 3)), t[row, column] - (cellwidth/2, 10),
+         halign=:left)
+end
+
+Drawing(700, 250, "assets/figures/arraytable.png")  # hide
+origin() # hide
+background("white") # hide
+A = rand(6, 6)
+l, h = extrema(A)
+rt, ct = size(A)
+t = Table(size(A), (80, 30))
+fontface("Georgia")
+fontsize(12)
+for r in 1:rt
+    for c in 1:ct
+        drawbar(t, A, r, c, l, h, 10)
+    end
+end
+finish() # hide
+nothing # hide
+```
+
+![grids](assets/figures/arraytable.png)
+
+## Grids
+
+You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
 
 Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`. Get the next grid point from a grid with `nextgridpoint(grid)`.
 

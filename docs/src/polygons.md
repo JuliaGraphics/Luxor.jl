@@ -785,27 +785,36 @@ nothing # hide
 
 Use `polyarea()` to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.
 
+This code draws some regular polygons and calculates their area, perimeter, and shows how near the ratio of perimeter over radius approaches 2π.
+
 ```@example
 using Luxor # hide
-Drawing(600, 500, "assets/figures/polyarea.png") # hide
+Drawing(650, 500, "assets/figures/polyarea.png") # hide
 origin() # hide
 background("white") # hide
-fontsize(12) # hide
-
-setopacity(0.5)
-outertable = Table([400], [400, 150])
-innertable = Table(20, 2, 60, 15, Point(150, 0))
-for i in 20:-1:3
-    sethue(i/20, 0.5, 1 - i/20)
-    p = ngonside(outertable[1], 50, i, 0, vertices=true)
-    poly(p, :fill)
-
-    sethue("grey30")
-    ngonside(outertable[1], 50, i, 0, :stroke)
-
-    text(string(i), innertable[i, 1], halign=:right)
-    text(string(Int(round(polyarea(p), 0))), innertable[i, 2], halign=:right)
+fontsize(13) # hide
+fontface("Georgia")
+sethue("black")
+setline(0.25)
+outerframe = Table([500], [400, 200])
+total = 30
+properties = Table(fill(15, total), [20, 85, 85], Point(200, 0))
+radius = 150
+text("radius = $radius", outerframe[1], halign=:center)
+for i in 3:total
+    text(string(i), properties[i, 1], halign=:right)
+    p = ngon(outerframe[1], radius, i, 0, vertices=true)
+    poly(p, :stroke, close=true)
+    pa = polyarea(p)
+    pp = polyperimeter(p)
+    ppoverradius = pp/radius
+    text(string(Int(round(pa, 0))), properties[i, 2], halign=:left)
+    text(string(round(ppoverradius, 6)), properties[i, 3], halign=:left)
 end
+
+fontsize(10)
+[text(["Sides", "Area", "Perimeter/Radius"][n], pt, halign=:center)
+    for (pt, n) in Table([20], [20, 85, 85], outerframe[2] - (0, 220))]
 
 finish() # hide
 nothing # hide
