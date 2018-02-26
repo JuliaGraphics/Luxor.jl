@@ -469,9 +469,11 @@ end
 
 """
     textwrap(s::T where T<:AbstractString, width::Real, pos::Point;
-        rightgutter=5)
+        rightgutter=5,
+        leading=0)
     textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
-        rightgutter=5)
+        rightgutter=5,
+        leading=0)
 
 Draw the string in `s` by splitting it at whitespace characters into lines, so that each
 line is no longer than `width` units. The text starts at `pos` such that the first line of
@@ -480,18 +482,21 @@ aligned on the left side, below `pos`.
 
 See also `textbox()`.
 
+If you don't supply a value for `leading`, the font's built-in extents are used.
+
 Text with no whitespace characters won't wrap. You can write a simple chunking function
 to split a string or array into chunks:
 
     chunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]
 """
 function textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
-        rightgutter=5)
+        rightgutter=5,
+        leading=0)
     lines = textlines(s, width; rightgutter=rightgutter)
     # find height of first non-empty line
     firstrealline = filter(!isempty, lines)[1]
     te = textextents(firstrealline)
-    height = te[4] - te[2]
+    leading == 0 ? height = min(te[4] - te[2]) : height = leading
     textbox(lines, pos, linefunc=linefunc, leading=height)
 end
 
