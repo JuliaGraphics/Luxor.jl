@@ -149,8 +149,8 @@ function Table(rowheights::Array{T, 1}, colwidths::Array{T, 1}, center=O) where 
     ncols = length(colwidths)
     currentrow = 1
     currentcol = 1
-    leftmargin = -sum(colwidths)/2
-    topmargin  = -sum(rowheights)/2
+    leftmargin = center.x - sum(colwidths)/2
+    topmargin  = center.y - sum(rowheights)/2
     Table(rowheights, colwidths, nrows, ncols, currentrow, currentcol, leftmargin, topmargin, center)
 end
 
