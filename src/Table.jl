@@ -117,8 +117,8 @@ function Table(nrows::Int, ncols::Int, cellwidth, cellheight, center=O)
     currentcol = 1
     rowheights = fill(cellheight, nrows)
     colwidths  = fill(cellwidth, ncols)
-    leftmargin = -sum(colwidths)/2
-    topmargin  = -sum(rowheights)/2
+    leftmargin = center.x - sum(colwidths)/2
+    topmargin  = center.y - sum(rowheights)/2
     Table(rowheights, colwidths, nrows, ncols, currentrow, currentcol, leftmargin, topmargin, center)
 end
 
@@ -181,7 +181,7 @@ function Base.start(t::Table)
     # return the initial state
     x = t.leftmargin + (t.colwidths[1]/2)
     y = t.topmargin  + (t.rowheights[1]/2)
-    return (t.center + Point(x, y), 1)
+    return ( Point(x, y), 1)
 end
 
 function Base.next(t::Table, state)
@@ -195,7 +195,7 @@ function Base.next(t::Table, state)
     t.currentcol = mod1(cellnumber, t.ncols)
     x1 = t.leftmargin + sum(t.colwidths[1:t.currentcol - 1]) + t.colwidths[t.currentcol]/2
     y1 = t.topmargin  + sum(t.rowheights[1:t.currentrow - 1]) + t.rowheights[t.currentrow]/2
-    nextpoint = t.center + Point(x1, y1)
+    nextpoint = Point(x1, y1)
     return ((nextpoint, cellnumber), (nextpoint, cellnumber + 1))
 end
 
@@ -222,7 +222,7 @@ function Base.getindex(t::Table, i::Int)
     currentcol = mod1(i, t.ncols)
     x1 = t.leftmargin + sum(t.colwidths[1:currentcol - 1]) + t.colwidths[currentcol]/2
     y1 = t.topmargin  + sum(t.rowheights[1:currentrow - 1]) + t.rowheights[currentrow]/2
-    return t.center + Point(x1, y1)
+    return  Point(x1, y1)
 end
 
 # t[r, c] -> Luxor.Point(0.0, -192.5)
@@ -231,7 +231,7 @@ function Base.getindex(t::Table, r::Int, c::Int)
     c <= t.ncols || throw(BoundsError(t, c))
     x1 = t.leftmargin + sum(t.colwidths[1:c - 1]) + t.colwidths[c]/2
     y1 = t.topmargin  + sum(t.rowheights[1:r - 1]) + t.rowheights[r]/2
-    return t.center + Point(x1, y1)
+    return  Point(x1, y1)
 end
 
 Base.getindex(t::Table, I) = [t[i] for i in I]
