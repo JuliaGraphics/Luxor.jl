@@ -798,18 +798,19 @@ sethue("black")
 setline(0.25)
 outerframe = Table([500], [400, 200])
 total = 30
-properties = Table(fill(15, total), [20, 85, 85], Point(200, 0))
-radius = 150
-text("radius = $radius", outerframe[1], halign=:center)
+properties = Table(fill(15, total), [20, 85, 85], outerframe[1, 2])
+radius = 55
+sethue("grey20")
 for i in 3:total
     text(string(i), properties[i, 1], halign=:right)
     p = ngon(outerframe[1], radius, i, 0, vertices=true)
-    poly(p, :stroke, close=true)
+    prettypoly(p, :stroke, close=true, () -> (sethue("red"); circle(O, 2, :fill)))
     pa = polyarea(p)
     pp = polyperimeter(p)
     ppoverradius = pp/radius
     text(string(Int(round(pa, 0))), properties[i, 2], halign=:left)
     text(string(round(ppoverradius, 6)), properties[i, 3], halign=:left)
+    radius += 5
 end
 
 fontsize(10)
