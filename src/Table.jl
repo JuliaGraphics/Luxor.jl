@@ -142,7 +142,7 @@ function Table(nrows::Int, ncols::Int, center=O)
 end
 
 # row heights in array, column widths in array
-function Table(rowheights::Array{T, 1}, colwidths::Array{T, 1}, center=O) where T <: Real
+function Table(rowheights::Array{T1, 1}, colwidths::Array{T2, 1}, center=O) where T1 <: Real where T2 <: Real
     rowheights = collect(Iterators.flatten(rowheights))
     colwidths =  collect(Iterators.flatten(colwidths))
     nrows = length(rowheights)
@@ -155,23 +155,23 @@ function Table(rowheights::Array{T, 1}, colwidths::Array{T, 1}, center=O) where 
 end
 
 # row heights in array, a single column width
-Table(rowheights::Array{T, 1}, colwidth::T, center=O) where T <: Real =
+Table(rowheights::Array{T1, 1}, colwidth::T2, center=O) where T1 <: Real where T2 <: Real =
     Table(rowheights, [colwidth], center)
 
 # a single row height, column widths in an array
-Table(row_height::T, colwidths::Array{T, 1}, center=O) where T <: Real =
+Table(row_height::T1, colwidths::Array{T2, 1}, center=O) where T1 <: Real where T2 <: Real =
     Table([row_height], colwidths, center)
 
 # a range of row heights, a range of column widths
-Table(rowheights::Range{T}, colwidths::Range{T}, center=O) where T <: Real =
+Table(rowheights::Range{T1}, colwidths::Range{T2}, center=O) where T1 <: Real where T2 <: Real =
     Table(collect(rowheights), collect(colwidths), center)
 
 # an array of row heights, a range of column widths
-Table(rowheights::Array{T, 1}, colwidths::Range{T}, center=O) where T <: Real =
+Table(rowheights::Array{T1, 1}, colwidths::Range{T2}, center=O) where T1 <: Real where T2 <: Real =
     Table(rowheights, collect(colwidths), center)
 
 # a range of row heights, an array of column widths
-Table(rowheights::Range{T}, colwidths::Array{T, 1}, center=O) where T <: Real =
+Table(rowheights::Range{T1}, colwidths::Array{T2, 1}, center=O) where T1 <: Real where T2 <: Real =
     Table(collect(rowheights), colwidths, center)
 
 # interfaces
