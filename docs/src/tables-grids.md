@@ -143,23 +143,22 @@ Notice that the table is drawn row by row, whereas 2D Julia arrays are usually a
 
 ### Varying row heights and column widths
 
-To specify varying row heights and column widths, supply arrays or ranges to the `Table` constructor. The next example has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:
+To specify varying row heights and column widths, supply arrays or ranges to the `Table` constructor. The next example has logarithmically increasing row heights, and four columns of width 130 points:
 
 ```@example
 using Luxor # hide
 Drawing(600, 400, "assets/figures/table1.png") # hide
 background("white") # hide
 origin() # hide
-fontsize(12) # hide
-srand(42) # hide
 
-t = Table([50, 100, 150], 15:20:140)
+t = Table(logspace(0.7, 1.5, 25), fill(130, 4))
 
 for (pt, n) in t
-    randomhue()
+    setgray(rescale(n, 1, length(t), 0, 1))
     box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)
     sethue("white")
-    text(string(n), pt, halign=:center)
+    fontsize(t.rowheights[t.currentrow])
+    text(string(n), pt, halign=:center, valign=:middle)
 end
 
 finish() # hide
@@ -170,7 +169,7 @@ nothing # hide
 
 To fill table cells, it's useful to be able to access the table's row and column specifications (using the `colwidths` and `rowheights` fields), and iteration can also provide information about the current row and column being processed (`currentrow` and `currentcol`).
 
-To ensure that graphic elements don't stray outside the cell walls, use a clipping region.
+To ensure that graphic elements don't stray outside the cell walls, you can use a clipping region.
 
 ### Drawing arrays and dataframes
 
@@ -198,6 +197,7 @@ end
 Drawing(700, 250, "assets/figures/arraytable.png")  # hide
 origin() # hide
 background("white") # hide
+srand(42) # hide
 A = rand(6, 6)
 l, h = extrema(A)
 rt, ct = size(A)
@@ -213,8 +213,11 @@ finish() # hide
 nothing # hide
 ```
 
-![grids](assets/figures/arraytable.png)
+![array table](assets/figures/arraytable.png)
 
+```@docs
+Table
+```
 ## Grids
 
 You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
@@ -227,6 +230,7 @@ Drawing(700, 250, "assets/figures/grids.png")  # hide
 background("white") # hide
 fontsize(14) # hide
 translate(50, 50) # hide
+srand(42) # hide
 grid = GridRect(O, 40, 80, (10 - 1) * 40)
 for i in 1:20
     randomhue()
@@ -246,6 +250,7 @@ using Luxor # hide
 Drawing(700, 400, "assets/figures/grid-hex.png")  # hide
 background("white") # hide
 fontsize(22) # hide
+srand(42)
 translate(100, 100) # hide
 radius = 70
 grid = GridHex(O, radius, 600)
@@ -261,7 +266,7 @@ finish() # hide
 nothing # hide
 ```
 
-![grids](assets/figures/grid-hex.png)
+![hex grid](assets/figures/grid-hex.png)
 
 ```@docs
 GridRect
