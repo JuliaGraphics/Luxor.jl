@@ -268,7 +268,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.Drawing",
     "page": "Basic concepts",
     "title": "Luxor.Drawing",
-    "category": "Type",
+    "category": "type",
     "text": "Create a new drawing, and optionally specify file type (PNG, PDF, SVG, or EPS) and dimensions.\n\nDrawing()\n\ncreates a drawing, defaulting to PNG format, default filename \"luxor-drawing.png\", default size 800 pixels square.\n\nYou can specify the dimensions, and assume the default output filename:\n\nDrawing(400, 300)\n\ncreates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default filename \"luxor-drawing.png\".\n\nDrawing(400, 300, \"my-drawing.pdf\")\n\ncreates a PDF drawing in the file \"my-drawing.pdf\", 400 by 300 pixels.\n\nDrawing(1200, 800, \"my-drawing.svg\")`\n\ncreates an SVG drawing in the file \"my-drawing.svg\", 1200 by 800 pixels.\n\nDrawing(width, height, surfacetype, [filename])\n\ncreates a new drawing of the given surface type (e.g. :svg, :png), storing the image only in memory if no filename is provided.\n\nDrawing(1200, 1200/golden, \"my-drawing.eps\")\n\ncreates an EPS drawing in the file \"my-drawing.eps\", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ) high. Only for PNG files must the dimensions be integers.\n\nDrawing(\"A4\", \"my-drawing.pdf\")\n\ncreates a drawing in ISO A4 size (595 wide by 842 high) in the file \"my-drawing.pdf\". Other sizes available are:  \"A0\", \"A1\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"Letter\", \"Legal\", \"A\", \"B\", \"C\", \"D\", \"E\". Append \"landscape\" to get the landscape version.\n\nDrawing(\"A4landscape\")\n\ncreates the drawing A4 landscape size.\n\nPDF files default to a white background, but PNG defaults to transparent, unless you specify one using background().\n\n\n\n"
 },
 
@@ -276,7 +276,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.finish",
     "page": "Basic concepts",
     "title": "Luxor.finish",
-    "category": "Function",
+    "category": "function",
     "text": "finish()\n\nFinish the drawing, and close the file. You may be able to open it in an external viewer application with preview().\n\n\n\n"
 },
 
@@ -284,7 +284,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.preview",
     "page": "Basic concepts",
     "title": "Luxor.preview",
-    "category": "Function",
+    "category": "function",
     "text": "preview()\n\nIf working in Jupyter (IJulia), display a PNG or SVG file in the notebook.\n\nIf working in Juno, display a PNG or SVG file in the Plot pane.\n\nOtherwise:\n\non macOS, open the file in the default application, which is probably the Preview.app for PNG and PDF, and Safari for SVG\non Unix, open the file with xdg-open\non Windows, pass the filename to explorer.\n\n\n\n"
 },
 
@@ -316,7 +316,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.background",
     "page": "Basic concepts",
     "title": "Luxor.background",
-    "category": "Function",
+    "category": "function",
     "text": "background(color)\n\nFill the canvas with a single color. Returns the (red, green, blue, alpha) values.\n\nExamples:\n\nbackground(\"antiquewhite\")\nbackground(\"ivory\")\n\nIf Colors.jl is installed:\n\nbackground(RGB(0, 0, 0))\nbackground(Luv(20, -20, 30))\n\nIf you don\'t specify a background color for a PNG drawing, the background will be transparent. You can set a partly or completely transparent background for PNG files by passing a color with an alpha value, such as this \'transparent black\':\n\nbackground(RGBA(0, 0, 0, 0))\n\n\n\n"
 },
 
@@ -324,7 +324,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.axes",
     "page": "Basic concepts",
     "title": "Luxor.axes",
-    "category": "Function",
+    "category": "function",
     "text": "Draw and label two axes lines starting at O, the current 0/0, and continuing out along the current positive x and y axes.\n\n\n\n"
 },
 
@@ -332,7 +332,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.origin",
     "page": "Basic concepts",
     "title": "Luxor.origin",
-    "category": "Function",
+    "category": "function",
     "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\norigin(x, y)\n\nReset the current matrix, then move the 0/0 position relative to the top left corner of the drawing.\n\n\n\norigin(pt:Point)\n\nReset the current matrix, then move the 0/0 position to pt.\n\n\n\n"
 },
 
@@ -348,7 +348,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.gsave",
     "page": "Basic concepts",
     "title": "Luxor.gsave",
-    "category": "Function",
+    "category": "function",
     "text": "gsave()\n\nSave the current color settings on the stack.\n\n\n\n"
 },
 
@@ -356,7 +356,7 @@ var documenterSearchIndex = {"docs": [
     "location": "basics.html#Luxor.grestore",
     "page": "Basic concepts",
     "title": "Luxor.grestore",
-    "category": "Function",
+    "category": "function",
     "text": "grestore()\n\nReplace the current graphics state with the one on top of the stack.\n\n\n\n"
 },
 
@@ -388,7 +388,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.rect",
     "page": "Simple graphics",
     "title": "Luxor.rect",
-    "category": "Function",
+    "category": "function",
     "text": "rect(xmin, ymin, w, h, action)\n\nCreate a rectangle with one corner at (xmin/ymin) with width w and height h and then do an action.\n\nSee box() for more ways to do similar things, such as supplying two opposite corners, placing by centerpoint and dimensions.\n\n\n\nrect(cornerpoint, w, h, action)\n\nCreate a rectangle with one corner at cornerpoint with width w and height h and do an action.\n\n\n\n"
 },
 
@@ -396,7 +396,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.box",
     "page": "Simple graphics",
     "title": "Luxor.box",
-    "category": "Function",
+    "category": "function",
     "text": "box(cornerpoint1, cornerpoint2, action=:nothing)\n\nCreate a rectangle between two points and do an action.\n\n\n\nbox(points::AbstractArray, action=:nothing)\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\n\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\n\n\nbox(x, y, width, height, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height.\n\n\n\nbox(x, y, width, height, cornerradius, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height. Round each corner by cornerradius.\n\n\n\nbox(t::Table, r::Int, c::Int, action::Symbol=:nothing)\n\nDraw a box in table t at row r and column c.\n\n\n\nbox(t::Table, cellnumber::Int, action::Symbol=:nothing)\n\nDraw box cellnumber in table t.\n\n\n\n"
 },
 
@@ -404,7 +404,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.polybbox",
     "page": "Simple graphics",
     "title": "Luxor.polybbox",
-    "category": "Function",
+    "category": "function",
     "text": "Find the bounding box of a polygon (array of points).\n\npolybbox(pointlist::AbstractArray)\n\nReturn the two opposite corners (suitable for box(), for example).\n\n\n\n"
 },
 
@@ -420,7 +420,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.circle",
     "page": "Simple graphics",
     "title": "Luxor.circle",
-    "category": "Function",
+    "category": "function",
     "text": "circle(x, y, r, action=:nothing)\n\nMake a circle of radius r centered at x/y.\n\naction is one of the actions applied by do_action, defaulting to :nothing. You can also use ellipse() to draw circles and place them by their centerpoint.\n\n\n\ncircle(pt, r, action)\n\nMake a circle centered at pt.\n\n\n\ncircle(pt1::Point, pt2::Point, action=:nothing)\n\nMake a circle that passes through two points that define the diameter:\n\n\n\n"
 },
 
@@ -428,7 +428,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.ellipse",
     "page": "Simple graphics",
     "title": "Luxor.ellipse",
-    "category": "Function",
+    "category": "function",
     "text": "ellipse(xc, yc, w, h, action=:none)\n\nMake an ellipse, centered at xc/yc, fitting in a box of width w and height h.\n\n\n\nellipse(cpt, w, h, action=:none)\n\nMake an ellipse, centered at point c, with width w, and height h.\n\n\n\nellipse(focus1::Point, focus2::Point, k, action=:none;\n        stepvalue=pi/100,\n        vertices=false,\n        reversepath=false)\n\nBuild a polygon approximation to an ellipse, given two points and a distance, k, which is the sum of the distances to the focii of any points on the ellipse (or the shortest length of string required to go from one focus to the perimeter and on to the other focus).\n\n\n\n"
 },
 
@@ -436,7 +436,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.circlepath",
     "page": "Simple graphics",
     "title": "Luxor.circlepath",
-    "category": "Function",
+    "category": "function",
     "text": "circlepath(center::Point, radius, action=:none;\n    reversepath=false,\n    kappa = 0.5522847)\n\nDraw a circle using Bézier curves.\n\n\n\n"
 },
 
@@ -452,7 +452,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.sector",
     "page": "Simple graphics",
     "title": "Luxor.sector",
-    "category": "Function",
+    "category": "function",
     "text": "sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)\n\nDraw an annular sector centered at centerpoint.\n\n\n\nsector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,\n   action::Symbol=:none)\n\nDraw an annular sector centered at the origin.\n\n\n\nsector(centerpoint::Point, innerradius, outerradius, startangle, endangle,\n    cornerradius, action:none)\n\nDraw an annular sector with rounded corners, basically a bent sausage shape, centered at centerpoint.\n\nTODO: The results aren\'t 100% accurate at the moment. There are small discontinuities where the curves join.\n\nThe cornerradius is reduced from the supplied value if neceesary to prevent overshoots.\n\n\n\nsector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,\n   cornerradius::Real, action::Symbol=:none)\n\nDraw an annular sector with rounded corners, centered at the current origin.\n\n\n\n"
 },
 
@@ -460,7 +460,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.pie",
     "page": "Simple graphics",
     "title": "Luxor.pie",
-    "category": "Function",
+    "category": "function",
     "text": "pie(x, y, radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at x/y. Angles start at the positive x-axis and are measured clockwise.\n\n\n\npie(centerpoint, radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at centerpoint.\n\nAngles start at the positive x-axis and are measured clockwise.\n\n\n\npie(radius, startangle, endangle, action=:none)\n\nDraw a pie shape centered at the origin\n\n\n\n"
 },
 
@@ -468,7 +468,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.spiral",
     "page": "Simple graphics",
     "title": "Luxor.spiral",
-    "category": "Function",
+    "category": "function",
     "text": "spiral(a, b, action::Symbol=:none;\n                 stepby = 0.01,\n                 period = 4pi,\n                 vertices = false,\n                 log=false)\n\nMake a spiral. The two primary parameters a and b determine the start radius, and the tightness.\n\nFor linear spirals (log=false), b values are:\n\nlituus: -2\n\nhyperbolic spiral: -1\n\nArchimedes\' spiral: 1\n\nFermat\'s spiral: 2\n\nFor logarithmic spirals (log=true):\n\ngolden spiral: b = ln(phi)/ (pi/2) (about 0.30)\n\nValues of b around 0.1 produce tighter, staircase-like spirals.\n\n\n\n"
 },
 
@@ -476,7 +476,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.squircle",
     "page": "Simple graphics",
     "title": "Luxor.squircle",
-    "category": "Function",
+    "category": "function",
     "text": "squircle(center::Point, hradius, vradius, action=:none;\n    rt = 0.5, stepby = pi/40, vertices=false)\n\nMake a squircle (basically a rectangle with rounded corners). Specify the center position, horizontal radius (distance from center to a side), and vertical radius (distance from center to top or bottom):\n\nThe rt option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make the shape more square. Values above make the shape more round.\n\n\n\n"
 },
 
@@ -492,7 +492,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.move",
     "page": "Simple graphics",
     "title": "Luxor.move",
-    "category": "Function",
+    "category": "function",
     "text": "move(x, y)\nmove(pt)\n\nMove to a point.\n\n\n\n"
 },
 
@@ -500,7 +500,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.rmove",
     "page": "Simple graphics",
     "title": "Luxor.rmove",
-    "category": "Function",
+    "category": "function",
     "text": "rmove(x, y)\n\nMove by an amount from the current point. Move relative to current position by x and y:\n\nMove relative to current position by the pt\'s x and y:\n\nrmove(pt)\n\n\n\n"
 },
 
@@ -508,7 +508,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.newpath",
     "page": "Simple graphics",
     "title": "Luxor.newpath",
-    "category": "Function",
+    "category": "function",
     "text": "newpath()\n\nCreate a new path. This is Cairo\'s new_path() function.\n\n\n\n"
 },
 
@@ -516,7 +516,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.newsubpath",
     "page": "Simple graphics",
     "title": "Luxor.newsubpath",
-    "category": "Function",
+    "category": "function",
     "text": "newsubpath()\n\nAdd a new subpath to the current path. This is Cairo\'s new_sub_path() function. It can be used for example to make holes in shapes.\n\n\n\n"
 },
 
@@ -524,7 +524,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.closepath",
     "page": "Simple graphics",
     "title": "Luxor.closepath",
-    "category": "Function",
+    "category": "function",
     "text": "closepath()\n\nClose the current path. This is Cairo\'s close_path() function.\n\n\n\n"
 },
 
@@ -540,7 +540,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.line",
     "page": "Simple graphics",
     "title": "Luxor.line",
-    "category": "Function",
+    "category": "function",
     "text": "line(x, y)\nline(x, y, :action)\nline(pt)\n\nCreate a line from the current position to the x/y position and optionally apply an action:\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n"
 },
 
@@ -548,7 +548,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.rline",
     "page": "Simple graphics",
     "title": "Luxor.rline",
-    "category": "Function",
+    "category": "function",
     "text": "rline(x, y)\nrline(x, y, :action)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position and optionally apply an action:\n\n\n\n"
 },
 
@@ -556,7 +556,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.rule",
     "page": "Simple graphics",
     "title": "Luxor.rule",
-    "category": "Function",
+    "category": "function",
     "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the x-axis. Returns the two points.\n\nThe end points are not calculated exactly, they\'re just a long way apart.\n\n\n\n"
 },
 
@@ -572,7 +572,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.arc",
     "page": "Simple graphics",
     "title": "Luxor.arc",
-    "category": "Function",
+    "category": "function",
     "text": "arc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAdd an arc to the current path from angle1 to angle2 going clockwise, centered at xc, yc.\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\narc(centerpoint::Point, radius, angle1, angle2, action=:nothing)\n\nAdd an arc to the current path from angle1 to angle2 going clockwise, centered at centerpoint.\n\n\n\n"
 },
 
@@ -580,7 +580,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.arc2r",
     "page": "Simple graphics",
     "title": "Luxor.arc2r",
-    "category": "Function",
+    "category": "function",
     "text": "  arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nMake a circular arc centered at c1 that starts at p2 and ends at p3, going clockwise.\n\nc1-p2 really determines the radius. If p3 doesn\'t lie on the circular path,  it will be used only as an indication of the arc\'s length, rather than its position.\n\n\n\n"
 },
 
@@ -588,7 +588,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.carc",
     "page": "Simple graphics",
     "title": "Luxor.carc",
-    "category": "Function",
+    "category": "function",
     "text": "carc(xc, yc, radius, angle1, angle2, action=:nothing)\n\nAdd an arc to the current path from angle1 to angle2 going counterclockwise, centered at xc/yc.\n\nAngles are defined relative to the x-axis, positive clockwise.\n\n\n\ncarc(centerpoint::Point, radius, angle1, angle2, action=:nothing)\n\nAdd an arc centered at centerpoint to the current path from angle1 to angle2, going counterclockwise.\n\n\n\n"
 },
 
@@ -596,7 +596,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.carc2r",
     "page": "Simple graphics",
     "title": "Luxor.carc2r",
-    "category": "Function",
+    "category": "function",
     "text": "carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nMake a circular arc centered at c1 that starts at p2 and ends at p3, going counterclockwise.\n\nc1-p2 really determines the radius. If p3 doesn\'t lie on the circular path, it will be used only as an indication of the arc\'s length, rather than its position.\n\n\n\n"
 },
 
@@ -604,7 +604,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.curve",
     "page": "Simple graphics",
     "title": "Luxor.curve",
-    "category": "Function",
+    "category": "function",
     "text": "curve(x1, y1, x2, y2, x3, y3)\ncurve(p1, p2, p3)\n\nAdd a Bézier curve.\n\nThe spline starts at the current position, finishing at x3/y3 (p3), following two control points x1/y1 (p1) and x2/y2 (p2).\n\n\n\n"
 },
 
@@ -620,7 +620,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.midpoint",
     "page": "Simple graphics",
     "title": "Luxor.midpoint",
-    "category": "Function",
+    "category": "function",
     "text": "midpoint(p1, p2)\n\nFind the midpoint between two points.\n\n\n\nmidpoint(a)\n\nFind midpoint between the first two elements of an array of points.\n\n\n\n"
 },
 
@@ -628,7 +628,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.between",
     "page": "Simple graphics",
     "title": "Luxor.between",
-    "category": "Function",
+    "category": "function",
     "text": "between(p1::Point, p2::Point, x)\nbetween((p1::Point, p2::Point), x)\n\nFind the point between point p1 and point p2 for x, where x is typically between 0 and 1, so these two should be equivalent:\n\nbetween(p1, p2, 0.5)\n\nand\n\nmidpoint(p1, p2)\n\n\n\n"
 },
 
@@ -636,7 +636,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.center3pts",
     "page": "Simple graphics",
     "title": "Luxor.center3pts",
-    "category": "Function",
+    "category": "function",
     "text": "center3pts(a::Point, b::Point, c::Point)\n\nFind the radius and center point for three points lying on a circle.\n\nreturns (centerpoint, radius) of a circle. Then you can use circle() to place a circle, or arc() to draw an arc passing through those points.\n\nIf there\'s no such circle, then you\'ll see an error message in the console and the function returns (Point(0,0), 0).\n\n\n\n"
 },
 
@@ -644,7 +644,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.intersection",
     "page": "Simple graphics",
     "title": "Luxor.intersection",
-    "category": "Function",
+    "category": "function",
     "text": "intersection(p1::Point, p2::Point, p3::Point, p4::Point;\n    commonendpoints = false,\n    crossingonly = false,\n    collinearintersect = false)\n\nFind intersection of two lines p1-p2 and p3-p4\n\nThis returns a tuple: (boolean, point(x, y)).\n\nKeyword options and default values:\n\ncrossingonly = false\n\nIf crossingonly = true, lines must actually cross. The function returns (false, intersectionpoint) if the lines don\'t actually cross, but would eventually intersect at intersectionpoint if continued beyond their current endpoints.\n\nIf false, the function returns (true, Point(x, y)) if the lines intersect somewhere eventually at intersectionpoint.\n\ncommonendpoints = false\n\nIf commonendpoints= true, will return (false, Point(0, 0)) if the lines share a common end point (because that\'s not so much an intersection, more a meeting).\n\nFunction returns (false, Point(0, 0)) if the lines are undefined.\n\nIf you want collinear points to be considered to intersect, set collinearintersect to true, although it defaults to false.\n\n\n\n"
 },
 
@@ -652,7 +652,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.intersectionlinecircle",
     "page": "Simple graphics",
     "title": "Luxor.intersectionlinecircle",
-    "category": "Function",
+    "category": "function",
     "text": "intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r)\n\nFind the intersection points of a line (extended through points p1 and p2) and a circle.\n\nReturn a tuple of (n, pt1, pt2)\n\nwhere\n\nn is the number of intersections, 0, 1, or 2\npt1 is first intersection point, or Point(0, 0) if none\npt2 is the second intersection point, or Point(0, 0) if none\n\nThe calculated intersection points won\'t necessarily lie on the line segment between p1 and p2.\n\n\n\n"
 },
 
@@ -660,7 +660,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.intersection2circles",
     "page": "Simple graphics",
     "title": "Luxor.intersection2circles",
-    "category": "Function",
+    "category": "function",
     "text": "intersection2circles(pt1, r1, pt2, r2)\n\nFind the area of intersection between two circles, the first centered at pt1 with radius r1, the second centered at pt2 with radius r2.\n\n\n\n"
 },
 
@@ -668,7 +668,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.intersectioncirclecircle",
     "page": "Simple graphics",
     "title": "Luxor.intersectioncirclecircle",
-    "category": "Function",
+    "category": "function",
     "text": "intersectioncirclecircle(cp1, r1, cp2, r2)\n\nFind the two points where two circles intersect, if they do. The first circle is centered at cp1 with radius r1, and the second is centered at cp1 with radius r1.\n\nReturns\n\n(flag, ip1, ip2)\n\nwhere flag is a Boolean true if the circles intersect at the points ip1 and ip2. If the circles don\'t intersect at all, or one is completely inside the other, flag is false and the points are both Point(0, 0).\n\nUse intersection2circles() to find the area of two overlapping circles.\n\nIn the pure world of maths, it must be possible that two circles \'kissing\' only have a single intersection point. At present, this unromantic function reports that two kissing circles have no intersection points.\n\n\n\n"
 },
 
@@ -676,7 +676,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.bboxesintersect",
     "page": "Simple graphics",
     "title": "Luxor.bboxesintersect",
-    "category": "Function",
+    "category": "function",
     "text": "bboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)\n\nReturn true if the two bounding boxes defined by acorner1:acorner2 and bcorner1:bcorner2 intersect.\n\nEach pair of points is assumed to define the two opposite corners of a bounding box.\n\n\n\n"
 },
 
@@ -684,7 +684,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.getnearestpointonline",
     "page": "Simple graphics",
     "title": "Luxor.getnearestpointonline",
-    "category": "Function",
+    "category": "function",
     "text": "getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)\n\nGiven a line from pt1 to pt2, and startpt is the start of a perpendicular heading to meet the line, at what point does it hit the line?\n\n\n\n"
 },
 
@@ -692,7 +692,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.pointlinedistance",
     "page": "Simple graphics",
     "title": "Luxor.pointlinedistance",
-    "category": "Function",
+    "category": "function",
     "text": "pointlinedistance(p::Point, a::Point, b::Point)\n\nFind the distance between a point p and a line between two points a and b.\n\n\n\n"
 },
 
@@ -700,7 +700,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.slope",
     "page": "Simple graphics",
     "title": "Luxor.slope",
-    "category": "Function",
+    "category": "function",
     "text": "slope(pointA::Point, pointB::Point)\n\nFind angle of a line starting at pointA and ending at pointB.\n\nReturn a value between 0 and 2pi. Value will be relative to the current axes.\n\nslope(O, Point(0, 100)) |> rad2deg # y is positive down the page\n90.0\n\nslope(Point(0, 100), O) |> rad2deg\n270.0\n\n\n\n"
 },
 
@@ -708,7 +708,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.perpendicular",
     "page": "Simple graphics",
     "title": "Luxor.perpendicular",
-    "category": "Function",
+    "category": "function",
     "text": "perpendicular(p::Point)\n\nReturns point Point(p.y, -p.x).\n\n\n\n"
 },
 
@@ -716,7 +716,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.@polar",
     "page": "Simple graphics",
     "title": "Luxor.@polar",
-    "category": "Macro",
+    "category": "macro",
     "text": "@polar (p)\n\nConvert a tuple of two numbers to a Point of x, y Cartesian coordinates.\n\n@polar (10, pi/4)\n@polar [10, pi/4]\n\nproduces\n\nLuxor.Point(7.0710678118654755,7.071067811865475)\n\n\n\n"
 },
 
@@ -724,7 +724,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.polar",
     "page": "Simple graphics",
     "title": "Luxor.polar",
-    "category": "Function",
+    "category": "function",
     "text": "polar(r, theta)\n\nConvert point in polar form (radius and angle) to a Point.\n\npolar(10, pi/4)\n\nproduces\n\nLuxor.Point(7.071067811865475,7.0710678118654755)\n\n\n\n"
 },
 
@@ -740,7 +740,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.arrow",
     "page": "Simple graphics",
     "title": "Luxor.arrow",
-    "category": "Function",
+    "category": "function",
     "text": "arrow(startpoint::Point, endpoint::Point;\n    linewidth = 1.0,\n    arrowheadlength = 10,\n    arrowheadangle = pi/8)\n\nDraw a line between two points and add an arrowhead at the end. The arrowhead length will be the length of the side of the arrow\'s head, and the arrowhead angle is the angle between the sloping side of the arrowhead and the arrow\'s shaft.\n\nArrows don\'t use the current linewidth setting (setline()), and defaults to 1, but you can specify another value. It doesn\'t need stroking/filling, the shaft is stroked and the head filled with the current color.\n\n\n\narrow(centerpos::Point, radius, startangle, endangle;\n    linewidth = 1.0,\n    arrowheadlength = 10,\n    arrowheadangle = pi/8)\n\nDraw a curved arrow, an arc centered at centerpos starting at startangle and ending at endangle with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.\n\nArrows don\'t use the current linewidth setting (setline()); you can specify the linewidth.\n\n\n\n"
 },
 
@@ -756,7 +756,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.julialogo",
     "page": "Simple graphics",
     "title": "Luxor.julialogo",
-    "category": "Function",
+    "category": "function",
     "text": "julialogo(;action=:fill, color=true)\n\nDraw the Julia logo. The default action is to fill the logo and use the colors:\n\njulialogo()\n\nIf color is false, the logo will use the current color, and the dots won\'t be colored in the usual way.\n\nThe logo\'s dimensions are about 330 wide and 240 high, and the 0/0 point is at the bottom left corner. To place the logo by locating its center, do this:\n\ngsave()\ntranslate(-165, -120)\njulialogo() # locate center at 0/0\ngrestore()\n\nTo use the logo as a clipping mask:\n\njulialogo(action=:clip)\n\n(In this case the color setting is automatically ignored.)\n\n\n\n"
 },
 
@@ -764,7 +764,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.juliacircles",
     "page": "Simple graphics",
     "title": "Luxor.juliacircles",
-    "category": "Function",
+    "category": "function",
     "text": "juliacircles(radius=100)\n\nDraw the three Julia circles in color centered at the origin.\n\nThe distance of the centers of the circles from the origin is radius. The optional keyword arguments outercircleratio (default 0.75) and innercircleratio (default 0.65) control the radius of the individual colored circles relative to the radius. So you can get relatively smaller or larger circles by adjusting the ratios.\n\n\n\n"
 },
 
@@ -788,7 +788,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.hypotrochoid",
     "page": "Simple graphics",
     "title": "Luxor.hypotrochoid",
-    "category": "Function",
+    "category": "function",
     "text": "hypotrochoid(R, r, d, action=:none;\n        stepby=0.01,\n        period=0,\n        vertices=false)\n\nMake a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius r rolling around the inside  of a fixed circle of radius R, where the point is a distance d from  the center of the interior circle. Things get interesting if you supply non-integral values.\n\nSpecial cases include the hypocycloid, if d = r, and an ellipse, if R = 2r.\n\nstepby, the angular step value, controls the amount of detail, ie the smoothness of the polygon,\n\nIf period is not supplied, or 0, the lowest period is calculated for you.\n\nThe function can return a polygon (a list of points), or draw the points directly using the supplied action. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of pi).\n\n\n\n"
 },
 
@@ -796,7 +796,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.epitrochoid",
     "page": "Simple graphics",
     "title": "Luxor.epitrochoid",
-    "category": "Function",
+    "category": "function",
     "text": "epitrochoid(R, r, d, action=:none;\n        stepby=0.01,\n        period=0,\n        vertices=false)\n\nMake a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius r rolling around the outside of a fixed circle of radius R, where the point is a distance d from the center of the circle. Things get interesting if you supply non-integral values.\n\nstepby, the angular step value, controls the amount of detail, ie the smoothness of the polygon.\n\nIf period is not supplied, or 0, the lowest period is calculated for you.\n\nThe function can return a polygon (a list of points), or draw the points directly using the supplied action. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of pi).\n\n\n\n"
 },
 
@@ -812,7 +812,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.cropmarks",
     "page": "Simple graphics",
     "title": "Luxor.cropmarks",
-    "category": "Function",
+    "category": "function",
     "text": "cropmarks(center, width, height)\n\nDraw cropmarks (also known as trim marks).\n\n\n\n"
 },
 
@@ -828,7 +828,7 @@ var documenterSearchIndex = {"docs": [
     "location": "simplegraphics.html#Luxor.bars",
     "page": "Simple graphics",
     "title": "Luxor.bars",
-    "category": "Function",
+    "category": "function",
     "text": "bars(values::AbstractArray;\n        yheight = 200,\n        xwidth = 25,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array. The bars will fit in a box yheight high (even if there are negative values).\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nand pass them like this:\n\nbars(v, yheight=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n"
 },
 
@@ -860,7 +860,7 @@ var documenterSearchIndex = {"docs": [
     "location": "tables-grids.html#Luxor.Tiler",
     "page": "Tables and grids",
     "title": "Luxor.Tiler",
-    "category": "Type",
+    "category": "type",
     "text": "tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)\n\nA Tiler is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, nrows/ncols are the number of rows and columns required, and margin is applied to all four edges of the area before the function calculates the tile sizes required.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\ntiles = Tiler(1000, 800, 4, 5, margin=20)   for (pos, n) in tiles       # the point pos is the center of the tile   end\n\nYou can access the calculated tile width and height like this:\n\ntiles = Tiler(1000, 800, 4, 5, margin=20)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt\'s sometimes useful to know which row and column you\'re currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nTo use a Tiler to make grid points:\n\nfirst.(collect(Tiler(800, 800, 4, 4))\n\nwhich returns an array of points that are the center points of the grid.\n\n\n\n"
 },
 
@@ -868,7 +868,7 @@ var documenterSearchIndex = {"docs": [
     "location": "tables-grids.html#Luxor.Partition",
     "page": "Tables and grids",
     "title": "Luxor.Partition",
-    "category": "Type",
+    "category": "type",
     "text": "p = Partition(areawidth, areaheight, tilewidth, tileheight)\n\nA Partition is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of each tile in a set of tiles that divide up a\n\nrectangular space such as a page into rows and columns (relative to current 0/0)\n\nthe number of the tile\n\nareawidth and areaheight are the dimensions of the area to be tiled, tilewidth/tileheight are the dimensions of the tiles.\n\nTiler and Partition are similar:\n\nPartition lets you specify the width and height of a cell\nTiler lets you specify how many rows and columns of cells you want, and a margin\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    # the point pos is the center of the tile\nend\n\nYou can access the calculated tile width and height like this:\n\ntiles = Partition(1200, 1200, 30, 30)\nfor (pos, n) in tiles\n    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)\nend\n\nIt\'s sometimes useful to know which row and column you\'re currently on:\n\ntiles.currentrow\ntiles.currentcol\n\nshould have that information for you.\n\nUnless the tilewidth and tileheight are exact multiples of the area width and height, you\'ll see a border at the right and bottom where the tiles won\'t fit.\n\n\n\n"
 },
 
@@ -893,7 +893,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Tables and grids",
     "title": "Varying row heights and column widths",
     "category": "section",
-    "text": "To specify varying row heights and column widths, supply arrays or ranges to the Table constructor. The next example has three rows, of heights 50, 100, and 150 units, and seven columns, with gradually increasing widths:using Luxor # hide\nDrawing(600, 400, \"assets/figures/table1.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nfontsize(12) # hide\nsrand(42) # hide\n\nt = Table([50, 100, 150], 15:20:140)\n\nfor (pt, n) in t\n    randomhue()\n    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)\n    sethue(\"white\")\n    text(string(n), pt, halign=:center)\nend\n\nfinish() # hide\nnothing # hide(Image: table 1)To fill table cells, it\'s useful to be able to access the table\'s row and column specifications (using the colwidths and rowheights fields), and iteration can also provide information about the current row and column being processed (currentrow and currentcol).To ensure that graphic elements don\'t stray outside the cell walls, use a clipping region."
+    "text": "To specify varying row heights and column widths, supply arrays or ranges to the Table constructor. The next example has logarithmically increasing row heights, and four columns of width 130 points:using Luxor # hide\nDrawing(600, 400, \"assets/figures/table1.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\nt = Table(logspace(0.7, 1.5, 25), fill(130, 4))\n\nfor (pt, n) in t\n    setgray(rescale(n, 1, length(t), 0, 1))\n    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)\n    sethue(\"white\")\n    fontsize(t.rowheights[t.currentrow])\n    text(string(n), pt, halign=:center, valign=:middle)\nend\n\nfinish() # hide\nnothing # hide(Image: table 1)To fill table cells, it\'s useful to be able to access the table\'s row and column specifications (using the colwidths and rowheights fields), and iteration can also provide information about the current row and column being processed (currentrow and currentcol).To ensure that graphic elements don\'t stray outside the cell walls, you can use a clipping region."
+},
+
+{
+    "location": "tables-grids.html#Luxor.Table",
+    "page": "Tables and grids",
+    "title": "Luxor.Table",
+    "category": "type",
+    "text": "t = Table(nrows, ncols)\nt = Table(nrows, ncols, colwidth, rowheight)\nt = Table(rowheights, columnwidths)\n\nTables are centered at O, but you can supply a point after the specifications.\n\nt = Table(nrows, ncols, centerpoint)\nt = Table(nrows, ncols, colwidth, rowheight, centerpoint)\nt = Table(rowheights, columnwidths, centerpoint)\n\nExamples\n\nSimple tables\n\nt = Table(4, 3) # 4 rows and 3 cols, default is 100w, 50 h\nt = Table(4, 3, 80, 30)   # 4 rows of 30pts high, 3 cols of 80pts wide\nt = Table(4, 3, (80, 30)) # same\nt = Table((4, 3), (80, 30)) # same\n\nSpecify row heights and column widths instead of quantities:\n\nt = Table([60, 40, 100], 50) # 3 different height rows, 1 column 50 wide\nt = Table([60, 40, 100], [100, 60, 40]) # 3 rows, 3 columns\nt = Table(fill(30, (10)), [50, 50, 50]) # 10 rows 30 high, 3 columns 10 wide\nt = Table(50, [60, 60, 60]) # just 1 row (50 high), 3 columns 60 wide\nt = Table([50], [50]) # just 1 row, 1 column, both 50 units wide\nt = Table(50, 50, 10, 5) # 50 rows, 50 columns, 10 units wide, 5 units high\nt = Table([6, 11, 16, 21, 26, 31, 36, 41, 46], [6, 11, 16, 21, 26, 31, 36, 41, 46])\nt = Table(15:5:55, vcat(5:2:15, 15:-2:5))\n #  table has 108 cells, with:\n #  row heights: 15 20 25 30 35 40 45 50 55\n #  col widths:  5 7 9 11 13 15 15 13 11 9 7 5\nt = Table(vcat(5:10:60, 60:-10:5), vcat(5:10:60, 60:-10:5))\nt = Table(vcat(5:10:60, 60:-10:5), 50) # 1 column 50 units wide\nt = Table(vcat(5:10:60, 60:-10:5), 1:5:50)\n\nA Table is an iterator that, for each iteration, returns a tuple of:\n\nthe x/y point of the center of cells arranged in rows and columns (relative to current 0/0)\nthe number of the cell (left to right, then top to bottom)\n\nnrows/ncols are the number of rows and columns required.\n\nIt\'s sometimes useful to know which row and column you\'re currently on while iterating:\n\nt.currentrow\nt.currentcol\n\nand row heights and column widths are available in:\n\nt.rowheights\nt.colheights\n\nbox(t::Table, r, c) can be used to fill table cells:\n\n@svg begin\n    for (pt, n) in (t = Table(8, 3, 30, 15))\n        randomhue()\n        box(t, t.currentrow, t.currentcol, :fill)\n        sethue(\"white\")\n        text(string(n), pt)\n    end\nend\n\nor without iteration, using cellnumber:\n\n@svg begin\n    t = Table(8, 3, 30, 15)\n    for n in 1:length(t)\n        randomhue()\n        box(t, n, :fill)\n        sethue(\"white\")\n        text(string(n), t[n])\n    end\nend\n\nTo use a Table to make grid points:\n\njulia> first.(collect(Table(10, 6)))\n60-element Array{Luxor.Point,1}:\n Luxor.Point(-10.0, -18.0)\n Luxor.Point(-6.0, -18.0)\n Luxor.Point(-2.0, -18.0)\n ⋮\n Luxor.Point(2.0, 18.0)\n Luxor.Point(6.0, 18.0)\n Luxor.Point(10.0, 18.0)\n\nwhich returns an array of points that are the center points of the cells in the table.\n\n\n\n"
 },
 
 {
@@ -901,14 +909,14 @@ var documenterSearchIndex = {"docs": [
     "page": "Tables and grids",
     "title": "Drawing arrays and dataframes",
     "category": "section",
-    "text": "With a little bit of extra work you can write code that draws objects like arrays and dataframes combining text with graphic features. For example, this code draws arrays visually and numerically.using Luxor # hide\nfunction drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)\n    setline(1.5)\n    cellwidth = t.colwidths[column] - 10\n    leftmargin = t[row, column] - (cellwidth/2, 0)\n    sethue(\"gray70\")\n    box(leftmargin - (0, barheight/2), leftmargin + (cellwidth, barheight/2), :fill)\n    boxwidth = rescale(data[row, column], minvalue, maxvalue, 0, cellwidth)\n    sethue(\"thistle\")\n    box(leftmargin - (0, barheight/2), leftmargin + (boxwidth, barheight/2), :fill)\n    sethue(\"black\")\n    line(leftmargin + (boxwidth, -barheight/2),\n         leftmargin + (boxwidth, +barheight/2),\n         :stroke)\n    text(string(round(data[row, column], 3)), t[row, column] - (cellwidth/2, 10),\n         halign=:left)\nend\n\nDrawing(700, 250, \"assets/figures/arraytable.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nA = rand(6, 6)\nl, h = extrema(A)\nrt, ct = size(A)\nt = Table(size(A), (80, 30))\nfontface(\"Georgia\")\nfontsize(12)\nfor r in 1:rt\n    for c in 1:ct\n        drawbar(t, A, r, c, l, h, 10)\n    end\nend\nfinish() # hide\nnothing # hide(Image: grids)"
+    "text": "With a little bit of extra work you can write code that draws objects like arrays and dataframes combining text with graphic features. For example, this code draws arrays visually and numerically.using Luxor # hide\nfunction drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)\n    setline(1.5)\n    cellwidth = t.colwidths[column] - 10\n    leftmargin = t[row, column] - (cellwidth/2, 0)\n    sethue(\"gray70\")\n    box(leftmargin - (0, barheight/2), leftmargin + (cellwidth, barheight/2), :fill)\n    boxwidth = rescale(data[row, column], minvalue, maxvalue, 0, cellwidth)\n    sethue(\"thistle\")\n    box(leftmargin - (0, barheight/2), leftmargin + (boxwidth, barheight/2), :fill)\n    sethue(\"black\")\n    line(leftmargin + (boxwidth, -barheight/2),\n         leftmargin + (boxwidth, +barheight/2),\n         :stroke)\n    text(string(round(data[row, column], 3)), t[row, column] - (cellwidth/2, 10),\n         halign=:left)\nend\n\nDrawing(700, 250, \"assets/figures/arraytable.png\")  # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nA = rand(6, 6)\nl, h = extrema(A)\nrt, ct = size(A)\nt = Table(size(A), (80, 30))\nfontface(\"Georgia\")\nfontsize(12)\nfor r in 1:rt\n    for c in 1:ct\n        drawbar(t, A, r, c, l, h, 10)\n    end\nend\nfinish() # hide\nnothing # hide(Image: array table)Table"
 },
 
 {
     "location": "tables-grids.html#Luxor.GridRect",
     "page": "Tables and grids",
     "title": "Luxor.GridRect",
-    "category": "Type",
+    "category": "type",
     "text": "GridRect(startpoint, xspacing, yspacing, width, height)\n\nDefine a rectangular grid, to start at startpoint and proceed along the x-axis in steps of xspacing, then along the y-axis in steps of yspacing.\n\nGridRect(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)\n\nFor a column, set the xspacing to 0:\n\ngrid = GridRect(O, 0, 40)\n\nTo get points from the grid, use nextgridpoint(g::Grid).\n\njulia> grid = GridRect(O, 0, 40);\njulia> nextgridpoint(grid)\nLuxor.Point(0.0,0.0)\n\njulia> nextgridpoint(grid)\nLuxor.Point(0.0,40.0)\n\nWhen you run out of grid points, you\'ll wrap round and start again.\n\n\n\n"
 },
 
@@ -916,7 +924,7 @@ var documenterSearchIndex = {"docs": [
     "location": "tables-grids.html#Luxor.GridHex",
     "page": "Tables and grids",
     "title": "Luxor.GridHex",
-    "category": "Type",
+    "category": "type",
     "text": "GridHex(startpoint, radius, width=1200.0, height=1200.0)\n\nDefine a hexagonal grid, to start at startpoint and proceed along the x-axis and then along the y-axis, radius is the radius of a circle that encloses each hexagon. The distance in x between the centers of successive hexagons is:\n\nfracsqrt(3) radius2\n\nTo get the next point from the grid, use nextgridpoint(g::Grid).\n\nWhen you run out of grid points, you\'ll wrap round and start again.\n\n\n\n"
 },
 
@@ -924,7 +932,7 @@ var documenterSearchIndex = {"docs": [
     "location": "tables-grids.html#Luxor.nextgridpoint",
     "page": "Tables and grids",
     "title": "Luxor.nextgridpoint",
-    "category": "Function",
+    "category": "function",
     "text": "nextgridpoint(g::GridRect)\n\nReturns the next available (or even the first) grid point of a grid.\n\n\n\nnextgridpoint(g::GridHex)\n\nReturns the next available grid point of a hexagonal grid.\n\n\n\n"
 },
 
@@ -933,7 +941,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tables and grids",
     "title": "Grids",
     "category": "section",
-    "text": "You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they\'ll supply the next point on the grid when you ask for it.Define a rectangular grid with GridRect, and a hexagonal grid with GridHex. Get the next grid point from a grid with nextgridpoint(grid).using Luxor # hide\nDrawing(700, 250, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\ntranslate(50, 50) # hide\ngrid = GridRect(O, 40, 80, (10 - 1) * 40)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)using Luxor # hide\nDrawing(700, 400, \"assets/figures/grid-hex.png\")  # hide\nbackground(\"white\") # hide\nfontsize(22) # hide\ntranslate(100, 100) # hide\nradius = 70\ngrid = GridHex(O, radius, 600)\n\nfor i in 1:15\n    randomhue()\n    p = nextgridpoint(grid)\n    ngon(p, radius-5, 6, pi/2, :fillstroke)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)GridRect\nGridHex\nnextgridpoint"
+    "text": "You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they\'ll supply the next point on the grid when you ask for it.Define a rectangular grid with GridRect, and a hexagonal grid with GridHex. Get the next grid point from a grid with nextgridpoint(grid).using Luxor # hide\nDrawing(700, 250, \"assets/figures/grids.png\")  # hide\nbackground(\"white\") # hide\nfontsize(14) # hide\ntranslate(50, 50) # hide\nsrand(42) # hide\ngrid = GridRect(O, 40, 80, (10 - 1) * 40)\nfor i in 1:20\n    randomhue()\n    p = nextgridpoint(grid)\n    squircle(p, 20, 20, :fill)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: grids)using Luxor # hide\nDrawing(700, 400, \"assets/figures/grid-hex.png\")  # hide\nbackground(\"white\") # hide\nfontsize(22) # hide\nsrand(42)\ntranslate(100, 100) # hide\nradius = 70\ngrid = GridHex(O, radius, 600)\n\nfor i in 1:15\n    randomhue()\n    p = nextgridpoint(grid)\n    ngon(p, radius-5, 6, pi/2, :fillstroke)\n    sethue(\"white\")\n    text(string(i), p, halign=:center)\nend\nfinish() # hide\nnothing # hide(Image: hex grid)GridRect\nGridHex\nnextgridpoint"
 },
 
 {
@@ -956,7 +964,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.sethue",
     "page": "Colors and styles",
     "title": "Luxor.sethue",
-    "category": "Function",
+    "category": "function",
     "text": "sethue(\"black\")\nsethue(0.3, 0.7, 0.9)\nsetcolor(sethue(\"red\")..., .2)\n\nSet the color without changing opacity.\n\nsethue() is like setcolor(), but we sometimes want to change the current color without changing alpha/opacity. Using sethue() rather than setcolor() doesn\'t change the current alpha opacity.\n\nSee also setcolor.\n\n\n\nsethue(col::ColorTypes.Colorant)\n\nSet the color without changing the current alpha/opacity:\n\n\n\nsethue(0.3, 0.7, 0.9)\n\nSet the color\'s r, g, b values. Use setcolor(r,g,b,a) to set transparent colors.\n\n\n\nsethue((r, g, b))\n\nSet the color to the tuple\'s values.\n\n\n\nsethue((r, g, b, a))\n\nSet the color to the tuple\'s values.\n\n\n\n"
 },
 
@@ -964,7 +972,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setcolor",
     "page": "Colors and styles",
     "title": "Luxor.setcolor",
-    "category": "Function",
+    "category": "function",
     "text": "setcolor(\"gold\")\nsetcolor(\"darkturquoise\")\n\nSet the current color to a named color. This use the definitions in Colors.jl to convert a string to RGBA eg setcolor(\"gold\") or \"green\", \"darkturquoise\", \"lavender\", etc. The list is at Colors.color_names.\n\nUse sethue() for changing colors without changing current opacity level.\n\nsethue() and setcolor() return the three or four values that were used:\n\njulia> setcolor(sethue(\"red\")..., .8)\n\n(1.0,0.0,0.0,0.8)\n\njulia> sethue(setcolor(\"red\")[1:3]...)\n\n(1.0,0.0,0.0)\n\nYou can also do:\n\nusing Colors\nsethue(colorant\"red\")\n\nSee also setcolor.\n\n\n\nsetcolor(r, g, b)\nsetcolor(r, g, b, alpha)\nsetcolor(color)\nsetcolor(col::ColorTypes.Colorant)\nsetcolor(sethue(\"red\")..., .2)\n\nSet the current color.\n\nExamples:\n\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\nsetcolor(.2, .3, .4, .5)\nsetcolor(convert(Colors.HSV, Colors.RGB(0.5, 1, 1)))\n\nfor i in 1:15:360\n   setcolor(convert(Colors.RGB, Colors.HSV(i, 1, 1)))\n   ...\nend\n\nSee also sethue.\n\n\n\nsetcolor((r, g, b))\n\nSet the color to the tuple\'s values.\n\n\n\nsetcolor((r, g, b, a))\n\nSet the color to the tuple\'s values.\n\n\n\n"
 },
 
@@ -972,7 +980,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setgray",
     "page": "Colors and styles",
     "title": "Luxor.setgray",
-    "category": "Function",
+    "category": "function",
     "text": "setgray(n)\nsetgrey(n)\n\nSet the color to a gray level of n, where n is between 0 and 1.\n\n\n\n"
 },
 
@@ -980,7 +988,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setopacity",
     "page": "Colors and styles",
     "title": "Luxor.setopacity",
-    "category": "Function",
+    "category": "function",
     "text": "setopacity(alpha)\n\nSet the current opacity to a value between 0 and 1. This modifies the alpha value of the current color.\n\n\n\n"
 },
 
@@ -988,7 +996,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.randomhue",
     "page": "Colors and styles",
     "title": "Luxor.randomhue",
-    "category": "Function",
+    "category": "function",
     "text": "randomhue()\n\nSet a random hue, without changing the current alpha opacity.\n\n\n\n"
 },
 
@@ -996,7 +1004,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.randomcolor",
     "page": "Colors and styles",
     "title": "Luxor.randomcolor",
-    "category": "Function",
+    "category": "function",
     "text": "randomcolor()\n\nSet a random color. This may change the current alpha opacity too.\n\n\n\n"
 },
 
@@ -1004,7 +1012,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setblend",
     "page": "Colors and styles",
     "title": "Luxor.setblend",
-    "category": "Function",
+    "category": "function",
     "text": "setblend(blend)\n\nStart using the named blend for filling graphics.\n\nThis aligns the original coordinates of the blend definition with the current axes.\n\n\n\n"
 },
 
@@ -1020,7 +1028,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setline",
     "page": "Colors and styles",
     "title": "Luxor.setline",
-    "category": "Function",
+    "category": "function",
     "text": "setline(n)\n\nSet the line width.\n\n\n\n"
 },
 
@@ -1028,7 +1036,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setlinecap",
     "page": "Colors and styles",
     "title": "Luxor.setlinecap",
-    "category": "Function",
+    "category": "function",
     "text": "setlinecap(s)\n\nSet the line ends. s can be \"butt\" (the default), \"square\", or \"round\".\n\n\n\n"
 },
 
@@ -1036,7 +1044,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setlinejoin",
     "page": "Colors and styles",
     "title": "Luxor.setlinejoin",
-    "category": "Function",
+    "category": "function",
     "text": "setlinejoin(\"miter\")\nsetlinejoin(\"round\")\nsetlinejoin(\"bevel\")\n\nSet the line join style, or how to render the junction of two lines when stroking.\n\n\n\n"
 },
 
@@ -1044,7 +1052,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setdash",
     "page": "Colors and styles",
     "title": "Luxor.setdash",
-    "category": "Function",
+    "category": "function",
     "text": "setlinedash(\"dot\")\n\nSet the dash pattern to one of: \"solid\", \"dotted\", \"dot\", \"dotdashed\", \"longdashed\", \"shortdashed\", \"dash\", \"dashed\", \"dotdotdashed\", \"dotdotdotdashed\"\n\n\n\n"
 },
 
@@ -1052,7 +1060,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.fillstroke",
     "page": "Colors and styles",
     "title": "Luxor.fillstroke",
-    "category": "Function",
+    "category": "function",
     "text": "fillstroke()\n\nFill and stroke the current path.\n\n\n\n"
 },
 
@@ -1060,7 +1068,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.strokepath",
     "page": "Colors and styles",
     "title": "Luxor.strokepath",
-    "category": "Function",
+    "category": "function",
     "text": "strokepath()\n\nStroke the current path with the current line width, line join, line cap, and dash settings. The current path is then cleared.\n\n\n\n"
 },
 
@@ -1068,7 +1076,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.fillpath",
     "page": "Colors and styles",
     "title": "Luxor.fillpath",
-    "category": "Function",
+    "category": "function",
     "text": "fillpath()\n\nFill the current path according to the current settings. The current path is then cleared.\n\n\n\n"
 },
 
@@ -1076,7 +1084,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.strokepreserve",
     "page": "Colors and styles",
     "title": "Luxor.strokepreserve",
-    "category": "Function",
+    "category": "function",
     "text": "strokepreserve()\n\nStroke the current path with current line width, line join, line cap, and dash settings, but then keep the path current.\n\n\n\n"
 },
 
@@ -1084,7 +1092,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.fillpreserve",
     "page": "Colors and styles",
     "title": "Luxor.fillpreserve",
-    "category": "Function",
+    "category": "function",
     "text": "fillpreserve()\n\nFill the current path with current settings, but then keep the path current.\n\n\n\n"
 },
 
@@ -1092,7 +1100,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.paint",
     "page": "Colors and styles",
     "title": "Luxor.paint",
-    "category": "Function",
+    "category": "function",
     "text": "paint()\n\nPaint the current clip region with the current settings.\n\n\n\n"
 },
 
@@ -1100,7 +1108,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.do_action",
     "page": "Colors and styles",
     "title": "Luxor.do_action",
-    "category": "Function",
+    "category": "function",
     "text": "do_action(action)\n\nThis is usually called by other graphics functions. Actions for graphics commands include :fill, :stroke, :clip, :fillstroke, :fillpreserve, :strokepreserve, :none, and :path.\n\n\n\n"
 },
 
@@ -1116,7 +1124,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.blend",
     "page": "Colors and styles",
     "title": "Luxor.blend",
-    "category": "Function",
+    "category": "function",
     "text": "blend(from::Point, to::Point)\n\nCreate an empty linear blend.\n\nA blend is a specification of how one color changes into another. Linear blends are defined by two points: parallel lines through these points define the start and stop locations of the blend. The blend is defined relative to the current axes origin. This means that you should be aware of the current axes when you define blends, and when you use them.\n\nTo add colors, use addstop().\n\n\n\nblend(centerpos1, rad1, centerpos2, rad2, color1, color2)\n\nCreate a radial blend.\n\nExample:\n\nredblue = blend(\n    pos, 0,                   # first circle center and radius\n    pos, tiles.tilewidth/2,   # second circle center and radius\n    \"red\",\n    \"blue\"\n    )\n\n\n\nblend(pt1::Point, pt2::Point, color1, color2)\n\nCreate a linear blend.\n\nExample:\n\nredblue = blend(pos, pos, \"red\", \"blue\")\n\n\n\nblend(from::Point, startradius, to::Point, endradius)\n\nCreate an empty radial blend.\n\nRadial blends are defined by two circles that define the start and stop locations. The first point is the center of the start circle, the first radius is the radius of the first circle.\n\nA new blend is empty. To add colors, use addstop().\n\n\n\n"
 },
 
@@ -1124,7 +1132,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.addstop",
     "page": "Colors and styles",
     "title": "Luxor.addstop",
-    "category": "Function",
+    "category": "function",
     "text": "addstop(b::Blend, offset, col)\naddstop(b::Blend, offset, (r, g, b, a))\naddstop(b::Blend, offset, string)\n\nAdd a color stop to a blend. The offset specifies the location along the blend\'s \'control vector\', which varies between 0 (beginning of the blend) and 1 (end of the blend). For linear blends, the control vector is from the start point to the end point. For radial blends, the control vector is from any point on the start circle, to the corresponding point on the end circle.\n\nExamples:\n\nblendredblue = blend(Point(0, 0), 0, Point(0, 0), 1)\naddstop(blendredblue, 0, setcolor(sethue(\"red\")..., .2))\naddstop(blendredblue, 1, setcolor(sethue(\"blue\")..., .2))\naddstop(blendredblue, 0.5, sethue(randomhue()...))\naddstop(blendredblue, 0.5, setcolor(randomcolor()...))\n\n\n\n"
 },
 
@@ -1140,7 +1148,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.blendadjust",
     "page": "Colors and styles",
     "title": "Luxor.blendadjust",
-    "category": "Function",
+    "category": "function",
     "text": "blendadjust(ablend, center::Point, xscale, yscale, rot=0)\n\nModify an existing blend by scaling, translating, and rotating it so that it will fill a shape properly even if the position of the shape is nowhere near the original location of the blend\'s definition.\n\nFor example, if your blend definition was this (notice the 1)\n\nblendgoldmagenta = blend(\n        Point(0, 0), 0,                   # first circle center and radius\n        Point(0, 0), 1,                   # second circle center and radius\n        \"gold\",\n        \"magenta\"\n        )\n\nyou can use it in a shape that\'s 100 units across and centered at pos, by calling this:\n\nblendadjust(blendgoldmagenta, Point(pos.x, pos.y), 100, 100)\n\nthen use setblend():\n\nsetblend(blendgoldmagenta)\n\n\n\n"
 },
 
@@ -1156,7 +1164,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setmode",
     "page": "Colors and styles",
     "title": "Luxor.setmode",
-    "category": "Function",
+    "category": "function",
     "text": "setmode(mode::String)\n\nSet the compositing/blending mode. mode can be one of:\n\n\"clear\" Where the second object is drawn, the first is completely removed.\n\"source\" The second object is drawn as if nothing else were below.\n\"over\" The default mode: like two transparent slides overlapping.\n\"in\" The first object is removed completely, the second is only drawn where the first was.\n\"out\" The second object is drawn only where the first one wasn\'t.\n\"atop\" The first object is mostly intact, but mixes both objects in the overlapping area. The second object object is not drawn elsewhere.\n\"dest\" Discard the second object completely.\n\"dest_over\" Like \"over\" but draw second object below the first\n\"dest_in\" Keep the first object whereever the second one overlaps.\n\"dest_out\" The second object is used to reduce the visibility of the first where they overlap.\n\"dest_atop\" Like \"over\" but draw second object below the first.\n\"xor\" XOR where the objects overlap\n\"add\" Add the overlapping areas together\n\"saturate\" Increase Saturation where objects overlap\n\"multiply\" Multiply where objects overlap\n\"screen\" Input colors are complemented and multiplied, the product is complemented again. The result is at least as light as the lighter of the input colors.\n\"overlay\" Multiplies or screens colors, depending on the lightness of the destination color.\n\"darken\" Selects the darker of the color values in each component.\n\"lighten\" Selects the lighter of the color values in each component.\n\nSee the Cairo documentation for details.\n\n\n\n"
 },
 
@@ -1172,7 +1180,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.mesh",
     "page": "Colors and styles",
     "title": "Luxor.mesh",
-    "category": "Function",
+    "category": "function",
     "text": "mesh(bezierpath::AbstractArray{NTuple{4,Point}},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh. The first three or four elements of the supplied bezierpath define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nUse setmesh() to select the mesh, which will be used to fill shapes.\n\nExample\n\n@svg begin\n    bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))\n    mesh1 = mesh(bp, [\n        \"red\",\n        Colors.RGB(0, 1, 0),\n        Colors.RGB(0, 1, 1),\n        Colors.RGB(1, 0, 1)\n        ])\n    setmesh(mesh1)\n    box(O, 500, 500, :fill)\nend\n\n\n\nmesh(points::AbstractArray{Point},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh.\n\nCreate a mesh. The first three or four sides of the supplied points polygon define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nExample\n\n@svg begin\n    pl = ngon(O, 250, 3, pi/6, vertices=true)\n    mesh1 = mesh(pl, [\n        \"purple\",\n        Colors.RGBA(0.0, 1.0, 0.5, 0.5),\n        \"yellow\"\n        ])\n    setmesh(mesh1)\n    setline(180)\n    ngon(O, 250, 3, pi/6, :strokepreserve)\n    setline(5)\n    sethue(\"black\")\n    strokepath()\nend\n\n\n\n"
 },
 
@@ -1180,7 +1188,7 @@ var documenterSearchIndex = {"docs": [
     "location": "colors-styles.html#Luxor.setmesh",
     "page": "Colors and styles",
     "title": "Luxor.setmesh",
-    "category": "Function",
+    "category": "function",
     "text": "setmesh(mesh::Mesh)\n\nSelect a mesh previously created with mesh() for filling shapes.\n\n\n\n"
 },
 
@@ -1212,7 +1220,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.ngon",
     "page": "Polygons and paths",
     "title": "Luxor.ngon",
-    "category": "Function",
+    "category": "function",
     "text": "ngon(x, y, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false, reversepath=false)\n\nFind the vertices of a regular n-sided polygon centered at x, y with circumradius radius.\n\nngon() draws the shapes: if you just want the raw points, use keyword argument vertices=true, which returns the array of points instead. Compare:\n\nngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon\'s points:\n\n    4-element Array{Luxor.Point,1}:\n    Luxor.Point(2.4492935982947064e-16,4.0)\n    Luxor.Point(-4.0,4.898587196589413e-16)\n    Luxor.Point(-7.347880794884119e-16,-4.0)\n    Luxor.Point(4.0,-9.797174393178826e-16)\n\nwhereas\n\nngon(0, 0, 4, 4, 0, :close) # draws a polygon\n\n\n\nngon(centerpos, radius, sides=5, orientation=0, action=:nothing;\n    vertices=false,\n    reversepath=false)\n\nDraw a regular polygon centered at point centerpos:\n\n\n\n"
 },
 
@@ -1220,7 +1228,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.ngonside",
     "page": "Polygons and paths",
     "title": "Luxor.ngonside",
-    "category": "Function",
+    "category": "function",
     "text": "ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,\n    action=:nothing; kwargs...)\n\nDraw a regular polygon centered at centerpoint with sides sides of length sidelength.\n\n\n\n"
 },
 
@@ -1236,7 +1244,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.star",
     "page": "Polygons and paths",
     "title": "Luxor.star",
-    "category": "Function",
+    "category": "function",
     "text": "star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false,\n    reversepath=false)\n\nMake a star. ratio specifies the height of the smaller radius of the star relative to the larger.\n\nUse vertices=true to return the vertices of a star instead of drawing it.\n\n\n\nstar(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;\n    vertices = false, reversepath=false)\n\nDraw a star centered at a position:\n\n\n\n"
 },
 
@@ -1252,7 +1260,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.poly",
     "page": "Polygons and paths",
     "title": "Luxor.poly",
-    "category": "Function",
+    "category": "function",
     "text": "Draw a polygon.\n\npoly(pointlist::AbstractArray{Point, 1}, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn\'t close or fill the polygon, to allow for clipping.\n\n\n\n"
 },
 
@@ -1260,7 +1268,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.prettypoly",
     "page": "Polygons and paths",
     "title": "Luxor.prettypoly",
-    "category": "Function",
+    "category": "function",
     "text": "prettypoly(points::AbstractArray{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);\n    close=false,\n    reversepath=false,\n    vertexlabels = (n, l) -> ()\n    )\n\nDraw the polygon defined by points, possibly closing and reversing it, using the current parameters, and then evaluate the vertexfunction function at every vertex of the polygon.\n\nThe default vertexfunction draws a 2 pt radius circle.\n\nTo mark each vertex of a polygon with a randomly colored filled circle:\n\np = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(p, :fill, () ->\n    begin\n        randomhue()\n        circle(O, 10, :fill)\n    end,\n    close=true)\n\nThe optional keyword argument vertexlabels lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle \"1 of 3\", \"2 of 3\", and \"3 of 3\" using:\n\nprettypoly(triangle, :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l))))\n\n\n\n"
 },
 
@@ -1268,7 +1276,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.simplify",
     "page": "Polygons and paths",
     "title": "Luxor.simplify",
-    "category": "Function",
+    "category": "function",
     "text": "Simplify a polygon:\n\nsimplify(pointlist::AbstractArray, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n"
 },
 
@@ -1276,7 +1284,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.isinside",
     "page": "Polygons and paths",
     "title": "Luxor.isinside",
-    "category": "Function",
+    "category": "function",
     "text": "isinside(p, pol; allowonedge=false)\n\nIs a point p inside a polygon pol? Returns true if it does, or false.\n\nThis is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.\n\nThe classification of points lying on the edges of the target polygon, or coincident with its vertices is not clearly defined, due to rounding errors or arithmetical inadequacy. By default these will generate errors, but you can suppress these by setting allowonedge to true.\n\n\n\n"
 },
 
@@ -1284,7 +1292,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.randompoint",
     "page": "Polygons and paths",
     "title": "Luxor.randompoint",
-    "category": "Function",
+    "category": "function",
     "text": "randompoint(lowpt, highpt)\n\nReturn a random point somewhere inside the rectangle defined by the two points.\n\n\n\nrandompoint(lowx, lowy, highx, highy)\n\nReturn a random point somewhere inside a rectangle defined by the four values.\n\n\n\n"
 },
 
@@ -1292,7 +1300,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.randompointarray",
     "page": "Polygons and paths",
     "title": "Luxor.randompointarray",
-    "category": "Function",
+    "category": "function",
     "text": "randompointarray(lowpt, highpt, n)\n\nReturn an array of n random points somewhere inside the rectangle defined by two points.\n\n\n\nrandompointarray(lowx, lowy, highx, highy, n)\n\nReturn an array of n random points somewhere inside the rectangle defined by the four coordinates.\n\n\n\n"
 },
 
@@ -1300,7 +1308,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polysplit",
     "page": "Polygons and paths",
     "title": "Luxor.polysplit",
-    "category": "Function",
+    "category": "function",
     "text": "polysplit(p, p1, p2)\n\nSplit a polygon into two where it intersects with a line. It returns two polygons:\n\n(poly1, poly2)\n\nThis doesn\'t always work, of course. For example, a polygon the shape of the letter \"E\" might end up being divided into more than two parts.\n\n\n\n"
 },
 
@@ -1308,7 +1316,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polysortbydistance",
     "page": "Polygons and paths",
     "title": "Luxor.polysortbydistance",
-    "category": "Function",
+    "category": "function",
     "text": "Sort a polygon by finding the nearest point to the starting point, then the nearest point to that, and so on.\n\npolysortbydistance(p, starting::Point)\n\nYou can end up with convex (self-intersecting) polygons, unfortunately.\n\n\n\n"
 },
 
@@ -1316,7 +1324,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polysortbyangle",
     "page": "Polygons and paths",
     "title": "Luxor.polysortbyangle",
-    "category": "Function",
+    "category": "function",
     "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::AbstractArray, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n"
 },
 
@@ -1324,7 +1332,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polycentroid",
     "page": "Polygons and paths",
     "title": "Luxor.polycentroid",
-    "category": "Function",
+    "category": "function",
     "text": "Find the centroid of simple polygon.\n\npolycentroid(pointlist)\n\nReturns a point. This only works for simple (non-intersecting) polygons.\n\nYou could test the point using isinside().\n\n\n\n"
 },
 
@@ -1340,7 +1348,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polysmooth",
     "page": "Polygons and paths",
     "title": "Luxor.polysmooth",
-    "category": "Function",
+    "category": "function",
     "text": "polysmooth(points, radius, action=:action; debug=false)\n\nMake a closed path from the points and round the corners by making them arcs with the given radius. Execute the action when finished.\n\nThe arcs are sometimes different sizes: if the given radius is bigger than the length of the shortest side, the arc can\'t be drawn at its full radius and is therefore drawn as large as possible (as large as the shortest side allows).\n\nThe debug option also draws the construction circles at each corner.\n\n\n\n"
 },
 
@@ -1356,7 +1364,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.offsetpoly",
     "page": "Polygons and paths",
     "title": "Luxor.offsetpoly",
-    "category": "Function",
+    "category": "function",
     "text": "offsetpoly(path::AbstractArray{Point, 1}, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm \'flip\' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them\n\n\n\n"
 },
 
@@ -1372,7 +1380,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polyfit",
     "page": "Polygons and paths",
     "title": "Luxor.polyfit",
-    "category": "Function",
+    "category": "function",
     "text": "polyfit(plist::AbstractArray, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n"
 },
 
@@ -1388,7 +1396,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.pathtopoly",
     "page": "Polygons and paths",
     "title": "Luxor.pathtopoly",
-    "category": "Function",
+    "category": "function",
     "text": "pathtopoly()\n\nConvert the current path to an array of polygons.\n\nReturns an array of polygons.\n\n\n\n"
 },
 
@@ -1396,7 +1404,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.getpath",
     "page": "Polygons and paths",
     "title": "Luxor.getpath",
-    "category": "Function",
+    "category": "function",
     "text": "getpath()\n\nGet the current path and return a CairoPath object, which is an array of element_type and points objects. With the results you can step through and examine each entry:\n\no = getpath()\nfor e in o\n      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO\n          (x, y) = e.points\n          move(x, y)\n      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO\n          (x, y) = e.points\n          # straight lines\n          line(x, y)\n          strokepath()\n          circle(x, y, 1, :stroke)\n      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO\n          (x1, y1, x2, y2, x3, y3) = e.points\n          # Bezier control lines\n          circle(x1, y1, 1, :stroke)\n          circle(x2, y2, 1, :stroke)\n          circle(x3, y3, 1, :stroke)\n          move(x, y)\n          curve(x1, y1, x2, y2, x3, y3)\n          strokepath()\n          (x, y) = (x3, y3) # update current point\n      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH\n          closepath()\n      else\n          error(\"unknown CairoPathEntry \" * repr(e.element_type))\n          error(\"unknown CairoPathEntry \" * repr(e.points))\n      end\n  end\n\n\n\n"
 },
 
@@ -1404,7 +1412,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.getpathflat",
     "page": "Polygons and paths",
     "title": "Luxor.getpathflat",
-    "category": "Function",
+    "category": "function",
     "text": "getpathflat()\n\nGet the current path, like getpath() but flattened so that there are no Bèzier curves.\n\nReturns a CairoPath which is an array of element_type and points objects.\n\n\n\n"
 },
 
@@ -1420,7 +1428,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.makebezierpath",
     "page": "Polygons and paths",
     "title": "Luxor.makebezierpath",
-    "category": "Function",
+    "category": "function",
     "text": "makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1)\n\nReturn a Bézier path that follows a polygon (an array of points). The Bézier path is an array of tuples; each tuple contains the four points that make up a segment of the Bézier path.\n\n\n\n"
 },
 
@@ -1428,7 +1436,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.drawbezierpath",
     "page": "Polygons and paths",
     "title": "Luxor.drawbezierpath",
-    "category": "Function",
+    "category": "function",
     "text": "drawbezierpath(bezierpath, action=:none;\n    close=true)\n\nDraw a Bézier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n"
 },
 
@@ -1436,7 +1444,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.bezierpathtopoly",
     "page": "Polygons and paths",
     "title": "Luxor.bezierpathtopoly",
-    "category": "Function",
+    "category": "function",
     "text": "bezierpathtopoly(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}; steps=10)\n\nConvert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.\n\nTo make a Bezier path, use makebezierpath() on a polygon.\n\nThe steps optional keyword determines how many line sections are used for each path.\n\n\n\n"
 },
 
@@ -1444,7 +1452,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.beziertopoly",
     "page": "Polygons and paths",
     "title": "Luxor.beziertopoly",
-    "category": "Function",
+    "category": "function",
     "text": "beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)\n\nConvert a Bezier segment (a tuple of four points: anchor1, control1, control2, anchor2) to a polygon (an array of points).\n\n\n\n"
 },
 
@@ -1452,7 +1460,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.pathtobezierpaths",
     "page": "Polygons and paths",
     "title": "Luxor.pathtobezierpaths",
-    "category": "Function",
+    "category": "function",
     "text": "pathtobezierpaths()\n\nConvert the current path (which may consist of one or more paths) to an array of Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path segment is a tuple of four points. A straight line is converted to a Bezier segment in which the control points are set to be the the same as the end points.\n\nExample\n\nThis code draws the Bezier segments and shows the control points as \"handles\", like a vector-editing program might.\n\n@svg begin\n    fontface(\"MyanmarMN-Bold\")\n    st = \"goo\"\n    thefontsize = 100\n    fontsize(thefontsize)\n    sethue(\"red\")\n    fontsize(thefontsize)\n    textpath(st)\n    nbps = pathtobezierpaths()\n    for nbp in nbps\n        setline(.15)\n        sethue(\"grey50\")\n        drawbezierpath(nbp, :stroke)\n        for p in nbp\n            sethue(\"red\")\n            circle(p[2], 0.16, :fill)\n            circle(p[3], 0.16, :fill)\n            line(p[2], p[1], :stroke)\n            line(p[3], p[4], :stroke)\n            if p[1] != p[4]\n                sethue(\"black\")\n                circle(p[1], 0.26, :fill)\n                circle(p[4], 0.26, :fill)\n            end\n        end\n    end\nend\n\n\n\n"
 },
 
@@ -1476,7 +1484,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polyperimeter",
     "page": "Polygons and paths",
     "title": "Luxor.polyperimeter",
-    "category": "Function",
+    "category": "function",
     "text": "polyperimeter(p::AbstractArray{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n"
 },
 
@@ -1484,7 +1492,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polyportion",
     "page": "Polygons and paths",
     "title": "Luxor.polyportion",
-    "category": "Function",
+    "category": "function",
     "text": "polyportion(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they\'ll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n"
 },
 
@@ -1492,7 +1500,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polyremainder",
     "page": "Polygons and paths",
     "title": "Luxor.polyremainder",
-    "category": "Function",
+    "category": "function",
     "text": "polyremainder(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn the rest of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three quarters, 0.75 the last quarter, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they\'ll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyportion() function to return the other part.\n\n\n\n"
 },
 
@@ -1500,7 +1508,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polydistances",
     "page": "Polygons and paths",
     "title": "Luxor.polydistances",
-    "category": "Function",
+    "category": "function",
     "text": "polydistances(p::AbstractArray{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n"
 },
 
@@ -1508,7 +1516,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.nearestindex",
     "page": "Polygons and paths",
     "title": "Luxor.nearestindex",
-    "category": "Function",
+    "category": "function",
     "text": "nearestindex(polydistancearray, value)\n\nReturn a tuple of the index of the largest value in polydistancearray less than value, and the difference value. Array is assumed to be sorted.\n\n(Designed for use with polydistances()).\n\n\n\n"
 },
 
@@ -1516,7 +1524,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polyarea",
     "page": "Polygons and paths",
     "title": "Luxor.polyarea",
-    "category": "Function",
+    "category": "function",
     "text": "polyarea(p::AbstractArray)\n\nFind the area of a simple polygon. It works only for polygons that don\'t self-intersect.\n\n\n\n"
 },
 
@@ -1532,7 +1540,7 @@ var documenterSearchIndex = {"docs": [
     "location": "polygons.html#Luxor.polyintersections",
     "page": "Polygons and paths",
     "title": "Luxor.polyintersections",
-    "category": "Function",
+    "category": "function",
     "text": "polyintersections(S::AbstractArray{Point, 1}, C::AbstractArray{Point, 1})\n\nReturn an array of the points in polygon S plus the points where polygon S crosses polygon C. Calls intersectlinepoly().\n\n\n\n"
 },
 
@@ -1588,7 +1596,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.fontface",
     "page": "Text",
     "title": "Luxor.fontface",
-    "category": "Function",
+    "category": "function",
     "text": "fontface(fontname)\n\nSelect a font to use. (Toy API)\n\n\n\n"
 },
 
@@ -1596,7 +1604,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.fontsize",
     "page": "Text",
     "title": "Luxor.fontsize",
-    "category": "Function",
+    "category": "function",
     "text": "fontsize(n)\n\nSet the font size to n points. The default size is 10 points. (Toy API)\n\n\n\n"
 },
 
@@ -1612,7 +1620,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.setfont",
     "page": "Text",
     "title": "Luxor.setfont",
-    "category": "Function",
+    "category": "function",
     "text": "setfont(family, fontsize)\n\nSelect a font and specify the size in points.\n\nExample:\n\nsetfont(\"Helvetica\", 24)\nsettext(\"Hello in Helvetica 24 using the Pro API\", Point(0, 10))\n\n\n\n"
 },
 
@@ -1628,7 +1636,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.text",
     "page": "Text",
     "title": "Luxor.text",
-    "category": "Function",
+    "category": "function",
     "text": "text(str)\ntext(str, pos)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it\'s placed at the current 0/0. In Luxor, placing text doesn\'t affect the current point.\n\nHorizontal alignment halign can be :left, :center, (also :centre) or :right.  Vertical alignment valign can be :baseline, :top, :middle, or :bottom.\n\nThe default alignment is :left, :baseline.\n\n\n\n"
 },
 
@@ -1644,7 +1652,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.settext",
     "page": "Text",
     "title": "Luxor.settext",
-    "category": "Function",
+    "category": "function",
     "text": "settext(text, pos;\n    halign = \"left\",\n    valign = \"bottom\",\n    angle  = 0,\n    markup = false)\n\nsettext(text;\n    kwargs)\n\nDraw the text at pos (if omitted defaults to 0/0). If no font is specified, on macOS the default font is Times Roman.\n\nTo align the text, use halign, one of \"left\", \"center\", or \"right\", and valign, one of \"top\", \"center\", or \"bottom\".\n\nangle is the rotation - in counterclockwise degrees.\n\nIf markup is true, then the string can contain some HTML-style markup. Supported tags include:\n\n<b>, <i>, <s>, <sub>, <sup>, <small>, <big>, <u>, <tt>, and <span>\n\nThe <span> tag can contains things like this:\n\n<span font=\'26\' background=\'green\' foreground=\'red\'>unreadable text</span>\n\n\n\n"
 },
 
@@ -1668,7 +1676,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.textpath",
     "page": "Text",
     "title": "Luxor.textpath",
-    "category": "Function",
+    "category": "function",
     "text": "textpath(t)\n\nConvert the text in string t to a new path, for subsequent filling/stroking etc...\n\n\n\n"
 },
 
@@ -1684,7 +1692,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.textextents",
     "page": "Text",
     "title": "Luxor.textextents",
-    "category": "Function",
+    "category": "function",
     "text": "textextents(str)\n\nReturn an array of six Float64s containing the measurements of the string str when set using the current font settings (Toy API):\n\n1 x_bearing\n\n2 y_bearing\n\n3 width\n\n4 height\n\n5 x_advance\n\n6 y_advance\n\nThe x and y bearings are the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like \"j\"; it\'s almost always a negative value for y displacement.\n\nThe width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.\n\nExample:\n\ntextextents(\"R\")\n\nreturns\n\n[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]\n\n\n\n"
 },
 
@@ -1700,7 +1708,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.label",
     "page": "Text",
     "title": "Luxor.label",
-    "category": "Function",
+    "category": "function",
     "text": "label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)\n\nAdd a text label at a point, positioned relative to that point, for example, :N signifies North and places the text directly above that point.\n\nUse one of :N, :S, :E, :W, :NE, :SE, :SW, :NW to position the label relative to that point.\n\nlabel(\"text\")          # positions text at North (above), relative to the origin\nlabel(\"text\", :S)      # positions text at South (below), relative to the origin\nlabel(\"text\", :S, pt)  # positions text South of pt\nlabel(\"text\", :N, pt, offset=20)  # positions text North of pt, offset by 20\n\nThe default offset is 5 units.\n\n\n\n"
 },
 
@@ -1716,7 +1724,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.textcurve",
     "page": "Text",
     "title": "Luxor.textcurve",
-    "category": "Function",
+    "category": "function",
     "text": "Place a string of text on a curve. It can spiral in or out.\n\ntextcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;\n          # optional keyword arguments:\n          spiral_ring_step = 0,    # step out or in by this amount\n          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)\n          spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards\n          clockwise = true\n          )\n\nstart_angle is relative to +ve x-axis, arc/circle is centered on (x_pos,y_pos) with radius start_radius.\n\n\n\n"
 },
 
@@ -1724,7 +1732,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.textcurvecentered",
     "page": "Text",
     "title": "Luxor.textcurvecentered",
-    "category": "Function",
+    "category": "function",
     "text": "textcurvecentered(the_text, the_angle, the_radius, center::Point;\n      clockwise = true,\n      letter_spacing = 0,\n      baselineshift = 0\n\nThis version of the textcurve() function is designed for shorter text strings that need positioning around a circle. (A cheesy effect much beloved of hipster brands and retronauts.)\n\nletter_spacing adjusts the tracking/space between chars, tighter is (-), looser is (+)).  baselineshift moves the text up or down away from the baseline.\n\ntextcurvecentred (UK spelling) is a synonym\n\n\n\n"
 },
 
@@ -1748,7 +1756,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.textwrap",
     "page": "Text",
     "title": "Luxor.textwrap",
-    "category": "Function",
+    "category": "function",
     "text": "textwrap(s::T where T<:AbstractString, width::Real, pos::Point;\n    rightgutter=5,\n    leading=0)\ntextwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;\n    rightgutter=5,\n    leading=0)\n\nDraw the string in s by splitting it at whitespace characters into lines, so that each line is no longer than width units. The text starts at pos such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below pos.\n\nSee also textbox().\n\nIf you don\'t supply a value for leading, the font\'s built-in extents are used.\n\nText with no whitespace characters won\'t wrap. You can write a simple chunking function to split a string or array into chunks:\n\nchunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]\n\n\n\n"
 },
 
@@ -1756,7 +1764,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.textbox",
     "page": "Text",
     "title": "Luxor.textbox",
-    "category": "Function",
+    "category": "function",
     "text": "textbox(lines::Array, pos::Point=O;\n    leading = 12,\n    linefunc::Function = (linenumber, linetext, startpos, height) -> (),\n    alignment=:left)\n\nDraw the strings in the array lines vertically downwards. leading controls the spacing between each line (default 12), and alignment determines the horizontal alignment (default :left).\n\nOptionally, before each line, execute the function linefunc(linenumber, linetext, startpos, height).\n\nSee also textwrap(), which modifies the text so that the lines fit into a specified width.\n\n\n\n"
 },
 
@@ -1764,7 +1772,7 @@ var documenterSearchIndex = {"docs": [
     "location": "text.html#Luxor.splittext",
     "page": "Text",
     "title": "Luxor.splittext",
-    "category": "Function",
+    "category": "function",
     "text": "splittext(s)\n\nSplit the text in string s into an array, but keep all the separators attached to the preceding word.\n\n\n\n"
 },
 
@@ -1788,7 +1796,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.scale",
     "page": "Transforms and matrices",
     "title": "Luxor.scale",
-    "category": "Function",
+    "category": "function",
     "text": "scale(x, y)\n\nScale workspace by x and y.\n\nExample:\n\nscale(0.2, 0.3)\n\n\n\nscale(f)\n\nScale workspace by f in both x and y.\n\n\n\n"
 },
 
@@ -1796,7 +1804,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.rotate",
     "page": "Transforms and matrices",
     "title": "Luxor.rotate",
-    "category": "Function",
+    "category": "function",
     "text": "rotate(a::Float64)\n\nRotate workspace by a radians clockwise (from positive x-axis to positive y-axis).\n\n\n\n"
 },
 
@@ -1804,7 +1812,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.translate",
     "page": "Transforms and matrices",
     "title": "Luxor.translate",
-    "category": "Function",
+    "category": "function",
     "text": "translate(x::Real, y::Real)\ntranslate(point)\n\nTranslate the workspace by x and y or by moving the origin to pt.\n\n\n\n"
 },
 
@@ -1820,7 +1828,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.getmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.getmatrix",
-    "category": "Function",
+    "category": "function",
     "text": "getmatrix()\n\nGet the current matrix. Returns an array of six float64 numbers:\n\nxx component of the affine transformation\nyx component of the affine transformation\nxy component of the affine transformation\nyy component of the affine transformation\nx0 translation component of the affine transformation\ny0 translation component of the affine transformation\n\nSome basic matrix transforms:\n\ntranslate\n\ntransform([1, 0, 0, 1, dx, dy]) shifts by dx, dy\n\nscale\n\ntransform([fx 0 0 fy 0 0]) scales by fx and fy\n\nrotate\n\ntransform([cos(a), -sin(a), sin(a), cos(a), 0, 0]) rotates around to a radians\n\nrotate around O: [c -s s c 0 0]\n\nshear\n\ntransform([1 0 a 1 0 0]) shears in x direction by a\n\nshear in y: [1  B 0  1 0 0]\nx-skew\n\ntransform([1, 0, tan(a), 1, 0, 0]) skews in x by a\n\ny-skew\n\ntransform([1, tan(a), 0, 1, 0, 0]) skews in y by a\n\nflip\n\ntransform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)]) flips with center at centerx/centery\n\nreflect\n\ntransform([1 0 0 -1 0 0]) reflects in xaxis\n\ntransform([-1 0 0 1 0 0]) reflects in yaxis\n\nWhen a drawing is first created, the matrix looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]\n\nWhen the origin is moved to 400/400, it looks like this:\n\ngetmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]\n\nTo reset the matrix to the original:\n\nsetmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])\n\n\n\n"
 },
 
@@ -1828,7 +1836,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.setmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.setmatrix",
-    "category": "Function",
+    "category": "function",
     "text": "setmatrix(m::AbstractArray)\n\nChange the current matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n"
 },
 
@@ -1836,7 +1844,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.transform",
     "page": "Transforms and matrices",
     "title": "Luxor.transform",
-    "category": "Function",
+    "category": "function",
     "text": "transform(a::AbstractArray)\n\nModify the current matrix by multiplying it by matrix a.\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n"
 },
 
@@ -1844,7 +1852,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.crossproduct",
     "page": "Transforms and matrices",
     "title": "Luxor.crossproduct",
-    "category": "Function",
+    "category": "function",
     "text": "crossproduct(p1::Point, p2::Point)\n\nThis is the perp dot product, really, not the crossproduct proper (which is 3D):\n\ndot(p1, perpendicular(p2))\n\n\n\n"
 },
 
@@ -1852,7 +1860,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.blendmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.blendmatrix",
-    "category": "Function",
+    "category": "function",
     "text": "blendmatrix(b::Blend, m)\n\nSet the matrix of a blend.\n\nTo apply a sequence of matrix transforms to a blend:\n\nA = [1 0 0 1 0 0]\nAj = cairotojuliamatrix(A)\nSj = scalingmatrix(2, .2) * Aj\nTj = translationmatrix(10, 0) * Sj\nA1 = juliatocairomatrix(Tj)\nblendmatrix(b, As)\n\n\n\n"
 },
 
@@ -1860,7 +1868,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.rotationmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.rotationmatrix",
-    "category": "Function",
+    "category": "function",
     "text": "rotationmatrix(a)\n\nReturn a 3x3 Julia matrix that will apply a rotation through a radians.\n\n\n\n"
 },
 
@@ -1868,7 +1876,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.scalingmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.scalingmatrix",
-    "category": "Function",
+    "category": "function",
     "text": "scalingmatrix(sx, sy)\n\nReturn a 3x3 Julia matrix that will apply a scaling by sx and sy.\n\n\n\n"
 },
 
@@ -1876,7 +1884,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.translationmatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.translationmatrix",
-    "category": "Function",
+    "category": "function",
     "text": "translationmatrix(x, y)\n\nReturn a 3x3 Julia matrix that will apply a translation in x and y.\n\n\n\n"
 },
 
@@ -1884,7 +1892,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.getscale",
     "page": "Transforms and matrices",
     "title": "Luxor.getscale",
-    "category": "Function",
+    "category": "function",
     "text": "getscale(R::Matrix)\ngetscale()\n\nGet the current scale of a Julia 3x3 matrix, or the current Luxor scale.\n\nReturns a tuple of x and y values.\n\n\n\n"
 },
 
@@ -1892,7 +1900,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.gettranslation",
     "page": "Transforms and matrices",
     "title": "Luxor.gettranslation",
-    "category": "Function",
+    "category": "function",
     "text": "gettranslation(R::Matrix)\ngettranslation()\n\nGet the current translation of a Julia 3x3 matrix, or the current Luxor translation.\n\nReturns a tuple of x and y values.\n\n\n\n"
 },
 
@@ -1900,7 +1908,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.getrotation",
     "page": "Transforms and matrices",
     "title": "Luxor.getrotation",
-    "category": "Function",
+    "category": "function",
     "text": "getrotation(R::Matrix)\ngetrotation()\n\nGet the rotation of a Julia 3x3 matrix, or the current Luxor rotation.\n\nR = beginbmatrix\na  b  tx \nc  d  ty \n0  0  1  \nendbmatrix\n\nThe rotation angle is atan2(-b, a) or atan2(c, d).\n\n\n\n"
 },
 
@@ -1908,7 +1916,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.cairotojuliamatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.cairotojuliamatrix",
-    "category": "Function",
+    "category": "function",
     "text": "cairotojuliamatrix(c)\n\nReturn a 3x3 Julia matrix that\'s the equivalent of the six-element matrix in c.\n\n\n\n"
 },
 
@@ -1916,7 +1924,7 @@ var documenterSearchIndex = {"docs": [
     "location": "transforms.html#Luxor.juliatocairomatrix",
     "page": "Transforms and matrices",
     "title": "Luxor.juliatocairomatrix",
-    "category": "Function",
+    "category": "function",
     "text": "juliatocairomatrix(c)\n\nReturn a six-element matrix that\'s the equivalent of the 3x3 Julia matrix in c.\n\n\n\n"
 },
 
@@ -1940,7 +1948,7 @@ var documenterSearchIndex = {"docs": [
     "location": "clipping.html#Luxor.clip",
     "page": "Clipping",
     "title": "Luxor.clip",
-    "category": "Function",
+    "category": "function",
     "text": "clip()\n\nEstablish a new clipping region by intersecting the current clipping region with the current path and then clearing the current path.\n\n\n\n"
 },
 
@@ -1948,7 +1956,7 @@ var documenterSearchIndex = {"docs": [
     "location": "clipping.html#Luxor.clippreserve",
     "page": "Clipping",
     "title": "Luxor.clippreserve",
-    "category": "Function",
+    "category": "function",
     "text": "clippreserve()\n\nEstablish a new clipping region by intersecting the current clipping region with the current path, but keep the current path.\n\n\n\n"
 },
 
@@ -1956,7 +1964,7 @@ var documenterSearchIndex = {"docs": [
     "location": "clipping.html#Luxor.clipreset",
     "page": "Clipping",
     "title": "Luxor.clipreset",
-    "category": "Function",
+    "category": "function",
     "text": "clipreset()\n\nReset the clipping region to the current drawing\'s extent.\n\n\n\n"
 },
 
@@ -1988,7 +1996,7 @@ var documenterSearchIndex = {"docs": [
     "location": "images.html#Luxor.readpng",
     "page": "Images",
     "title": "Luxor.readpng",
-    "category": "Function",
+    "category": "function",
     "text": "readpng(pathname)\n\nRead a PNG file.\n\nThis returns a image object suitable for placing on the current drawing with placeimage(). You can access its width and height fields:\n\nimage = readpng(\"/tmp/test-image.png\")\nw = image.width\nh = image.height\n\n\n\n"
 },
 
@@ -1996,7 +2004,7 @@ var documenterSearchIndex = {"docs": [
     "location": "images.html#Luxor.placeimage",
     "page": "Images",
     "title": "Luxor.placeimage",
-    "category": "Function",
+    "category": "function",
     "text": "placeimage(img, xpos, ypos; centered=false)\n\nPlace a PNG image on the drawing at (xpos/ypos). The image img has been previously loaded using readpng().\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\nplaceimage(img, pos; centered=false)\n\nPlace the top left corner of the PNG image on the drawing at pos.\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\nplaceimage(img, xpos, ypos, a; centered=false)\n\nPlace a PNG image on the drawing at (xpos/ypos) with transparency a.\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\nplaceimage(img, pos, a; centered=false)\n\nPlace a PNG image on the drawing at pos with transparency a.\n\nUse keyword centered=true to place the center of the image at the position.\n\n\n\n"
 },
 
@@ -2052,7 +2060,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Turtle",
     "page": "Turtle graphics",
     "title": "Luxor.Turtle",
-    "category": "Type",
+    "category": "type",
     "text": "Turtle()\nTurtle(O)\nTurtle(0, 0)\nTurtle(O, pendown=true, orientation=0, pencolor=(1.0, 0.25, 0.25))\n\nCreate a Turtle. You can command a turtle to move and draw \"turtle graphics\".\n\nThe commands (unusually for Julia) start with a capital letter, and angles are specified in degrees.\n\nBasic commands are Forward(), Turn(), Pendown(), Penup(), Pencolor(), Penwidth(), Circle(), Orientation(), Rectangle(), and Reposition().\n\nOthers include Push(), Pop(), Message(), HueShift(), Randomize_saturation(), Reposition(), and Pen_opacity_random().\n\n\n\n"
 },
 
@@ -2060,7 +2068,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Forward",
     "page": "Turtle graphics",
     "title": "Luxor.Forward",
-    "category": "Function",
+    "category": "function",
     "text": "Forward(t::Turtle, d=1)\n\nMove the turtle forward by d units. The stored position is updated.\n\n\n\n"
 },
 
@@ -2068,7 +2076,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Turn",
     "page": "Turtle graphics",
     "title": "Luxor.Turn",
-    "category": "Function",
+    "category": "function",
     "text": "Turn(t::Turtle, r=5.0)\n\nIncrease the turtle\'s rotation by r degrees. See also Orientation.\n\n\n\n"
 },
 
@@ -2076,7 +2084,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Circle",
     "page": "Turtle graphics",
     "title": "Luxor.Circle",
-    "category": "Function",
+    "category": "function",
     "text": "Circle(t::Turtle, radius=1.0)\n\nDraw a filled circle centered at the current position with the given radius.\n\n\n\n"
 },
 
@@ -2084,7 +2092,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.HueShift",
     "page": "Turtle graphics",
     "title": "Luxor.HueShift",
-    "category": "Function",
+    "category": "function",
     "text": "HueShift(t::Turtle, inc=1.0)\n\nShift the Hue of the turtle\'s pen forward by inc. Hue values range between 0 and 360.\n\n\n\n"
 },
 
@@ -2092,7 +2100,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Message",
     "page": "Turtle graphics",
     "title": "Luxor.Message",
-    "category": "Function",
+    "category": "function",
     "text": "Message(t::Turtle, txt)\n\nWrite some text at the current position.\n\n\n\n"
 },
 
@@ -2100,7 +2108,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Orientation",
     "page": "Turtle graphics",
     "title": "Luxor.Orientation",
-    "category": "Function",
+    "category": "function",
     "text": "Orientation(t::Turtle, r=0.0)\n\nSet the turtle\'s orientation to r degrees. See also Turn.\n\n\n\n"
 },
 
@@ -2108,7 +2116,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Randomize_saturation",
     "page": "Turtle graphics",
     "title": "Luxor.Randomize_saturation",
-    "category": "Function",
+    "category": "function",
     "text": "Randomize_saturation(t::Turtle)\n\nRandomize the saturation of the turtle\'s pen color.\n\n\n\n"
 },
 
@@ -2116,7 +2124,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Rectangle",
     "page": "Turtle graphics",
     "title": "Luxor.Rectangle",
-    "category": "Function",
+    "category": "function",
     "text": "Rectangle(t::Turtle, width=10.0, height=10.0)\n\nDraw a filled rectangle centered at the current position with the given radius.\n\n\n\n"
 },
 
@@ -2124,7 +2132,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Pen_opacity_random",
     "page": "Turtle graphics",
     "title": "Luxor.Pen_opacity_random",
-    "category": "Function",
+    "category": "function",
     "text": "Pen_opacity_random(t::Turtle)\n\nChange the opacity of the pen to some value at random.\n\n\n\n"
 },
 
@@ -2132,7 +2140,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Pendown",
     "page": "Turtle graphics",
     "title": "Luxor.Pendown",
-    "category": "Function",
+    "category": "function",
     "text": "Pendown(t::Turtle)\n\nPut that pen down and start drawing.\n\n\n\n"
 },
 
@@ -2140,7 +2148,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Penup",
     "page": "Turtle graphics",
     "title": "Luxor.Penup",
-    "category": "Function",
+    "category": "function",
     "text": "Penup(t::Turtle)\n\nPick that pen up and stop drawing.\n\n\n\n"
 },
 
@@ -2148,7 +2156,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Pencolor",
     "page": "Turtle graphics",
     "title": "Luxor.Pencolor",
-    "category": "Function",
+    "category": "function",
     "text": "Pencolor(t::Turtle, r, g, b)\n\nSet the Red, Green, and Blue colors of the turtle.\n\n\n\n"
 },
 
@@ -2156,7 +2164,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Penwidth",
     "page": "Turtle graphics",
     "title": "Luxor.Penwidth",
-    "category": "Function",
+    "category": "function",
     "text": "Penwidth(t::Turtle, w)\n\nSet the width of the line drawn.\n\n\n\n"
 },
 
@@ -2164,7 +2172,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Point",
     "page": "Turtle graphics",
     "title": "Luxor.Point",
-    "category": "Type",
+    "category": "type",
     "text": "The Point type holds two coordinates. Currently it\'s immutable, so remember not try to change the values of the x and y values directly.\n\n\n\n"
 },
 
@@ -2172,7 +2180,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Pop",
     "page": "Turtle graphics",
     "title": "Luxor.Pop",
-    "category": "Function",
+    "category": "function",
     "text": "Pop(t::Turtle)\n\nLift the turtle\'s position and orientation off a stack.\n\n\n\n"
 },
 
@@ -2180,7 +2188,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Push",
     "page": "Turtle graphics",
     "title": "Luxor.Push",
-    "category": "Function",
+    "category": "function",
     "text": "Push(t::Turtle)\n\nSave the turtle\'s position and orientation on a stack.\n\n\n\n"
 },
 
@@ -2188,7 +2196,7 @@ var documenterSearchIndex = {"docs": [
     "location": "turtle.html#Luxor.Reposition",
     "page": "Turtle graphics",
     "title": "Luxor.Reposition",
-    "category": "Function",
+    "category": "function",
     "text": "Reposition(t::Turtle, pos::Point)\nReposition(t::Turtle, x, y)\n\nReposition: pick the turtle up and place it at another position.\n\n\n\n"
 },
 
@@ -2220,7 +2228,7 @@ var documenterSearchIndex = {"docs": [
     "location": "animation.html#Luxor.Movie",
     "page": "Animation",
     "title": "Luxor.Movie",
-    "category": "Type",
+    "category": "type",
     "text": "The Movie and Scene types and the animate() function are designed to help you create the frames that can be used to make an animated GIF or movie.\n\n1 Provide width, height, title, and optionally a frame range to the Movie constructor:\n\ndemo = Movie(400, 400, \"test\", 1:500)\n\n2 Define one or more scenes and scene-drawing functions.\n\n3 Run the animate() function, calling those scenes.\n\nExample\n\nbang = Movie(400, 100, \"bang\")\n\nbackdrop(scene, framenumber) =  background(\"black\")\n\nfunction frame1(scene, framenumber)\n    background(\"white\")\n    sethue(\"black\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(O, 40 * eased_n, :fill)\nend\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\n\n"
 },
 
@@ -2228,7 +2236,7 @@ var documenterSearchIndex = {"docs": [
     "location": "animation.html#Luxor.Scene",
     "page": "Animation",
     "title": "Luxor.Scene",
-    "category": "Type",
+    "category": "type",
     "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nthe movie created by Movie()\nthe framefunction is a function taking two arguments: the scene and the framenumber.\nthe framerange determines which frames are processed by the function. Defaults to the entire movie.\nthe optional easingfunction can be accessed by the framefunction to vary the transition speed\n\n\n\n"
 },
 
@@ -2236,7 +2244,7 @@ var documenterSearchIndex = {"docs": [
     "location": "animation.html#Luxor.animate",
     "page": "Animation",
     "title": "Luxor.animate",
-    "category": "Function",
+    "category": "function",
     "text": "animate(movie::Movie, scenelist::AbstractArray{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n"
 },
 
