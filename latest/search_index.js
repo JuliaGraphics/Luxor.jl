@@ -533,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Paths and positions",
     "category": "section",
-    "text": "A path is a sequence of lines and curves. You can add lines and curves to the current path, then use closepath() to join the last point to the first.A path can have subpaths, created withnewsubpath(), which can form holes.There is a \'current position\' which you can set with move(), and can use implicitly in functions like line(), text(), arc() and curve().move\nrmove\nnewpath\nnewsubpath\nclosepath"
+    "text": "A path is a sequence of lines and curves. You can add lines and curves to the current path, then use closepath() to join the last point to the first.A path can have subpaths, created withnewsubpath(), which can form holes.There is a \'current position\' which you can set with move(), and can use implicitly in functions like line(), rline(), text(), arc() and curve().move\nrmove\nnewpath\nnewsubpath\nclosepath"
 },
 
 {
@@ -541,7 +541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.line",
     "category": "function",
-    "text": "line(x, y)\nline(x, y, :action)\nline(pt)\n\nCreate a line from the current position to the x/y position and optionally apply an action:\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n"
+    "text": "line(x, y)\nline(x, y)\nline(pt)\n\nCreate a line from the current position to the x/y position.\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n"
 },
 
 {
@@ -549,7 +549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.rline",
     "category": "function",
-    "text": "rline(x, y)\nrline(x, y, :action)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position and optionally apply an action:\n\n\n\n"
+    "text": "rline(x, y)\nrline(x, y)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position.\n\n\n\n"
 },
 
 {
@@ -565,7 +565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Lines",
     "category": "section",
-    "text": "Use line() and rline() to draw straight lines.line\nrlineYou can use rule() to draw a line across the entire drawing through a point, at an angle to the current x-axis.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ny = 10\nfor x in logspace(0, 2.75, 40)\n    circle(Point(x, y), 2, :fill)\n    rule(Point(x, y), -pi/2)\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)rule"
+    "text": "Use line() and rline() to draw straight lines. line(pt1, pt2, action) draws a line between two points. line(pt) draws a line from the current position to the point. rline(pt) draws a line relative to the current position. line\nrlineYou can use rule() to draw a line across the entire drawing through a point, at an angle to the current x-axis.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ny = 10\nfor x in logspace(0, 2.75, 40)\n    circle(Point(x, y), 2, :fill)\n    rule(Point(x, y), -pi/2)\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)rule"
 },
 
 {
@@ -581,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.arc2r",
     "category": "function",
-    "text": "  arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nMake a circular arc centered at c1 that starts at p2 and ends at p3, going clockwise.\n\nc1-p2 really determines the radius. If p3 doesn\'t lie on the circular path,  it will be used only as an indication of the arc\'s length, rather than its position.\n\n\n\n"
+    "text": "  arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nAdd a circular arc centered at c1 that starts at p2 and ends at p3, going clockwise, to the current path.\n\nc1-p2 really determines the radius. If p3 doesn\'t lie on the circular path,  it will be used only as an indication of the arc\'s length, rather than its position.\n\n\n\n"
 },
 
 {
@@ -597,7 +597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.carc2r",
     "category": "function",
-    "text": "carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nMake a circular arc centered at c1 that starts at p2 and ends at p3, going counterclockwise.\n\nc1-p2 really determines the radius. If p3 doesn\'t lie on the circular path, it will be used only as an indication of the arc\'s length, rather than its position.\n\n\n\n"
+    "text": "carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)\n\nAdd a circular arc centered at c1 that starts at p2 and ends at p3, going counterclockwise, to the current path.\n\nc1-p2 really determines the radius. If p3 doesn\'t lie on the circular path, it will be used only as an indication of the arc\'s length, rather than its position.\n\n\n\n"
 },
 
 {
@@ -613,7 +613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Arcs and curves",
     "category": "section",
-    "text": "There are a few standard arc-drawing commands, such as curve(), arc(), carc(), and arc2r().curve() constructs Bézier curves from control points:using Luxor # hide\nDrawing(500, 275, \"assets/figures/curve.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetline(.5)\npt1 = Point(0, -125)\npt2 = Point(200, 125)\npt3 = Point(200, -125)\n\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])\n\nline(O, pt1, :stroke)\nline(pt2, pt3, :stroke)\n\nsethue(\"black\")\nsetline(3)\n\nmove(O)\ncurve(pt1, pt2, pt3)\nstrokepath()\nfinish()  # hide\nnothing # hide(Image: curve)arc2r() draws a circular arc that joins two points:using Luxor # hide\nDrawing(700, 200, \"assets/figures/arc2r.png\") # hide\norigin() # hide\nsrand(42) # hide\nbackground(\"white\") # hide\ntiles = Tiler(700, 200, 1, 6)\nfor (pos, n) in tiles\n    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)\n    sethue(\"black\")\n    map(pt -> circle(pt, 4, :fill), [c1, pt3])\n    sethue(\"red\")\n    circle(pt2, 4, :fill)\n    randomhue()\n    arc2r(c1, pt2, pt3, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)arc\narc2r\ncarc\ncarc2r\ncurve"
+    "text": "There are a few standard arc-drawing commands, such as curve(), arc(), carc(), and arc2r(). Because these are often used when building complex paths, they usually add arcs to the current path. To construct a sequence of lines and arcs, use the :path action.curve() constructs Bézier curves from control points:using Luxor # hide\nDrawing(500, 275, \"assets/figures/curve.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nsetline(.5)\npt1 = Point(0, -125)\npt2 = Point(200, 125)\npt3 = Point(200, -125)\n\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])\n\nline(O, pt1, :stroke)\nline(pt2, pt3, :stroke)\n\nsethue(\"black\")\nsetline(3)\n\nmove(O)\ncurve(pt1, pt2, pt3)\nstrokepath()\nfinish()  # hide\nnothing # hide(Image: curve)arc2r() draws a circular arc that joins two points:using Luxor # hide\nDrawing(700, 200, \"assets/figures/arc2r.png\") # hide\norigin() # hide\nsrand(42) # hide\nbackground(\"white\") # hide\ntiles = Tiler(700, 200, 1, 6)\nfor (pos, n) in tiles\n    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)\n    sethue(\"black\")\n    map(pt -> circle(pt, 4, :fill), [c1, pt3])\n    sethue(\"red\")\n    circle(pt2, 4, :fill)\n    randomhue()\n    arc2r(c1, pt2, pt3, :stroke)\nend\nfinish() # hide\nnothing # hide(Image: arc)arc\narc2r\ncarc\ncarc2r\ncurve"
 },
 
 {
