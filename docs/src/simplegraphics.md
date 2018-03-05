@@ -340,7 +340,7 @@ then use `closepath()` to join the last point to the first.
 
 A path can have subpaths, created with` newsubpath()`, which can form holes.
 
-There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `text()`, `arc()` and `curve()`.
+There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `rline()`, `text()`, `arc()` and `curve()`.
 
 ```@docs
 move
@@ -352,7 +352,7 @@ closepath
 
 ## Lines
 
-Use `line()` and `rline()` to draw straight lines.
+Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` draws a line from the current position to the point. `rline(pt)` draws a line relative to the current position. 
 
 ```@docs
 line
@@ -387,7 +387,7 @@ rule
 
 ## Arcs and curves
 
-There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`.
+There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arcs to the current path. To construct a sequence of lines and arcs, use the `:path` action.
 
 `curve()` constructs Bézier curves from control points:
 

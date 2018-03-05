@@ -341,10 +341,10 @@ rmove(pt)       = rmove(pt.x, pt.y)
 
 """
     line(x, y)
-    line(x, y, :action)
+    line(x, y)
     line(pt)
 
-Create a line from the current position to the `x/y` position and optionally apply an action:
+Create a line from the current position to the `x/y` position.
 """
 line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
 line(pt)        = line(pt.x, pt.y)
@@ -362,13 +362,12 @@ end
 
 """
     rline(x, y)
-    rline(x, y, :action)
+    rline(x, y)
     rline(pt)
 
-Create a line relative to the current position to the `x/y` position and optionally apply an
-action:
+Create a line relative to the current position to the `x/y` position.
 """
-rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr,x, y)
+rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr, x, y)
 rline(pt)       = rline(pt.x, pt.y)
 
 """
