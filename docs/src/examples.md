@@ -36,9 +36,12 @@ The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewin
 
 ```julia
 @svg begin
-    g = [Point(3x, 3y) for x in 1:10:100, y in 1:10:100]
-    circle.(g, 4, :fill)
-    label.(string.([(y - 1) * 10 + x for x in 1:10, y in 1:10]), :E, g)
+    sethue("red")
+    randpoint = Point(rand(-200:200), rand(-200:200))
+    circle(randpoint, 2, :fill)
+    sethue("black")
+    foreach(f -> arrow(f, between(f, randpoint, .1), arrowheadlength=6),
+        first.(collect(Table(fill(20, 15), fill(20, 15)))))
 end
 ```
 ![background](assets/figures/circle-dots.png)
