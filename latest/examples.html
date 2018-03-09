@@ -14,9 +14,12 @@ preview()</code></pre><p><code>Drawing(1000, 1000, &quot;hello-world.png&quot;)<
         circle(O, 150, :stroke)
         text(&quot;hello world&quot;, halign=:center, valign=:middle)
      end</code></pre><p><img src="assets/figures/hello-world-macro.png" alt="background"/></p><pre><code class="language-julia">@svg begin
-    g = [Point(3x, 3y) for x in 1:10:100, y in 1:10:100]
-    circle.(g, 4, :fill)
-    label.(string.([(y - 1) * 10 + x for x in 1:10, y in 1:10]), :E, g)
+    sethue(&quot;red&quot;)
+    randpoint = Point(rand(-200:200), rand(-200:200))
+    circle(randpoint, 2, :fill)
+    sethue(&quot;black&quot;)
+    foreach(f -&gt; arrow(f, between(f, randpoint, .1), arrowheadlength=6),
+        first.(collect(Table(fill(20, 15), fill(20, 15)))))
 end</code></pre><p><img src="assets/figures/circle-dots.png" alt="background"/></p><h2><a class="nav-anchor" id="The-Julia-logos-1" href="#The-Julia-logos-1">The Julia logos</a></h2><p>Luxor contains two functions that draw: the Julia logo, either in color or a single color; and the three Julia circles.</p><div><pre><code class="language-julia">using Luxor
 Drawing(600, 400, &quot;assets/figures/julia-logos.png&quot;)
 origin()
