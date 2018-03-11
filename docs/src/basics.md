@@ -27,7 +27,7 @@ julia> P.y
 13.0
 ```
 
-Points are immutable, so you can't change P's x or y coordinate directly. But it's easy to make new points based on existing ones.
+Points are immutable, so you can't change P's x or y values directly. But it's easy to make new points based on existing ones.
 
 Points can be added together:
 
@@ -171,6 +171,12 @@ or
      )
 ```
 
+```@docs
+@svg
+@png
+@pdf
+```
+
 ### Drawings in memory
 
 You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
@@ -247,9 +253,31 @@ origin
 
 ## Save and restore
 
-`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and they'll return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
+`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
 
-As a convenient shorthand, you can use the macro `@layer begin ... end` to enclose graphics commands.
+You can also use the `@layer` macro to enclose graphics commands:
+
+```
+@svg begin
+    circle(O, 100, :stroke)
+    @layer (sethue("red"); rule(O); rule(O, pi/2))
+    circle(O, 200, :stroke)
+end
+```
+
+or
+
+```
+@svg begin
+    circle(O, 100, :stroke)
+    @layer begin
+        sethue("red")
+        rule(O)
+        rule(O, pi/2)
+    end
+    circle(O, 200, :stroke)
+end
+```
 
 ```@docs
 gsave

@@ -50,7 +50,7 @@ What happened? Can you see this image somewhere?
 
 If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing.png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
-Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. PDF documents are often higher quality, but usually open up in a separate application.
+Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. SVGs are often higher quality too, but they're text-based so can become very large for complex images. PDF documents are always higher quality, and usually open up in a separate application.
 
 This example illustrates a few things about Luxor drawings:
 
@@ -62,7 +62,7 @@ This example illustrates a few things about Luxor drawings:
 
 - The circle wasn't filled, but `stroked`. We passed the `:stroke` symbol as an action to the `circle()` function. Many drawing functions expect some action, such as `:fill` or `:stroke`, and sometimes `:clip` or `:fillstroke`.
 
-- Did the first drawing takes a few seconds to appear? The Cairo drawing engine has to warm up. Once it's running, it's much faster.
+- Did the first drawing takes a few seconds to appear? The Cairo drawing engine takes a little time warm up. Once it's running, drawings appear much faster.
 
 Once more, with more black:
 
@@ -90,7 +90,7 @@ finish()
 
 For the main section of this tutorial, we'll attempt to draw Euclid's egg, which involves a bit of geometry.
 
-For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions) isn't considered to be 'best practice'.
+For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions which Julia can compile) isn't considered to be 'best practice'.
 
 ```julia
 @png begin
@@ -189,11 +189,11 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-2.png)
 
-While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot ('`.`') just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting for us.
+While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot ('`.`') just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting (from scalar to vector) for us.
 
 ### Intersect this
 
-We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersectionlinecircle` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
+We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersectionlinecircle()` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
 
 ```julia
 @png begin
@@ -407,9 +407,9 @@ finish()
 
 ### Eggs at the ready
 
-We now know all the points on the egg's perimeter, and the centers of the circular arcs. To draw the outline, we'll use the `arc2r()` function four times. This function takes a center point and two points on a circular arc, plus an action.
+We now know all the points on the egg's perimeter, and the centers of the circular arcs. To draw the outline, we'll use the `arc2r()` function four times. This function takes: a center point and two points that together define a circular arc, plus an action.
 
-The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:stroke` action would, this action adds a section to the current path (which is initially empty).
+The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:fill` and `:stroke` actions do, this action adds a section to the current path (which is initially empty).
 
 ```julia
 @png begin
@@ -420,13 +420,13 @@ The shape consists of four curves, so we'll use the `:path` action. Instead of i
     setline(5)
     setdash("solid")
 
-    arc2r(B, A, ip1, :path)
-    arc2r(C1, ip1, ip2, :path)
-    arc2r(A, ip2, B, :path)
-    arc2r(O, B, A, :path)
+    arc2r(B,    A,  ip1, :path) # centered at B, from A to ip1
+    arc2r(C1, ip1,  ip2, :path)
+    arc2r(A,  ip2,    B, :path)
+    arc2r(O,    B,    A, :path)
 ```
 
-Once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a 'preserve' version of the first action. This applies the action but keeps the path around for further actions.
+Once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a "preserve" version of the first action. This applies the action but keeps the path around for more actions.
 
 ```
     strokepreserve()
@@ -506,7 +506,7 @@ finish()
 
 ## Egg stroke
 
-To be more generally useful, the above code can be boiled into a function.
+To be more generally useful, the above code can be boiled into a single function.
 
 ```julia
 function egg(radius, action=:none)
@@ -540,7 +540,7 @@ function egg(radius, action=:none)
 end
 ```
 
-This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is one of the available actions.
+This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is the required actions.
 
 (Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)
 
@@ -552,7 +552,7 @@ Notice that this function doesn't define anything about what the shape looks lik
     for theta in range(0, pi/6, 12)
         @layer begin
             rotate(theta)
-            translate(0, -150)         
+            translate(0, -150)
             egg(50, :path)
             setline(10)
             randomhue()
@@ -603,7 +603,7 @@ setopacity(0.7)
 for theta in range(0, pi/6, 12)
     @layer begin
         rotate(theta)
-        translate(0, -150)         
+        translate(0, -150)
         egg(50, :path)
         setline(10)
         randomhue()
@@ -617,13 +617,13 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-7.png)
 
-The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated to `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so when `theta` is 0 a shift of -150 looks like an upwards shift). The `randomhue()` function does what it says, and the `egg()` function is passed the `:fill` action and the radius.
+The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated by `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so, before any rotation takes place, a shift of -150 looks like an upwards shift). The `randomhue()` function does what you expect, and the `egg()` function is passed the `:fill` action and the radius.
 
-Notice that the four drawing instructions are encased in a `@layer begin...end` 'shell'. Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
+Notice that the four drawing instructions are encased in a `@layer begin...end` "shell". Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
 
-Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and positive angles are clockwise. So the second egg in the previous example was drawn after the axes were rotated π/6 radians clockwise.
+Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and the y-axis due south, and positive angles are clockwise (ie from the positive x-axis towards the positive y-axis). So the second egg in the previous example was drawn after the axes were rotated by π/6 radians clockwise.
 
-You can tell which egg was drawn first — it's overlapped on each side by subsequent eggs.
+If you look closely you can tell which egg was drawn first — it's overlapped on each side by subsequent eggs.
 
 #### Thought experiments
 
@@ -631,11 +631,17 @@ You can tell which egg was drawn first — it's overlapped on each side by subse
 
 2. What would happen if the translation was `translate(150, 0)` rather than `translate(0, -150)`?
 
-3. What would happen if you translated each egg before you rotated the drawing environment?
+3. What would happen if you translated each egg *before* you rotated the drawing environment?
 
-As well as stroke and fill actions, you can use the path as a clipping region (`:clip`), or as the basis for more shape shifting.
+Some useful tools for investigating the important aspects of coordinates and transformations include:
+
+- `axes()` to draw the current x and y axes
+- `getrotation()` to get the current rotation
+- `getscale()` to get the current scale
 
 ## Polyeggs
+
+As well as stroke and fill actions, you can use the path as a clipping region (`:clip`), or as the basis for more shape shifting.
 
 The `egg()` function creates a path and lets you apply an action to it. It's also possible to convert the path into a polygon (an array of points), which lets you do more things with it. The following code converts the egg's path into a polygon, and then moves every other point of the polygon halfway towards the centroid.
 
@@ -658,7 +664,7 @@ This loop steps through the points and moves every odd-numbered one halfway towa
 
 ```julia
     for pt in 1:2:length(pgon)
-        pgon[pt] = between(pc, pgon[pt], 0.5)  
+        pgon[pt] = between(pc, pgon[pt], 0.5)
     end
     poly(pgon, :stroke)
 end
@@ -723,7 +729,7 @@ For a final experiment with our `egg()` function, here's Luxor's `offsetpoly()` 
     circle(pc, 5, :fill)
 
     for pt in 1:2:length(pgon)
-        pgon[pt] = between(pc, pgon[pt], 0.8)  
+        pgon[pt] = between(pc, pgon[pt], 0.8)
     end
 
     for i in 30:-3:-8
@@ -774,7 +780,7 @@ pc = polycentroid(pgon)
 circle(pc, 5, :fill)
 
 for pt in 1:2:length(pgon)
-    pgon[pt] = between(pc, pgon[pt], 0.8)  
+    pgon[pt] = between(pc, pgon[pt], 0.8)
 end
 
 for i in 30:-3:-8
@@ -801,15 +807,20 @@ Here, the graphics are provided by the `ngon()` function, which draws regular `n
 using Luxor, Colors
 @svg begin
     setopacity(0.5)
-    egg(150, :clip)
+    eg(a) = egg(150, a)
+    sethue("gold")
+    eg(:fill)
+    eg(:clip)
     @layer begin
-        for i in 360:-4:1
-            sethue(Colors.HSV(i, 1.0, 0.8))
-            rotate(pi/30)
-            ngon(O, i, 5, 0, :fill)
-        end
+       for i in 360:-4:1
+           sethue(Colors.HSV(i, 1.0, 0.8))
+           rotate(pi/30)
+           ngon(O, i, 5, 0, :stroke)
+       end
     end
     clipreset()
+    sethue("red")
+    eg(:stroke)
 end
 ```
 
@@ -846,17 +857,21 @@ function egg(radius, action=:none)
     closepath()
     do_action(action)
 end
-
 setopacity(0.5)
-egg(150, :clip)
-gsave()
-    for i in 360:-4:1
-        sethue(Colors.HSV(i, 1.0, 0.8))
-        rotate(pi/30)
-        ngon(O, i, 5, 0, :fill)
-    end
-grestore()
+eg(a) = egg(150, a)
+sethue("gold")
+eg(:fill)
+eg(:clip)
+@layer begin
+   for i in 360:-4:1
+       sethue(Colors.HSV(i, 1.0, 0.8))
+       rotate(pi/30)
+       ngon(O, i, 5, 0, :stroke)
+   end
+end
 clipreset()
+sethue("red")
+eg(:stroke)
 finish()
 ```
 ![clip example](assets/figures/tutorial-egg-10.png)
