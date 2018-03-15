@@ -8,7 +8,55 @@ A path is one or more straight and curved (Bézier) lines placed on the drawing.
 
 Luxor also provides a Bézier-path type, which is an array of four-point tuples, each of which is a Bézier curve section.
 
-Functions are provided for converting between polygons and paths.
+```@setup polytable
+using Luxor
+Drawing(700, 275, "assets/figures/polytable.png")
+background("white")
+origin()
+fontsize(10)
+fontface("Menlo")
+
+tabledata = [
+"",             "create",               "convert",              "draw",              "info",             "other",
+"polygons",     "ngon()",               "",                     "poly()",            "isinside()",       "simplify()",
+"",             "ngonside()",           "",                     "prettypoly()",      "polyperimeter()",  "polysplit()",
+"",             "star()",               "",                     "",                  "polyarea()",       "polyportion()",
+"",             "offsetpoly()",         "",                     "",                  "polycentroid()",   "polyremainder()",
+"",             "polyfit()",            "",                     "",                  "polybbox()",       "polysortbyangle()",
+"",             "hyptrochoid()",        "",                     "",                  "",                 "polysortbydistance()",
+"",             "epitrochoid()",        "",                     "",                  "",                 "polyintersections()",
+"paths",        "getpath()",            "pathtopoly()",         "",                  "",                 "",
+"",             "getpathflat()",        "",                     "polysmooth()",      "",                 "",
+"Bezierpaths",  "makebezierpath()",     "pathtobezierpaths()",  "drawbezierpath()",  "",                 "",
+"",             "pathtobezierpaths()",  "bezierpathtopoly()",   "",                  "",                 ""
+]
+
+# have to find widest text to draw table
+nrows, ncols = 12, 6
+widths = Float64[]
+for c in 1:ncols
+    temp = []
+    for r in 1:nrows
+        te = textextents(tabledata[((r-1) * ncols) + c])[3]
+        push!(temp, te + 10)
+    end
+    push!(widths, maximum(temp))
+end
+t = Table(fill(20, nrows), widths)
+for n in t
+    c = n[2]
+    sethue("azure")
+    if t.currentrow >= 2 && t.currentcol >= 2
+        box(t, c, :stroke)
+    end
+    sethue("black")
+    text(string(tabledata[c]), t[c] - (t.colwidths[t.currentcol]/2 - 5, 0))
+end
+finish()
+nothing
+```
+
+![polygons etc](assets/figures/polytable.png)
 
 ## Regular polygons ("ngons")
 
