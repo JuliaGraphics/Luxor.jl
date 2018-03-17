@@ -10,29 +10,29 @@ Luxor also provides a Bézier-path type, which is an array of four-point tuples,
 
 ```@setup polytable
 using Luxor
-Drawing(700, 275, "assets/figures/polytable.png")
+Drawing(800, 275, "assets/figures/polytable.png")
 background("white")
 origin()
-fontsize(10)
-fontface("Menlo")
 
 tabledata = [
-"",             "create",               "convert",              "draw",              "info",             "other",
-"polygons",     "ngon()",               "",                     "poly()",            "isinside()",       "simplify()",
-"",             "ngonside()",           "",                     "prettypoly()",      "polyperimeter()",  "polysplit()",
-"",             "star()",               "",                     "",                  "polyarea()",       "polyportion()",
-"",             "offsetpoly()",         "",                     "",                  "polycentroid()",   "polyremainder()",
-"",             "polyfit()",            "",                     "",                  "polybbox()",       "polysortbyangle()",
-"",             "hyptrochoid()",        "",                     "",                  "",                 "polysortbydistance()",
-"",             "epitrochoid()",        "",                     "",                  "",                 "polyintersections()",
-"paths",        "getpath()",            "pathtopoly()",         "",                  "",                 "",
-"",             "getpathflat()",        "",                     "polysmooth()",      "",                 "",
-"Bezierpaths",  "makebezierpath()",     "pathtobezierpaths()",  "drawbezierpath()",  "",                 "",
-"",             "pathtobezierpaths()",  "bezierpathtopoly()",   "",                  "",                 ""
+"",            "create",               "convert",              "draw",              "info",             "other",
+"polygon",     "ngon()",               "polysmooth()",         "poly()",            "isinside()",       "simplify()",
+"",            "ngonside()",           "",                     "prettypoly()",      "polyperimeter()",  "polysplit()",
+"",            "star()",               "",                     "polysmooth()",      "polyarea()",       "polyportion()",
+"",            "offsetpoly()",         "",                     "",                  "polycentroid()",   "polyremainder()",
+"",            "polyfit()",            "",                     "",                  "polybbox()",       "polysortbyangle()",
+"",            "hyptrochoid()",        "",                     "",                  "",                 "polysortbydistance()",
+"",            "epitrochoid()",        "",                     "",                  "",                 "polyintersections()",
+"path",        "getpath()",            "pathtopoly()",         "",                  "",                 "",
+"",            "getpathflat()",        "",                     "",                  "",                 "",
+"bezierpath",  "makebezierpath()",     "pathtobezierpaths()",  "drawbezierpath()",  "",                 "",
+"",            "pathtobezierpaths()",  "bezierpathtopoly()",   "",                  "",                 ""
 ]
 
 # have to find widest text to draw table
 nrows, ncols = 12, 6
+fontsize(12)
+fontface("Menlo")
 widths = Float64[]
 for c in 1:ncols
     temp = []
@@ -45,9 +45,17 @@ end
 t = Table(fill(20, nrows), widths)
 for n in t
     c = n[2]
-    sethue("azure")
+    @layer begin
+    sethue("thistle")
     if t.currentrow >= 2 && t.currentcol >= 2
-        box(t, c, :stroke)
+        if isodd(t.currentcol)
+            setopacity(0.5)
+            setopacity(0.5)
+        else
+            setopacity(0.75)
+        end
+        box(t, c, :fill)
+    end
     end
     sethue("black")
     text(string(tabledata[c]), t[c] - (t.colwidths[t.currentcol]/2 - 5, 0))
