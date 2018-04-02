@@ -35,7 +35,7 @@ The `label()` function also uses the Toy API.
 Use:
 
 - `setfont(fontname, fontsize)` to specify the fontname and size in points
-- `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise), and the presence of any Pango-flavored markup.
+- `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any Pango-flavored markup.
 
 ```@example
 using Luxor # hide
@@ -117,7 +117,7 @@ settext("<span font='26' background ='green' foreground='red'> Hey</span>
     <tt>monospaced</tt>",
     halign="center",
     markup=true,
-    angle=10)
+    angle=10) # degrees counterclockwise!
 finish() # hide
 nothing # hide
 ```

@@ -17,7 +17,7 @@ function circle(x, y, r, action=:nothing)
 end
 
 """
-    circle(pt, r, action)
+    circle(pt, r, action=:nothing)
 
 Make a circle centered at `pt`.
 """
