@@ -333,6 +333,8 @@ relative to that point.
     label("text", :N, pt, offset=20)  # positions text North of pt, offset by 20
 
 The default offset is 5 units.
+
+TODO: Negative offsets don't give good results.
 """
 function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
     # alignment one of :N, :S, :E, ;W, ;NE; :SE, :SW, :NW
@@ -353,6 +355,32 @@ function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
     elseif in(alignment, [:NW, :nw])
         text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :right, valign = :bottom)
     end
+end
+
+"""
+    label(txt::String, rotation::rot=0.0, pos::Point=O; offset=5)
+
+Add a text label at a point, positioned relative to that point, for example,
+`0.0` is East, `pi` is West.
+"""
+function label(txt::String, rotation=0.0, pos::Point=O; offset=5)
+    if 0 < rotation <= pi/4
+        vertalign  = :middle
+        horizalign = :left
+    elseif pi/4 < rotation <= 3pi/4
+        vertalign  = :top
+        horizalign = :center
+    elseif 3pi/4 < rotation <= 5pi/4
+        vertalign  = :middle
+        horizalign = :right
+    elseif 5pi/4 < rotation <= 7pi/4
+        vertalign  = :bottom
+        horizalign = :center
+    else
+        vertalign  = :middle
+        horizalign = :left
+    end
+    text(txt, pos + polar(offset, rotation), halign = horizalign, valign=vertalign)
 end
 
 """

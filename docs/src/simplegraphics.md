@@ -85,6 +85,11 @@ nothing # hide
 
 ![center and radius of 3 points](assets/figures/center3.png)
 
+```@docs
+circle
+center3pts
+```
+
 With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
 ```@example
@@ -136,7 +141,6 @@ nothing # hide
 ![more ellipses](assets/figures/ellipses_1.png)
 
 ```@docs
-circle
 ellipse
 ```
 
@@ -352,7 +356,7 @@ closepath
 
 ## Lines
 
-Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` draws a line from the current position to the point. `rline(pt)` draws a line relative to the current position. 
+Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` draws a line from the current position to the point. `rline(pt)` draws a line relative to the current position.
 
 ```@docs
 line
@@ -508,10 +512,6 @@ between
 ```
 
 `center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
-
-```@docs
-center3pts
-```
 
 `intersection()` finds the intersection of two lines.
 

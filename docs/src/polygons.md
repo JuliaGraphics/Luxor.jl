@@ -4,7 +4,7 @@ For drawing shapes, Luxor provides polygons and paths.
 
 A polygon is an ordered collection of Points stored in an array.
 
-A path is one or more straight and curved (Bézier) lines placed on the drawing. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
+A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
 
 Luxor also provides a Bézier-path type, which is an array of four-point tuples, each of which is a Bézier curve section.
 
@@ -172,7 +172,7 @@ star
 
 ## Polygons
 
-Use `poly()` to draw lines connecting the points or just fill the area:
+Use `poly()` to draw lines connecting the points and/or just fill the area:
 
 ```@example
 using Luxor # hide
@@ -616,7 +616,7 @@ NTuple{4,Point}[
      ]
 ```
 
-Bézier paths are slightly different from ordinary paths in that they don't usually contain straight line segments. (Although by setting the two control points to be the same as their matching start/end points, you create straight line sections.)
+Bézier paths are different from ordinary paths in that they don't usually contain straight line segments. However, by setting the two control points to be the same as their matching start/end points, you create straight line sections.
 
 `makebezierpath()` takes the points in a polygon and converts each line segment into one Bézier curve. `drawbezierpath()` draws the resulting sequence.
 
@@ -671,7 +671,7 @@ nothing # hide
 ```
 ![path to polygon](assets/figures/bezierpaths.png)
 
-You can convert a Bézier path to a polygon (an array of points), using the `bezierpathtopoly()` function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used for each Bézier curve segment.
+You can convert a Bézier path to a polygon (an array of points), using the `bezierpathtopoly()` function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used to approximate each Bézier segment.
 
 In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).
 
@@ -711,7 +711,7 @@ nothing # hide
 
 You can convert the current path to an array of Bézier paths using the `pathtobezierpaths()` function.
 
-In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then each segment is drawn (in orange) showing how the control points affect the curvature of the Bézier segments.
+In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then the control points of segment are drawn (in orange) showing how they affect the curvature.
 
 ```@example
 using Luxor # hide
@@ -813,7 +813,7 @@ sethue("blue")
 poly(polyportion(p, 0.75), :stroke)
 
 setline(1)
-circle(polyremainder(p, 0.75)[1], 5, :stroke)
+circle(polyremainder(p, 0.75)[1], 5, :stroke) # first point
 
 finish() # hide
 nothing # hide
@@ -835,7 +835,43 @@ nothing # hide
      520.66
      607.437
 
-`nearestindex` returns the index of the nearest index value, an array of distances made by polydistances, to the value, and the excess value.
+It's used by `polyportion()` and `polyremainder()`, and you can pre-calculate and pass them to these functions via keyword arguments for performance. By default the result includes the final closing segment (`closed=true`).
+
+These functions also make use of the `nearestindex()`, which returns a tuple of: the index of the nearest value in an array of distances to a given value; and the excess value.
+
+In this example, we want to find a point halfway round the perimeter of a triangle. Use `nearestindex()` to find the index of the nearest vertex (`nidx`, 2), and the surplus length, (`over`, 100).
+
+```@example
+using Luxor # hide
+Drawing(650, 250, "assets/figures/nearestindex.png") # hide
+origin() # hide
+background("white") # hide
+
+sethue("black") # hide
+setline(0.5) # hide
+
+p = ngonside(O, 200, 3, vertices=true)
+prettypoly(p, :stroke, close=true, vertexlabels = (n, l) -> label(string(n), :NW, offset=10))
+
+# distances array
+da = polydistances(p)
+
+nidx, over = nearestindex(da, polyperimeter(p)/2)
+
+sethue("red")
+circle(p[nidx], 5, :stroke)
+
+arrow(p[nidx],
+      between(p[nidx], p[nidx+1], over/norm(p[nidx], p[nidx+1])),
+      linewidth=2)
+
+finish() # hide
+nothing # hide
+```
+
+![nearestindex](assets/figures/nearestindex.png)
+
+Of course, it's much easier to do `polyportion(p, 0.5)`.
 
 ### Area of polygon
 
