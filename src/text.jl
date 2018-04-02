@@ -5,6 +5,7 @@
 """
     text(str)
     text(str, pos)
+    text(str, pos, angle=pi/2)
     text(str, x, y)
     text(str, pos, halign=:left)
     text(str, valign=:baseline)
@@ -15,13 +16,20 @@ Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
 string at the point. If you omit the point, it's placed at the current `0/0`. In
 Luxor, placing text doesn't affect the current point.
 
+`angle` specifies the rotation of the text relative to the current x-axis.
+
 Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
 `:right`.  Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or
 `:bottom`.
 
 The default alignment is `:left`, `:baseline`.
+
+This uses Cairo's Toy text API.
 """
-function text(t, pt::Point; halign=:left, valign=:baseline)
+function text(t, pt::Point;
+        halign=:left,
+        valign=:baseline,
+        angle=0.0)
     #= text can aligned by one of the following points
         top/left       top/center       top/right
         middle/left    middle/center    middle/right
@@ -57,6 +65,7 @@ function text(t, pt::Point; halign=:left, valign=:baseline)
 
     gsave()
     Cairo.move_to(currentdrawing.cr, textpointx, textpointy)
+    Cairo.rotate(currentdrawing.cr, angle)
     Cairo.show_text(currentdrawing.cr, t)
     grestore()
 end
@@ -359,12 +368,14 @@ function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
 end
 
 """
-    label(txt::String, rotation::rot=0.0, pos::Point=O; offset=5)
+    label(txt::String, rotation::Float64, pos::Point=O; offset=5)
 
 Add a text label at a point, positioned relative to that point, for example,
 `0.0` is East, `pi` is West.
+
+    label("text", pi)          # positions text to the left of the origin
 """
-function label(txt::String, rotation=0.0, pos::Point=O; offset=5)
+function label(txt::String, rotation::Real, pos::Point=O; offset=5)
     if 0 < rotation <= pi/4
         vertalign  = :middle
         horizalign = :left
