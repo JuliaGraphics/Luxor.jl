@@ -9,7 +9,7 @@ else
     const Test = BaseTestNext
 end
 
-function dot(pos)
+function drawdot(pos)
     gsave()
     sethue("red")
     circle(pos, 5, :fill)
@@ -20,7 +20,7 @@ function showt(c, p, ha, va, n)
   text(c, p, halign=ha, valign=va)
   gsave()
   setopacity(0.1)
-  text(string(n), p)
+  text(string(n), p, angle=0)
   grestore()
 end
 
@@ -42,7 +42,7 @@ function text_alignment_tests(fname)
         gsave()
         h = haligns[current_h]
         v = valigns[current_v]
-        dot(Point(pos))
+        drawdot(Point(pos))
         showt("Å˰̀Ά", pos, h, v, n)
         grestore()
         push!(legend, "$n h: $h v: $v")
