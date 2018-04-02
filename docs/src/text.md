@@ -97,6 +97,21 @@ nothing # hide
 
 ![text placement](assets/figures/text-placement.png)
 
+```@example
+using Luxor # hide
+Drawing(400, 300, "assets/figures/text-rotation.png") # hide
+origin() # hide
+background("white") # hide
+fontsize(10)
+fontface("Georgia")
+[text(string(theta), Point(40cos(theta), 40sin(theta)), angle=theta)
+  for theta in 0:pi/12:47pi/24]
+finish() # hide
+nothing # hide
+```
+
+![text rotation](assets/figures/text-rotation.png)
+
 ```@docs
 text
 ```
