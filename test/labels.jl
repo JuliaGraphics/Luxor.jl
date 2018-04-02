@@ -18,6 +18,8 @@ function testlabels(fname)
     origin() # move 0/0 to center
     background("ivory")
     sethue("black")
+
+    # compasspoint version
     compass = [:E, :SE, :S, :SW, :W, :NW, :N, :NE]
 
     fontsize(7)
@@ -28,6 +30,18 @@ function testlabels(fname)
         n = mod1(convert(Int, div(i + pi/8, pi/4) + 1), 8)
         label(string(compass[n]), compass[n], pt)
     end
+
+    # angle version
+    pg = ngon(O, 100, 32, 0, vertices=true)
+    poly(pg, :stroke, close=true)
+    for pt in pg
+        circle(pt, 3, :fill)
+        s = slope(O, pt)
+        pistring = nearestpirat(slope(O, pt))
+        label(string(round(s, 1)), s, pt, offset=-15)
+        label(string(round(s, 1)), s, pt, offset=15)
+    end
+
 
     @test finish() == true
     println("...finished labels test, saved in $(fname)")
