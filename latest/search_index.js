@@ -1561,6 +1561,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "polygons.html#Luxor.intersectlinepoly",
+    "page": "Polygons and paths",
+    "title": "Luxor.intersectlinepoly",
+    "category": "function",
+    "text": "intersectlinepoly(pt1::Point, pt2::Point, C)\n\nReturn an array of the points where a line between pt1 and pt2 crosses polygon C.\n\n\n\n"
+},
+
+{
     "location": "polygons.html#Luxor.polyintersections",
     "page": "Polygons and paths",
     "title": "Luxor.polyintersections",
@@ -1573,7 +1581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Polygon intersections (WIP)",
     "category": "section",
-    "text": "polyintersections calculates the intersection points of two polygons.using Luxor # hide\nDrawing(600, 550, \"assets/figures/polyintersections.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"grey60\") # hide\nsetopacity(0.8) # hide\npentagon = ngon(O, 250, 5, vertices=true)\nsquare = box(O + (80, 20), 280, 280, vertices=true)\n\npoly(pentagon, :stroke, close=true)\npoly(square, :stroke, close=true)\n\nsethue(\"orange\")\ncircle.(polyintersections(pentagon, square), 8, :fill)\n\nsethue(\"green\")\ncircle.(polyintersections(square, pentagon), 4, :fill)\n\nfinish() # hide\nnothing # hide(Image: polygon intersections)The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.polyintersections"
+    "text": "intersectlinepoly(pt1, pt2, polygon) returns an array containing the points where a line from pt1 to pt2 crosses the perimeter of the polygon.using Luxor # hide\nDrawing(600, 550, \"assets/figures/linepolyintersections.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(5) # hide\nsetline(0.3)\nsethue(\"thistle\")\nc = star(O, 120, 7, 0.2, vertices=true)\npoly(c, :fillstroke, close=true)\nfor n in 1:15\n    pt1 = Point(rand(-250:250, 2)...)\n    pt2 = Point(rand(-250:250, 2)...)\n    ips = intersectlinepoly(pt1, pt2, c)\n    if !isempty(ips)\n            sethue(\"grey20\")\n            line(pt1, pt2, :stroke)\n            randomhue()\n            circle.(ips, 2, :fill)\n    else\n        sethue(\"grey80\")\n        line(pt1, pt2, :stroke)\n    end\nend\nfinish() # hide\nnothing # hide(Image: line/polygon intersections)polyintersections calculates the intersection points of two polygons.using Luxor # hide\nDrawing(600, 550, \"assets/figures/polyintersections.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"grey60\") # hide\nsetopacity(0.8) # hide\npentagon = ngon(O, 250, 5, vertices=true)\nsquare = box(O + (80, 20), 280, 280, vertices=true)\n\npoly(pentagon, :stroke, close=true)\npoly(square, :stroke, close=true)\n\nsethue(\"orange\")\ncircle.(polyintersections(pentagon, square), 8, :fill)\n\nsethue(\"green\")\ncircle.(polyintersections(square, pentagon), 4, :fill)\n\nfinish() # hide\nnothing # hide(Image: polygon intersections)The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.intersectlinepoly\npolyintersections"
 },
 
 {
@@ -1605,7 +1613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "The Toy API",
     "category": "section",
-    "text": "Use:text(string, [position]) to place text at a position, otherwise at 0/0, and optionally specify the horizontal and vertical alignment\nfontface(fontname) to specify the fontname\nfontsize(fontsize) to specify the fontsize in pointsusing Luxor # hide\nDrawing(600, 100, \"assets/figures/toy-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nfontsize(18)\nfontface(\"Georgia-Bold\")\ntext(\"Georgia: a serif typeface designed in 1993 by Matthew Carter.\", halign=:center)\nfinish() # hide\nnothing # hide(Image: text placement)The label() function also uses the Toy API."
+    "text": "Use:text(string, [position]) to place text at a position, otherwise at 0/0, and optionally specify the horizontal and vertical alignment\nfontface(fontname) to specify the fontname\nfontsize(fontsize) to specify the fontsize in pointsusing Luxor # hide\nDrawing(600, 100, \"assets/figures/toy-text-example.png\") # hide\norigin() # hide\nbackground(\"azure\") # hide\nsethue(\"black\") # hide\nfontsize(18)\nfontface(\"Georgia-Bold\")\ntext(\"Georgia: a serif typeface designed in 1993 by Matthew Carter.\", halign=:center)\nfinish() # hide\nnothing # hide(Image: text placement)The label() function also uses the Toy API."
 },
 
 {
@@ -1613,7 +1621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "The Pro API",
     "category": "section",
-    "text": "Use:setfont(fontname, fontsize) to specify the fontname and size in points\nsettext(text, [position]) to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any Pango-flavored markup.using Luxor # hide\nDrawing(600, 100, \"assets/figures/pro-text-example.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetfont(\"Georgia Bold\", 18)\nsettext(\"Georgia: a serif typeface designed in 1993 by Matthew Carter.\", halign=\"center\")\nfinish() # hide\nnothing # hide(Image: text placement)"
+    "text": "Use:setfont(fontname, fontsize) to specify the fontname and size in points\nsettext(text, [position]) to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any Pango-flavored markup.using Luxor # hide\nDrawing(600, 100, \"assets/figures/pro-text-example.png\") # hide\norigin() # hide\nbackground(\"azure\") # hide\nsethue(\"black\") # hide\nsetfont(\"Georgia Bold\", 18)\nsettext(\"Georgia: a serif typeface designed in 1993 by Matthew Carter.\", halign=\"center\")\nfinish() # hide\nnothing # hide(Image: text placement)"
 },
 
 {
@@ -1661,7 +1669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.text",
     "category": "function",
-    "text": "text(str)\ntext(str, pos)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it\'s placed at the current 0/0. In Luxor, placing text doesn\'t affect the current point.\n\nHorizontal alignment halign can be :left, :center, (also :centre) or :right.  Vertical alignment valign can be :baseline, :top, :middle, or :bottom.\n\nThe default alignment is :left, :baseline.\n\n\n\n"
+    "text": "text(str)\ntext(str, pos)\ntext(str, pos, angle=pi/2)\ntext(str, x, y)\ntext(str, pos, halign=:left)\ntext(str, valign=:baseline)\ntext(str, valign=:baseline, halign=:left)\ntext(str, pos, valign=:baseline, halign=:left)\n\nDraw the text in the string str at x/y or pt, placing the start of the string at the point. If you omit the point, it\'s placed at the current 0/0. In Luxor, placing text doesn\'t affect the current point.\n\nangle specifies the rotation of the text relative to the current x-axis.\n\nHorizontal alignment halign can be :left, :center, (also :centre) or :right.  Vertical alignment valign can be :baseline, :top, :middle, or :bottom.\n\nThe default alignment is :left, :baseline.\n\nThis uses Cairo\'s Toy text API.\n\n\n\n"
 },
 
 {
@@ -1669,7 +1677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Placing text (\"Toy\" API)",
     "category": "section",
-    "text": "Use text() to place text.using Luxor # hide\nDrawing(400, 150, \"assets/figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(80) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"black\")\ntext(\"1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"2\",  pt2, halign=:center, valign = :bottom)\ntext(\"3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"4\",  pt1, halign=:left,   valign = :top)\ntext(\"5 \", pt2, halign=:center, valign = :top)\ntext(\"6\",  pt3, halign=:right,  valign = :top)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nfinish() # hide\nnothing # hide(Image: text placement)text"
+    "text": "Use text() to place text.using Luxor # hide\nDrawing(400, 150, \"assets/figures/text-placement.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(80) # hide\nsethue(\"black\") # hide\npt1 = Point(-100, 0)\npt2 = Point(0, 0)\npt3 = Point(100, 0)\nsethue(\"black\")\ntext(\"1\",  pt1, halign=:left,   valign = :bottom)\ntext(\"2\",  pt2, halign=:center, valign = :bottom)\ntext(\"3\",  pt3, halign=:right,  valign = :bottom)\ntext(\"4\",  pt1, halign=:left,   valign = :top)\ntext(\"5 \", pt2, halign=:center, valign = :top)\ntext(\"6\",  pt3, halign=:right,  valign = :top)\nsethue(\"red\")\nmap(p -> circle(p, 4, :fill), [pt1, pt2, pt3])\nfinish() # hide\nnothing # hide(Image: text placement)using Luxor # hide\nDrawing(400, 300, \"assets/figures/text-rotation.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nfontsize(10)\nfontface(\"Georgia\")\n[text(string(theta), Point(40cos(theta), 40sin(theta)), angle=theta)\n  for theta in 0:pi/12:47pi/24]\nfinish() # hide\nnothing # hide(Image: text rotation)text"
 },
 
 {
@@ -1733,7 +1741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Luxor.label",
     "category": "function",
-    "text": "label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)\n\nAdd a text label at a point, positioned relative to that point, for example, :N signifies North and places the text directly above that point.\n\nUse one of :N, :S, :E, :W, :NE, :SE, :SW, :NW to position the label relative to that point.\n\nlabel(\"text\")          # positions text at North (above), relative to the origin\nlabel(\"text\", :S)      # positions text at South (below), relative to the origin\nlabel(\"text\", :S, pt)  # positions text South of pt\nlabel(\"text\", :N, pt, offset=20)  # positions text North of pt, offset by 20\n\nThe default offset is 5 units.\n\nTODO: Negative offsets don\'t give good results.\n\n\n\nlabel(txt::String, rotation::rot=0.0, pos::Point=O; offset=5)\n\nAdd a text label at a point, positioned relative to that point, for example, 0.0 is East, pi is West.\n\n\n\n"
+    "text": "label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)\n\nAdd a text label at a point, positioned relative to that point, for example, :N signifies North and places the text directly above that point.\n\nUse one of :N, :S, :E, :W, :NE, :SE, :SW, :NW to position the label relative to that point.\n\nlabel(\"text\")          # positions text at North (above), relative to the origin\nlabel(\"text\", :S)      # positions text at South (below), relative to the origin\nlabel(\"text\", :S, pt)  # positions text South of pt\nlabel(\"text\", :N, pt, offset=20)  # positions text North of pt, offset by 20\n\nThe default offset is 5 units.\n\nTODO: Negative offsets don\'t give good results.\n\n\n\nlabel(txt::String, rotation::Float64, pos::Point=O; offset=5)\n\nAdd a text label at a point, positioned relative to that point, for example, 0.0 is East, pi is West.\n\nlabel(\"text\", pi)          # positions text to the left of the origin\n\n\n\n"
 },
 
 {
