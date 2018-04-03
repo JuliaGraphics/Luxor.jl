@@ -926,6 +926,38 @@ polyarea
 
 ## Polygon intersections (WIP)
 
+`intersectlinepoly(pt1, pt2, polygon)` returns an array containing the points where a line from `pt1` to `pt2` crosses the perimeter of the `polygon`.
+
+```@example
+using Luxor # hide
+Drawing(600, 550, "assets/figures/linepolyintersections.png") # hide
+origin() # hide
+background("white") # hide
+srand(5) # hide
+setline(0.3)
+sethue("thistle")
+c = star(O, 120, 7, 0.2, vertices=true)
+poly(c, :fillstroke, close=true)
+for n in 1:15
+    pt1 = Point(rand(-250:250, 2)...)
+    pt2 = Point(rand(-250:250, 2)...)
+    ips = intersectlinepoly(pt1, pt2, c)
+    if !isempty(ips)
+            sethue("grey20")
+            line(pt1, pt2, :stroke)
+            randomhue()
+            circle.(ips, 2, :fill)
+    else
+        sethue("grey80")
+        line(pt1, pt2, :stroke)
+    end
+end
+finish() # hide
+nothing # hide
+```
+
+![line/polygon intersections](assets/figures/linepolyintersections.png)
+
 `polyintersections` calculates the intersection points of two polygons.
 
 ```@example
@@ -956,5 +988,6 @@ nothing # hide
 The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.
 
 ```@docs
+intersectlinepoly
 polyintersections
 ```
