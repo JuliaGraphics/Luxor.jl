@@ -17,7 +17,7 @@ Use:
 using Luxor # hide
 Drawing(600, 100, "assets/figures/toy-text-example.png") # hide
 origin() # hide
-background("white") # hide
+background("azure") # hide
 sethue("black") # hide
 fontsize(18)
 fontface("Georgia-Bold")
@@ -41,7 +41,7 @@ Use:
 using Luxor # hide
 Drawing(600, 100, "assets/figures/pro-text-example.png") # hide
 origin() # hide
-background("white") # hide
+background("azure") # hide
 sethue("black") # hide
 setfont("Georgia Bold", 18)
 settext("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign="center")
@@ -102,6 +102,7 @@ using Luxor # hide
 Drawing(400, 300, "assets/figures/text-rotation.png") # hide
 origin() # hide
 background("white") # hide
+sethue("black") # hide
 fontsize(10)
 fontface("Georgia")
 [text(string(theta), Point(40cos(theta), 40sin(theta)), angle=theta)
