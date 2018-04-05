@@ -28,11 +28,9 @@ function poly(pointlist::AbstractArray{Point, 1}, action::Symbol = :nothing; clo
 end
 
 """
-Find the bounding box of a polygon (array of points).
-
     polybbox(pointlist::AbstractArray)
 
-Return the two opposite corners (suitable for `box()`, for example).
+Return two opposite corners of the bounding box of a polygon (array of points).
 """
 function polybbox(pointlist::AbstractArray{Point, 1})
     lowx, lowy = pointlist[1].x, pointlist[1].y
@@ -44,6 +42,21 @@ function polybbox(pointlist::AbstractArray{Point, 1})
         p.y > highy && (highy = p.y)
     end
     return [Point(lowx, lowy), Point(highx, highy)]
+end
+
+"""
+    polybbox()
+
+Return a bounding box (two opposite corners) the same size and position as the
+current drawing.
+"""
+function polybbox()
+    # ignore current matrix
+    b = getmatrix()
+    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
+    r = polybbox([Point(0, 0), Point(currentdrawing.width, currentdrawing.height)])
+    setmatrix(b)
+    return r
 end
 
 """

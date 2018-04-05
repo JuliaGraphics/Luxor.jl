@@ -13,52 +13,57 @@ using Luxor
 Drawing(800, 275, "assets/figures/polytable.png")
 background("white")
 origin()
+tabledata = readdlm(IOBuffer(
+"""
+-             create                convert               draw               info              other             
+polygon       ngon()                polysmooth()          poly()             isinside()        simplify()
+-             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()
+-             star()                -                     polysmooth()       polyarea()        polyportion()
+-             offsetpoly()          -                     -                  polycentroid()    polyremainder()
+-             polyfit()             -                     -                  polybbox()        polysortbyangle()
+-             hyptrochoid()         -                     -                  -                 polysortbydistance()
+-             epitrochoid()         -                     -                  -                 polyintersections()
+path          getpath()             pathtopoly()          -                  -                 -
+-             getpathflat()         -                     -                  -                 -  
+bezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -
+-             pathtobezierpaths()   bezierpathtopoly()    -                  -                 -  
+"""))
 
-tabledata = [
-"",            "create",               "convert",              "draw",              "info",             "other",
-"polygon",     "ngon()",               "polysmooth()",         "poly()",            "isinside()",       "simplify()",
-"",            "ngonside()",           "",                     "prettypoly()",      "polyperimeter()",  "polysplit()",
-"",            "star()",               "",                     "polysmooth()",      "polyarea()",       "polyportion()",
-"",            "offsetpoly()",         "",                     "",                  "polycentroid()",   "polyremainder()",
-"",            "polyfit()",            "",                     "",                  "polybbox()",       "polysortbyangle()",
-"",            "hyptrochoid()",        "",                     "",                  "",                 "polysortbydistance()",
-"",            "epitrochoid()",        "",                     "",                  "",                 "polyintersections()",
-"path",        "getpath()",            "pathtopoly()",         "",                  "",                 "",
-"",            "getpathflat()",        "",                     "",                  "",                 "",
-"bezierpath",  "makebezierpath()",     "pathtobezierpaths()",  "drawbezierpath()",  "",                 "",
-"",            "pathtobezierpaths()",  "bezierpathtopoly()",   "",                  "",                 ""
-]
-
-# have to find widest text to draw table
-nrows, ncols = 12, 6
+# find the widths of the columns
+nrows, ncols = size(tabledata)
 fontsize(12)
 fontface("Menlo")
 widths = Float64[]
+margin=4
 for c in 1:ncols
     temp = []
     for r in 1:nrows
-        te = textextents(tabledata[((r-1) * ncols) + c])[3]
+        te = textextents(tabledata[r, c])[3]
         push!(temp, te + 10)
     end
     push!(widths, maximum(temp))
 end
+
+# draw table using the widths
 t = Table(fill(20, nrows), widths)
-for n in t
-    c = n[2]
-    @layer begin
-    sethue("thistle")
-    if t.currentrow >= 2 && t.currentcol >= 2
-        if isodd(t.currentcol)
-            setopacity(0.5)
-            setopacity(0.5)
-        else
-            setopacity(0.75)
+for r in 1:size(t)[1]
+   for c in 1:size(t)[2]
+        @layer begin
+        sethue("thistle")
+        if r >= 2 && c >= 2
+            if isodd(c)
+                setopacity(0.5)
+            else
+                setopacity(0.75)
+            end
+            box(t, r, c, :fill)
         end
-        box(t, c, :fill)
+        end
+        sethue("black")
+        if tabledata[r, c] != "-"
+            text(string(tabledata[r, c]), t[r, c] - (t.colwidths[c]/2 - margin, 0))
+        end
     end
-    end
-    sethue("black")
-    text(string(tabledata[c]), t[c] - (t.colwidths[t.currentcol]/2 - 5, 0))
 end
 finish()
 nothing
@@ -288,7 +293,7 @@ setopacity(0.5) # hide
 
 decorate(pos, p, level) = begin
     if level < 4
-        randomhue();
+        randomhue()
         scale(0.25, 0.25)
         prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)
     end
