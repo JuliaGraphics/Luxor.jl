@@ -251,6 +251,25 @@ axes
 origin
 ```
 
+`polybbox()` without arguments returns two points, the opposite corners of a bounding box that encloses the drawing. This code fragment draws three circles, one at two corners and one at the midway point between the two corners.
+
+```@example
+using Luxor # hide
+Drawing(400, 400, "assets/figures/bbox.png") # hide
+background("white") # hide
+sethue("blue")  # hide
+corners = polybbox()
+circle.([corners..., midpoint(corners...)], 100, :fill)
+finish() # hide
+nothing # hide
+```
+
+![axes](assets/figures/bbox.png)
+
+```@docs
+polybbox
+```
+
 ## Save and restore
 
 `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.

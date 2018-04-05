@@ -81,12 +81,14 @@ end
 
 function point_arithmetic_test(fname, npoints=20)
     Drawing(1200, 1200, fname)
-    origin()
+    background("white")
+    sethue("thistle")
+    box(polybbox(), :stroke)
     scale(0.5, 0.5)
     setline(2.5)
-    background("white")
     setopacity(0.5)
     fontsize(8)
+    origin()
     randompoints = randompointarray(Point(-600, -600), Point(600, 600), npoints)
 
     # +
