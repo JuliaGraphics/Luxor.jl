@@ -13,7 +13,8 @@ function drawpolyboundingbox(apoly)
     gsave()
     setline(0.3)
     setdash("dotted")
-    box(polybbox(apoly), :stroke)
+    poly(convert(Vector{Point}, BoundingBox(apoly)), :stroke, close=true)
+    box(BoundingBox(apoly), :stroke)
     grestore()
 end
 
