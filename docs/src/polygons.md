@@ -20,7 +20,7 @@ polygon       ngon()                polysmooth()          poly()             isi
 -             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()
 -             star()                -                     polysmooth()       polyarea()        polyportion()
 -             offsetpoly()          -                     -                  polycentroid()    polyremainder()
--             polyfit()             -                     -                  polybbox()        polysortbyangle()
+-             polyfit()             -                     -                  boundingbox()        polysortbyangle()
 -             hyptrochoid()         -                     -                  -                 polysortbydistance()
 -             epitrochoid()         -                     -                  -                 polyintersections()
 path          getpath()             pathtopoly()          -                  -                 -

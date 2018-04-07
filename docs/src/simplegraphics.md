@@ -34,7 +34,6 @@ If you want the coordinates of the corners of a box, use this form of `box()`:
 ```@docs
 rect
 box
-polybbox
 ```
 
 For regular polygons, see the next section on Polygons.
@@ -607,7 +606,7 @@ intersection
 intersectionlinecircle
 intersection2circles
 intersectioncirclecircle
-bboxesintersect
+boundingboxesintersect
 ```
 `getnearestpointonline()` finds perpendiculars.
 
@@ -695,6 +694,145 @@ nothing # hide
 ```@docs
 julialogo
 juliacircles
+```
+
+## Bounding boxes
+
+The `BoundingBox` type allows you to use rectangular extents to organize and interact with the 2D drawing area. A `BoundingBox` instance returns two points, the opposite corners of a bounding box.
+
+`BoundingBox()` without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see `origin()`).
+
+This example draws circles at three points: at two of the drawing's corners and the midway point between them:
+
+```@example
+using Luxor # hide
+Drawing(400, 400, "assets/figures/bbox.png") # hide
+background("white") # hide
+
+origin()
+
+bb = BoundingBox()
+setline(10)
+sethue("orange")
+
+circle(bb[1], 120, :stroke) # first corner
+
+circle(bb[2], 120, :stroke) # second corner
+
+circle(midpoint(bb...), 120, :stroke) # midpoint
+
+sethue("blue")
+circle.([bb[1], midpoint(bb[1:2]), bb[2]], 100, :fill)
+
+sethue("red")
+circle.([first(bb), midpoint(bb...), last(bb)], 50, :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![bounding box](assets/figures/bbox.png)
+
+You can make a BoundingBox from a piece of text, a polygon, or by modifying an existing one.
+
+```@example
+using Luxor # hide
+Drawing(400, 200, "assets/figures/bboxpoly.png") # hide
+background("white") # hide
+origin() # hide
+
+p = star(O, 100, 5, 0.1, pi/3.3, vertices=true)
+sethue("antiquewhite")
+box(BoundingBox(p), :fill)
+
+sethue("black")
+poly(p, :stroke, close=true)
+
+finish() # hide
+nothing # hide
+```
+
+![bounding box of polygon](assets/figures/bboxpoly.png)
+
+You can also do some arithmetic on them. In the next example, the text's bounding box is filled with yellow, increased by 20 units (blue), scaled by 1.3 (green), and shifted by `(0, 100)` (orange). The bounding box objects are passed to `box()` or `poly()` to be drawn.
+
+```@example
+using Luxor # hide
+Drawing(600, 200, "assets/figures/bbox2.png") # hide
+background("white") # hide
+origin() # hide
+
+fontsize(30)
+str = "good afternoon"
+sethue("yellow")
+box(BoundingBox(str), :fill)
+sethue("black")
+text(str)
+
+sethue("blue")
+modbox = BoundingBox(str) + 20 # add 20 units to all sides
+poly(modbox, :stroke, close=true)
+
+sethue("green")
+modbox = BoundingBox(str) * 1.3
+poly(modbox, :stroke, close=true)
+
+sethue("orange")
+modbox = BoundingBox(str) + (0, 100)
+poly(modbox, :fill, close=true)
+
+finish() # hide
+nothing # hide
+```
+
+![bounding boxes 2](assets/figures/bbox2.png)
+
+You can find the intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created and drawn differently depending on whether they're inside the intersection or outside.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/bbox3.png") # hide
+background("white") # hide
+srand(42) # hide
+
+origin()
+setopacity(0.75)
+setline(4)
+
+bbox1 = BoundingBox()/2 - (70, 80)
+sethue("yellow")
+box(bbox1, :fill)
+
+bbox2 = BoundingBox()/2  + (100, 80)
+sethue("pink")
+box(bbox2, :fill)
+
+sethue("black")
+box(bbox1 + bbox2, :stroke)
+
+sethue("red")
+bothboxes = intersectboundingboxes(bbox1, bbox2)
+box(bothboxes, :fill)
+
+for i in 1:500
+    pt = randompoint(bbox1 + bbox2...)
+    if isinside(pt, bothboxes)
+        sethue("white")
+        circle(pt, 5, :fill)
+    else
+        sethue("black")
+        circle(pt, 2, :fill)
+    end
+end
+
+finish() # hide
+nothing # hide
+```
+
+![intersecting bounding boxes](assets/figures/bbox3.png)
+
+```@docs
+BoundingBox
 ```
 
 ## Miscellaneous

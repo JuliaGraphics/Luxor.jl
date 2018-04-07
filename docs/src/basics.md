@@ -10,7 +10,7 @@ The underlying drawing model is that you make shapes, or add points to paths, an
 
 Specify points (positions) using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
 
-The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into areas, using `Tiler`, `Partition`, and `Table`, and define grids, using `GridRect` and `GridHex`.
+The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into areas, using `Tiler`, `Partition`, and `Table`, and define grids, using `GridRect` and `GridHex`. The `BoundingBox` type provides tools for working with rectangular extents.
 
 ## Points and coordinates
 
@@ -249,25 +249,6 @@ nothing # hide
 background
 axes
 origin
-```
-
-`polybbox()` without arguments returns two points, the opposite corners of a bounding box that encloses the drawing. This code fragment draws three circles, one at two corners and one at the midway point between the two corners.
-
-```@example
-using Luxor # hide
-Drawing(400, 400, "assets/figures/bbox.png") # hide
-background("white") # hide
-sethue("blue")  # hide
-corners = polybbox()
-circle.([corners..., midpoint(corners...)], 100, :fill)
-finish() # hide
-nothing # hide
-```
-
-![axes](assets/figures/bbox.png)
-
-```@docs
-polybbox
 ```
 
 ## Save and restore

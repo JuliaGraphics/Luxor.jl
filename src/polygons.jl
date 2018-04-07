@@ -28,38 +28,6 @@ function poly(pointlist::AbstractArray{Point, 1}, action::Symbol = :nothing; clo
 end
 
 """
-    polybbox(pointlist::AbstractArray)
-
-Return two opposite corners of the bounding box of a polygon (array of points).
-"""
-function polybbox(pointlist::AbstractArray{Point, 1})
-    lowx, lowy = pointlist[1].x, pointlist[1].y
-    highx, highy = pointlist[end].x, pointlist[end].y
-    for p in pointlist
-        p.x < lowx  && (lowx  = p.x)
-        p.y < lowy  && (lowy  = p.y)
-        p.x > highx && (highx = p.x)
-        p.y > highy && (highy = p.y)
-    end
-    return [Point(lowx, lowy), Point(highx, highy)]
-end
-
-"""
-    polybbox()
-
-Return a bounding box (two opposite corners) the same size and position as the
-current drawing.
-"""
-function polybbox()
-    # ignore current matrix
-    b = getmatrix()
-    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-    r = polybbox([Point(0, 0), Point(currentdrawing.width, currentdrawing.height)])
-    setmatrix(b)
-    return r
-end
-
-"""
 Find the centroid of simple polygon.
 
     polycentroid(pointlist)

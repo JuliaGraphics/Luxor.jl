@@ -447,26 +447,3 @@ produces
     Luxor.Point(7.071067811865475,7.0710678118654755)
 """
 polar(r, theta) = Point(r * cos(theta), r * sin(theta))
-
-"""
-    bboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)
-
-Return true if the two bounding boxes defined by acorner1:acorner2 and bcorner1:bcorner2 intersect.
-
-Each pair of points is assumed to define the two opposite corners of a bounding box.
-
-"""
-function bboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)
-    minax, maxax = minmax(acorner1.x, acorner2.x)
-    minay, maxay = minmax(acorner1.y, acorner2.y)
-
-    minbx, maxbx = minmax(bcorner1.x, bcorner2.x)
-    minby, maxby = minmax(bcorner1.y, bcorner2.y)
-
-    maxax < minbx && return false
-    maxbx < minax && return false
-
-    maxay < minby && return false
-    maxby < minay && return false
-    return true # boxes overlap
-end

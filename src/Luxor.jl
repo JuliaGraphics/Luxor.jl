@@ -36,10 +36,9 @@ include("bars.jl")
 include("bezierpath.jl")
 include("mesh.jl")
 include("Table.jl")
+include("BoundingBox.jl")
+include("deprecations.jl")
 #include("shapefile.jl")
-
-@deprecate fill() fillpath()
-@deprecate stroke() strokepath()
 
 export Drawing, currentdrawing,
     cm, inch, mm,
@@ -56,7 +55,7 @@ export Drawing, currentdrawing,
 
     makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
 
-    strokepath, fillpath, # stroke, fill are now deprecated
+    strokepath, fillpath,
 
     rect, box, cropmarks,
 
@@ -64,10 +63,14 @@ export Drawing, currentdrawing,
 
     move, rmove, line, rule, rline, arrow,
 
+    BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
+
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
-    intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, bboxesintersect, ispointonline,
+    intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
     intersectlinepoly, polyintersections,
+
+    intersectboundingboxes, boundingboxesintersect,
 
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,
@@ -75,7 +78,7 @@ export Drawing, currentdrawing,
     Point, O, randompoint, randompointarray, midpoint, between, slope, intersection,
     pointlinedistance, getnearestpointonline, isinside,
     perpendicular, crossproduct,
-    prettypoly, polysmooth, polysplit, poly, simplify, polybbox, polycentroid,
+    prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
@@ -109,7 +112,7 @@ export Drawing, currentdrawing,
 
     GridHex, GridRect, nextgridpoint,
 
-    Table, 
+    Table,
     readpng, placeimage,
 
     julialogo, juliacircles,

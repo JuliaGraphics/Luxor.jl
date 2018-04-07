@@ -25,13 +25,23 @@ rect(cornerpoint::Point, w, h, action::Symbol) =
     rect(cornerpoint.x, cornerpoint.y, w, h, action)
 
 """
-    box(cornerpoint1, cornerpoint2, action=:nothing)
+    box(cornerpoint1, cornerpoint2, action=:nothing; vertices=false)
 
-Create a rectangle between two points and do an action.
+Create a rectangle between two points and do an action. Use `vertices=true` to
+return an array of the four corner points rather than draw the box.
 """
-box(corner1::Point, corner2::Point, action::Symbol=:nothing) =
-    rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
-
+function box(corner1::Point, corner2::Point, action::Symbol=:nothing; vertices=false)
+    if vertices
+       return  [
+       Point(corner1.x, corner1.y),
+       Point(corner2.x, corner1.y),
+       Point(corner2.x, corner2.y),
+       Point(corner1.x, corner2.y)
+       ]
+    else
+        rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
+    end
+end
 """
     box(points::AbstractArray, action=:nothing)
 

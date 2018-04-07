@@ -13,7 +13,7 @@ function drawbbox(apoly)
     gsave()
     setline(0.3)
     setdash("dotted")
-    box(polybbox(apoly), :stroke)
+    box(BoundingBox(apoly), :stroke)
     grestore()
 end
 

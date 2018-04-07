@@ -93,6 +93,11 @@ function run_all_tests()
     @testset "axes" begin
         include("axes-test.jl")
     end
+
+    @testset "boundingbox" begin
+        include("boundingboxtests.jl")
+    end
+
     @testset "clipping" begin
         include("clipping-test.jl")
     end
