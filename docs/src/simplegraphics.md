@@ -22,14 +22,21 @@ nothing # hide
 
 ![rect vs box](assets/figures/basicrects.png)
 
-Whereas `rect()` rectangles are positioned at one corner, a box made with `box()` can either be defined by its center and dimensions, or by two opposite corners.
+`rect()` rectangles are positioned by a corner, but a box made with `box()` can either be defined by its center and dimensions, or by two opposite corners.
 
 ![rects](assets/figures/rects.png)
 
-If you want the coordinates of the corners of a box, use this form of `box()`:
+If you want the coordinates of the corners of a box, rather than draw one immediatelye, use:
 
-    box(centerpoint, width, height, vertices=true)
+```julia
+box(centerpoint, width, height, vertices=true)
+```
 
+or
+
+```julia
+box(corner1,  corner2, vertices=true)
+```    
 
 ```@docs
 rect
@@ -76,7 +83,7 @@ p1 = Point(0, -50)
 p2 = Point(100, 0)
 p3 = Point(0, 65)
 map(p -> circle(p, 4, :fill), [p1, p2, p3])
-sethue("orange") # hide
+sethue("orange")
 circle(center3pts(p1, p2, p3)..., :stroke)
 finish() # hide
 nothing # hide
@@ -115,11 +122,50 @@ nothing # hide
 
 ![ellipses](assets/figures/ellipses.png)
 
-It's also possible to construct polygons that are approximations to ellipses with two focal points and a distance.
+`ellipse()` can also construct polygons that are approximations to ellipses. You supply two focal points and a length which is the sum of the distances of a point on the perimeter to the two focii.
 
 ```@example
 using Luxor # hide
-Drawing(500, 450, "assets/figures/ellipses_1.png") # hide
+Drawing(400, 220, "assets/figures/ellipses_1.png") # hide
+origin() # hide
+background("white") # hide
+
+srand(42) # hide
+sethue("black") # hide
+setline(1) # hide
+fontface("Menlo")
+
+f1 = Point(-100, 0)
+f2 = Point(100, 0)
+
+circle.([f1, f2], 3, :fill)
+
+epoly = ellipse(f1, f2, 250, vertices=true)
+poly(epoly, :stroke,  close=true)
+
+pt = epoly[rand(1:end)]
+
+poly([f1, pt, f2], :stroke)
+
+label("f1", :W, f1, offset=10)
+label("f2", :E, f2, offset=10)
+
+label(string(round(norm(f1, pt), 1)), :SE, midpoint(f1, pt))
+label(string(round(norm(pt, f2), 1)), :SW, midpoint(pt, f2))
+
+label("ellipse(f1, f2, 250)", :S, Point(0, 75))
+
+finish() # hide
+nothing # hide
+```
+
+![more ellipses](assets/figures/ellipses_1.png)
+
+The advantage of this method is that there's a `vertices=true|false` option, allowing further scope for polygon manipulation.
+
+```@example
+using Luxor # hide
+Drawing(500, 450, "assets/figures/ellipses_2.png") # hide
 origin() # hide
 background("white") # hide
 sethue("gray30") # hide
@@ -137,7 +183,7 @@ finish() # hide
 nothing # hide
 ```
 
-![more ellipses](assets/figures/ellipses_1.png)
+![even more ellipses](assets/figures/ellipses_2.png)
 
 ```@docs
 ellipse
@@ -232,17 +278,28 @@ To construct spirals, use the `spiral()` function. These can be drawn directly, 
 
 ```@example
 using Luxor # hide
-Drawing(500, 400, "assets/figures/spiral.png") # hide
+Drawing(600, 300, "assets/figures/spiral.png") # hide
 background("white") # hide
 origin() # hide
-sethue("magenta") # hide
+sethue("black") # hide
+setline(.5) # hide
+fontface("Avenir-Heavy") # hide
+fontsize(15) # hide
 
-sp = spiral(4, 1, stepby=pi/24, period=12pi, vertices=true)
+spiraldata = [
+  (-2, "Lituus",      50),
+  (-1, "Hyperbolic", 100),
+  ( 1, "Archimedes",   1),
+  ( 2, "Fermat",       5)]
 
-for i in 1:10
-    setgray(i/10)
-    setline(22-2i)
-    poly(sp, :stroke)
+grid = GridRect(O - (200, 0), 130, 50)
+
+for aspiral in spiraldata
+    @layer begin
+        translate(nextgridpoint(grid))
+        spiral(last(aspiral), first(aspiral), period=20pi, :stroke)
+        label(aspiral[2], :S, offset=100)
+    end
 end
 
 finish() # hide
@@ -251,26 +308,36 @@ nothing # hide
 
 ![spiral](assets/figures/spiral.png)
 
-Use the `log=true` option to draw logarithmic spirals.
+Use the `log=true` option to draw logarithmic (Bernoulli or Fibonacci) spirals.
 
 ```@example
 using Luxor # hide
-Drawing(500, 400, "assets/figures/spiral-log.png") # hide
+Drawing(600, 400, "assets/figures/spiral-log.png") # hide
 background("white") # hide
 origin() # hide
-sethue("magenta") # hide
+setline(.5) # hide
+sethue("black") # hide
+fontface("Avenir-Heavy") # hide
+fontsize(15) # hide
 
-sp = spiral(2, .12, log=true, stepby=pi/24, period=12pi, vertices=true)
+spiraldata = [
+    (10,  0.05),
+    (4,   0.10),
+    (0.5, 0.17)]
 
-for i in 1:10
-    setgray(i/10)
-    setline(22-2i)
-    poly(sp, :stroke)
+grid = GridRect(O - (200, 0), 175, 50)
+for aspiral in spiraldata
+    @layer begin
+        translate(nextgridpoint(grid))
+        spiral(first(aspiral), last(aspiral), log=true, period=10pi, :stroke)
+        label(string(aspiral), :S, offset=100)
+    end
 end
 
 finish() # hide
 nothing # hide
 ```
+Modify the `stepby` and `period` parameters to taste, or collect the vertices for further processing.
 
 ![spiral log](assets/figures/spiral-log.png)
 
@@ -278,7 +345,7 @@ nothing # hide
 spiral
 ```
 
-A *squircle* is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste by supplying a value for keyword `rt`:
+A *squircle* is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste by supplying a value for the root (keyword `rt`):
 
 ```@example
 using Luxor # hide
@@ -338,8 +405,7 @@ nothing # hide
 
 ## Paths and positions
 
-A path is a sequence of lines and curves. You can add lines and curves to the current path,
-then use `closepath()` to join the last point to the first.
+A path is a sequence of lines and curves. You can add lines and curves to the current path, then use `closepath()` to join the last point to the first.
 
 A path can have subpaths, created with` newsubpath()`, which can form holes.
 
@@ -355,7 +421,7 @@ closepath
 
 ## Lines
 
-Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` draws a line from the current position to the point. `rline(pt)` draws a line relative to the current position.
+Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` adds a line to the current path going from the current position to the point. `rline(pt)` adds a line relative to the current position.
 
 ```@docs
 line
@@ -390,20 +456,26 @@ rule
 
 ## Arcs and curves
 
-There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arcs to the current path. To construct a sequence of lines and arcs, use the `:path` action.
+There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the `:path` action.
 
 `curve()` constructs Bézier curves from control points:
 
 ```@example
 using Luxor # hide
-Drawing(500, 275, "assets/figures/curve.png") # hide
+Drawing(600, 275, "assets/figures/curve.png") # hide
 origin() # hide
 background("white") # hide
+
+sethue("black") # hide
 
 setline(.5)
 pt1 = Point(0, -125)
 pt2 = Point(200, 125)
 pt3 = Point(200, -125)
+
+label.(string.(["O", "control point 1", "control point 2", "control point 3"]),
+    :e,
+    [O, pt1, pt2, pt3])
 
 sethue("red")
 map(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
@@ -414,16 +486,18 @@ line(pt2, pt3, :stroke)
 sethue("black")
 setline(3)
 
+# start a path
 move(O)
-curve(pt1, pt2, pt3)
+curve(pt1, pt2, pt3) #  add to current path
 strokepath()
+
 finish()  # hide
 nothing # hide
 ```
 
 ![curve](assets/figures/curve.png)
 
-`arc2r()` draws a circular arc that joins two points:
+`arc2r()` draws a circular arc centered at a point that passes through two other points:
 
 ```@example
 using Luxor # hide
@@ -517,22 +591,27 @@ between
 ```@example
 using Luxor # hide
 Drawing(700, 220, "assets/figures/intersection.png") # hide
-origin() # hide
 background("white") # hide
-sethue("darkmagenta") # hide
-pt1, pt2, pt3, pt4 = ngon(O, 100, 5, vertices=true)
-text.(["pt 1", "pt 2", "pt 3", "pt 4"], [pt1, pt2, pt3, pt4])
-line(pt1, pt2, :stroke)
-line(pt4, pt3, :stroke)
+origin() # hide
 
-flag, ip =  intersection(pt1, pt2, pt4, pt3)
+sethue("black")
+P1, P2, P3, P4 = ngon(O, 100, 5, vertices=true)
+label.(["P1", "P2", "P3", "P4"], :N, [P1, P2, P3, P4])
+line(P1, P2, :stroke)
+line(P4, P3, :stroke)
+
+flag, ip =  intersection(P1, P2, P4, P3)
 if flag
     circle(ip, 5, :fill)
 end
+
 finish() # hide
 nothing # hide
 ```
+
 ![arc](assets/figures/intersection.png)
+
+Notice that the order in which the points define the lines is important (P1 to P2, P4 to P3). The `collinearintersect=true` option may also help.
 
 `intersectionlinecircle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
 
@@ -560,7 +639,7 @@ nothing # hide
 ```
 ![arc](assets/figures/intersection_line_circle.png)
 
-`intersection2circles()` finds the area of the intersection of two circles, and `intersectioncirclecircle() finds the points where they cross.
+`intersection2circles()` finds the area of the intersection of two circles, and `intersectioncirclecircle()` finds the points where they cross.
 
 This example shows the areas of two circles, and the area of their intersection.
 
@@ -594,7 +673,7 @@ text(string(intersection2circles(c1..., c2...) |> round),
 sethue("red")
 flag, C, D = intersectioncirclecircle(c1..., c2...)
 if flag
-    circle.([C, D], 2, :fill)
+    circle.([C, D], 5, :fill)
 end
 finish() # hide
 nothing # hide
@@ -706,7 +785,7 @@ This example draws circles at three points: at two of the drawing's corners and 
 
 ```@example
 using Luxor # hide
-Drawing(400, 400, "assets/figures/bbox.png") # hide
+Drawing(700, 400, "assets/figures/bbox.png") # hide
 background("white") # hide
 
 origin()
@@ -715,17 +794,17 @@ bb = BoundingBox()
 setline(10)
 sethue("orange")
 
-circle(bb[1], 120, :stroke) # first corner
+circle(bb[1], 150, :stroke) # first corner
 
-circle(bb[2], 120, :stroke) # second corner
+circle(bb[2], 150, :stroke) # second corner
 
-circle(midpoint(bb...), 120, :stroke) # midpoint
+circle(midpoint(bb...), 150, :stroke) # midpoint
 
 sethue("blue")
-circle.([bb[1], midpoint(bb[1:2]), bb[2]], 100, :fill)
+circle.([bb[1], midpoint(bb[1:2]), bb[2]], 130, :fill)
 
 sethue("red")
-circle.([first(bb), midpoint(bb...), last(bb)], 50, :fill)
+circle.([first(bb), midpoint(bb...), last(bb)], 100, :fill)
 
 finish() # hide
 nothing # hide
@@ -733,7 +812,7 @@ nothing # hide
 
 ![bounding box](assets/figures/bbox.png)
 
-You can make a BoundingBox from a piece of text, a polygon, or by modifying an existing one.
+You can make a BoundingBox from two points, a text string, an existing polygon, or by modifying an existing one.
 
 ```@example
 using Luxor # hide
@@ -754,15 +833,18 @@ nothing # hide
 
 ![bounding box of polygon](assets/figures/bboxpoly.png)
 
-You can also do some arithmetic on them. In the next example, the text's bounding box is filled with yellow, increased by 20 units (blue), scaled by 1.3 (green), and shifted by `(0, 100)` (orange). The bounding box objects are passed to `box()` or `poly()` to be drawn.
+The bounding box objects can be passed to `box()` or `poly()` to be drawn.
+
+You can also do some arithmetic on bounding boxes. In the next example, the text's bounding box is filled with yellow, increased by 20 units (blue), scaled by 1.3 (green), and shifted by `(0, 100)` (orange).
 
 ```@example
 using Luxor # hide
-Drawing(600, 200, "assets/figures/bbox2.png") # hide
+Drawing(500, 300, "assets/figures/bbox2.png") # hide
 background("white") # hide
 origin() # hide
 
-fontsize(30)
+translate(-130,0)
+fontsize(40)
 str = "good afternoon"
 sethue("yellow")
 box(BoundingBox(str), :fill)
@@ -770,7 +852,7 @@ sethue("black")
 text(str)
 
 sethue("blue")
-modbox = BoundingBox(str) + 20 # add 20 units to all sides
+modbox = BoundingBox(str) + 40 # add 20 units to all sides
 poly(modbox, :stroke, close=true)
 
 sethue("green")
@@ -787,7 +869,7 @@ nothing # hide
 
 ![bounding boxes 2](assets/figures/bbox2.png)
 
-You can find the intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created and drawn differently depending on whether they're inside the intersection or outside.
+You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created and drawn differently depending on whether they're inside the intersection or outside.
 
 ```@example
 using Luxor # hide
@@ -797,13 +879,13 @@ srand(42) # hide
 
 origin()
 setopacity(0.75)
-setline(4)
+setline(8)
 
-bbox1 = BoundingBox()/2 - (70, 80)
+bbox1 = BoundingBox()/2 - (50, 30)
 sethue("yellow")
 box(bbox1, :fill)
 
-bbox2 = BoundingBox()/2  + (100, 80)
+bbox2 = BoundingBox()/2  + (50, 30)
 sethue("pink")
 box(bbox2, :fill)
 
@@ -818,7 +900,7 @@ for i in 1:500
     pt = randompoint(bbox1 + bbox2...)
     if isinside(pt, bothboxes)
         sethue("white")
-        circle(pt, 5, :fill)
+        circle(pt, 3, :fill)
     else
         sethue("black")
         circle(pt, 2, :fill)
