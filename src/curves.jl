@@ -100,12 +100,13 @@ ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
     squircle(center::Point, hradius, vradius, action=:none;
         rt = 0.5, stepby = pi/40, vertices=false)
 
-Make a squircle (basically a rectangle with rounded corners). Specify the center position,
-horizontal radius (distance from center to a side), and vertical radius (distance from
-center to top or bottom):
+Make a squircle or superellipse (basically a rectangle with rounded corners).
+Specify the center position, horizontal radius (distance from center to a side),
+and vertical radius (distance from center to top or bottom):
 
-The `rt` option defaults to 0.5, and gives an intermediate shape. Values less than 0.5 make
-the shape more square. Values above make the shape more round.
+The root (`rt`) option defaults to 0.5, and gives an intermediate shape. Values
+less than 0.5 make the shape more rectangular. Values above make the shape more
+round. The horizontal and vertical radii can be different.
 """
 function squircle(center::Point, hradius, vradius, action=:none;
                   rt = 0.5,

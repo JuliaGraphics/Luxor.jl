@@ -365,10 +365,14 @@ using Luxor, Colors # hide
 Drawing(600, 600, "assets/figures/mesh1.png") # hide
 origin() # hide
 background("white") # hide
-
 setcolor("grey50")
 circle.([Point(x, y) for x in -200:25:200, y in -200:25:200], 10, :fill)
-bp = makebezierpath(ngon(O, 250, 4, pi/4, vertices=true), smoothing=.4)
+
+bp = makebezierpath(box(O, 300, 300, vertices=true), smoothing=.4)
+setline(3)
+sethue("black")
+
+drawbezierpath(bp, :stroke)
 mesh1 = mesh(bp, [
     Colors.RGBA(1, 0, 0, 1),   # bottom left, red
     Colors.RGBA(1, 1, 1, 0.0), # top left, transparent
