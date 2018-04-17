@@ -37,6 +37,8 @@ function test_turtles(fname)
         setopacity(0.5)
         Penwidth(🐢, .5)
         n = 400
+        Pendown(🐢)
+        Penup(🐢)
         for i in 1:200
             Forward(🐢, n)
             Turn(🐢, 29)
@@ -44,17 +46,23 @@ function test_turtles(fname)
             n += 1.25
             subroutine(🐢)
         end
+        Reposition(🐢, O)
+        Rectangle(🐢, 10, 10)
     end
 
     fontsize(30)
-    Reposition(raphael, 400, -100);   Reposition(michaelangelo, 400, -50)
+    Reposition(raphael, Point(400, -100));   Reposition(michaelangelo, 400, -50)
     Message(raphael, "Raphael");      Message(michaelangelo, "Michaelangelo")
 
     Push(raphael)
     Pop(raphael)
 
+    Pencolor(raphael, "white")
+    Randomize_saturation(michaelangelo)
+
     # test warnings
-    Pop(michaelangelo) # should get warning!
+    info("stack was already empty warning expected...")
+    Pop(michaelangelo) # should get "stack empty" warning!
     @test finish() == true
 end
 

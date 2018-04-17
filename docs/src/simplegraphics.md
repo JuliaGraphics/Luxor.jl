@@ -26,7 +26,7 @@ nothing # hide
 
 ![rects](assets/figures/rects.png)
 
-If you want the coordinates of the corners of a box, rather than draw one immediatelye, use:
+If you want the coordinates of the corners of a box, rather than draw one immediately, use:
 
 ```julia
 box(centerpoint, width, height, vertices=true)

@@ -254,14 +254,14 @@ function box(t::Table, r::Int, c::Int, action::Symbol=:nothing)
 end
 
 """
-    box(t::Table, cellnumber::Int, action::Symbol=:nothing)
+    box(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)
 
 Draw box `cellnumber` in table `t`.
 """
-function box(t::Table, cellnumber::Int, action::Symbol=:nothing)
+function box(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)
     r = div(cellnumber - 1, t.ncols) + 1
     c = mod1(cellnumber, t.ncols)
 
     cellw, cellh = t.colwidths[c], t.rowheights[r]
-    box(t[r, c], cellw, cellh, action)
+    box(t[r, c], cellw, cellh, action; vertices=vertices)
 end

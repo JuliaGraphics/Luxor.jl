@@ -144,9 +144,32 @@ function +(bb1::BoundingBox, bb2::BoundingBox)
     return BoundingBox(Point(lox.x, loy.y), Point(hix.x, hiy.y))
 end
 
+"""
+    boxwidth(bb::BoundingBox)
+
+Return the width of bounding box `bb`.
+"""
 boxwidth(bb::BoundingBox)       = abs(bb.corner1.x - bb.corner2.x)
+
+"""
+    boxheight(bb::BoundingBox)
+
+Return the height of bounding box `bb`.
+"""
 boxheight(bb::BoundingBox)      = abs(bb.corner1.y - bb.corner2.y)
+
+"""
+    boxdiagonal(bb::BoundingBox)
+
+Return the length of the diagonal of bounding box `bb`.
+"""
 boxdiagonal(bb::BoundingBox)    = hypot(boxwidth(bb), boxheight(bb))
+
+"""
+    boxaspectratio(bb::BoundingBox)
+
+Return the asepct ratio (the height divided by the width) of bounding box `bb`.
+"""
 boxaspectratio(bb::BoundingBox) = boxheight(bb)/boxwidth(bb)
 
 """
