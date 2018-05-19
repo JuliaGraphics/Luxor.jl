@@ -4,7 +4,11 @@
 
 For color definitions and conversions, you can use Colors.jl.
 
-`setcolor()` and `sethue()` apply a single solid or transparent color to shapes. `setblend()` applies a smooth transition between two or more colors. `setmesh` applies a color mesh.
+`setcolor()` and `sethue()` apply a single solid or transparent color to shapes.
+
+`setblend()` applies a smooth transition between two or more colors.
+
+`setmesh()` applies a color mesh.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
 
@@ -111,6 +115,18 @@ strokepreserve
 fillpreserve
 paint
 do_action
+```
+
+Soon you'll be able to define dash patterns  in Luxor. For now:
+
+```julia
+dashes = [50.0,  # ink
+          10.0,  # skip
+          10.0,  # ink
+          10.0   # skip
+          ]
+offset = -50.0
+Cairo.set_dash(currentdrawing.cr, dashes, offset)
 ```
 
 ## Blends
@@ -352,13 +368,37 @@ setmode
 
 ## Meshes
 
-A mesh is a Cairo feature that provides smooth shading between three or four colors across a region defined by lines or curves.
+A mesh provides smooth shading between three or four colors across a region defined by lines or curves.
 
 To create a mesh, use the `mesh()` function and save the result as a mesh object. To use a mesh, supply the mesh object to the `setmesh()` function.
 
 The `mesh()` function accepts either an array of Bézier paths or a polygon.
 
-The first example uses a Bézier path conversion of a square as the outline of the mesh. Because the box to be filled is larger than the mesh's outlines, not all the box is filled.
+This basic example obtains a polygon from the drawing area using `box(BoundingBox()...` and uses the four corners of the mesh and the four colors in the array to build the mesh. The `paint()` function fills the drawing.
+
+```@example
+using Luxor, Colors # hide
+Drawing(600, 600, "assets/figures/mesh-basic.png") # hide
+origin() # hide
+
+garishmesh = mesh(
+    box(BoundingBox(), vertices=true),
+    ["purple", "green", "yellow", "red"])
+
+setmesh(garishmesh)
+
+paint()
+
+setline(2)
+sethue("white")
+hypotrochoid(180, 81, 130, :stroke)
+finish() # hide
+nothing # hide
+```
+
+![mesh 1](assets/figures/mesh-basic.png)
+
+The next example uses a Bézier path conversion of a square as the outline of the mesh. Because the box to be filled is larger than the mesh's outlines, not all the box is filled.
 
 ```@example
 using Luxor, Colors # hide

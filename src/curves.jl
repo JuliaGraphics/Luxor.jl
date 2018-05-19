@@ -74,7 +74,8 @@ Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `
 function ellipse(xc, yc, w, h, action=:none)
     x  = xc - w/2
     y  = yc - h/2
-    kappa = .5522848 # ??? http://www.whizkidtech.redprince.net/bezier/circle/kappa/
+    # kappa = 4.0 * (sqrt(2.0) - 1.0) / 3.0
+    kappa = 0.5522847498307936
     ox = (w / 2) * kappa  # control point offset horizontal
     oy = (h / 2) * kappa  # control point offset vertical
     xe = x + w            # x-end
@@ -373,11 +374,15 @@ curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 """
     circlepath(center::Point, radius, action=:none;
         reversepath=false,
-        kappa = 0.5522847)
+        kappa = 0.5522847498307936)
 
 Draw a circle using Bézier curves.
+
+The magic value, `kappa`, is `4.0 * (sqrt(2.0) - 1.0) / 3.0`.
 """
-function circlepath(center::Point, radius, action=:none; reversepath=false, kappa = 0.5522847)
+function circlepath(center::Point, radius, action=:none;
+    reversepath=false,
+    kappa = 0.5522847498307936)
     function northtoeast(center::Point, radius, kappa)
         curve(center.x + (radius * kappa), center.y + radius, center.x + radius,
         center.y + (radius * kappa), center.x + radius, center.y )
