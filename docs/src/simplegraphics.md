@@ -686,7 +686,9 @@ intersectionlinecircle
 intersection2circles
 intersectioncirclecircle
 boundingboxesintersect
+ispointonline
 ```
+
 `getnearestpointonline()` finds perpendiculars.
 
 ```@example
@@ -915,6 +917,11 @@ nothing # hide
 
 ```@docs
 BoundingBox
+boxaspectratio
+boxdiagonal
+boxwidth
+boxheight
+intersectboundingboxes
 ```
 
 ## Miscellaneous

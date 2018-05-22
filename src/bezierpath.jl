@@ -1,6 +1,8 @@
 """
-   findbeziercontrolpoints(previouspt::Point, pt1::Point, pt2::Point,
-            nextpt::Point;
+    findbeziercontrolpoints(previouspt::Point, 
+        pt1::Point,
+        pt2::Point,
+        nextpt::Point;
         smooth_value=0.5)
 
 Find the Bézier control points for the line between `pt1` and `pt2`, where the

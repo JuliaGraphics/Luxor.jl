@@ -751,6 +751,7 @@ end
 finish() # hide
 nothing # hide
 ```
+
 ![path to polygon](assets/figures/pathtobezierpaths.png)
 
 ```@docs
@@ -759,6 +760,7 @@ drawbezierpath
 bezierpathtopoly
 beziertopoly
 pathtobezierpaths
+Luxor.findbeziercontrolpoints
 ```
 
 ## Polygon information

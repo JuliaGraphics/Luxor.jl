@@ -364,6 +364,7 @@ You can access the list of modes with the unexported symbol `Luxor.blendingmodes
 
 ```@docs
 setmode
+getmode
 ```
 
 ## Meshes

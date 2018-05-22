@@ -47,6 +47,7 @@ nothing # hide
 
 ![scale](assets/figures/scale.png)
 
+
 `rotate()` rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
 
 ```@example
@@ -70,13 +71,16 @@ nothing # hide
 
 ![rotate](assets/figures/rotate.png)
 
+To return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` to reset the matrix to the default. `origin()` resets the matrix then moves the origin to the center of the page.
+
+`rescale()` is just a convenient utility function for linear interpolation, also called a "lerp".
+
 ```@docs
 scale
 rotate
 translate
+rescale
 ```
-
-To return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` to reset the matrix to the default. `origin()` resets the matrix then moves the origin to the center of the page.
 
 # Matrices and transformations
 
