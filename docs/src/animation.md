@@ -136,13 +136,52 @@ Most easing functions have names constructed like this:
 
 and there's an `easingflat()` linear transition.
 
+```@setup draweasingfunctions
+using Luxor # hide
+function draweasingfunction(f, pos, w, h)
+  @layer begin
+    translate(pos)
+    setline(0.5)
+    sethue("black")
+    box(O, w, h, :stroke)
+    sethue("purple")
+    for i in 0:0.005:1.0
+      circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)
+    end
+    sethue("black")
+    text(replace(string(f), "Luxor.", ""), Point(0, h/2 - 20), halign=:center)
+  end
+end
+
+Drawing(650, 650, "assets/figures/easingfunctions.png") # hide
+background("white") # hide
+origin() # hide
+t = Tiler(650, 650, 5, 5)
+margin=5
+fontsize(10)
+fontface("Menlo")
+for (pos, n) in t
+  n > length(Luxor.easingfunctions) && continue
+  draweasingfunction(Luxor.easingfunctions[n], pos, t.tilewidth-margin, t.tileheight-margin)
+end
+
+finish() # hide
+nothing # hide
+```
+
+In these graphs, the horizontal axis is time (between 0 and 1), and the vertical axis is the parameter value (between 0 and 1).
+
+![easing function summary](assets/figures/easingfunctions.png)
+
 One way to use an easing function in a frame-making function is like this:
 
-     function moveobject(scene, framenumber)
-        background("white")
-        ...
-        easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
-        ...
+```julia
+function moveobject(scene, framenumber)
+    background("white")
+    ...
+    easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    ...
+```
 
 This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.
 

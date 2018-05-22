@@ -329,7 +329,9 @@ settext(text::AbstractString, pos::Point; kwargs...) =
 settext(text; kwargs...) = settext(text, O; kwargs...)
 
 """
-    label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
+    label(txt::String, alignment::Symbol=:N, pos::Point=O;
+        offset=5,
+        leader=false)
 
 Add a text label at a point, positioned relative to that point, for example, `:N` signifies
 North and places the text directly above that point.
@@ -344,38 +346,60 @@ relative to that point.
 
 The default offset is 5 units.
 
+If `leader` is true, draw a line as well.
+
 TODO: Negative offsets don't give good results.
 """
-function label(txt::String, alignment::Symbol=:N, pos::Point=O; offset=5)
+function label(txt::String, alignment::Symbol=:N, pos::Point=O;
+        offset=5,
+        leader=false,
+        leaderoffsets=[0.0, 1.0])
     # alignment one of :N, :S, :E, ;W, ;NE; :SE, :SW, :NW
     if in(alignment, [:N, :n])
-        text(txt, Point(pos.x, pos.y - offset), halign = :center, valign = :bottom)
+        pt = Point(pos.x, pos.y - offset)
+        text(txt, pt, halign = :center, valign = :bottom)
     elseif in(alignment, [:E, :e])
-        text(txt, Point(pos.x + offset, pos.y), halign = :left, valign = :middle)
+        pt = Point(pos.x + offset, pos.y)
+        text(txt, pt, halign = :left, valign = :middle)
     elseif in(alignment, [:S, :s])
-        text(txt, Point(pos.x, pos.y + offset), halign = :center, valign = :top)
+        pt = Point(pos.x, pos.y + offset)
+        text(txt, pt, halign = :center, valign = :top)
     elseif in(alignment, [:W, :w])
-        text(txt, Point(pos.x - offset, pos.y), halign = :right, valign = :middle)
+        pt = Point(pos.x - offset, pos.y)
+        text(txt, pt, halign = :right, valign = :middle)
     elseif in(alignment, [:NE, :ne])
-        text(txt, Point(pos.x + (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :left, valign = :bottom)
+        pt = Point(pos.x + (offset * cos(pi/4)), pos.y - (offset * sin(pi/4)))
+        text(txt, pt, halign = :left, valign = :bottom)
     elseif in(alignment, [:SE, :se])
-        text(txt, Point(pos.x + (offset * cos(pi/4)), pos.y + (offset * sin(pi/4))), halign = :left, valign = :top)
+        pt = Point(pos.x + (offset * cos(pi/4)), pos.y + (offset * sin(pi/4)))
+        text(txt, pt, halign = :left, valign = :top)
     elseif in(alignment, [:SW, :sw])
-        text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y + (offset * sin(pi/4))), halign = :right, valign = :top)
+        pt = Point(pos.x - (offset * cos(pi/4)), pos.y + (offset * sin(pi/4)))
+        text(txt, pt, halign = :right, valign = :top)
     elseif in(alignment, [:NW, :nw])
-        text(txt, Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4))), halign = :right, valign = :bottom)
+        pt = Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4)))
+        text(txt, pt, halign = :right, valign = :bottom)
+    end
+    if leader
+        line(between(pos, pt, leaderoffsets[1]), between(pos, pt, leaderoffsets[2]), :stroke)
     end
 end
 
 """
-    label(txt::String, rotation::Float64, pos::Point=O; offset=5)
+    label(txt::String, rotation::Float64, pos::Point=O;
+        offset=5,
+        leader=false,
+        leaderoffsets=[0.0, 1.0])
 
 Add a text label at a point, positioned relative to that point, for example,
 `0.0` is East, `pi` is West.
 
     label("text", pi)          # positions text to the left of the origin
 """
-function label(txt::String, rotation::Real, pos::Point=O; offset=5)
+function label(txt::String, rotation::Real, pos::Point=O;
+        offset=5,
+        leader=false,
+        leaderoffsets=[0.0, 1.0])
     if 0 < rotation <= pi/4
         vertalign  = :middle
         horizalign = :left
@@ -392,7 +416,11 @@ function label(txt::String, rotation::Real, pos::Point=O; offset=5)
         vertalign  = :middle
         horizalign = :left
     end
-    text(txt, pos + polar(offset, rotation), halign = horizalign, valign=vertalign)
+    pt = pos + polar(offset, rotation)
+    if leader
+        line(between(pos, pt, leaderoffsets[1]), between(pos, pt, leaderoffsets[2]), :stroke)
+    end
+    text(txt, pt, halign = horizalign, valign=vertalign)
 end
 
 """

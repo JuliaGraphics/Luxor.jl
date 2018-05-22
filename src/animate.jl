@@ -302,6 +302,16 @@ function easingflat(t, b, c, d)
     return c * t / d + b
 end
 
+"""easeinoutinversequad"""
+function easeinoutinversequad(t, b, c, d)
+   t /= d/2
+   if t <= 1
+      return -(c/2) * (t * (t - 2)) + b
+    end
+   t -= 1
+   return c/2 * (t * t * t + 1) + b
+end
+
 easingfunctions = [lineartween,
                     easeinquad,
                     easeoutquad,
@@ -324,4 +334,5 @@ easingfunctions = [lineartween,
                     easeincirc,
                     easeoutcirc,
                     easeinoutcirc,
-                    easingflat]
+                    easingflat,
+                    easeinoutinversequad]
