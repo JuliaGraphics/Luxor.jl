@@ -192,7 +192,7 @@ points to indicate where it should be. So `:N` (for North) places a text label d
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "assets/figures/labels.png") # hide
+Drawing(400, 350, "assets/figures/labels.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black")
@@ -202,8 +202,8 @@ octagon = ngon(O, 100, 8, 0, vertices=true)
 compass = [:SE, :S, :SW, :W, :NW, :N, :NE, :E, :SE]
 
 for i in 1:8
-    circle(octagon[i], 2, :fill)
-    label(string(compass[i]), compass[i], octagon[i])
+    circle(octagon[i], 5, :fill)
+    label(string(compass[i]), compass[i], octagon[i], leader=true, leaderoffsets=[0.2, 0.9], offset=50)
 end
 
 finish() # hide

@@ -13,6 +13,7 @@ function run_all_tests()
         if !  @compat is_windows()
             include("animation-test.jl")
         end
+        include("easingfunctions.jl")
     end
 
     @testset "polygons" begin
@@ -43,6 +44,7 @@ function run_all_tests()
         include("text-path-clipping.jl")
         include("text-wrapping.jl")
         include("text-boxes.jl")
+        include("label-tests.jl")
     end
 
     @testset "curves" begin
