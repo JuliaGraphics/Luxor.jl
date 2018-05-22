@@ -232,3 +232,30 @@ Here:
 - `c` is the change between the beginning and destination value of the property
 
 - `d` is the total length of the transition
+
+```@docs
+easingflat
+lineartween
+easeinquad
+easeoutquad
+easeinoutquad
+easeincubic
+easeoutcubic
+easeinoutcubic
+easeinquart
+easeoutquart
+easeinoutquart
+easeinquint
+easeoutquint
+easeinoutquint
+easeinsine
+easeoutsine
+easeinoutsine
+easeinexpo
+easeoutexpo
+easeinoutexpo
+easeincirc
+easeoutcirc
+easeinoutcirc
+easeinoutinversequad
+```

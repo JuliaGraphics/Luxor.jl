@@ -99,6 +99,7 @@ To create a drawing, and optionally specify the filename and type, and dimension
 
 ```@docs
 Drawing
+paper_sizes
 ```
 
 To finish a drawing and close the file, use `finish()`, and, to launch an external application to view it, use `preview()`.

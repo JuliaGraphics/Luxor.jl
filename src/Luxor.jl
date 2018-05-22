@@ -127,7 +127,7 @@ export Drawing, currentdrawing,
     lineartween, easeinquad, easeoutquad, easeinoutquad, easeincubic, easeoutcubic,
     easeinoutcubic, easeinquart, easeoutquart, easeinoutquart, easeinquint, easeoutquint,
     easeinoutquint, easeinsine, easeoutsine, easeinoutsine, easeinexpo, easeoutexpo,
-    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat
+    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

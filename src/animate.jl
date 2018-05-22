@@ -144,19 +144,53 @@ Create the movie defined in `movie` by rendering the frames define in `scene`.
 """
 animate(movie::Movie, scene::Scene; kwargs...) = animate(movie, [scene]; kwargs...)
 
-"""quadratic easing in - accelerating from zero velocity"""
+
+"""
+    easingflat(t, b, c, d)
+
+A flat easing function, same as `lineartween()`.
+
+For all easing functions, the four parameters are:
+
+- `t` time, ie the current framenumber
+- `b` beginning position or bottom value of the range
+- `c` total change in position or top value of the range
+- `d` duration, ie a framecount
+
+1. `t/d` or `t/=d` normalizes `t` to between 0 and 1
+2. `... * c` scales up to the required range value
+3. `... + b` adds the initial offset
+
+"""
+function easingflat(t, b, c, d)
+    return c * t / d + b
+end
+
+"""
+    easeinquad(t, b, c, d)
+
+quadratic easing in - accelerating from zero velocity
+"""
 function easeinquad(t, b, c, d)
    t /= d
    return c * t * t + b
 end
 
-"""quadratic easing out - decelerating to zero velocity"""
+"""
+    easeoutquad(t, b, c, d)
+
+quadratic easing out - decelerating to zero velocity
+"""
 function easeoutquad(t, b, c, d)
    t /= d
    return -c * t * (t - 2) + b
 end
 
-"""quadratic easing in/out - acceleration until halfway, then deceleration"""
+"""
+    easeinoutquad(t, b, c, d)
+
+quadratic easing in/out - acceleration until halfway, then deceleration
+"""
 function easeinoutquad(t, b, c, d)
    t /= d/2
    if t < 1
@@ -166,20 +200,32 @@ function easeinoutquad(t, b, c, d)
    return -(c/2) * (t * (t - 2) - 1) + b
 end
 
-"""cubic easing in - accelerating from zero velocity"""
+"""
+    easeincubic(t, b, c, d)
+
+cubic easing in - accelerating from zero velocity
+"""
 function easeincubic(t, b, c, d)
    t /= d
    return c * t * t * t + b
 end
 
-"""cubic easing out - decelerating to zero velocity"""
+"""
+    easeoutcubic(t, b, c, d)
+
+cubic easing out - decelerating to zero velocity
+"""
 function easeoutcubic(t, b, c, d)
    t /= d
    t -= 1
    return c * (t * t * t + 1) + b
 end
 
-"""cubic easing in/out - acceleration until halfway, then deceleration"""
+"""
+    easeinoutcubic(t, b, c, d)
+
+cubic easing in/out - acceleration until halfway, then deceleration
+"""
 function easeinoutcubic(t, b, c, d)
    t /= d/2
    if t < 1
@@ -189,20 +235,32 @@ function easeinoutcubic(t, b, c, d)
    return c/2 * (t * t * t + 2) + b
 end
 
-"""quartic easing in - accelerating from zero velocity"""
+"""
+    easeinquart(t, b, c, d)
+
+quartic easing in - accelerating from zero velocity
+"""
 function easeinquart(t, b, c, d)
    t /= d
    return c * t * t * t * t + b
 end
 
-"""quartic easing out - decelerating to zero velocity"""
+"""
+    easeoutquart(t, b, c, d)
+
+quartic easing out - decelerating to zero velocity
+"""
 function easeoutquart(t, b, c, d)
    t /= d
    t -= 1
    return -c * (t * t * t * t - 1) + b
 end
 
-"""quartic easing in/out - acceleration until halfway, then deceleration"""
+"""
+    easeinoutquart(t, b, c, d)
+
+quartic easing in/out - acceleration until halfway, then deceleration
+"""
 function easeinoutquart(t, b, c, d)
    t /= d/2
    if t < 1
@@ -212,20 +270,32 @@ function easeinoutquart(t, b, c, d)
    return -c/2 * (t * t * t * t - 2) + b
 end
 
-"""quintic easing in - accelerating from zero velocity"""
+"""
+    easeinquint(t, b, c, d)
+
+quintic easing in - accelerating from zero velocity
+"""
 function easeinquint(t, b, c, d)
    t /= d
    return c * t * t * t * t * t + b
 end
 
-"""quintic easing out - decelerating to zero velocity"""
+"""
+    easeoutquint(t, b, c, d)
+
+quintic easing out - decelerating to zero velocity
+"""
 function easeoutquint(t, b, c, d)
    t /= d
    t -= 1
    return c * (t * t * t * t * t + 1) + b
 end
 
-"""quintic easing in/out - acceleration until halfway, then deceleration"""
+"""
+    easeinoutquint(t, b, c, d)
+
+quintic easing in/out - acceleration until halfway, then deceleration
+"""
 function easeinoutquint(t, b, c, d)
    t /= d/2
    if t < 1
@@ -235,22 +305,38 @@ function easeinoutquint(t, b, c, d)
    return c/2 * (t * t * t * t * t + 2) + b
 end
 
-"""sinusoidal easing in - accelerating from zero velocity"""
+"""
+    easeinsine(t, b, c, d)
+
+sinusoidal easing in - accelerating from zero velocity
+"""
 function easeinsine(t, b, c, d)
    return -c * cos(t/d * (pi/2)) + c + b
 end
 
-"""sinusoidal easing out - decelerating to zero velocity"""
+"""
+    easeoutsine(t, b, c, d)
+
+sinusoidal easing out - decelerating to zero velocity
+"""
 function easeoutsine(t, b, c, d)
    return c * sin(t/d * (pi/2)) + b
 end
 
-"""sinusoidal easing in/out - accelerating until halfway, then decelerating"""
+"""
+    easeinoutsine(t, b, c, d)
+
+sinusoidal easing in/out - accelerating until halfway, then decelerating
+"""
 function easeinoutsine(t, b, c, d)
    return -c/2 * (cos(pi * t/d) - 1) + b
 end
 
-"""exponential easing in - accelerating from zero velocity"""
+"""
+    easeinexpo(t, b, c, d)
+
+exponential easing in - accelerating from zero velocity
+"""
 function easeinexpo(t, b, c, d)
     if isapprox(t, 0.0, atol=1e-3)
         return 0.0
@@ -259,12 +345,20 @@ function easeinexpo(t, b, c, d)
     end
 end
 
-"""exponential easing out - decelerating to zero velocity"""
+"""
+    easeoutexpo(t, b, c, d)
+
+exponential easing out - decelerating to zero velocity
+"""
 function easeoutexpo(t, b, c, d)
    return c * (-(2 ^ (-10 * t/d)) + 1) + b
 end
 
-"""exponential easing in/out - accelerating until halfway, then decelerating"""
+"""
+    easeinoutexpo(t, b, c, d)
+
+exponential easing in/out - accelerating until halfway, then decelerating
+"""
 function easeinoutexpo(t, b, c, d)
    t /= d/2
    if t < 1
@@ -274,20 +368,32 @@ function easeinoutexpo(t, b, c, d)
    return c/2 * (-(2 ^ (-10 * t)) + 2) + b
 end
 
-"""circular easing in - accelerating from zero velocity"""
+"""
+    easeincirc(t, b, c, d)
+
+circular easing in - accelerating from zero velocity
+"""
 function easeincirc(t, b, c, d)
    t /= d
    return -c * (sqrt(abs((1 - t * t))) - 1) + b
 end
 
-"""circular easing out - decelerating to zero velocity"""
+"""
+    easeoutcirc(t, b, c, d)
+
+circular easing out - decelerating to zero velocity
+"""
 function easeoutcirc(t, b, c, d)
    t /= d
    t -= 1
    return c * sqrt(abs((1 - t * t))) + b
 end
 
-"""circular easing in/out - acceleration until halfway, then deceleration"""
+"""
+    easeinoutcirc(t, b, c, d)
+
+circular easing in/out - acceleration until halfway, then deceleration
+"""
 function easeinoutcirc(t, b, c, d)
    t /= d/2
    if (t < 1)
@@ -297,12 +403,13 @@ function easeinoutcirc(t, b, c, d)
    return c/2 * (sqrt(abs(1 - t * t)) + 1) + b
 end
 
-"""easingflat, same as lineartween()"""
-function easingflat(t, b, c, d)
-    return c * t / d + b
-end
 
-"""easeinoutinversequad"""
+
+"""
+    easeinoutinversequad(t, b, c, d)
+
+ease in, then slow down, then speed up, and ease out
+"""
 function easeinoutinversequad(t, b, c, d)
    t /= d/2
    if t <= 1
