@@ -33,6 +33,7 @@ function general_tests()
     @test .>=(Point(5, 5),  Point(5, 5))
     @test perpendicular(Point(10, 5)) == Point(5.0, -10.0)
     @test perpendicular(Point(-10, -5)) == Point(-5.0,10.0)
+
     @test crossproduct(Point(2, 3), Point(3, 2)) == -5.0
     @test crossproduct(Point(-20, 30), Point(60, 20)) < 2000
 
@@ -77,6 +78,12 @@ function general_tests()
     @test isequal(between(pt1, pt3, 0.0), pt1)
     @test isequal(between(pt1, pt3, 1.0), pt3)
 
+
+    # test drop perpendicular
+    p1 = Point(0, 0)
+    p2 = Point(0, 50)
+    @test perpendicular(p1, p2, 10) == Luxor.Point(-10.0, 0.0)
+    @test perpendicular(p1, p2, 20) == Luxor.Point(-20.0, 0.0)
 end
 
 function point_arithmetic_test(fname, npoints=20)
