@@ -153,6 +153,27 @@ function between(couple::NTuple{2, Point}, x)
 end
 
 """
+    perpendicular(p1, p2, k)
+
+Return a point `p3` that is `k` units away from `p1`, such that a line `p1 p3`
+is perpendicular to `p1 p2`.
+
+Convention? to the right?
+"""
+function perpendicular(p1::Point, p2::Point, k)
+    px = p2.x - p1.x
+    py = p2.y - p1.y
+    l = hypot(px, py)
+    if l > 0.0
+        ux = -py/l
+        uy = px/l
+        return Point(p1.x + (k * ux), p1.y + (k * uy))
+    else
+        error("these two points are the same")
+    end
+end
+
+"""
     perpendicular(p::Point)
 
 Returns point `Point(p.y, -p.x)`.
