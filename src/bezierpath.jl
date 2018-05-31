@@ -1,5 +1,5 @@
 """
-    findbeziercontrolpoints(previouspt::Point, 
+    findbeziercontrolpoints(previouspt::Point,
         pt1::Point,
         pt2::Point,
         nextpt::Point;
@@ -54,7 +54,7 @@ end
     drawbezierpath(bezierpath, action=:none;
         close=true)
 
-Draw a Bézier path, and apply the action, such as `:none`, `:stroke`, `:fill`,
+Draw the Bézier path, and apply the action, such as `:none`, `:stroke`, `:fill`,
 etc. By default the path is closed.
 """
 function drawbezierpath(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}, action=:none; close=true)
@@ -69,6 +69,16 @@ function drawbezierpath(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}, action
     end
     do_action(action)
 end
+
+"""
+    drawbezierpath(bezierpathsegment, action=:none;
+        close=true)
+
+Draw the Bézier path segment, and apply the action, such as `:none`, `:stroke`,
+`:fill`, etc. By default the path is open.
+"""
+drawbezierpath(bezierpathsegment::NTuple{4,Luxor.Point},
+    action=:none; kwargs...) = drawbezierpath([bezierpathsegment], action; kwargs...)
 
 """
     beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)
@@ -234,4 +244,102 @@ function pathtobezierpaths()
         end
     end
     return result
+end
+
+# More Bezier madness
+
+function _solvexy(a, b, c, d, e, f)
+# solve linear equation ai + bj = c and di + ej = f
+    j = (c - a / d * f) / (b - a * e / d)
+    i = (c - (b * j)) / a
+    return i, j
+end
+
+# basis functions
+_b0(t) = (1 - t) ^ 3
+_b1(t) = t * (1 - t) * (1 - t) * 3
+_b2(t) = (1 - t) * t * t * 3
+_b3(t) = (t ^ 3)
+
+"""
+    bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::Point, endpoint::Point)
+
+Given four points, return a Bezier path segment that passes through all
+four points, starting at `startpoint` and ending at `endpoint`. The two middle
+points of the returned tuple are the two control points.
+
+(Don Lancaster ftw: https://www.tinaja.com/glib/nubz4pts1.pdf)
+"""
+function bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::Point, endpoint::Point)
+    # chord lengths
+    c1 = sqrt((pointonline1.x - startpoint.x) * (pointonline1.x - startpoint.x) + (pointonline1.y - startpoint.y) * (pointonline1.y - startpoint.y))
+    c2 = sqrt((pointonline2.x - pointonline1.x) * (pointonline2.x - pointonline1.x) + (pointonline2.y - pointonline1.y) * (pointonline2.y - pointonline1.y))
+    c3 = sqrt((endpoint.x - pointonline2.x) * (endpoint.x - pointonline2.x) + (endpoint.y - pointonline2.y) * (endpoint.y - pointonline2.y))
+    # best guess for t
+    t1 = c1 / (c1 + c2 + c3)
+    t2 = (c1 + c2) / (c1 + c2 + c3)
+    (x1, x2) = _solvexy(_b1(t1), _b2(t1), pointonline1.x - (startpoint.x * _b0(t1)) - (endpoint.x * _b3(t1)), _b1(t2), _b2(t2), pointonline2.x - (startpoint.x * _b0(t2)) - (endpoint.x * _b3(t2)))
+    (y1, y2) = _solvexy(_b1(t1), _b2(t1), pointonline1.y - (startpoint.y * _b0(t1)) - (endpoint.y * _b3(t1)), _b1(t2), _b2(t2), pointonline2.y - (startpoint.y * _b0(t2)) - (endpoint.y * _b3(t2)))
+    return startpoint, Point(x1, y1), Point(x2, y2), endpoint
+end
+
+"""
+    bezier(t, A::Point, A1::Point, B1::Point, B::Point)
+
+The Bezier cubic curve function, `t` going from 0 to 1, starting at A, finishing
+at B, control points A1 (controlling A), and B1 (controlling B).
+"""
+bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
+      A * (1 - t)^3 +
+      (A1 * 3t * (1 - t)^2) +
+      (B1 * 3t^2 * (1 - t)) +
+      (B * t^3)
+
+"""
+  bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
+
+Return the first derivative of Bezier function
+"""
+bezier′(t, A, A1, B1, B) = 3(1-t)^2 * (A1-A) + 6(1-t) * t * (B1-A1) + 3t^2 * (B-B1)
+
+"""
+    bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
+
+Return the second derivative of Bezier function.
+"""
+bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
+
+"""
+    beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
+
+Return the curvature of the Bezier curve at `t` ([0-1]), given start and end
+points A and B, and control points A1 and B1. The value (kappa) will typically
+be a value between -0.001 and 0.001 for points with coordinates in the 100-500
+range.
+
+κ(t) is the curvature of the curve at point t, which for a parametric planar
+curve is:
+
+```math
+\begin{equation}
+\kappa = \frac{\mid \dot{x}\ddot{y}-\dot{y}\ddot{x}\mid}
+    {(\dot{x}^2 + \dot{y}^2)^{\frac{3}{2}}}
+\end{equation}
+```
+
+The radius of curvature, or the radius of an osculating circle at a point, is
+1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points
+with coordinates in the 100-500 range.
+
+TODO Fix
+
+The value of kappa can sometimes collapse near 0, returning NaN (and Inf for
+radius of curvature).
+"""
+function beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
+    x′ = bezier′(t, A, A1, B1, B).x
+    y′ = bezier′(t, A, A1, B1, B).y
+    x′′ = bezier′′(t, A, A1, B1, B).x
+    y′′ = bezier′′(t, A, A1, B1, B).y
+    return ((x′ * y′′) - (y′ * x′′)) / (x′^2 + y′^2)^(3/2)
 end

@@ -53,7 +53,8 @@ export Drawing, currentdrawing,
 
     newpath, closepath, newsubpath,
 
-    makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
+    bezier, bezier′, bezier′, makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
+    bezierfrompoints, beziercurvature,
 
     strokepath, fillpath,
 
@@ -359,10 +360,10 @@ function preview()
 end
 
 """
-    @svg drawing-instructions [width] [height]
+    @svg drawing-instructions [width] [height] [filename]
 
 Create and preview an SVG drawing, optionally specifying width and height (the default is
-600 by 600). The file is saved in the current working directory as `luxor-drawing.svg`.
+600 by 600). The file is saved in the current working directory as `luxor-drawing-(timestamp).svg`.
 
 Examples
 
@@ -386,9 +387,12 @@ Examples
          end 1200, 1200
 """
 
-macro svg(body, width=600, height=600)
+macro svg(body, width=600, height=600, fname="luxor-drawing.svg")
      quote
-        Drawing($width, $height, "luxor-drawing.svg")
+        if $fname == ""
+             fname = "luxor-drawing-$(Libc.strftime("%H%M%S", Libc.time())).svg"
+        end
+        Drawing($width, $height, $fname)
         origin()
         background("white")
         sethue("black")
@@ -402,7 +406,7 @@ end
     @png drawing-instructions [width] [height]
 
 Create and preview an PNG drawing, optionally specifying width and height (the default is
-600 by 600). The file is saved in the current working directory as `luxor-drawing.png`.
+600 by 600). The file is saved in the current working directory as `luxor-drawingluxor-drawing(timestamp).png`.
 
 Examples
 
@@ -428,7 +432,7 @@ Examples
 
 macro png(body, width=600, height=600)
      quote
-        Drawing($width, $height, "luxor-drawing.png")
+        Drawing($width, $height, "luxor-drawing-$(Libc.strftime("%H%M%S", Libc.time())).png")
         origin()
         background("white")
         sethue("black")
@@ -442,7 +446,7 @@ end
     @pdf drawing-instructions [width] [height]
 
 Create and preview an PDF drawing, optionally specifying width and height (the default is
-600 by 600). The file is saved in the current working directory as `luxor-drawing.pdf`.
+600 by 600). The file is saved in the current working directory as `luxor-drawing(timestamp).pdf`.
 
 Examples
 
@@ -467,7 +471,7 @@ Examples
 """
 macro pdf(body, width=600, height=600)
      quote
-        Drawing($width, $height, "luxor-drawing.pdf")
+        Drawing($width, $height, "luxor-drawing-$(Libc.strftime("%H%M%S", Libc.time())).pdf")
         origin()
         background("white")
         sethue("black")

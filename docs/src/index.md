@@ -37,6 +37,12 @@ using Luxor
 To test:
 
 ```
+julia> @svg juliacircles()
+```
+
+or
+
+```
 julia> @png juliacircles()
 ```
 
