@@ -362,8 +362,9 @@ end
 """
     @svg drawing-instructions [width] [height] [filename]
 
-Create and preview an SVG drawing, optionally specifying width and height (the default is
-600 by 600). The file is saved in the current working directory as `luxor-drawing-(timestamp).svg`.
+Create and preview an SVG drawing, optionally specifying width and height (the
+default is 600 by 600). The file is saved in the current working directory as
+`filename` if supplied, or `luxor-drawing-(timestamp).svg`.
 
 Examples
 
@@ -372,6 +373,8 @@ Examples
     @svg circle(O, 20, :fill) 400
 
     @svg circle(O, 20, :fill) 400 1200
+
+    @svg circle(O, 20, :fill) 400 1200 "images/test.svg"
 
     @svg begin
             setline(10)
@@ -387,11 +390,8 @@ Examples
          end 1200, 1200
 """
 
-macro svg(body, width=600, height=600, fname="luxor-drawing.svg")
+macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).svg")
      quote
-        if $fname == ""
-             fname = "luxor-drawing-$(Libc.strftime("%H%M%S", Libc.time())).svg"
-        end
         Drawing($width, $height, $fname)
         origin()
         background("white")
@@ -403,10 +403,11 @@ macro svg(body, width=600, height=600, fname="luxor-drawing.svg")
 end
 
 """
-    @png drawing-instructions [width] [height]
+    @png drawing-instructions [width] [height] [filename]
 
-Create and preview an PNG drawing, optionally specifying width and height (the default is
-600 by 600). The file is saved in the current working directory as `luxor-drawingluxor-drawing(timestamp).png`.
+Create and preview an PNG drawing, optionally specifying width and height (the
+default is 600 by 600). The file is saved in the current working directory as
+`filename`, if supplied, or `luxor-drawing(timestamp).png`.
 
 Examples
 
@@ -415,6 +416,8 @@ Examples
     @png circle(O, 20, :fill) 400
 
     @png circle(O, 20, :fill) 400 1200
+
+    @png circle(O, 20, :fill) 400 1200 "images/round.png"
 
     @png begin
             setline(10)
@@ -427,12 +430,12 @@ Examples
             setline(10)
             sethue("purple")
             circle(O, 20, :fill)
-         end 1200, 1200
+         end 1200 1200
 """
 
-macro png(body, width=600, height=600)
+macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).png")
      quote
-        Drawing($width, $height, "luxor-drawing-$(Libc.strftime("%H%M%S", Libc.time())).png")
+        Drawing($width, $height, $fname)
         origin()
         background("white")
         sethue("black")
@@ -443,10 +446,11 @@ macro png(body, width=600, height=600)
 end
 
 """
-    @pdf drawing-instructions [width] [height]
+    @pdf drawing-instructions [width] [height] [filename]
 
-Create and preview an PDF drawing, optionally specifying width and height (the default is
-600 by 600). The file is saved in the current working directory as `luxor-drawing(timestamp).pdf`.
+Create and preview an PDF drawing, optionally specifying width and height (the
+default is 600 by 600). The file is saved in the current working directory as
+`filename` if supplied, or `luxor-drawing(timestamp).pdf`.
 
 Examples
 
@@ -456,12 +460,13 @@ Examples
 
     @pdf circle(O, 20, :fill) 400 1200
 
+    @pdf circle(O, 20, :fill) 400 1200 "images/A0-version.pdf"
+
     @pdf begin
             setline(10)
             sethue("purple")
             circle(O, 20, :fill)
          end
-
 
     @pdf begin
             setline(10)
@@ -469,9 +474,9 @@ Examples
             circle(O, 20, :fill)
          end 1200, 1200
 """
-macro pdf(body, width=600, height=600)
+macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).pdf")
      quote
-        Drawing($width, $height, "luxor-drawing-$(Libc.strftime("%H%M%S", Libc.time())).pdf")
+        Drawing($width, $height, $fname)
         origin()
         background("white")
         sethue("black")
