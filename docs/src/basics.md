@@ -144,7 +144,7 @@ The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create gra
 expands to
 
 ```
-Drawing(50, 50, "luxor-drawing.png")
+Drawing(50, 50, "luxor-drawing-(timestamp).png")
 origin()
 background("white")
 sethue("black")
@@ -153,7 +153,7 @@ finish()
 preview()
 ```
 
-They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:
+They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename. For multiple lines, use either:
 
 ```
 @svg begin
