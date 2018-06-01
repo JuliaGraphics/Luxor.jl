@@ -54,7 +54,7 @@ export Drawing, currentdrawing,
     newpath, closepath, newsubpath,
 
     bezier, bezier′, bezier′, makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
-    bezierfrompoints, beziercurvature,
+    bezierfrompoints, beziercurvature, bezierstroke, movebezierhandles, brush, 
 
     strokepath, fillpath,
 

@@ -343,3 +343,167 @@ function beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
     y′′ = bezier′′(t, A, A1, B1, B).y
     return ((x′ * y′′) - (y′ * x′′)) / (x′^2 + y′^2)^(3/2)
 end
+
+"""
+    bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0))
+
+Create a BezierPath that replaces the single Bezier path segment in `bps`. The
+new Bezier path contains two segments, which can be filled/stroked.
+"""
+function bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0)
+    newbezpath = NTuple{4, Point}[]
+    p1, cp1, cp2, p2 = bps
+    # find two points on the curve
+    # choose third and two thirds
+    ip1 = bezier(0.33, p1, cp1, cp2, p2)
+    ip2 = bezier(0.66, p1, cp1, cp2, p2)
+    # find slope of curve at those points
+    pt1 = bezier′(0.33, p1, cp1, cp2, p2)
+    pt2 = bezier′(0.66, p1, cp1, cp2, p2)
+    # find normals normal is 1/slope
+    slopeip1 =  -1/(pt1.y/pt1.x)
+    slopeip2 =  -1/(pt2.y/pt2.x)
+    # find perpendiculars on both sides
+    ipt1 = ip1 + polar(width, atan(slopeip1))
+    ipt2 = ip2 + polar(width, atan(slopeip2))
+    ipt3 = ip1 - polar(width, atan(slopeip1))
+    ipt4 = ip2 - polar(width, atan(slopeip2))
+    # make two new beziers, one on each side
+    result1 = bezierfrompoints(p1, ipt3, ipt4, p2)
+    result2 = bezierfrompoints(p1, ipt1, ipt2, p2)
+    push!(newbezpath, (p1, result1[2], result1[3], p2))
+    push!(newbezpath, (p2, result2[3], result2[2], p1))
+    return newbezpath
+end
+
+"""
+    bezierstroke(point1, point2, width=0.0)
+        angles=[0.05, -0.1],
+        handles=[0.4, 0.4])
+
+Return a stroked version of a straight line between two points, as a BezierPath.
+
+It wil have 2 or 6 Bezier path segments that define a brush or pen shape. If
+width is 0, the brush shape starts and ends at a point. Otherwise the brush shape
+starts and ends with the thick end.
+
+To draw it, use eg `drawbezierpath(..., :fill)`.
+"""
+function bezierstroke(p1::Point, p2::Point, width=0.0;
+            angles=[0.05, -0.1],
+            handles=[0.4, 0.4])
+
+    bezpath = NTuple{4, Point}[]
+    # simple stroke starting ending at point
+    if isapprox(width, 0.0)
+        push!(bezpath, (p1, p1, p2, p2))
+        push!(bezpath, (p2, p2, p1, p1))
+    # stroke with broad opening and closing
+    else
+        cp1 = perpendicular(p1, p2, -width)
+        push!(bezpath, (p1, p1, cp1, cp1))
+
+        cp2 = perpendicular(p2, p1, width)
+        push!(bezpath, (cp1, cp1, cp2, cp2))
+        push!(bezpath, (cp2, cp2, p2, p2))
+
+        # TODO the segments should be collinear, perhaps?
+        cp3 = perpendicular(p2, p1, -width)
+        push!(bezpath, (p2, p2, cp3, cp3))
+
+        cp4 = perpendicular(p1, p2, width)
+        push!(bezpath, (cp3, cp3, cp4, cp4))
+
+        push!(bezpath, (cp4, cp4, p1, p1))
+    end
+    return movebezierhandles(bezpath, angles=angles, handles=handles)
+end
+
+"""
+    movebezierhandles(bps::NTuple{4,Luxor.Point};
+            angles=[0 .05, -0.1],
+            handles=[0.3, 0.3])
+
+Return a new Bezier path segment with new locations for the Bezier control
+points in the Bezier path segment `bps`.
+
+`angles` are the two angles that the "handles" make with the line direciton.
+
+` handles` are the lengths of the "handles". 0.3 is a typical value.
+"""
+function movebezierhandles(bps::NTuple{4,Luxor.Point};
+            angles=[0.05, -0.1],
+            handles=[0.4, 0.4])
+    d = norm(bps[1], bps[4])
+    s = slope(bps[1], bps[4])
+    bezhandle1 = bps[1] + polar(d * handles[1], s - angles[1])
+    s = slope(bps[4], bps[1])
+    bezhandle2 = bps[4] + polar(d * handles[2], s + angles[2])
+    return (bps[1], bezhandle1, bezhandle2, bps[4])
+end
+
+"""
+    movebezierhandles(bezpath::AbstractArray{NTuple{4,Luxor.Point}};
+            angles=[0 .05, -0.1],
+            handles=[0.3, 0.3])
+
+Return a new Bezierpath with new locations for the Bezier control points in
+every Bezier path segment of the BezierPath in `bezpath`.
+
+`angles` are the two angles that the "handles" make with the line direciton.
+
+` handles` are the lengths of the "handles". 0.3 is a typical value.
+"""
+function movebezierhandles(bezpath::AbstractArray{NTuple{4,Luxor.Point}};
+            angles=[0.05, -0.1],
+            handles=[0.4, 0.4])
+    newbezpath = NTuple{4, Point}[]
+    for bps in bezpath
+        push!(newbezpath, movebezierhandles(bps, angles=angles, handles=handles))
+    end
+    return newbezpath
+end
+
+"""
+    brush(pt1, pt2, width=10;
+            strokes=5,
+            minwidth=0.01,
+            maxwidth=0.03,
+            minbend=0.01,
+            maxbend=0.1,
+            twist = -1, # -1 or 1
+            randomopacity = true
+            )
+
+Draw a composite brush stroke made up of some randomized individual brush strokes.
+"""
+function brush(pt1, pt2, width=10;
+        strokes=5,
+        minwidth=0.01,
+        maxwidth=0.03,
+        minbend=0.01,
+        maxbend=0.1,
+        twist = -1,
+        randomopacity = true
+        )
+    @layer begin
+        println()
+        sl = slope(pt1, pt2)
+        n = norm(pt1, pt2)
+        translate(pt1)
+        rotate(sl - pi/2)
+        for j in linspace(-width/2, width/2, max(strokes, 2))
+            shp = [O + (j, 0), O + (j, n)]
+            shp .+= Point(rand(-5:5), rand(-5:5))
+            pbp = bezierstroke(shp[1], shp[2],
+                # width of each stroke
+                rand(Bool) ? 0.0 : rand(minwidth:0.1:maxwidth),
+                angles = [rand(minbend:0.01:maxbend), twist * rand(minbend:0.01:maxbend)],               # bezier handle angles
+                # bezier handle lengths
+                handles=[rand(0.4:0.1:0.6, 2)...]
+            )
+            randomopacity ? setopacity(rand()) : setopacity(1.0)
+            drawbezierpath(pbp, :fill, close=false)
+        end
+    end
+end
