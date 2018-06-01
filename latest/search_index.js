@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
     "category": "section",
-    "text": "Install the package as follows:Pkg.add(\"Luxor\")Cairo.jl and Colors.jl will be installed if necessary.To use Luxor, type:using LuxorTo test:julia> @png juliacircles()"
+    "text": "Install the package as follows:Pkg.add(\"Luxor\")Cairo.jl and Colors.jl will be installed if necessary.To use Luxor, type:using LuxorTo test:julia> @svg juliacircles()orjulia> @png juliacircles()"
 },
 
 {
@@ -309,7 +309,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.@svg",
     "category": "macro",
-    "text": "@svg drawing-instructions [width] [height]\n\nCreate and preview an SVG drawing, optionally specifying width and height (the default is 600 by 600). The file is saved in the current working directory as luxor-drawing.svg.\n\nExamples\n\n@svg circle(O, 20, :fill)\n\n@svg circle(O, 20, :fill) 400\n\n@svg circle(O, 20, :fill) 400 1200\n\n@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end\n\n\n@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 1200, 1200\n\n\n\n"
+    "text": "@svg drawing-instructions [width] [height] [filename]\n\nCreate and preview an SVG drawing, optionally specifying width and height (the default is 600 by 600). The file is saved in the current working directory as filename if supplied, or luxor-drawing-(timestamp).svg.\n\nExamples\n\n@svg circle(O, 20, :fill)\n\n@svg circle(O, 20, :fill) 400\n\n@svg circle(O, 20, :fill) 400 1200\n\n@svg circle(O, 20, :fill) 400 1200 \"images/test.svg\"\n\n@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end\n\n\n@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 1200, 1200\n\n\n\n"
 },
 
 {
@@ -317,7 +317,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.@png",
     "category": "macro",
-    "text": "@png drawing-instructions [width] [height]\n\nCreate and preview an PNG drawing, optionally specifying width and height (the default is 600 by 600). The file is saved in the current working directory as luxor-drawing.png.\n\nExamples\n\n@png circle(O, 20, :fill)\n\n@png circle(O, 20, :fill) 400\n\n@png circle(O, 20, :fill) 400 1200\n\n@png begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end\n\n\n@png begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 1200, 1200\n\n\n\n"
+    "text": "@png drawing-instructions [width] [height] [filename]\n\nCreate and preview an PNG drawing, optionally specifying width and height (the default is 600 by 600). The file is saved in the current working directory as filename, if supplied, or luxor-drawing(timestamp).png.\n\nExamples\n\n@png circle(O, 20, :fill)\n\n@png circle(O, 20, :fill) 400\n\n@png circle(O, 20, :fill) 400 1200\n\n@png circle(O, 20, :fill) 400 1200 \"images/round.png\"\n\n@png begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end\n\n\n@png begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 1200 1200\n\n\n\n"
 },
 
 {
@@ -325,7 +325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.@pdf",
     "category": "macro",
-    "text": "@pdf drawing-instructions [width] [height]\n\nCreate and preview an PDF drawing, optionally specifying width and height (the default is 600 by 600). The file is saved in the current working directory as luxor-drawing.pdf.\n\nExamples\n\n@pdf circle(O, 20, :fill)\n\n@pdf circle(O, 20, :fill) 400\n\n@pdf circle(O, 20, :fill) 400 1200\n\n@pdf begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end\n\n\n@pdf begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 1200, 1200\n\n\n\n"
+    "text": "@pdf drawing-instructions [width] [height] [filename]\n\nCreate and preview an PDF drawing, optionally specifying width and height (the default is 600 by 600). The file is saved in the current working directory as filename if supplied, or luxor-drawing(timestamp).pdf.\n\nExamples\n\n@pdf circle(O, 20, :fill)\n\n@pdf circle(O, 20, :fill) 400\n\n@pdf circle(O, 20, :fill) 400 1200\n\n@pdf circle(O, 20, :fill) 400 1200 \"images/A0-version.pdf\"\n\n@pdf begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end\n\n@pdf begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     end 1200, 1200\n\n\n\n"
 },
 
 {
@@ -333,7 +333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Quick drawings with macros",
     "category": "section",
-    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing.png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke)\nfinish()\npreview()They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600). For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     endor@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     )@svg\n@png\n@pdf"
+    "text": "The @svg, @png, and @pdf macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:@svg circle(O, 20, :stroke) 50 50expands toDrawing(50, 50, \"luxor-drawing-(timestamp).png\")\norigin()\nbackground(\"white\")\nsethue(\"black\")\ncircle(O, 20, :stroke)\nfinish()\npreview()They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600), and you don\'t have to specify a filename. For multiple lines, use either:@svg begin\n        setline(10)\n        sethue(\"purple\")\n        circle(O, 20, :fill)\n     endor@svg (setline(10);\n      sethue(\"purple\");\n      circle(O, 20, :fill);\n     )@svg\n@png\n@pdf"
 },
 
 {
@@ -1533,7 +1533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.drawbezierpath",
     "category": "function",
-    "text": "drawbezierpath(bezierpath, action=:none;\n    close=true)\n\nDraw a Bézier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n"
+    "text": "drawbezierpath(bezierpath, action=:none;\n    close=true)\n\nDraw the Bézier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\ndrawbezierpath(bezierpathsegment, action=:none;\n    close=true)\n\nDraw the Bézier path segment, and apply the action, such as :none, :stroke, :fill, etc. By default the path is open.\n\n\n\n"
 },
 
 {
@@ -1565,7 +1565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.findbeziercontrolpoints",
     "category": "function",
-    "text": "findbeziercontrolpoints(previouspt::Point, \n    pt1::Point,\n    pt2::Point,\n    nextpt::Point;\n    smooth_value=0.5)\n\nFind the Bézier control points for the line between pt1 and pt2, where the point before pt1 is previouspt and the next point after pt2 is nextpt.\n\n\n\n"
+    "text": "findbeziercontrolpoints(previouspt::Point,\n    pt1::Point,\n    pt2::Point,\n    nextpt::Point;\n    smooth_value=0.5)\n\nFind the Bézier control points for the line between pt1 and pt2, where the point before pt1 is previouspt and the next point after pt2 is nextpt.\n\n\n\n"
 },
 
 {
