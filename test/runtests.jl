@@ -60,6 +60,7 @@ function run_all_tests()
         include("pie-test.jl")
         include("bezierpath.jl")
         include("bezierpathtopoly.jl")
+        include("bezierstroke-test.jl")
     end
 
     @testset "color" begin
