@@ -1,4 +1,65 @@
 """
+    bezier(t, A::Point, A1::Point, B1::Point, B::Point)
+
+The Bezier cubic curve function, `t` going from 0 to 1, starting at A, finishing
+at B, control points A1 (controlling A), and B1 (controlling B).
+"""
+bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
+      A * (1 - t)^3 +
+      (A1 * 3t * (1 - t)^2) +
+      (B1 * 3t^2 * (1 - t)) +
+      (B * t^3)
+
+"""
+  bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
+
+Return the first derivative of Bezier function
+"""
+bezier′(t, A, A1, B1, B) = 3(1-t)^2 * (A1-A) + 6(1-t) * t * (B1-A1) + 3t^2 * (B-B1)
+
+"""
+    bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
+
+Return the second derivative of Bezier function.
+"""
+bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
+
+"""
+    beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
+
+Return the curvature of the Bezier curve at `t` ([0-1]), given start and end
+points A and B, and control points A1 and B1. The value (kappa) will typically
+be a value between -0.001 and 0.001 for points with coordinates in the 100-500
+range.
+
+κ(t) is the curvature of the curve at point t, which for a parametric planar
+curve is:
+
+```math
+\begin{equation}
+\kappa = \frac{\mid \dot{x}\ddot{y}-\dot{y}\ddot{x}\mid}
+    {(\dot{x}^2 + \dot{y}^2)^{\frac{3}{2}}}
+\end{equation}
+```
+
+The radius of curvature, or the radius of an osculating circle at a point, is
+1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points
+with coordinates in the 100-500 range.
+
+TODO Fix
+
+The value of kappa can sometimes collapse near 0, returning NaN (and Inf for
+radius of curvature).
+"""
+function beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
+    x′ = bezier′(t, A, A1, B1, B).x
+    y′ = bezier′(t, A, A1, B1, B).y
+    x′′ = bezier′′(t, A, A1, B1, B).x
+    y′′ = bezier′′(t, A, A1, B1, B).y
+    return ((x′ * y′′) - (y′ * x′′)) / (x′^2 + y′^2)^(3/2)
+end
+
+"""
     findbeziercontrolpoints(previouspt::Point,
         pt1::Point,
         pt2::Point,
@@ -283,66 +344,7 @@ function bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::
     return startpoint, Point(x1, y1), Point(x2, y2), endpoint
 end
 
-"""
-    bezier(t, A::Point, A1::Point, B1::Point, B::Point)
-
-The Bezier cubic curve function, `t` going from 0 to 1, starting at A, finishing
-at B, control points A1 (controlling A), and B1 (controlling B).
-"""
-bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
-      A * (1 - t)^3 +
-      (A1 * 3t * (1 - t)^2) +
-      (B1 * 3t^2 * (1 - t)) +
-      (B * t^3)
-
-"""
-  bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
-
-Return the first derivative of Bezier function
-"""
-bezier′(t, A, A1, B1, B) = 3(1-t)^2 * (A1-A) + 6(1-t) * t * (B1-A1) + 3t^2 * (B-B1)
-
-"""
-    bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
-
-Return the second derivative of Bezier function.
-"""
-bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
-
-"""
-    beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
-
-Return the curvature of the Bezier curve at `t` ([0-1]), given start and end
-points A and B, and control points A1 and B1. The value (kappa) will typically
-be a value between -0.001 and 0.001 for points with coordinates in the 100-500
-range.
-
-κ(t) is the curvature of the curve at point t, which for a parametric planar
-curve is:
-
-```math
-\begin{equation}
-\kappa = \frac{\mid \dot{x}\ddot{y}-\dot{y}\ddot{x}\mid}
-    {(\dot{x}^2 + \dot{y}^2)^{\frac{3}{2}}}
-\end{equation}
-```
-
-The radius of curvature, or the radius of an osculating circle at a point, is
-1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points
-with coordinates in the 100-500 range.
-
-TODO Fix
-
-The value of kappa can sometimes collapse near 0, returning NaN (and Inf for
-radius of curvature).
-"""
-function beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
-    x′ = bezier′(t, A, A1, B1, B).x
-    y′ = bezier′(t, A, A1, B1, B).y
-    x′′ = bezier′′(t, A, A1, B1, B).x
-    y′′ = bezier′′(t, A, A1, B1, B).y
-    return ((x′ * y′′) - (y′ * x′′)) / (x′^2 + y′^2)^(3/2)
-end
+bezierfrompoints(ptslist::Array{Point, 1}) = bezierfrompoints(ptslist...)
 
 """
     bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0))
@@ -350,7 +352,9 @@ end
 Create a BezierPath that replaces the single Bezier path segment in `bps`. The
 new Bezier path contains two segments, which can be filled/stroked.
 """
-function bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0)
+function bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0;
+            angles=[0.01, -0.01],
+            handles=[0.4, 0.4])
     newbezpath = NTuple{4, Point}[]
     p1, cp1, cp2, p2 = bps
     # find two points on the curve
@@ -373,11 +377,13 @@ function bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0)
     result2 = bezierfrompoints(p1, ipt1, ipt2, p2)
     push!(newbezpath, (p1, result1[2], result1[3], p2))
     push!(newbezpath, (p2, result2[3], result2[2], p1))
-    return newbezpath
+
+    return movebezierhandles(newbezpath, angles=angles, handles=handles)
+    # return newbezpath
 end
 
 """
-    bezierstroke(point1, point2, width=0.0)
+    bezierstroke(point1, point2, width=0.0;
         angles=[0.05, -0.1],
         handles=[0.4, 0.4])
 
