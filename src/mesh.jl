@@ -1,7 +1,7 @@
 const Mesh = Cairo.CairoPattern
 
 """
-    mesh(bezierpath::AbstractArray{NTuple{4,Point}},
+    mesh(bezierpath::BezierPath,
          colors=AbstractArray{ColorTypes.Colorant, 1})
 
 Create a mesh. The first three or four elements of the supplied `bezierpath`
@@ -28,7 +28,7 @@ Use `setmesh()` to select the mesh, which will be used to fill shapes.
 end
 ```
 """
-function mesh(bezierpath::AbstractArray{NTuple{4,Point}},
+function mesh(bezierpath::BezierPath,
               colors=AbstractArray{ColorTypes.Colorant, 1})
     pattern = Cairo.CairoPatternMesh()
     Cairo.mesh_pattern_begin_patch(pattern)
@@ -49,6 +49,10 @@ function mesh(bezierpath::AbstractArray{NTuple{4,Point}},
 	Cairo.mesh_pattern_end_patch(pattern)
     return pattern
 end
+
+# old style for compatibility
+mesh(bezierpath::AbstractArray{NTuple{4,Point}}, colors=AbstractArray{ColorTypes.Colorant, 1}) =
+    mesh(BezierPath(bezierpath), colors)
 
 """
     mesh(points::AbstractArray{Point},

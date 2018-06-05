@@ -53,8 +53,8 @@ export Drawing, currentdrawing,
 
     newpath, closepath, newsubpath,
 
-    bezier, bezier′, bezier′, makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
-    bezierfrompoints, beziercurvature, bezierstroke, movebezierhandles, brush, 
+    BezierPath, BezierPathSegment, bezier, bezier′, bezier′, makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
+    bezierfrompoints, beziercurvature, bezierstroke, setbezierhandles, shiftbezierhandles, brush,
 
     strokepath, fillpath,
 
