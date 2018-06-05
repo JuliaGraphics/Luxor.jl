@@ -755,12 +755,21 @@ nothing # hide
 ![path to polygon](assets/figures/pathtobezierpaths.png)
 
 ```@docs
-makebezierpath
-drawbezierpath
+bezier
+bezier′
+bezier′′
+beziercurvature
+bezierfrompoints
 bezierpathtopoly
+bezierstroke
 beziertopoly
-pathtobezierpaths
+brush
+drawbezierpath
 Luxor.findbeziercontrolpoints
+makebezierpath
+pathtobezierpaths
+setbezierhandles
+shiftbezierhandles
 ```
 
 ## Polygon information

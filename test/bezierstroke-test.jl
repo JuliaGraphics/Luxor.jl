@@ -42,8 +42,8 @@ function testbezierstroke(fname)
             end
             # close needs doing manually
             if length(bpath) >= 2
-                closingsegment = (bpath[end][3], bpath[end][4], bpath[1][1], bpath[1][2])
-                drawbezierpath(bezierstroke(closingsegment, rand(1:15)), :fill)
+                closingsegment = BezierPathSegment(bpath[end].cp2, bpath[end].p2, bpath[1].p1, bpath[1].cp2)
+                drawbezierpath(closingsegment, :fill)
             end
         end
         end
@@ -63,7 +63,7 @@ function testbezierstroke(fname)
         end
         # close needs doing manually
         if length(b) >= 2
-            closingsegment = (b[end][4], b[end][4], b[1][1], b[1][1])
+            closingsegment = BezierPathSegment(b[end].p2, b[end].p2, b[1].p1, b[1].p1)
             drawbezierpath(bezierstroke(closingsegment, rand(5:25)), :fill)
             sethue("black")
             drawbezierpath(bezierstroke(closingsegment, rand(5:25)), :stroke)

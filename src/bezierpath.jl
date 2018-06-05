@@ -1,8 +1,51 @@
+mutable struct BezierPathSegment <: AbstractArray{Luxor.Point, 1}
+    p1::Point
+    cp1::Point
+    cp2::Point
+    p2::Point
+end
+
+Base.size(bps::BezierPathSegment) = (4, )
+Base.length(bps::BezierPathSegment) = 4
+Base.eltype(::Type{BezierPathSegment}) = Luxor.Point
+Base.getindex(bps::BezierPathSegment, i::Int64) = [bps.p1, bps.cp1, bps.cp2, bps.p2][i]
+Base.setindex!(bp::BezierPathSegment, v, i::Int64) = [bps.p1, bps.cp1, bps.cp2, bps.p2][i] = v
+Base.IndexStyle(::Type{<:BezierPathSegment}) = IndexLinear()
+
+Base.start(bps::BezierPathSegment) = 1
+Base.next(bps::BezierPathSegment, s::Int) = bps[s], s+1
+Base.done(bps::BezierPathSegment, s::Int) = (s > length(bps))
+
+function Base.show(io::IO, bps::BezierPathSegment)
+    println(io, "p1  $(bps.p1)   cp1 $(bps.cp1)")
+    println(io, "cp2  $(bps.cp2)  p2 $(bps.p2)")
+end
+
+mutable struct BezierPath <: AbstractArray{BezierPathSegment, 1}
+    segments::Vector{BezierPathSegment}
+end
+
+BezierPath(bps::BezierPathSegment) = BezierPath([bps])
+BezierPath() = BezierPath([])
+
+Base.size(bp::BezierPath) = size(bp.segments)
+Base.length(bp::BezierPath) = length(bp.segments)
+Base.eltype(::Type{BezierPath}) = BezierPathSegment
+Base.getindex(bp::BezierPath, i::Int64) = bp.segments[i]
+Base.setindex!(bp::BezierPath, v, i::Int64) = bp.segments[i] = v
+Base.IndexStyle(::Type{<:BezierPath}) = IndexLinear()
+
+Base.push!(bp::BezierPath, v::BezierPathSegment) = Base.push!(bp.segments, v)
+
+Base.show(io::IO, bp::BezierPath) =
+    print(io, "BezierPath with $(length(bp.segments)) segments")
+
 """
     bezier(t, A::Point, A1::Point, B1::Point, B::Point)
 
-The Bezier cubic curve function, `t` going from 0 to 1, starting at A, finishing
-at B, control points A1 (controlling A), and B1 (controlling B).
+Return the result of evaluating the Bezier cubic curve function, `t` going from
+0 to 1, starting at A, finishing at B, control points A1 (controlling A), and B1
+(controlling B).
 """
 bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
       A * (1 - t)^3 +
@@ -13,7 +56,7 @@ bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
 """
   bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
 
-Return the first derivative of Bezier function
+Return the first derivative of the Bezier function.
 """
 bezier′(t, A, A1, B1, B) = 3(1-t)^2 * (A1-A) + 6(1-t) * t * (B1-A1) + 3t^2 * (B-B1)
 
@@ -46,9 +89,9 @@ The radius of curvature, or the radius of an osculating circle at a point, is
 1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points
 with coordinates in the 100-500 range.
 
-TODO Fix
+TODO Fix overshoot...
 
-The value of kappa can sometimes collapse near 0, returning NaN (and Inf for
+...The value of kappa can sometimes collapse near 0, returning NaN (and Inf for
 radius of curvature).
 """
 function beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
@@ -90,7 +133,7 @@ end
 """
     makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1)
 
-Return a Bézier path that represents a polygon (an array of points). The Bézier
+Return a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier
 path is an array of segments (tuples of 4 points); each segment contains the
 four points that make up a section of the entire Bézier path. `smoothing`
 determines how closely the curve follows the polygon. A value of 0 returns a
@@ -99,57 +142,66 @@ the original polygon's edges.
 """
 function makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1.0)
     lpg = length(pgon)
-    newpath = NTuple{4,Luxor.Point}[]
+    newpath = BezierPath()
     for i in 1:lpg
         cp1, cp2 = findbeziercontrolpoints(
             pgon[mod1(i - 1, lpg)],
             pgon[mod1(i,     lpg)],
             pgon[mod1(i + 1, lpg)],
             pgon[mod1(i + 2, lpg)], smoothing=smoothing)
-        push!(newpath, (pgon[mod1(i, lpg)], cp1, cp2, pgon[mod1(i + 1, lpg)]))
+        push!(newpath, BezierPathSegment(pgon[mod1(i, lpg)], cp1, cp2, pgon[mod1(i + 1, lpg)]))
     end
     return newpath
 end
 
 """
-    drawbezierpath(bezierpath, action=:none;
+    drawbezierpath(bezierpath::BezierPath, action=:none;
         close=true)
 
 Draw the Bézier path, and apply the action, such as `:none`, `:stroke`, `:fill`,
 etc. By default the path is closed.
 """
-function drawbezierpath(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}, action=:none; close=true)
-    move(bezierpath[1][1])
+function drawbezierpath(bezierpath::BezierPath, action=:none; close=true)
+    move(bezierpath[1].p1)
     for i in 1:length(bezierpath) - 1
         c = bezierpath[i]
-        curve(c[2], c[3], c[4])
+        curve(c.cp1, c.cp2, c.p2)
     end
     if close == true
         c = bezierpath[end]
-        curve(c[2], c[3], c[4])
+        curve(c.cp1, c.cp2, c.p2)
     end
     do_action(action)
 end
 
 """
-    drawbezierpath(bezierpathsegment, action=:none;
-        close=true)
+    drawbezierpath(bps::BezierPathSegment, action=:none;
+        close=false)
 
 Draw the Bézier path segment, and apply the action, such as `:none`, `:stroke`,
 `:fill`, etc. By default the path is open.
 """
-drawbezierpath(bezierpathsegment::NTuple{4,Luxor.Point},
-    action=:none; kwargs...) = drawbezierpath([bezierpathsegment], action; kwargs...)
+function drawbezierpath(bps::BezierPathSegment,
+    action=:none; close=false)
+    move(bps.p1)
+    curve(bps.cp1, bps.cp2, bps.p2)
+    if close == true
+        closepath()
+    end
+    do_action(action)
+end
+
+drawbezierpath(bpsa::Array{BezierPathSegment, 1}, action=:none) =
+   foreach(b -> drawbezierpath(b, action), bpsa)
 
 """
-    beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)
+    beziertopoly(bpseg::BezierPathSegment; steps=10)
 
-Convert a Bezier segment (a tuple of four points: anchor1, control1, control2,
-anchor2) to a polygon (an array of points).
+Convert a Bezier segment to a polygon (an array of points).
 """
-function beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)
+function beziertopoly(bpseg::BezierPathSegment; steps=10)
     thepolygon = Point[]
-    anchor1, control1, control2, anchor2 = bpseg
+    anchor1, control1, control2, anchor2 = bpseg.p1, bpseg.cp1, bpseg.cp2, bpseg.p2
     dx1 = control1.x - anchor1.x
     dy1 = control1.y - anchor1.y
     dx2 = control2.x - control1.x
@@ -195,15 +247,17 @@ function beziertopoly(bpseg::NTuple{4,Luxor.Point}; steps=10)
 end
 
 """
-    bezierpathtopoly(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}; steps=10)
+    bezierpathtopoly(bezierpath::BezierPath; steps=10)
 
-Convert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.
+Convert a Bezier path (an array of Bezier segments, where each segment is a
+tuple of four points: anchor1, control1, control2, anchor2) to a polygon.
 
 To make a Bezier path, use `makebezierpath()` on a polygon.
 
-The `steps` optional keyword determines how many line sections are used for each path.
+The `steps` optional keyword determines how many line sections are used for each
+path.
 """
-function bezierpathtopoly(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}; steps=10)
+function bezierpathtopoly(bezierpath::BezierPath; steps=10)
     resultpoly = Point[]
     for bp in bezierpath
         p = beziertopoly(bp, steps=steps)
@@ -216,12 +270,15 @@ function bezierpathtopoly(bezierpath::AbstractArray{NTuple{4,Luxor.Point}}; step
 end
 
 """
-    pathtobezierpaths()
+    pathtobezierpaths(
+        ; flat=true)
 
 Convert the current path (which may consist of one or more paths) to an array of
 Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path
 segment is a tuple of four points. A straight line is converted to a Bezier segment
 in which the control points are set to be the the same as the end points.
+
+If `flat` is true, use `getpathflat()` rather than `getpath()`.
 
 # Example
 
@@ -259,14 +316,13 @@ end
 ```
 
 """
-function pathtobezierpaths()
-    originalpath = getpath()
+function pathtobezierpaths(; flat=true)
+    flat ? (originalpath = getpath()) : (originalpath = getpathflat())
     # to store all the Bezier paths
-    result = Array{NTuple{4,Luxor.Point}, 1}[]
-    # to store a Bezier path
-    newbezpath = NTuple{4,Luxor.Point}[]
+    result = BezierPath[]
+    # to store one Bezier path
+    newbezpath = BezierPath()
     # to store a Bezier segment
-    bezsegment = ()
     currentpos = Point(0, 0)
     if length(originalpath) > 0
         for e in originalpath
@@ -274,14 +330,14 @@ function pathtobezierpaths()
                 currentpos = Point(e.points[1], e.points[2])
             elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO            # 1
                 # add a straight line segment in the form of a bezsegment
-                bezsegment = (currentpos,
+                bezsegment = BezierPathSegment(currentpos,
                               currentpos,
                               Point(e.points[1], e.points[2]),
                               Point(e.points[1], e.points[2]))
                 push!(newbezpath, bezsegment)
                 currentpos = Point(e.points[1], e.points[2])
             elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO           # 2
-                bezsegment = (currentpos,
+                bezsegment = BezierPathSegment(currentpos,
                               Point(e.points[1], e.points[2]),
                               Point(e.points[3], e.points[4]),
                               Point(e.points[5], e.points[6]))
@@ -293,7 +349,7 @@ function pathtobezierpaths()
                     push!(result, newbezpath)
                 end
                 # make new path
-                newbezpath = NTuple{4,Luxor.Point}[]
+                newbezpath = BezierPath()
             else
                 error("unknown CairoPathEntry " * repr(e.element_type))
                 error("unknown CairoPathEntry " * repr(e.points))
@@ -323,13 +379,13 @@ _b2(t) = (1 - t) * t * t * 3
 _b3(t) = (t ^ 3)
 
 """
-    bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::Point, endpoint::Point)
+    bezierfrompoints(startpoint::Point, pointonline1::Point,
+        pointonline2::Point, endpoint::Point)
 
-Given four points, return a Bezier path segment that passes through all
-four points, starting at `startpoint` and ending at `endpoint`. The two middle
-points of the returned tuple are the two control points.
-
-(Don Lancaster ftw: https://www.tinaja.com/glib/nubz4pts1.pdf)
+Given four points, return the Bezier curve that passes through all four points,
+starting at `startpoint` and ending at `endpoint`. The two middle points of the
+returned BezierPathSegment are the two control points that make the curve pass
+through the two middle points supplied.
 """
 function bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::Point, endpoint::Point)
     # chord lengths
@@ -341,21 +397,24 @@ function bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::
     t2 = (c1 + c2) / (c1 + c2 + c3)
     (x1, x2) = _solvexy(_b1(t1), _b2(t1), pointonline1.x - (startpoint.x * _b0(t1)) - (endpoint.x * _b3(t1)), _b1(t2), _b2(t2), pointonline2.x - (startpoint.x * _b0(t2)) - (endpoint.x * _b3(t2)))
     (y1, y2) = _solvexy(_b1(t1), _b2(t1), pointonline1.y - (startpoint.y * _b0(t1)) - (endpoint.y * _b3(t1)), _b1(t2), _b2(t2), pointonline2.y - (startpoint.y * _b0(t2)) - (endpoint.y * _b3(t2)))
-    return startpoint, Point(x1, y1), Point(x2, y2), endpoint
+    return BezierPathSegment(startpoint, Point(x1, y1), Point(x2, y2), endpoint)
 end
 
+"""
+    bezierfrompoints(ptslist::Array{Point, 1})
+
+Given four points, return the Bezier curve that passes through all four points.
+"""
 bezierfrompoints(ptslist::Array{Point, 1}) = bezierfrompoints(ptslist...)
 
 """
-    bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0))
+    bezierstroke(bps::BezierPathSegment, width=5.0)
 
-Create a BezierPath that replaces the single Bezier path segment in `bps`. The
-new Bezier path contains two segments, which can be filled/stroked.
+Create a BezierPath that replaces the single BezierPathSegment in `bps`. The
+new BezierPath contains two segments which together define a shape.
 """
-function bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0;
-            angles=[0.01, -0.01],
-            handles=[0.4, 0.4])
-    newbezpath = NTuple{4, Point}[]
+function bezierstroke(bps::BezierPathSegment, width=5.0)
+    newbezpath = BezierPath()
     p1, cp1, cp2, p2 = bps
     # find two points on the curve
     # choose third and two thirds
@@ -375,19 +434,16 @@ function bezierstroke(bps::NTuple{4,Luxor.Point}, width=5.0;
     # make two new beziers, one on each side
     result1 = bezierfrompoints(p1, ipt3, ipt4, p2)
     result2 = bezierfrompoints(p1, ipt1, ipt2, p2)
-    push!(newbezpath, (p1, result1[2], result1[3], p2))
-    push!(newbezpath, (p2, result2[3], result2[2], p1))
+    push!(newbezpath, BezierPathSegment(p1, result1[2], result1[3], p2))
+    push!(newbezpath, BezierPathSegment(p2, result2[3], result2[2], p1))
 
-    return movebezierhandles(newbezpath, angles=angles, handles=handles)
-    # return newbezpath
+    return newbezpath
 end
 
 """
-    bezierstroke(point1, point2, width=0.0;
-        angles=[0.05, -0.1],
-        handles=[0.4, 0.4])
+    bezierstroke(point1, point2, width=0.0)
 
-Return a stroked version of a straight line between two points, as a BezierPath.
+Return a BezierPath, a stroked version of a straight line between two points.
 
 It wil have 2 or 6 Bezier path segments that define a brush or pen shape. If
 width is 0, the brush shape starts and ends at a point. Otherwise the brush shape
@@ -395,39 +451,36 @@ starts and ends with the thick end.
 
 To draw it, use eg `drawbezierpath(..., :fill)`.
 """
-function bezierstroke(p1::Point, p2::Point, width=0.0;
-            angles=[0.05, -0.1],
-            handles=[0.4, 0.4])
-
-    bezpath = NTuple{4, Point}[]
+function bezierstroke(p1::Point, p2::Point, width=0.0)
+    bezpath = BezierPath()
     # simple stroke starting ending at point
     if isapprox(width, 0.0)
-        push!(bezpath, (p1, p1, p2, p2))
-        push!(bezpath, (p2, p2, p1, p1))
+        push!(bezpath, BezierPathSegment(p1, p1, p2, p2))
+        push!(bezpath, BezierPathSegment(p2, p2, p1, p1))
     # stroke with broad opening and closing
     else
         cp1 = perpendicular(p1, p2, -width)
-        push!(bezpath, (p1, p1, cp1, cp1))
+        push!(bezpath, BezierPathSegment(p1, p1, cp1, cp1))
 
         cp2 = perpendicular(p2, p1, width)
-        push!(bezpath, (cp1, cp1, cp2, cp2))
-        push!(bezpath, (cp2, cp2, p2, p2))
+        push!(bezpath, BezierPathSegment(cp1, cp1, cp2, cp2))
+        push!(bezpath, BezierPathSegment(cp2, cp2, p2, p2))
 
         # TODO the segments should be collinear, perhaps?
         cp3 = perpendicular(p2, p1, -width)
-        push!(bezpath, (p2, p2, cp3, cp3))
+        push!(bezpath, BezierPathSegment(p2, p2, cp3, cp3))
 
         cp4 = perpendicular(p1, p2, width)
-        push!(bezpath, (cp3, cp3, cp4, cp4))
+        push!(bezpath, BezierPathSegment(cp3, cp3, cp4, cp4))
 
-        push!(bezpath, (cp4, cp4, p1, p1))
+        push!(bezpath, BezierPathSegment(cp4, cp4, p1, p1))
     end
-    return movebezierhandles(bezpath, angles=angles, handles=handles)
+    return bezpath
 end
 
 """
-    movebezierhandles(bps::NTuple{4,Luxor.Point};
-            angles=[0 .05, -0.1],
+    setbezierhandles(bps::BezierPathSegment;
+            angles=[0.05, -0.1],
             handles=[0.3, 0.3])
 
 Return a new Bezier path segment with new locations for the Bezier control
@@ -437,19 +490,19 @@ points in the Bezier path segment `bps`.
 
 ` handles` are the lengths of the "handles". 0.3 is a typical value.
 """
-function movebezierhandles(bps::NTuple{4,Luxor.Point};
+function setbezierhandles(bps::BezierPathSegment;
             angles=[0.05, -0.1],
-            handles=[0.4, 0.4])
+            handles=[0.3, 0.3])
     d = norm(bps[1], bps[4])
     s = slope(bps[1], bps[4])
     bezhandle1 = bps[1] + polar(d * handles[1], s - angles[1])
     s = slope(bps[4], bps[1])
     bezhandle2 = bps[4] + polar(d * handles[2], s + angles[2])
-    return (bps[1], bezhandle1, bezhandle2, bps[4])
+    return BezierPathSegment(bps[1], bezhandle1, bezhandle2, bps[4])
 end
 
 """
-    movebezierhandles(bezpath::AbstractArray{NTuple{4,Luxor.Point}};
+    setbezierhandles(bezpath::BezierPath;
             angles=[0 .05, -0.1],
             handles=[0.3, 0.3])
 
@@ -460,14 +513,47 @@ every Bezier path segment of the BezierPath in `bezpath`.
 
 ` handles` are the lengths of the "handles". 0.3 is a typical value.
 """
-function movebezierhandles(bezpath::AbstractArray{NTuple{4,Luxor.Point}};
-            angles=[0.05, -0.1],
-            handles=[0.4, 0.4])
-    newbezpath = NTuple{4, Point}[]
+function setbezierhandles(bezpath::BezierPath;
+        angles=[0.05, -0.1],
+        handles=[0.4, 0.4])
+    newbezpath = BezierPath()
     for bps in bezpath
-        push!(newbezpath, movebezierhandles(bps, angles=angles, handles=handles))
+        push!(newbezpath, setbezierhandles(bps, angles=angles, handles=handles))
     end
     return newbezpath
+end
+
+"""
+    shiftbezierhandles(bps::BezierPathSegment;
+        angles=[0.1, -0.1], handles=[1.1, 1.1])
+
+Return a new BezierPathSegment that modifies the Bezier path in `bps` by moving
+the control handles. The values in `angles` increase the angle of the handles;
+the values in `handles` modifies the lengths: 1 preserves the length, 0.5 halves
+the length of the  handles, 2 doubles them.
+"""
+function shiftbezierhandles(bps::BezierPathSegment;
+        angles=[0.1, -0.1],
+        handles=[0.1, 0.1])
+    p1, cp1, cp2, p2 = bps
+    # find slope of curve at the end points
+    spt1 = bezier′(0.0, p1, cp1, cp2, p2)
+    spt2 = bezier′(1.0, p1, cp1, cp2, p2)
+    # angle of handle to curve
+    s1 = slope(p1, cp1)
+    s2 = slope(p2, cp2)
+    # length of handles
+    l1 = norm(p1, cp1)
+    l2 = norm(p2, cp2)
+    # new angle
+    s1 += angles[1]
+    s2 += angles[2]
+    # new handle lengths
+    l1 = l1 * handles[1]
+    l2 = l2 * handles[2]
+    newcontrolpoint1 = p1 + polar(l1, s1)
+    newcontrolpoint2 = p2 + polar(l2, s2)
+    return BezierPathSegment(p1, newcontrolpoint1, newcontrolpoint2, p2)
 end
 
 """
@@ -475,25 +561,23 @@ end
             strokes=5,
             minwidth=0.01,
             maxwidth=0.03,
-            minbend=0.01,
-            maxbend=0.1,
             twist = -1, # -1 or 1
             randomopacity = true
             )
 
 Draw a composite brush stroke made up of some randomized individual brush strokes.
+
+!!!
+    There is a lot of randomness in this function. Results are unpredictable.
 """
 function brush(pt1, pt2, width=10;
         strokes=5,
         minwidth=0.01,
         maxwidth=0.03,
-        minbend=0.01,
-        maxbend=0.1,
         twist = -1,
         randomopacity = true
         )
     @layer begin
-        println()
         sl = slope(pt1, pt2)
         n = norm(pt1, pt2)
         translate(pt1)
@@ -501,15 +585,47 @@ function brush(pt1, pt2, width=10;
         for j in linspace(-width/2, width/2, max(strokes, 2))
             shp = [O + (j, 0), O + (j, n)]
             shp .+= Point(rand(-5:5), rand(-5:5))
-            pbp = bezierstroke(shp[1], shp[2],
-                # width of each stroke
-                rand(Bool) ? 0.0 : rand(minwidth:0.1:maxwidth),
-                angles = [rand(minbend:0.01:maxbend), twist * rand(minbend:0.01:maxbend)],               # bezier handle angles
-                # bezier handle lengths
-                handles=[rand(0.4:0.1:0.6, 2)...]
+            pbp = bezierstroke(shp[1], shp[2], rand(Bool) ? 0.0 : rand(minwidth:0.1:maxwidth))
+            for bps in pbp
+                nbpb = setbezierhandles(bps,
+                    angles  = [rand(minwidth:0.001:maxwidth), twist * rand(minwidth:0.001:maxwidth)],
+                    handles = [rand(0.3:0.1:0.4, 2)...]
+                    )
+                randomopacity ? setopacity(rand()) : setopacity(1.0)
+                drawbezierpath(nbpb, :stroke, close=false)
+            end
+        end
+    end
+end
+
+"""
+    brush(bpseg::BezierPathSegment, width=10;
+            strokes=5,
+            minwidth=0.01,
+            maxwidth=0.03,
+            twist = -1, # -1 or 1
+            randomopacity = true
             )
+"""
+function brush(bpseg::BezierPathSegment, width=10;
+        strokes=5,
+        minwidth=0.01,
+        maxwidth=0.01,
+        twist = -1,
+        randomopacity = true
+        )
+    @layer begin
+        # random start positions
+        for j in linspace(-width/2, width/2, max(strokes, 2))
+            shiftedpts = [bpseg.p1 + (j, 0), bpseg.p2 + (j, 0)]
+            shiftedpts .+= Point(rand(-width/2:width/2), rand(-width/2:width/2))
+            pbp = bezierstroke(BezierPathSegment(shiftedpts[1], bpseg.cp1, bpseg.cp2, shiftedpts[2]),
+                rand(Bool) ? 0.0 : rand(minwidth:0.1:maxwidth))
+            npbp = shiftbezierhandles.(pbp,
+                angles  = [rand(minwidth:0.001:maxwidth), twist * rand(minwidth:0.001:maxwidth)],
+                handles = [rand(0.8:0.1:1.2, 2)...])
             randomopacity ? setopacity(rand()) : setopacity(1.0)
-            drawbezierpath(pbp, :fill, close=false)
+            drawbezierpath.(npbp, :stroke, close=false)
         end
     end
 end
