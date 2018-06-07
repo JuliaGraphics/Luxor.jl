@@ -73,13 +73,12 @@ nothing # hide
 
 To return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` to reset the matrix to the default. `origin()` resets the matrix then moves the origin to the center of the page.
 
-`rescale()` is just a convenient utility function for linear interpolation, also called a "lerp".
+`rescale()` is a convenient utility function for linear interpolation, also called a "lerp".
 
 ```@docs
 scale
 rotate
 translate
-rescale
 ```
 
 # Matrices and transformations

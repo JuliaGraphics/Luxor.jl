@@ -38,38 +38,49 @@ function testbezierstroke(fname)
             drawbezierpath(bpath, :stroke)
             for bps in bpath
                 randomhue()
-                drawbezierpath(bezierstroke(bps, rand(1:15)), :fill)
+                drawbezierpath(setbezierhandles(bps, angles=[2rand(), 2rand()], handles=[3rand(), 2rand()]), :fill)
             end
             # close needs doing manually
-            if length(bpath) >= 2
-                closingsegment = BezierPathSegment(bpath[end].cp2, bpath[end].p2, bpath[1].p1, bpath[1].cp2)
-                drawbezierpath(closingsegment, :fill)
+            if length(bpath) >= 1
+                closingsegment = BezierPathSegment(bpath[end].cp2, bpath[end].p2, bpath[1].p1, bpath[1].cp1)
+                seg = setbezierhandles(closingsegment, angles=[2rand(), -2rand()], handles=[3rand(), 2rand()])
+                drawbezierpath(seg, :fill)
             end
         end
         end
     end
+
+    # Julia!
     fontsize(500)
     fontface("Times-Bold")
-    translate(-450, 0)
+    translate(-450, 100)
+
     textpath("julia")
     bp = pathtobezierpaths()
     newpath() # clear current path
+    for i in 1:5
     for b in bp
         for bps in b
             randomhue()
-            drawbezierpath(bezierstroke(bps), :fill)
-            sethue("black")
-            drawbezierpath(bezierstroke(bps), :stroke)
+            drawbezierpath(setbezierhandles(bps,
+                angles=[3rand(), 3rand()], handles=[4rand(), 4rand()]),
+                :fill)
         end
         # close needs doing manually
-        if length(b) >= 2
-            closingsegment = BezierPathSegment(b[end].p2, b[end].p2, b[1].p1, b[1].p1)
-            drawbezierpath(bezierstroke(closingsegment, rand(5:25)), :fill)
-            sethue("black")
-            drawbezierpath(bezierstroke(closingsegment, rand(5:25)), :stroke)
+        if length(b) >= 1
+            closingsegment = BezierPathSegment(b[end].cp2, b[end].p2, b[1].p1, b[1].cp1)
+            seg = setbezierhandles(closingsegment, angles=[4rand(), -4rand()], handles=[4rand(), 4rand()])
+            drawbezierpath(seg, :fill)
         end
     end
-    @test finish() == true
+
+    setmode("overlay")
+    textpath("julia")
+    sethue("blue")
+    fillpath()
+
+end
+    @test finish() == true    
 end
 
 fname = "bezierstroke.png"

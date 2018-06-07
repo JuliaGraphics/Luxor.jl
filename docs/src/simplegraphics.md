@@ -922,6 +922,8 @@ boxdiagonal
 boxwidth
 boxheight
 intersectboundingboxes
+boxtop
+boxbottom
 ```
 
 ## Miscellaneous

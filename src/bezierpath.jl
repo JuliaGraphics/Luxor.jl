@@ -17,7 +17,7 @@ Base.next(bps::BezierPathSegment, s::Int) = bps[s], s+1
 Base.done(bps::BezierPathSegment, s::Int) = (s > length(bps))
 
 function Base.show(io::IO, bps::BezierPathSegment)
-    println(io, "p1  $(bps.p1)   cp1 $(bps.cp1)")
+    println(io, "p1  $(bps.p1)  cp1 $(bps.cp1)")
     println(io, "cp2  $(bps.cp2)  p2 $(bps.p2)")
 end
 
@@ -408,39 +408,6 @@ Given four points, return the Bezier curve that passes through all four points.
 bezierfrompoints(ptslist::Array{Point, 1}) = bezierfrompoints(ptslist...)
 
 """
-    bezierstroke(bps::BezierPathSegment, width=5.0)
-
-Create a BezierPath that replaces the single BezierPathSegment in `bps`. The
-new BezierPath contains two segments which together define a shape.
-"""
-function bezierstroke(bps::BezierPathSegment, width=5.0)
-    newbezpath = BezierPath()
-    p1, cp1, cp2, p2 = bps
-    # find two points on the curve
-    # choose third and two thirds
-    ip1 = bezier(0.33, p1, cp1, cp2, p2)
-    ip2 = bezier(0.66, p1, cp1, cp2, p2)
-    # find slope of curve at those points
-    pt1 = bezier′(0.33, p1, cp1, cp2, p2)
-    pt2 = bezier′(0.66, p1, cp1, cp2, p2)
-    # find normals normal is 1/slope
-    slopeip1 =  -1/(pt1.y/pt1.x)
-    slopeip2 =  -1/(pt2.y/pt2.x)
-    # find perpendiculars on both sides
-    ipt1 = ip1 + polar(width, atan(slopeip1))
-    ipt2 = ip2 + polar(width, atan(slopeip2))
-    ipt3 = ip1 - polar(width, atan(slopeip1))
-    ipt4 = ip2 - polar(width, atan(slopeip2))
-    # make two new beziers, one on each side
-    result1 = bezierfrompoints(p1, ipt3, ipt4, p2)
-    result2 = bezierfrompoints(p1, ipt1, ipt2, p2)
-    push!(newbezpath, BezierPathSegment(p1, result1[2], result1[3], p2))
-    push!(newbezpath, BezierPathSegment(p2, result2[3], result2[2], p1))
-
-    return newbezpath
-end
-
-"""
     bezierstroke(point1, point2, width=0.0)
 
 Return a BezierPath, a stroked version of a straight line between two points.
@@ -453,35 +420,51 @@ To draw it, use eg `drawbezierpath(..., :fill)`.
 """
 function bezierstroke(p1::Point, p2::Point, width=0.0)
     bezpath = BezierPath()
-    # simple stroke starting ending at point
     if isapprox(width, 0.0)
+        # simple wavy stroke starting ending at point
         push!(bezpath, BezierPathSegment(p1, p1, p2, p2))
         push!(bezpath, BezierPathSegment(p2, p2, p1, p1))
-    # stroke with broad opening and closing
+        result = setbezierhandles.(bezpath, angles=[0.1, -0.1],handles=[0.3, 0.3])
     else
+        # stroke with broad opening and closing
+        # make the paths, then give them some control power
         cp1 = perpendicular(p1, p2, -width)
-        push!(bezpath, BezierPathSegment(p1, p1, cp1, cp1))
+        seg = BezierPathSegment(p1, p1, cp1, cp1)
+        adjustedseg = setbezierhandles(seg, angles=[0.1, -0.1], handles=[0.3, 0.3])
+        push!(bezpath, adjustedseg)
 
         cp2 = perpendicular(p2, p1, width)
-        push!(bezpath, BezierPathSegment(cp1, cp1, cp2, cp2))
-        push!(bezpath, BezierPathSegment(cp2, cp2, p2, p2))
+        seg = BezierPathSegment(cp1, cp1, cp2, cp2)
+        adjustedseg = setbezierhandles(seg, angles=[0.1, -0.1], handles=[0.3, 0.3])
+        push!(bezpath, adjustedseg)
+
+        seg = BezierPathSegment(cp2, cp2, p2, p2)
+        adjustedseg = setbezierhandles(seg, angles=[0.1, -0.1], handles=[0.3, 0.3])
+        push!(bezpath, adjustedseg)
 
         # TODO the segments should be collinear, perhaps?
         cp3 = perpendicular(p2, p1, -width)
-        push!(bezpath, BezierPathSegment(p2, p2, cp3, cp3))
+        seg = BezierPathSegment(p2, p2, cp3, cp3)
+        adjustedseg = setbezierhandles(seg, angles=[0.1, -0.1], handles=[0.3, 0.3])
+        push!(bezpath, adjustedseg)
 
         cp4 = perpendicular(p1, p2, width)
-        push!(bezpath, BezierPathSegment(cp3, cp3, cp4, cp4))
+        seg = BezierPathSegment(cp3, cp3, cp4, cp4)
+        adjustedseg = setbezierhandles(seg, angles=[0.1, -0.1], handles=[0.3, 0.3])
+        push!(bezpath, adjustedseg)
 
-        push!(bezpath, BezierPathSegment(cp4, cp4, p1, p1))
+        seg = BezierPathSegment(cp4, cp4, p1, p1)
+        adjustedseg = setbezierhandles(seg, angles=[0.1, -0.1], handles=[0.3, 0.3])
+        push!(bezpath, adjustedseg)
+        result = bezpath
     end
-    return bezpath
+    return result
 end
 
 """
     setbezierhandles(bps::BezierPathSegment;
-            angles=[0.05, -0.1],
-            handles=[0.3, 0.3])
+            angles  = [0.05, -0.1],
+            handles = [0.3, 0.3])
 
 Return a new Bezier path segment with new locations for the Bezier control
 points in the Bezier path segment `bps`.
@@ -533,8 +516,8 @@ the values in `handles` modifies the lengths: 1 preserves the length, 0.5 halves
 the length of the  handles, 2 doubles them.
 """
 function shiftbezierhandles(bps::BezierPathSegment;
-        angles=[0.1, -0.1],
-        handles=[0.1, 0.1])
+        angles  = [0.1, -0.1],
+        handles = [0.1, 0.1])
     p1, cp1, cp2, p2 = bps
     # find slope of curve at the end points
     spt1 = bezier′(0.0, p1, cp1, cp2, p2)
@@ -558,74 +541,59 @@ end
 
 """
     brush(pt1, pt2, width=10;
-            strokes=5,
-            minwidth=0.01,
-            maxwidth=0.03,
-            twist = -1, # -1 or 1
-            randomopacity = true
-            )
-
-Draw a composite brush stroke made up of some randomized individual brush strokes.
-
-!!!
-    There is a lot of randomness in this function. Results are unpredictable.
-"""
-function brush(pt1, pt2, width=10;
-        strokes=5,
+        strokes=10,
         minwidth=0.01,
         maxwidth=0.03,
         twist = -1,
-        randomopacity = true
+        lowhandle  = 0.3,
+        highhandle = 0.7,
+        randomopacity = true,
+        tidystart = false,
+        action = :fill)
+
+Draw a composite brush stroke made up of some randomized individual filled
+Bezier paths.
+
+!!! note
+
+    There is a lot of randomness in this function. Results are unpredictable.
+"""
+function brush(pt1, pt2, width=10;
+        strokes=10,
+        minwidth=0.01,
+        maxwidth=0.03,
+        twist = -1,
+        lowhandle  = 0.3,
+        highhandle = 0.7,
+        randomopacity = true,
+        tidystart = false,
+        action = :fill
         )
     @layer begin
         sl = slope(pt1, pt2)
         n = norm(pt1, pt2)
         translate(pt1)
         rotate(sl - pi/2)
-        for j in linspace(-width/2, width/2, max(strokes, 2))
-            shp = [O + (j, 0), O + (j, n)]
-            shp .+= Point(rand(-5:5), rand(-5:5))
-            pbp = bezierstroke(shp[1], shp[2], rand(Bool) ? 0.0 : rand(minwidth:0.1:maxwidth))
-            for bps in pbp
-                nbpb = setbezierhandles(bps,
-                    angles  = [rand(minwidth:0.001:maxwidth), twist * rand(minwidth:0.001:maxwidth)],
-                    handles = [rand(0.3:0.1:0.4, 2)...]
-                    )
-                randomopacity ? setopacity(rand()) : setopacity(1.0)
-                drawbezierpath(nbpb, :stroke, close=false)
+        widthsteps = (maxwidth - minwidth)/10
+        for j in 1:strokes
+            shiftedline = [O + (0, 0), O + (0, n)]
+            if tidystart
+                shiftedline .+= Point(rand(-width/2:width/2), 0)
+            else
+                shiftedline .+= Point(rand(-width/2:width/2), rand(-width/2:width/2))
             end
-        end
-    end
-end
-
-"""
-    brush(bpseg::BezierPathSegment, width=10;
-            strokes=5,
-            minwidth=0.01,
-            maxwidth=0.03,
-            twist = -1, # -1 or 1
-            randomopacity = true
-            )
-"""
-function brush(bpseg::BezierPathSegment, width=10;
-        strokes=5,
-        minwidth=0.01,
-        maxwidth=0.01,
-        twist = -1,
-        randomopacity = true
-        )
-    @layer begin
-        # random start positions
-        for j in linspace(-width/2, width/2, max(strokes, 2))
-            shiftedpts = [bpseg.p1 + (j, 0), bpseg.p2 + (j, 0)]
-            shiftedpts .+= Point(rand(-width/2:width/2), rand(-width/2:width/2))
-            pbp = bezierstroke(BezierPathSegment(shiftedpts[1], bpseg.cp1, bpseg.cp2, shiftedpts[2]),
-                rand(Bool) ? 0.0 : rand(minwidth:0.1:maxwidth))
-            npbp = shiftbezierhandles.(pbp,
-                angles  = [rand(minwidth:0.001:maxwidth), twist * rand(minwidth:0.001:maxwidth)],
-                handles = [rand(0.8:0.1:1.2, 2)...])
-            randomopacity ? setopacity(rand()) : setopacity(1.0)
-            drawbezierpath.(npbp, :stroke, close=false)
+            pbp = bezierstroke(shiftedline[1],
+                shiftedline[2],
+                rand(Bool) ? 0.0 : rand(minwidth:widthsteps:maxwidth)
+                )
+            for bps in pbp
+                randomopacity ? setopacity(rand(0.3:0.1:0.9)) : setopacity(1.0)
+                nbpb = shiftbezierhandles(bps,
+                    angles  = [twist * rand(minwidth:widthsteps:maxwidth), -twist * rand(minwidth:widthsteps:maxwidth)],
+                    handles = [rand(lowhandle:0.01:highhandle, 2)...]
+                    )
+                drawbezierpath(nbpb, action, close=false)
+            end
         end
     end
 end

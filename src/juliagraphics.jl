@@ -12,6 +12,15 @@ const purples = (darker_purple, lighter_purple)
 const greens = (darker_green, lighter_green)
 const reds = (darker_red, lighter_red)
 
+const juliacolorscheme = [
+    RGB(Luxor.darker_purple...),
+    RGB(Luxor.darker_red...),
+    RGB(Luxor.darker_red...),
+    RGB(Luxor.darker_green...),
+    RGB(Luxor.darker_green...),
+    RGB(Luxor.darker_purple...)
+    ]
+
 """
     julialogo(;action=:fill, color=true)
 
