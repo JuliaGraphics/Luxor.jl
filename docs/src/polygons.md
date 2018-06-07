@@ -6,7 +6,7 @@ A polygon is an ordered collection of Points stored in an array.
 
 A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
 
-Luxor also provides a Bézier-path type, which is an array of four-point tuples, each of which is a Bézier curve section.
+Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
 ```@setup polytable
 using Luxor
@@ -20,13 +20,15 @@ polygon       ngon()                polysmooth()          poly()             isi
 -             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()
 -             star()                -                     polysmooth()       polyarea()        polyportion()
 -             offsetpoly()          -                     -                  polycentroid()    polyremainder()
--             polyfit()             -                     -                  boundingbox()        polysortbyangle()
+-             polyfit()             -                     -                  boundingbox()     polysortbyangle()
 -             hyptrochoid()         -                     -                  -                 polysortbydistance()
 -             epitrochoid()         -                     -                  -                 polyintersections()
 path          getpath()             pathtopoly()          -                  -                 -
 -             getpathflat()         -                     -                  -                 -  
 bezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -
--             pathtobezierpaths()   bezierpathtopoly()    -                  -                 -  
+-             pathtobezierpaths()   bezierpathtopoly()    brush()            -                 -  
+-             BezierPath()          -                     -                  -                 -
+-             BezierPathSegment()   -                     -                  -                 -
 """))
 
 # find the widths of the columns
@@ -600,10 +602,9 @@ getpathflat
 
 Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths, and `pathtobezierpaths()` to convert the current path to an array of Bézier paths.  
 
-A Bézier path is a sequence of Bézier curve segments; each curve segment is defined by four points: two end points and their control points.
+A BezierPath type contains a sequence of `BezierPathSegment`s; each curve segment is defined by four points: two end points and their control points.
 
 ```
-NTuple{4,Point}[
     (Point(-129.904, 75.0),        # start point
      Point(-162.38, 18.75),        # ^ control point
      Point(-64.9519, -150.0),      # v control point
@@ -618,7 +619,6 @@ NTuple{4,Point}[
      Point(-129.904, 75.0)
      ),
      ...
-     ]
 ```
 
 Bézier paths are different from ordinary paths in that they don't usually contain straight line segments. However, by setting the two control points to be the same as their matching start/end points, you create straight line sections.
@@ -714,7 +714,7 @@ nothing # hide
 ```
 ![path to polygon](assets/figures/bezierpathtopoly.png)
 
-You can convert the current path to an array of Bézier paths using the `pathtobezierpaths()` function.
+You can convert the current path to an array of BezierPaths using the `pathtobezierpaths()` function.
 
 In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then the control points of segment are drawn (in orange) showing how they affect the curvature.
 
@@ -754,22 +754,41 @@ nothing # hide
 
 ![path to polygon](assets/figures/pathtobezierpaths.png)
 
+### Brush strokes
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/brush.png") # hide
+origin() # hide
+background("white") # hide
+srand(42) # hide
+sethue("black") # hide
+brush(Point(-250, 0), Point(250, 0), 20,
+    strokes=15,
+    tidystart=true,
+    lowhandle=0.0,
+    twist=-5,
+    lowhandle=-0.5,
+    highhandle=0.5)
+finish() # hide
+nothing # hide
+```
+
+![brush](assets/figures/brush.png)
+
 ```@docs
 bezier
-bezier′
-bezier′′
 beziercurvature
 bezierfrompoints
 bezierpathtopoly
 bezierstroke
 beziertopoly
-brush
 drawbezierpath
-Luxor.findbeziercontrolpoints
 makebezierpath
 pathtobezierpaths
 setbezierhandles
 shiftbezierhandles
+brush
 ```
 
 ## Polygon information

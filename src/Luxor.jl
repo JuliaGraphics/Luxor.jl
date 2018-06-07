@@ -64,7 +64,7 @@ export Drawing, currentdrawing,
 
     move, rmove, line, rule, rline, arrow,
 
-    BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
+    BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio, boxtop, boxbottom,
 
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,

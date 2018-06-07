@@ -168,9 +168,23 @@ boxdiagonal(bb::BoundingBox)    = hypot(boxwidth(bb), boxheight(bb))
 """
     boxaspectratio(bb::BoundingBox)
 
-Return the asepct ratio (the height divided by the width) of bounding box `bb`.
+Return the aspect ratio (the height divided by the width) of bounding box `bb`.
 """
 boxaspectratio(bb::BoundingBox) = boxheight(bb)/boxwidth(bb)
+
+"""
+    boxtop(bb::BoundingBox)
+
+Return the top center point of bounding box `bb`.
+"""
+boxtop(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb)/2)
+
+"""
+    boxbottom(bb::BoundingBox)
+
+Return the top center point of bounding box `bb`.
+"""
+boxbottom(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
 
 """
     convert(Point, bbox::BoundingBox)
