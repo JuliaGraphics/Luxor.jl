@@ -126,10 +126,9 @@ where some of the characters—eg "F", "+", "-", and "t"—issue turtle control 
 It's usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it's better to target PNG rather than SVG or PDF for this example!).
 
 ```@example
-using Luxor, Colors, ColorSchemes
+using Luxor, Colors
 function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
-    cs = ColorSchemes.botticelli
     Drawing(w, w, "assets/figures/strange-vector.png")
     origin()
     background("white")
@@ -148,10 +147,10 @@ function strange(dotsize, w=800.0)
             if xx < xmax && xx > xmin && yy < ymax && yy > ymin
                 xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range
                 ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range
-                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))
-                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))
-                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))
-                sethue(mean([col1, col2, col3]))
+                rcolor = rescale(xx, -1, 1, 0.0, .7)
+                gcolor = rescale(yy, -1, 1, 0.2, .5)
+                bcolor = rescale(zz, -1, 1, 0.3, .8)
+                setcolor(convert(Colors.HSV, Colors.RGB(rcolor, gcolor, bcolor)))
                 circle(Point(xpos, ypos), dotsize, :fill)
             end
         end
