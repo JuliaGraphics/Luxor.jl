@@ -43,10 +43,10 @@ function text(t, pt::Point;
     =#
 
     xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(t)
-    halignment = findfirst([:left, :center, :right, :centre], halign)
+    halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
 
     # if unspecified or wrong, default to left, also treat UK spelling centre as center
-    if halignment == 0
+    if halignment == nothing
         halignment = 1
     elseif halignment == 4
         halignment = 2
@@ -54,10 +54,10 @@ function text(t, pt::Point;
 
     textpointx = pt.x - [0, textwidth/2, textwidth][halignment]
 
-    valignment = findfirst([:top, :middle, :baseline, :bottom], valign)
+    valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
 
     # if unspecified or wrong, default to baseline
-    if valignment == 0
+    if valignment == nothing
         valignment = 3
     end
 
@@ -260,7 +260,7 @@ function textcurvecentered(the_text, the_angle, the_radius, center::Point;
     # hack to adjust starting angle for the letter spacing
     # to do it accurately would take lots more code and brain cells
     lspaced = length(the_text) * letter_spacing
-    lspacedangle = atan2(lspaced, baselineradius)
+    lspacedangle = atan(lspaced, baselineradius)
 
     theta = atextwidth/baselineradius               # find angle
     if clockwise

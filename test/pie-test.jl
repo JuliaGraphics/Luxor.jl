@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function test_pie(fname)
   pagewidth, pageheight = 1200, 1400
@@ -22,8 +17,8 @@ function test_pie(fname)
   for (pos, n) in pagetiles
     randomhue()
     fromA, toA = rand() * 2pi, rand() * 2pi
-    fromA_str, toA_str = string(convert(Int, round(rad2deg(fromA), 0))),
-                         string(convert(Int, round(rad2deg(toA), 0)))
+    fromA_str, toA_str = string(convert(Int, round(rad2deg(fromA), digits=0))),
+                         string(convert(Int, round(rad2deg(toA), digits=0)))
     pie(pos, rad, fromA, toA, :fill)
 
     #label

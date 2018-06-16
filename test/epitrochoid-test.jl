@@ -1,13 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Random
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function test_epitrochoid(fname)
     Drawing(1400, 1400, fname)
@@ -42,7 +37,7 @@ function test_epitrochoid(fname)
         sethue("magenta")
         portion = rand()
         poly(polyportion(p, portion), :stroke, close=false)
-        text(string("portion ", round(portion, 2)), halign=:center, O.x, O.y+tiles.tileheight/2 + 30)
+        text(string("portion ", round(portion, digits=2)), halign=:center, O.x, O.y+tiles.tileheight/2 + 30)
 
         sethue("cyan")
         setline(0.3)

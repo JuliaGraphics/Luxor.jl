@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
@@ -90,7 +85,7 @@ function julia_heart(fname)
 
     origin()
     background("black")
-    const namelist = map(x->string(x), names(Base)) # list of names in Base.
+    namelist = map(x->string(x), names(Base)) # list of names in Base.
 
     background_text(namelist)
     for n in 1:5

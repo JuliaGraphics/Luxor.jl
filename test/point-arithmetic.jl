@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)
@@ -149,34 +144,13 @@ function point_arithmetic_test(fname, npoints=20)
         end
     end
 
-    if VERSION < v"0.6.0-"
-        # .<(p1, p2)              = p1 < p2
-        # .>(p1, p2)              = p2 < p1
-        # .<=(p1, p2)             = p1 <= p2
-        # .>=(p1, p2)             = p2 <= p1
-        testfunctions = [.<, .>, .>=, .<=]
-        sethue("blue")
-        for f in testfunctions
-            for i in 1:length(randompoints)-1
-                if f(randompoints[1:npoints], randompoints[npoints:-1:1]) != true
-                    ellipse(randompoints[i], 12, 23, :fill)
-                    text(string("$f 4 & 5"), randompoints[i] + 6)
-                end
-            end
-        end
-    else
-        # WARNING: .< is no longer a function object; use broadcast(<, ...) instead
-        # WARNING: .> is no longer a function object; use broadcast(>, ...) instead
-        # WARNING: .>= is no longer a function object; use broadcast(>=, ...) instead
-        # WARNING: .<= is no longer a function object; use broadcast(<=, ...) instead
-        testfunctions = [<, >, >=, <=]
-        sethue("orange")
-        for f in testfunctions
-            for i in 1:length(randompoints)-1
-                if f.(randompoints[1:npoints], randompoints[npoints:-1:1]) != true
-                    ellipse(randompoints[i], 19, 32, :fill)
-                    text(string("v6"), randompoints[i] - 6)
-                end
+    testfunctions = [<, >, >=, <=]
+    sethue("orange")
+    for f in testfunctions
+        for i in 1:length(randompoints)-1
+            if f.(randompoints[1:npoints], randompoints[npoints:-1:1]) != true
+                ellipse(randompoints[i], 19, 32, :fill)
+                text(string("v6"), randompoints[i] - 6)
             end
         end
     end
@@ -184,13 +158,13 @@ function point_arithmetic_test(fname, npoints=20)
     sethue("purple")
     for i in 1:length(randompoints)-1
         v = cmp(randompoints[i], randompoints[i+1])
-        text(string(round(v, 1)), randompoints[i] + 15)
+        text(string(round(v, digits=1)), randompoints[i] + 15)
     end
 
     sethue("cyan")
     for i in 1:length(randompoints)-1
-        n = norm(randompoints[i], randompoints[i+1])
-        text(string(round(n, 1)), randompoints[i])
+        n = distance(randompoints[i], randompoints[i+1])
+        text(string(round(n, digits=1)), randompoints[i])
     end
 
     sethue("magenta")

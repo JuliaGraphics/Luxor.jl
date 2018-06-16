@@ -2,12 +2,9 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
+
+using Colors
 
 demomovie = Movie(400, 400, "test", 0:359)
 

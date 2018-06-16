@@ -1,12 +1,11 @@
-import Base: +, -, *, /, ^, !=, <, >, ==, norm
-import Base: isequal, isless, isapprox, cmp, dot, size, getindex
+import Base: +, -, *, /, ^, !=, <, >, ==
+import Base: isequal, isless, isapprox, cmp, size, getindex
 
 """
 The Point type holds two coordinates. Currently it's immutable, so remember not try to
 change the values of the x and y values directly.
 """
-
-immutable Point
+struct Point
    x::Float64
    y::Float64
 end
@@ -42,8 +41,12 @@ const O = Point(0, 0)
 Base.size(::Point) = 2
 Base.getindex(p::Point, i) = [p.x, p.y][i]
 
-function dot(a::Point, b::Point)
-    return dot([a.x, a.y], [b.x, b.y])
+function dotproduct(a::Point, b::Point)
+    result = 0.0
+    for i in [:x, :y]
+        result += getfield(a, i) * getfield(b, i)
+    end
+    return result
 end
 
 # comparisons
@@ -56,30 +59,17 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 >(p1::Point, p2::Point)               = p2 < p1
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
 
-# These have been replaced in v0.6 with broadcasting syntax
-# fix from https://github.com/JuliaLang/Compat.jl/issues/308
-if VERSION < v"0.6.0-dev.1632" # julia#17623
-    include_string("""
-    import Base: .*, ./, .<, .>, .>=, .<=
-    .*(k::Number, p2::Point)              = Point(k * p2.x,    k * p2.y)
-    .*(p2::Point, k::Number)              = Point(k * p2.x,    k * p2.y)
-    ./(p2::Point, k::Number)              = Point(p2.x/k,      p2.y/k)
-    .<(p1::Point, p2::Point)              = p1 < p2
-    .>(p1::Point, p2::Point)              = p2 < p1
-    .<=(p1::Point, p2::Point)             = p1 <= p2
-    .>=(p1::Point, p2::Point)             = p2 <= p1
-    """, string(@__FILE__, ':', @__LINE__))
-end
-
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 """
-    norm(p1::Point, p2::Point)
+    distance(p1::Point, p2::Point)
 
-Find the norm of two points (two argument form).
+Find the distance between two points (two argument form).
 """
-function norm(p1::Point, p2::Point)
-    norm([p1.x, p1.y] - [p2.x, p2.y])
+function distance(p1::Point, p2::Point)
+    dx = p2.x - p1.x
+    dy = p2.y - p1.y
+    return sqrt(dx*dx + dy*dy)
 end
 
 """
@@ -186,11 +176,9 @@ end
     crossproduct(p1::Point, p2::Point)
 
 This is the *perp dot product*, really, not the crossproduct proper (which is 3D):
-
-    dot(p1, perpendicular(p2))
 """
 function crossproduct(p1::Point, p2::Point)
-    return dot(p1, perpendicular(p2))
+    return dotproduct(p1, perpendicular(p2))
 end
 
 function randomordinate(low, high)
@@ -388,7 +376,7 @@ Return a value between 0 and 2pi. Value will be relative to the current axes.
 
 """
 function slope(pointA, pointB)
-    return mod2pi(atan2(pointB.y - pointA.y, pointB.x - pointA.x))
+    return mod2pi(atan(pointB.y - pointA.y, pointB.x - pointA.x))
 end
 
 function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)

@@ -31,7 +31,7 @@ Make a circle that passes through two points that define the diameter:
 """
 function circle(pt1::Point, pt2::Point, action=:nothing)
     center = midpoint(pt1, pt2)
-    radius = norm(pt1, pt2)/2
+    radius = distance(pt1, pt2)/2
     circle(center, radius, action)
 end
 
@@ -54,7 +54,7 @@ function center3pts(a::Point, b::Point, c::Point)
     # do the lines intersect?
     crossp = crossproduct(perpAB, perpBC)
     if isapprox(crossp, 0)
-        info("no circle passes through all three points")
+        @info("no circle passes through all three points")
         return Point(0,0), 0
     end
     centerX = ((midAB.y * perpAB.x * perpBC.x) +
@@ -177,9 +177,9 @@ to the current path.
  it will be used only as an indication of the arc's length, rather than its position.
 """
 function arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
-    r = norm(c1, p2)
-    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
-    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
+    r = distance(c1, p2)
+    startangle = atan(p2.y - c1.y, p2.x - c1.x)
+    endangle   = atan(p3.y - c1.y, p3.x - c1.x)
     if endangle < startangle
         endangle = mod2pi(endangle + 2pi)
     end
@@ -196,9 +196,9 @@ going counterclockwise, to the current path.
 path, it will be used only as an indication of the arc's length, rather than its position.
 """
 function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
-    r = norm(c1, p2)
-    startangle = atan2(p2.y - c1.y, p2.x - c1.x)
-    endangle   = atan2(p3.y - c1.y, p3.x - c1.x)
+    r = distance(c1, p2)
+    startangle = atan(p2.y - c1.y, p2.x - c1.x)
+    endangle   = atan(p3.y - c1.y, p3.x - c1.x)
     if startangle < endangle
         startangle = mod2pi(startangle + 2pi)
     end
@@ -261,7 +261,7 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
 
     # TODO reduce given corner radius to prevent messes when spanning angle too small
     # 4 is a magic number
-    while abs(endangle - startangle) < 4.0(atan2(cornerradius, innerradius))
+    while abs(endangle - startangle) < 4.0(atan(cornerradius, innerradius))
         cornerradius *= 0.75
     end
 
@@ -454,7 +454,7 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
                  reversepath=false)
     a = k/2  # a = ellipse's major axis, the widest part
     cpoint = midpoint(focus1, focus2)
-    dc = norm(focus1, cpoint)
+    dc = distance(focus1, cpoint)
     b = sqrt(abs(a^2 - dc^2)) # minor axis, hopefuly not 0
     phi = slope(O, focus2) # angle between the major axis and the x-axis
     points = Point[]
@@ -631,7 +631,7 @@ Find the area of intersection between two circles, the first centered at `pt1` w
 function intersection2circles(pt1, r1, pt2, r2)
     r1squared = r1^2
     r2squared = r2^2
-    d = norm(pt1, pt2)
+    d = distance(pt1, pt2)
     intersectionarea = 0.0
     if (d > r2 + r1)
         # circles do not overlap
@@ -679,7 +679,7 @@ circles have no intersection points.
 function intersectioncirclecircle(cp1, r1, cp2, r2)
     r1squared = r1^2
     r2squared = r2^2
-    d = norm(cp1, cp2)
+    d = distance(cp1, cp2)
     if d > (r2 + r1) # circles do not overlap
         return (false, O, O)
     elseif (d <= abs(r1 - r2)) && (r1 >= r2)

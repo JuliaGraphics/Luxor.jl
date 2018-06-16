@@ -2,18 +2,13 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function point_intersect(fname)
     Drawing(1000, 1000, fname)
     origin()
     setopacity(0.4)
-    
+
     for i in 1:100
         randomhue()
         p1 = Point(rand(-450:450), rand(-450:450))

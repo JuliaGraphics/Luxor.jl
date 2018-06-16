@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function barfunc1(low, high, v; extremes=extrema(values), barnumber=0, bartotal=0, mvalue=0)
     @layer begin
@@ -16,7 +11,7 @@ function barfunc1(low, high, v; extremes=extrema(values), barnumber=0, bartotal=
         box(Point(low.x - 5, low.y), Point(high.x + 5, high.y), :fill)
         fontsize(6)
         sethue("black")
-        textbox([string(round(v,2))], Point(low.x, 100), leading=5, alignment=:center)
+        textbox([string(round(v, digits=2))], Point(low.x, 100), leading=5, alignment=:center)
         sethue("gray80")
         setline(0.5)
         setdash("dot")

@@ -43,7 +43,7 @@ To use a Tiler to make grid points:
 
 which returns an array of points that are the center points of the grid.
 """
-type Tiler
+mutable struct Tiler
     areawidth::Real
     areaheight::Real
     tilewidth::Real
@@ -125,7 +125,7 @@ To get points from the grid, use `nextgridpoint(g::Grid)`.
 
 When you run out of grid points, you'll wrap round and start again.
 """
-type GridRect
+mutable struct GridRect
     startpoint::Point
     currentpoint::Point
     xspacing::Float64
@@ -144,7 +144,7 @@ type GridRect
     end
 end
 
-doc"""
+@doc doc"""
     GridHex(startpoint, radius, width=1200.0, height=1200.0)
 
 Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis and
@@ -159,7 +159,7 @@ To get the next point from the grid, use `nextgridpoint(g::Grid)`.
 
 When you run out of grid points, you'll wrap round and start again.
 """
-type GridHex
+mutable struct GridHex
     startpoint::Point
     radius::Float64
     currentpoint::Point
@@ -271,7 +271,7 @@ should have that information for you.
 Unless the tilewidth and tileheight are exact multiples of the area width and height, you'll
 see a border at the right and bottom where the tiles won't fit.
 """
-type Partition
+mutable struct Partition
     areawidth::Real
     areaheight::Real
     tilewidth::Real

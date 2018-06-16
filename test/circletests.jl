@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function testareaintersection()
     c1 = (O, 150)
@@ -56,7 +51,7 @@ function test_circles(fname)
             p4 = getnearestpointonline(p1, p2, cpoint)
             line(p1, p2, :stroke)
             line(cpoint, p4, :stroke)
-            text(string(round(pointlinedistance(cpoint, p1, p2), 1)), cpoint)
+            text(string(round(pointlinedistance(cpoint, p1, p2), digits=1)), cpoint)
         end
         setopacity(0.8)
     end

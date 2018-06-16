@@ -5,7 +5,7 @@ For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`
 `translate()` shifts the current axes by the specified amounts in x and y. It's relative and cumulative, rather than absolute:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor, Colors, Random # hide
 Drawing(600, 200, "assets/figures/translate.png") # hide
 background("white") # hide
 srand(1) # hide
@@ -28,7 +28,7 @@ nothing # hide
 `scale(x, y)` or `scale(n)` scales the current workspace by the specified amounts. Again, it's relative to the current scale, not to the document's original.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor, Colors, Random # hide
 Drawing(400, 200, "assets/figures/scale.png") # hide
 background("white") # hide
 srand(1) # hide
@@ -51,7 +51,7 @@ nothing # hide
 `rotate()` rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 200, "assets/figures/rotate.png") # hide
 background("white") # hide
 srand(1) # hide
@@ -126,7 +126,7 @@ end
 for i in 0:5
     xskew = tand(i * 5.0)
     transform([1, 0, xskew, 1, 50, 0])
-    boxtext(O, string(round(rad2deg(xskew), 1), "°"))
+    boxtext(O, string(round(rad2deg(xskew), digits=1), "°"))
 end
 
 finish() # hide

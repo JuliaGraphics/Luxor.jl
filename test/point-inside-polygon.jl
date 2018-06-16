@@ -5,12 +5,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function ngon_poly(x, y, radius, sides::Int, orientation=0, action=:nothing; close=true)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,

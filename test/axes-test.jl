@@ -2,19 +2,14 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function test_axes(x, y, rot, w)
     gsave()
     translate(x, y)
     rotate(rot)
     box(0, 0, w, w, :clip)
-    axes()
+    Luxor.axes()
     clipreset()
     grestore()
 end

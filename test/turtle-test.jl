@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function subroutine(🐢::Turtle)
     for i in 1:10
@@ -61,7 +56,7 @@ function test_turtles(fname)
     Randomize_saturation(michaelangelo)
 
     # test warnings
-    info("stack was already empty warning expected...")
+    @info("stack was already empty warning expected...")
     Pop(michaelangelo) # should get "stack empty" warning!
     @test finish() == true
 end

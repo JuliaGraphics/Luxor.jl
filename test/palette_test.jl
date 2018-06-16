@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function draw_color_bars(x, y, n, colmap, label)
     setcolor(1, 1, 1)
@@ -22,7 +17,7 @@ function draw_color_bars(x, y, n, colmap, label)
         setcolor(c)
         rect(x, y, tilesize, tilesize, :fill)
         setcolor((1, 1, 1))
-        text(string(@sprintf(" %2.2f ",c.r), @sprintf("%2.2f ",c.g),@sprintf("%2.2f ",c.b)), x + tilesize + 5, y + tilesize/2)
+        text("$(c.r), $(c.g), $(c.b)", x + tilesize + 5, y + tilesize/2)
         y +=tilesize
     end
 end

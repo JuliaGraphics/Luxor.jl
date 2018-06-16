@@ -5,17 +5,13 @@ The Luxor package provides a set of vector drawing functions for creating graphi
 """
 module Luxor
 
-# as of Julia version 0.4, we still have to share fill() and scale() with Base.
-# as of Julia version 0.6, we still have to share fill() with Base.
-# fill() is deprecated, replaced with fillpath()
-
 import Base: fill
 
 if isdefined(Base, :scale)
     import Base: scale
 end
 
-using Colors, Cairo, Compat, FileIO, Juno
+using Colors, Cairo, FileIO, Juno, Dates
 
 include("point.jl")
 include("basics.jl")
@@ -78,7 +74,7 @@ export Drawing, currentdrawing,
 
     Point, O, randompoint, randompointarray, midpoint, between, slope, intersection,
     pointlinedistance, getnearestpointonline, isinside,
-    perpendicular, crossproduct,
+    perpendicular, crossproduct, dotproduct, distance,
     prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
@@ -135,7 +131,7 @@ const inch = 72.0
 const cm = 28.3464566929
 const mm = 2.83464566929
 
-type Drawing
+mutable struct Drawing
     width::Float64
     height::Float64
     filename::String
@@ -166,7 +162,7 @@ type Drawing
             error("Unknown Luxor surface type $stype")
         end
         the_cr  = Cairo.CairoContext(the_surface)
-        # info("drawing '$f' ($w w x $h h) created in $(pwd())")
+        # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata)
         return currentdrawing
     end
@@ -257,7 +253,7 @@ creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
 creates a new drawing of the given surface type (e.g. :svg, :png), storing the image only in memory if no filename is provided.
 
-    Drawing(1200, 1200/golden, "my-drawing.eps")
+    Drawing(1200, 1200/Base.Mathconstants.golden, "my-drawing.eps")
 
 creates an EPS drawing in the file "my-drawing.eps", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ)
 high. Only for PNG files must the dimensions be integers.
@@ -282,8 +278,8 @@ function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
     return currentdrawing
 end
 function Drawing(paper_size::String, f="luxor-drawing.png")
-  if contains(paper_size, "landscape")
-    psize = replace(paper_size, "landscape", "")
+  if occursin("landscape", paper_size)
+    psize = replace(paper_size, "landscape" => "")
     h, w = paper_sizes[psize]
   else
     w, h = paper_sizes[paper_size]
@@ -350,11 +346,11 @@ function preview()
         end
     elseif candisplay && juno
         display(currentdrawing)
-    elseif @compat is_apple()
+    elseif Sys.isapple()
         run(`open $(currentdrawing.filename)`)
-    elseif @compat is_windows()
+    elseif Sys.iswindows()
         run(ignorestatus(`explorer $(currentdrawing.filename)`))
-    elseif @compat is_unix()
+    elseif Sys.isunix()
         run(`xdg-open $(currentdrawing.filename)`)
     end
 end
@@ -389,8 +385,7 @@ Examples
             circle(O, 20, :fill)
          end 1200, 1200
 """
-
-macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).svg")
+macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
      quote
         Drawing($width, $height, $fname)
         origin()
@@ -432,7 +427,6 @@ Examples
             circle(O, 20, :fill)
          end 1200 1200
 """
-
 macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).png")
      quote
         Drawing($width, $height, $fname)

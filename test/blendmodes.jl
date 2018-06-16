@@ -2,12 +2,7 @@
 
 using Luxor, Colors
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function blend_mode_test(fname)
     Drawing(600, 600, fname)

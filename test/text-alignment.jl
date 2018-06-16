@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function drawdot(pos)
     gsave()
@@ -42,7 +37,7 @@ function text_alignment_tests(fname)
         gsave()
         h = haligns[current_h]
         v = valigns[current_v]
-        drawdot(Point(pos))
+        drawdot(pos)
         showt("Å˰̀Ά", pos, h, v, n)
         grestore()
         push!(legend, "$n h: $h v: $v")

@@ -126,7 +126,7 @@ using Luxor # hide
 Drawing(400, 150, "assets/figures/pro-text-placement.png") # hide
 origin() # hide
 background("white") # hide
-axes()
+Luxor.axes()
 sethue("black")
 settext("<span font='26' background ='green' foreground='red'> Hey</span>
     <i>italic</i> <b>bold</b> <sup>superscript</sup>

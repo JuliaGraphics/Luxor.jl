@@ -430,7 +430,6 @@ end
 """
     The `layer` macro is a shortcut for `gsave()` ... `grestore()`.
 """
-
 macro layer(a)
     quote
         gsave()

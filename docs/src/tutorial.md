@@ -328,15 +328,15 @@ To find (and draw) these points is straightforward, but we'll mark these as inte
     circle.([I1, I2, I3, I4], 2, :fill)
 ```
 
-The `norm()` function returns the distance between two points, and it's simple enough to compare the distances.
+The `distance()` function returns the distance between two points, and it's simple enough to compare the distances.
 
 ```julia
-    if norm(C1, I1) < norm(C1, I2)
+    if distance(C1, I1) < distance(C1, I2)
        ip1 = I1
     else
        ip1 = I2
     end
-    if norm(C1, I3) < norm(C1, I4)
+    if distance(C1, I3) < distance(C1, I4)
        ip2 = I3
     else
        ip2 = I4
@@ -344,7 +344,7 @@ The `norm()` function returns the distance between two points, and it's simple e
 
     label("ip1", :N, ip1)
     label("ip2", :N, ip2)
-    circle(C1, norm(C1, ip1), :stroke)
+    circle(C1, distance(C1, ip1), :stroke)
 
 end
 ```
@@ -386,12 +386,12 @@ nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
 circle.([I1, I2, I3, I4], 2, :fill)
 
-if norm(C1, I1) < norm(C1, I2)
+if distance(C1, I1) < distance(C1, I2)
     ip1 = I1
 else
    ip1 = I2
 end
-if norm(C1, I3) < norm(C1, I4)
+if distance(C1, I3) < distance(C1, I4)
    ip2    = I3
 else
    ip2 = I4
@@ -399,7 +399,7 @@ end
 
 label("ip1", :N, ip1)
 label("ip2", :N, ip2)
-circle(C1, norm(C1, ip1), :stroke)
+circle(C1, distance(C1, ip1), :stroke)
 
 finish()
 ```
@@ -474,12 +474,12 @@ nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
 circle.([I1, I2, I3, I4], 2, :fill)
 
-if norm(C1, I1) < norm(C1, I2)
+if distance(C1, I1) < distance(C1, I2)
     ip1 = I1
 else
    ip1 = I2
 end
-if norm(C1, I3) < norm(C1, I4)
+if distance(C1, I3) < distance(C1, I4)
    ip2    = I3
 else
    ip2 = I4
@@ -487,7 +487,7 @@ end
 
 label("ip1", :N, ip1)
 label("ip2", :N, ip2)
-circle(C1, norm(C1, ip1), :stroke)
+circle(C1, distance(C1, ip1), :stroke)
 
 setline(5)
 setdash("solid")
@@ -518,12 +518,12 @@ function egg(radius, action=:none)
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    if norm(C1, I1) < norm(C1, I2)
+    if distance(C1, I1) < distance(C1, I2)
         ip1 = I1
     else
         ip1 = I2
     end
-    if norm(C1, I3) < norm(C1, I4)
+    if distance(C1, I3) < distance(C1, I4)
         ip2 = I3
     else
         ip2 = I4
@@ -566,7 +566,7 @@ end
 ```
 
 ```@setup te7
-using Luxor
+using Luxor, Random
 srand(42)
 Drawing(725, 500, "assets/figures/tutorial-egg-7.png")
 function egg(radius, action=:none)
@@ -578,12 +578,12 @@ function egg(radius, action=:none)
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    if norm(C1, I1) < norm(C1, I2)
+    if distance(C1, I1) < distance(C1, I2)
         ip1 = I1
     else
         ip1 = I2
     end
-    if norm(C1, I3) < norm(C1, I4)
+    if distance(C1, I3) < distance(C1, I4)
         ip2 = I3
     else
         ip2 = I4
@@ -682,12 +682,12 @@ function egg(radius, action=:none)
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    if norm(C1, I1) < norm(C1, I2)
+    if distance(C1, I1) < distance(C1, I2)
         ip1 = I1
     else
         ip1 = I2
     end
-    if norm(C1, I3) < norm(C1, I4)
+    if distance(C1, I3) < distance(C1, I4)
         ip2    = I3
     else
         ip2 = I4
@@ -741,7 +741,7 @@ end
 ```
 
 ```@setup te9
-using Luxor
+using Luxor, Random
 Drawing(725, 600, "assets/figures/tutorial-egg-9.png")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
@@ -752,12 +752,12 @@ function egg(radius, action=:none)
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    if norm(C1, I1) < norm(C1, I2)
+    if distance(C1, I1) < distance(C1, I2)
         ip1 = I1
     else
         ip1 = I2
     end
-    if norm(C1, I3) < norm(C1, I4)
+    if distance(C1, I3) < distance(C1, I4)
         ip2    = I3
     else
         ip2 = I4
@@ -838,12 +838,12 @@ function egg(radius, action=:none)
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    if norm(C1, I1) < norm(C1, I2)
+    if distance(C1, I1) < distance(C1, I2)
         ip1 = I1
     else
         ip1 = I2
     end
-    if norm(C1, I3) < norm(C1, I4)
+    if distance(C1, I3) < distance(C1, I4)
         ip2    = I3
     else
         ip2 = I4

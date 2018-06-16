@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function run_line_intersection_test(fname)
     Drawing(2000, 2000, fname)
@@ -41,12 +36,12 @@ function run_line_intersection_test(fname)
             gsave()
             setline(.5)
             setdash("dot")
-            if norm(a, ip) < norm(b, ip)
+            if distance(a, ip) < distance(b, ip)
                 arrow(a, ip, arrowheadlength=1)
             else
                 arrow(b, ip, arrowheadlength=1)
             end
-            if norm(c, ip) < norm(d, ip)
+            if distance(c, ip) < distance(d, ip)
                 arrow(c, ip, arrowheadlength=1)
             else
                 arrow(d, ip, arrowheadlength=1)
@@ -57,7 +52,7 @@ function run_line_intersection_test(fname)
             if ip != O
                 circle(ip, 2, :stroke)
             end
-            dist = norm(O, ip)
+            dist = distance(O, ip)
             if dist > 500
                 text("intersection point is $(dist) units away", O)
             end
