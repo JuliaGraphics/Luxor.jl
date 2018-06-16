@@ -11,13 +11,13 @@ fontslist = [
 using Luxor, Colors
 
 function editfontname(ff1)
-    ff2 = replace(ff1, "Std", "")
-    ff2 = replace(ff2, "-", " ")
-    ff2 = replace(ff2, r"MT|LT|TT", "")
-    ff2 = replace(ff2, "Bd", "Bold")
-    ff2 = replace(ff2, "Bk", "Book")
-    ff2 = replace(ff2, r"([A-z])(Pro)", s"\1 \2")
-    ff2 = replace(ff2, "Regular", "")
+    ff2 = replace(ff1, "Std" => "")
+    ff2 = replace(ff2, "-" => " ")
+    ff2 = replace(ff2, r"MT|LT|TT" => "")
+    ff2 = replace(ff2, "Bd" => "Bold")
+    ff2 = replace(ff2, "Bk" => "Book")
+    ff2 = replace(ff2, r"([A-z])(Pro)" => s"\1 \2")
+    ff2 = replace(ff2, "Regular" => "")
     return ff2
 end
 
@@ -87,7 +87,7 @@ const pageheight = 1684 # A2 size paper, points
 
 function main(str)
     global x, y, xstep, ystep, hmargin, vmargin, rowspacing, oversizefonts
-    filename = replace("i-love-" * str * "-fonts.pdf", r"[^A-z0-9.]", "")
+    filename = replace("i-love-" * str * "-fonts.pdf", r"[^A-z0-9.]" => "")
     Drawing(pagewidth, pageheight, "/tmp/$(filename)")
     # background and title
     background = "mintcream"

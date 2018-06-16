@@ -168,7 +168,6 @@ end
 
 Draw a regular polygon centered at point `centerpos`:
 """
-
 ngon(centerpoint::Point, radius::Real, sides::Int=5, orientation=0, action=:nothing; kwargs...) =
     ngon(centerpoint.x, centerpoint.y, radius, sides, orientation, action; kwargs...)
 
@@ -223,7 +222,6 @@ end
 
 Draw a star centered at a position:
 """
-
 function star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0,
               action=:nothing;
               vertices=false,

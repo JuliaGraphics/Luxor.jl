@@ -1,17 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Random
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
-
-function test_bboxes_numeric()
-
-end
+using Test
 
 function test_bboxes(fname)
     pagewidth, pageheight = 1200, 1400
@@ -65,6 +56,7 @@ function test_bboxes(fname)
     bv = box(box1, vertices=true)
     @test isapprox(bv[1].y, -433.33333, atol = 0.01)
 
+
     # contains
     for i in 1:1000
         pt = Point(rand(-1000:1000), rand(-1000:1000))
@@ -94,8 +86,6 @@ function test_bboxes(fname)
 end
 
 srand(42)
-
-test_bboxes_numeric()
 
 fname = "bounding-box-test.png"
 

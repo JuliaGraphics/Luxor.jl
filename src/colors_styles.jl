@@ -248,8 +248,8 @@ Set the compositing/blending mode. `mode` can be one of:
 See the [Cairo documentation](https://www.cairographics.org/operators/) for details.
 """
 function setmode(operator::String)
-    indx = findfirst(blendingmodes, operator)
-    if indx != 0
+    indx = findfirst(isequal(operator), blendingmodes)
+    if indx !== nothing
         Cairo.set_operator(currentdrawing.cr, blendingoperators[indx])
     end
 end

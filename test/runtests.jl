@@ -1,16 +1,9 @@
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
-
-using Compat
+using Test
 
 function run_all_tests()
 
     @testset "animation (Unix only)" begin
-        if !  @compat is_windows()
+        if ! Sys.iswindows()
             include("animation-test.jl")
         end
         include("easingfunctions.jl")
@@ -134,18 +127,18 @@ end
 
 if get(ENV, "LUXOR_KEEP_TEST_RESULTS", false) == "true"
         cd(mktempdir())
-        info("...Keeping the results")
+        @info("...Keeping the results")
         run_all_tests()
-        info("Test images saved in: $(pwd())")
+        @info("Test images saved in: $(pwd())")
 else
     mktempdir() do tmpdir
         cd(tmpdir) do
-            info("running tests in: $(pwd())")
-            info("but not keeping the results")
-            info("because you didn't do: ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
+            @info("running tests in: $(pwd())")
+            @info("but not keeping the results")
+            @info("because you didn't do: ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
             run_all_tests()
-            info("Test images weren't saved. To see the test images, next time do this before running:")
-            info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
+            @info("Test images weren't saved. To see the test images, next time do this before running:")
+            @info(" ENV[\"LUXOR_KEEP_TEST_RESULTS\"] = \"true\"")
         end
     end
 end

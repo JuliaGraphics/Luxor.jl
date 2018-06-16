@@ -73,7 +73,7 @@ nothing # hide
 Or passing through three points. The `center3pts()` function returns the center position and radius of a circle passing through three points:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 200, "assets/figures/center3.png") # hide
 background("white") # hide
 origin() # hide
@@ -99,7 +99,7 @@ center3pts
 With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(500, 300, "assets/figures/ellipses.png") # hide
 background("white") # hide
 fontsize(11) # hide
@@ -112,7 +112,7 @@ for (pos, n) in tiles
     randomhue()
     ellipse(pos, width, height, :fill)
     sethue("black")
-    label = string(round(width/height, 2))
+    label = string(round(width/height, digits=2))
     textcentered(label, pos.x, pos.y + 25)
     width += 2
 end
@@ -125,7 +125,7 @@ nothing # hide
 `ellipse()` can also construct polygons that are approximations to ellipses. You supply two focal points and a length which is the sum of the distances of a point on the perimeter to the two focii.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 220, "assets/figures/ellipses_1.png") # hide
 origin() # hide
 background("white") # hide
@@ -150,8 +150,8 @@ poly([f1, pt, f2], :stroke)
 label("f1", :W, f1, offset=10)
 label("f2", :E, f2, offset=10)
 
-label(string(round(norm(f1, pt), 1)), :SE, midpoint(f1, pt))
-label(string(round(norm(pt, f2), 1)), :SW, midpoint(pt, f2))
+label(string(round(distance(f1, pt), digits=1)), :SE, midpoint(f1, pt))
+label(string(round(distance(pt, f2), digits=1)), :SW, midpoint(pt, f2))
 
 label("ellipse(f1, f2, 250)", :S, Point(0, 75))
 
@@ -500,7 +500,7 @@ nothing # hide
 `arc2r()` draws a circular arc centered at a point that passes through two other points:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(700, 200, "assets/figures/arc2r.png") # hide
 origin() # hide
 srand(42) # hide
@@ -743,7 +743,7 @@ arrow
 A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(750, 250, "assets/figures/julia-logo.png")  # hide
 srand(42) # hide
 origin()  # hide
@@ -874,7 +874,7 @@ nothing # hide
 You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created and drawn differently depending on whether they're inside the intersection or outside.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 400, "assets/figures/bbox3.png") # hide
 background("white") # hide
 srand(42) # hide
@@ -1004,7 +1004,7 @@ nothing # hide
 To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to `bars()`:
 
 ```@example
-using Luxor, Colors # hide
+using Luxor, Colors, Random # hide
 Drawing(800, 450, "assets/figures/bars1.png")  # hide
 srand(2) # hide
 origin() # hide

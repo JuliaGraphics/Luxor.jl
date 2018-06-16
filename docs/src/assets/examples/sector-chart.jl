@@ -75,7 +75,7 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
     refpos = Point(
         (innerradius - textoffset) * cos(startangle + (endangle - startangle)/2),
         (innerradius - textoffset) * sin(startangle + (endangle - startangle)/2))
-    rotangle = atan2(refpos.y, refpos.x)
+    rotangle = atan(refpos.y, refpos.x)
     # subtract half the width of the string to center it
     glyph_x_bearing, glyph_y_bearing, glyph_width,
       glyph_height, glyph_x_advance, glyph_y_advance = textextents(labels[i])
@@ -89,9 +89,9 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
     refpos = Point(
         (outerradius + textoffset) * cos(startangle + (endangle - startangle)/2),
         (outerradius + textoffset) * sin(startangle + (endangle - startangle)/2))
-    rotangle = atan2(refpos.y, refpos.x)
+    rotangle = atan(refpos.y, refpos.x)
     translate(refpos)
-    roundedtext = string(round(rawdatavalues[i], 2))
+    roundedtext = string(round(rawdatavalues[i], digits=2))
     (rotangle > pi/2 || rotangle < -pi/2) ? textright(roundedtext) : text(roundedtext)
     grestore()
   end
@@ -181,5 +181,5 @@ function main()
   preview()
 end
 
-cd(Pkg.dir() * "/Luxor/docs/src/assets/examples/")  
+cd(Pkg.dir() * "/Luxor/docs/src/assets/examples/")
 main()

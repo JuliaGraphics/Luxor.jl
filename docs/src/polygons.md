@@ -182,7 +182,7 @@ star
 Use `poly()` to draw lines connecting the points and/or just fill the area:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/simplepoly.png") # hide
 background("white") # hide
 srand(42) # hide
@@ -285,7 +285,7 @@ prettypoly
 Recursive decoration is possible:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 260, "assets/figures/prettypolyrecursive.png") # hide
 background("white") # hide
 srand(42) # hide
@@ -370,7 +370,7 @@ isinside
 You can use `randompoint()` and `randompointarray()` to create a random Point or list of Points.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 250, "assets/figures/randompoints.png") # hide
 background("white") # hide
 srand(42) # hide
@@ -403,7 +403,7 @@ randompointarray
 There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 150, "assets/figures/polysplit.png") # hide
 origin() # hide
 setopacity(0.7) # hide
@@ -436,7 +436,7 @@ Because polygons can have sharp corners, the experimental `polysmooth()` functio
 The original polygon is shown in red; the smoothed polygon is shown on top:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polysmooth.png") # hide
 origin() # hide
 background("white") # hide
@@ -463,7 +463,7 @@ nothing # hide
 The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
@@ -492,7 +492,7 @@ polysmooth
 The experimental `offsetpoly()` function constructs an outline polygon outside or inside an existing polygon. In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use `poly()` to draw the result returned by `offsetpoly()`.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyoffset-simple.png") # hide
 origin() # hide
 background("white") # hide
@@ -535,7 +535,7 @@ offsetpoly
 The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyfit.png") # hide
 origin() # hide
 background("white") # hide
@@ -650,7 +650,7 @@ nothing # hide
 ![path to polygon](assets/figures/abezierpath.png)
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 320, "assets/figures/bezierpaths.png") # hide
 background("white") # hide
 origin() # hide
@@ -681,7 +681,7 @@ You can convert a Bézier path to a polygon (an array of points), using the `bez
 In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 600, "assets/figures/bezierpathtopoly.png") # hide
 background("white") # hide
 origin() # hide
@@ -757,7 +757,7 @@ nothing # hide
 ### Brush strokes
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/brush.png") # hide
 origin() # hide
 background("white") # hide
@@ -796,7 +796,7 @@ brush
 `polyperimeter` calculates the length of a polygon's perimeter.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyperimeter.png") # hide
 origin() # hide
 background("white") # hide
@@ -822,7 +822,7 @@ nothing # hide
 `polyportion()` and `polyremainder()` return part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns the first half of polygon `p`, `polyremainder(p, .75)` returns the last quarter of it.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyportion.png") # hide
 origin() # hide
 background("white") # hide
@@ -897,7 +897,7 @@ sethue("red")
 circle(p[nidx], 5, :stroke)
 
 arrow(p[nidx],
-      between(p[nidx], p[nidx+1], over/norm(p[nidx], p[nidx+1])),
+      between(p[nidx], p[nidx+1], over/distance(p[nidx], p[nidx+1])),
       linewidth=2)
 
 finish() # hide
@@ -935,8 +935,8 @@ for i in 3:total
     pa = polyarea(p)
     pp = polyperimeter(p)
     ppoverradius = pp/radius
-    text(string(Int(round(pa, 0))), properties[i, 2], halign=:left)
-    text(string(round(ppoverradius, 6)), properties[i, 3], halign=:left)
+    text(string(Int(round(pa, digits=0))), properties[i, 2], halign=:left)
+    text(string(round(ppoverradius, digits=6)), properties[i, 3], halign=:left)
     radius += 5
 end
 
@@ -964,7 +964,7 @@ polyarea
 `intersectlinepoly(pt1, pt2, polygon)` returns an array containing the points where a line from `pt1` to `pt2` crosses the perimeter of the `polygon`.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 550, "assets/figures/linepolyintersections.png") # hide
 origin() # hide
 background("white") # hide

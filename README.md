@@ -5,6 +5,18 @@
 | [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
 | [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.6-img]][pkg-0.6-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
 
+## Status as of 2018-06-16
+
+Mostly functional on Julia v0.7. Hopefully the deprecation warnings should fade away.
+
+### Deprecations and warnings
+
+* `norm(pt1::Point, pt2::Point)` is now `distance(pt1::Point, pt2::Point)`
+* `dot(pt1::Point, pt2::Point)`  is now `dotproduct(pt1::Point, pt2::Point)`
+* an `axes()` function is now part of Base Julia, so you may have to qualify the Luxor version as `Luxor.axes()`.
+
+[![][pkg-0.7-img]][pkg-0.7-url]
+
 ## Luxor
 
 Luxor is a Julia package for drawing simple static vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles. Think of it as a high-level and slightly easier to use interface to [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. In Luxor, the emphasis is on simplicity and ease of use.  

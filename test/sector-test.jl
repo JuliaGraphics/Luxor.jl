@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 fname = "sector-test.pdf"
 Drawing(1500, 1500, fname) # points/pixels, 2000 points is 70.56cm × 70.56cm
@@ -27,7 +22,7 @@ sector(0, 20, pi/12, 0, :stroke)
 for inner in 0:20:600
     for a in 0:pi/12:2pi
         randomhue()
-        sector(O, inner, inner + 20, a, a + pi/12, :fill) 
+        sector(O, inner, inner + 20, a, a + pi/12, :fill)
         sethue("black")
         sector(inner, inner + 20, a, a + pi/12, :stroke)
     end

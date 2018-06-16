@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function grid_test(fname)
     Drawing("A0landscape", fname)
@@ -15,7 +10,7 @@ function grid_test(fname)
     translate(200, 200)
     fontsize(14)
     setline(0.2)
-    axes()
+    Luxor.axes()
     side = 100
     grid = GridRect(O, side, side, 1000, 1600)
     for p in 1:121
@@ -27,7 +22,7 @@ function grid_test(fname)
         text(string(p, ":", grid.rownumber, ":", grid.colnumber), pt, halign=:center, valign=:middle)
     end
     translate(currentdrawing.width/2, 0)
-    axes()
+    Luxor.axes()
     centers = 100
     grid = GridHex(O, centers, 800, 800)
     lastpt = O
@@ -44,11 +39,11 @@ function grid_test(fname)
         lastpt = pt
     end
     sethue("black")
-    
+
     arrow(O, Point(O.x + (sqrt(3) * centers) / 2, 0))
     circle(O, (sqrt(3) * centers) / 2, :stroke)
     circle(O, centers, :stroke)
-    
+
     finish()
 end
 

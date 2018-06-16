@@ -64,7 +64,6 @@ circle.
 
 A new blend is empty. To add colors, use `addstop()`.
 """
-
 function blend(from::Point, startradius, to::Point, endradius)
     return Cairo.pattern_create_radial(from.x, from.y, startradius, to.x, to.y, endradius)
 end

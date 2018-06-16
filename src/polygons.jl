@@ -89,7 +89,7 @@ The `refpoint` can be chosen, but the minimum point is usually OK too:
 function polysortbyangle(pointlist::AbstractArray{Point, 1}, refpoint=minimum(pointlist))
     angles = Float64[]
     for pt in pointlist
-        push!(angles, atan2(refpoint.y - pt.y, refpoint.x - pt.x))
+        push!(angles, atan(refpoint.y - pt.y, refpoint.x - pt.x))
     end
     return pointlist[sortperm(angles)]
 end
@@ -108,10 +108,10 @@ function polysortbydistance(pointlist::AbstractArray{Point, 1}, starting::Point)
     remaining = setdiff(pointlist, route)
     while length(remaining) > 0
         # find the nearest point to the current position on the route
-        nearest = first(sort!(remaining, lt = (x, y) -> norm(route[end], x) < norm(route[end], y)))
+        nearest = first(sort!(remaining, lt = (x, y) -> distance(route[end], x) < distance(route[end], y)))
         # add this to the route and remove from remaining points
         push!(route, nearest)
-        shift!(remaining)
+        popfirst!(remaining)
     end
     return route
 end
@@ -180,7 +180,6 @@ its vertices is not clearly defined, due to rounding errors or arithmetical
 inadequacy. By default these will generate errors, but you can suppress these by setting
 `allowonedge` to `true`.
 """
-
 function isinside(p::Point, pointlist::AbstractArray{Point, 1};
         allowonedge::Bool=false)
     c = false
@@ -342,7 +341,7 @@ function drawroundedcorner(cornerpoint::Point, p1::Point, p2::Point, radius, pat
     dy2 = cornerpoint.y - p2.y
 
     # Angle between vector 1 and vector 2 divided by 2
-    angle2 = (atan2(dy1, dx1) - atan2(dy2, dx2)) / 2
+    angle2 = (atan(dy1, dx1) - atan(dy2, dx2)) / 2
 
     #  length of segment between corner point and the
     #  points of intersection with the circle of a given radius
@@ -380,8 +379,8 @@ function drawroundedcorner(cornerpoint::Point, p1::Point, p2::Point, radius, pat
     debug && circle(circlepoint, radius, :stroke)
 
     # start angle and end engle of arc
-    startangle = atan2(p1_cross.y - circlepoint.y, p1_cross.x - circlepoint.x)
-    endangle   = atan2(p2_cross.y - circlepoint.y, p2_cross.x - circlepoint.x)
+    startangle = atan(p1_cross.y - circlepoint.y, p1_cross.x - circlepoint.x)
+    endangle   = atan(p2_cross.y - circlepoint.y, p2_cross.x - circlepoint.x)
 
     # add first line segment, up to the start of the arc
     push!(path, (:line, p1_cross)) # draw line to arc start
@@ -475,18 +474,18 @@ point (!). There are a number of issues to be aware of:
 function offsetpoly(path::AbstractArray{Point, 1}, d)
     # don't try to calculate offset of two identical points
     if path[1] == path[end]
-        shift!(path)
+        popfirst!(path)
     end
     l = length(path)
-    resultpoly = Array{Point}(l)
+    resultpoly = Array{Point}(undef, l)
     for i in 1:l
         p1 = path[mod1(i, l)]
         p2 = path[mod1(i + 1, l)]
         p3 = path[mod1(i + 2, l)]
 
         # should check for identical points here too...
-        L12 = norm(p1, p2)
-        L23 = norm(p2, p3)
+        L12 = distance(p1, p2)
+        L23 = distance(p2, p3)
         # the offset line of p1 - p2
         x1p = p1.x + (d * (p2.y - p1.y))/ L12
         y1p = p1.y + (d * (p1.x - p2.x))/ L12
@@ -520,7 +519,7 @@ makes a smooth path that runs between the first and last points.
 """
 function polyfit(plist::AbstractArray{Point, 1}, npoints=30)
     l = length(plist)
-    resultpoly = Array{Point}(0)
+    resultpoly = Array{Point}(undef, 0)
     # start at first point
     push!(resultpoly, plist[1])
     # skip the first point
@@ -593,11 +592,11 @@ function polydistances(p::AbstractArray{Point, 1}; closed=true)
     r = Float64[0.0]
     t = 0.0
     for i in 1:length(p) - 1
-        t += norm(p[i], p[i + 1])
+        t += distance(p[i], p[i + 1])
         push!(r, t)
     end
     if closed
-        t += norm(p[end], p[1])
+        t += distance(p[end], p[1])
         push!(r, t)
     end
     return r
@@ -657,7 +656,7 @@ function polyportion(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist
     ind, surplus = nearestindex(pdist, portion * pdist[end])
     if surplus > 0.0
         nextind = mod1(ind + 1, length(p))
-        overshootpoint = between(p[ind], p[nextind], surplus/norm(p[ind], p[nextind]))
+        overshootpoint = between(p[ind], p[nextind], surplus/distance(p[ind], p[nextind]))
         return vcat(p[1:ind], overshootpoint)
     else
         return p[1:end]
@@ -690,7 +689,7 @@ function polyremainder(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdi
     ind, surplus = nearestindex(pdist, portion * pdist[end])
     if surplus > 0.0
         nextind = mod1(ind + 1, length(p))
-        overshootpoint = between(p[ind], p[nextind], surplus/norm(p[ind], p[nextind]))
+        overshootpoint = between(p[ind], p[nextind], surplus/distance(p[ind], p[nextind]))
         return vcat(overshootpoint, p[nextind:end])
     else
         return p[1:end]
@@ -730,7 +729,7 @@ function intersectlinepoly(pt1::Point, pt2::Point, C::AbstractArray{Point, 1})
         end
     end
     # sort by distance from pt1
-    sort!(intersectingpoints, lt = (p1, p2) -> norm(p1, pt1) < norm(p2, pt1))
+    sort!(intersectingpoints, lt = (p1, p2) -> distance(p1, pt1) < distance(p2, pt1))
     return intersectingpoints
 end
 

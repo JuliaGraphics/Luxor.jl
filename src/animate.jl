@@ -32,12 +32,11 @@ animate(bang, [
 
 ```
 """
-
-type Movie
+struct Movie
     width::Float64
     height::Float64
     movietitle::String
-    movieframerange::Range
+    movieframerange::AbstractRange
 end
 
 """
@@ -46,7 +45,6 @@ end
 Define a movie, specifying the width, height, and a title. The title will be used to
 make the output file name. The range defaults to `1:250`.
 """
-
 Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:250)
 
 """default linear transition - no easing, no acceleration"""
@@ -62,10 +60,10 @@ The Scene type defines a function to be used to render a range of frames in a mo
 - the `framerange` determines which frames are processed by the function. Defaults to the entire movie.
 - the optional `easingfunction` can be accessed by the framefunction to vary the transition speed
 """
-type Scene
+mutable struct Scene
     movie::Movie
     framefunction::Function
-    framerange::Range
+    framerange::AbstractRange
     easingfunction::Function
 end
 
@@ -100,7 +98,7 @@ function animate(movie::Movie, scenelist::AbstractArray{Scene, 1};
         framerate=30,
         pathname="")
     tempdirectory = mktempdir()
-    info("Frames for animation \"$(movie.movietitle)\" are being stored in directory: \n\t $(tempdirectory)")
+    @info("Frames for animation \"$(movie.movietitle)\" are being stored in directory: \n\t $(tempdirectory)")
     filecounter = 1
     rangelist = 0:-1
     for scene in scenelist
@@ -108,7 +106,7 @@ function animate(movie::Movie, scenelist::AbstractArray{Scene, 1};
     end
     rangelist = unique(rangelist) # remove shared frames
     if rangelist[end] < movie.movieframerange.stop
-        warn("Movie framerange is longer than scene frame range: \n\t $(movie.movieframerange) > $(rangelist[end])")
+        @warn("Movie framerange is longer than scene frame range: \n\t $(movie.movieframerange) > $(rangelist[end])")
     end
     for currentframe in rangelist[1]:rangelist[end]
         Drawing(movie.width, movie.height, "$(tempdirectory)/$(lpad(filecounter, 10, "0")).png")
@@ -122,16 +120,16 @@ function animate(movie::Movie, scenelist::AbstractArray{Scene, 1};
         finish()
         filecounter += 1
     end
-    info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
+    @info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
     if creategif == true
         # these two commands create a palette and then create animated GIF from the resulting images
         run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
         run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
         if ! isempty(pathname)
             mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, remove_destination=true)
-            info("GIF is: $pathname")
+            @info("GIF is: $pathname")
         else
-            info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
+            @info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
         end
     end
     return true
@@ -143,7 +141,6 @@ end
 Create the movie defined in `movie` by rendering the frames define in `scene`.
 """
 animate(movie::Movie, scene::Scene; kwargs...) = animate(movie, [scene]; kwargs...)
-
 
 """
     easingflat(t, b, c, d)
@@ -402,8 +399,6 @@ function easeinoutcirc(t, b, c, d)
    t -= 2
    return c/2 * (sqrt(abs(1 - t * t)) + 1) + b
 end
-
-
 
 """
     easeinoutinversequad(t, b, c, d)

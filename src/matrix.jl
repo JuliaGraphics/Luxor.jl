@@ -81,12 +81,12 @@ Change the current matrix to matrix `m`. Use `getmatrix()` to get the current ma
 """
 function setmatrix(m::AbstractArray)
     if eltype(m) != Float64
-        m = map(Float64,m)
+        m = map(Float64, m)
     end
     # some matrices make Cairo freak out and need reset. Not sure what the rules are yet…
     if length(m) < 6
         throw("didn't like that matrix $m: not enough values")
-    elseif countnz(m) == 0
+    elseif count(!iszero, m) == 0
         throw("didn't like that matrix $m: too many zeroes")
     else
         cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
@@ -168,7 +168,7 @@ function juliatocairomatrix(c::Matrix)
     return [c[1] c[2] c[4] c[5] c[7] c[8]]
 end
 
-doc"""
+@doc doc"""
     getrotation(R::Matrix)
     getrotation()
 
@@ -182,11 +182,11 @@ c & d & ty \\
 \end{bmatrix}
 ```
 
-The rotation angle is `atan2(-b, a)` or `atan2(c, d)`.
+The rotation angle is `atan(-b, a)` or `atan(c, d)`.
 """
 function getrotation(R::Matrix)
-    # t = atan2(-R[4], R[1]) # should be the same as:
-    t = atan2(R[2], R[5])
+    # t = atan(-R[4], R[1]) # should be the same as:
+    t = atan(R[2], R[5])
     return mod2pi(t)
 end
 

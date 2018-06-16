@@ -20,8 +20,8 @@ function arrow(startpoint::Point, endpoint::Point;
     gsave()
     setlinejoin("butt")
     setline(linewidth)
-    shaftlength = norm(startpoint, endpoint)
-    shaftangle = atan2(startpoint.y - endpoint.y, startpoint.x - endpoint.x)
+    shaftlength = distance(startpoint, endpoint)
+    shaftangle = atan(startpoint.y - endpoint.y, startpoint.x - endpoint.x)
     arrowheadtopsideangle = shaftangle + arrowheadangle
     # shorten the length so that lines
     # stop before we get to the arrow
@@ -102,7 +102,7 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     # draw head
     # rotation of head should be based on end of shaft, not end of arrow
     newendpoint =              Point(radius * cos(newendangle), radius * sin(newendangle))
-    shaftangle =               mod2pi(-pi/2 + atan2(0 - newendpoint.y, 0 - newendpoint.x))
+    shaftangle =               mod2pi(-pi/2 + atan(0 - newendpoint.y, 0 - newendpoint.x))
     #
     arrowheadoutersideangle = shaftangle + pi - arrowheadangle
     arrowheadinnersideangle    = shaftangle + pi + arrowheadangle

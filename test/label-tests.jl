@@ -1,13 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Random
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 srand(42)
 
@@ -48,8 +43,8 @@ function testlabels(fname)
     for pt in pg
         circle(pt, 3, :fill)
         s = slope(O, pt)
-        label(string(round(s, 1)), s, pt, leader=true, leaderoffsets=[0.3, 0.9], offset=15)
-        label(string(round(s, 1)), s, pt, offset=-15)
+        label(string(round(s, digits=1)), s, pt, leader=true, leaderoffsets=[0.3, 0.9], offset=15)
+        label(string(round(s, digits=1)), s, pt, offset=-15)
     end
 
     @test finish() == true

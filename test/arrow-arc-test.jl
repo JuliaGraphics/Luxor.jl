@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function test_circular_arrows_1(pos)
     gsave()
@@ -15,12 +10,12 @@ function test_circular_arrows_1(pos)
     toa =   rescale(rand(1:100), (1, 100), (0, 2pi))
     sethue("black")
     arrow(pos, 100, froma, toa, linewidth=rand(1:6), arrowheadlength=rand(10:30))
-    text(string("from: ", round(rad2deg(froma), 1)), pos)
-    text(string("to: ", round(rad2deg(toa), 1)), pos.x, pos.y+10)
+    text(string("from: ", round(rad2deg(froma), digits=1)), pos)
+    text(string("to: ", round(rad2deg(toa), digits=1)), pos.x, pos.y+10)
     sethue("magenta")
     arrow(pos, 100, toa, froma; linewidth=rand(1:6), arrowheadlength=rand(10:30))
-    text(string("from: ", round(rad2deg(toa), 1)), pos.x, pos.y+20)
-    text(string("to: ", round(rad2deg(froma), 1)), pos.x, pos.y+30)
+    text(string("from: ", round(rad2deg(toa), digits=1)), pos.x, pos.y+20)
+    text(string("to: ", round(rad2deg(froma), digits=1)), pos.x, pos.y+30)
     grestore()
 end
 

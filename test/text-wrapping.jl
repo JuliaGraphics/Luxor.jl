@@ -2,13 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
-
+using Test
 
 function text_wrap_tests(fname)
     Drawing(1400, 1400, fname)
@@ -34,15 +28,15 @@ function text_wrap_tests(fname)
             else
                 # textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
                textwrap("Luxor is a city in Upper (southern) Egypt. " ^ 12,
-                tiles.tilewidth,
-                O - (tiles.tilewidth/2 - 2,  tiles.tileheight/2 - 2),
-                # l is the text of a line, p is the position of the start of the line, h is the interline height
-                (n, l, p, h) -> begin
-                        text(string(length(l)), p + (tiles.tilewidth - 20, 0))
-                        opacity *= 0.8
-                        setopacity(opacity)
-                    end,
-                rightgutter=40)
+                    tiles.tilewidth,
+                    O - (tiles.tilewidth/2 - 2,  tiles.tileheight/2 - 2),
+                    # l is the text of a line, p is the position of the start of the line, h is the interline height
+                    (n, l, p, h) -> begin
+                            text(string(length(l)), p + (tiles.tilewidth - 20, 0))
+                            opacity *= 0.8
+                            setopacity(opacity)
+                        end,
+                    rightgutter=40)
             end
         end
     end

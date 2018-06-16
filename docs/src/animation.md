@@ -149,7 +149,7 @@ function draweasingfunction(f, pos, w, h)
       circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)
     end
     sethue("black")
-    text(replace(string(f), "Luxor.", ""), Point(0, h/2 - 20), halign=:center)
+    text(replace(string(f), "Luxor." => ""), Point(0, h/2 - 20), halign=:center)
   end
 end
 

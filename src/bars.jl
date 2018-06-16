@@ -26,8 +26,9 @@ bars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)
 
 To suppress the text labels, use optional keyword `labels=false`.
 """
-
 function bars(values::AbstractArray;
+    yheight = 200,
+    xwidth = 25,
     barfunction   = (bottom::Point, top::Point, value;
         extremes=extrema(values), barnumber=0, bartotal=0) -> begin
                 setline(xwidth)
@@ -36,7 +37,7 @@ function bars(values::AbstractArray;
     labels::Bool=true,
     labelfunction = (bottom::Point, top::Point, value;
         extremes=extrema(values), barnumber=0, bartotal=0) -> begin
-            t = string(round(value, 2))
+            t = string(round(value, digits=2))
             textoffset = textextents(t)[4]
             fontsize(10)
             if top.y < 0
@@ -45,9 +46,8 @@ function bars(values::AbstractArray;
                 tp = Point(top.x, max(top.y, bottom.y) + textoffset)
             end
             text(t, tp, halign=:center, valign=:middle)
-            end,
-    yheight = 200,
-    xwidth = 25)
+        end)
+    
     x = O.x
     mn, mx = extrema(values)
     isapprox(mn, mx, atol=0.00001) && (mx = mn + 100) # better show something than nothing

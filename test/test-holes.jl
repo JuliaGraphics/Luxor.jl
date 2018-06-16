@@ -2,12 +2,7 @@
 
 using Luxor
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function make_some_holes(fname)
     Drawing(1200, 1200, fname)

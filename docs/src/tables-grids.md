@@ -18,7 +18,7 @@ The `Tiler` iterator returns the center point and tile number of each tile in tu
 In this example, every third tile is divided up into subtiles and colored:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(400, 300, "assets/figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
@@ -110,7 +110,7 @@ t[r, c] = Luxor.Point(150.0, 100.0)
 The next example creates a table with 10 rows and 10 columns, where each cell is 50 units wide and 35 high.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 400, "assets/figures/table2.png") # hide
 background("white") # hide
 origin() # hide
@@ -176,7 +176,7 @@ To ensure that graphic elements don't stray outside the cell walls, you can use 
 With a little bit of extra work you can write code that draws objects like arrays and dataframes combining text with graphic features. For example, this code draws arrays visually and numerically.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
     setline(1.5)
     cellwidth = t.colwidths[column] - 10
@@ -190,7 +190,7 @@ function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
     line(leftmargin + (boxwidth, -barheight/2),
          leftmargin + (boxwidth, +barheight/2),
          :stroke)
-    text(string(round(data[row, column], 3)), t[row, column] - (cellwidth/2, 10),
+    text(string(round(data[row, column], digits=3)), t[row, column] - (cellwidth/2, 10),
          halign=:left)
 end
 
@@ -225,7 +225,7 @@ You might also find a use for a grid. Luxor provides a simple grid utility. Grid
 Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`. Get the next grid point from a grid with `nextgridpoint(grid)`.
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(700, 250, "assets/figures/grids.png")  # hide
 background("white") # hide
 fontsize(14) # hide
@@ -246,7 +246,7 @@ nothing # hide
 ![grids](assets/figures/grids.png)
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(700, 400, "assets/figures/grid-hex.png")  # hide
 background("white") # hide
 fontsize(22) # hide

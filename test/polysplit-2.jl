@@ -1,13 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Random
 
-if VERSION >= v"0.5.0-dev+7720"
-    using Base.Test
-else
-    using BaseTestNext
-    const Test = BaseTestNext
-end
+using Test
 
 function poly_split_2(fname)
     Drawing(2500, 2500, fname)
@@ -30,7 +25,7 @@ function poly_split_2(fname)
         setdash("dot")
         move(pt1)
         rline(pt2 - pt1)
-        stroke()
+        strokepath()
         setdash("solid")
         poly1, poly2 = polysplit(s, pt1, pt2)
         randomhue()

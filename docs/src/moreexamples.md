@@ -58,7 +58,7 @@ The Markdown markup looks like this:
 
 `````
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
@@ -81,7 +81,7 @@ finish() # hide
 and after you run Documenter's build process the HTML output looks like this:
 
 ```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polysmoothy.png") # hide
 origin() # hide
 background("white") # hide

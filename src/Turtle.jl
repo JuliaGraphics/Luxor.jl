@@ -32,7 +32,7 @@ Basic commands are `Forward()`, `Turn()`, `Pendown()`, `Penup()`, `Pencolor()`,
 Others include `Push()`, `Pop()`, `Message()`, `HueShift()`, `Randomize_saturation()`,
 `Reposition()`, and `Pen_opacity_random()`.
 """
-type Turtle
+mutable struct Turtle
     xpos::Float64
     ypos::Float64
     pendown::Bool
@@ -150,7 +150,7 @@ function Pop(t::Turtle)
 # restore xpos, ypos, turn from queue
     global queue
     if isempty(queue)
-        info("stack was already empty")
+        @info("stack was already empty")
         t.xpos, t.ypos, t.orientation = 0.0, 0.0, 0.0
     else
         t.xpos, t.ypos, t.orientation = pop!(queue)

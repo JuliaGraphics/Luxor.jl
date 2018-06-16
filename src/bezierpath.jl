@@ -67,7 +67,7 @@ Return the second derivative of Bezier function.
 """
 bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
 
-"""
+@doc doc"""
     beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
 
 Return the curvature of the Bezier curve at `t` ([0-1]), given start and end
@@ -78,12 +78,10 @@ range.
 κ(t) is the curvature of the curve at point t, which for a parametric planar
 curve is:
 
-```math
 \begin{equation}
 \kappa = \frac{\mid \dot{x}\ddot{y}-\dot{y}\ddot{x}\mid}
     {(\dot{x}^2 + \dot{y}^2)^{\frac{3}{2}}}
 \end{equation}
-```
 
 The radius of curvature, or the radius of an osculating circle at a point, is
 1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points
@@ -119,7 +117,7 @@ function findbeziercontrolpoints(previouspt::Point, point1::Point, point2::Point
     xc2 = (point1.x + point2.x)/2.0     ; yc2 = (point1.y + point2.y)/2.0
     xc3 = (point2.x + nextpt.x)/2.0     ; yc3 = (point2.y + nextpt.y)/2.0
 
-    l1, l2, l3 = norm(previouspt, point1), norm(point2, point1), norm(nextpt, point2)
+    l1, l2, l3 = distance(previouspt, point1), distance(point2, point1), distance(nextpt, point2)
     k1 = l1 / (l1 + l2)   ; k2 = l2 / (l2 + l3)
     xm1 = xc1 + (xc2-xc1) * k1  ; ym1 = yc1 + (yc2-yc1) * k1
     xm2 = xc2 + (xc3-xc2) * k2  ; ym2 = yc2 + (yc3-yc2) * k2
@@ -476,7 +474,7 @@ points in the Bezier path segment `bps`.
 function setbezierhandles(bps::BezierPathSegment;
             angles=[0.05, -0.1],
             handles=[0.3, 0.3])
-    d = norm(bps[1], bps[4])
+    d = distance(bps[1], bps[4])
     s = slope(bps[1], bps[4])
     bezhandle1 = bps[1] + polar(d * handles[1], s - angles[1])
     s = slope(bps[4], bps[1])
@@ -526,8 +524,8 @@ function shiftbezierhandles(bps::BezierPathSegment;
     s1 = slope(p1, cp1)
     s2 = slope(p2, cp2)
     # length of handles
-    l1 = norm(p1, cp1)
-    l2 = norm(p2, cp2)
+    l1 = distance(p1, cp1)
+    l2 = distance(p2, cp2)
     # new angle
     s1 += angles[1]
     s2 += angles[2]
@@ -571,7 +569,7 @@ function brush(pt1, pt2, width=10;
         )
     @layer begin
         sl = slope(pt1, pt2)
-        n = norm(pt1, pt2)
+        n = distance(pt1, pt2)
         translate(pt1)
         rotate(sl - pi/2)
         widthsteps = (maxwidth - minwidth)/10
