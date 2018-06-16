@@ -707,10 +707,12 @@ nothing # hide
 ![arc](assets/figures/perpendicular.png)
 
 ```@docs
+distance
 getnearestpointonline
 pointlinedistance
 slope
 perpendicular
+dotproduct
 @polar
 polar
 ```
