@@ -1,6 +1,6 @@
 ```@meta
 DocTestSetup = quote
-    using Luxor
+    using Luxor, Dates
 end
 ```
 
@@ -51,5 +51,6 @@ julia> @png juliacircles()
 The documentation was built using [Documenter.jl](https://github.com/JuliaDocs).
 
 ```@example
-println("Documentation built $(now()) with Julia $(VERSION).") # hide
+using Dates # hide
+println("Documentation built $(Dates.now()) with Julia $(VERSION)") # hide
 ```

@@ -11,7 +11,7 @@ background("white") # hide
 srand(1) # hide
 setline(1) # hide
 origin()
-for i in range(0, 30, 6)
+for i in range(0, step=30, length=6)
     sethue(HSV(i, 1, 1)) # from Colors
     setopacity(0.5)
     circle(0, 0, 40, :fillpreserve)
@@ -34,7 +34,7 @@ background("white") # hide
 srand(1) # hide
 setline(1) # hide
 origin()
-for i in range(0, 30, 6)
+for i in range(0, step=30, length=6)
     sethue(HSV(i, 1, 1)) # from Colors
     circle(0, 0, 90, :fillpreserve)
     setcolor("black")

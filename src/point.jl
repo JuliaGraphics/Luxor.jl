@@ -41,6 +41,11 @@ const O = Point(0, 0)
 Base.size(::Point) = 2
 Base.getindex(p::Point, i) = [p.x, p.y][i]
 
+"""
+    dotproduct(a::Point, b::Point)
+
+Return the scalar dot product of the two points.
+"""
 function dotproduct(a::Point, b::Point)
     result = 0.0
     for i in [:x, :y]

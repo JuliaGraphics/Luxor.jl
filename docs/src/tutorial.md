@@ -549,7 +549,7 @@ Notice that this function doesn't define anything about what the shape looks lik
 ```julia
 @png begin
     setopacity(0.7)
-    for theta in range(0, pi/6, 12)
+    for theta in range(0, step=pi/6, length=12)
         @layer begin
             rotate(theta)
             translate(0, -150)
@@ -600,7 +600,7 @@ end
 background("white")
 origin()
 setopacity(0.7)
-for theta in range(0, pi/6, 12)
+for theta in range(0, step=pi/6, length=12)
     @layer begin
         rotate(theta)
         translate(0, -150)
@@ -635,7 +635,7 @@ If you look closely you can tell which egg was drawn first — it's overlapped o
 
 Some useful tools for investigating the important aspects of coordinates and transformations include:
 
-- `axes()` to draw the current x and y axes
+- `Luxor.axes()` to draw the current x and y axes
 - `getrotation()` to get the current rotation
 - `getscale()` to get the current scale
 
