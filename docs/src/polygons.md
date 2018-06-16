@@ -766,7 +766,6 @@ sethue("black") # hide
 brush(Point(-250, 0), Point(250, 0), 20,
     strokes=15,
     tidystart=true,
-    lowhandle=0.0,
     twist=-5,
     lowhandle=-0.5,
     highhandle=0.5)

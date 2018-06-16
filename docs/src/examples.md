@@ -55,7 +55,7 @@ using Luxor
 Drawing(600, 400, "assets/figures/julia-logos.png")
 origin()
 background("white")
-for theta in range(0, pi/8, 16)
+for theta in range(0, step=pi/8, length=16)
     gsave()
     scale(0.25)
     rotate(theta)

@@ -117,7 +117,7 @@ paint
 do_action
 ```
 
-Soon you'll be able to define dash patterns  in Luxor. For now:
+Soon you'll be able to define dash patterns in Luxor. For now:
 
 ```julia
 dashes = [50.0,  # ink
@@ -145,7 +145,7 @@ background("white") # hide
 orangeblue = blend(Point(-200, 0), Point(200, 0), "orange", "blue")
 setblend(orangeblue)
 box(O, 400, 100, :fill)
-axes()
+Luxor.axes()
 finish() # hide
 nothing # hide
 ```
@@ -162,7 +162,7 @@ background("white") # hide
 greenmagenta = blend(Point(0, 0), 5, Point(0, 0), 150, "green", "magenta")
 setblend(greenmagenta)
 box(O, 400, 200, :fill)
-axes()
+Luxor.axes()
 finish() # hide
 nothing # hide
 ```
@@ -183,7 +183,7 @@ addstop(goldblend, 0.75, "darkgoldenrod4")
 addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
 box(O, 400, 200, :fill)
-axes()
+Luxor.axes()
 finish() # hide
 nothing # hide
 ```

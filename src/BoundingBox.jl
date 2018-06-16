@@ -69,6 +69,8 @@ Base.start(bbox::BoundingBox) = 1
 Base.next(bbox::BoundingBox, state) = state == 1 ? (bbox.corner1, state + 1) : state == 2 ? (bbox.corner2, state + 1) : error("this should never happen")
 Base.done(bbox::BoundingBox, state) = state > 2
 
+Base.last(bbox::BoundingBox) = bbox.corner2
+
 Base.size(bbox::BoundingBox) = (2)
 
 function Base.length(bbox::BoundingBox)
