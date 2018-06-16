@@ -148,7 +148,7 @@ mutable struct Drawing
     function Drawing(w, h, stype::Symbol, f::AbstractString="")
         global currentdrawing
         bufdata = UInt8[]
-        iobuf = IOBuffer(bufdata, true, true)
+        iobuf = IOBuffer(bufdata, read=true, write=true)
         the_surfacetype = stype
         if stype == :pdf
             the_surface     =  Cairo.CairoPDFSurface(iobuf, w, h)
