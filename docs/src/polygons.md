@@ -1,6 +1,6 @@
 ```@meta
 DocTestSetup = quote
-    using Luxor, Colors
+    using Luxor, Colors, Random
     end
 ```
 # Polygons and paths

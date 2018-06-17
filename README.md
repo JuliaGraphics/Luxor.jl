@@ -13,7 +13,7 @@ Mostly functional on Julia v0.7. Hopefully the deprecation warnings should fade 
 
 * `norm(pt1::Point, pt2::Point)` is now `distance(pt1::Point, pt2::Point)`
 * `dot(pt1::Point, pt2::Point)`  is now `dotproduct(pt1::Point, pt2::Point)`
-* an `axes()` function is now part of Base Julia, so you may have to qualify the Luxor version as `Luxor.axes()`.
+* an `axes()` function is now part of Base Julia. The `Luxor.axes()` function may be renamed soon.
 
 [![][pkg-0.7-img]][pkg-0.7-url]
 
