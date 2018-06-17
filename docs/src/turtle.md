@@ -1,3 +1,8 @@
+```@meta
+DocTestSetup = quote
+    using Luxor, Colors
+    end
+```
 # Turtle graphics
 
 Some simple "turtle graphics" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.

@@ -1,3 +1,8 @@
+```@meta
+DocTestSetup = quote
+    using Luxor, Colors
+    end
+```
 # Colors and styles
 
 ## Color and opacity

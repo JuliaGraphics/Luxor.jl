@@ -1,3 +1,8 @@
+```@meta
+DocTestSetup = quote
+    using Luxor, Colors
+    end
+```
 # Text and fonts
 
 ## A tale of two APIs

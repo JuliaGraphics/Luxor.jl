@@ -1,3 +1,8 @@
+```@meta
+DocTestSetup = quote
+    using Luxor, Colors
+    end
+```
 # Tables and grids
 
 You often want to position graphics at regular locations on the drawing. The positions can be provided by:

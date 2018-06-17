@@ -1,3 +1,8 @@
+```@meta
+DocTestSetup = quote
+    using Luxor, Colors
+    end
+```
 # Transforms and matrices
 
 For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`, and `translate(tx, ty)`.

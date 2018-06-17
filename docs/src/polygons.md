@@ -1,3 +1,8 @@
+```@meta
+DocTestSetup = quote
+    using Luxor, Colors
+    end
+```
 # Polygons and paths
 
 For drawing shapes, Luxor provides polygons and paths.

@@ -1,6 +1,6 @@
 ```@meta
 DocTestSetup = quote
-    using Luxor, Dates
+    using Luxor, Dates, Colors
 end
 ```
 
