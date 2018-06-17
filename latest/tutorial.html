@@ -61,12 +61,12 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-4.png" alt="
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    circle.([I1, I2, I3, I4], 2, :fill)</code></pre><p>The <code>norm()</code> function returns the distance between two points, and it&#39;s simple enough to compare the distances.</p><pre><code class="language-julia">    if norm(C1, I1) &lt; norm(C1, I2)
+    circle.([I1, I2, I3, I4], 2, :fill)</code></pre><p>The <code>distance()</code> function returns the distance between two points, and it&#39;s simple enough to compare the distances.</p><pre><code class="language-julia">    if distance(C1, I1) &lt; distance(C1, I2)
        ip1 = I1
     else
        ip1 = I2
     end
-    if norm(C1, I3) &lt; norm(C1, I4)
+    if distance(C1, I3) &lt; distance(C1, I4)
        ip2 = I3
     else
        ip2 = I4
@@ -74,7 +74,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-4.png" alt="
 
     label(&quot;ip1&quot;, :N, ip1)
     label(&quot;ip2&quot;, :N, ip2)
-    circle(C1, norm(C1, ip1), :stroke)
+    circle(C1, distance(C1, ip1), :stroke)
 
 end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-5.png" alt="point example"/></p><h3><a class="nav-anchor" id="Eggs-at-the-ready-1" href="#Eggs-at-the-ready-1">Eggs at the ready</a></h3><p>We now know all the points on the egg&#39;s perimeter, and the centers of the circular arcs. To draw the outline, we&#39;ll use the <code>arc2r()</code> function four times. This function takes: a center point and two points that together define a circular arc, plus an action.</p><p>The shape consists of four curves, so we&#39;ll use the <code>:path</code> action. Instead of immediately drawing the shape, like the <code>:fill</code> and <code>:stroke</code> actions do, this action adds a section to the current path (which is initially empty).</p><pre><code class="language-julia">@png begin
 
@@ -100,12 +100,12 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-6.png" alt="
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    if norm(C1, I1) &lt; norm(C1, I2)
+    if distance(C1, I1) &lt; distance(C1, I2)
         ip1 = I1
     else
         ip1 = I2
     end
-    if norm(C1, I3) &lt; norm(C1, I4)
+    if distance(C1, I3) &lt; distance(C1, I4)
         ip2 = I3
     else
         ip2 = I4
@@ -121,7 +121,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-6.png" alt="
     do_action(action)
 end</code></pre><p>This keeps all the intermediate code and calculations safely hidden away, and it&#39;s now possible to draw a Euclidean egg by calling <code>egg(100, :stroke)</code>, for example, where <code>100</code> is the required width (radius), and <code>:stroke</code> is the required actions.</p><p>(Of course, there&#39;s no error checking. This should be added if the function is to be used for any serious applications...!)</p><p>Notice that this function doesn&#39;t define anything about what the shape looks like or where it&#39;s placed. When called, the function inherits the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:</p><pre><code class="language-julia">@png begin
     setopacity(0.7)
-    for theta in range(0, pi/6, 12)
+    for theta in range(0, step=pi/6, length=12)
         @layer begin
             rotate(theta)
             translate(0, -150)
@@ -134,7 +134,7 @@ end</code></pre><p>This keeps all the intermediate code and calculations safely 
             strokepath()
         end
     end
-end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-7.png" alt="point example"/></p><p>The loop runs 12 times, with <code>theta</code> increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated by <code>theta</code> radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so, before any rotation takes place, a shift of -150 looks like an upwards shift). The <code>randomhue()</code> function does what you expect, and the <code>egg()</code> function is passed the <code>:fill</code> action and the radius.</p><p>Notice that the four drawing instructions are encased in a <code>@layer begin...end</code> &quot;shell&quot;. Any change made to the drawing environment inside this shell is discarded after each <code>end</code>. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.</p><p>Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and the y-axis due south, and positive angles are clockwise (ie from the positive x-axis towards the positive y-axis). So the second egg in the previous example was drawn after the axes were rotated by π/6 radians clockwise.</p><p>If you look closely you can tell which egg was drawn first — it&#39;s overlapped on each side by subsequent eggs.</p><h4><a class="nav-anchor" id="Thought-experiments-1" href="#Thought-experiments-1">Thought experiments</a></h4><ol><li><p>What would happen if the translation was <code>translate(0, 150)</code> rather than <code>translate(0, -150)</code>?</p></li><li><p>What would happen if the translation was <code>translate(150, 0)</code> rather than <code>translate(0, -150)</code>?</p></li><li><p>What would happen if you translated each egg <em>before</em> you rotated the drawing environment?</p></li></ol><p>Some useful tools for investigating the important aspects of coordinates and transformations include:</p><ul><li><p><code>axes()</code> to draw the current x and y axes</p></li><li><p><code>getrotation()</code> to get the current rotation</p></li><li><p><code>getscale()</code> to get the current scale</p></li></ul><h2><a class="nav-anchor" id="Polyeggs-1" href="#Polyeggs-1">Polyeggs</a></h2><p>As well as stroke and fill actions, you can use the path as a clipping region (<code>:clip</code>), or as the basis for more shape shifting.</p><p>The <code>egg()</code> function creates a path and lets you apply an action to it. It&#39;s also possible to convert the path into a polygon (an array of points), which lets you do more things with it. The following code converts the egg&#39;s path into a polygon, and then moves every other point of the polygon halfway towards the centroid.</p><pre><code class="language-julia">@png begin
+end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-7.png" alt="point example"/></p><p>The loop runs 12 times, with <code>theta</code> increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated by <code>theta</code> radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so, before any rotation takes place, a shift of -150 looks like an upwards shift). The <code>randomhue()</code> function does what you expect, and the <code>egg()</code> function is passed the <code>:fill</code> action and the radius.</p><p>Notice that the four drawing instructions are encased in a <code>@layer begin...end</code> &quot;shell&quot;. Any change made to the drawing environment inside this shell is discarded after each <code>end</code>. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.</p><p>Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and the y-axis due south, and positive angles are clockwise (ie from the positive x-axis towards the positive y-axis). So the second egg in the previous example was drawn after the axes were rotated by π/6 radians clockwise.</p><p>If you look closely you can tell which egg was drawn first — it&#39;s overlapped on each side by subsequent eggs.</p><h4><a class="nav-anchor" id="Thought-experiments-1" href="#Thought-experiments-1">Thought experiments</a></h4><ol><li><p>What would happen if the translation was <code>translate(0, 150)</code> rather than <code>translate(0, -150)</code>?</p></li><li><p>What would happen if the translation was <code>translate(150, 0)</code> rather than <code>translate(0, -150)</code>?</p></li><li><p>What would happen if you translated each egg <em>before</em> you rotated the drawing environment?</p></li></ol><p>Some useful tools for investigating the important aspects of coordinates and transformations include:</p><ul><li><code>Luxor.axes()</code> to draw the current x and y axes</li><li><code>getrotation()</code> to get the current rotation</li><li><code>getscale()</code> to get the current scale</li></ul><h2><a class="nav-anchor" id="Polyeggs-1" href="#Polyeggs-1">Polyeggs</a></h2><p>As well as stroke and fill actions, you can use the path as a clipping region (<code>:clip</code>), or as the basis for more shape shifting.</p><p>The <code>egg()</code> function creates a path and lets you apply an action to it. It&#39;s also possible to convert the path into a polygon (an array of points), which lets you do more things with it. The following code converts the egg&#39;s path into a polygon, and then moves every other point of the polygon halfway towards the centroid.</p><pre><code class="language-julia">@png begin
     egg(160, :path)
     pgon = first(pathtopoly())</code></pre><p>The <code>pathtopoly()</code> function converts the current path made by <code>egg(160, :path)</code> into a polygon. Those smooth curves have been approximated by a series of straight line segments. The <code>first()</code> function is used because <code>pathtopoly()</code> returns an array of one or more polygons (paths can consist of a series of loops), and we know that we need only the single path here.</p><pre><code class="language-julia">    pc = polycentroid(pgon)
     circle(pc, 5, :fill)</code></pre><p><code>polycentroid()</code> finds the centroid of the new polygon.</p><p>This loop steps through the points and moves every odd-numbered one halfway towards the centroid. <code>between()</code> finds a point midway between two specified points. The <code>poly()</code> function draws the array of points.</p><pre><code class="language-julia">    for pt in 1:2:length(pgon)

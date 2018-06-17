@@ -32,7 +32,7 @@ fontface(&quot;Avenir-Black&quot;)
 textcurve(&quot;THIS IS TEXT ON A CURVE &quot; ^ 14, 0, 550, O)
 finish()
 preview() # on macOS, opens in Preview</code></pre><h2><a class="nav-anchor" id="Illustrating-this-document-1" href="#Illustrating-this-document-1">Illustrating this document</a></h2><p>This documentation was built with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the HTML pages are built: the Julia source for the image is stored in the Markdown source document, and the code to create the images runs each time the documentation is generated.</p><p>The Markdown markup looks like this:</p><pre><code class="language-none">```@example
-using Luxor # hide
+using Luxor, Random # hide
 Drawing(600, 250, &quot;assets/figures/polysmooth-pathological.png&quot;) # hide
 origin() # hide
 background(&quot;white&quot;) # hide
@@ -55,16 +55,26 @@ sethue(&quot;red&quot;)
 prettypoly(p, close=true, :stroke)
 setdash(&quot;solid&quot;)
 sethue(&quot;black&quot;)
-polysmooth(p, 40, :fill, debug=true)</code></pre></div><p><img src="assets/figures/polysmoothy.png" alt="polysmooth"/></p><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-turtles?-1">Why turtles?</a></h2><p>An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here&#39;s an example of how a complex pattern can emerge from a simple set of rules, taken from <a href="https://github.com/cormullion/Lindenmayer.jl">Lindenmayer.jl</a>:</p><p><img src="assets/figures/penrose.png" alt="penrose"/></p><p>The definition of this figure is:</p><pre><code class="language-none">penrose = LSystem(Dict(&quot;X&quot;  =&gt;  &quot;PM++QM----YM[-PM----XM]++t&quot;,
+polysmooth(p, 40, :fill, debug=true)</code></pre><pre><code class="language-none">┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: The function `cfunction` is now written as a macro `@cfunction`.
+│   caller = get_stream_callback at Cairo.jl:145 [inlined]
+└ @ Core Cairo.jl:145</code></pre></div><p><img src="assets/figures/polysmoothy.png" alt="polysmooth"/></p><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-turtles?-1">Why turtles?</a></h2><p>An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here&#39;s an example of how a complex pattern can emerge from a simple set of rules, taken from <a href="https://github.com/cormullion/Lindenmayer.jl">Lindenmayer.jl</a>:</p><p><img src="assets/figures/penrose.png" alt="penrose"/></p><p>The definition of this figure is:</p><pre><code class="language-none">penrose = LSystem(Dict(&quot;X&quot;  =&gt;  &quot;PM++QM----YM[-PM----XM]++t&quot;,
                        &quot;Y&quot;  =&gt; &quot;+PM--QM[---XM--YM]+t&quot;,
                        &quot;P&quot;  =&gt; &quot;-XM++YM[+++PM++QM]-t&quot;,
                        &quot;Q&quot;  =&gt; &quot;--PM++++XM[+QM++++YM]--YMt&quot;,
                        &quot;M&quot;  =&gt; &quot;F&quot;,
                        &quot;F&quot;  =&gt; &quot;&quot;),
-                  &quot;1[Y]++[Y]++[Y]++[Y]++[Y]&quot;)</code></pre><p>where some of the characters—eg &quot;F&quot;, &quot;+&quot;, &quot;-&quot;, and &quot;t&quot;—issue turtle control commands, and others—&quot;X,&quot;, &quot;Y&quot;, &quot;P&quot;, and &quot;Q&quot;—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.</p><h2><a class="nav-anchor" id="Strange-1" href="#Strange-1">Strange</a></h2><p>It&#39;s usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it&#39;s an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it&#39;s better to target PNG rather than SVG or PDF for this example!).</p><div><pre><code class="language-julia">using Luxor, Colors, ColorSchemes
+                  &quot;1[Y]++[Y]++[Y]++[Y]++[Y]&quot;)</code></pre><p>where some of the characters—eg &quot;F&quot;, &quot;+&quot;, &quot;-&quot;, and &quot;t&quot;—issue turtle control commands, and others—&quot;X,&quot;, &quot;Y&quot;, &quot;P&quot;, and &quot;Q&quot;—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.</p><h2><a class="nav-anchor" id="Strange-1" href="#Strange-1">Strange</a></h2><p>It&#39;s usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it&#39;s an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it&#39;s better to target PNG rather than SVG or PDF for this example!).</p><div><pre><code class="language-julia">using Luxor, Colors
 function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
-    cs = ColorSchemes.botticelli
     Drawing(w, w, &quot;assets/figures/strange-vector.png&quot;)
     origin()
     background(&quot;white&quot;)
@@ -83,10 +93,10 @@ function strange(dotsize, w=800.0)
             if xx &lt; xmax &amp;&amp; xx &gt; xmin &amp;&amp; yy &lt; ymax &amp;&amp; yy &gt; ymin
                 xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range
                 ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range
-                col1 = get(cs, rescale(xx, -1, 1, 0.0, .5))
-                col2 = get(cs, rescale(yy, -1, 1, 0.0, .4))
-                col3 = get(cs, rescale(zz, -1, 1, 0.0, .2))
-                sethue(mean([col1, col2, col3]))
+                rcolor = rescale(xx, -1, 1, 0.0, .7)
+                gcolor = rescale(yy, -1, 1, 0.2, .5)
+                bcolor = rescale(zz, -1, 1, 0.3, .8)
+                setcolor(convert(Colors.HSV, Colors.RGB(rcolor, gcolor, bcolor)))
                 circle(Point(xpos, ypos), dotsize, :fill)
             end
         end
@@ -94,19 +104,12 @@ function strange(dotsize, w=800.0)
     finish()
 end
 
-strange(.3, 800)</code></pre><pre><code class="language-none">WARNING: --output requested, but no modules defined during run
-WARNING: The call to compilecache failed to create a usable precompiled cache file for module FFTW. Got:
-WARNING: Cache file &quot;/Users/travis/.julia/lib/v0.6/FFTW.ji&quot; not found.
-WARNING: eval from module Main to ImageCore:
-Expr(:call, Expr(:., :Base, :include_from_node1)::Any, &quot;/Users/travis/.julia/v0.6/FFTW/src/FFTW.jl&quot;)::Any
-  ** incremental compilation may be broken for this module **
-
-WARNING: --output requested, but no modules defined during run
-WARNING: The call to compilecache failed to create a usable precompiled cache file for module FFTW. Got:
-WARNING: Cache file &quot;/Users/travis/.julia/lib/v0.6/FFTW.ji&quot; not found.
-WARNING: eval from module Main to FFTViews:
-Expr(:call, Expr(:., :Base, :include_from_node1)::Any, &quot;/Users/travis/.julia/v0.6/FFTW/src/FFTW.jl&quot;)::Any
-  ** incremental compilation may be broken for this module **</code></pre></div><p><img src="assets/figures/strange-vector.png" alt="strange attractor in vectors"/></p><h2><a class="nav-anchor" id="Hipster-logo:-text-on-curves-1" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></h2><div><pre><code class="language-julia">using Luxor
+strange(.3, 800)</code></pre><pre><code class="language-none">┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: The function `cfunction` is now written as a macro `@cfunction`.
+│   caller = get_stream_callback at Cairo.jl:145 [inlined]
+└ @ Core Cairo.jl:145</code></pre></div><p><img src="assets/figures/strange-vector.png" alt="strange attractor in vectors"/></p><h2><a class="nav-anchor" id="Hipster-logo:-text-on-curves-1" href="#Hipster-logo:-text-on-curves-1">Hipster logo: text on curves</a></h2><div><pre><code class="language-julia">using Luxor
 function hipster(fname, toptext, bottomtext)
     Drawing(400, 350, fname)
     origin()
@@ -149,4 +152,9 @@ end
 
 hipster(&quot;assets/figures/textcurvecenteredexample.png&quot;,
     &quot;• DRAWN WITH LUXOR • &quot;,
-    &quot;VECTOR GRAPHICS FOR JULIA&quot;)</code></pre></div><p><img src="assets/figures/textcurvecenteredexample.png" alt="text on a curve"/></p><footer><hr/><a class="previous" href="animation.html"><span class="direction">Previous</span><span class="title">Animation</span></a><a class="next" href="functionindex.html"><span class="direction">Next</span><span class="title">Index</span></a></footer></article></body></html>
+    &quot;VECTOR GRAPHICS FOR JULIA&quot;)</code></pre><pre><code class="language-none">┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: The function `cfunction` is now written as a macro `@cfunction`.
+│   caller = get_stream_callback at Cairo.jl:145 [inlined]
+└ @ Core Cairo.jl:145</code></pre></div><p><img src="assets/figures/textcurvecenteredexample.png" alt="text on a curve"/></p><footer><hr/><a class="previous" href="animation.html"><span class="direction">Previous</span><span class="title">Animation</span></a><a class="next" href="functionindex.html"><span class="direction">Next</span><span class="title">Index</span></a></footer></article></body></html>

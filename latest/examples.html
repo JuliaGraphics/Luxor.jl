@@ -24,7 +24,7 @@ end</code></pre><p><img src="assets/figures/circle-dots.png" alt="background"/><
 Drawing(600, 400, &quot;assets/figures/julia-logos.png&quot;)
 origin()
 background(&quot;white&quot;)
-for theta in range(0, pi/8, 16)
+for theta in range(0, step=pi/8, length=16)
     gsave()
     scale(0.25)
     rotate(theta)
@@ -42,7 +42,15 @@ grestore()
 translate(200, -150)
 scale(0.3)
 julialogo()
-finish()</code></pre></div><p><img src="assets/figures/julia-logos.png" alt="background"/></p><p>The <code>gsave()</code> function saves the current drawing parameters, and any subsequent changes such as the <code>scale()</code> and <code>rotate()</code> operations are discarded by the next <code>grestore()</code> function.</p><p>Use the extension to specify the format: for example change &quot;julia-logos.png&quot; to &quot;julia-logos.svg&quot; or &quot;julia-logos.pdf&quot; or &quot;julia-logos.eps&quot;, to produce different formats.</p><h2><a class="nav-anchor" id="Something-a-bit-more-complicated:-a-Sierpinski-triangle-1" href="#Something-a-bit-more-complicated:-a-Sierpinski-triangle-1">Something a bit more complicated: a Sierpinski triangle</a></h2><p>Here&#39;s a version of the Sierpinski recursive triangle, clipped to a circle.</p><p><img src="assets/figures/sierpinski.png" alt="Sierpinski"/></p><pre><code class="language-julia"># Subsequent examples will omit these setup and finishing functions:
+finish()</code></pre><pre><code class="language-none">┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: `replace(s::AbstractString, pat, f)` is deprecated, use `replace(s, pat =&gt; f)` instead.
+│   caller = _parse_colorant(::String) at parse.jl:51
+└ @ Colors parse.jl:51
+┌ Warning: The function `cfunction` is now written as a macro `@cfunction`.
+│   caller = get_stream_callback at Cairo.jl:145 [inlined]
+└ @ Core Cairo.jl:145</code></pre></div><p><img src="assets/figures/julia-logos.png" alt="background"/></p><p>The <code>gsave()</code> function saves the current drawing parameters, and any subsequent changes such as the <code>scale()</code> and <code>rotate()</code> operations are discarded by the next <code>grestore()</code> function.</p><p>Use the extension to specify the format: for example change &quot;julia-logos.png&quot; to &quot;julia-logos.svg&quot; or &quot;julia-logos.pdf&quot; or &quot;julia-logos.eps&quot;, to produce different formats.</p><h2><a class="nav-anchor" id="Something-a-bit-more-complicated:-a-Sierpinski-triangle-1" href="#Something-a-bit-more-complicated:-a-Sierpinski-triangle-1">Something a bit more complicated: a Sierpinski triangle</a></h2><p>Here&#39;s a version of the Sierpinski recursive triangle, clipped to a circle.</p><p><img src="assets/figures/sierpinski.png" alt="Sierpinski"/></p><pre><code class="language-julia"># Subsequent examples will omit these setup and finishing functions:
 #
 # using Luxor, Colors
 # Drawing()
