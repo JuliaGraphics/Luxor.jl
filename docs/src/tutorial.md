@@ -69,12 +69,13 @@ This example illustrates a few things about Luxor drawings:
 
 - Did the first drawing takes a few seconds to appear? The Cairo drawing engine takes a little time warm up. Once it's running, drawings appear much faster.
 
-Once more, with more black:
+Once more, with more black, and some rulers:
 
 ```julia
 @png begin
     text("Hello again, world!", Point(0, 250))
     circle(Point(0, 0), 200, :fill)
+    rulers()
 end
 ```
 
@@ -86,6 +87,7 @@ origin()
 sethue("black")
 text("Hello again, world!", Point(0, 250))
 circle(Point(0, 0), 200, :fill)
+rulers()
 finish()
 ```
 
@@ -640,7 +642,7 @@ If you look closely you can tell which egg was drawn first — it's overlapped o
 
 Some useful tools for investigating the important aspects of coordinates and transformations include:
 
-- `Luxor.axes()` to draw the current x and y axes
+- `rulers()` to draw the current x and y axes
 - `getrotation()` to get the current rotation
 - `getscale()` to get the current scale
 

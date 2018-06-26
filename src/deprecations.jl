@@ -4,3 +4,4 @@
 @deprecate bboxesintersect boundingboxesintersect
 @deprecate norm distance
 @deprecate dot dotproduct
+@deprecate axes rulers
