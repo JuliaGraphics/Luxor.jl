@@ -67,8 +67,8 @@ Drawing(600, 300, "assets/figures/point-ex.png") # hide
 background("white") # hide
 origin() # hide
 sethue("blue") # hide
-Luxor.axes()
-box.([O + (i, 0) for i in linspace(0, 200, 5)], 20, 20, :stroke)
+rulers()
+box.([O + (i, 0) for i in range(0, stop=200, length=5)], 20, 20, :stroke)
 finish() # hide
 nothing # hide
 ```
@@ -232,14 +232,14 @@ nothing # hide
 
 ![background](assets/figures/backgrounds.png)
 
-The `Luxor.axes()` function draws a couple of lines and text labels in light gray to indicate the position and orientation of the current axes.
+The `rulers()` function draws a couple of rulers to indicate the position and orientation of the current axes.
 
 ```@example
 using Luxor # hide
 Drawing(400, 400, "assets/figures/axes.png") # hide
 background("gray80")
 origin()
-Luxor.axes()
+rulers()
 finish() # hide
 nothing # hide
 ```
@@ -248,7 +248,7 @@ nothing # hide
 
 ```@docs
 background
-Luxor.axes
+rulers
 origin
 ```
 

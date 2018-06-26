@@ -12,7 +12,9 @@ function testtable(fname)
     origin()
     background("white")
 
-    t = Table(collect(linspace(30, 85, 10)), collect(linspace(20, 75, 10)))
+    t = Table(
+        collect(range(30, stop=85, length=10)),
+        collect(range(20, stop=75, length=10)))
     sethue("red")
     circle.(t[:, 3], 10, :fill)
     sethue("blue")

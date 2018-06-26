@@ -69,25 +69,6 @@ rescale(x, from::NTuple{2,Number}, to::NTuple{2, Number}) =
     ((x - from[1]) / (from[2] - from[1])) * (to[2] - to[1]) + to[1]
 
 """
-Draw and label two axes lines starting at `O`, the current 0/0, and continuing out along the
-current positive x and y axes.
-"""
-function axes()
-    # draw axes
-    gsave()
-    setline(1)
-    fontsize(20)
-    sethue("gray")
-    arrow(O, Point(currentdrawing.width/2.0 * 0.6, 0.0))
-    text("x", Point(currentdrawing.width/2.0 * 0.6, -15.0))
-    text("x", Point(30, -15))
-    arrow(O, Point(0, currentdrawing.height/2.0 * 0.6))
-    text("y", Point(5, currentdrawing.width/2.0 * 0.6))
-    text("y", Point(5, 30))
-    grestore()
-end
-
-"""
     background(color)
 
 Fill the canvas with a single color. Returns the (red, green, blue, alpha) values.
@@ -102,9 +83,10 @@ If Colors.jl is installed:
     background(RGB(0, 0, 0))
     background(Luv(20, -20, 30))
 
-If you don't specify a background color for a PNG drawing, the background will be
-transparent. You can set a partly or completely transparent background for PNG files by
-passing a color with an alpha value, such as this 'transparent black':
+If you don't specify a background color for a PNG drawing, the background will
+be transparent. You can set a partly or completely transparent background for
+PNG files by passing a color with an alpha value, such as this 'transparent
+black':
 
     background(RGBA(0, 0, 0, 0))
 
@@ -520,3 +502,41 @@ Get the current path, like `getpath()` but flattened so that there are no Bèzie
 Returns a CairoPath which is an array of `element_type` and `points` objects.
 """
 getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
+
+"""
+Draw and label two rulers starting at `O`, the current 0/0, and continuing out
+along the current positive x and y axes.
+"""
+function rulers()
+    @layer begin
+        n = 200
+        w = 20
+        setopacity(0.5)
+        setline(0.25)
+        sethue("darkorange")
+        #x axis
+        box(O, O + (n, -w), :fillstroke)
+        #y axis
+        box(O - (w, 0), O + (0, n), :fillstroke)
+        sethue("darkgoldenrod")
+        setopacity(1)
+        [line(Point(x, 0), Point(x, -w/4), :stroke) for x in 0:10:n]
+        [line(Point(-w/4, y), Point(0, y), :stroke) for y in 0:10:n]
+        [line(Point(x, 0), Point(x, -w/6), :stroke) for x in 0:5:n]
+        [line(Point(-w/6, y), Point(0, y), :stroke) for y in 0:5:n]
+        fontsize(2)
+        [text(string(x), Point(x, -w/3), halign=:right) for x in 10:10:n]
+        @layer begin
+                rotate(pi/2)
+                [text(string(x), Point(x, w/3), halign=:right) for x in 10:10:n]
+        end
+        fontsize(15)
+        text("x", O + (n + w, -w/2), halign=:right, valign=:middle)
+        text("y", O + (-w/2, n), halign=:right, valign=:middle, angle=pi/2)
+        #center
+        circle(O, 2, :strokepreserve)
+        sethue("white")
+        setopacity(0.5)
+        fillpath()
+    end
+end

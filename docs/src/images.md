@@ -19,7 +19,7 @@ background("grey40") # hide
 img = readpng("assets/figures/julia-logo-mask.png")
 w = img.width
 h = img.height
-Luxor.axes()
+rulers()
 scale(0.3, 0.3)
 rotate(pi/4)
 placeimage(img, -w/2, -h/2, .5)

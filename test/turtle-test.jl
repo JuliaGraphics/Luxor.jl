@@ -32,8 +32,8 @@ function test_turtles(fname)
         setopacity(0.5)
         Penwidth(🐢, .5)
         n = 400
-        Pendown(🐢)
         Penup(🐢)
+        Pendown(🐢)
         for i in 1:200
             Forward(🐢, n)
             Turn(🐢, 29)

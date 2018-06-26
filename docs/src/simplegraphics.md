@@ -16,7 +16,7 @@ using Luxor # hide
 Drawing(400, 220, "assets/figures/basicrects.png") # hide
 background("white") # hide
 origin() # hide
-Luxor.axes()
+rulers()
 sethue("red")
 rect(O, 100, 100, :stroke)
 sethue("blue")

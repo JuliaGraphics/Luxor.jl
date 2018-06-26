@@ -43,7 +43,7 @@ export Drawing, currentdrawing,
     rescale,
 
     finish, preview,
-    origin, axes, background,
+    origin, rulers, background,
 
     @png, @pdf, @svg,
 

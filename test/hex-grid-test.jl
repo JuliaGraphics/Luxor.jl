@@ -10,7 +10,7 @@ function grid_test(fname)
     translate(200, 200)
     fontsize(14)
     setline(0.2)
-    Luxor.axes()
+    rulers()
     side = 100
     grid = GridRect(O, side, side, 1000, 1600)
     for p in 1:121
@@ -22,7 +22,7 @@ function grid_test(fname)
         text(string(p, ":", grid.rownumber, ":", grid.colnumber), pt, halign=:center, valign=:middle)
     end
     translate(currentdrawing.width/2, 0)
-    Luxor.axes()
+    rulers()
     centers = 100
     grid = GridHex(O, centers, 800, 800)
     lastpt = O
