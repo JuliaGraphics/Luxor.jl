@@ -65,9 +65,17 @@ function BoundingBox(str::String)
     return BoundingBox(lcorner, ocorner)
 end
 
-Base.start(bbox::BoundingBox) = 1
-Base.next(bbox::BoundingBox, state) = state == 1 ? (bbox.corner1, state + 1) : state == 2 ? (bbox.corner2, state + 1) : error("this should never happen")
-Base.done(bbox::BoundingBox, state) = state > 2
+#state is either 1 or 2!
+function Base.iterate(bbox::BoundingBox)
+    return (bbox.corner1, 2)
+end
+
+function Base.iterate(bbox::BoundingBox, state)
+    if state > 2
+        return
+    end
+    state == 1 ? (bbox.corner1, state + 1) : state == 2 ? (bbox.corner2, state + 1) : error("this should never happen")
+end
 
 Base.last(bbox::BoundingBox) = bbox.corner2
 

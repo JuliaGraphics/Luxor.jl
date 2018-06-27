@@ -531,11 +531,13 @@ function rulers()
                 [text(string(x), Point(x, w/3), halign=:right) for x in 10:10:n]
         end
         fontsize(15)
-        text("x", O + (n + w, -w/2), halign=:right, valign=:middle)
-        text("y", O + (-w/2, n), halign=:right, valign=:middle, angle=pi/2)
+        text("X", O + (n-w/2, w), halign=:right, valign=:middle)
+        text("Y", O + (-3w/2, n-w), halign=:right, valign=:middle, angle=pi/2)
+        sethue("white")
+        text("X", O + (w, -w/2), halign=:right, valign=:middle)
+        text("Y", O + (-w/3, w/3), halign=:right, valign=:middle, angle=pi/2)
         #center
         circle(O, 2, :strokepreserve)
-        sethue("white")
         setopacity(0.5)
         fillpath()
     end

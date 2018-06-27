@@ -12,9 +12,17 @@ Base.getindex(bps::BezierPathSegment, i::Int64) = [bps.p1, bps.cp1, bps.cp2, bps
 Base.setindex!(bp::BezierPathSegment, v, i::Int64) = [bps.p1, bps.cp1, bps.cp2, bps.p2][i] = v
 Base.IndexStyle(::Type{<:BezierPathSegment}) = IndexLinear()
 
-Base.start(bps::BezierPathSegment) = 1
-Base.next(bps::BezierPathSegment, s::Int) = bps[s], s+1
-Base.done(bps::BezierPathSegment, s::Int) = (s > length(bps))
+# state is integer referring to one of the four points
+function Base.iterate(bps::BezierPathSegment)
+    return (bps.p1, 2)
+end
+
+function Base.iterate(bps::BezierPathSegment, s)
+    if (s > length(bps))
+        return
+    end
+    return bps[s], s+1
+end
 
 function Base.show(io::IO, bps::BezierPathSegment)
     println(io, "p1  $(bps.p1)  cp1 $(bps.cp1)")
