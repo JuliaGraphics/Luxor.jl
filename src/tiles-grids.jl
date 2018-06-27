@@ -62,20 +62,10 @@ mutable struct Tiler
     end
 end
 
-function Base.start(pt::Tiler)
-    # return the initial state
+function Base.iterate(pt::Tiler)
     x = -(pt.areawidth/2)  + pt.margin + (pt.tilewidth/2)
     y = -(pt.areaheight/2) + pt.margin + (pt.tileheight/2)
-    return (Point(x, y), 1)
-end
-
-function Base.next(pt::Tiler, state)
-    # Returns the item and the next state
-    # state[1] is the Point
-    x = state[1].x
-    y = state[1].y
-    # state[2] is the tilenumber
-    tilenumber = state[2]
+    tilenumber = 1
     x1 = x + pt.tilewidth
     y1 = y
     if x1 > (pt.areawidth/2) - pt.margin
@@ -86,9 +76,21 @@ function Base.next(pt::Tiler, state)
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
-function Base.done(pt::Tiler, state)
-    # Tests if there are any items remaining
-    state[2] > (pt.nrows * pt.ncols)
+function Base.iterate(pt::Tiler, state)
+    if state[2] > (pt.nrows * pt.ncols)
+        return
+    end
+    x = state[1].x
+    y = state[1].y
+    tilenumber = state[2]
+    x1 = x + pt.tilewidth
+    y1 = y
+    if x1 > (pt.areawidth/2) - pt.margin
+        y1 += pt.tileheight
+        x1 = -(pt.areawidth/2) + pt.margin + (pt.tilewidth/2)
+    end
+    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
 function Base.length(pt::Tiler)
@@ -289,20 +291,10 @@ mutable struct Partition
     end
 end
 
-function Base.start(pt::Partition)
-    # return the initial state
+function Base.iterate(pt::Partition)
     x = -(pt.areawidth/2)  + (pt.tilewidth/2)
     y = -(pt.areaheight/2) + (pt.tileheight/2)
-    return (Point(x, y), 1)
-end
-
-function Base.next(pt::Partition, state)
-    # Returns the item and the next state
-    # state[1] is the Point
-    x = state[1].x
-    y = state[1].y
-    # state[2] is the tilenumber
-    tilenumber = state[2]
+    tilenumber = 1
     x1 = x + pt.tilewidth
     y1 = y
     if (x1 + pt.tilewidth/2) > (pt.areawidth/2)
@@ -313,9 +305,21 @@ function Base.next(pt::Partition, state)
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
-function Base.done(pt::Partition, state)
-    # Tests if there are any items remaining
-    state[2] > (pt.nrows * pt.ncols)
+function Base.iterate(pt::Partition, state)
+    if state[2] > (pt.nrows * pt.ncols)
+        return
+    end
+    x = state[1].x
+    y = state[1].y
+    tilenumber = state[2]
+    x1 = x + pt.tilewidth
+    y1 = y
+    if (x1 + pt.tilewidth/2) > (pt.areawidth/2)
+        y1 += pt.tileheight
+        x1 = -(pt.areawidth/2) + (pt.tilewidth/2)
+    end
+    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
 function Base.length(pt::Partition)

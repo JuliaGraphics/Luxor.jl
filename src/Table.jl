@@ -176,15 +176,23 @@ Table(rowheights::AbstractRange{T1}, colwidths::Array{T2, 1}, center=O) where T1
 
 # interfaces
 
-# basic iteration
-function Base.start(t::Table)
-    # return the initial state
+function Base.iterate(t::Table)
     x = t.leftmargin + (t.colwidths[1]/2)
     y = t.topmargin  + (t.rowheights[1]/2)
-    return ( Point(x, y), 1)
+    cellnumber = 2
+    t.currentrow = div(cellnumber - 1, t.ncols) + 1
+    t.currentcol = mod1(cellnumber, t.ncols)
+    x1 = t.leftmargin + sum(t.colwidths[1:t.currentcol - 1]) + t.colwidths[t.currentcol]/2
+    y1 = t.topmargin  + sum(t.rowheights[1:t.currentrow - 1]) + t.rowheights[t.currentrow]/2
+    nextpoint = Point(x1, y1)
+    return ((Point(x, y), 1), (nextpoint, 2))
 end
 
-function Base.next(t::Table, state)
+# v0.7 iteration
+function Base.iterate(t::Table, state)
+    if state[2] > t.nrows * t.ncols
+        return
+    end
     # state[1] is the Point
     x = state[1].x
     y = state[1].y
@@ -197,10 +205,6 @@ function Base.next(t::Table, state)
     y1 = t.topmargin  + sum(t.rowheights[1:t.currentrow - 1]) + t.rowheights[t.currentrow]/2
     nextpoint = Point(x1, y1)
     return ((nextpoint, cellnumber), (nextpoint, cellnumber + 1))
-end
-
-function Base.done(t::Table, state)
-    state[2] > t.nrows * t.ncols
 end
 
 function Base.size(t::Table)
