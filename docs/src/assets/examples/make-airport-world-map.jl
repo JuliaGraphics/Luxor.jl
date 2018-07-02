@@ -21,7 +21,7 @@ function drawairportmap(outputfilename, countryoutlines, airportdata)
     sethue("black")
     for airport in airportdata
         city, country, lat, long = split(chomp(airport), ",")
-        location = Point(parse(long), -parse(lat)) # flip y-coordinate
+        location = Point(Meta.parse(long), -Meta.parse(lat)) # flip y-coordinate
         circle(location, .01, :fill)
         text(string(city), location.x, location.y - 0.02)
     end
