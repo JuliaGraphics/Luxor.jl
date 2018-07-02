@@ -126,7 +126,7 @@ function animate(movie::Movie, scenelist::AbstractArray{Scene, 1};
         run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
         run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
         if ! isempty(pathname)
-            mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, remove_destination=true)
+            mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force=true)
             @info("GIF is: $pathname")
         else
             @info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")

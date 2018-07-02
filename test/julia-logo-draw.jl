@@ -38,7 +38,7 @@ end
 function dropshadow()
     steps=20
     # white-gray ramp
-    gramp = linspace(colorant"white", colorant"gray60", steps)
+    gramp = range(colorant"white", stop=colorant"gray60", length=steps)
     gsave()
     r = 200
     sethue("purple")

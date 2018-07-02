@@ -115,7 +115,7 @@ function main()
   setline(1)
 
   # get the data
-  d = readcsv("benchmarks-julia.csv")
+  d = readdlm("benchmarks-julia.csv")
   # fields are language | test | timetaken
   d = d[d[:, 1] .!= "octave" , :]
   # but we don't want "Octave" because there are too many outliers :)
