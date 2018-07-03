@@ -782,6 +782,8 @@ nothing # hide
 
 ```@docs
 bezier
+bezier′
+bezier′′
 beziercurvature
 bezierfrompoints
 bezierpathtopoly
@@ -792,6 +794,7 @@ makebezierpath
 pathtobezierpaths
 setbezierhandles
 shiftbezierhandles
+findbeziercontrolpoints
 brush
 ```
 

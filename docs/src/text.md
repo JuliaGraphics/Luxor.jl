@@ -225,16 +225,14 @@ label
 
 Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
-![text on a curve or spiral](assets/figures/text-spiral.png)
-
-```julia
-using Luxor
-Drawing(1800, 1800, "/tmp/text-spiral.png")
-origin()
-background("ivory")
-fontsize(18)
-fontface("LucidaSansUnicode")
-sethue("royalblue4")
+```@example
+using Luxor # hide
+Drawing(1800, 1800, "assets/figures/text-spiral.png") # hide
+origin() # hide
+background("ivory") # hide
+fontsize(16) # hide
+fontface("Menlo") # hide
+sethue("royalblue4") # hide
 textstring = join(names(Base), " ")
 textcurve("this spiral contains every word in julia names(Base): " * textstring,
     -pi/2,
@@ -243,11 +241,13 @@ textcurve("this spiral contains every word in julia names(Base): " * textstring,
     letter_spacing = 0,
     spiral_ring_step = 0)
 fontsize(35)
-fontface("Agenda-Black")
+fontface("Avenir-Black")
 textcentered("julia names(Base)", 0, 0)
-finish()
-preview()
+finish() # hide
+nothing # hide
 ```
+
+![text on a curve or spiral](assets/figures/text-spiral.png)
 
 For shorter strings, `textcurvecentered()` tries to place the text on a circular arc by its center point.
 
