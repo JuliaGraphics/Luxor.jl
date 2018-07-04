@@ -341,7 +341,7 @@ function preview()
             Base.invokelatest(display, "image/png", load(currentdrawing.filename))
         elseif currentdrawing.surfacetype == :svg
             open(currentdrawing.filename) do f
-                display("image/svg+xml", readstring(f))
+                display("image/svg+xml", read(f, String))
             end
         end
     elseif candisplay && juno
