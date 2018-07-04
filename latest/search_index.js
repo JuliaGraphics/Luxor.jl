@@ -1561,107 +1561,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "polygons.html#Luxor.bezier",
-    "page": "Polygons and paths",
-    "title": "Luxor.bezier",
-    "category": "function",
-    "text": "bezier(t, A::Point, A1::Point, B1::Point, B::Point)\n\nReturn the result of evaluating the Bezier cubic curve function, t going from 0 to 1, starting at A, finishing at B, control points A1 (controlling A), and B1 (controlling B).\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.beziercurvature",
-    "page": "Polygons and paths",
-    "title": "Luxor.beziercurvature",
-    "category": "function",
-    "text": "beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)\n\nReturn the curvature of the Bezier curve at t ([0-1]), given start and end points A and B, and control points A1 and B1. The value (kappa) will typically be a value between -0.001 and 0.001 for points with coordinates in the 100-500 range.\n\nκ(t) is the curvature of the curve at point t, which for a parametric planar curve is:\n\n\\begin{equation} \\kappa = \\frac{\\mid \\dot{x}\\ddot{y}-\\dot{y}\\ddot{x}\\mid}     {(\\dot{x}^2 + \\dot{y}^2)^{\\frac{3}{2}}} \\end{equation}\n\nThe radius of curvature, or the radius of an osculating circle at a point, is 1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points with coordinates in the 100-500 range.\n\nTODO Fix overshoot...\n\n...The value of kappa can sometimes collapse near 0, returning NaN (and Inf for radius of curvature).\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.bezierfrompoints",
-    "page": "Polygons and paths",
-    "title": "Luxor.bezierfrompoints",
-    "category": "function",
-    "text": "bezierfrompoints(startpoint::Point, pointonline1::Point,\n    pointonline2::Point, endpoint::Point)\n\nGiven four points, return the Bezier curve that passes through all four points, starting at startpoint and ending at endpoint. The two middle points of the returned BezierPathSegment are the two control points that make the curve pass through the two middle points supplied.\n\n\n\n\n\nbezierfrompoints(ptslist::Array{Point, 1})\n\nGiven four points, return the Bezier curve that passes through all four points.\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.bezierpathtopoly",
-    "page": "Polygons and paths",
-    "title": "Luxor.bezierpathtopoly",
-    "category": "function",
-    "text": "bezierpathtopoly(bezierpath::BezierPath; steps=10)\n\nConvert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.\n\nTo make a Bezier path, use makebezierpath() on a polygon.\n\nThe steps optional keyword determines how many line sections are used for each path.\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.bezierstroke",
-    "page": "Polygons and paths",
-    "title": "Luxor.bezierstroke",
-    "category": "function",
-    "text": "bezierstroke(point1, point2, width=0.0)\n\nReturn a BezierPath, a stroked version of a straight line between two points.\n\nIt wil have 2 or 6 Bezier path segments that define a brush or pen shape. If width is 0, the brush shape starts and ends at a point. Otherwise the brush shape starts and ends with the thick end.\n\nTo draw it, use eg drawbezierpath(..., :fill).\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.beziertopoly",
-    "page": "Polygons and paths",
-    "title": "Luxor.beziertopoly",
-    "category": "function",
-    "text": "beziertopoly(bpseg::BezierPathSegment; steps=10)\n\nConvert a Bezier segment to a polygon (an array of points).\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.drawbezierpath",
-    "page": "Polygons and paths",
-    "title": "Luxor.drawbezierpath",
-    "category": "function",
-    "text": "drawbezierpath(bezierpath::BezierPath, action=:none;\n    close=true)\n\nDraw the Bézier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n\n\ndrawbezierpath(bps::BezierPathSegment, action=:none;\n    close=false)\n\nDraw the Bézier path segment, and apply the action, such as :none, :stroke, :fill, etc. By default the path is open.\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.makebezierpath",
-    "page": "Polygons and paths",
-    "title": "Luxor.makebezierpath",
-    "category": "function",
-    "text": "makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1)\n\nReturn a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier path is an array of segments (tuples of 4 points); each segment contains the four points that make up a section of the entire Bézier path. smoothing determines how closely the curve follows the polygon. A value of 0 returns a straight-sided path; as values move above 1 the paths deviate further from the original polygon\'s edges.\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.pathtobezierpaths",
-    "page": "Polygons and paths",
-    "title": "Luxor.pathtobezierpaths",
-    "category": "function",
-    "text": "pathtobezierpaths(\n    ; flat=true)\n\nConvert the current path (which may consist of one or more paths) to an array of Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path segment is a tuple of four points. A straight line is converted to a Bezier segment in which the control points are set to be the the same as the end points.\n\nIf flat is true, use getpathflat() rather than getpath().\n\nExample\n\nThis code draws the Bezier segments and shows the control points as \"handles\", like a vector-editing program might.\n\n@svg begin\n    fontface(\"MyanmarMN-Bold\")\n    st = \"goo\"\n    thefontsize = 100\n    fontsize(thefontsize)\n    sethue(\"red\")\n    fontsize(thefontsize)\n    textpath(st)\n    nbps = pathtobezierpaths()\n    for nbp in nbps\n        setline(.15)\n        sethue(\"grey50\")\n        drawbezierpath(nbp, :stroke)\n        for p in nbp\n            sethue(\"red\")\n            circle(p[2], 0.16, :fill)\n            circle(p[3], 0.16, :fill)\n            line(p[2], p[1], :stroke)\n            line(p[3], p[4], :stroke)\n            if p[1] != p[4]\n                sethue(\"black\")\n                circle(p[1], 0.26, :fill)\n                circle(p[4], 0.26, :fill)\n            end\n        end\n    end\nend\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.setbezierhandles",
-    "page": "Polygons and paths",
-    "title": "Luxor.setbezierhandles",
-    "category": "function",
-    "text": "setbezierhandles(bps::BezierPathSegment;\n        angles  = [0.05, -0.1],\n        handles = [0.3, 0.3])\n\nReturn a new Bezier path segment with new locations for the Bezier control points in the Bezier path segment bps.\n\nangles are the two angles that the \"handles\" make with the line direciton.\n\nhandles are the lengths of the \"handles\". 0.3 is a typical value.\n\n\n\n\n\nsetbezierhandles(bezpath::BezierPath;\n        angles=[0 .05, -0.1],\n        handles=[0.3, 0.3])\n\nReturn a new Bezierpath with new locations for the Bezier control points in every Bezier path segment of the BezierPath in bezpath.\n\nangles are the two angles that the \"handles\" make with the line direciton.\n\nhandles are the lengths of the \"handles\". 0.3 is a typical value.\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.shiftbezierhandles",
-    "page": "Polygons and paths",
-    "title": "Luxor.shiftbezierhandles",
-    "category": "function",
-    "text": "shiftbezierhandles(bps::BezierPathSegment;\n    angles=[0.1, -0.1], handles=[1.1, 1.1])\n\nReturn a new BezierPathSegment that modifies the Bezier path in bps by moving the control handles. The values in angles increase the angle of the handles; the values in handles modifies the lengths: 1 preserves the length, 0.5 halves the length of the  handles, 2 doubles them.\n\n\n\n\n\n"
-},
-
-{
-    "location": "polygons.html#Luxor.brush",
-    "page": "Polygons and paths",
-    "title": "Luxor.brush",
-    "category": "function",
-    "text": "brush(pt1, pt2, width=10;\n    strokes=10,\n    minwidth=0.01,\n    maxwidth=0.03,\n    twist = -1,\n    lowhandle  = 0.3,\n    highhandle = 0.7,\n    randomopacity = true,\n    tidystart = false,\n    action = :fill)\n\nDraw a composite brush stroke made up of some randomized individual filled Bezier paths.\n\nnote: Note\nThere is a lot of randomness in this function. Results are unpredictable.\n\n\n\n\n\n"
-},
-
-{
     "location": "polygons.html#Brush-strokes-1",
     "page": "Polygons and paths",
     "title": "Brush strokes",
     "category": "section",
-    "text": "using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/brush.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsethue(\"black\") # hide\nbrush(Point(-250, 0), Point(250, 0), 20,\n    strokes=15,\n    tidystart=true,\n    twist=-5,\n    lowhandle=-0.5,\n    highhandle=0.5)\nfinish() # hide\nnothing # hide(Image: brush)bezier\nbeziercurvature\nbezierfrompoints\nbezierpathtopoly\nbezierstroke\nbeziertopoly\ndrawbezierpath\nmakebezierpath\npathtobezierpaths\nsetbezierhandles\nshiftbezierhandles\nbrush"
+    "text": "using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/brush.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsrand(42) # hide\nsethue(\"black\") # hide\nbrush(Point(-250, 0), Point(250, 0), 20,\n    strokes=15,\n    tidystart=true,\n    twist=-5,\n    lowhandle=-0.5,\n    highhandle=0.5)\nfinish() # hide\nnothing # hide(Image: brush)bezier\nbezier′\nbezier′′\nbeziercurvature\nbezierfrompoints\nbezierpathtopoly\nbezierstroke\nbeziertopoly\ndrawbezierpath\nmakebezierpath\npathtobezierpaths\nsetbezierhandles\nshiftbezierhandles\nfindbeziercontrolpoints\nbrush"
 },
 
 {
@@ -1941,7 +1845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Text on a curve",
     "category": "section",
-    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.(Image: text on a curve or spiral)using Luxor\nDrawing(1800, 1800, \"/tmp/text-spiral.png\")\norigin()\nbackground(\"ivory\")\nfontsize(18)\nfontface(\"LucidaSansUnicode\")\nsethue(\"royalblue4\")\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring,\n    -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\nfontsize(35)\nfontface(\"Agenda-Black\")\ntextcentered(\"julia names(Base)\", 0, 0)\nfinish()\npreview()For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n    clockwise = true,\n    letter_spacing = 0,\n    baselineshift = -20\n    )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n    clockwise = false,\n    letter_spacing = 0,\n    baselineshift = 10\n    )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
+    "text": "Use textcurve(str) to draw a string str on a circular arc or spiral.using Luxor # hide\nDrawing(1800, 1800, \"assets/figures/text-spiral.png\") # hide\norigin() # hide\nbackground(\"ivory\") # hide\nfontsize(16) # hide\nfontface(\"Menlo\") # hide\nsethue(\"royalblue4\") # hide\ntextstring = join(names(Base), \" \")\ntextcurve(\"this spiral contains every word in julia names(Base): \" * textstring,\n    -pi/2,\n    800, 0, 0,\n    spiral_in_out_shift = -18.0,\n    letter_spacing = 0,\n    spiral_ring_step = 0)\nfontsize(35)\nfontface(\"Avenir-Black\")\ntextcentered(\"julia names(Base)\", 0, 0)\nfinish() # hide\nnothing # hide(Image: text on a curve or spiral)For shorter strings, textcurvecentered() tries to place the text on a circular arc by its center point.using Luxor # hide\nDrawing(400, 250, \"assets/figures/text-centered.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontface(\"Arial-Black\")\nfontsize(24) # hide\nsethue(\"black\") # hide\nsetdash(\"dot\") # hide\nsetline(0.25) # hide\ncircle(O, 100, :stroke)\ntextcurvecentered(\"hello world\", -pi/2, 100, O;\n    clockwise = true,\n    letter_spacing = 0,\n    baselineshift = -20\n    )\ntextcurvecentered(\"hello world\", pi/2, 100, O;\n    clockwise = false,\n    letter_spacing = 0,\n    baselineshift = 10\n    )\nfinish() # hide\nnothing # hide(Image: text centered on curve)textcurve\ntextcurvecentered"
 },
 
 {
