@@ -1056,3 +1056,50 @@ nothing # hide
 ```@docs
 bars
 ```
+
+### Box maps
+
+The `boxmap()` function divides a rectangular area into smaller boxes or tiles based on the values of elements in an array.
+
+This example uses a short section of the Fibonacci sequence to determine the area of the boxes. Notice that the values are sorted in reverse, and are scaled to fit in the available area.
+
+```@example
+using Luxor, Colors, Random # hide
+Drawing(800, 450, "assets/figures/boxmap.png")  # hide
+srand(13) # hide
+origin() # hide
+background("white") # hide
+
+fib = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+
+# make a boxmap and store the tiles
+tiles = boxmap(fib, BoundingBox()[1], 800, 450)
+
+for (n, t) in enumerate(tiles)
+    randomhue()
+    bb = BoundingBox(t)
+    sethue("black")
+    box(bb - 5, :stroke)
+
+    randomhue()
+    box(bb - 8, :fill)
+
+    # text labels
+    sethue("white")
+
+    # rescale text to fit better
+    fontsize(boxwidth(bb) > boxheight(bb) ? boxheight(bb)/4 : boxwidth(bb)/4)
+    text(string(sort(fib, rev=true)[n]),
+        midpoint(bb[1], bb[2]),
+        halign=:center,
+            valign=:middle)
+end
+
+finish() # hide
+nothing # hide
+```
+![boxmap](assets/figures/boxmap.png)
+
+```@docs
+boxmap
+```

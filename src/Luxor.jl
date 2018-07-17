@@ -33,6 +33,7 @@ include("bezierpath.jl")
 include("mesh.jl")
 include("Table.jl")
 include("BoundingBox.jl")
+include("Boxmaptile.jl")
 include("deprecations.jl")
 #include("shapefile.jl")
 
@@ -62,6 +63,8 @@ export Drawing, currentdrawing,
 
     BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio, boxtop, boxbottom,
 
+    Boxmaptile, boxmap,
+    
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
