@@ -75,7 +75,7 @@ Return the second derivative of Bezier function.
 """
 bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
 
-@doc doc"""
+"""
     beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
 
 Return the curvature of the Bezier curve at `t` ([0-1]), given start and end
@@ -86,10 +86,12 @@ range.
 κ(t) is the curvature of the curve at point t, which for a parametric planar
 curve is:
 
-\begin{equation}
-\kappa = \frac{\mid \dot{x}\ddot{y}-\dot{y}\ddot{x}\mid}
-    {(\dot{x}^2 + \dot{y}^2)^{\frac{3}{2}}}
+```math
+\\begin{equation}
+\\kappa = \\frac{\\mid \\dot{x}\\ddot{y}-\\dot{y}\\ddot{x}\\mid}
+    {(\\dot{x}^2 + \\dot{y}^2)^{\\frac{3}{2}}}
 \end{equation}
+```
 
 The radius of curvature, or the radius of an osculating circle at a point, is
 1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points

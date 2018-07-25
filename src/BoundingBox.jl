@@ -19,6 +19,11 @@ BoundingBox()
 
 Return a BoundingBox the same size and position as the current drawing, assuming
 the origin (0//0) is at the center.
+
+The `centered` option defaults to `true`, and assumes the drawing is currently
+centered. If `false`, the function assumes that the origin is at the top left
+of the drawing. So this function doesn't really work if the current matrix has
+been modified (by `translate()`, `scale()`, `rotate()` etc.)
 """
 function BoundingBox(;centered=true)
     if centered

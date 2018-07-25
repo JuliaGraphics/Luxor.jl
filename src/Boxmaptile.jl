@@ -5,10 +5,11 @@ struct BoxmapTile
     h::Float64
 end
 
+
 """
     buildrow(A, x, y, w, h)
 
-make a set of tiles in a row
+make a row of tiles
 """
 function buildrow(A, x, y, w, h)
     covered = sum(A)
@@ -24,7 +25,7 @@ end
 """
     buildcolumn(A, x, y, w, h)
 
-make a set of tiles in a column
+make a column of tiles
 """
 function buildcolumn(A, x, y, w, h)
     covered = sum(A)
@@ -40,7 +41,7 @@ end
 """
     layout(A, x, y, w, h)
 
-call buildrow or buildcolumn
+make a row of tiles (if wide) or a column of tiles (if high)
 """
 function layout(A, x, y, w, h)
     if w >= h
@@ -50,37 +51,37 @@ function layout(A, x, y, w, h)
     end
 end
 
-function leftoverrow(A, x, y, w, h)
+function rowlayoutleftover(A, x, y, w, h)
     covered = sum(A)
     width = covered/h
-    leftoverx = x + width
-    leftoverw = w - width
-    return leftoverx, y, leftoverw, h
+    layoutleftoverx = x + width
+    layoutleftoverw = w - width
+    return layoutleftoverx, y, layoutleftoverw, h
 end
 
-function leftovercol(A, x, y, w, h)
+function columnlayoutleftover(A, x, y, w, h)
     covered = sum(A)
     height = covered/w
-    leftovery = y + height
-    leftoverh = h - height
-    return x, leftovery, w, leftoverh
+    layoutleftovery = y + height
+    layoutleftoverh = h - height
+    return x, layoutleftovery, w, layoutleftoverh
 end
 
-function leftover(A, x, y, w, h)
+function layoutleftover(A, x, y, w, h)
     if w >= h
-        return leftoverrow(A, x, y, w, h)
+        return rowlayoutleftover(A, x, y, w, h)
     else
-        return leftovercol(A, x, y, w, h)
+        return columnlayoutleftover(A, x, y, w, h)
     end
 end
 
 """
-    worst()
+    highestaspectratio()
 
 Find the highest aspect ratio of a list of rectangles, given the length
 of the side along which they are to be laid out.
 """
-function worst(A, x, y, w, h)
+function highestaspectratio(A, x, y, w, h)
     return maximum([max(tile.w/tile.h, tile.h/tile.w) for tile in layout(A, x, y, w, h)])
 end
 
@@ -89,11 +90,11 @@ function buildboxmap(A, x, y, w, h)
     length(A) == 1 && return layout(A, x, y, w, h)
     i = 1
     while i < length(A) &&
-        (worst(A[1:i], x, y, w, h) >= worst(A[1:i+1], x, y, w, h))
+        (highestaspectratio(A[1:i], x, y, w, h) >= highestaspectratio(A[1:i+1], x, y, w, h))
         i += 1
     end
-    leftoverx, leftovery, leftoverw, leftoverh = leftover(A[1:i], x, y, w, h)
-    return append!(layout(A[1:i], x, y, w, h), buildboxmap(A[i+1:end], leftoverx, leftovery, leftoverw, leftoverh))
+    layoutleftoverx, layoutleftovery, layoutleftoverw, layoutleftoverh = layoutleftover(A[1:i], x, y, w, h)
+    return append!(layout(A[1:i], x, y, w, h), buildboxmap(A[i+1:end], layoutleftoverx, layoutleftovery, layoutleftoverw, layoutleftoverh))
 end
 
 """
@@ -136,6 +137,8 @@ end 400 400 "/tmp/boxmap.svg"
 ```
 """
 function boxmap(A, pt::Point, w, h)
+    # algorithm basically from Bruls, Huizing, van Wijk, "Squarified Treemaps"
+    # without the silly name
     !all(n -> n > 0, A) && error("all values must be positive")
     sort!(A, rev=true)
     totalvalue = sum(A)
