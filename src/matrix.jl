@@ -168,7 +168,7 @@ function juliatocairomatrix(c::Matrix)
     return [c[1] c[2] c[4] c[5] c[7] c[8]]
 end
 
-@doc doc"""
+"""
     getrotation(R::Matrix)
     getrotation()
 

@@ -11,7 +11,27 @@ if isdefined(Base, :scale)
     import Base: scale
 end
 
-using Colors, Cairo, FileIO, Juno, Dates
+using Juno
+
+using Colors, FileIO, Dates
+
+using Cairo
+
+#= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface,
+CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
+CairoContext, arc, arc_negative, circle, clip, clip_preserve, close_path,
+convert_cairo_path_data, copy_path, copy_path_flat, curve_to, destroy, fill,
+fill_preserve, finish, get_matrix, get_operator, height, image, line_to,
+mesh_pattern_begin_patch, mesh_pattern_curve_to, mesh_pattern_end_patch,
+mesh_pattern_line_to, mesh_pattern_move_to, mesh_pattern_set_corner_color_rgba,
+move_to, new_path, new_sub_path,paint, paint_with_alpha,
+pattern_add_color_stop_rgba, pattern_create_linear, pattern_create_radial,
+read_from_png, rectangle, rel_line_to, rel_move_to, reset_clip, restore, rotate,
+save, scale, select_font_face, set_antialias, set_font_face, set_font_size,
+set_line_cap, set_line_join, set_line_type, set_line_width, set_matrix,
+set_operator, set_source, set_source_rgba, set_source_surface, show_text,
+status, stroke, stroke_preserve, text, text_extents, text_path, translate,
+width, write_to_png =#
 
 include("point.jl")
 include("basics.jl")
@@ -64,7 +84,7 @@ export Drawing, currentdrawing,
     BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio, boxtop, boxbottom,
 
     Boxmaptile, boxmap,
-    
+
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
@@ -180,8 +200,10 @@ function Base.show(io::IO, d::Luxor.Drawing)
 """)
 end
 
-Base.mimewritable(::MIME"image/svg+xml",d::Luxor.Drawing) = d.surfacetype == :svg
-Base.mimewritable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
+# in memory:
+
+Base.showable(::MIME"image/svg+xml",d::Luxor.Drawing) = d.surfacetype == :svg
+Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
 
 function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
     write(f, d.bufferdata)
@@ -274,7 +296,7 @@ creates the drawing A4 landscape size.
 PDF files default to a white background, but PNG defaults to transparent, unless you specify
 one using `background()`.
 """
-function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
+function Drawing(w=800.0, h=800.0, f::String="luxor-drawing.png")
     global currentdrawing
     (path, ext)         = splitext(f)
     currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f)
@@ -314,10 +336,6 @@ function finish()
 
     return true
 end
-
-# Juno support
-
-include("atom.jl")
 
 """
     preview()

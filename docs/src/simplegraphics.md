@@ -844,7 +844,7 @@ nothing # hide
 
 The bounding box objects can be passed to `box()` or `poly()` to be drawn.
 
-You can also do some arithmetic on bounding boxes. In the next example, the text's bounding box is filled with yellow, increased by 20 units (blue), scaled by 1.3 (green), and shifted by `(0, 100)` (orange).
+You can also do some arithmetic on bounding boxes. In the next example, the text's bounding box is filled with yellow, increased by 40 units (blue), scaled by 1.3 (green), and shifted by `(0, 100)` (orange).
 
 ```@example
 using Luxor # hide
@@ -861,7 +861,7 @@ sethue("black")
 text(str)
 
 sethue("blue")
-modbox = BoundingBox(str) + 40 # add 20 units to all sides
+modbox = BoundingBox(str) + 40 # add 40 units to all sides
 poly(modbox, :stroke, close=true)
 
 sethue("green")
