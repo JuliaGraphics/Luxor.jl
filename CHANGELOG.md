@@ -1,6 +1,6 @@
 # Changelog
 
-## [v0.11.1] the next release
+## [v0.11.1] - 2018-07-29
 
 ### Added
 
