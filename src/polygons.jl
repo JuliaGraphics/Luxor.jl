@@ -697,6 +697,38 @@ function polyremainder(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdi
 end
 
 """
+    polysample(p::AbstractArray{Point, 1}, npoints::Int64)
+
+Sample the polygon `p`, returning a polygon with `npoints` to represent it. The
+first sampled point is:
+
+     1/`npoints` * `perimeter of p`
+
+away from the original first point of `p`.
+
+If `npoints` is the same as `length(p)` the returned polygon is the same as the
+original, but the first point finishes up at the end (so `new=circshift(old,
+1)`).
+"""
+function polysample(p::AbstractArray{Point, 1}, npoints::Int64)
+    length(p) < 2 && error("not enough points in polygon to take samples")
+    npoints < 2  && return p[[1, end]]
+    distances = polydistances(p, closed=true)
+    result = Point[]
+    for i in 1:npoints
+        ind, surplus = nearestindex(distances, (i/npoints) * distances[end])
+        if surplus > 0.0
+            nextind = mod1(ind + 1, length(p))
+            overshootpoint = between(p[ind], p[nextind], surplus/distance(p[ind], p[nextind]))
+            push!(result, overshootpoint)
+        else
+            push!(result, p[i])
+        end
+    end
+    return result
+end
+
+"""
     polyarea(p::AbstractArray)
 
 Find the area of a simple polygon. It works only for polygons that don't

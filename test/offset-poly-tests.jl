@@ -8,7 +8,7 @@ function offset_poly_test(fname)
     Drawing("A2", fname)
     origin()
     background("white")
-    srand(42)
+    Random.seed!(42)
     setline(1.5)
 
     tiles = Tiler(currentdrawing.width, currentdrawing.height, 6, 6, margin=20)

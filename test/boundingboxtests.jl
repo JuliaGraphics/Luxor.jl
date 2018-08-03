@@ -85,7 +85,7 @@ function test_bboxes(fname)
     println("...finished bounding box test, saved in $(fname)")
 end
 
-srand(42)
+Random.seed!(42)
 
 fname = "bounding-box-test.png"
 

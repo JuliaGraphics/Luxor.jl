@@ -25,7 +25,7 @@ function arrow_test(fname)
   @test finish() == true
 end
 
-srand(42)
+Random.seed!(42)
 fname = "arrow-line-test.pdf"
 arrow_test(fname)
 println("...finished test: output in $(fname)")

@@ -574,7 +574,7 @@ end
 
 ```@setup te7
 using Luxor, Random
-srand(42)
+Random.seed!(42)
 Drawing(725, 500, "assets/figures/tutorial-egg-7.png")
 function egg(radius, action=:none)
     A, B = [Point(x, 0) for x in [-radius, radius]]
@@ -780,7 +780,7 @@ function egg(radius, action=:none)
 end
 background("white")
 origin()
-srand(42)
+Random.seed!(42)
 egg(80, :path)
 pgon = first(pathtopoly())
 pc = polycentroid(pgon)

@@ -13,7 +13,7 @@ For basic transformations of the drawing space, use `scale(sx, sy)`, `rotate(a)`
 using Luxor, Colors, Random # hide
 Drawing(600, 200, "assets/figures/translate.png") # hide
 background("white") # hide
-srand(1) # hide
+Random.seed!(1) # hide
 setline(1) # hide
 origin()
 for i in range(0, step=30, length=6)
@@ -36,7 +36,7 @@ nothing # hide
 using Luxor, Colors, Random # hide
 Drawing(400, 200, "assets/figures/scale.png") # hide
 background("white") # hide
-srand(1) # hide
+Random.seed!(1) # hide
 setline(1) # hide
 origin()
 for i in range(0, step=30, length=6)
@@ -59,7 +59,7 @@ nothing # hide
 using Luxor, Random # hide
 Drawing(400, 200, "assets/figures/rotate.png") # hide
 background("white") # hide
-srand(1) # hide
+Random.seed!(1) # hide
 setline(1) # hide
 origin()
 setopacity(0.7) # hide

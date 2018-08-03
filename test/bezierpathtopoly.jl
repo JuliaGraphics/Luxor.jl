@@ -33,7 +33,7 @@ function bezpathtopolytest(fname)
     @test length(p2) == 55
     @test typeof(p2[1]) == Luxor.Point
 
-    srand(3)
+    Random.seed!(3)
     setline(0.01)
     currentwidth = 800
     currentheight = 800

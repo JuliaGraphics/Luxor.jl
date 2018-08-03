@@ -1,5 +1,21 @@
 # Changelog
 
+
+## [in development] - 2018-08 ...
+
+### Added
+
+- `polysample()`
+
+### Changed
+
+- `srand` to `Random.seed!`
+- replaced Appveyor script from https://github.com/JuliaCI/Appveyor.jl
+
+### Removed
+
+### Deprecated
+
 ## [v0.11.1] - 2018-07-29
 
 ### Added

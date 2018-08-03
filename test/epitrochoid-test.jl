@@ -49,7 +49,7 @@ function test_epitrochoid(fname)
     @test finish() == true
 end
 
-srand(42)
+Random.seed!(42)
 
 fname = "epitrochoid-test.pdf"
 test_epitrochoid(fname)

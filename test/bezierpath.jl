@@ -5,7 +5,7 @@ using Luxor, Random
 using Test
 
 function bezierpathtest(fname)
-    srand(3)
+    Random.seed!(3)
     currentwidth = 1200
     currentheight = 1200
     Drawing(currentwidth, currentheight, fname)
@@ -27,7 +27,7 @@ function bezierpathtest(fname)
 end
 
 function pathtobezierpath(fname)
-    srand(3)
+    Random.seed!(3)
     currentwidth = 800
     currentheight = 800
     Drawing(currentwidth, currentheight, fname)

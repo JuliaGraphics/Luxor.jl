@@ -57,7 +57,7 @@ end
 
 using Random
 
-srand(42)
+Random.seed!(42)
 
 fname = "hypotrochoid-test.pdf"
 test_hypotrochoid(fname)

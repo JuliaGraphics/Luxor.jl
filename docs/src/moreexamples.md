@@ -63,7 +63,7 @@ Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(1) # hide
 p = star(O, 60, 5, 0.35, 0, vertices=true)
 setdash("dot")
@@ -86,7 +86,7 @@ Drawing(600, 250, "assets/figures/polysmoothy.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(1) # hide
 p = star(O, 60, 5, 0.35, 0, vertices=true)
 setdash("dot")

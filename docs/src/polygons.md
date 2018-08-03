@@ -190,7 +190,7 @@ Use `poly()` to draw lines connecting the points and/or just fill the area:
 using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/simplepoly.png") # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 origin() # hide
 sethue("orchid4") # hide
 tiles = Tiler(600, 250, 1, 2, margin=20)
@@ -293,7 +293,7 @@ Recursive decoration is possible:
 using Luxor, Random # hide
 Drawing(400, 260, "assets/figures/prettypolyrecursive.png") # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 origin() # hide
 sethue("magenta") # hide
 setopacity(0.5) # hide
@@ -378,7 +378,7 @@ You can use `randompoint()` and `randompointarray()` to create a random Point or
 using Luxor, Random # hide
 Drawing(400, 250, "assets/figures/randompoints.png") # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 origin() # hide
 
 pt1 = Point(-100, -100)
@@ -412,7 +412,7 @@ using Luxor, Random # hide
 Drawing(400, 150, "assets/figures/polysplit.png") # hide
 origin() # hide
 setopacity(0.7) # hide
-srand(42) # hide
+Random.seed!(42) # hide
 sethue("black") # hide
 s = squircle(O, 60, 60, vertices=true)
 pt1 = Point(0, -120)
@@ -446,7 +446,7 @@ Drawing(600, 250, "assets/figures/polysmooth.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.5) # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(0.7) # hide
 tiles = Tiler(600, 250, 1, 5, margin=10)
 for (pos, n) in tiles
@@ -473,7 +473,7 @@ Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(1) # hide
 p = star(O, 60, 5, 0.35, 0, vertices=true)
 setdash("dot")
@@ -501,7 +501,7 @@ using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyoffset-simple.png") # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(1.5) # hide
 
 p = star(O, 45, 5, 0.5, 0, vertices=true)
@@ -544,7 +544,7 @@ using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyfit.png") # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 
 pts = [Point(x, rand(-100:100)) for x in -280:30:280]
 setopacity(0.7)
@@ -659,7 +659,7 @@ using Luxor, Random # hide
 Drawing(600, 320, "assets/figures/bezierpaths.png") # hide
 background("white") # hide
 origin() # hide
-srand(3) # hide
+Random.seed!(3) # hide
 tiles = Tiler(600, 300, 1, 4, margin=20)
 for (pos, n) in tiles
     @layer begin
@@ -690,7 +690,7 @@ using Luxor, Random # hide
 Drawing(600, 600, "assets/figures/bezierpathtopoly.png") # hide
 background("white") # hide
 origin() # hide
-srand(3) # hide
+Random.seed!(3) # hide
 
 pgon = star(O, 250, 5, 0.6, 0, vertices=true)
 
@@ -766,7 +766,7 @@ using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/brush.png") # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 sethue("black") # hide
 brush(Point(-250, 0), Point(250, 0), 20,
     strokes=15,
@@ -807,7 +807,7 @@ using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyperimeter.png") # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(1.5) # hide
 sethue("black") # hide
 fontsize(20) # hide
@@ -826,6 +826,10 @@ nothing # hide
 
 ![polyperimeter](assets/figures/polyperimeter.png)
 
+### Polygon resampling
+
+Luxor functions can return the first part or last part of a polygon. Or you can ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the "lines" joining the vertices) or decrease them (which changes the shape of the polygon).
+
 `polyportion()` and `polyremainder()` return part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns the first half of polygon `p`, `polyremainder(p, .75)` returns the last quarter of it.
 
 ```@example
@@ -833,7 +837,7 @@ using Luxor, Random # hide
 Drawing(600, 250, "assets/figures/polyportion.png") # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 setline(1.5) # hide
 sethue("black") # hide
 fontsize(20) # hide
@@ -862,6 +866,39 @@ nothing # hide
 ```
 
 ![polyportion](assets/figures/polyportion.png)
+
+To resample a polygon, use `polysample()`. In this example, the same four-sided polygon is sampled at multiples of 4, with different circle radii at each multiple. This adds more points to the original polygon.
+
+```@example
+using Luxor, Random # hide
+Drawing(600, 250, "assets/figures/polysample.png") # hide
+origin() # hide
+background("white") # hide
+Random.seed!(42) # hide
+
+origin() # hide
+background("white") # hide
+Random.seed!(42) # hide
+setline(1) # hide
+sethue("black") # hide
+
+pts = ngon(O, 100, 4, vertices=true)
+for (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))
+    prettypoly(polysample(pts, npoints),
+        :stroke, close=true,
+        () -> begin
+                circle(O, 2n, :stroke)
+              end)
+end    
+
+finish() # hide
+nothing # hide
+```
+
+![polysampling](assets/figures/polysample.png)
+
+
+### Polygon side lengths
 
 `polydistances` returns an array of the accumulated side lengths of a polygon.
 
@@ -975,7 +1012,7 @@ using Luxor, Random # hide
 Drawing(600, 550, "assets/figures/linepolyintersections.png") # hide
 origin() # hide
 background("white") # hide
-srand(5) # hide
+Random.seed!(5) # hide
 setline(0.3)
 sethue("thistle")
 c = star(O, 120, 7, 0.2, vertices=true)
