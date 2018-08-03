@@ -27,7 +27,7 @@ using Luxor, Random # hide
 Drawing(400, 300, "assets/figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
-srand(1) # hide
+Random.seed!(1) # hide
 fontsize(20) # hide
 tiles = Tiler(400, 300, 4, 5, margin=5)
 for (pos, n) in tiles
@@ -119,7 +119,7 @@ using Luxor, Random # hide
 Drawing(600, 400, "assets/figures/table2.png") # hide
 background("white") # hide
 origin() # hide
-srand(42) # hide
+Random.seed!(42) # hide
 fontface("Helvetica-Bold") # hide
 fontsize(20) # hide
 sethue("black")
@@ -202,7 +202,7 @@ end
 Drawing(700, 250, "assets/figures/arraytable.png")  # hide
 origin() # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 A = rand(6, 6)
 l, h = extrema(A)
 rt, ct = size(A)
@@ -235,7 +235,7 @@ Drawing(700, 250, "assets/figures/grids.png")  # hide
 background("white") # hide
 fontsize(14) # hide
 translate(50, 50) # hide
-srand(42) # hide
+Random.seed!(42) # hide
 grid = GridRect(O, 40, 80, (10 - 1) * 40)
 for i in 1:20
     randomhue()
@@ -255,7 +255,7 @@ using Luxor, Random # hide
 Drawing(700, 400, "assets/figures/grid-hex.png")  # hide
 background("white") # hide
 fontsize(22) # hide
-srand(42)
+Random.seed!(42)
 translate(100, 100) # hide
 radius = 70
 grid = GridHex(O, radius, 600)

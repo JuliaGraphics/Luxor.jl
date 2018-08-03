@@ -15,7 +15,7 @@ function draw_luxor_demo(fname, flag)
     setline(20)         # line width
     # graphics functions use :fill, :stroke, :fillstroke, :clip, or leave blank
     rect(-400,-400,800,800, :fill)
-    srand(42)
+    Random.seed!(42)
     randomhue()
     circle(0, 0, 460, :stroke)
 

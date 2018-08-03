@@ -5,7 +5,7 @@ using Luxor, Random
 using Test
 
 function testtable(fname)
-    srand(3)
+    Random.seed!(3)
     currentwidth = 800
     currentheight = 800
     Drawing(currentwidth, currentheight, fname)

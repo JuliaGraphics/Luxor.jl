@@ -5,7 +5,7 @@ using Luxor, Random
 using Test
 
 function testbezierstroke(fname)
-    srand(3)
+    Random.seed!(3)
     currentwidth = 1200
     currentheight = 1200
     Drawing(currentwidth, currentheight, fname)

@@ -72,7 +72,7 @@ function test_hypotrochoid_at_pdf()
     end 1200 1200
 end
 
-srand(42)
+Random.seed!(42)
 
 test_hypotrochoid_at_png() ; println("output PNG")
 test_hypotrochoid_at_svg() ; println("output SVG")

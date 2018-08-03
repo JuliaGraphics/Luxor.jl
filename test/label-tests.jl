@@ -4,7 +4,7 @@ using Luxor, Random
 
 using Test
 
-srand(42)
+Random.seed!(42)
 
 function testlabels(fname)
     pagewidth, pageheight = 800, 800

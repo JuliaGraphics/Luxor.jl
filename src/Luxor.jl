@@ -1,5 +1,3 @@
-__precompile__()
-
 """
 The Luxor package provides a set of vector drawing functions for creating graphical documents.
 """
@@ -102,7 +100,7 @@ export Drawing, currentdrawing,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
-    polyarea,
+    polyarea, polysample,
 
     @polar, polar,
 

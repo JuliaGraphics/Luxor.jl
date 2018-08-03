@@ -108,7 +108,7 @@ using Luxor, Random # hide
 Drawing(500, 300, "assets/figures/ellipses.png") # hide
 background("white") # hide
 fontsize(11) # hide
-srand(1) # hide
+Random.seed!(1) # hide
 origin() # hide
 tiles = Tiler(500, 300, 5, 5)
 width = 20
@@ -135,7 +135,7 @@ Drawing(400, 220, "assets/figures/ellipses_1.png") # hide
 origin() # hide
 background("white") # hide
 
-srand(42) # hide
+Random.seed!(42) # hide
 sethue("black") # hide
 setline(1) # hide
 fontface("Menlo")
@@ -508,7 +508,7 @@ nothing # hide
 using Luxor, Random # hide
 Drawing(700, 200, "assets/figures/arc2r.png") # hide
 origin() # hide
-srand(42) # hide
+Random.seed!(42) # hide
 background("white") # hide
 tiles = Tiler(700, 200, 1, 6)
 for (pos, n) in tiles
@@ -752,7 +752,7 @@ A couple of functions in Luxor provide you with instant access to the Julia logo
 ```@example
 using Luxor, Random # hide
 Drawing(750, 250, "assets/figures/julia-logo.png")  # hide
-srand(42) # hide
+Random.seed!(42) # hide
 origin()  # hide
 background("white") # hide
 
@@ -884,7 +884,7 @@ You can find the union and intersection of BoundingBoxes, and also find whether 
 using Luxor, Random # hide
 Drawing(600, 400, "assets/figures/bbox3.png") # hide
 background("white") # hide
-srand(42) # hide
+Random.seed!(42) # hide
 
 origin()
 setopacity(0.75)
@@ -1013,7 +1013,7 @@ To change the way the bars and labels are drawn, define some functions and pass 
 ```@example
 using Luxor, Colors, Random # hide
 Drawing(800, 450, "assets/figures/bars1.png")  # hide
-srand(2) # hide
+Random.seed!(2) # hide
 origin() # hide
 background("white") # hide
 setopacity(0.8) # hide
@@ -1066,7 +1066,7 @@ This example uses a short section of the Fibonacci sequence to determine the are
 ```@example
 using Luxor, Colors, Random # hide
 Drawing(800, 450, "assets/figures/boxmap.png")  # hide
-srand(13) # hide
+Random.seed!(13) # hide
 origin() # hide
 background("white") # hide
 
