@@ -5,15 +5,9 @@
 | [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
 | [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.6-img]][pkg-0.6-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
 
-## Status as of 2018-06-16
+## Status as of 2018-08-04
 
-Mostly functional on Julia v0.7. Hopefully the deprecation warnings should fade away.
-
-### Deprecations and warnings
-
-* `norm(pt1::Point, pt2::Point)` is now `distance(pt1::Point, pt2::Point)`
-* `dot(pt1::Point, pt2::Point)`  is now `dotproduct(pt1::Point, pt2::Point)`
-* `axes()` is now `rulers()`
+Compatible with Julia v0.7 release candidate 2. If you can install Cairo successfully, you should be OK.
 
 [![][pkg-0.7-img]][pkg-0.7-url]
 
