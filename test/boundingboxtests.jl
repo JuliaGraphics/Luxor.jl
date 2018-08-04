@@ -13,7 +13,6 @@ function test_bboxes(fname)
     setline(40)
     sethue("blue")
     box(BoundingBox(), :stroke)
-
     sethue("red")
     box(BoundingBox() * 0.9, :stroke)
 
@@ -21,13 +20,21 @@ function test_bboxes(fname)
     box(BoundingBox(centered=false) * 0.9, :stroke)
 
     sethue("purple")
-    setopacity(0.5)
+    setopacity(0.7)
     fontsize(100)
     box(BoundingBox("purple"), :fill)
     sethue("white")
     text("purple")
 
-
+    setline(10)
+    sethue("black")
+    bb = BoundingBox()
+    circle(midpoint(bb), 30, :stroke)
+    for i in 0:0.05:1
+        randomhue()
+        circle(between(bb, i), 30, :fill)
+    end
+    
     # combine and intersections
     box1 = BoundingBox()/3 - (200, 200)
     box2 = BoundingBox()/4 - (300, 300)
@@ -36,6 +43,7 @@ function test_bboxes(fname)
     sethue("black")
     setline(2)
     box.([box1, box2, box3, box4], :stroke)
+
 
     sethue("pink")
     box(box1, :fill)
@@ -56,7 +64,7 @@ function test_bboxes(fname)
     bv = box(box1, vertices=true)
     @test isapprox(bv[1].y, -433.33333, atol = 0.01)
 
-
+    setline(1)
     # contains
     for i in 1:1000
         pt = Point(rand(-1000:1000), rand(-1000:1000))

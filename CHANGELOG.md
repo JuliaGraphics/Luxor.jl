@@ -6,13 +6,27 @@
 ### Added
 
 - `polysample()`
+- `Dates` prefix where required
+- `midpoint()`` and `between()`` work on BoundingBoxes
 
 ### Changed
 
 - `srand` to `Random.seed!`
 - replaced Appveyor script from https://github.com/JuliaCI/Appveyor.jl
+- adjusted with imports from Cairo in test scripts
+- `end` in `mod1()`
+- Point is `broadcastable`
+- `preview()`` now returns name of new file, unless in Juno/Jupyter
 
 ### Removed
+
+- fill removed, use fillpath
+- stroke  removed, use strokepath
+- polybbox  removed, use  boundingbox
+- bboxesintersect  removed, use  boundingboxesintersect
+- norm  removed, use  distance
+- dot  removed, use  dotproduct
+- axes  removed, use rulers
 
 ### Deprecated
 

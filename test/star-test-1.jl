@@ -16,7 +16,7 @@ for y in 100 * randn(h, 1)
     setcolor(cols[rand(1:end)])
     # star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0, action=:nothing; vertices = false, reversepath=false)
     star(x, y, 10, rand(4:7), rand(3:7)/10, 0, :fill)
-    x += 2
+    global x += 2
 end
 @test finish() == true
 println("...finished test: output in $(fname)")

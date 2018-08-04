@@ -286,3 +286,18 @@ end
 Returns `true` if `pt` is inside bounding box `bb`.
 """
 isinside(p::Point, bb::BoundingBox) = (bb.corner1.x <= p.x <= bb.corner2.x) && (bb.corner1.y <= p.y <= bb.corner2.y)
+
+"""
+    midpoint(bb::BoundingBox)
+
+Returns the point midway between the two points of the BoundingBox.
+"""
+midpoint(bb::BoundingBox) = midpoint(bb...)
+
+"""
+between(bb::BoundingBox, x)
+
+Find a point between the two corners of a BoundingBox corresponding to `x`,
+where `x` is typically between 0 and 1.
+"""
+between(bb::BoundingBox, k=0.5) = between(bb[1], bb[2], k)

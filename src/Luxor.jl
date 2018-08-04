@@ -53,7 +53,7 @@ include("Table.jl")
 include("BoundingBox.jl")
 include("Boxmaptile.jl")
 include("deprecations.jl")
-#include("shapefile.jl")
+#include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
 export Drawing, currentdrawing,
     cm, inch, mm,
@@ -190,18 +190,28 @@ mutable struct Drawing
 end
 
 function Base.show(io::IO, d::Luxor.Drawing)
-  print(io, """    width:    $(d.width)
+  print(io, """\n    width:    $(d.width)
     height:   $(d.height)
     filename: $(d.filename)
     type:     $(d.surfacetype)
-    color:    ($(d.redvalue), $(d.greenvalue), $(d.bluevalue), $(d.alpha))
 """)
 end
+
+# How Luxor output works. You start by creating a drawing either aimed at a
+# file (PDF, EPS, PNG, SVG) or aimed at an in-memory buffer (:SVG and :PNG); you
+# could be working in Jupyter or Atom, or a terminal, and on either Mac, Linux,
+# or Windows.  (The @svg/@png/@pdf macros are shortcuts to file-based drawings.)
+# When a drawing is finished, you go `finish()` (that's the last line of the
+# @... macros.). Then, if you want to see it, you go `preview()`. Then the code
+# decides where you're working, and what type of file it is, then sends it to the
+# right place, depending on the OS.
 
 # in memory:
 
 Base.showable(::MIME"image/svg+xml",d::Luxor.Drawing) = d.surfacetype == :svg
 Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
+
+# file-based
 
 function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
     write(f, d.bufferdata)
@@ -355,6 +365,7 @@ function preview()
     Juno.isactive() ? juno = true : juno = false
     if candisplay && jupyter
         Main.IJulia.clear_output(true)
+        returnvalue = nothing
         if currentdrawing.surfacetype == :png
             # avoid world age errors
             Base.invokelatest(display, "image/png", load(currentdrawing.filename))
@@ -365,13 +376,18 @@ function preview()
         end
     elseif candisplay && juno
         display(currentdrawing)
+        returnvalue = nothing
     elseif Sys.isapple()
         run(`open $(currentdrawing.filename)`)
+        returnvalue = currentdrawing.filename
     elseif Sys.iswindows()
         run(ignorestatus(`explorer $(currentdrawing.filename)`))
+        returnvalue = currentdrawing.filename
     elseif Sys.isunix()
         run(`xdg-open $(currentdrawing.filename)`)
+        returnvalue = currentdrawing.filename
     end
+    return returnvalue
 end
 
 """
@@ -446,7 +462,7 @@ Examples
             circle(O, 20, :fill)
          end 1200 1200
 """
-macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).png")
+macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
      quote
         Drawing($width, $height, $fname)
         origin()
@@ -487,7 +503,7 @@ Examples
             circle(O, 20, :fill)
          end 1200, 1200
 """
-macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(now(), "HHMMSS_s")).pdf")
+macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
      quote
         Drawing($width, $height, $fname)
         origin()

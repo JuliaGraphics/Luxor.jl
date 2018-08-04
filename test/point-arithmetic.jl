@@ -1,8 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor
-
-using Test
+using Luxor, Test, Random
 
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)
@@ -16,16 +14,22 @@ function general_tests()
     @test -pt1 == Point(-pt1.x, -pt1.y)
 
     # is point/4 inside a box
+    # a: we now have to wrap arguments with Ref() to ensure they  broadcast as scalar
+    @test isinside(Ref(pt1) ./ 4, box(O, 10, 10, vertices=true))
+
+    # b: but we defined Point as broadcastable, so we shouldn't need that
     @test isinside(pt1 ./ 4, box(O, 10, 10, vertices=true))
 
     # is point not in every corner of box
-    @test all(Point(1, 1) .< box(O, 10, 10, vertices=true)) == false
-    @test any(Point(0, 0) .< [Point(1, 1), Point(1, 2), Point(2, 3)]) == true
+    @test all(Ref(Point(1, 1)) .< box(O, 10, 10, vertices=true)) == false
+    @test any(Ref(Point(0, 0)) .< [Point(1, 1), Point(1, 2), Point(2, 3)]) == true
     # is point outside every corner of box
-    @test all(Point(10, 10)  .> box(O, 10, 10, vertices=true)) == true
+    @test all(Ref(Point(10, 10))  .> box(O, 10, 10, vertices=true)) == true
 
+    # ? do these need Ref()?
     @test .>=(Point(5, 5),  Point(5, 5))
     @test .>=(Point(5, 5),  Point(5, 5))
+
     @test perpendicular(Point(10, 5)) == Point(5.0, -10.0)
     @test perpendicular(Point(-10, -5)) == Point(-5.0,10.0)
 

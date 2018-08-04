@@ -4,6 +4,12 @@ using Luxor
 
 using Test
 
+
+import Cairo.CAIRO_PATH_MOVE_TO
+import Cairo.CAIRO_PATH_LINE_TO
+import Cairo.CAIRO_PATH_CURVE_TO
+import Cairo.CAIRO_PATH_CLOSE_PATH
+
 function get_path_flat(str)
     sethue("blue")
     setopacity(.7)
@@ -14,16 +20,16 @@ function get_path_flat(str)
     sethue("red")
     x, y = 0, 0
     for e in o
-        if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
+        if e.element_type == CAIRO_PATH_MOVE_TO
             (x, y) = e.points
             move(x, y)
-        elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO
+        elseif e.element_type == CAIRO_PATH_LINE_TO
             (x, y) = e.points
             # straight lines
             line(x, y)
             strokepath()
             circle(x, y, 1, :stroke)
-        elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
+        elseif e.element_type == CAIRO_PATH_CURVE_TO
             (x1, y1, x2, y2, x3, y3) = e.points
             # show bezier control lines
             circle(x1, y1, 1, :stroke)
@@ -33,7 +39,7 @@ function get_path_flat(str)
             curve(x1, y1, x2, y2, x3, y3)
             strokepath()
             (x, y) = (x3, y3) # update current point
-        elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
+        elseif e.element_type == CAIRO_PATH_CLOSE_PATH
             closepath()
         else
             error("unknown CairoPathEntry " * repr(e.element_type))
