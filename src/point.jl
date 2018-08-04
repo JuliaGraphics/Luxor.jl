@@ -1,5 +1,5 @@
 import Base: +, -, *, /, ^, !=, <, >, ==
-import Base: isequal, isless, isapprox, cmp, size, getindex
+import Base: isequal, isless, isapprox, cmp, size, getindex, broadcastable
 
 """
 The Point type holds two coordinates. Currently it's immutable, so remember not try to
@@ -40,6 +40,8 @@ const O = Point(0, 0)
 # for broadcasting
 Base.size(::Point) = 2
 Base.getindex(p::Point, i) = [p.x, p.y][i]
+
+Base.broadcastable(x::Point) = Ref(x)
 
 """
     dotproduct(a::Point, b::Point)
@@ -130,13 +132,7 @@ midpoint(pt::AbstractArray) = midpoint(pt[1], pt[2])
     between((p1::Point, p2::Point), x)
 
 Find the point between point `p1` and point `p2` for `x`, where `x` is typically between 0
-and 1, so these two should be equivalent:
-
-    between(p1, p2, 0.5)
-
-and
-
-    midpoint(p1, p2)
+and 1. `between(p1, p2, 0.5)` is equivalent to `midpoint(p1, p2)`.
 """
 function between(p1::Point, p2::Point, x)
     return p1 + (x * (p2 - p1))

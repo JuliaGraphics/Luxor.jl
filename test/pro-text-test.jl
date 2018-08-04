@@ -30,7 +30,7 @@ function test_pro_text(fname)
         # pro api:
         setfont("Georgia $i", i)
         settext(
-            strings[mod1(counter, length(strings))],
+            strings[mod1(counter, end)],
             Point(col1, row),
             halign="left",
             valign="top",

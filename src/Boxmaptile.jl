@@ -9,7 +9,7 @@ end
 """
     buildrow(A, x, y, w, h)
 
-make a row of tiles
+Make a row of tiles from A.
 """
 function buildrow(A, x, y, w, h)
     covered = sum(A)
@@ -25,7 +25,7 @@ end
 """
     buildcolumn(A, x, y, w, h)
 
-make a column of tiles
+Make a column of tiles from A.
 """
 function buildcolumn(A, x, y, w, h)
     covered = sum(A)
@@ -41,7 +41,7 @@ end
 """
     layout(A, x, y, w, h)
 
-make a row of tiles (if wide) or a column of tiles (if high)
+From A, make a row of tiles (if wider than tall) or a column of tiles (if taller than wide).
 """
 function layout(A, x, y, w, h)
     if w >= h
@@ -98,11 +98,11 @@ function buildboxmap(A, x, y, w, h)
 end
 
 """
-    boxmap(A, pt, w, h)
+    boxmap(A::AbstractArray, pt, w, h)
 
-Build a box map with one corner at `pt` and width `w` and height `h`. There are
-`length(A)` boxes. The areas of the boxes are proportional to the original
-values, scaled as necessary.
+Build a box map of the values in `A` with one corner at `pt` and width `w` and
+height `h`. There are `length(A)` boxes. The areas of the boxes are proportional
+to the original values, scaled as necessary.
 
 The return value is an array of BoxmapTiles. For example:
 
@@ -136,7 +136,7 @@ using Luxor
 end 400 400 "/tmp/boxmap.svg"
 ```
 """
-function boxmap(A, pt::Point, w, h)
+function boxmap(A::AbstractArray, pt::Point, w, h)
     # algorithm basically from Bruls, Huizing, van Wijk, "Squarified Treemaps"
     # without the silly name
     !all(n -> n > 0, A) && error("all values must be positive")

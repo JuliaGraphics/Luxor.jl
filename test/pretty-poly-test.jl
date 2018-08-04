@@ -2,7 +2,7 @@
 
 using Luxor
 
-using Test
+using Test, Random
 
 function drawbbox(apoly)
     gsave()

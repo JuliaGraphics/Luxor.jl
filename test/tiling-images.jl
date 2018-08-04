@@ -2,7 +2,7 @@
 
 using Luxor
 
-using Test
+using Test, Random
 
 function get_png_files(folder)
     tempfolder = pwd()
