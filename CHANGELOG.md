@@ -1,13 +1,13 @@
 # Changelog
 
 
-## [in development] - 2018-08 ...
+## [v0.11.2] - 2018-08-04
 
 ### Added
 
 - `polysample()`
 - `Dates` prefix where required
-- `midpoint()`` and `between()`` work on BoundingBoxes
+- `midpoint()` and `between()` work on BoundingBoxes
 
 ### Changed
 
@@ -15,20 +15,21 @@
 - replaced Appveyor script from https://github.com/JuliaCI/Appveyor.jl
 - adjusted with imports from Cairo in test scripts
 - `end` in `mod1()`
-- Point is `broadcastable`
+-  Point is `broadcastable`
 - `preview()`` now returns name of new file, unless in Juno/Jupyter
 
 ### Removed
 
-- fill removed, use fillpath
-- stroke  removed, use strokepath
-- polybbox  removed, use  boundingbox
-- bboxesintersect  removed, use  boundingboxesintersect
-- norm  removed, use  distance
-- dot  removed, use  dotproduct
-- axes  removed, use rulers
+- fill() removed, use fillpath
+- stroke() removed, use strokepath
+- polybbox() removed, use  boundingbox
+- bboxesintersect() removed, use  boundingboxesintersect
+- norm() removed, use  distance
+- dot() removed, use  dotproduct
+- axes() removed, use rulers
 
 ### Deprecated
+
 
 ## [v0.11.1] - 2018-07-29
 
