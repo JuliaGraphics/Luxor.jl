@@ -1,6 +1,19 @@
 # Changelog
 
 
+## [future] - 2018-??.??
+
+### Added
+
+### Changed
+
+- `polysample()` has closed option restored
+
+### Removed
+
+### Deprecated
+
+
 ## [v0.11.2] - 2018-08-04
 
 ### Added
@@ -15,18 +28,18 @@
 - replaced Appveyor script from https://github.com/JuliaCI/Appveyor.jl
 - adjusted with imports from Cairo in test scripts
 - `end` in `mod1()`
--  Point is `broadcastable`
-- `preview()`` now returns name of new file, unless in Juno/Jupyter
+- Point is `broadcastable`
+- `preview()` now returns name of new file, unless in Juno/Jupyter
 
 ### Removed
 
-- fill() removed, use fillpath
-- stroke() removed, use strokepath
-- polybbox() removed, use  boundingbox
-- bboxesintersect() removed, use  boundingboxesintersect
-- norm() removed, use  distance
-- dot() removed, use  dotproduct
-- axes() removed, use rulers
+- `fill()` removed, use fillpath
+- `stroke()` removed, use strokepath
+- `polybbox()` removed, use  boundingbox
+- `bboxesintersect()` removed, use  boundingboxesintersect
+- `norm()` removed, use  distance
+- `dot()` removed, use  dotproduct
+- `axes()` removed, use rulers
 
 ### Deprecated
 
