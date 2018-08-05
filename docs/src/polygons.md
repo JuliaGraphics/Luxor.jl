@@ -870,15 +870,10 @@ nothing # hide
 To resample a polygon, use `polysample()`. In this example, the same four-sided polygon is sampled at multiples of 4, with different circle radii at each multiple. This adds more points to the original polygon.
 
 ```@example
-using Luxor, Random # hide
+using Luxor # hide
 Drawing(600, 250, "assets/figures/polysample.png") # hide
 origin() # hide
 background("white") # hide
-Random.seed!(42) # hide
-
-origin() # hide
-background("white") # hide
-Random.seed!(42) # hide
 setline(1) # hide
 sethue("black") # hide
 
@@ -897,6 +892,52 @@ nothing # hide
 
 ![polysampling](assets/figures/polysample.png)
 
+There is a `closed` option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is first sampled as a closed polygon, then as a non-closed one.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/polysample2.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+sethue("black") # hide
+fontsize(8) # hide
+
+translate(0, -50) # hide
+setline(1) # hide
+sethue("black") # hide
+
+numbervertices(l, n) = label(string(l), :N, O)
+drawvertices() = ngon(O, 3, 4, 0, :fill)
+
+pts = [Point(30x, 20sin(x)) for x in -2pi:pi/6:2pi]
+
+prettypoly(pts, "stroke", drawvertices, vertexlabels = numbervertices)
+
+translate(0, 50)
+
+npoints = 40
+
+sethue("cornflowerblue")
+prettypoly(polysample(pts, npoints, closed=true), :stroke, drawvertices,
+    vertexlabels = numbervertices)
+
+translate(0, 50)
+
+sethue("magenta")
+prettypoly(polysample(pts, npoints, closed=false), :stroke, drawvertices,
+    vertexlabels = numbervertices)
+
+
+finish() # hide
+nothing # hide
+```
+
+![polysampling 2](assets/figures/polysample2.png)
+
+```@docs
+polysample
+```
 
 ### Polygon side lengths
 
