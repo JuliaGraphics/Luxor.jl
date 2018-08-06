@@ -16,10 +16,9 @@ notifications:
   email: false
 
 before_script:
-  - julia -e 'using Pkg; Pkg.add("StaticArrays")'
-  - julia -e 'using Pkg; Pkg.add("OrdinaryDiffEq")'
   - julia -e 'using Pkg; Pkg.add("Coverage")'
   - julia -e 'using Pkg; Pkg.add("Colors")'
+  - julia -e 'using Pkg; Pkg.add("Luxor")'
 
 after_success:
   - test $TRAVIS_OS_NAME = "macos" && julia -e 'using Pkg; Pkg.add("Documenter"); include(joinpath("docs", "make.jl"))'
