@@ -6,13 +6,21 @@ os:
 julia:
   - 0.7
   - nightly
+
 matrix:
   allow_failures:
     - julia: 0.7
     - julia: nightly
+
 notifications:
   email: false
+
+before_script:
+  - julia -e 'using Pkg; Pkg.add("StaticArrays")'
+  - julia -e 'using Pkg; Pkg.add("OrdinaryDiffEq")'
+  - julia -e 'using Pkg; Pkg.add("Coverage")'
+  - julia -e 'using Pkg; Pkg.add("Colors")'
+
 after_success:
-- julia -e 'Pkg.add("Documenter")'
-- julia -e 'import Luxor; joinpath(dirname(pathof(Luxor)), "..", paths...); Pkg.add("Colors"); include(joinpath("docs", "make.jl"))'
-- julia -e 'import Luxor; joinpath(dirname(pathof(Luxor)), "..", paths...); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+  - test $TRAVIS_OS_NAME = "macos" && julia -e 'using Pkg; Pkg.add("Documenter"); include(joinpath("docs", "make.jl"))'
+  - test $TRAVIS_OS_NAME = "macos" && julia -e 'using Coverage; Codecov.submit(process_folder())'
