@@ -7,22 +7,23 @@ julia:
   - 0.7
   - nightly
 
-matrix:
-  allow_failures:
-    - julia: 0.7
-    - julia: nightly
-
 notifications:
   email: false
 
-before_script:
-  - julia -e 'using Pkg; Pkg.add("Coverage")'
+script:
   - julia -e 'using Pkg; Pkg.add("Colors")'
   - julia -e 'using Pkg; Pkg.add("Luxor")'
-
-script:
+  - julia -e 'using Pkg; Pkg.add("Coverage")'
   - julia -e 'import Pkg; Pkg.test("Luxor"; coverage=true)'
 
+jobs:
+  include:
+    - stage: deploy
+      julia: 0.7
+      os: osx
+      script:
+        - julia -e 'Pkg.add("Documenter")'
+        - julia -e 'cd(Pkg.dir("Luxor")); include("docs/make.jl")'
+
 after_success:
-  - test $TRAVIS_OS_NAME = "linux" && julia -e 'using Pkg; Pkg.add("Documenter"); include(joinpath("docs", "make.jl"))'
-  - test $TRAVIS_OS_NAME = "osx" && julia -e 'using Coverage; Codecov.submit(process_folder())'
+    - if [ $TRAVIS_JULIA_VERSION = "nightly" ]; then julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'; fi
