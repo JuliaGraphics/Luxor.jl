@@ -8,7 +8,8 @@
 ### Changed
 
 - `polysample()` has closed option restored
-
+- .travis.yml tweaks
+ 
 ### Removed
 
 ### Deprecated
