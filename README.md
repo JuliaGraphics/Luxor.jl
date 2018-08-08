@@ -5,9 +5,10 @@
 | [![][docs-stable-img]][docs-stable-url] | [![][pkg-0.5-img]][pkg-0.5-url]       | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
 | [![][docs-latest-img]][docs-latest-url] | [![][pkg-0.6-img]][pkg-0.6-url]       | [![Build Status][appvey-img]][appvey-url] |                                 |
 
-## Status as of 2018-08-04
+## Status as of 2018-08-08
 
-Compatible with Julia v0.7 release candidate 2. If you can install Cairo successfully, you should be OK.
+Mostly compatible with Julia v0.7 and v1.0, but very dependeent on successfulintallation of
+Homebew and Cairo. If you can install them, you should be OK.
 
 [![][pkg-0.7-img]][pkg-0.7-url]
 
