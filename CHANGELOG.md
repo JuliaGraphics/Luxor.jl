@@ -9,7 +9,8 @@
 
 - `polysample()` has closed option restored
 - .travis.yml tweaks
- 
+- `setcolor(colorant)` no longer drops the alpha if supplied
+
 ### Removed
 
 ### Deprecated

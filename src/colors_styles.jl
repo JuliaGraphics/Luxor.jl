@@ -58,11 +58,11 @@ See also [`sethue`](@ref).
 """
 function setcolor(col::ColorTypes.Colorant)
   temp = convert(RGBA, col)
-  setcolor(temp.r, temp.g, temp.b)
+  setcolor(temp.r, temp.g, temp.b, temp.alpha)
   return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
 end
 
-function setcolor(r, g, b, a=1.0)
+function setcolor(r, g, b, a = 1.0)
     currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
       currentdrawing.alpha = r, g, b, a
     Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
