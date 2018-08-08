@@ -1,20 +1,21 @@
 # Changelog
 
 
-## [future] - 2018-??.??
+## [v0.12.0] - 2018-08-08
+
+- need new version number for better compatibility with v1.0
 
 ### Added
 
 ### Changed
 
 - `polysample()` has closed option restored
-- .travis.yml tweaks
+- .travis.yml tweaks to try and get something to build
 - `setcolor(colorant)` no longer drops the alpha if supplied
 
 ### Removed
 
 ### Deprecated
-
 
 ## [v0.11.2] - 2018-08-04
 
