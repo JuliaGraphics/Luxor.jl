@@ -1,11 +1,13 @@
 # Changelog
 
 
-## [v0.12.0] - 2018-08-08
+## [soon to be v0.12.0] - 2018-08-
 
 - need new version number for better compatibility with v1.0
 
 ### Added
+
+- option for tempdirectory in `animate()`
 
 ### Changed
 
