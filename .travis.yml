@@ -5,25 +5,32 @@ os:
   - osx
 julia:
   - 0.7
+  - 1.0
   - nightly
 
-notifications:
-  email: false
-
 script:
-  - julia -e 'using Pkg; Pkg.add("Colors")'
-  - julia -e 'using Pkg; Pkg.add("Luxor")'
-  - julia -e 'using Pkg; Pkg.add("Coverage")'
-  - julia -e 'import Pkg; Pkg.test("Luxor"; coverage=true)'
-
-jobs:
-  include:
-    - stage: deploy
-      julia: 0.7
-      os: osx
-      script:
-        - julia -e 'Pkg.add("Documenter")'
-        - julia -e 'cd(Pkg.dir("Luxor")); include("docs/make.jl")'
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - |
+    julia -e '
+      VERSION >= v"0.7.0-DEV.3656" && using Pkg
+      if VERSION >= v"0.7.0-DEV.5183" && (isfile("Project.toml") || isfile("JuliaProject.toml"))
+          Pkg.add("Colors")
+          Pkg.build()
+          Pkg.test(coverage=true)
+      else
+          Pkg.clone(pwd())
+          Pkg.add("Colors")
+          Pkg.build("Luxor")
+          Pkg.test("Luxor"; coverage=true)
+      end'
 
 after_success:
-    - if [ $TRAVIS_JULIA_VERSION = "nightly" ]; then julia -e 'cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'; fi
+  - |
+    julia -e '
+      VERSION >= v"0.7.0-DEV.3656" && using Pkg
+      VERSION >= v"0.7.0-DEV.5183" || cd(Pkg.dir("Luxor"))
+      Pkg.add("Coverage"); using Coverage
+      Codecov.submit(process_folder())
+      Pkg.add("Documenter")
+      cd(Pkg.dir("Luxor"))
+      include("docs/make.jl")'
