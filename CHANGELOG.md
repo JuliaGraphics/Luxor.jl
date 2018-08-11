@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [soon to be v0.12.0] - 2018-08-
+## [v0.12.0] - 2018-08-11
 
 - need new version number for better compatibility with v1.0
 
@@ -14,8 +14,11 @@
 - `polysample()` has closed option restored
 - .travis.yml tweaks to try and get something to build
 - `setcolor(colorant)` no longer drops the alpha if supplied
+- `stray 'endof' removed in table.jl
 
 ### Removed
+
+- `scale` is no longer in Base, so we don't need to import it
 
 ### Deprecated
 

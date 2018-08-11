@@ -5,10 +5,6 @@ module Luxor
 
 import Base: fill
 
-if isdefined(Base, :scale)
-    import Base: scale
-end
-
 using Juno
 
 using Colors, FileIO, Dates
