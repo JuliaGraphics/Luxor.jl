@@ -217,7 +217,7 @@ end
 
 Base.eltype(::Type{Table}) = Tuple
 
-Base.endof(t::Table) = length(t)
+Base.end(t::Table) = length(t)
 
 # t[n] -> Luxor.Point(0.0, -192.5)
 function Base.getindex(t::Table, i::Int)
