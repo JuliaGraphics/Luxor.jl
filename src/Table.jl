@@ -217,9 +217,6 @@ end
 
 Base.eltype(::Type{Table}) = Tuple
 
-Base.end(t::Table) = length(t)
-
-# t[n] -> Luxor.Point(0.0, -192.5)
 function Base.getindex(t::Table, i::Int)
     1 <= i <= t.ncols * t.nrows || throw(BoundsError(t, i))
     currentrow = div(i - 1, t.ncols) + 1
