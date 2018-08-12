@@ -1,9 +1,9 @@
 # Changelog
 
 
-## [v0.12.0] - 2018-08-11
+## [v0.12.0] - 2018-08-
 
-- need new version number for better compatibility with v1.0
+- new version number for better compatibility with v1.0
 
 ### Added
 
@@ -14,7 +14,7 @@
 - `polysample()` has closed option restored
 - .travis.yml tweaks to try and get something to build
 - `setcolor(colorant)` no longer drops the alpha if supplied
-- `stray 'endof' removed in table.jl
+- `endof` replaced with `lastindex`
 
 ### Removed
 

@@ -215,6 +215,8 @@ function Base.length(t::Table)
     t.nrows * t.ncols
 end
 
+Base.lastindex(t::Table) = length(t)
+
 Base.eltype(::Type{Table}) = Tuple
 
 function Base.getindex(t::Table, i::Int)
