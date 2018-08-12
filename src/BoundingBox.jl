@@ -94,7 +94,7 @@ unsafe_length(bbox::BoundingBox) = length(bbox)
 
 Base.eltype(::Type{BoundingBox}) = Point
 
-Base.endof(bbox::BoundingBox) = 2
+Base.lastindex(bbox::BoundingBox) = 2
 
 function Base.getindex(bbox::BoundingBox, i::Int)
     if i == 1
