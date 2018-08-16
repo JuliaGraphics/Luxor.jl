@@ -15,6 +15,7 @@
 - .travis.yml tweaks to try and get something to build
 - `setcolor(colorant)` no longer drops the alpha if supplied
 - `endof` replaced with `lastindex`
+- `rule` now draws lines across boundingbox, default to the drawing's boundingbox
 
 ### Removed
 

@@ -2,7 +2,7 @@ import Base: +, -, *, /, ^, !=, <, >, ==
 import Base: isequal, isless, isapprox, cmp, size, getindex, broadcastable
 
 """
-The Point type holds two coordinates. Currently it's immutable, so remember not try to
+The Point type holds two coordinates. It's immutable, you can't
 change the values of the x and y values directly.
 """
 struct Point
