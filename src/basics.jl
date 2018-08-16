@@ -11,12 +11,6 @@ function origin()
     Cairo.translate(currentdrawing.cr, currentdrawing.width/2.0, currentdrawing.height/2.0)
 end
 
-"""
-    origin(x, y)
-
-Reset the current matrix, then move the `0/0` position relative to the top left corner of
-the drawing.
-"""
 function origin(x, y)
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
     Cairo.translate(currentdrawing.cr, x, y)
@@ -302,7 +296,6 @@ function setdash(dashing)
 end
 
 """
-    move(x, y)
     move(pt)
 
 Move to a point.
@@ -311,23 +304,17 @@ move(x, y)      = Cairo.move_to(currentdrawing.cr,x, y)
 move(pt)        = move(pt.x, pt.y)
 
 """
-    rmove(x, y)
-
-Move by an amount from the current point. Move relative to current position by `x` and `y`:
+    rmove(pt)
 
 Move relative to current position by the `pt`'s x and y:
-
-    rmove(pt)
 """
 rmove(x, y)     = Cairo.rel_move_to(currentdrawing.cr,x, y)
 rmove(pt)       = rmove(pt.x, pt.y)
 
 """
-    line(x, y)
-    line(x, y)
     line(pt)
 
-Create a line from the current position to the `x/y` position.
+Draw a line from the current position to the `pt`.
 """
 line(x, y)      = Cairo.line_to(currentdrawing.cr,x, y)
 line(pt)        = line(pt.x, pt.y)
@@ -344,30 +331,87 @@ function line(pt1::Point, pt2::Point, action=:nothing)
 end
 
 """
-    rline(x, y)
-    rline(x, y)
     rline(pt)
 
-Create a line relative to the current position to the `x/y` position.
+Draw a line relative to the current position to the `pt`.
 """
 rline(x, y)     = Cairo.rel_line_to(currentdrawing.cr, x, y)
 rline(pt)       = rline(pt.x, pt.y)
 
 """
-    rule(pos::Point, theta=0.0)
+    rule(pos, theta;
+        boundingbox=BoundingBox())
 
-Draw a line across the entire drawing passing through `pos`, at an angle of `theta` to the
-x-axis. Returns the two points.
+Draw a straight line through `pos` at an angle `theta` from the x axis.
 
-The end points are not calculated exactly, they're just a long way apart.
+By default, the line spans the entire drawing, but you can supply a BoundingBox
+to change the extent of the line.
+
+    rule(O)       # draws an x axis
+    rule(O, pi/2) # draws a  y axis
+
+The function:
+
+    rule(O, pi/2, boundingbox=BoundingBox()/2)
+
+draws a line that spans a bounding box half the width and height of the drawing.
 """
-function rule(pos::Point, theta=0.0)
-    diagonal = hypot(currentdrawing.width, currentdrawing.height)
-    postarget  = Point(pos.x + (diagonal * cos(theta)), pos.y + (diagonal * sin(theta)))
-    pt1 = between(pos, postarget, -2)
-    pt2 = between(pos, postarget, 3)
-    line(pt1, pt2, :stroke)
-    return (pt1, pt2)
+function rule(pos, theta=0.0;
+        boundingbox=BoundingBox())
+    bbox       = box(boundingbox, vertices=true)
+    topside    = bbox[1:2]
+    rightside  = bbox[2:3]
+    bottomside = bbox[3:4]
+    leftside   = vcat(bbox[4], bbox[1])
+
+    #if !isinside(pos, bbox, allowonedge=true)
+    #    #@warn "position is not inside bounding box"
+    #end
+
+    # ruled line could be as long as the diagonal so add a bit extra
+    r = boxdiagonal(boundingbox)/2 + 10
+    rcosa = r * cos(theta)
+    rsina = r * sin(theta)
+    ruledline = (pos - (rcosa, rsina), pos + (rcosa, rsina))
+
+    # use set to avoid duplicating points
+    interpoints = Set{Point}()
+
+    # check for intersection with top of bounding box
+    flag, ip = intersection(ruledline[1], ruledline[2], topside[1], topside[2])
+    if flag
+        if !(ip.x > topside[2].x || ip.x < topside[1].x)
+            push!(interpoints, ip)
+        end
+    end
+
+    # check for right intersection
+    flag, ip = intersection(ruledline[1], ruledline[2], rightside[1], rightside[2])
+    if flag
+        if !(ip.y > rightside[2].y || ip.y < rightside[1].y)
+            push!(interpoints, ip)
+        end
+    end
+
+    # check for bottom intersection
+    flag, ip = intersection(ruledline[1], ruledline[2], bottomside[1], bottomside[2])
+    if flag
+        if !(ip.x < bottomside[2].x || ip.x > bottomside[1].x)
+            push!(interpoints, ip)
+        end
+    end
+
+    # check for left intersection
+    flag, ip = intersection(ruledline[1], ruledline[2], leftside[1], leftside[2])
+    if flag
+        if !(ip.y > leftside[1].y || ip.y < leftside[2].y)
+            push!(interpoints, ip)
+        end
+    end
+
+    # finally draw the line if we have two points
+    length(interpoints) == 2 && line(interpoints..., :stroke)
+    return interpoints
 end
 
 saved_colors = Tuple{Float64,Float64,Float64,Float64}[]
@@ -447,10 +491,10 @@ Rotate workspace by `a` radians clockwise (from positive x-axis to positive y-ax
 rotate(a) = Cairo.rotate(currentdrawing.cr, a)
 
 """
-    translate(x::Real, y::Real)
     translate(point)
+    translate(x::Real, y::Real)
 
-Translate the workspace by `x` and `y` or by moving the origin to `pt`.
+Translate the workspace to `x` and `y` or to `pt`.
 """
 translate(tx::Real, ty::Real)        = Cairo.translate(currentdrawing.cr, tx, ty)
 translate(pt::Point)     = translate(pt.x, pt.y)
@@ -504,6 +548,8 @@ Returns a CairoPath which is an array of `element_type` and `points` objects.
 getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(currentdrawing.cr))
 
 """
+    rulers()
+
 Draw and label two rulers starting at `O`, the current 0/0, and continuing out
 along the current positive x and y axes.
 """
