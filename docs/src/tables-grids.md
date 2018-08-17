@@ -156,7 +156,7 @@ Drawing(600, 400, "assets/figures/table1.png") # hide
 background("white") # hide
 origin() # hide
 
-t = Table(logspace(0.7, 1.5, 25), fill(130, 4))
+t = Table(10 .^ range(0.7, length=25, stop=1.5), fill(130, 4))
 
 for (pt, n) in t
     setgray(rescale(n, 1, length(t), 0, 1))

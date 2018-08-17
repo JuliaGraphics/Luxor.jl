@@ -14,7 +14,7 @@ A path is a sequence of one or more straight and curved (circular arc or Bézier
 Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
 ```@setup polytable
-using Luxor
+using Luxor, DelimitedFiles
 Drawing(800, 275, "assets/figures/polytable.png")
 background("white")
 origin()
@@ -780,6 +780,8 @@ nothing # hide
 
 ![brush](assets/figures/brush.png)
 
+For more information (and more than you probably wanted to know) about Luxor's Bézier paths, visit [https://cormullion.github.io/blog/2018/06/21/bezier.html](https://cormullion.github.io/blog/2018/06/21/bezier.html).
+
 ```@docs
 bezier
 bezier′
@@ -794,7 +796,7 @@ makebezierpath
 pathtobezierpaths
 setbezierhandles
 shiftbezierhandles
-findbeziercontrolpoints
+Luxor.findbeziercontrolpoints
 brush
 ```
 
@@ -1014,6 +1016,7 @@ properties = Table(fill(15, total), [20, 85, 85], outerframe[1, 2])
 radius = 55
 sethue("grey20")
 for i in 3:total
+    global radius
     text(string(i), properties[i, 1], halign=:right)
     p = ngon(outerframe[1], radius, i, 0, vertices=true)
     prettypoly(p, :stroke, close=true, () -> (sethue("red"); circle(O, 2, :fill)))

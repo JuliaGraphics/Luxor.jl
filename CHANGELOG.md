@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [v0.12.0] - 2018-08-
+## [v0.12.0] - 2018-08-17
 
 - new version number for better compatibility with v1.0
 
@@ -12,10 +12,10 @@
 ### Changed
 
 - `polysample()` has closed option restored
-- .travis.yml tweaks to try and get something to build
+- .travis.yml tweaks - the saga continues
 - `setcolor(colorant)` no longer drops the alpha if supplied
 - `endof` replaced with `lastindex`
-- `rule` now draws lines across boundingbox, default to the drawing's boundingbox
+- `rule()` now draws lines across boundingbox, default to the drawing's boundingbox
 
 ### Removed
 

@@ -114,6 +114,7 @@ tiles = Tiler(500, 300, 5, 5)
 width = 20
 height = 25
 for (pos, n) in tiles
+    global width, height
     randomhue()
     ellipse(pos, width, height, :fill)
     sethue("black")
@@ -433,19 +434,19 @@ line
 rline
 ```
 
-You can use `rule()` to draw a line across the entire drawing through a point, at an angle to the current x-axis.
+You can use `rule()` to draw a line through a point, optionally at an angle to the current x-axis.
 
 ```@example
 using Luxor # hide
 Drawing(700, 200, "assets/figures/rule.png") # hide
 background("white") # hide
 sethue("black") # hide
-setline(1) # hide
-
+setline(0.5) # hide
 y = 10
-for x in logspace(0, 2.75, 40)
+for x in 10 .^ range(0, length=100, stop=3)
+    global y
     circle(Point(x, y), 2, :fill)
-    rule(Point(x, y), -pi/2)
+    rule(Point(x, y), -pi/2, boundingbox=BoundingBox(centered=false))
     y += 2
 end
 
@@ -454,6 +455,25 @@ nothing # hide
 ```
 
 ![arc](assets/figures/rule.png)
+
+Use the optional `boundingbox` to control the extent of the ruled lines.
+
+```@example
+using Luxor # hide
+Drawing(700, 200, "assets/figures/rulebbox.png") # hide
+origin()
+background("white") # hide
+sethue("black") # hide
+setline(0.75) # hide
+box(BoundingBox() * 0.9, :stroke)
+for x in 10 .^ range(0, length=100, stop=3)
+    rule(Point(x, 0), pi/2,  boundingbox=BoundingBox() * 0.9)
+    rule(Point(-x, 0), pi/2, boundingbox=BoundingBox() * 0.9)
+end
+finish() # hide
+```
+
+![arc](assets/figures/rulebbox.png)
 
 ```@docs
 rule
