@@ -10,7 +10,15 @@ julia:
 matrix:
   allow_failures:
     - julia: nightly
+jobs:
+  include:
+    - stage: deploy
+      julia: 0.7
+      os: linux
+      script:
+        - julia -e 'import Pkg; Pkg.build("Colors")'
+        - julia -e 'import Pkg; Pkg.build("Luxor")'
+        - julia -e 'import Pkg; Pkg.add("Documenter")'
+        - julia -e 'import Luxor; include("docs/make.jl")'
 after_success:
- - julia -e 'import Pkg; Pkg.add("Documenter"); Pkg.add("Colors"); '
- - julia -e 'import Pkg; cd(Pkg.dir("Luxor")); include(joinpath("docs", "make.jl"))'
  - julia -e 'import Pkg; cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
