@@ -10,6 +10,9 @@ julia:
 matrix:
   allow_failures:
     - julia: nightly
+env:
+  global:
+    - DOCUMENTER_DEBUG=true
 jobs:
   include:
     - stage: deploy
