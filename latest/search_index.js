@@ -357,7 +357,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.rulers",
     "category": "function",
-    "text": "Draw and label two rulers starting at O, the current 0/0, and continuing out along the current positive x and y axes.\n\n\n\n\n\n"
+    "text": "rulers()\n\nDraw and label two rulers starting at O, the current 0/0, and continuing out along the current positive x and y axes.\n\n\n\n\n\n"
 },
 
 {
@@ -365,7 +365,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Basic concepts",
     "title": "Luxor.origin",
     "category": "function",
-    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\n\n\norigin(x, y)\n\nReset the current matrix, then move the 0/0 position relative to the top left corner of the drawing.\n\n\n\n\n\norigin(pt:Point)\n\nReset the current matrix, then move the 0/0 position to pt.\n\n\n\n\n\n"
+    "text": "origin()\n\nReset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).\n\nYou can refer to the 0/0 point as O. (O = Point(0, 0)),\n\n\n\n\n\norigin(pt:Point)\n\nReset the current matrix, then move the 0/0 position to pt.\n\n\n\n\n\n"
 },
 
 {
@@ -477,7 +477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Circles and ellipses",
     "category": "section",
-    "text": "There are various ways to make circles, including by center and radius, or passing through two points:using Luxor # hide\nDrawing(400, 200, \"assets/figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = O\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(O, Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide\nnothing # hide(Image: circles)Or passing through three points. The center3pts() function returns the center position and radius of a circle passing through three points:using Luxor, Random # hide\nDrawing(400, 200, \"assets/figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\")\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide\nnothing # hide(Image: center and radius of 3 points)circle\ncenter3ptsWith ellipse() you can place ellipses (and circles) by defining the center point and the width and height.using Luxor, Random # hide\nDrawing(500, 300, \"assets/figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nRandom.seed!(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n    randomhue()\n    ellipse(pos, width, height, :fill)\n    sethue(\"black\")\n    label = string(round(width/height, digits=2))\n    textcentered(label, pos.x, pos.y + 25)\n    width += 2\nend\nfinish() # hide\nnothing # hide(Image: ellipses)ellipse() can also construct polygons that are approximations to ellipses. You supply two focal points and a length which is the sum of the distances of a point on the perimeter to the two focii.using Luxor, Random # hide\nDrawing(400, 220, \"assets/figures/ellipses_1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nRandom.seed!(42) # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontface(\"Menlo\")\n\nf1 = Point(-100, 0)\nf2 = Point(100, 0)\n\ncircle.([f1, f2], 3, :fill)\n\nepoly = ellipse(f1, f2, 250, vertices=true)\npoly(epoly, :stroke,  close=true)\n\npt = epoly[rand(1:end)]\n\npoly([f1, pt, f2], :stroke)\n\nlabel(\"f1\", :W, f1, offset=10)\nlabel(\"f2\", :E, f2, offset=10)\n\nlabel(string(round(distance(f1, pt), digits=1)), :SE, midpoint(f1, pt))\nlabel(string(round(distance(pt, f2), digits=1)), :SW, midpoint(pt, f2))\n\nlabel(\"ellipse(f1, f2, 250)\", :S, Point(0, 75))\n\nfinish() # hide\nnothing # hide(Image: more ellipses)The advantage of this method is that there\'s a vertices=true|false option, allowing further scope for polygon manipulation.using Luxor # hide\nDrawing(500, 450, \"assets/figures/ellipses_2.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"gray30\") # hide\nsetline(1) # hide\nf1 = Point(-100, 0)\nf2 = Point(100, 0)\nellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)\n[ begin\n    setgray(rescale(c, 150, 1, 0, 1))\n    poly(offsetpoly(ellipsepoly, c), close=true, :fill);\n    rotate(pi/20)\n  end\n     for c in 150:-10:1 ]\nfinish() # hide\nnothing # hide(Image: even more ellipses)ellipsecirclepath() constructs a circular path from Bézier curves, which allows you to use circles as paths.using Luxor # hide\nDrawing(600, 250, \"assets/figures/circle-path.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\ntiles = Tiler(600, 250, 1, 5)\nfor (pos, n) in tiles\n    randomhue()\n    circlepath(pos, tiles.tilewidth/2, :path)\n    newsubpath()\n    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)\nend\nfinish() # hide\nnothing # hide(Image: circles as paths)circlepath"
+    "text": "There are various ways to make circles, including by center and radius, or passing through two points:using Luxor # hide\nDrawing(400, 200, \"assets/figures/circles.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(2) # hide\np1 = O\np2 = Point(100, 0)\nsethue(\"red\")\ncircle(p1, 40, :fill)\nsethue(\"green\")\ncircle(p1, p2, :stroke)\nsethue(\"black\")\narrow(O, Point(0, -40))\nmap(p -> circle(p, 4, :fill), [p1, p2])\nfinish() # hide\nnothing # hide(Image: circles)Or passing through three points. The center3pts() function returns the center position and radius of a circle passing through three points:using Luxor, Random # hide\nDrawing(400, 200, \"assets/figures/center3.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(3) # hide\nsethue(\"black\")\np1 = Point(0, -50)\np2 = Point(100, 0)\np3 = Point(0, 65)\nmap(p -> circle(p, 4, :fill), [p1, p2, p3])\nsethue(\"orange\")\ncircle(center3pts(p1, p2, p3)..., :stroke)\nfinish() # hide\nnothing # hide(Image: center and radius of 3 points)circle\ncenter3ptsWith ellipse() you can place ellipses (and circles) by defining the center point and the width and height.using Luxor, Random # hide\nDrawing(500, 300, \"assets/figures/ellipses.png\") # hide\nbackground(\"white\") # hide\nfontsize(11) # hide\nRandom.seed!(1) # hide\norigin() # hide\ntiles = Tiler(500, 300, 5, 5)\nwidth = 20\nheight = 25\nfor (pos, n) in tiles\n    global width, height\n    randomhue()\n    ellipse(pos, width, height, :fill)\n    sethue(\"black\")\n    label = string(round(width/height, digits=2))\n    textcentered(label, pos.x, pos.y + 25)\n    width += 2\nend\nfinish() # hide\nnothing # hide(Image: ellipses)ellipse() can also construct polygons that are approximations to ellipses. You supply two focal points and a length which is the sum of the distances of a point on the perimeter to the two focii.using Luxor, Random # hide\nDrawing(400, 220, \"assets/figures/ellipses_1.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\n\nRandom.seed!(42) # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontface(\"Menlo\")\n\nf1 = Point(-100, 0)\nf2 = Point(100, 0)\n\ncircle.([f1, f2], 3, :fill)\n\nepoly = ellipse(f1, f2, 250, vertices=true)\npoly(epoly, :stroke,  close=true)\n\npt = epoly[rand(1:end)]\n\npoly([f1, pt, f2], :stroke)\n\nlabel(\"f1\", :W, f1, offset=10)\nlabel(\"f2\", :E, f2, offset=10)\n\nlabel(string(round(distance(f1, pt), digits=1)), :SE, midpoint(f1, pt))\nlabel(string(round(distance(pt, f2), digits=1)), :SW, midpoint(pt, f2))\n\nlabel(\"ellipse(f1, f2, 250)\", :S, Point(0, 75))\n\nfinish() # hide\nnothing # hide(Image: more ellipses)The advantage of this method is that there\'s a vertices=true|false option, allowing further scope for polygon manipulation.using Luxor # hide\nDrawing(500, 450, \"assets/figures/ellipses_2.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"gray30\") # hide\nsetline(1) # hide\nf1 = Point(-100, 0)\nf2 = Point(100, 0)\nellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)\n[ begin\n    setgray(rescale(c, 150, 1, 0, 1))\n    poly(offsetpoly(ellipsepoly, c), close=true, :fill);\n    rotate(pi/20)\n  end\n     for c in 150:-10:1 ]\nfinish() # hide\nnothing # hide(Image: even more ellipses)ellipsecirclepath() constructs a circular path from Bézier curves, which allows you to use circles as paths.using Luxor # hide\nDrawing(600, 250, \"assets/figures/circle-path.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(4)\ntiles = Tiler(600, 250, 1, 5)\nfor (pos, n) in tiles\n    randomhue()\n    circlepath(pos, tiles.tilewidth/2, :path)\n    newsubpath()\n    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)\nend\nfinish() # hide\nnothing # hide(Image: circles as paths)circlepath"
 },
 
 {
@@ -525,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.move",
     "category": "function",
-    "text": "move(x, y)\nmove(pt)\n\nMove to a point.\n\n\n\n\n\n"
+    "text": "move(pt)\n\nMove to a point.\n\n\n\n\n\n"
 },
 
 {
@@ -533,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.rmove",
     "category": "function",
-    "text": "rmove(x, y)\n\nMove by an amount from the current point. Move relative to current position by x and y:\n\nMove relative to current position by the pt\'s x and y:\n\nrmove(pt)\n\n\n\n\n\n"
+    "text": "rmove(pt)\n\nMove relative to current position by the pt\'s x and y:\n\n\n\n\n\n"
 },
 
 {
@@ -573,7 +573,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.line",
     "category": "function",
-    "text": "line(x, y)\nline(x, y)\nline(pt)\n\nCreate a line from the current position to the x/y position.\n\n\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n\n\n"
+    "text": "line(pt)\n\nDraw a line from the current position to the pt.\n\n\n\n\n\nline(pt1::Point, pt2::Point, action=:nothing)\n\nMake a line between two points, pt1 and pt2 and do an action.\n\n\n\n\n\n"
 },
 
 {
@@ -581,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.rline",
     "category": "function",
-    "text": "rline(x, y)\nrline(x, y)\nrline(pt)\n\nCreate a line relative to the current position to the x/y position.\n\n\n\n\n\n"
+    "text": "rline(pt)\n\nDraw a line relative to the current position to the pt.\n\n\n\n\n\n"
 },
 
 {
@@ -589,7 +589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.rule",
     "category": "function",
-    "text": "rule(pos::Point, theta=0.0)\n\nDraw a line across the entire drawing passing through pos, at an angle of theta to the x-axis. Returns the two points.\n\nThe end points are not calculated exactly, they\'re just a long way apart.\n\n\n\n\n\n"
+    "text": "rule(pos, theta;\n    boundingbox=BoundingBox())\n\nDraw a straight line through pos at an angle theta from the x axis.\n\nBy default, the line spans the entire drawing, but you can supply a BoundingBox to change the extent of the line.\n\nrule(O)       # draws an x axis\nrule(O, pi/2) # draws a  y axis\n\nThe function:\n\nrule(O, pi/2, boundingbox=BoundingBox()/2)\n\ndraws a line that spans a bounding box half the width and height of the drawing.\n\n\n\n\n\n"
 },
 
 {
@@ -597,7 +597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Lines",
     "category": "section",
-    "text": "Use line() and rline() to draw straight lines. line(pt1, pt2, action) draws a line between two points. line(pt) adds a line to the current path going from the current position to the point. rline(pt) adds a line relative to the current position.line\nrlineYou can use rule() to draw a line across the entire drawing through a point, at an angle to the current x-axis.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ny = 10\nfor x in logspace(0, 2.75, 40)\n    circle(Point(x, y), 2, :fill)\n    rule(Point(x, y), -pi/2)\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)rule"
+    "text": "Use line() and rline() to draw straight lines. line(pt1, pt2, action) draws a line between two points. line(pt) adds a line to the current path going from the current position to the point. rline(pt) adds a line relative to the current position.line\nrlineYou can use rule() to draw a line through a point, optionally at an angle to the current x-axis.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rule.png\") # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(0.5) # hide\ny = 10\nfor x in 10 .^ range(0, length=100, stop=3)\n    global y\n    circle(Point(x, y), 2, :fill)\n    rule(Point(x, y), -pi/2, boundingbox=BoundingBox(centered=false))\n    y += 2\nend\n\nfinish() # hide\nnothing # hide(Image: arc)Use the optional boundingbox to control the extent of the ruled lines.using Luxor # hide\nDrawing(700, 200, \"assets/figures/rulebbox.png\") # hide\norigin()\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(0.75) # hide\nbox(BoundingBox() * 0.9, :stroke)\nfor x in 10 .^ range(0, length=100, stop=3)\n    rule(Point(x, 0), pi/2,  boundingbox=BoundingBox() * 0.9)\n    rule(Point(-x, 0), pi/2, boundingbox=BoundingBox() * 0.9)\nend\nfinish() # hide(Image: arc)rule"
 },
 
 {
@@ -1029,7 +1029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tables and grids",
     "title": "Varying row heights and column widths",
     "category": "section",
-    "text": "To specify varying row heights and column widths, supply arrays or ranges to the Table constructor. The next example has logarithmically increasing row heights, and four columns of width 130 points:using Luxor # hide\nDrawing(600, 400, \"assets/figures/table1.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\nt = Table(logspace(0.7, 1.5, 25), fill(130, 4))\n\nfor (pt, n) in t\n    setgray(rescale(n, 1, length(t), 0, 1))\n    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)\n    sethue(\"white\")\n    fontsize(t.rowheights[t.currentrow])\n    text(string(n), pt, halign=:center, valign=:middle)\nend\n\nfinish() # hide\nnothing # hide(Image: table 1)To fill table cells, it\'s useful to be able to access the table\'s row and column specifications (using the colwidths and rowheights fields), and iteration can also provide information about the current row and column being processed (currentrow and currentcol).To ensure that graphic elements don\'t stray outside the cell walls, you can use a clipping region."
+    "text": "To specify varying row heights and column widths, supply arrays or ranges to the Table constructor. The next example has logarithmically increasing row heights, and four columns of width 130 points:using Luxor # hide\nDrawing(600, 400, \"assets/figures/table1.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\nt = Table(10 .^ range(0.7, length=25, stop=1.5), fill(130, 4))\n\nfor (pt, n) in t\n    setgray(rescale(n, 1, length(t), 0, 1))\n    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)\n    sethue(\"white\")\n    fontsize(t.rowheights[t.currentrow])\n    text(string(n), pt, halign=:center, valign=:middle)\nend\n\nfinish() # hide\nnothing # hide(Image: table 1)To fill table cells, it\'s useful to be able to access the table\'s row and column specifications (using the colwidths and rowheights fields), and iteration can also provide information about the current row and column being processed (currentrow and currentcol).To ensure that graphic elements don\'t stray outside the cell walls, you can use a clipping region."
 },
 
 {
@@ -1357,7 +1357,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Polygons and paths",
     "category": "section",
-    "text": "For drawing shapes, Luxor provides polygons and paths.A polygon is an ordered collection of Points stored in an array.A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a \'current path\', to which you can add lines and curves until you finish with a stroke or fill instruction.Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.using Luxor\nDrawing(800, 275, \"assets/figures/polytable.png\")\nbackground(\"white\")\norigin()\ntabledata = readdlm(IOBuffer(\n\"\"\"\n-             create                convert               draw               info              other             \npolygon       ngon()                polysmooth()          poly()             isinside()        simplify()\n-             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()\n-             star()                -                     polysmooth()       polyarea()        polyportion()\n-             offsetpoly()          -                     -                  polycentroid()    polyremainder()\n-             polyfit()             -                     -                  boundingbox()     polysortbyangle()\n-             hyptrochoid()         -                     -                  -                 polysortbydistance()\n-             epitrochoid()         -                     -                  -                 polyintersections()\npath          getpath()             pathtopoly()          -                  -                 -\n-             getpathflat()         -                     -                  -                 -  \nbezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -\n-             pathtobezierpaths()   bezierpathtopoly()    brush()            -                 -  \n-             BezierPath()          -                     -                  -                 -\n-             BezierPathSegment()   -                     -                  -                 -\n\"\"\"))\n\n# find the widths of the columns\nnrows, ncols = size(tabledata)\nfontsize(12)\nfontface(\"Menlo\")\nwidths = Float64[]\nmargin=4\nfor c in 1:ncols\n    temp = []\n    for r in 1:nrows\n        te = textextents(tabledata[r, c])[3]\n        push!(temp, te + 10)\n    end\n    push!(widths, maximum(temp))\nend\n\n# draw table using the widths\nt = Table(fill(20, nrows), widths)\nfor r in 1:size(t)[1]\n   for c in 1:size(t)[2]\n        @layer begin\n        sethue(\"thistle\")\n        if r >= 2 && c >= 2\n            if isodd(c)\n                setopacity(0.5)\n            else\n                setopacity(0.75)\n            end\n            box(t, r, c, :fill)\n        end\n        end\n        sethue(\"black\")\n        if tabledata[r, c] != \"-\"\n            text(string(tabledata[r, c]), t[r, c] - (t.colwidths[c]/2 - margin, 0))\n        end\n    end\nend\nfinish()\nnothing(Image: polygons etc)"
+    "text": "For drawing shapes, Luxor provides polygons and paths.A polygon is an ordered collection of Points stored in an array.A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a \'current path\', to which you can add lines and curves until you finish with a stroke or fill instruction.Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.using Luxor, DelimitedFiles\nDrawing(800, 275, \"assets/figures/polytable.png\")\nbackground(\"white\")\norigin()\ntabledata = readdlm(IOBuffer(\n\"\"\"\n-             create                convert               draw               info              other             \npolygon       ngon()                polysmooth()          poly()             isinside()        simplify()\n-             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()\n-             star()                -                     polysmooth()       polyarea()        polyportion()\n-             offsetpoly()          -                     -                  polycentroid()    polyremainder()\n-             polyfit()             -                     -                  boundingbox()     polysortbyangle()\n-             hyptrochoid()         -                     -                  -                 polysortbydistance()\n-             epitrochoid()         -                     -                  -                 polyintersections()\npath          getpath()             pathtopoly()          -                  -                 -\n-             getpathflat()         -                     -                  -                 -  \nbezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -\n-             pathtobezierpaths()   bezierpathtopoly()    brush()            -                 -  \n-             BezierPath()          -                     -                  -                 -\n-             BezierPathSegment()   -                     -                  -                 -\n\"\"\"))\n\n# find the widths of the columns\nnrows, ncols = size(tabledata)\nfontsize(12)\nfontface(\"Menlo\")\nwidths = Float64[]\nmargin=4\nfor c in 1:ncols\n    temp = []\n    for r in 1:nrows\n        te = textextents(tabledata[r, c])[3]\n        push!(temp, te + 10)\n    end\n    push!(widths, maximum(temp))\nend\n\n# draw table using the widths\nt = Table(fill(20, nrows), widths)\nfor r in 1:size(t)[1]\n   for c in 1:size(t)[2]\n        @layer begin\n        sethue(\"thistle\")\n        if r >= 2 && c >= 2\n            if isodd(c)\n                setopacity(0.5)\n            else\n                setopacity(0.75)\n            end\n            box(t, r, c, :fill)\n        end\n        end\n        sethue(\"black\")\n        if tabledata[r, c] != \"-\"\n            text(string(tabledata[r, c]), t[r, c] - (t.colwidths[c]/2 - margin, 0))\n        end\n    end\nend\nfinish()\nnothing(Image: polygons etc)"
 },
 
 {
@@ -1577,11 +1577,131 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "polygons.html#Luxor.bezier",
+    "page": "Polygons and paths",
+    "title": "Luxor.bezier",
+    "category": "function",
+    "text": "bezier(t, A::Point, A1::Point, B1::Point, B::Point)\n\nReturn the result of evaluating the Bezier cubic curve function, t going from 0 to 1, starting at A, finishing at B, control points A1 (controlling A), and B1 (controlling B).\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.bezier′",
+    "page": "Polygons and paths",
+    "title": "Luxor.bezier′",
+    "category": "function",
+    "text": "bezier′(t, A::Point, A1::Point, B1::Point, B::Point)\n\nReturn the first derivative of the Bezier function.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.bezier′′",
+    "page": "Polygons and paths",
+    "title": "Luxor.bezier′′",
+    "category": "function",
+    "text": "bezier′(t, A::Point, A1::Point, B1::Point, B::Point)\n\nReturn the second derivative of Bezier function.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.beziercurvature",
+    "page": "Polygons and paths",
+    "title": "Luxor.beziercurvature",
+    "category": "function",
+    "text": "beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)\n\nReturn the curvature of the Bezier curve at t ([0-1]), given start and end points A and B, and control points A1 and B1. The value (kappa) will typically be a value between -0.001 and 0.001 for points with coordinates in the 100-500 range.\n\nκ(t) is the curvature of the curve at point t, which for a parametric planar curve is:\n\nbeginequation\nkappa = fracmid dotxddoty-dotyddotxmid\n    (dotx^2 + doty^2)^frac32\nndequation\n\nThe radius of curvature, or the radius of an osculating circle at a point, is 1/κ(t). Values of 1/κ will typically be in the range -1000 to 1000 for points with coordinates in the 100-500 range.\n\nTODO Fix overshoot...\n\n...The value of kappa can sometimes collapse near 0, returning NaN (and Inf for radius of curvature).\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.bezierfrompoints",
+    "page": "Polygons and paths",
+    "title": "Luxor.bezierfrompoints",
+    "category": "function",
+    "text": "bezierfrompoints(startpoint::Point, pointonline1::Point,\n    pointonline2::Point, endpoint::Point)\n\nGiven four points, return the Bezier curve that passes through all four points, starting at startpoint and ending at endpoint. The two middle points of the returned BezierPathSegment are the two control points that make the curve pass through the two middle points supplied.\n\n\n\n\n\nbezierfrompoints(ptslist::Array{Point, 1})\n\nGiven four points, return the Bezier curve that passes through all four points.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.bezierpathtopoly",
+    "page": "Polygons and paths",
+    "title": "Luxor.bezierpathtopoly",
+    "category": "function",
+    "text": "bezierpathtopoly(bezierpath::BezierPath; steps=10)\n\nConvert a Bezier path (an array of Bezier segments, where each segment is a tuple of four points: anchor1, control1, control2, anchor2) to a polygon.\n\nTo make a Bezier path, use makebezierpath() on a polygon.\n\nThe steps optional keyword determines how many line sections are used for each path.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.bezierstroke",
+    "page": "Polygons and paths",
+    "title": "Luxor.bezierstroke",
+    "category": "function",
+    "text": "bezierstroke(point1, point2, width=0.0)\n\nReturn a BezierPath, a stroked version of a straight line between two points.\n\nIt wil have 2 or 6 Bezier path segments that define a brush or pen shape. If width is 0, the brush shape starts and ends at a point. Otherwise the brush shape starts and ends with the thick end.\n\nTo draw it, use eg drawbezierpath(..., :fill).\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.beziertopoly",
+    "page": "Polygons and paths",
+    "title": "Luxor.beziertopoly",
+    "category": "function",
+    "text": "beziertopoly(bpseg::BezierPathSegment; steps=10)\n\nConvert a Bezier segment to a polygon (an array of points).\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.drawbezierpath",
+    "page": "Polygons and paths",
+    "title": "Luxor.drawbezierpath",
+    "category": "function",
+    "text": "drawbezierpath(bezierpath::BezierPath, action=:none;\n    close=true)\n\nDraw the Bézier path, and apply the action, such as :none, :stroke, :fill, etc. By default the path is closed.\n\n\n\n\n\ndrawbezierpath(bps::BezierPathSegment, action=:none;\n    close=false)\n\nDraw the Bézier path segment, and apply the action, such as :none, :stroke, :fill, etc. By default the path is open.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.makebezierpath",
+    "page": "Polygons and paths",
+    "title": "Luxor.makebezierpath",
+    "category": "function",
+    "text": "makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1)\n\nReturn a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier path is an array of segments (tuples of 4 points); each segment contains the four points that make up a section of the entire Bézier path. smoothing determines how closely the curve follows the polygon. A value of 0 returns a straight-sided path; as values move above 1 the paths deviate further from the original polygon\'s edges.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.pathtobezierpaths",
+    "page": "Polygons and paths",
+    "title": "Luxor.pathtobezierpaths",
+    "category": "function",
+    "text": "pathtobezierpaths(\n    ; flat=true)\n\nConvert the current path (which may consist of one or more paths) to an array of Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path segment is a tuple of four points. A straight line is converted to a Bezier segment in which the control points are set to be the the same as the end points.\n\nIf flat is true, use getpathflat() rather than getpath().\n\nExample\n\nThis code draws the Bezier segments and shows the control points as \"handles\", like a vector-editing program might.\n\n@svg begin\n    fontface(\"MyanmarMN-Bold\")\n    st = \"goo\"\n    thefontsize = 100\n    fontsize(thefontsize)\n    sethue(\"red\")\n    fontsize(thefontsize)\n    textpath(st)\n    nbps = pathtobezierpaths()\n    for nbp in nbps\n        setline(.15)\n        sethue(\"grey50\")\n        drawbezierpath(nbp, :stroke)\n        for p in nbp\n            sethue(\"red\")\n            circle(p[2], 0.16, :fill)\n            circle(p[3], 0.16, :fill)\n            line(p[2], p[1], :stroke)\n            line(p[3], p[4], :stroke)\n            if p[1] != p[4]\n                sethue(\"black\")\n                circle(p[1], 0.26, :fill)\n                circle(p[4], 0.26, :fill)\n            end\n        end\n    end\nend\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.setbezierhandles",
+    "page": "Polygons and paths",
+    "title": "Luxor.setbezierhandles",
+    "category": "function",
+    "text": "setbezierhandles(bps::BezierPathSegment;\n        angles  = [0.05, -0.1],\n        handles = [0.3, 0.3])\n\nReturn a new Bezier path segment with new locations for the Bezier control points in the Bezier path segment bps.\n\nangles are the two angles that the \"handles\" make with the line direciton.\n\nhandles are the lengths of the \"handles\". 0.3 is a typical value.\n\n\n\n\n\nsetbezierhandles(bezpath::BezierPath;\n        angles=[0 .05, -0.1],\n        handles=[0.3, 0.3])\n\nReturn a new Bezierpath with new locations for the Bezier control points in every Bezier path segment of the BezierPath in bezpath.\n\nangles are the two angles that the \"handles\" make with the line direciton.\n\nhandles are the lengths of the \"handles\". 0.3 is a typical value.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.shiftbezierhandles",
+    "page": "Polygons and paths",
+    "title": "Luxor.shiftbezierhandles",
+    "category": "function",
+    "text": "shiftbezierhandles(bps::BezierPathSegment;\n    angles=[0.1, -0.1], handles=[1.1, 1.1])\n\nReturn a new BezierPathSegment that modifies the Bezier path in bps by moving the control handles. The values in angles increase the angle of the handles; the values in handles modifies the lengths: 1 preserves the length, 0.5 halves the length of the  handles, 2 doubles them.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.findbeziercontrolpoints",
+    "page": "Polygons and paths",
+    "title": "Luxor.findbeziercontrolpoints",
+    "category": "function",
+    "text": "findbeziercontrolpoints(previouspt::Point,\n    pt1::Point,\n    pt2::Point,\n    nextpt::Point;\n    smooth_value=0.5)\n\nFind the Bézier control points for the line between pt1 and pt2, where the point before pt1 is previouspt and the next point after pt2 is nextpt.\n\n\n\n\n\n"
+},
+
+{
+    "location": "polygons.html#Luxor.brush",
+    "page": "Polygons and paths",
+    "title": "Luxor.brush",
+    "category": "function",
+    "text": "brush(pt1, pt2, width=10;\n    strokes=10,\n    minwidth=0.01,\n    maxwidth=0.03,\n    twist = -1,\n    lowhandle  = 0.3,\n    highhandle = 0.7,\n    randomopacity = true,\n    tidystart = false,\n    action = :fill)\n\nDraw a composite brush stroke made up of some randomized individual filled Bezier paths.\n\nnote: Note\nThere is a lot of randomness in this function. Results are unpredictable.\n\n\n\n\n\n"
+},
+
+{
     "location": "polygons.html#Brush-strokes-1",
     "page": "Polygons and paths",
     "title": "Brush strokes",
     "category": "section",
-    "text": "using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/brush.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\nsethue(\"black\") # hide\nbrush(Point(-250, 0), Point(250, 0), 20,\n    strokes=15,\n    tidystart=true,\n    twist=-5,\n    lowhandle=-0.5,\n    highhandle=0.5)\nfinish() # hide\nnothing # hide(Image: brush)bezier\nbezier′\nbezier′′\nbeziercurvature\nbezierfrompoints\nbezierpathtopoly\nbezierstroke\nbeziertopoly\ndrawbezierpath\nmakebezierpath\npathtobezierpaths\nsetbezierhandles\nshiftbezierhandles\nfindbeziercontrolpoints\nbrush"
+    "text": "using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/brush.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\nsethue(\"black\") # hide\nbrush(Point(-250, 0), Point(250, 0), 20,\n    strokes=15,\n    tidystart=true,\n    twist=-5,\n    lowhandle=-0.5,\n    highhandle=0.5)\nfinish() # hide\nnothing # hide(Image: brush)For more information (and more than you probably wanted to know) about Luxor\'s Bézier paths, visit https://cormullion.github.io/blog/2018/06/21/bezier.html.bezier\nbezier′\nbezier′′\nbeziercurvature\nbezierfrompoints\nbezierpathtopoly\nbezierstroke\nbeziertopoly\ndrawbezierpath\nmakebezierpath\npathtobezierpaths\nsetbezierhandles\nshiftbezierhandles\nLuxor.findbeziercontrolpoints\nbrush"
 },
 
 {
@@ -1593,11 +1713,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "polygons.html#Luxor.polysample",
+    "page": "Polygons and paths",
+    "title": "Luxor.polysample",
+    "category": "function",
+    "text": "polysample(p::AbstractArray{Point, 1}, npoints::Int64;\n        closed=true)\n\nSample the polygon p, returning a polygon with npoints to represent it. The first sampled point is:\n\n 1/`npoints` * `perimeter of p`\n\naway from the original first point of p.\n\nIf npoints is the same as length(p) the returned polygon is the same as the original, but the first point finishes up at the end (so new=circshift(old, 1)).\n\nIf closed is true, the entire polygon (including the edge joining the last point to the first point) is sampled.\n\n\n\n\n\n"
+},
+
+{
     "location": "polygons.html#Polygon-resampling-1",
     "page": "Polygons and paths",
     "title": "Polygon resampling",
     "category": "section",
-    "text": "Luxor functions can return the first part or last part of a polygon. Or you can ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the \"lines\" joining the vertices) or decrease them (which changes the shape of the polygon).polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke) # first point\n\nfinish() # hide\nnothing # hide(Image: polyportion)To resample a polygon, use polysample(). In this example, the same four-sided polygon is sampled at multiples of 4, with different circle radii at each multiple. This adds more points to the original polygon.using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/polysample.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\n\norigin() # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\nsetline(1) # hide\nsethue(\"black\") # hide\n\npts = ngon(O, 100, 4, vertices=true)\nfor (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))\n    prettypoly(polysample(pts, npoints),\n        :stroke, close=true,\n        () -> begin\n                circle(O, 2n, :stroke)\n              end)\nend    \n\nfinish() # hide\nnothing # hide(Image: polysampling)"
+    "text": "Luxor functions can return the first part or last part of a polygon. Or you can ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the \"lines\" joining the vertices) or decrease them (which changes the shape of the polygon).polyportion() and polyremainder() return part of a polygon depending on the fraction you supply. For example, polyportion(p, 0.5) returns the first half of polygon p, polyremainder(p, .75) returns the last quarter of it.using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/polyportion.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\nsetline(1.5) # hide\nsethue(\"black\") # hide\nfontsize(20) # hide\n\np = ngon(O, 100, 7, 0, vertices=true)\npoly(p, :stroke, close=true)\nsetopacity(0.75)\n\nsetline(20)\nsethue(\"red\")\npoly(polyportion(p, 0.25), :stroke)\n\nsetline(10)\nsethue(\"green\")\npoly(polyportion(p, 0.5), :stroke)\n\nsetline(5)\nsethue(\"blue\")\npoly(polyportion(p, 0.75), :stroke)\n\nsetline(1)\ncircle(polyremainder(p, 0.75)[1], 5, :stroke) # first point\n\nfinish() # hide\nnothing # hide(Image: polyportion)To resample a polygon, use polysample(). In this example, the same four-sided polygon is sampled at multiples of 4, with different circle radii at each multiple. This adds more points to the original polygon.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polysample.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetline(1) # hide\nsethue(\"black\") # hide\n\npts = ngon(O, 100, 4, vertices=true)\nfor (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))\n    prettypoly(polysample(pts, npoints),\n        :stroke, close=true,\n        () -> begin\n                circle(O, 2n, :stroke)\n              end)\nend    \n\nfinish() # hide\nnothing # hide(Image: polysampling)There is a closed option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is first sampled as a closed polygon, then as a non-closed one.using Luxor # hide\nDrawing(600, 250, \"assets/figures/polysample2.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsetline(1) # hide\nsethue(\"black\") # hide\nfontsize(8) # hide\n\ntranslate(0, -50) # hide\nsetline(1) # hide\nsethue(\"black\") # hide\n\nnumbervertices(l, n) = label(string(l), :N, O)\ndrawvertices() = ngon(O, 3, 4, 0, :fill)\n\npts = [Point(30x, 20sin(x)) for x in -2pi:pi/6:2pi]\n\nprettypoly(pts, \"stroke\", drawvertices, vertexlabels = numbervertices)\n\ntranslate(0, 50)\n\nnpoints = 40\n\nsethue(\"cornflowerblue\")\nprettypoly(polysample(pts, npoints, closed=true), :stroke, drawvertices,\n    vertexlabels = numbervertices)\n\ntranslate(0, 50)\n\nsethue(\"magenta\")\nprettypoly(polysample(pts, npoints, closed=false), :stroke, drawvertices,\n    vertexlabels = numbervertices)\n\n\nfinish() # hide\nnothing # hide(Image: polysampling 2)polysample"
 },
 
 {
@@ -1661,7 +1789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Area of polygon",
     "category": "section",
-    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.This code draws some regular polygons and calculates their area, perimeter, and shows how near the ratio of perimeter over radius approaches 2π.using Luxor # hide\nDrawing(650, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(13) # hide\nfontface(\"Georgia\")\nsethue(\"black\")\nsetline(0.25)\nouterframe = Table([500], [400, 200])\ntotal = 30\nproperties = Table(fill(15, total), [20, 85, 85], outerframe[1, 2])\nradius = 55\nsethue(\"grey20\")\nfor i in 3:total\n    text(string(i), properties[i, 1], halign=:right)\n    p = ngon(outerframe[1], radius, i, 0, vertices=true)\n    prettypoly(p, :stroke, close=true, () -> (sethue(\"red\"); circle(O, 2, :fill)))\n    pa = polyarea(p)\n    pp = polyperimeter(p)\n    ppoverradius = pp/radius\n    text(string(Int(round(pa, digits=0))), properties[i, 2], halign=:left)\n    text(string(round(ppoverradius, digits=6)), properties[i, 3], halign=:left)\n    radius += 5\nend\n\nfontsize(10)\n[text([\"Sides\", \"Area\", \"Perimeter/Radius\"][n], pt, halign=:center)\n    for (pt, n) in Table([20], [20, 85, 85], outerframe[2] - (0, 220))]\n\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolyremainder\npolydistances\nnearestindex\npolyarea"
+    "text": "Use polyarea() to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.This code draws some regular polygons and calculates their area, perimeter, and shows how near the ratio of perimeter over radius approaches 2π.using Luxor # hide\nDrawing(650, 500, \"assets/figures/polyarea.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nfontsize(13) # hide\nfontface(\"Georgia\")\nsethue(\"black\")\nsetline(0.25)\nouterframe = Table([500], [400, 200])\ntotal = 30\nproperties = Table(fill(15, total), [20, 85, 85], outerframe[1, 2])\nradius = 55\nsethue(\"grey20\")\nfor i in 3:total\n    global radius\n    text(string(i), properties[i, 1], halign=:right)\n    p = ngon(outerframe[1], radius, i, 0, vertices=true)\n    prettypoly(p, :stroke, close=true, () -> (sethue(\"red\"); circle(O, 2, :fill)))\n    pa = polyarea(p)\n    pp = polyperimeter(p)\n    ppoverradius = pp/radius\n    text(string(Int(round(pa, digits=0))), properties[i, 2], halign=:left)\n    text(string(round(ppoverradius, digits=6)), properties[i, 3], halign=:left)\n    radius += 5\nend\n\nfontsize(10)\n[text([\"Sides\", \"Area\", \"Perimeter/Radius\"][n], pt, halign=:center)\n    for (pt, n) in Table([20], [20, 85, 85], outerframe[2] - (0, 220))]\n\nfinish() # hide\nnothing # hide(Image: poly area)polyperimeter\npolyportion\npolyremainder\npolydistances\nnearestindex\npolyarea"
 },
 
 {
@@ -1949,7 +2077,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.translate",
     "category": "function",
-    "text": "translate(x::Real, y::Real)\ntranslate(point)\n\nTranslate the workspace by x and y or by moving the origin to pt.\n\n\n\n\n\n"
+    "text": "translate(point)\ntranslate(x::Real, y::Real)\n\nTranslate the workspace to x and y or to pt.\n\n\n\n\n\n"
 },
 
 {
@@ -2309,7 +2437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Luxor.Point",
     "category": "type",
-    "text": "The Point type holds two coordinates. Currently it\'s immutable, so remember not try to change the values of the x and y values directly.\n\n\n\n\n\n"
+    "text": "The Point type holds two coordinates. It\'s immutable, you can\'t change the values of the x and y values directly.\n\n\n\n\n\n"
 },
 
 {
@@ -2341,7 +2469,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Turtle graphics",
     "title": "Turtle graphics",
     "category": "section",
-    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.using Luxor, Colors\nDrawing(600, 400, \"assets/figures/turtles.png\")  \norigin()  \nbackground(\"midnightblue\")  \n\n🐢 = Turtle() # you can type the turtle emoji with \\:turtle:\nPencolor(🐢, \"cyan\")\nPenwidth(🐢, 1.5)\nglobal n = 5\nfor i in 1:400\n    Forward(🐢, n)\n    Turn(🐢, 89.5)\n    HueShift(🐢)\n    n += 0.75\nend\nfontsize(20)\nMessage(🐢, \"finished\")\nfinish()  \nnothing # hide(Image: text placement)The turtle commands expect a reference to a turtle as the first argument (it doesn\'t have to be a turtle emoji!), and you can have any number of turtles active at a time.using Luxor, Colors # hide\nDrawing(800, 800, \"assets/figures/manyturtles.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nquantity = 9\nturtles = [Turtle(O, true, 2pi * rand(), (rand(), rand(), 0.5)...) for i in 1:quantity]\nReposition.(turtles, first.(collect(Tiler(800, 800, 3, 3))))\nglobal n = 10\nPenwidth.(turtles, 0.5)\nfor i in 1:300\n    Forward.(turtles, n)\n    HueShift.(turtles)\n    Turn.(turtles, [60.1, 89.5, 110, 119.9, 120.1, 135.1, 145.1, 176, 190])\n    n += 0.5\nend\nfinish() # hide  \nnothing # hide(Image: text placement)Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
+    "text": "Some simple \"turtle graphics\" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.using Luxor, Colors\nDrawing(600, 400, \"assets/figures/turtles.png\")  \norigin()  \nbackground(\"midnightblue\")  \n\n🐢 = Turtle() # you can type the turtle emoji with \\:turtle:\nPencolor(🐢, \"cyan\")\nPenwidth(🐢, 1.5)\nn = 5\nfor i in 1:400\n    global n\n    Forward(🐢, n)\n    Turn(🐢, 89.5)\n    HueShift(🐢)\n    n += 0.75\nend\nfontsize(20)\nMessage(🐢, \"finished\")\nfinish()  \nnothing # hide(Image: text placement)The turtle commands expect a reference to a turtle as the first argument (it doesn\'t have to be a turtle emoji!), and you can have any number of turtles active at a time.using Luxor, Colors # hide\nDrawing(800, 800, \"assets/figures/manyturtles.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nquantity = 9\nturtles = [Turtle(O, true, 2pi * rand(), (rand(), rand(), 0.5)...) for i in 1:quantity]\nReposition.(turtles, first.(collect(Tiler(800, 800, 3, 3))))\nn = 10\nPenwidth.(turtles, 0.5)\nfor i in 1:300\n    global n\n    Forward.(turtles, n)\n    HueShift.(turtles)\n    Turn.(turtles, [60.1, 89.5, 110, 119.9, 120.1, 135.1, 145.1, 176, 190])\n    n += 0.5\nend\nfinish() # hide  \nnothing # hide(Image: text placement)Turtle\nForward\nTurn\nCircle\nHueShift\nMessage\nOrientation\nRandomize_saturation\nRectangle\nPen_opacity_random\nPendown\nPenup\nPencolor\nPenwidth\nPoint\nPop\nPush\nReposition"
 },
 
 {
@@ -2381,7 +2509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "function",
-    "text": "animate(movie::Movie, scenelist::AbstractArray{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::AbstractArray{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30,\n        tempdirectory=\".\")\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n\n\n"
 },
 
 {
