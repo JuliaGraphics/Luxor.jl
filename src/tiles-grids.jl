@@ -16,30 +16,32 @@ Tiler and Partition are similar:
 
 - Partition lets you specify the width and height of a cell
 
-- Tiler lets you specify how many rows and columns of cells you want, and a margin
+- Tiler lets you specify how many rows and columns of cells you want, and a margin:
 
-    tiles = Tiler(1000, 800, 4, 5, margin=20)
-    for (pos, n) in tiles
-        # the point pos is the center of the tile
-    end
+```
+tiles = Tiler(1000, 800, 4, 5, margin=20)
+for (pos, n) in tiles
+    # the point pos is the center of the tile
+end
+```
 
 You can access the calculated tile width and height like this:
 
-    tiles = Tiler(1000, 800, 4, 5, margin=20)
-    for (pos, n) in tiles
-        ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
-    end
+```
+tiles = Tiler(1000, 800, 4, 5, margin=20)
+for (pos, n) in tiles
+    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+end
+```
 
-It's sometimes useful to know which row and column you're currently on:
-
-    tiles.currentrow
-    tiles.currentcol
-
-should have that information for you.
+It's sometimes useful to know which row and column you're currently on.
+`tiles.currentrow` and `tiles.currentcol` should have that information for you.
 
 To use a Tiler to make grid points:
 
-    first.(collect(Tiler(800, 800, 4, 4))
+```
+first.(collect(Tiler(800, 800, 4, 4))
+```
 
 which returns an array of points that are the center points of the grid.
 """
