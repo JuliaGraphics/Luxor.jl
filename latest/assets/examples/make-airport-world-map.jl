@@ -1,7 +1,9 @@
 #!/usr/bin/env julia
 
 using Shapefile, Luxor
-include(Pkg.dir("Luxor") * "/src/readshapefiles.jl")
+
+include(joinpath(dirname(pathof(Luxor)), "readshapefiles.jl"))
+
 function drawairportmap(outputfilename, countryoutlines, airportdata)
     Drawing(4000, 2000, outputfilename)
     origin()
@@ -29,9 +31,9 @@ function drawairportmap(outputfilename, countryoutlines, airportdata)
     preview()
 end
 
-worldshapefile = Pkg.dir("Luxor") * "/docs/src/assets/examples/outlines-of-world-countries.shp"
+worldshapefile = joinpath(dirname(pathof(Luxor)), "../docs/src/assets/examples/outlines-of-world-countries.shp")
 
-airportdata = readlines(Pkg.dir("Luxor") * "/docs/src/assets/examples/airports.csv")
+airportdata = readlines(joinpath(dirname(pathof(Luxor)), "../docs/src/assets/examples/airports.csv"))
 
 worldshapes = open(worldshapefile) do f
     read(f, Shapefile.Handle)

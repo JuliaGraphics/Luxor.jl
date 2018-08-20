@@ -15,7 +15,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-1.png" alt="
     A, B = [Point(x, 0) for x in [-radius, radius]]
     line(A, B, :stroke)
     circle(O, radius, :stroke)
-
+# &gt;&gt;&gt;&gt;
     label(&quot;A&quot;, :NW, A)
     label(&quot;O&quot;, :N,  O)
     label(&quot;B&quot;, :NE, B)
@@ -36,7 +36,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-2.png" alt="
     label(&quot;B&quot;, :NE, B)
 
     circle.([A, O, B], 2, :fill)
-    circle.([A, B], 2radius, :stroke)</code></pre><p>The <code>intersectionlinecircle()</code> takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.</p><p>The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia&#39;s math-friendly style. The circle is centered at A and has a radius of AB (which is <code>2radius</code>). Assuming that there are two intersections, we feed these to <code>circle()</code> and <code>label()</code> for drawing and labeling using our new broadcasting superpowers.</p><pre><code class="language-julia">
+    circle.([A, B], 2radius, :stroke)</code></pre><p>The <code>intersectionlinecircle()</code> takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.</p><p>The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia&#39;s math-friendly style. The circle is centered at A and has a radius of AB (which is <code>2radius</code>). Assuming that there are two intersections, we feed these to <code>circle()</code> and <code>label()</code> for drawing and labeling using our new broadcasting superpowers.</p><pre><code class="language-julia"># &gt;&gt;&gt;&gt;
     nints, C, D =
         intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
@@ -47,7 +47,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-2.png" alt="
 
 end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-3.png" alt="point example"/></p><h3><a class="nav-anchor" id="The-upper-circle-1" href="#The-upper-circle-1">The upper circle</a></h3><p>Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.</p><p>Finding this new center point C1 is easy enough, because we can again use <code>intersectionlinecircle()</code> to find the point where the central circle crosses a line from O to D.</p><p>Add some more lines to your code:</p><pre><code class="language-julia">@png begin
 
-    # ...
+# &gt;&gt;&gt;&gt;
 
     nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
     if nints == 2
@@ -55,14 +55,15 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-3.png" alt="
         label(&quot;C1&quot;, :N, C1)
     end
 
-end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-4.png" alt="point example"/></p><p>The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1.</p><p>To find (and draw) these points is straightforward, but we&#39;ll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:</p><pre><code class="language-julia">@png begin
-
-    # ...
+end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-4.png" alt="point example"/></p><p>The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1.</p><p>To find (and draw) these points is straightforward, but we&#39;ll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:</p><pre><code class="language-julia"># &gt;&gt;&gt;&gt;
 
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    circle.([I1, I2, I3, I4], 2, :fill)</code></pre><p>The <code>distance()</code> function returns the distance between two points, and it&#39;s simple enough to compare the distances.</p><pre><code class="language-julia">    if distance(C1, I1) &lt; distance(C1, I2)
+    circle.([I1, I2, I3, I4], 2, :fill)</code></pre><p>The <code>distance()</code> function returns the distance between two points, and it&#39;s simple enough to compare the distances.</p><pre><code class="language-julia">
+# &gt;&gt;&gt;&gt;
+
+    if distance(C1, I1) &lt; distance(C1, I2)
        ip1 = I1
     else
        ip1 = I2
@@ -77,10 +78,8 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-4.png" alt="
     label(&quot;ip2&quot;, :N, ip2)
     circle(C1, distance(C1, ip1), :stroke)
 
-end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-5.png" alt="point example"/></p><h3><a class="nav-anchor" id="Eggs-at-the-ready-1" href="#Eggs-at-the-ready-1">Eggs at the ready</a></h3><p>We now know all the points on the egg&#39;s perimeter, and the centers of the circular arcs. To draw the outline, we&#39;ll use the <code>arc2r()</code> function four times. This function takes: a center point and two points that together define a circular arc, plus an action.</p><p>The shape consists of four curves, so we&#39;ll use the <code>:path</code> action. Instead of immediately drawing the shape, like the <code>:fill</code> and <code>:stroke</code> actions do, this action adds a section to the current path (which is initially empty).</p><pre><code class="language-julia">@png begin
-
-    # ... as before
-    # Add this:
+end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-5.png" alt="point example"/></p><h3><a class="nav-anchor" id="Eggs-at-the-ready-1" href="#Eggs-at-the-ready-1">Eggs at the ready</a></h3><p>We now know all the points on the egg&#39;s perimeter, and the centers of the circular arcs. To draw the outline, we&#39;ll use the <code>arc2r()</code> function four times. This function takes: a center point and two points that together define a circular arc, plus an action.</p><p>The shape consists of four curves, so we&#39;ll use the <code>:path</code> action. Instead of immediately drawing the shape, like the <code>:fill</code> and <code>:stroke</code> actions do, this action adds a section to the current path (which is initially empty).</p><pre><code class="language-julia">
+# &gt;&gt;&gt;&gt;
 
     setline(5)
     setdash(&quot;solid&quot;)
@@ -88,7 +87,7 @@ end</code></pre><div></div><p><img src="assets/figures/tutorial-egg-5.png" alt="
     arc2r(B,    A,  ip1, :path) # centered at B, from A to ip1
     arc2r(C1, ip1,  ip2, :path)
     arc2r(A,  ip2,    B, :path)
-    arc2r(O,    B,    A, :path)</code></pre><p>Once we&#39;ve added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a &quot;preserve&quot; version of the first action. This applies the action but keeps the path around for more actions.</p><pre><code class="language-none">    strokepreserve()
+    arc2r(O,    B,    A, :path)</code></pre><p>Once we&#39;ve added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a &quot;preserve&quot; version of the first action. This applies the action but keeps the path around for more actions.</p><pre><code class="language-julia">    strokepreserve()
     setopacity(0.8)
     sethue(&quot;ivory&quot;)
     fillpath()
