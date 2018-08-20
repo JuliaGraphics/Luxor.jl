@@ -127,7 +127,7 @@ function draw(n)
 end
 
 depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
-cols = distinguishable_colors(depth)
+cols = distinguishable_colors(depth) # from Colors.jl
 draw(depth)
 
 # finish()
@@ -136,9 +136,9 @@ draw(depth)
 
 The main type (apart from the Drawing) is the Point, an immutable composite type containing `x` and `y` fields.
 
-## Working in Jupyter
+## Working interactively
 
-If you want to work interactively, you can use an environment such as a Jupyter notebook, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work, of course. And if you're working in the REPL, after your first drawing subsequent drawings will be much quicker.)
+If you want to work interactively, you can use an environment such as a Jupyter notebook or the Juno IDE, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work, of course. And if you're working in the REPL, after your first drawing subsequent drawings will be much quicker.)
 
 ![Jupyter](assets/figures/jupyter-star.png)
 
@@ -156,11 +156,11 @@ This is the full map:
 
 !["simple world map"](assets/figures/airport-map.png)
 
-You'll need to install the [Shapefile.jl](https://github.com/JuliaGeo/Shapefile.jl) package before running the code:
+You'll need to install the [Shapefile](https://github.com/JuliaGeo/Shapefile.jl) package before running the code:
 
 ```julia
 using Shapefile, Luxor
-include(Pkg.dir("Luxor") * "/src/readshapefiles.jl")
+include(joinpath(dirname(pathof(Luxor)), "readshapefiles.jl"))
 function drawairportmap(outputfilename, countryoutlines, airportdata)
     Drawing(4000, 2000, outputfilename)
     origin()
@@ -187,9 +187,9 @@ function drawairportmap(outputfilename, countryoutlines, airportdata)
     finish()
     preview()
 end
+worldshapefile = joinpath(dirname(pathof(Luxor)), "../docs/src/assets/examples/outlines-of-world-countries.shp")
+airportdata = readlines(joinpath(dirname(pathof(Luxor)), "../docs/src/assets/examples/airports.csv"))
 
-worldshapefile = Pkg.dir("Luxor") * "/docs/src/assets/examples/outlines-of-world-countries.shp"
-airportdata = readlines(Pkg.dir("Luxor") * "/docs/src/assets/examples/airports.csv")
 worldshapes = open(worldshapefile) do f
     read(f, Shapefile.Handle)
 end
@@ -201,11 +201,11 @@ drawairportmap("/tmp/airport-map.pdf", worldshapes, airportdata)
 
 ### Sector chart
 
-!["benchmark sector chart"](assets/figures/sector-chart.png)
+!["benchmark sector chart"](assets/figures/sector-chart.svg)
 
-Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org) and tries to render them literally as radiating sectors. The larger the sector, the slower the performance, so it's difficult to see the Julia scores sometimes...!
+Sector charts look cool but they aren't always good at their job. This chart takes the raw benchmark scores from the [Julia website](http://julialang.org/benchmarks) and tries to render them literally as radiating sectors. The larger the sector, the slower the performance, so it's difficult to see the Julia scores sometimes...!
 
-[link to PDF original](assets/figures/sector-chart.pdf) | [link to Julia source](assets/examples/sector-chart.jl)
+[link to PDF](assets/figures/sector-chart.pdf) | [link to Julia source](assets/examples/sector-chart.jl)
 
 ### Ampersands
 

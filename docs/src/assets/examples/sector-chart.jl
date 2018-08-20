@@ -1,8 +1,10 @@
 #!/usr/bin/env julia
 
-using Luxor, Colors
+using Luxor, Colors, DelimitedFiles, Dates
 
 """
+    howmanyrowscolumns(n)
+
 Work out how many rows and columns we need given the number of cells required.
 It favours squarer layouts.
 """
@@ -13,6 +15,8 @@ function howmanyrowscolumns(n)
 end
 
 """
+    areaofsector(innerradius, outerradius, startangle, endangle)
+
 Find the area of an annular sector.
 """
 function areaofsector(innerradius, outerradius, startangle, endangle)
@@ -21,30 +25,31 @@ function areaofsector(innerradius, outerradius, startangle, endangle)
 end
 
 """
+    outerradiusgivenarea(area, innerradius, startangle, endangle)
+
 Find the outerradius of a sector if we already know what its area and innerradius are.
 """
-
 function outerradiusgivenarea(area, innerradius, startangle, endangle)
     theta = endangle - startangle
     return sqrt( (area + (theta/2) * innerradius^2) / (theta/2) ) - innerradius
 end
 
 """
-Draw a sector chart. You specify the centerposition, the tilewidth and height, some datavalues,
-labels (one for each datavalue), and a dictionary that maps languages to colors. And a title.
-
-The incoming values are rescaled to make nice pictures. But the original values are shown in labels.
-
     sectorchart(centerpos,
         innerradius,
         tilewidth, tileheight,
         rawdatavalues, labels, colordict, title;
         gap=deg2rad(1))
 
+Draw a sector chart. You specify the centerposition, the tilewidth and height, some datavalues,
+labels (one for each datavalue), and a dictionary that maps languages to colors. And a title.
+
+The incoming values are rescaled to make nice pictures. But the original values are shown in labels.
+
 The gap is applied to the left and right of the sector, to leave some white space.
 """
-
-function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalues, labels, coldict, title; gap=deg2rad(2))
+function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalues, labels, coldict, title;
+    gap=deg2rad(2))
   gsave()
   translate(centerpos)
   n = length(rawdatavalues)
@@ -97,17 +102,17 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
   end
   gsave()
   # label this chart
-  fontsize(24)
+  fontsize(20)
   fontface("Impact")
   sethue("black")
-  textcentered(title, 0, min(tilewidth/2, tileheight/2) - 20)
+  textcentered(title, 0, min(tilewidth/2, tileheight/2) - 15)
   grestore()
   grestore()
 end
 
 
 function main()
-  fname = "/tmp/sector-chart.pdf"
+  fname = "/tmp/sector-chart.svg"
   width, height = 1064, 1064
   Drawing(width, height, fname)
   origin()
@@ -115,7 +120,7 @@ function main()
   setline(1)
 
   # get the data
-  d = readdlm("benchmarks-julia.csv")
+  d = readdlm("benchmarks-julia.csv", ',')
   # fields are language | test | timetaken
   d = d[d[:, 1] .!= "octave" , :]
   # but we don't want "Octave" because there are too many outliers :)
@@ -124,8 +129,21 @@ function main()
   benchmarknames = unique(d[:,2])
 
   # build a color dictionary for languages
-  #          "c",     "fortran",   "go",         "java",       "javascript", "julia",      "lua",   "mathematica",  "matlab",  "python",      "r"]
-  cols   =  ["gray20", "darkgreen", "blueviolet", "royalblue2",  "orange3",   "red",       "cyan3", "orangered3",   "gray56",  "chartreuse3", "aquamarine"]
+  cols   =  [
+    "gray20",      # C
+    "darkgreen",   # Fortran
+    "blueviolet",  # Go
+    "royalblue2",  # Java
+    "orange3",     # Javascript
+    "red",         # Julia
+    "cyan3",       # Lua
+    "orangered3",  # Mathematica
+    "gray56",      # MATLAB
+    "chartreuse3", # Python
+    "aquamarine",  # R
+    "sienna",      # Rust
+    ]
+
   languagecolors = Dict(languages[i] => cols[i] for i in 1:length(languages))
 
   # how many charts are we plotting?
@@ -151,7 +169,7 @@ function main()
   fontsize(40)
   gsave()
   translate(0, -height/2 + 100)
-  textcentered("Julia benchmarks")
+  textcentered("Julia benchmarks: who is the slowest?")
   grestore()
 
   # footnotes
@@ -159,7 +177,7 @@ function main()
   fontface("Monaco")
   fontsize(6)
   translate(0, height/2 - 50)
-  textcentered("plotted $(Dates.format(now(), "e, dd u yyyy HH:MM")) Bigger areas mean slower. Humans are bad at comparing areas. Benchmarks are taken from the http://julialang.org web site.")
+  textcentered("plotted $(Dates.format(now(), "e, dd u yyyy HH:MM")) Bigger areas mean slower. Humans are bad at comparing areas. Benchmarks are at https://julialang.org/benchmarks")
   translate(0, 10)
   textcentered("Terms and conditions apply. Objects may appear smaller than they actually are. The value of investments may go up as well as down.")
   grestore()
@@ -181,5 +199,5 @@ function main()
   preview()
 end
 
-cd(Pkg.dir() * "/Luxor/docs/src/assets/examples/")
+cd(@__DIR__)
 main()
