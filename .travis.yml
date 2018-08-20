@@ -13,15 +13,9 @@ matrix:
 env:
   global:
     - DOCUMENTER_DEBUG=true
-jobs:
-  include:
-    - stage: deploy
-      julia: 0.7
-      os: linux
-      script:
-        - julia -e 'import Pkg; Pkg.add("Colors"); Pkg.build("Colors")'
-        - julia -e 'import Pkg; Pkg.add("Luxor");  Pkg.build("Luxor")'
-        - julia -e 'import Pkg; Pkg.add("Documenter")'
-        - julia -e 'import Luxor; include("docs/make.jl")'
 after_success:
- - julia -e 'import Pkg; cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+  - julia -e 'import Pkg; Pkg.add("Colors"); Pkg.build("Colors")'
+  - julia -e 'import Pkg; Pkg.add("Luxor");  Pkg.build("Luxor")'
+  - julia -e 'import Pkg; Pkg.add("Documenter")'
+  - julia -e 'import Luxor; include("docs/make.jl")'
+  - julia -e 'import Pkg; cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'

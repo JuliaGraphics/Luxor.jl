@@ -7,8 +7,7 @@
 
 ## Status as of 2018-08-08
 
-Mostly compatible with Julia v0.7 and v1.0, but very dependeent on successfulintallation of
-Homebew and Cairo. If you can install them, you should be OK.
+Compatible with Julia v1.0. If you can install Cairo and Homebrew successfully, you should be OK.
 
 [![][pkg-0.7-img]][pkg-0.7-url]
 
@@ -18,7 +17,9 @@ Luxor is a Julia package for drawing simple static vector graphics. It provides 
 
 Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
 
-There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg). A short tutorial can be found in the latest version of the documentation.
+A short tutorial can be found in the latest version of the documentation.
+
+There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg), and some Luxor-related blog posts at [cormullion.github.io/](https://cormullion.github.io/).
 
 Luxor isn't interactive: for interactive graphics, look at [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), and [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl). [Makie](https://github.com/JuliaPlots/Makie.jl) is worth investigating.
 
