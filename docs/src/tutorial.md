@@ -165,7 +165,7 @@ Edit your previous code by adding instructions to draw some labels and circles:
     A, B = [Point(x, 0) for x in [-radius, radius]]
     line(A, B, :stroke)
     circle(O, radius, :stroke)
-
+# >>>>
     label("A", :NW, A)
     label("O", :N,  O)
     label("B", :NE, B)
@@ -225,7 +225,7 @@ The `intersectionlinecircle()` takes four arguments: two points to define the li
 The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia's math-friendly style. The circle is centered at A and has a radius of AB (which is `2radius`). Assuming that there are two intersections, we feed these to `circle()` and `label()` for drawing and labeling using our new broadcasting superpowers.
 
 ```julia
-
+# >>>>
     nints, C, D =
         intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
@@ -276,7 +276,7 @@ Add some more lines to your code:
 ```julia
 @png begin
 
-    # ...
+# >>>>
 
     nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
     if nints == 2
@@ -325,9 +325,7 @@ The two other points that define this circle lie on the intersections of the lar
 To find (and draw) these points is straightforward, but we'll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:
 
 ```julia
-@png begin
-
-    # ...
+# >>>>
 
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
@@ -338,6 +336,9 @@ To find (and draw) these points is straightforward, but we'll mark these as inte
 The `distance()` function returns the distance between two points, and it's simple enough to compare the distances.
 
 ```julia
+
+# >>>>
+
     if distance(C1, I1) < distance(C1, I2)
        ip1 = I1
     else
@@ -419,10 +420,8 @@ We now know all the points on the egg's perimeter, and the centers of the circul
 The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:fill` and `:stroke` actions do, this action adds a section to the current path (which is initially empty).
 
 ```julia
-@png begin
 
-    # ... as before
-    # Add this:
+# >>>>
 
     setline(5)
     setdash("solid")
@@ -435,7 +434,7 @@ The shape consists of four curves, so we'll use the `:path` action. Instead of i
 
 Once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a "preserve" version of the first action. This applies the action but keeps the path around for more actions.
 
-```
+```julia
     strokepreserve()
     setopacity(0.8)
     sethue("ivory")
