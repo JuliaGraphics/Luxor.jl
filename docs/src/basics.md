@@ -14,20 +14,20 @@ Y coordinates increase downwards, so `Point(0, 100)` usually lies below `Point(0
 
 The main types you'll encounter in Luxor are:
 
-| Name of type     | Purpose |
-|--                |--       |
-|Drawing           |holds the current drawing|
-|Point             |specifies 2D points|
-|BoundingBox       |defines a bounding box|
-|Table             |defines a table with different column widths and row heights|
-|Partition         |defines a table defined by cell width and height|
-|Tiler             |defines a rectangular grid of tiles|
-|BezierPathSegment |a Bezier path segment defined by 4 points|
-|BezierPath        |contains a series of BezierPathSegments|
-|GridRect          |defines a rectangular grid|
-|GridHex           |defines a hexagonal grid|
-|Scene             |used to define a scene for an animation|
-|Turtle            |represents a turtle for drawing turtle graphics|
+| Name of type      | Purpose |
+| ---               | ---     |
+| Drawing           | holds the current drawing |
+| Point             | specifies 2D points |
+| BoundingBox       | defines a bounding box |
+| Table             | defines a table with different column widths and row  heights |
+| Partition         | defines a table defined by cell width and height |
+| Tiler             | defines a rectangular grid of tiles |
+| BezierPathSegment | a Bezier path segment defined by 4 points |
+| BezierPath        | contains a series of BezierPathSegments |
+| GridRect          | defines a rectangular grid |
+| GridHex           | defines a hexagonal grid |
+| Scene             | used to define a scene for an animation |
+| Turtle            | represents a turtle for drawing turtle graphics |
 
 ## Points and coordinates
 
