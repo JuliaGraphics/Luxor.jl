@@ -12,7 +12,7 @@ Experienced Julia users and programmers fluent in other languages and graphics s
 If you've already downloaded Julia, and have added the Luxor package successfully (like this):
 
 ```julia
-Pkg.add("Luxor")
+] add Luxor
 ```
 
 then you're ready to start.
@@ -53,21 +53,21 @@ What happened? Can you see this image somewhere?
 
 ![point example](assets/figures/tutorial-hello-world.png)
 
-If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing.png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
+If you're using Juno, the image should appear in the Plots window. If you're working in a Jupyter notebook, the image should appear below the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing-(time stamp).png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
-Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. SVGs are often higher quality too, but they're text-based so can become very large for complex images. PDF documents are always higher quality, and usually open up in a separate application.
+Let's press on. The `@png` macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the `Document()`, `origin()`, `finish()`, and `preview()` functions.) There are also `@svg` and `@pdf` macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. SVGs are usually higher quality too, but they're text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.
 
 This example illustrates a few things about Luxor drawings:
 
-- There are default values which you don't have to set if you don't want to (file names, colors, font sizes, etc).
+- There are default values which you don't have to set if you don't want to (file names, colors, font sizes, and so on).
 
-- Positions on the drawing are specified with coordinates stored in the Point datatype, and you can sometimes omit positions altogether.
+- Positions on the drawing are specified with coordinates stored in the Point type, and you can sometimes omit positions altogether.
 
-- The text was placed at the origin point (0,0), and by default it's left aligned.
+- The text was placed at the origin point (0/0), and by default it's left aligned.
 
 - The circle wasn't filled, but `stroked`. We passed the `:stroke` symbol as an action to the `circle()` function. Many drawing functions expect some action, such as `:fill` or `:stroke`, and sometimes `:clip` or `:fillstroke`.
 
-- Did the first drawing takes a few seconds to appear? The Cairo drawing engine takes a little time warm up. Once it's running, drawings appear much faster.
+- Did the first drawing takes a few seconds to appear? The Cairo drawing engine takes a little time to warm up. Once it's running, drawings appear much faster.
 
 Once more, with more black, and some rulers:
 
@@ -109,20 +109,22 @@ To start off, define the variable `radius` to hold a value of 80 units (there ar
     radius=80
 ```
 
-Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB or LUV) values or use named colors, such as "red", "gray0" is black, and "gray100" is white. (For more details about colors, see [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).)
+Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB or LUV) values or use named colors, such as "red" or "green". "gray0" is black, and "gray100" is white. (For more information about colors, see [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).)
 
 ```julia
     setdash("dot")
     sethue("gray30")
 ```
 
-Next, make two points, A and B, which will lie either side of the origin point. This line uses an array comprehension - notice the square brackets enclosing a `for` loop. `x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points. But it shows how you can assign more than one variable at the same time, and also how to generate more than two points...
+Next, make two points, A and B, which will lie either side of the origin point. This line uses an array comprehension - notice the square brackets enclosing a `for` loop.
 
 ```julia
     A, B = [Point(x, 0) for x in [-radius, radius]]
 ```
 
-With two points defined, draw a line from A to B, and "stroke" it.
+`x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points, but it shows how you can assign more than one variable at the same time, and also how to generate more than two points.
+
+With two points defined, draw a line from A to B, and stroke it.
 
 ```julia
     line(A, B, :stroke)
@@ -153,7 +155,7 @@ nothing
 
 ### Labels and dots
 
-It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using points of the compass, so `:N` places the label to the north of a position.
+It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using points of the compass, so `:N` places the label to the north of a point.
 
 Edit your previous code by adding instructions to draw some labels and circles:
 
@@ -196,7 +198,7 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-2.png)
 
-While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot ('`.`') just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting (from scalar to vector) for us.
+While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot (`.`) just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting (from scalar to vector) for us.
 
 ### Intersect this
 
@@ -322,7 +324,7 @@ finish()
 
 The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1.
 
-To find (and draw) these points is straightforward, but we'll mark these as intermediate for now, because there are four intersection points but we want just the two nearest the top:
+To find (and draw) these points is straightforward, but we'll mark these as intermediate for now, because there are in fact four intersection points but we want just the two nearest the top:
 
 ```julia
 # >>>>
@@ -550,7 +552,7 @@ This keeps all the intermediate code and calculations safely hidden away, and it
 
 (Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)
 
-Notice that this function doesn't define anything about what the shape looks like or where it's placed. When called, the function inherits the current drawing environment: scale, rotation, position, line thickness, color, style, and so on. This lets us write code like this:
+Notice that this function doesn't define anything about what color it is, or where it's placed. When called, the function inherits the current drawing environment: scale, rotation, position of the origin, line thickness, color, style, and so on. This lets us write code like this:
 
 ```julia
 @png begin
@@ -625,7 +627,7 @@ finish()
 
 The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated by `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so, before any rotation takes place, a shift of -150 looks like an upwards shift). The `randomhue()` function does what you expect, and the `egg()` function is passed the `:fill` action and the radius.
 
-Notice that the four drawing instructions are encased in a `@layer begin...end` "shell". Any change made to the drawing environment inside this shell is discarded after each `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
+Notice that the four drawing instructions are encased in a `@layer begin...end` shell. Any change made to the drawing environment inside this shell is discarded after the `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
 
 Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and the y-axis due south, and positive angles are clockwise (ie from the positive x-axis towards the positive y-axis). So the second egg in the previous example was drawn after the axes were rotated by π/6 radians clockwise.
 
@@ -666,7 +668,7 @@ The `pathtopoly()` function converts the current path made by `egg(160, :path)` 
 
 `polycentroid()` finds the centroid of the new polygon.
 
-This loop steps through the points and moves every odd-numbered one halfway towards the centroid. `between()` finds a point midway between two specified points. The `poly()` function draws the array of points.
+This loop steps through the points and moves every odd-numbered one halfway towards the centroid. `between()` finds a point midway between two specified points. Finally the `poly()` function draws the array of points.
 
 ```julia
     for pt in 1:2:length(pgon)

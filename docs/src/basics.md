@@ -6,11 +6,28 @@ DocTestSetup = quote
 
 # The basics
 
-The underlying drawing model is that you make shapes, or add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the current drawing environment by transforming/rotating/scaling it. This affects subsequent graphics but not the ones you've already drawn.
+The underlying drawing model is that you make shapes, and add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the current graphics state by transforming/rotating/scaling it, and setting style parameters, and so on. Subsequent graphics use the new state, but the graphics you've already drawn are unchanged.
 
-Specify points (positions) using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`. The default is `:nothing`.
+You can specify points on the drawing surface using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:nothing`.
 
-The main defined types are `Point`, `Drawing`, and `Tiler`.  `Drawing` is how you create new drawings. You can divide up the drawing area into areas, using `Tiler`, `Partition`, and `Table`, and define grids, using `GridRect` and `GridHex`. The `BoundingBox` type provides tools for working with rectangular extents.
+Y coordinates increase downwards, so `Point(0, 100)` usually lies below `Point(0, 0)`. This is the preferred coordinate system for much computer graphics software, but mathematicians and scientists may well be used to the y-axis increasing upwards...
+
+The main types you'll encounter in Luxor are:
+
+| Name of type     | Purpose |
+|--                |--       |
+|Drawing           |holds the current drawing|
+|Point             |specifies 2D points|
+|BoundingBox       |defines a bounding box|
+|Table             |defines a table with different column widths and row heights|
+|Partition         |defines a table defined by cell width and height|
+|Tiler             |defines a rectangular grid of tiles|
+|BezierPathSegment |a Bezier path segment defined by 4 points|
+|BezierPath        |contains a series of BezierPathSegments|
+|GridRect          |defines a rectangular grid|
+|GridHex           |defines a hexagonal grid|
+|Scene             |used to define a scene for an animation|
+|Turtle            |represents a turtle for drawing turtle graphics|
 
 ## Points and coordinates
 
@@ -75,7 +92,7 @@ nothing # hide
 
 ![point example](assets/figures/point-ex.png)
 
-Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise'). (Turtle graphics conventionally let you supply angles in degrees.)
+Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise'). (The main exception is for turtle graphics, which conventionally let you supply angles in degrees.)
 
 Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
 
@@ -95,7 +112,7 @@ rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 
 ### Drawings and files
 
-To create a drawing, and optionally specify the filename and type, and dimensions, use the `Drawing` constructor function.
+To create a drawing, and optionally specify the filename, type, and dimensions, use the `Drawing` constructor function.
 
 ```@docs
 Drawing
@@ -157,10 +174,10 @@ They just save a bit of typing. You can omit the width and height (defaulting to
 
 ```
 @svg begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end
 ```
 
 or
@@ -178,13 +195,32 @@ or
 @pdf
 ```
 
+If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files create with the macros are created in your current working directory as `luxor-drawing-` followed by a time stamp.
+
+If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:
+
+```
+Drawing()
+background(1, 1, 1, 0)
+origin()
+setline(30)
+setcolor("green")
+box(BoundingBox() - 50, :stroke)
+finish()
+preview()
+```
+
+![transparent background](assets/figures/transparentbackground.png)
+
 ### Drawings in memory
 
 You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
 
-    Drawing(width, height, surfacetype, [filename])
+```
+Drawing(width, height, surfacetype, [filename])
+```
 
-lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. In a Jupyter notebook you can use Interact.jl to provide faster manipulations:
+lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. In a Jupyter notebook you can use it to provide faster manipulations. For example:
 
 ```
 using Interact
@@ -208,7 +244,9 @@ end
 
 The origin (0/0) starts off at the top left: the x axis runs left to right across the page, and the y axis runs top to bottom down the page.
 
-The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program. You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
+The `origin()` function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program.
+
+You can use functions like `scale()`, `rotate()`, and `translate()` to change the coordinate system.
 
 `background()` fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, `background()` fills just that region. In the next example, the first `background()` fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the `Table` iterator:
 
@@ -256,7 +294,7 @@ origin
 
 `gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
 
-You can also use the `@layer` macro to enclose graphics commands:
+The `@layer` macro is a synonym for a `gsave()`...`grestore()` pair.
 
 ```
 @svg begin

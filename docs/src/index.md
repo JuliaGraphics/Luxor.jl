@@ -12,9 +12,9 @@ The focus of Luxor is on simplicity and ease of use: it should be easier to use 
 
 Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
 
-There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg).
+There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg), and some Luxor-related blog posts at [cormullion.github.io/](https://cormullion.github.io/).
 
-For interactive graphics, you'll find [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), and [Makie](https://github.com/JuliaPlots/Makie.jl) language worth investigating.
+Luxor isn't interactive: for interactive graphics, look at [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), and [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl). [Makie](https://github.com/JuliaPlots/Makie.jl) is worth investigating.
 
 Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl). Original version by [cormullion](https://github.com/cormullion), much improved with contributions from the Julia community.
 
