@@ -5,7 +5,7 @@ DocTestSetup = quote
 ```
 # Simple graphics
 
-In Luxor, there are different ways of working with graphical items. Some, such as lines, rectangles and circles, are drawn immediately (ie placed on the drawing and then "forgotten"). Others can be constructed and then converted to lists of points for further processing. For these, watch out for a `vertices=true` option.
+In Luxor, there are different ways of working with graphical items. Some, such as lines, rectangles and circles, are drawn immediately (ie placed on the drawing and then "forgotten"). Others can be constructed and then converted to lists of points for further processing. For some of these, watch out for a `vertices=true` option, which returns coordinate data rather than draws things.
 
 ## Rectangles and boxes
 
@@ -42,6 +42,8 @@ or
 ```julia
 box(corner1,  corner2, vertices=true)
 ```    
+
+`box` is also able to draw some of the other Luxor objects, such as BoundingBoxes and Table cells.
 
 ```@docs
 rect
@@ -101,7 +103,7 @@ circle
 center3pts
 ```
 
-With `ellipse()` you can place ellipses (and circles) by defining the center point and the width and height.
+With `ellipse()` you can place ellipses and circles by defining the center point and the width and height.
 
 ```@example
 using Luxor, Random # hide
@@ -280,7 +282,7 @@ nothing # hide
 pie
 ```
 
-To construct spirals, use the `spiral()` function. These can be drawn directly, or used as polygons. The default is to draw Archimedes (non-logarithmic) spirals.
+To construct spirals, use the `spiral()` function. These can be drawn directly, or used as polygons. The default is to draw Archimedean (non-logarithmic) spirals.
 
 ```@example
 using Luxor # hide
@@ -343,6 +345,7 @@ end
 finish() # hide
 nothing # hide
 ```
+
 Modify the `stepby` and `period` parameters to taste, or collect the vertices for further processing.
 
 ![spiral log](assets/figures/spiral-log.png)
@@ -456,7 +459,7 @@ nothing # hide
 
 ![arc](assets/figures/rule.png)
 
-Use the optional `boundingbox` to control the extent of the ruled lines.
+Use the `boundingbox` keyword argument to crop the ruled lines with a BoundingBox.
 
 ```@example
 using Luxor # hide
@@ -481,7 +484,7 @@ rule
 
 ## Arcs and curves
 
-There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the `:path` action.
+There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the `:path` action, followed by a final `:stroke` or similar.
 
 `curve()` constructs Bézier curves from control points:
 
@@ -723,7 +726,7 @@ origin() # hide
 background("white") # hide
 sethue("darkmagenta") # hide
 end1, end2, pt3 = ngon(O, 100, 3, vertices=true)
-map(pt -> circle(pt, 5, :fill), [end1, end2, pt3])
+circle.([end1, end2, pt3], 5, :fill)
 line(end1, end2, :stroke)
 arrow(pt3, getnearestpointonline(end1, end2, pt3))
 finish() # hide
@@ -806,9 +809,11 @@ juliacircles
 
 ## Bounding boxes
 
-The `BoundingBox` type allows you to use rectangular extents to organize and interact with the 2D drawing area. A `BoundingBox` instance returns two points, the opposite corners of a bounding box.
+The `BoundingBox` type allows you to use rectangular extents to organize and interact with the 2D drawing area. A `BoundingBox` holds two points, the opposite corners of a bounding box.
 
-`BoundingBox()` without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see `origin()`).
+You can make a BoundingBox from the current drawing, two points, a text string, an existing polygon, or by modifying an existing one.
+
+`BoundingBox()` without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see `origin()`). Use `centered=false` if the drawing origin is still at the top left corner.
 
 This example draws circles at three points: at two of the drawing's corners and the midway point between them:
 
@@ -841,7 +846,7 @@ nothing # hide
 
 ![bounding box](assets/figures/bbox.png)
 
-You can make a BoundingBox from two points, a text string, an existing polygon, or by modifying an existing one.
+You can make a bounding box from a polygon:
 
 ```@example
 using Luxor # hide
@@ -862,9 +867,13 @@ nothing # hide
 
 ![bounding box of polygon](assets/figures/bboxpoly.png)
 
-The bounding box objects can be passed to `box()` or `poly()` to be drawn.
+The resulting bounding box objects can be passed to `box()` or `poly()` to be drawn.
 
-You can also do some arithmetic on bounding boxes. In the next example, the text's bounding box is filled with yellow, increased by 40 units (blue), scaled by 1.3 (green), and shifted by `(0, 100)` (orange).
+Pass a bounding box to `midpoint()` to find its center point. The functions `boxbottom()`, `boxheight()`, `boxtop()`, `boxaspectratio()`, `boxdiagonal()`, and  `boxwidth()` return information about a bounding box.
+
+To convert a bounding box `b` into a box, use `box(b, vertices=true)` or `convert(Vector{Point}, BoundingBox())`.
+
+You can also do some arithmetic on bounding boxes. In the next example, the bounding box is created from the text "good afternoon". The bounding box is filled with purple, then increased by 40 units on all sides (blue), also scaled by 1.3 (green), and also shifted by `(0, 100)` (orange).
 
 ```@example
 using Luxor # hide
@@ -875,9 +884,9 @@ origin() # hide
 translate(-130,0)
 fontsize(40)
 str = "good afternoon"
-sethue("yellow")
+sethue("purple")
 box(BoundingBox(str), :fill)
-sethue("black")
+sethue("white")
 text(str)
 
 sethue("blue")
@@ -1079,9 +1088,9 @@ bars
 
 ### Box maps
 
-The `boxmap()` function divides a rectangular area into smaller boxes or tiles based on the values of elements in an array.
+The `boxmap()` function divides a rectangular area into a sorted arrangement of smaller boxes or tiles based on the values of elements in an array.
 
-This example uses a short section of the Fibonacci sequence to determine the area of the boxes. Notice that the values are sorted in reverse, and are scaled to fit in the available area.
+This example uses the Fibonacci sequence to determine the area of the boxes. Notice that the values are sorted in reverse, and are scaled to fit in the available area.
 
 ```@example
 using Luxor, Colors, Random # hide
