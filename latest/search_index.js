@@ -885,7 +885,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple graphics",
     "title": "Luxor.boxbottom",
     "category": "function",
-    "text": "boxbottom(bb::BoundingBox)\n\nReturn the top center point of bounding box bb.\n\n\n\n\n\n"
+    "text": "boxbottom(bb::BoundingBox)\n\nReturn the bottom center point of bounding box bb.\n\n\n\n\n\n"
 },
 
 {
