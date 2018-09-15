@@ -32,8 +32,8 @@ makedocs(
 deploydocs(
     repo = "github.com/JuliaGraphics/Luxor.jl.git",
     target = "build",
-    julia  = "0.7",
-    osname = "linux",
+    julia  = "1.0",
+    osname = "osx",
     deps = nothing,
     make = nothing
 )
