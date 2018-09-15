@@ -1,21 +1,33 @@
 # Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
+
 os:
   - linux
   - osx
+
 julia:
   - 0.7
   - 1.0
   - nightly
+
 matrix:
   allow_failures:
     - julia: nightly
+
 env:
   global:
     - DOCUMENTER_DEBUG=true
+
+jobs:
+  include:
+    - stage: "Documentation"
+      julia: 1.0
+      os: linux
+      script:
+        - julia --project=docs/ -e 'using Pkg; Pkg.instantiate();
+                                    Pkg.add(PackageSpec(path=pwd()))'
+        - julia --project=docs/ docs/make.jl
+      after_success: skip
+
 after_success:
-  - julia -e 'import Pkg; Pkg.add("Colors"); Pkg.build("Colors")'
-  - julia -e 'import Pkg; Pkg.add("Luxor");  Pkg.build("Luxor")'
-  - julia -e 'import Pkg; Pkg.add("Documenter")'
-  - julia -e 'import Luxor; include("docs/make.jl")'
   - julia -e 'import Pkg; cd(Pkg.dir("Luxor")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
