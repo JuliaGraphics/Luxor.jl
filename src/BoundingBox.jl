@@ -197,7 +197,7 @@ boxtop(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb)/2
 """
     boxbottom(bb::BoundingBox)
 
-Return the top center point of bounding box `bb`.
+Return the bottom center point of bounding box `bb`.
 """
 boxbottom(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
 

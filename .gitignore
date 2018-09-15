@@ -1,3 +1,4 @@
 *.cov
 .vscode/*
 docs/build/*
+Manifest.toml
