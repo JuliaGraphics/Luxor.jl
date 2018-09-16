@@ -481,6 +481,30 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "simplegraphics.html#Luxor.circletangent2circles",
+    "page": "Simple graphics",
+    "title": "Luxor.circletangent2circles",
+    "category": "function",
+    "text": "circletangent2circles(radius, circle1center::Point, circle1radius, circle2center::Point, circle2radius)\n\nFind the centers of up to two circles of radius radius that are tangent to the two circles defined by circle1... and circle2.... These two circles can overlap, but one can\'t be inside the other.\n\n(0, O, O)      - no such circles exist\n(1, pt1, O)    - 1 circle exists, centered at pt1\n(2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2\n\n(The O are just dummy points so that three values are always returned.)\n\n\n\n\n\n"
+},
+
+{
+    "location": "simplegraphics.html#Luxor.circlepointtangent",
+    "page": "Simple graphics",
+    "title": "Luxor.circlepointtangent",
+    "category": "function",
+    "text": "circlepointtangent(through::Point, radius, targetcenter::Point, targetradius)\n\nFind the centers of up to two circles of radius radius that pass through point through and are tangential to a circle that has radius targetradius and center targetcenter.\n\nThis function returns a tuple:\n\n(0, O, O)      - no circles exist\n(1, pt1, O)    - 1 circle exists, centered at pt1\n(2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2\n\n(The O are just dummy points so that three values are always returned.)\n\n\n\n\n\n"
+},
+
+{
+    "location": "simplegraphics.html#Circles-and-tangents-1",
+    "page": "Simple graphics",
+    "title": "Circles and tangents",
+    "category": "section",
+    "text": "Functions to find circles that are tangential to other circles include:circletangent2circles() finds circles of a particular radius tangential to two circles\ncirclepointtangent() finds circles of a particular radius passing through a point and tangential to another circleThese functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).circletangent2circles() takes the required radius and two existing circles:using Luxor # hide\nDrawing(600, 250, \"assets/figures/circle-tangents.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ncircle1 = (Point(-100, 0), 90)\ncircle(circle1..., :stroke)\ncircle2 = (Point(100, 0), 90)\ncircle(circle2..., :stroke)\n\nrequiredradius = 25\nncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)\n\nif ncandidates==2\n    sethue(\"orange\")\n    circle(p1, requiredradius, :fill)\n    sethue(\"green\")\n    circle(p2, requiredradius, :fill)\n    sethue(\"purple\")\n    circle(p1, requiredradius, :stroke)\n    circle(p2, requiredradius, :stroke)\nend\n\n# the circles are 10 apart, so there should be just one circle\n# that fits there\n\nrequiredradius = 10\nncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)\n\nif ncandidates==1\n    sethue(\"blue\")\n    circle(p1, requiredradius, :fill)\n    sethue(\"cyan\")\n    circle(p1, requiredradius, :stroke)\nend\n\nfinish() # hide\nnothing # hide(Image: circle tangents)circlepointtangent() looks for circles of a specified radius that pass through a point and are tangential to a circle. There are usually two candidates.using Luxor # hide\nDrawing(600, 250, \"assets/figures/circle-point-tangent.png\") # hide\norigin() # hide\nbackground(\"white\") # hide\nsethue(\"black\") # hide\nsetline(1) # hide\n\ncircle1 = (Point(-100, 0), 90)\ncircle(circle1..., :stroke)\n\nrequiredradius = 50\nrequiredpassthrough = O + (80, 0)\nncandidates, p1, p2 = circlepointtangent(requiredpassthrough, requiredradius, circle1...)\n\nif ncandidates==2\n    sethue(\"orange\")\n    circle(p1, requiredradius, :stroke)\n    sethue(\"green\")\n    circle(p2, requiredradius, :stroke)\nend\n\nsethue(\"black\")\ncircle(requiredpassthrough, 4, :fill)\n\nfinish() # hide\nnothing # hide(Image: circle tangents 2)circletangent2circles\ncirclepointtangent"
+},
+
+{
     "location": "simplegraphics.html#Luxor.sector",
     "page": "Simple graphics",
     "title": "Luxor.sector",

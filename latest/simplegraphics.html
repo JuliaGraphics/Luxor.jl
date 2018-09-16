@@ -68,7 +68,51 @@ for (pos, n) in tiles
     circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
 end</code></pre></div><p><img src="assets/figures/circle-path.png" alt="circles as paths"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.circlepath" href="#Luxor.circlepath"><code>Luxor.circlepath</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">circlepath(center::Point, radius, action=:none;
     reversepath=false,
-    kappa = 0.5522847498307936)</code></pre><p>Draw a circle using Bézier curves.</p><p>The magic value, <code>kappa</code>, is <code>4.0 * (sqrt(2.0) - 1.0) / 3.0</code>.</p></div></div></section><h2><a class="nav-anchor" id="More-curved-shapes:-sectors,-spirals,-and-squircles-1" href="#More-curved-shapes:-sectors,-spirals,-and-squircles-1">More curved shapes: sectors, spirals, and squircles</a></h2><p>A sector (technically an &quot;annular sector&quot;) has an inner and outer radius, as well as start and end angles.</p><div><pre><code class="language-julia">sethue(&quot;tomato&quot;)
+    kappa = 0.5522847498307936)</code></pre><p>Draw a circle using Bézier curves.</p><p>The magic value, <code>kappa</code>, is <code>4.0 * (sqrt(2.0) - 1.0) / 3.0</code>.</p></div></div></section><h3><a class="nav-anchor" id="Circles-and-tangents-1" href="#Circles-and-tangents-1">Circles and tangents</a></h3><p>Functions to find circles that are tangential to other circles include:</p><ul><li><code>circletangent2circles()</code> finds circles of a particular radius tangential to two circles</li><li><code>circlepointtangent()</code> finds circles of a particular radius passing through a point and tangential to another circle</li></ul><p>These functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).</p><p><code>circletangent2circles()</code> takes the required radius and two existing circles:</p><div><pre><code class="language-julia">circle1 = (Point(-100, 0), 90)
+circle(circle1..., :stroke)
+circle2 = (Point(100, 0), 90)
+circle(circle2..., :stroke)
+
+requiredradius = 25
+ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
+
+if ncandidates==2
+    sethue(&quot;orange&quot;)
+    circle(p1, requiredradius, :fill)
+    sethue(&quot;green&quot;)
+    circle(p2, requiredradius, :fill)
+    sethue(&quot;purple&quot;)
+    circle(p1, requiredradius, :stroke)
+    circle(p2, requiredradius, :stroke)
+end
+
+# the circles are 10 apart, so there should be just one circle
+# that fits there
+
+requiredradius = 10
+ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
+
+if ncandidates==1
+    sethue(&quot;blue&quot;)
+    circle(p1, requiredradius, :fill)
+    sethue(&quot;cyan&quot;)
+    circle(p1, requiredradius, :stroke)
+end</code></pre></div><p><img src="assets/figures/circle-tangents.png" alt="circle tangents"/></p><p><code>circlepointtangent()</code> looks for circles of a specified radius that pass through a point and are tangential to a circle. There are usually two candidates.</p><div><pre><code class="language-julia">circle1 = (Point(-100, 0), 90)
+circle(circle1..., :stroke)
+
+requiredradius = 50
+requiredpassthrough = O + (80, 0)
+ncandidates, p1, p2 = circlepointtangent(requiredpassthrough, requiredradius, circle1...)
+
+if ncandidates==2
+    sethue(&quot;orange&quot;)
+    circle(p1, requiredradius, :stroke)
+    sethue(&quot;green&quot;)
+    circle(p2, requiredradius, :stroke)
+end
+
+sethue(&quot;black&quot;)
+circle(requiredpassthrough, 4, :fill)</code></pre></div><p><img src="assets/figures/circle-point-tangent.png" alt="circle tangents 2"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.circletangent2circles" href="#Luxor.circletangent2circles"><code>Luxor.circletangent2circles</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">circletangent2circles(radius, circle1center::Point, circle1radius, circle2center::Point, circle2radius)</code></pre><p>Find the centers of up to two circles of radius <code>radius</code> that are tangent to the two circles defined by <code>circle1...</code> and <code>circle2...</code>. These two circles can overlap, but one can&#39;t be inside the other.</p><ul><li><p>(0, O, O)      - no such circles exist</p></li><li><p>(1, pt1, O)    - 1 circle exists, centered at pt1</p></li><li><p>(2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2</p></li></ul><p>(The O are just dummy points so that three values are always returned.)</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.circlepointtangent" href="#Luxor.circlepointtangent"><code>Luxor.circlepointtangent</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">circlepointtangent(through::Point, radius, targetcenter::Point, targetradius)</code></pre><p>Find the centers of up to two circles of radius <code>radius</code> that pass through point <code>through</code> and are tangential to a circle that has radius <code>targetradius</code> and center <code>targetcenter</code>.</p><p>This function returns a tuple:</p><ul><li><p>(0, O, O)      - no circles exist</p></li><li><p>(1, pt1, O)    - 1 circle exists, centered at pt1</p></li><li><p>(2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2</p></li></ul><p>(The O are just dummy points so that three values are always returned.)</p></div></div></section><h2><a class="nav-anchor" id="More-curved-shapes:-sectors,-spirals,-and-squircles-1" href="#More-curved-shapes:-sectors,-spirals,-and-squircles-1">More curved shapes: sectors, spirals, and squircles</a></h2><p>A sector (technically an &quot;annular sector&quot;) has an inner and outer radius, as well as start and end angles.</p><div><pre><code class="language-julia">sethue(&quot;tomato&quot;)
 sector(50, 90, pi/2, 0, :fill)
 sethue(&quot;olive&quot;)
 sector(Point(O.x + 200, O.y), 50, 90, 0, pi/2, :fill)</code></pre></div><p><img src="assets/figures/sector.png" alt="sector"/></p><p>You can also supply a value for a corner radius. The same sector is drawn but with rounded corners.</p><div><pre><code class="language-julia">sethue(&quot;tomato&quot;)
