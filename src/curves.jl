@@ -701,4 +701,80 @@ function intersectioncirclecircle(cp1, r1, cp2, r2)
     return (true, p3, p4)
 end
 
+"""
+    circlepointtangent(through::Point, radius, targetcenter::Point, targetradius)
+
+Find the centers of up to two circles of radius `radius` that pass through point
+`through` and are tangential to a circle that has radius `targetradius` and
+center `targetcenter`.
+
+This function returns a tuple:
+
+* (0, O, O)      - no circles exist
+
+* (1, pt1, O)    - 1 circle exists, centered at pt1
+
+* (2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2
+
+(The O are just dummy points so that three values are always returned.)
+"""
+function circlepointtangent(through::Point, radius, targetcenter::Point, targetradius)
+    distx = targetcenter.x - through.x
+    disty = targetcenter.y - through.y
+    dsq = distance(through, targetcenter)^2
+    if isless(dsq, 10e-6) # coincident
+        return (0, O, O)
+    else
+        sqinv=0.5/dsq
+        s = dsq - ((2radius + targetradius) * targetradius)
+        root = 4(radius^2) * dsq - s^2
+        s *= sqinv
+        if isless(dsq, 0.0) # no center possible
+            return (0, O, O)
+        else
+            if isless(root, 10e-6) # only one circle possible
+                x = through.x + distx * s
+                y = through.y + disty * s
+                if isless(abs(distance(through, Point(x, y)) - radius), 10e-6)
+                    return (1, Point(x, y), O)
+                else
+                    return (0, O, O)
+                end
+            else # two circles are possible
+                root = sqrt(root) * sqinv
+                xconst = through.x + distx * s
+                yconst = through.y + disty * s
+                xvar = disty * root
+                yvar = distx * root
+            return (2, Point(xconst - xvar, yconst + yvar), Point(xconst + xvar, yconst - yvar))
+            end
+        end
+    end
+end
+
+"""
+    circletangent2circles(radius, circle1center::Point, circle1radius, circle2center::Point, circle2radius)
+
+Find the centers of up to two circles of radius `radius` that are tangent to the
+two circles defined by `circle1...` and `circle2...`. These two circles can
+overlap, but one can't be inside the other.
+
+* (0, O, O)      - no such circles exist
+
+* (1, pt1, O)    - 1 circle exists, centered at pt1
+
+* (2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2
+
+(The O are just dummy points so that three values are always returned.)
+"""
+function circletangent2circles(radius, circle1center::Point, circle1radius, circle2center::Point, circle2radius)
+    modradius1 = radius + circle1radius
+    modradius2 = circle2radius - circle1radius
+    return circlepointtangent(circle1center, modradius1, circle2center, modradius2)
+end
+
+function randpoint()
+    return Point(rand(-200:200), rand(-200:200))
+end
+
 # eof

@@ -223,6 +223,101 @@ nothing # hide
 circlepath
 ```
 
+### Circles and tangents
+
+Functions to find circles that are tangential to other circles include:
+
+- `circletangent2circles()` finds circles of a particular radius tangential to two circles
+- `circlepointtangent()` finds circles of a particular radius passing through a point and tangential to another circle
+
+These functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).
+
+`circletangent2circles()` takes the required radius and two existing circles:
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/circle-tangents.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(1) # hide
+
+circle1 = (Point(-100, 0), 90)
+circle(circle1..., :stroke)
+circle2 = (Point(100, 0), 90)
+circle(circle2..., :stroke)
+
+requiredradius = 25
+ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
+
+if ncandidates==2
+    sethue("orange")
+    circle(p1, requiredradius, :fill)
+    sethue("green")
+    circle(p2, requiredradius, :fill)
+    sethue("purple")
+    circle(p1, requiredradius, :stroke)
+    circle(p2, requiredradius, :stroke)
+end
+
+# the circles are 10 apart, so there should be just one circle
+# that fits there
+
+requiredradius = 10
+ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
+
+if ncandidates==1
+    sethue("blue")
+    circle(p1, requiredradius, :fill)
+    sethue("cyan")
+    circle(p1, requiredradius, :stroke)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![circle tangents](assets/figures/circle-tangents.png)
+
+`circlepointtangent()` looks for circles of a specified radius that pass through a point and are tangential to a circle. There are usually two candidates.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/circle-point-tangent.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(1) # hide
+
+circle1 = (Point(-100, 0), 90)
+circle(circle1..., :stroke)
+
+requiredradius = 50
+requiredpassthrough = O + (80, 0)
+ncandidates, p1, p2 = circlepointtangent(requiredpassthrough, requiredradius, circle1...)
+
+if ncandidates==2
+    sethue("orange")
+    circle(p1, requiredradius, :stroke)
+    sethue("green")
+    circle(p2, requiredradius, :stroke)
+end
+
+sethue("black")
+circle(requiredpassthrough, 4, :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![circle tangents 2](assets/figures/circle-point-tangent.png)
+
+
+```@docs
+circletangent2circles
+circlepointtangent
+```
+
 ## More curved shapes: sectors, spirals, and squircles
 
 A sector (technically an "annular sector") has an inner and outer radius, as well as start and end angles.
