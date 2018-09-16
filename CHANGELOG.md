@@ -1,6 +1,20 @@
 # Changelog
 
 
+## upcoming release
+
+### Added
+
+- circle/tangent functions
+
+### Changed
+
+- Travis documentation stage
+
+### Removed
+
+### Deprecated
+
 ## [v0.12.0] - 2018-08-17
 
 - new version number for better compatibility with v1.0

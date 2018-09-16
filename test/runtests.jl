@@ -55,6 +55,7 @@ function run_all_tests()
         include("bezierpath.jl")
         include("bezierpathtopoly.jl")
         include("bezierstroke-test.jl")
+        include("circletangent-test.jl")
     end
 
     @testset "color" begin
