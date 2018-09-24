@@ -14,16 +14,16 @@ Luxor is thoroughly procedural and static: your code issues a sequence of simple
 
 There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg), and some Luxor-related blog posts at [cormullion.github.io/](https://cormullion.github.io/).
 
-Luxor isn't interactive: for interactive graphics, look at [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), and [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl). [Makie](https://github.com/JuliaPlots/Makie.jl) is worth investigating.
+Luxor isn't interactive: for interactive graphics, look at [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), and [Makie](https://github.com/JuliaPlots/Makie.jl).
 
 Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraphics/Luxor.jl). Original version by [cormullion](https://github.com/cormullion), much improved with contributions from the Julia community.
 
 ## Installation and basic usage
 
-Install the package as follows:
+Install the package using the package manager:
 
 ```
-Pkg.add("Luxor")
+] add Luxor
 ```
 
 Cairo.jl and Colors.jl will be installed if necessary.

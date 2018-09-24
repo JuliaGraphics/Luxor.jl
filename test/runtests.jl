@@ -125,6 +125,7 @@ function run_all_tests()
         include("hex-grid-test.jl")
         include("cropmarkstest.jl")
         include("boxmaptest.jl")
+        include("noise-test.jl")
     end
 end
 

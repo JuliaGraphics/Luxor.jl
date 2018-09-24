@@ -175,11 +175,11 @@ end
 Get the rotation of a Julia 3x3 matrix, or the current Luxor rotation.
 
 ```math
-R = \begin{bmatrix}
-a & b & tx \\
-c & d & ty \\
-0 & 0 & 1  \\
-\end{bmatrix}
+\\begin{bmatrix}
+a & b & tx \\\\
+c & d & ty \\\\
+0 & 0 & 1  \\\\
+\\end{bmatrix}
 ```
 
 The rotation angle is `atan(-b, a)` or `atan(c, d)`.

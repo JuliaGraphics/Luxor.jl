@@ -9,21 +9,31 @@ Experienced Julia users and programmers fluent in other languages and graphics s
 
 ## What you need
 
-If you've already downloaded Julia, and have added the Luxor package successfully (like this):
+If you've already downloaded Julia, and have added the Luxor package successfully (using `] add Luxor`):
 
-```julia
-] add Luxor
+```
+$ julia
+               _
+   _       _ _(_)_     |  Documentation: https://docs.julialang.org
+  (_)     | (_) (_)    |
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.0.0 (2018-08-08)
+ _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+|__/                   |
+
+(v1.0) pkg>  add Luxor
 ```
 
 then you're ready to start.
 
-Presumably you'll be working in a Jupyter notebook, or perhaps using the Atom/Juno editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
+You can work in a Jupyter notebook, or perhaps use the Atom/Juno editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
 
 Ready? Let's begin. The goal of this tutorial is to do a bit of basic 'compass and ruler' Euclidean geometry, to introduce the basic concepts of Luxor drawings.
 
 ## First steps
 
-Have you started a Julia session? Excellent. We'll have to load just one package for this tutorial:
+We'll have to load just one package for this tutorial:
 
 ```julia
 using Luxor
@@ -97,13 +107,13 @@ finish()
 
 For the main section of this tutorial, we'll attempt to draw Euclid's egg, which involves a bit of geometry.
 
-For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions which Julia can compile) isn't considered to be 'best practice'.
+For now, you can continue to store all the drawing instructions between the `@png` macro's `begin` and `end` markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions which Julia can compile) isn't considered to be 'best practice', because the unit of compilation in Julia is the function. (Look up 'global scope' in the documentation.)
 
 ```julia
 @png begin
 ```
 
-To start off, define the variable `radius` to hold a value of 80 units (there are 72 units in a traditional inch):
+and first define the variable `radius` to hold a value of 80 units (there are 72 units in a traditional inch):
 
 ```julia
     radius=80
@@ -115,6 +125,8 @@ Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB o
     setdash("dot")
     sethue("gray30")
 ```
+
+(You can use `setcolor()` instead of `sethue()` — the latter doesn't affect the current opacity setting.)
 
 Next, make two points, A and B, which will lie either side of the origin point. This line uses an array comprehension - notice the square brackets enclosing a `for` loop.
 
@@ -130,7 +142,7 @@ With two points defined, draw a line from A to B, and stroke it.
     line(A, B, :stroke)
 ```
 
-Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter 'O' as a short cut for Origin, ie the `Point(0, 0)`.
+Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter **O** as a short cut for Origin, ie the `Point(0, 0)`.
 
 ```julia
     circle(O, radius, :stroke)
@@ -155,7 +167,7 @@ nothing
 
 ### Labels and dots
 
-It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using points of the compass, so `:N` places the label to the north of a point.
+It's a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there's a special `label()` function we can use, which positions a text string close to a point, using angles or points of the compass, so `:N` places the label to the north of a point.
 
 Edit your previous code by adding instructions to draw some labels and circles:
 
@@ -198,11 +210,11 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-2.png)
 
-While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called 'broadcasting'. The dot (`.`) just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting (from scalar to vector) for us.
+While we could have drawn all the circles as usual, we've taken the opportunity to introduce a powerful Julia feature called _broadcasting_. The dot (`.`) just after the function name in the last two `circle()` function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn't have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting (from scalar to vector) for us.
 
 ### Intersect this
 
-We've now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersectionlinecircle()` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
+We're now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There's a Luxor function called `intersectionlinecircle()` that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we'll only have to do circle A.
 
 ```julia
 @png begin
@@ -322,9 +334,9 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-4.png)
 
-The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1.
+The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1. We're looking for the lines `A-C1-ip`, where `ip` is somewhere on the circle between D and B, and `B-C1-ip`, where `ip` is somewhere between A and D.
 
-To find (and draw) these points is straightforward, but we'll mark these as intermediate for now, because there are in fact four intersection points but we want just the two nearest the top:
+To find (and draw) these points is straightforward. We'll mark these as intermediate for now, because there are in fact four intersection points but we want just the two nearest the top:
 
 ```julia
 # >>>>
@@ -335,7 +347,7 @@ To find (and draw) these points is straightforward, but we'll mark these as inte
     circle.([I1, I2, I3, I4], 2, :fill)
 ```
 
-The `distance()` function returns the distance between two points, and it's simple enough to compare the distances.
+So we can use the `distance()` function to find the distance between two points, and it's simple enough to compare the values and choose the shortest.
 
 ```julia
 
@@ -419,9 +431,13 @@ finish()
 
 We now know all the points on the egg's perimeter, and the centers of the circular arcs. To draw the outline, we'll use the `arc2r()` function four times. This function takes: a center point and two points that together define a circular arc, plus an action.
 
-The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:fill` and `:stroke` actions do, this action adds a section to the current path (which is initially empty).
+The shape consists of four curves, so we'll use the `:path` action. Instead of immediately drawing the shape, like the `:fill` and `:stroke` actions do, this action adds a section to the current path.
 
 ```julia
+
+    label("ip1", :N, ip1)
+    label("ip2", :N, ip2)
+    circle(C1, distance(C1, ip1), :stroke)
 
 # >>>>
 
@@ -434,7 +450,7 @@ The shape consists of four curves, so we'll use the `:path` action. Instead of i
     arc2r(O,    B,    A, :path)
 ```
 
-Once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a "preserve" version of the first action. This applies the action but keeps the path around for more actions.
+Finally, once we've added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a `preserve` version of the first action. This applies the action but keeps the path available for more actions.
 
 ```julia
     strokepreserve()
@@ -570,7 +586,7 @@ Notice that this function doesn't define anything about what color it is, or whe
             strokepath()
         end
     end
-end
+end 800 800 "/tmp/eggstravaganza.png"
 ```
 
 ```@setup te7
@@ -734,7 +750,6 @@ For a final experiment with our `egg()` function, here's Luxor's `offsetpoly()` 
     egg(80, :path)
     pgon = first(pathtopoly())
     pc = polycentroid(pgon)
-    circle(pc, 5, :fill)
 
     for pt in 1:2:length(pgon)
         pgon[pt] = between(pc, pgon[pt], 0.8)
@@ -745,7 +760,7 @@ For a final experiment with our `egg()` function, here's Luxor's `offsetpoly()` 
         op = offsetpoly(pgon, i)
         poly(op, :stroke, close=true)
     end
-end
+end 800 800 "/tmp/spike-egg.png"
 ```
 
 ```@setup te9
@@ -801,7 +816,7 @@ finish()
 ```
 ![point example](assets/figures/tutorial-egg-9.png)
 
-The slight changes in the regularity of the points (originally created by the path-to-polygon conversion and the varying number of samples it made) are continually amplified in successive outlinings.
+The small changes in the regularity of the points created by the path-to-polygon conversion and the varying number of samples it made are continually amplified in successive outlinings.
 
 ## Clipping
 
@@ -884,6 +899,6 @@ finish()
 ```
 ![clip example](assets/figures/tutorial-egg-10.png)
 
-It's usually good practice to add a matching `clipreset()` after the clipping has been completed.
+It's good practice to add a matching `clipreset()` after the clipping has been completed. Unbalanced clipping can lead to unpredictable results.
 
 Good luck with your explorations!
