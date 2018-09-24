@@ -86,7 +86,7 @@ nothing # hide
 
 The `gsave()` function saves the current drawing parameters, and any subsequent changes such as the `scale()` and `rotate()` operations are discarded by the next `grestore()` function.
 
-Use the extension to specify the format: for example change "julia-logos.png" to "julia-logos.svg" or "julia-logos.pdf" or "julia-logos.eps", to produce different SVG, PDF, or EPS format files.
+Use the extension to specify the format: for example change `julia-logos.png` to `julia-logos.svg` or `julia-logos.pdf` or `julia-logos.eps` to produce SVG, PDF, or EPS format output.
 
 ## Something a bit more complicated: a Sierpinski triangle
 
@@ -122,8 +122,8 @@ end
 
 function draw(n)
     circle(O, 75, :clip)
-    my_points = ngon(O, 150, 3, -pi/2, vertices=true)
-    sierpinski(my_points, n)
+    points = ngon(O, 150, 3, -pi/2, vertices=true)
+    sierpinski(points, n)
 end
 
 depth = 8 # 12 is ok, 20 is right out (on my computer, at least)

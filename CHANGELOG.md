@@ -1,11 +1,12 @@
 # Changelog
 
 
-## upcoming release
+## [v1.0.0] - 2018-09-24
 
 ### Added
 
 - circle/tangent functions
+- noise
 
 ### Changed
 
@@ -17,7 +18,7 @@
 
 ## [v0.12.0] - 2018-08-17
 
-- new version number for better compatibility with v1.0
+- new version number for better compatibility with julia v1.0
 
 ### Added
 

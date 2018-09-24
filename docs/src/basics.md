@@ -10,7 +10,7 @@ The underlying drawing model is that you make shapes, and add points to paths, a
 
 You can specify points on the drawing surface using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:nothing`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:nothing`.
 
-Y coordinates increase downwards, so `Point(0, 100)` usually lies below `Point(0, 0)`. This is the preferred coordinate system for much computer graphics software, but mathematicians and scientists may well be used to the y-axis increasing upwards...
+Y coordinates increase downwards, so `Point(0, 100)` is below `Point(0, 0)`. This is the preferred coordinate system for computer graphics software, but mathematicians and scientists may well be used to the y-axis increasing upwards...
 
 The main types you'll encounter in Luxor are:
 
@@ -28,12 +28,13 @@ The main types you'll encounter in Luxor are:
 | GridHex           | defines a hexagonal grid |
 | Scene             | used to define a scene for an animation |
 | Turtle            | represents a turtle for drawing turtle graphics |
+| Noise             | an object that provides noisy values |
 
 ## Points and coordinates
 
 The Point type holds two coordinates, `x` and `y`. For example:
 
-```
+```julia
 julia> P = Point(12.0, 13.0)
 Luxor.Point(12.0, 13.0)
 
@@ -48,7 +49,7 @@ Points are immutable, so you can't change P's x or y values directly. But it's e
 
 Points can be added together:
 
-```
+```julia
 julia> Q = Point(4, 5)
 Luxor.Point(4.0, 5.0)
 
@@ -58,7 +59,7 @@ Luxor.Point(16.0, 18.0)
 
 You can add or multiply Points and scalars:
 
-```
+```julia
 julia> 10P
 Luxor.Point(120.0, 130.0)
 
@@ -68,7 +69,7 @@ Luxor.Point(112.0, 113.0)
 
 You can also make new points by mixing Points and tuples:
 
-```
+```julia
 julia> P + (10, 0)
 Luxor.Point(22.0, 13.0)
 
@@ -136,7 +137,7 @@ preview
 
 The global variable `currentdrawing` (of type Drawing) stores some parameters related to the current drawing:
 
-```
+```julia
 julia> fieldnames(typeof(currentdrawing))
 10-element Array{Symbol,1}:
 :width
@@ -154,13 +155,13 @@ julia> fieldnames(typeof(currentdrawing))
 
 The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
 
-```
+```julia
 @svg circle(O, 20, :stroke) 50 50
 ```
 
 expands to
 
-```
+```julia
 Drawing(50, 50, "luxor-drawing-(timestamp).png")
 origin()
 background("white")
@@ -172,7 +173,7 @@ preview()
 
 They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename. For multiple lines, use either:
 
-```
+```julia
 @svg begin
     setline(10)
     sethue("purple")
@@ -182,10 +183,10 @@ end
 
 or
 
-```
+```julia
 @svg (setline(10);
       sethue("purple");
-      circle(O, 20, :fill);
+      circle(O, 20, :fill)
      )
 ```
 
@@ -199,7 +200,7 @@ If you don't specify a size, the defaults are 600 by 600. If you don't specify a
 
 If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:
 
-```
+```julia
 Drawing()
 background(1, 1, 1, 0)
 origin()
@@ -222,7 +223,7 @@ Drawing(width, height, surfacetype, [filename])
 
 lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. In a Jupyter notebook you can use it to provide faster manipulations. For example:
 
-```
+```julia
 using Interact
 
 function makecircle(r)
@@ -296,7 +297,7 @@ origin
 
 The `@layer` macro is a synonym for a `gsave()`...`grestore()` pair.
 
-```
+```julia
 @svg begin
     circle(O, 100, :stroke)
     @layer (sethue("red"); rule(O); rule(O, pi/2))
@@ -306,7 +307,7 @@ end
 
 or
 
-```
+```julia
 @svg begin
     circle(O, 100, :stroke)
     @layer begin

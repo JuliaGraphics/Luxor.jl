@@ -48,6 +48,7 @@ include("mesh.jl")
 include("Table.jl")
 include("BoundingBox.jl")
 include("Boxmaptile.jl")
+include("noise.jl")
 include("deprecations.jl")
 #include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
@@ -141,7 +142,10 @@ export Drawing, currentdrawing,
     lineartween, easeinquad, easeoutquad, easeinoutquad, easeincubic, easeoutcubic,
     easeinoutcubic, easeinquart, easeoutquart, easeinoutquart, easeinquint, easeoutquint,
     easeinoutquint, easeinsine, easeoutsine, easeinoutsine, easeinexpo, easeoutexpo,
-    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad
+    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad,
+
+    # noise
+    Noise, noise, initnoise
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0
