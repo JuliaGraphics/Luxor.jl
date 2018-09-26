@@ -6,23 +6,14 @@ function noisetest(fname)
     Drawing(800, 800, fname)
     background("skyblue")
     origin()
-
-    n1 = Noise()
-    @test noise(n1, 42, 42) == 0.637142847175
-
-    n2 = Noise(seed=12)
-    @test noise(n2, 42, 42) == 0.40644951822500003
-
-    n3 = Noise(initnoise())
-    @test length(n3.table) == 256
-
-    noise1 = Noise(seed=2)
+    @test noise(0, 0, 0) == 0.5
+    @test noise(2, 1, 1) == 0.6630553497942386
     tiles = Tiler(800, 800, 150, 150)
     for k in 1:2:10
         for (pos, n) in tiles
             f, d = .01, k
-            ns = noise(noise1, pos.x, pos.y, frequency=f, depth=d)
-            setcolor(ns, ns, 1, ns)
+            ns = noise(pos.x * 0.006, pos.y * 0.006, detail=3, persistence=.15)
+            sethue(ns, ns, 1)
             box(pos, tiles.tilewidth, tiles.tileheight, :fill)
         end
     end
