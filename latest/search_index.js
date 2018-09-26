@@ -1033,19 +1033,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "geometrytools.html#Luxor.Noise",
-    "page": "Geometry tools",
-    "title": "Luxor.Noise",
-    "category": "type",
-    "text": "Noise()\nNoise(;seed=0)\nNoise(v; seed=0)\n\nCreate a Noise object. It contains:\n\ntable a table of 256 integers\nseed  an integer seed value\n\nIf provided, v is an array of 256 values. You can use the provided initnoise() function.\n\nseed keyword is an integer that seeds the initial noise parameters.\n\nExamples\n\nNoise()\nNoise(;seed=0)\nNoise(initnoise(); seed=0)\n\n\n\n\n\n"
-},
-
-{
     "location": "geometrytools.html#Luxor.noise",
     "page": "Geometry tools",
     "title": "Luxor.noise",
     "category": "function",
-    "text": "noise(n::Noise, x, y;\n    frequency = 0.05,\n    depth     = 1)\n\nGet a value from the Noise object in n corresponding to x and y. It returns a value between 0.0 and 1.0.\n\nThe keyword frequency determines the basic frequency of the noise. Values around 0.005 give three or four peaks and troughs.\n\nThe keyword depth is an integer (from 1 up to about 30, you\'ll get integer overflow eventually) that specifies the number of levels required. 1 produces large smooth noise, 10 to 20 add finer detail.\n\n\n\n\n\n"
+    "text": "noise(x, y=1, z=1;\n    detail      = 2,\n    persistence = 1)\n\nGenerate a noise value for x, y, and z coordinates.\n\n\n\n\n\n"
 },
 
 {
@@ -1053,7 +1045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Geometry tools",
     "title": "Noise",
     "category": "section",
-    "text": "For artistic graphics you\'ll often require noisy input values. To do this in Luxor, create a Noise object, and use it to obtain \"predictably\" random values for input coordinates. The values change randomly but smoothly; it\'s basically 2D Perlin noise.In this example, the size of each tile varies slowly as the noise() function returns values between 0 and 1 depending on the location of the input points x and y coordinates in pos.x and pos.y. Use the frequency and depth keywords to control the \"busy-ness\" of the noise, and the depth of detail.using Luxor # hide\nDrawing(800, 400, \"assets/figures/noise.png\") # hide\n\nbackground(\"white\") # hide\norigin() # hide\n\nn1 = Noise()\ntiles = Tiler(800, 400, 80, 80)\nsethue(\"black\")\nfor (pos, n) in tiles\n    f, d = .01, 1\n    ns = noise(n1, pos.x, pos.y, frequency=f, depth=d)\n    box(pos, ns  * tiles.tilewidth, ns * tiles.tileheight, :fill)\nend\n\nfinish() # hide\nnothing # hide(Image: noise)Noise\nnoise"
+    "text": "For artistic graphics you\'ll often require noisy input values. To do this in Luxor, use the noise() function to obtain \"predictably\" random values for input coordinates. The values wander smoothly rather than jumping about everywhere.In this example, the color of each tile varies slowly as the noise() function returns values between 0 and 1 depending on the location of the input points x and y coordinates in pos.x and pos.y.using Luxor, Colors # hide\nDrawing(800, 400, \"assets/figures/noise.png\") # hide\n\nbackground(\"white\") # hide\norigin() # hide\n\ntiles = Tiler(800, 400, 120, 120)\nsethue(\"black\")\nfor (pos, n) in tiles\n    freq = 0.008\n    ns = noise(freq * pos.x, freq * pos.y, detail=1)\n    sethue(Colors.Lab(80, rescale(ns, 0, 1, -100, 100), rescale(ns, 0, 1, 100, 50)))\n    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)\nend\n\nfinish() # hide\nnothing # hide(Image: noise)noise"
 },
 
 {
