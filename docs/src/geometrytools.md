@@ -377,9 +377,13 @@ boxbottom
 
 ## Noise
 
-For artistic graphics you'll often require noisy input values. To do this in Luxor, use the `noise()` function to obtain "predictably" random values for input coordinates. The values wander smoothly rather than jumping about everywhere.
+For artistic graphics you might prefer noisy input values to purely random ones. Use the `noise()` function to obtain smoothly changing random values corresponding to input coordinates. The returned values wander slowly rather than jump about everywhere.
 
-In this example, the color of each tile varies slowly as the `noise()` function returns values between 0 and 1 depending on the location of the input points x and y coordinates in `pos.x` and `pos.y`.
+In this example, the gray value varies gradually as the `noise()` function returns values between 0 and 1 depending on the location of the two input values `pos.x` and `pos.y`.
+
+The top two quadrants use a lower value for the `detail` keyword argument, an integer specifying how many "octaves" of noise you want. You can see that the detail level is low.
+
+The left two quadrants use a lower value for the `persistence` keyword argument, a floating point number specifying how quickly the amplitude diminishes for each successive level of detail. There is more fine detail when the persistence is higher, particularly when the `detail` setting is also high.
 
 ```@example
 using Luxor, Colors # hide
@@ -388,12 +392,14 @@ Drawing(800, 400, "assets/figures/noise.png") # hide
 background("white") # hide
 origin() # hide
 
-tiles = Tiler(800, 400, 120, 120)
+tiles = Tiler(800, 400, 200, 200)
 sethue("black")
 for (pos, n) in tiles
-    freq = 0.008
-    ns = noise(freq * pos.x, freq * pos.y, detail=1)
-    sethue(Colors.Lab(80, rescale(ns, 0, 1, -100, 100), rescale(ns, 0, 1, 100, 50)))
+    freq = 0.005
+    pos.y < 0 ? d = 2 : d = 4
+    pos.x < 0 ? pers = 0.35 : pers = 1.25
+    ns = noise(freq * pos.x, freq * pos.y, detail=d, persistence=pers)
+    setgray(ns)
     box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
 end
 
@@ -405,4 +411,5 @@ nothing # hide
 
 ```@docs
 noise
+seednoise
 ```

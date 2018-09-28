@@ -28,7 +28,6 @@ The main types you'll encounter in Luxor are:
 | GridHex           | defines a hexagonal grid |
 | Scene             | used to define a scene for an animation |
 | Turtle            | represents a turtle for drawing turtle graphics |
-| Noise             | an object that provides noisy values |
 
 ## Points and coordinates
 

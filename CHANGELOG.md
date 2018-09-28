@@ -1,6 +1,21 @@
 # Changelog
 
 
+## dev version: in a forthcoming release
+
+### Added
+
+- Luxor.initnoise()
+- seednoise()
+
+### Changed
+
+- noise implementation revised 
+
+### Removed
+
+### Deprecated
+
 ## [v1.0.0] - 2018-09-24
 
 ### Added
