@@ -353,16 +353,16 @@ The `isinside()` function returns true if a point is inside a polygon.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/isinside.png") # hide
+Drawing(500, 500, "assets/figures/isinside.png") # hide
 background("white") # hide
 origin() # hide
-setline(0.5)
-apolygon = star(O, 100, 5, 0.5, 0, vertices=true)
-for n in 1:10000
-    apoint = randompoint(Point(-200, -150), Point(200, 150))
-    randomhue()
-    isinside(apoint, apolygon) ? circle(apoint, 3, :fill) : circle(apoint, .5, :stroke)
+
+apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
+for pt in collect(first.(Table(30, 30, 15, 15)))
+    sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))
+    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, :fill) : circle(pt, 3, :fill)
 end
+
 finish() # hide
 nothing # hide
 ```

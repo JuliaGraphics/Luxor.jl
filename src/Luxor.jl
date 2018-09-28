@@ -145,7 +145,7 @@ export Drawing, currentdrawing,
     easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad,
 
     # noise
-    noise
+    noise, seednoise
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

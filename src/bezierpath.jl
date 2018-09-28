@@ -284,7 +284,7 @@ end
 Convert the current path (which may consist of one or more paths) to an array of
 Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path
 segment is a tuple of four points. A straight line is converted to a Bezier segment
-in which the control points are set to be the the same as the end points.
+in which the control points are set to be the same as the end points.
 
 If `flat` is true, use `getpathflat()` rather than `getpath()`.
 

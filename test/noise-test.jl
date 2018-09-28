@@ -6,8 +6,12 @@ function noisetest(fname)
     Drawing(800, 800, fname)
     background("skyblue")
     origin()
+
+    seednoise(rand(1:12, 512))
+    Luxor.initnoise()
+
     @test noise(0, 0, 0) == 0.5
-    @test noise(2, 1, 1) == 0.6630553497942386
+
     tiles = Tiler(800, 800, 150, 150)
     for k in 1:2:10
         for (pos, n) in tiles
