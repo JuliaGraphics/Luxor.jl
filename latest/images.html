@@ -51,14 +51,14 @@ for theta in 0:pi/6:2pi
         transform([1, 0, -pi/4, 1, 250, 0])
         placeimage(img, -w/2, -h/2, .75)
     grestore()
-end</code></pre></div><p><img src="assets/figures/transform-images.png" alt="transforming images"/></p><h2><a class="nav-anchor" id="Drawing-on-images-1" href="#Drawing-on-images-1">Drawing on images</a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In this example, we&#39;ll annotate a PNG file with some text and graphics.</p><div><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
+end</code></pre></div><p><img src="assets/figures/transform-images.png" alt="transforming images"/></p><h2><a class="nav-anchor" id="Drawing-on-images-1" href="#Drawing-on-images-1">Drawing on images</a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In these examples, we&#39;ll annotate a PNG file.</p><div><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
 
 w = image.width
 h = image.height
 
 # create a drawing surface of the same size
 
-fname = &quot;assets/figures/drawing_on_images.png&quot;
+fname = &quot;drawing_on_images.png&quot;
 Drawing(w, h, fname)
 
 # place the image on the Drawing - it&#39;s positioned by its top/left corner
@@ -68,29 +68,36 @@ placeimage(image, 0, 0)
 # now you can annotate the image. The (0/0) is at the top left.
 
 sethue(&quot;red&quot;)
-fontsize(20)
-circle(5, 5, 2, :fill)
-text(&quot;(5/5)&quot;, Point(25, 25), halign=:center)
+setline(1)
+fontsize(16)
+circle(Point(150, 50), 2, :fill)
+label(&quot;(150/50)&quot;, :NE, Point(150, 50), leader=true, offset=25)
 
-arrow(Point(w/2, 50), Point(0, 50))
-arrow(Point(w/2, 50), Point(w, 50))
+arrow(Point(w/2, 90), Point(0, 90))
+arrow(Point(w/2, 90), Point(w, 90))
 text(&quot;width $w&quot;, Point(w/2, 70), halign=:center)
 
-# to divide up the image into rectangular areas, temporarily position the axes at the center:
+# to divide up the image into rectangular areas and number them,
+# temporarily position the axes at the center:
 
-gsave()
-setline(0.2)
-sethue(&quot;green&quot;)
-fontsize(12)
-translate(w/2, h/2)
-tiles = Tiler(w, h, 16, 10, margin=0)
-for (pos, n) in tiles
-    box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
-    text(string(n), pos, halign=:center)
-end
-grestore()
+@layer begin
+  setline(0.5)
+  sethue(&quot;green&quot;)
+  fontsize(12)
+  translate(w/2, h/2)
+  tiles = Tiler(w, h, 8, 8, margin=0)
+  for (pos, n) in tiles
+      box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
+      text(string(n-1), pos, halign=:center)
+  end
+end</code></pre></div><p><img src="assets/figures/drawing_on_images.png" alt="drawing on images"/></p><h3><a class="nav-anchor" id="Adding-text-to-transformed-images-1" href="#Adding-text-to-transformed-images-1">Adding text to transformed images</a></h3><p>The above approach works well, but suppose you want to locate the working origin at the lower left of the image, ie you want all coordinates to be relative to the bottom left corner of the image?</p><p>To do this, use <code>translate()</code> and <code>transform()</code> to modify the drawing space:</p><div><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
+w = image.width
+h = image.height
+fname = &quot;drawing_on_images_2.png&quot;
+Drawing(w, h, fname)
+placeimage(image, 0, 0)
 
-# If you want coordinates to be relative to the bottom left corner of the image, transform:
+# Move the axes to the bottom:
 
 translate(0, h)
 
@@ -101,11 +108,28 @@ transform([1 0 0 -1 0 0])
 # now 0/0 is at the bottom left corner, and 100/100 is up and to the right.
 
 sethue(&quot;blue&quot;)
-arrow(O, Point(100, 100))
+arrow(Point(200, 300), Point(160, 300))
 
-# However, don&#39;t use text while flipped, because it&#39;s reversed:
+# However, don&#39;t draw text while flipped, because it will be reversed!
 
-text(&quot;I&#39;m in reverse!&quot;, w/2, h/2)</code></pre></div><p><img src="assets/figures/drawing_on_images.png" alt="drawing on images"/></p><h2><a class="nav-anchor" id="Image-compositing-1" href="#Image-compositing-1">Image compositing</a></h2><p>You should be using <a href="https://github.com/JuliaImages">Images.jl</a> for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by <code>setmode()</code>.</p><div><pre><code class="language-julia">img = readpng(&quot;assets/figures/textcurvecenteredexample.png&quot;)
+fontsize(20)
+sethue(&quot;black&quot;)
+text(&quot;Oh no!&quot;, Point(30, 250))
+
+# To work around this, define a text function
+# that flips the workspace over the x-axis just for the text:
+
+function textoverlay(t, pos; kwargs...)
+    @layer begin
+        translate(pos)
+        transform([1 0 0 -1 0 0])
+        text(t, O; kwargs...)
+    end
+end
+
+textoverlay(&quot;a tittle!&quot;, Point(200, 300), halign=:left, valign=:middle)
+textoverlay(&quot;0/0&quot;, O)
+arrow(Point(130, 400), Point(130, 340))</code></pre></div><p><img src="assets/figures/drawing_on_images_2.png" alt="drawing on transformed images"/></p><h2><a class="nav-anchor" id="Image-compositing-1" href="#Image-compositing-1">Image compositing</a></h2><p>You should be using <a href="https://github.com/JuliaImages">Images.jl</a> for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by <code>setmode()</code>.</p><div><pre><code class="language-julia">img = readpng(&quot;assets/figures/textcurvecenteredexample.png&quot;)
 w = img.width
 h = img.height
 
