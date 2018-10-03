@@ -24,6 +24,12 @@ bars(v, yheight=10, xwidth=10, barfunction=mybarfunction)
 bars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)
 ```
 
+or:
+
+```
+bars(v, labelfunction = (args...; extremes=[], barnumber=0, bartotal=0) ->  setgray(rand()))
+```
+
 To suppress the text labels, use optional keyword `labels=false`.
 """
 function bars(values::AbstractArray;
@@ -47,7 +53,7 @@ function bars(values::AbstractArray;
             end
             text(t, tp, halign=:center, valign=:middle)
         end)
-    
+
     x = O.x
     mn, mx = extrema(values)
     isapprox(mn, mx, atol=0.00001) && (mx = mn + 100) # better show something than nothing
