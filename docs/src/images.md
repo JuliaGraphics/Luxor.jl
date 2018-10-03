@@ -107,7 +107,7 @@ nothing # hide
 
 You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.
 
-In this example, we'll annotate a PNG file with some text and graphics.
+In these examples, we'll annotate a PNG file.
 
 ```@example
 using Luxor # hide
@@ -119,7 +119,7 @@ h = image.height
 
 # create a drawing surface of the same size
 
-fname = "assets/figures/drawing_on_images.png"
+fname = "drawing_on_images.png"
 Drawing(w, h, fname)
 
 # place the image on the Drawing - it's positioned by its top/left corner
@@ -129,29 +129,54 @@ placeimage(image, 0, 0)
 # now you can annotate the image. The (0/0) is at the top left.
 
 sethue("red")
-fontsize(20)
-circle(5, 5, 2, :fill)
-text("(5/5)", Point(25, 25), halign=:center)
+setline(1)
+fontsize(16)
+circle(Point(150, 50), 2, :fill)
+label("(150/50)", :NE, Point(150, 50), leader=true, offset=25)
 
-arrow(Point(w/2, 50), Point(0, 50))
-arrow(Point(w/2, 50), Point(w, 50))
+arrow(Point(w/2, 90), Point(0, 90))
+arrow(Point(w/2, 90), Point(w, 90))
 text("width $w", Point(w/2, 70), halign=:center)
 
-# to divide up the image into rectangular areas, temporarily position the axes at the center:
+# to divide up the image into rectangular areas and number them,
+# temporarily position the axes at the center:
 
-gsave()
-setline(0.2)
-sethue("green")
-fontsize(12)
-translate(w/2, h/2)
-tiles = Tiler(w, h, 16, 10, margin=0)
-for (pos, n) in tiles
-    box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
-    text(string(n), pos, halign=:center)
+@layer begin
+  setline(0.5)
+  sethue("green")
+  fontsize(12)
+  translate(w/2, h/2)
+  tiles = Tiler(w, h, 8, 8, margin=0)
+  for (pos, n) in tiles
+      box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
+      text(string(n-1), pos, halign=:center)
+  end
 end
-grestore()
+finish() # hide
+nothing # hide
+```
 
-# If you want coordinates to be relative to the bottom left corner of the image, transform:
+![drawing on images](assets/figures/drawing_on_images.png)
+
+### Adding text to transformed images
+
+The above approach works well, but suppose you want to locate the working origin
+at the lower left of the image, ie you want all coordinates to be relative to the
+bottom left corner of the image?
+
+To do this, use `translate()` and `transform()` to modify the drawing space:
+
+```@example
+using Luxor # hide
+
+image = readpng("assets/figures/julia-logo-mask.png")
+w = image.width
+h = image.height
+fname = "drawing_on_images_2.png"
+Drawing(w, h, fname)
+placeimage(image, 0, 0)
+
+# Move the axes to the bottom:
 
 translate(0, h)
 
@@ -162,17 +187,36 @@ transform([1 0 0 -1 0 0])
 # now 0/0 is at the bottom left corner, and 100/100 is up and to the right.
 
 sethue("blue")
-arrow(O, Point(100, 100))
+arrow(Point(200, 300), Point(160, 300))
 
-# However, don't use text while flipped, because it's reversed:
+# However, don't draw text while flipped, because it will be reversed!
 
-text("I'm in reverse!", w/2, h/2)
+fontsize(20)
+sethue("black")
+text("Oh no!", Point(30, 250))
+
+# To work around this, define a text function
+# that flips the workspace over the x-axis just for the text:
+
+function textoverlay(t, pos; kwargs...)
+    @layer begin
+        translate(pos)
+        transform([1 0 0 -1 0 0])
+        text(t, O; kwargs...)
+    end
+end
+
+textoverlay("a tittle!", Point(200, 300), halign=:left, valign=:middle)
+textoverlay("0/0", O)
+arrow(Point(130, 400), Point(130, 340))
+
+finish() # hide
 
 finish() # hide
 nothing # hide
 ```
 
-![drawing on images](assets/figures/drawing_on_images.png)
+![drawing on transformed images](assets/figures/drawing_on_images_2.png)
 
 ## Image compositing
 

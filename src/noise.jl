@@ -1,11 +1,8 @@
-# based on code by Stefan Gustavson, Linköping University
-
 struct Grad
   x::Int64
   y::Int64
   z::Int64
 end
-
 
 const grad3 = [Grad(1,1,0), Grad(-1,1,0), Grad(1,-1,0), Grad(-1,-1,0), Grad(1,0,1),
   Grad(-1,0,1), Grad(1,0,-1), Grad(-1,0,-1), Grad(0,1,1), Grad(0,-1,1),
@@ -54,6 +51,7 @@ function dotp(g::Grad, x, y, z)
     return g.x * x + g.y * y + g.z * z
 end
 
+# based on code by Stefan Gustavson, Linköping University
 function _noise3(xin, yin, zin)
     # Skewing and unskewing factors
     _G3 = 1.0/6.0
