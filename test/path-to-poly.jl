@@ -31,17 +31,21 @@ end
 function get_line_path()
     origin()
     translate(0, 200)
-    move(Point(rand(-50:50), rand(-50:50)))
-    line(Point(rand(-50:50), rand(-50:50)))
-    line(Point(rand(-50:50), rand(-50:50)))
-    line(Point(rand(-50:50), rand(-50:50)))
-    line(Point(rand(-50:50), rand(-50:50)))
+    translate(0, 200)
+    pts = ngon(O, 100, 7, vertices=true)
+    move(pts[1])
+    line(pts[2])
+    line(pts[3])
+    line(pts[4])
+    line(pts[5])
+    line(pts[6])
+    line(pts[7])
     closepath()
     plist = pathtopoly()
     setline(0.5)
     for (n, pgon) in enumerate(plist)
-        for i in 0:10:50
-            sethue(rand(), 0.5, 0.6)
+        for i in 0:4:50
+            sethue(i/50, 0.5, 0.6)
             poly(offsetpoly(pgon, i), :stroke, close=true)
         end
     end

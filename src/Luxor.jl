@@ -3,13 +3,11 @@ The Luxor package provides a set of vector drawing functions for creating graphi
 """
 module Luxor
 
-import Base: fill
-
 using Juno
 
-using Colors, FileIO, Dates
-
 using Cairo
+
+using Colors, FileIO, Dates
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface,
 CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
@@ -167,7 +165,7 @@ mutable struct Drawing
     bufferdata::AbstractArray{UInt8,1} # Direct access to data
 
     function Drawing(w, h, stype::Symbol, f::AbstractString="")
-        global currentdrawing
+#        global currentdrawing
         bufdata = UInt8[]
         iobuf = IOBuffer(bufdata, read=true, write=true)
         the_surfacetype = stype
@@ -242,7 +240,7 @@ The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default
 "E"       => (3168, 2448))
 ```
 """
-paper_sizes = Dict{String, Tuple}(
+const paper_sizes = Dict{String, Tuple}(
   "A0"     => (2384, 3370),
   "A1"     => (1684, 2384),
   "A2"     => (1191, 1684),
