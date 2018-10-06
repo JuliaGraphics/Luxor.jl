@@ -70,7 +70,7 @@ To reset the matrix to the original:
 
 """
 function getmatrix()
-    gm = Cairo.get_matrix(currentdrawing.cr)
+    gm = Cairo.get_matrix(get_current_cr())
     return([gm.xx, gm.yx, gm.xy, gm.yy, gm.x0, gm.y0])
 end
 
@@ -90,7 +90,7 @@ function setmatrix(m::AbstractArray)
         throw("didn't like that matrix $m: too many zeroes")
     else
         cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
-        Cairo.set_matrix(currentdrawing.cr, cm)
+        Cairo.set_matrix(get_current_cr(), cm)
     end
 end
 
@@ -106,7 +106,7 @@ For example, to skew the current state by 45 degrees in x and move by 20 in y di
 Use `getmatrix()` to get the current matrix.
 """
 function transform(a::AbstractArray)
-    b = Cairo.get_matrix(currentdrawing.cr)
+    b = Cairo.get_matrix(get_current_cr())
     setmatrix([
         (a[1] * b.xx)  + a[2]  * b.xy,             # xx
         (a[1] * b.yx)  + a[2]  * b.yy,             # yx

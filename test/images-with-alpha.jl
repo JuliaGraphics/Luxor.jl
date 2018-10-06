@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function get_all_png_files_alpha(folder)
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
     return map(f -> string(folder, f), imagelist)

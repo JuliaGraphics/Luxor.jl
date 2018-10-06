@@ -1,8 +1,11 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor
 
 using Test
+
+using Random
+Random.seed!(42)
 
 function test_bboxes(fname)
     pagewidth, pageheight = 1200, 1400
@@ -34,7 +37,7 @@ function test_bboxes(fname)
         randomhue()
         circle(between(bb, i), 30, :fill)
     end
-    
+
     # combine and intersections
     box1 = BoundingBox()/3 - (200, 200)
     box2 = BoundingBox()/4 - (300, 300)

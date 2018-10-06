@@ -4,6 +4,9 @@ using Luxor, Random
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function test_hypotrochoid(fname)
     Drawing(1400, 1400, fname)
     origin()

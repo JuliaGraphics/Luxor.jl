@@ -6,6 +6,9 @@ using Test
 
 using Colors
 
+using Random
+Random.seed!(42)
+
 demomovie = Movie(400, 400, "test", 0:359)
 
 function backdrop(scene, framenumber)

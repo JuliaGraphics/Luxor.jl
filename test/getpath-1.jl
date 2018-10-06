@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function getpath_1(fname)
     Drawing(400, 250, fname)
 

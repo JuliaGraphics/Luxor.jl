@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function test_pro_text(fname)
     Drawing(1600, 1800, fname)
     sethue("black")

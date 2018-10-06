@@ -5,7 +5,6 @@ using Luxor, BenchmarkTools
 using BenchmarkTools
 
 function bm1()
-    @info
     Drawing(1000, 1000, "luxor-test1.pdf")
     origin()
     t = Tiler(1000, 1000, 10, 10, margin=10)
@@ -21,7 +20,7 @@ function bm2()
     origin()
     t = Tiler(1000, 1000, 10, 10, margin=10)
     for (pos, n) in t
-        sethue("red")
+        setcolor"red"
         setopacity(rand())
         box(pos, t.tilewidth/2, t.tilewidth/2, :fill)
     end
@@ -34,7 +33,7 @@ end
 
 #=
 
-Julia v1.0.0 Luxor v1.0.0 iMac
+1: Julia v1.0.0 Luxor v1.0.0 iMac 2018-10-05 12:37:11
 
 julia-1.0> @benchmark bm1()
 BenchmarkTools.Trial:
@@ -61,5 +60,36 @@ BenchmarkTools.Trial:
   --------------
   samples:          4247
   evals/sample:     1
+
+
+2:  Julia v1.0.0 Luxor v1.1.0 iMac 2018-10-05 12:40:11
+
+after some type work, there's a slight improvement in allocations
+
+  julia-1.0> @benchmark bm1()
+  BenchmarkTools.Trial:
+    memory estimate:  38.94 KiB
+    allocs estimate:  782
+    --------------
+    minimum time:     1.950 ms (0.00% GC)
+    median time:      2.136 ms (0.00% GC)
+    mean time:        2.302 ms (1.57% GC)
+    maximum time:     68.908 ms (92.70% GC)
+    --------------
+    samples:          2165
+    evals/sample:     1
+
+  julia-1.0> @benchmark bm2()
+  BenchmarkTools.Trial:
+    memory estimate:  92.00 KiB
+    allocs estimate:  2285
+    --------------
+    minimum time:     663.034 μs (0.00% GC)
+    median time:      736.955 μs (0.00% GC)
+    mean time:        806.080 μs (2.46% GC)
+    maximum time:     49.676 ms (96.68% GC)
+    --------------
+    samples:          6164
+    evals/sample:     1
 
  =#

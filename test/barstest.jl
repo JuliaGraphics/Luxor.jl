@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function barfunc1(low, high, v; extremes=extrema(values), barnumber=0, bartotal=0, mvalue=0)
     @layer begin
         sethue(rescale(v, 0, extremes[2], 0, 1), rand(), rand())

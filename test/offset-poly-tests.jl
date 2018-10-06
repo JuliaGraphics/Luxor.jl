@@ -1,6 +1,9 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor
+
+using Random
+Random.seed!(42)
 
 using Test
 
@@ -8,10 +11,9 @@ function offset_poly_test(fname)
     Drawing("A2", fname)
     origin()
     background("white")
-    Random.seed!(42)
     setline(1.5)
 
-    tiles = Tiler(currentdrawing.width, currentdrawing.height, 6, 6, margin=20)
+    tiles = Tiler(Luxor.current_width(), Luxor.current_height(), 6, 6, margin=20)
     randomoffset = 18
     for (pos, n) in tiles
         gsave()

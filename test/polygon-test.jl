@@ -4,6 +4,9 @@ using Luxor, Colors
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function poly_areas()
     # test area calculations
     @test polyarea(ngon(O, 100, 4, 0, vertices=true)) ≈ 20_000

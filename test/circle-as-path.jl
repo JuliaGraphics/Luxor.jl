@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function circle_as_path(fname)
     currentwidth = 1200
     currentheight = 1200 # pts

@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function subroutine(🐢::Turtle)
     for i in 1:10
         Forward(🐢, 40)

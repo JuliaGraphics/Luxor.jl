@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function star_test_1(fname)
     width, height = 2000, 2000
     Drawing(width, height, fname)

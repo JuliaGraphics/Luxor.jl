@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
     gsave()

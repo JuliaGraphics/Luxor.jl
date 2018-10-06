@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function draweasingfunction(f, pos, w, h)
     @layer begin
         translate(pos)

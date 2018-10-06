@@ -134,22 +134,6 @@ finish
 preview
 ```
 
-The global variable `currentdrawing` (of type Drawing) stores some parameters related to the current drawing:
-
-```julia
-julia> fieldnames(typeof(currentdrawing))
-10-element Array{Symbol,1}:
-:width
-:height
-:filename
-:surface
-:cr
-:surfacetype
-:redvalue
-:greenvalue
-:bluevalue
-:alpha
-```
 ## Quick drawings with macros
 
 The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
@@ -220,25 +204,7 @@ You can choose to store the drawing in memory. The advantage to this is that in-
 Drawing(width, height, surfacetype, [filename])
 ```
 
-lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. In a Jupyter notebook you can use it to provide faster manipulations. For example:
-
-```julia
-using Interact
-
-function makecircle(r)
-    d = Drawing(300, 300, :svg)
-    sethue("black")
-    origin()
-    setline(0.5)
-    hypotrochoid(150, 100, r, :stroke)
-    finish()
-    return d
-end
-
-@manipulate for r in 5:150
-    makecircle(r)
-end
-```
+lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
 
 ## The drawing surface
 

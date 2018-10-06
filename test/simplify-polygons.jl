@@ -6,6 +6,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function sinecurves()
     gsave()
     translate(100, 100)

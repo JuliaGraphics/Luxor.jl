@@ -4,6 +4,9 @@ using Luxor, Colors
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function spiral_logo_eps()
     gsave()
     scale(.3, .3)

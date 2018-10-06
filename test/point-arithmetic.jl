@@ -1,6 +1,9 @@
 #!/usr/bin/env julia
 
-using Luxor, Test, Random
+using Luxor, Test
+
+using Random
+Random.seed!(42)
 
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)

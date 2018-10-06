@@ -4,6 +4,8 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
 
 import Cairo.CAIRO_PATH_MOVE_TO
 import Cairo.CAIRO_PATH_LINE_TO

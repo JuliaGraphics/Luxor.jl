@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function cropmarkstest(fname)
     Drawing(1300, 1300, fname)
     origin()

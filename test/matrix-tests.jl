@@ -6,6 +6,9 @@ using Test
 # some of these tests produce errors on Linux versions of Cairo
 # but no errors on MacOS X Cairo.
 
+using Random
+Random.seed!(42)
+
 function matrix_tests(fname)
     # matrix tests
 

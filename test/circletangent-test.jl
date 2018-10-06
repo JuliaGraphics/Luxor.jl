@@ -1,8 +1,9 @@
 #!/usr/bin/env julia
 
-using Luxor, Test, Random
+using Luxor, Test
 
-Random.seed!(7)
+using Random
+Random.seed!(42)
 
 function findanddrawsometangentialcircles(c1center, c1radius, c2center, c2radius)
     for requiredradius in 1:150

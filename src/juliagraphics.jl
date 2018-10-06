@@ -49,7 +49,7 @@ To use the logo as a clipping mask:
 """
 function julialogo(;action=:fill, color=true)
     # save current color
-    r, g, b, a = currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha
+    r, g, b, a = get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha()
     # "j"
     color && setcolor("black")
     move(72.872, 177.311)

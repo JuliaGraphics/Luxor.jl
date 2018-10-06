@@ -4,6 +4,9 @@ using Luxor, Colors
 
 using Test
 
+using Random
+Random.seed!(2)
+
 function meshtest1(fname)
     Drawing(1200, 1200, fname)
     origin()

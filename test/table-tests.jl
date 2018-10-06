@@ -1,11 +1,13 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function testtable(fname)
-    Random.seed!(3)
     currentwidth = 800
     currentheight = 800
     Drawing(currentwidth, currentheight, fname)

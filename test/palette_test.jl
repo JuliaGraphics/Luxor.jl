@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function draw_color_bars(x, y, n, colmap, label)
     setcolor(1, 1, 1)
     fontsize(8)

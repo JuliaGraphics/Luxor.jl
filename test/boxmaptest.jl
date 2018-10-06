@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function boxmaptest(fname)
     Drawing(850, 850, fname)
     origin()

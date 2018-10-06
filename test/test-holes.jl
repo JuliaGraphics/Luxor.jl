@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function make_some_holes(fname)
     Drawing(1200, 1200, fname)
     origin()

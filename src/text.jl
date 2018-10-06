@@ -64,9 +64,9 @@ function text(t, pt::Point;
     textpointy = pt.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
 
     gsave()
-    Cairo.move_to(currentdrawing.cr, textpointx, textpointy)
-    Cairo.rotate(currentdrawing.cr, angle)
-    Cairo.show_text(currentdrawing.cr, t)
+    Cairo.move_to(get_current_cr(), textpointx, textpointy)
+    Cairo.rotate(get_current_cr(), angle)
+    Cairo.show_text(get_current_cr(), t)
     grestore()
 end
 
@@ -108,7 +108,7 @@ textright(t, pt::Point) = textright(t, pt.x, pt.y)
 Select a font to use. (Toy API)
 """
 fontface(f) =
-    Cairo.select_font_face(currentdrawing.cr, f,
+    Cairo.select_font_face(get_current_cr(), f,
                            Cairo.FONT_SLANT_NORMAL,
                            Cairo.FONT_WEIGHT_NORMAL)
 
@@ -117,7 +117,7 @@ fontface(f) =
 
 Set the font size to `n` points. The default size is 10 points. (Toy API)
 """
-fontsize(n) = Cairo.set_font_size(currentdrawing.cr, n)
+fontsize(n) = Cairo.set_font_size(get_current_cr(), n)
 
 """
     textextents(str)
@@ -155,7 +155,7 @@ returns
 
     [1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]
 """
-textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
+textextents(str) = Cairo.text_extents(get_current_cr(), str)
 
 """
     textpath(t)
@@ -163,7 +163,7 @@ textextents(str) = Cairo.text_extents(currentdrawing.cr, str)
 Convert the text in string `t` to a new path, for subsequent filling/stroking etc...
 """
 function textpath(t)
-    Cairo.text_path(currentdrawing.cr, t)
+    Cairo.text_path(get_current_cr(), t)
 end
 
 """
@@ -292,7 +292,7 @@ function setfont(family::AbstractString, fontsize)
     # once the size of the output was set relative to 96dpi
     # mysteriously has changed Oct 2017
     fsize = fontsize # was * 72/96
-    set_font_face(currentdrawing.cr, string(family, " ", fsize))
+    set_font_face(get_current_cr(), string(family, " ", fsize))
 end
 
 """
@@ -324,7 +324,7 @@ The `<span>` tag can contains things like this:
     <span font='26' background='green' foreground='red'>unreadable text</span>
 """
 settext(text::AbstractString, pos::Point; kwargs...) =
-    Cairo.text(currentdrawing.cr, pos.x, pos.y, text; kwargs...)
+    Cairo.text(get_current_cr(), pos.x, pos.y, text; kwargs...)
 
 settext(text; kwargs...) = settext(text, O; kwargs...)
 
@@ -532,8 +532,13 @@ function textbox(lines::Array, pos::Point=O;
     end
 end
 
-# inference fails with this one defined.
-#textbox(s; kwargs...) = textbox([s], O; kwargs...)
+"""
+    textbox(s::String, pos::Point=O;
+        leading = 12,
+        linefunc::Function = (linenumber, linetext, startpos, height) -> (),
+        alignment=:left)
+"""
+textbox(s::String, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
 
 """
     textwrap(s::T where T<:AbstractString, width::Real, pos::Point;

@@ -12,7 +12,7 @@ function circle(x, y, r, action=:nothing)
     if action != :path
         newpath()
     end
-    Cairo.arc(currentdrawing.cr, x, y, r, 0, 2pi)
+    Cairo.arc(get_current_cr(), x, y, r, 0, 2pi)
     do_action(action)
 end
 
@@ -132,7 +132,7 @@ at xc, yc.
 Angles are defined relative to the x-axis, positive clockwise.
 """
 function arc(xc, yc, radius, angle1, angle2, action=:nothing)
-    Cairo.arc(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+    Cairo.arc(get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
@@ -154,7 +154,7 @@ centered at `xc`/`yc`.
 Angles are defined relative to the x-axis, positive clockwise.
 """
 function carc(xc, yc, radius, angle1, angle2, action=:nothing)
-    Cairo.arc_negative(currentdrawing.cr, xc, yc, radius, angle1, angle2)
+    Cairo.arc_negative(get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
@@ -368,7 +368,7 @@ Add a Bézier curve.
 The spline starts at the current position, finishing at `x3/y3` (`p3`),
 following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`).
 """
-curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(currentdrawing.cr, x1, y1, x2, y2, x3, y3)
+curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(get_current_cr(), x1, y1, x2, y2, x3, y3)
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 """
@@ -470,7 +470,7 @@ end
 """
     hypotrochoid(R, r, d, action=:none;
             stepby=0.01,
-            period=0,
+            period=0.0,
             vertices=false)
 
 Make a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
@@ -492,7 +492,7 @@ many points were drawn and what the period was (as a multiple of `pi`).
 function hypotrochoid(R, r, d, action=:none;
                       close    = true,
                       stepby   = 0.01,
-                      period   = 0,
+                      period   = 0.0,
                       vertices = false)
     function nextposition(t)
         x = (R - r) * cos(t) + (d * cos(((R - r)/r) * t))

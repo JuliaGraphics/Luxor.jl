@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function test_intersections(fname)
     Drawing(2000, 2000, fname)
     origin()

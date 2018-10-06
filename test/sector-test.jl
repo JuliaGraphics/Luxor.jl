@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 fname = "sector-test.pdf"
 Drawing(1500, 1500, fname) # points/pixels, 2000 points is 70.56cm × 70.56cm
 

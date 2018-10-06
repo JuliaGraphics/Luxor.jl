@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function randomsine(func, vertscale, horizontalscale, pagewidth, pageheight, style, delta=0.1)
     # y is positive downwards...
     pl = Point[]

@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function julia_logo_test(fname)
     Drawing(1000, 1000, fname)
     origin()

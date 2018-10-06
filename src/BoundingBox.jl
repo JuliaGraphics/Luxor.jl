@@ -29,12 +29,12 @@ function BoundingBox(;centered=true)
     if centered
         # ignore current matrix
         r = BoundingBox(
-        Point(-currentdrawing.width/2, -currentdrawing.height/2),
-        Point(currentdrawing.width/2, currentdrawing.height/2))
+        Point(-current_width()/2, -current_height()/2),
+        Point(current_width()/2, current_height()/2))
     else
         b = getmatrix()
         setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-        r = BoundingBox(Point(0, 0), Point(currentdrawing.width, currentdrawing.height))
+        r = BoundingBox(Point(0, 0), Point(current_width(), current_height()))
         setmatrix(b)
     end
     return r
