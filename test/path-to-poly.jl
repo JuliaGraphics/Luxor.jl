@@ -2,6 +2,10 @@
 
 using Luxor
 
+
+using Random
+Random.seed!(42)
+
 using Test
 
 function get_text_path()

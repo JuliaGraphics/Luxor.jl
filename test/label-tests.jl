@@ -1,9 +1,10 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor
 
 using Test
 
+using Random
 Random.seed!(42)
 
 function testlabels(fname)

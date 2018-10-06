@@ -11,7 +11,7 @@ function rect(xmin, ymin, w, h, action::Symbol=:nothing)
     if action != :path
         newpath()
     end
-    Cairo.rectangle(currentdrawing.cr, xmin, ymin, w, h)
+    Cairo.rectangle(get_current_cr(), xmin, ymin, w, h)
     do_action(action)
 end
 

@@ -9,6 +9,9 @@ import Cairo.CAIRO_PATH_CLOSE_PATH
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function get_path(str)
     sethue("blue")
     setopacity(.7)

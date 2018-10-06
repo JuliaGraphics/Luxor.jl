@@ -15,7 +15,7 @@ function readpng(pathname)
 end
 
 function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
-    Cairo.paint_with_alpha(currentdrawing.cr, a)
+    Cairo.paint_with_alpha(get_current_cr(), a)
 end
 
 """
@@ -31,9 +31,9 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered=false)
         w, h = img.width, img.height
         xpos, ypos = xpos - (w/2), ypos - (h/2)
     end
-    Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
+    Cairo.set_source_surface(get_current_cr(), img, xpos, ypos)
     # no alpha
-    Cairo.paint(currentdrawing.cr)
+    Cairo.paint(get_current_cr())
 end
 
 """
@@ -57,8 +57,8 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered=false)
         w, h = img.width, img.height
         xpos, ypos = xpos - (w/2), ypos - (h/2)
     end
-    Cairo.set_source_surface(currentdrawing.cr, img, xpos, ypos)
-    paint_with_alpha(currentdrawing.cr, alpha)
+    Cairo.set_source_surface(get_current_cr(), img, xpos, ypos)
+    paint_with_alpha(get_current_cr(), alpha)
 end
 
 """

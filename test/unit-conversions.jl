@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function unit_conversions_test(fname)
     pagewidth, pageheight = 2000, 2000
     Drawing(pagewidth, pageheight, fname)

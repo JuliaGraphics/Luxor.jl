@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function drawtriangle(points, degree)
     sethue(cols[degree])
     poly(points, :fill)

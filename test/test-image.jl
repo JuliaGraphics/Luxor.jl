@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function image_testing(fname)
     width, height = 4000, 4000
     margin = 500

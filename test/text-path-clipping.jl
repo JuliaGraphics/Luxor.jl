@@ -2,6 +2,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function text_path_clip(fname)
     currentwidth = 1250 # pts
     currentheight = 800 # pts

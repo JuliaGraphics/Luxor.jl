@@ -1,15 +1,17 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor
 
 using Test
+
+using Random
+Random.seed!(42)
 
 function poly_split_2(fname)
     Drawing(2500, 2500, fname)
     background(1, .8, .1)
     origin()
     setopacity(0.7)
-    Random.seed!(42)
     fontsize(2)
     sethue("black")
     s = squircle(O, 600, 600, vertices=true)

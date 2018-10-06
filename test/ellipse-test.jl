@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function test_ellipse(fname)
   pagewidth, pageheight = 1200, 1400
   Drawing(pagewidth, pageheight, fname)

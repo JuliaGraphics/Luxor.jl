@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function randompoly(rad, n)
     result = Point[]
     for i in 1:n

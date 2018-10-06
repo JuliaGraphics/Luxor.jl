@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function run_line_intersection_test(fname)
     Drawing(2000, 2000, fname)
     origin()

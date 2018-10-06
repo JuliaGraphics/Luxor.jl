@@ -103,7 +103,7 @@ function addstop(b::Blend, offset, col::NTuple{4,Number})
 end
 
 function addstop(b::Blend, offset, col::NTuple{3,Number})
-    currentopacity = currentdrawing.alpha
+    currentopacity = get_current_alpha()
     Cairo.pattern_add_color_stop_rgba(b, offset, col[1], col[2], col[3], currentopacity)
 end
 
@@ -115,7 +115,7 @@ Start using the named blend for filling graphics.
 This aligns the original coordinates of the blend definition with the current axes.
 """
 function setblend(b::Blend)
-    Cairo.set_source(currentdrawing.cr, b)
+    Cairo.set_source(get_current_cr(), b)
 end
 
 """

@@ -27,11 +27,14 @@ See also [`setcolor`](@ref).
 """
 function setcolor(col::String)
     temp = parse(RGBA, col)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
-        currentdrawing.alpha = temp.r, temp.g, temp.b, temp.alpha
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-        currentdrawing.greenvalue, currentdrawing.bluevalue, temp.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+    # set Luxor settings
+    set_current_redvalue(temp.r)
+    set_current_greenvalue(temp.g)
+    set_current_bluevalue(temp.b)
+    set_current_alpha(temp.alpha)
+    # and set Cairo context too
+    Cairo.set_source_rgba(get_current_cr(), temp.r, temp.g, temp.b, temp.alpha)
+    return (temp.r, temp.g, temp.b, temp.alpha)
 end
 
 """
@@ -59,13 +62,15 @@ See also [`sethue`](@ref).
 function setcolor(col::ColorTypes.Colorant)
   temp = convert(RGBA, col)
   setcolor(temp.r, temp.g, temp.b, temp.alpha)
-  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+  return (temp.r, temp.g, temp.b, temp.alpha)
 end
 
 function setcolor(r, g, b, a = 1.0)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
-      currentdrawing.alpha = r, g, b, a
-    Cairo.set_source_rgba(currentdrawing.cr, r, g, b, a)
+    set_current_redvalue(r)
+    set_current_greenvalue(g)
+    set_current_bluevalue(b)
+    set_current_alpha(a)
+    Cairo.set_source_rgba(get_current_cr(), r, g, b, a)
     return (r, g, b, a)
 end
 
@@ -80,10 +85,12 @@ macro setcolor_str(ex)
     isa(ex, String) || error("colorant requires literal strings")
     col = parse(RGBA, ex)
     quote
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue,
-      currentdrawing.alpha = $col.r, $col.g, $col.b, $col.alpha
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-      currentdrawing.greenvalue, currentdrawing.bluevalue, $col.alpha)
+        set_current_redvalue($col.r)
+        set_current_greenvalue($col.g)
+        set_current_bluevalue($col.b)
+        set_current_alpha($col.alpha)
+        Cairo.set_source_rgba(get_current_cr(), get_current_redvalue(),
+           get_current_greenvalue(), get_current_bluevalue(), $col.alpha)
     end
 end
 
@@ -102,12 +109,14 @@ See also [`setcolor`](@ref).
 """
 function sethue(col::String)
     temp = parse(RGBA,  col)
-    currentdrawing.redvalue, currentdrawing.greenvalue,
-        currentdrawing.bluevalue = temp.r, temp.g, temp.b
+    set_current_redvalue(temp.r)
+    set_current_greenvalue(temp.g)
+    set_current_bluevalue(temp.b)
+
     # use current alpha, not incoming one
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-        currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
+    Cairo.set_source_rgba(get_current_cr(), get_current_redvalue(),
+        get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
+    return (temp.r, temp.g, temp.b)
 end
 
 """
@@ -117,11 +126,12 @@ Set the color without changing the current alpha/opacity:
 """
 function sethue(col::ColorTypes.Colorant)
     temp = convert(RGBA,  col)
-    currentdrawing.redvalue, currentdrawing.greenvalue,
-        currentdrawing.bluevalue = temp.r, temp.g, temp.b
+    set_current_redvalue(temp.r)
+    set_current_greenvalue(temp.g)
+    set_current_bluevalue(temp.b)
     # use current alpha
-    Cairo.set_source_rgba(currentdrawing.cr, temp.r, temp.g, temp.b, currentdrawing.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
+    Cairo.set_source_rgba(get_current_cr(), temp.r, temp.g, temp.b, get_current_alpha())
+    return (temp.r, temp.g, temp.b)
 end
 
 """
@@ -130,10 +140,12 @@ end
 Set the color's `r`, `g`, `b` values. Use `setcolor(r,g,b,a)` to set transparent colors.
 """
 function sethue(r, g, b)
-    currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue = r, g, b
+    set_current_redvalue(r)
+    set_current_greenvalue(g)
+    set_current_bluevalue(b)
     # use current alpha
-    Cairo.set_source_rgba(currentdrawing.cr, r, g, b, currentdrawing.alpha)
-    return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
+    Cairo.set_source_rgba(get_current_cr(), r, g, b, get_current_alpha())
+    return (r, g, b)
 end
 
 """
@@ -172,9 +184,9 @@ current color.
 """
 function setopacity(a)
     # use current RGB values
-    currentdrawing.alpha = a
-    Cairo.set_source_rgba(currentdrawing.cr, currentdrawing.redvalue,
-        currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+    set_current_alpha(a)
+    Cairo.set_source_rgba(get_current_cr(), get_current_redvalue(),
+        get_current_greenvalue(), get_current_bluevalue(), a)
     return a
 end
 
@@ -195,7 +207,7 @@ Set a random hue, without changing the current alpha opacity.
 function randomhue()
   rrand, grand, brand = rand(3)
   sethue(rrand, grand, brand)
-  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue)
+  return (rrand, grand, brand)
 end
 
 """
@@ -206,7 +218,7 @@ Set a random color. This may change the current alpha opacity too.
 function randomcolor()
   rrand, grand, brand, arand = rand(4)
   setcolor(rrand, grand, brand, arand)
-  return (currentdrawing.redvalue, currentdrawing.greenvalue, currentdrawing.bluevalue, currentdrawing.alpha)
+  return (rrand, grand, brand, arand)
 end
 
 # compositing operators
@@ -250,7 +262,7 @@ See the [Cairo documentation](https://www.cairographics.org/operators/) for deta
 function setmode(operator::String)
     indx = findfirst(isequal(operator), blendingmodes)
     if indx !== nothing
-        Cairo.set_operator(currentdrawing.cr, blendingoperators[indx])
+        Cairo.set_operator(get_current_cr(), blendingoperators[indx])
     end
 end
 
@@ -260,5 +272,5 @@ end
 Return the current compositing/blending mode as a string.
 """
 function getmode()
-    return blendingmodes[Cairo.get_operator(currentdrawing.cr) + 1]
+    return blendingmodes[Cairo.get_operator(get_current_cr()) + 1]
 end

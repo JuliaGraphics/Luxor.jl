@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function testareaintersection()
     c1 = (O, 150)
     c2 = (O + (100, 0), 150)

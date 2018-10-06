@@ -21,7 +21,7 @@ function grid_test(fname)
         sethue("white")
         text(string(p, ":", grid.rownumber, ":", grid.colnumber), pt, halign=:center, valign=:middle)
     end
-    translate(currentdrawing.width/2, 0)
+    translate(Luxor.current_width()/2, 0)
     rulers()
     centers = 100
     grid = GridHex(O, centers, 800, 800)

@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 w, h = 600, 600
 
 fname = "stars.png"

@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function poly_fit(fname)
     currentwidth = 2400 # pts
     currentheight = 2400 # pts

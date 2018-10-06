@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function textbox_tests(fname)
     Drawing(1000, 1000, fname)
     origin()
@@ -19,6 +22,7 @@ function textbox_tests(fname)
             sethue("ivory")
             box(O, tiles.tilewidth-2, tiles.tileheight-2, :fill)
             sethue("black")
+            # even-numbered boxes split and count
             if iseven(n)
                 opacity = 1.0
                 # split on ., (, and )
@@ -36,20 +40,25 @@ function textbox_tests(fname)
                     end,
                     leading=10)
             else
+                # odd-numbered boxes number and fade
                 # split on the letter "y"
                textbox(split("Luxor is a city in Upper (southern) Egypt. " ^ 6, "y"),
                 O - (tiles.tilewidth/2 - 2, tiles.tileheight/2 - 2),
                 linefunc = (l, t, p, h) ->
                     begin
                         text(string(l), p + (tiles.tilewidth - 20, 0))
-                        setopacity(1/(l/3))
+                        setopacity(rescale(l, 1, 10, 1.0, 0.3))
                     end,
                     leading=12)
             end
         end
     end
+
+    fontsize(80)
+    textbox("LUXOR", alignment=:center)
+    
     @test finish() == true
     println("...finished test: output in $(fname)")
 end
 
-textbox_tests("textbox-tests.svg")
+textbox_tests("textbox-tests.png")

@@ -1,8 +1,11 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor
 
 using Test
+
+using Random
+Random.seed!(42)
 
 function test_epitrochoid(fname)
     Drawing(1400, 1400, fname)

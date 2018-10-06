@@ -2,7 +2,10 @@
 
 using Luxor
 
-using Test, Random
+using Test
+
+using Random
+Random.seed!(42)
 
 function get_png_files(folder)
     tempfolder = pwd()

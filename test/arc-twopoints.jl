@@ -1,6 +1,8 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Random
+
+Random.seed!(42)
 
 using Test
 

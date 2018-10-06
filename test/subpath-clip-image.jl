@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function subpath_clipping(fname)
     width, height = 1000, 1000
     Drawing(width, height, fname)

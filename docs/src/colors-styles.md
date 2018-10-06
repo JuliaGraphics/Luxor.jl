@@ -131,7 +131,7 @@ dashes = [50.0,  # ink
           10.0   # skip
           ]
 offset = -50.0
-Cairo.set_dash(currentdrawing.cr, dashes, offset)
+Cairo.set_dash(get_current_cr()(), dashes, offset)
 ```
 
 ## Blends

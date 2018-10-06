@@ -113,5 +113,5 @@ end
 Select a mesh previously created with `mesh()` for filling shapes.
 """
 function setmesh(m::Mesh)
-    Cairo.set_source(currentdrawing.cr, m)
+    Cairo.set_source(get_current_cr(), m)
 end

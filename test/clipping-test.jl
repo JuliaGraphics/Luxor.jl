@@ -4,6 +4,9 @@ using Luxor, Colors
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function drawlogoclip(x, y)
     foregroundcolors = diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
     gsave()

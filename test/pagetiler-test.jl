@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 setantialias(6)
 
 fname = "tiler-test1.pdf"

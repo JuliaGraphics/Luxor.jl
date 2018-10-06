@@ -20,7 +20,7 @@ function test1(p, x, y)
         begin
             scale(0.5, 0.5)
             randomhue()
-            opacity = currentdrawing.alpha
+            opacity = Luxor.get_current_alpha()
             setopacity(rand(5:10)/10)
             ngon(0, 0, 15, rand(3:12), 0, :fill)
             setopacity(opacity)

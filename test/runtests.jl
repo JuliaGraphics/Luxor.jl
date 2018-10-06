@@ -1,5 +1,8 @@
 using Test
 
+using Random
+Random.seed!(42)
+
 function run_all_tests()
 
     @testset "animation (Unix only)" begin
@@ -88,8 +91,8 @@ function run_all_tests()
         include("julia-logo-testing.jl")
     end
 
-    @testset "axes" begin
-        include("axes-test.jl")
+    @testset "rulers" begin
+        include("rulers-test.jl")
     end
 
     @testset "boundingbox" begin

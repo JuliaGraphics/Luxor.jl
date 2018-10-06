@@ -2,6 +2,9 @@
 
 using Luxor, Test, Colors
 
+using Random
+Random.seed!(42)
+
 function noisetest(fname)
     Drawing(800, 800, fname)
     background("skyblue")

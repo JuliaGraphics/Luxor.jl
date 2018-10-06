@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function hipster(fname)
     Drawing(400, 350, fname) # hide
     origin() # hide

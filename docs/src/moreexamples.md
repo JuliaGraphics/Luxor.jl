@@ -40,7 +40,7 @@ fontsize(60)
 setcolor("turquoise")
 fontface("Optima-ExtraBlack")
 textwidth = textextents("Luxor")[5]
-textcentred("Luxor", 0, currentdrawing.height/2 - 400)
+textcentred("Luxor", 0, current_height()/2 - 400)
 fontsize(18)
 fontface("Avenir-Black")
 

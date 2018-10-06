@@ -136,11 +136,11 @@ draw(depth)
 
 The Point type is an immutable composite type containing `x` and `y` fields that specify a 2D point.
 
-## Working interactively
+## Working in Jupyter and Juno
 
-If you want to work interactively, you can use an environment such as a Jupyter notebook or the Juno IDE, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work, of course, as Julia compiles functions when they're first encountered, and calls the compiled versions thereafter.)
+You can use an environment such as a Jupyter notebook or the Juno IDE, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
 
-![Jupyter](assets/figures/jupyter-star.png)
+![Jupyter](assets/figures/jupyter-basic.png)
 
 ## More examples
 

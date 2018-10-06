@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function polysampletest(fname)
     Drawing(400, 400, fname)
     origin()
@@ -35,7 +38,7 @@ function polysampletest(fname)
 
     @test finish() == true
     println("...finished test: output in $(fname)")
-    
+
 end
 
 polysampletest("polysample.svg")

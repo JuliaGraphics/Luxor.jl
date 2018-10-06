@@ -4,9 +4,12 @@
 
 # it can be run to test Juno/Jupyter integration...
 
-using Luxor, Random
+using Luxor
 
 using Test
+
+using Random
+Random.seed!(42)
 
 function draw_hypotrochoids()
     background("grey10")
@@ -15,7 +18,7 @@ function draw_hypotrochoids()
     tiles = Tiler(1200, 1200, 6, 6)
     for (pos, n) in tiles
         gsave()
-        setline(1.5)
+        setline(.5)
         translate(pos)
 
         R = 45; r = n; d = 20
@@ -79,7 +82,7 @@ test_hypotrochoid_at_svg() ; println("output SVG")
 test_hypotrochoid_at_pdf() ; println("output PDF")
 
 
-#= testing @manipulate
+#testing @manipulate
 
 using Interact
 
@@ -96,5 +99,3 @@ end
 @manipulate for r in 5:150
     makecircle(r)
 end
-
-=#

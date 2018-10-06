@@ -4,6 +4,9 @@ using Luxor, Colors
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function blend_mode_test(fname)
     Drawing(600, 600, fname)
     origin()

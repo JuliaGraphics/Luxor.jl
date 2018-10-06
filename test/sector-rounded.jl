@@ -2,7 +2,11 @@
 
 using Luxor
 
+using Random
+Random.seed!(42)
+
 using Test
+
 
 function multitest(w, h)
     tiles = Tiler(w, h, 5, 5)

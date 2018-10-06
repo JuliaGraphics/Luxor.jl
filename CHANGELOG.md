@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.1.1] - 2018-10-04
+
+### Added
+
+### Changed
+
+- fixed display code to work in Jupyter
+- rand() in all tests is seeded in advance to produce predictable output
+- internal changes to fix type stability
+
+### Removed
+
+### Deprecated
 
 ## [v1.1.0] - 2018-10-04
 

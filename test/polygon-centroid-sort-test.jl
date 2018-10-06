@@ -4,6 +4,9 @@ using Luxor
 
 using Test
 
+using Random
+Random.seed!(42)
+
 function drawpolyboundingbox(apoly)
     gsave()
     setline(0.3)
