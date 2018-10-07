@@ -25,6 +25,7 @@ nothing # hide
 ![simple clip](assets/figures/simpleclip.png)
 
 ```@docs
+clip
 clippreserve
 clipreset
 ```
