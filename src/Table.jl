@@ -66,7 +66,7 @@ and row heights and column widths are available in:
 
 ```
 t.rowheights
-t.colheights
+t.colwidths
 ```
 
 `box(t::Table, r, c)` can be used to fill table cells:

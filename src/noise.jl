@@ -182,7 +182,7 @@ function _octaves(x, y, z, octaves::Int, persistence)
     frequency = 1.0
     amplitude = 1.0
     maxval    = 0.0
-    for i     = 1:octaves
+    for i in 1:octaves
         total += _noise3(x * frequency, y * frequency, z * frequency) * amplitude
         maxval += amplitude
         amplitude *= persistence
