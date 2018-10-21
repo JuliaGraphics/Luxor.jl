@@ -127,7 +127,7 @@ t = Table(vcat(5:10:60, 60:-10:5), vcat(5:10:60, 60:-10:5))
 t = Table(vcat(5:10:60, 60:-10:5), 50) # 1 column 50 units wide
 t = Table(vcat(5:10:60, 60:-10:5), 1:5:50)</code></pre><p>A Table is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of cells arranged in rows and columns (relative to current 0/0)</p></li><li><p>the number of the cell (left to right, then top to bottom)</p></li></ul><p><code>nrows</code>/<code>ncols</code> are the number of rows and columns required.</p><p>It&#39;s sometimes useful to know which row and column you&#39;re currently on while iterating:</p><pre><code class="language-none">t.currentrow
 t.currentcol</code></pre><p>and row heights and column widths are available in:</p><pre><code class="language-none">t.rowheights
-t.colheights</code></pre><p><code>box(t::Table, r, c)</code> can be used to fill table cells:</p><pre><code class="language-none">@svg begin
+t.colwidths</code></pre><p><code>box(t::Table, r, c)</code> can be used to fill table cells:</p><pre><code class="language-none">@svg begin
     for (pt, n) in (t = Table(8, 3, 30, 15))
         randomhue()
         box(t, t.currentrow, t.currentcol, :fill)
