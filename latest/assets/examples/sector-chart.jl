@@ -85,7 +85,7 @@ function sectorchart(centerpos, innerradius, tilewidth, tileheight, rawdatavalue
     glyph_x_bearing, glyph_y_bearing, glyph_width,
       glyph_height, glyph_x_advance, glyph_y_advance = textextents(labels[i])
     shiftangle = asin((glyph_width/2)/innerradius)
-    textcurve(labels[i], rotangle-shiftangle, innerradius - textoffset)
+    textcurve(titlecase(labels[i]), rotangle-shiftangle, innerradius - textoffset)
 
     # show the original raw data value (not the rescaled value used for plotting)
     # refpos is for text placement
@@ -113,7 +113,7 @@ end
 
 function main()
   fname = "/tmp/sector-chart.svg"
-  width, height = 1064, 1064
+  width, height = 1064, 1200
   Drawing(width, height, fname)
   origin()
   background("ivory")
@@ -144,7 +144,7 @@ function main()
     "sienna",      # Rust
     ]
 
-  languagecolors = Dict(languages[i] => cols[i] for i in 1:length(languages))
+  languagecolors = Dict(languages[i] => cols[i] for i in eachindex(languages))
 
   # how many charts are we plotting?
   # numberofrows, numberofcolumns = howmanyrowscolumns(length(benchmarknames))
