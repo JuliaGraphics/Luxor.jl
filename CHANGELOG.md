@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.1.2] - 2018-10-31
+
+### Added
+
+### Changed
+
+- use eachindex more
+- docs use more svg images
+- changed preview() in Windows again
+
+### Removed
+
+### Deprecated
+
 ## [v1.1.1] - 2018-10-04
 
 ### Added

@@ -35,7 +35,7 @@ function testtable(fname)
 
     sethue("black")
     fontsize(10)
-    for n in 1:length(t)
+    for (pt, n) in t
         label(string(n), :n, t[n], offset=15)
     end
 

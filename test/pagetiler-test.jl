@@ -7,12 +7,11 @@ using Test
 using Random
 Random.seed!(42)
 
-setantialias(6)
-
 fname = "tiler-test1.pdf"
 pagewidth, pageheight = 600, 900
 Drawing(pagewidth, pageheight, fname)
 origin() # move 0/0 to center
+setantialias(6)
 background("ivory")
 setopacity(0.9)
 setline(0.6)
@@ -28,9 +27,8 @@ for (pos, n) in pagetiles
   ellipse(pos, pagetiles.tilewidth, pagetiles.tileheight, :fill)
 end
 
-# testing eachindex
-for i in 1:length(pagetiles)
-    cpos, n =  pagetiles[i]
+for tile in pagetiles
+    cpos, n =  tile
     for j in 1:20
         box(cpos, 5j, 5j, :stroke)
     end

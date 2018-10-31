@@ -17,31 +17,37 @@ For color definitions and conversions, you can use Colors.jl.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
 
-Named colors, such as "gold", or "lavender", can be found in Colors.color_names. This code shows the first 625 colors.
+Named colors, such as "gold", or "lavender", can be found in Colors.color_names.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(800, 500, "assets/figures/colors.png") # hide
+Drawing(800, 800, "assets/figures/colors.svg") # hide
+
 origin() # hide
 background("white") # hide
-fontsize(5) # hide
-cols = collect(Colors.color_names)
-tiles = Tiler(800, 500, 25, 25)
-for (pos, n) in tiles
-    sethue(cols[n][1])
-    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
-    clab = convert(Lab, parse(Colorant, cols[n][1]))
-    labelbrightness = 100 - clab.l
-    sethue(convert(RGB, Lab(labelbrightness, clab.b, clab.a)))
-    text(string(cols[n][1]), pos, halign=:center)
+fontface("AvenirNextCondensed-Regular") # hide
+fontsize(8)
+cols = sort(collect(Colors.color_names))
+ncols = 15
+nrows = convert(Int, ceil(length(cols) / ncols))
+table = Table(nrows, ncols, 800/ncols, 800/nrows)
+gamma = 2.2
+for n in 1:length(cols)
+    col = cols[n][1]
+    r, g, b = sethue(col)
+    box(table[n], table.colwidths[1], table.rowheights[1], :fill)
+    luminance = 0.2126 * r^gamma + 0.7152 * g^gamma + 0.0722 * b^gamma
+    (luminance > 0.5^gamma) ? sethue("black") : sethue("white")
+    text(string(cols[n][1]), table[n], halign=:center, valign=:middle)
 end
 finish() # hide
-nothing # hide
+
+nothing #hide
 ```
 
-![line endings](assets/figures/colors.png)
+![line endings](assets/figures/colors.svg)
 
-Some fiddling with Lab colors adjusts the label color to make it stand out against the background.
+(To make the label stand out against the background, the luminance is calculated, then used to choose the label's color.)
 
 ```@docs
 sethue

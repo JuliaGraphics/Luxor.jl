@@ -183,7 +183,7 @@ inadequacy. By default these will generate errors, but you can suppress these by
 function isinside(p::Point, pointlist::AbstractArray{Point, 1};
         allowonedge::Bool=false)
     c = false
-    @inbounds for counter in 1:length(pointlist)
+    @inbounds for counter in eachindex(pointlist)
         q1 = pointlist[counter]
         # if reached last point, set "next point" to first point
         if counter == length(pointlist)
@@ -758,7 +758,7 @@ Return an array of the points where a line between pt1 and pt2 crosses polygon C
 """
 function intersectlinepoly(pt1::Point, pt2::Point, C::AbstractArray{Point, 1})
     intersectingpoints = Point[]
-    for j in 1:length(C)
+    for j in eachindex(C)
         Cpointpair = (C[j], C[mod1(j+1, length(C))])
         flag, pt = intersection(pt1, pt2, Cpointpair..., crossingonly=true)
         if flag
@@ -779,7 +779,7 @@ polygon C. Calls `intersectlinepoly()`.
 """
 function polyintersections(S::AbstractArray{Point, 1}, C::AbstractArray{Point, 1})
     Splusintersectionpoints = Point[]
-    for i in 1:length(S)
+    for i in eachindex(S)
         Spointpair = (S[i], S[mod1(i+1, length(S))])
         push!(Splusintersectionpoints, S[i])
         for pt in intersectlinepoly(Spointpair..., C)

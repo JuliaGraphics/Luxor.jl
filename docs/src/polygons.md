@@ -56,7 +56,7 @@ t = Table(fill(20, nrows), widths)
 for r in 1:size(t)[1]
    for c in 1:size(t)[2]
         @layer begin
-        sethue("thistle")
+        sethue("thistle1")
         if r >= 2 && c >= 2
             if isodd(c)
                 setopacity(0.5)
