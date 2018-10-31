@@ -275,23 +275,20 @@ function preview()
             display_ijulia(MIME("image/png"), current_filename())
         elseif current_surface_type() == :svg
             display_ijulia(MIME("image/svg+xml"), current_filename())
-            # open(current_filename()) do f
-            #     display("image/svg+xml", read(f, String))
-            # end
         end
     elseif candisplay && juno
         display(CURRENTDRAWING[1])
         returnvalue = nothing
     elseif Sys.isapple()
-        run(`open $(current_filename())`)
         returnvalue = current_filename()
+        run(`open $(returnvalue)`)
     elseif Sys.iswindows()
+        returnvalue = current_filename()
         cmd = get(ENV, "COMSPEC", "cmd")
-        run(`$(ENV["COMSPEC"]) /c start $(filename)`)
-        returnvalue = current_filename()
+        run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
     elseif Sys.isunix()
-        run(`xdg-open $(current_filename())`)
         returnvalue = current_filename()
+        run(`xdg-open $(returnvalue)`)
     end
     return returnvalue
 end

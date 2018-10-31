@@ -491,7 +491,7 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
     push!(result, strip(join(currentline)))
 
     # strip trailing spaces
-    for i in 1:length(result)
+    for i in eachindex(result)
        result[i] = strip(result[i])
     end
     return result

@@ -24,12 +24,12 @@ In this example, every third tile is divided up into subtiles and colored:
 
 ```@example
 using Luxor, Random # hide
-Drawing(400, 300, "assets/figures/tiler.png") # hide
+Drawing(800, 500, "assets/figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
 Random.seed!(1) # hide
 fontsize(20) # hide
-tiles = Tiler(400, 300, 4, 5, margin=5)
+tiles = Tiler(800, 500, 4, 5, margin=5)
 for (pos, n) in tiles
     randomhue()
     box(pos, tiles.tilewidth, tiles.tileheight, :fill)
@@ -37,6 +37,8 @@ for (pos, n) in tiles
         gsave()
         translate(pos)
         subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
+
+        @show tiles[n]
         for (pos1, n1) in subtiles
             randomhue()
             box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
@@ -58,6 +60,18 @@ how many rows and columns of tiles you want.
 ```@docs
 Tiler
 Partition
+```
+
+You can obtain the centerpoints of all the tiles in one go with:
+
+```
+first.(collect(tiles))
+```
+
+or obtain ranges with:
+
+```
+tiles[1:2:end]
 ```
 
 ## Tables

@@ -87,7 +87,7 @@ or without iteration, using cellnumber:
 ```
 @svg begin
     t = Table(8, 3, 30, 15)
-    for n in 1:length(t)
+    for n in eachindex(t)
         randomhue()
         box(t, n, :fill)
         sethue("white")
