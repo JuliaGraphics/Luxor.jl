@@ -46,6 +46,8 @@ animate(demo, [
 
 ![animation example](assets/figures/animation.gif)
 
+In this example, for each frame numbered 0 to 359, the graphics are drawn by the `backdrop()` and `frame()` functions, in that order. A drawing is automatically created (in PNG format) and centered (`origin()`) so you can start drawing immediately. The `finish()` function is automatically called when all the drawing functions in the scenes have completed, and the process starts afresh for the next frame.
+
 ```@docs
 Movie
 Scene
@@ -72,7 +74,7 @@ As an example, consider a simple example showing the sun for each hour of a 24 h
 
     sun24demo = Movie(400, 400, "sun24", 0:23)
 
-The `backgroundfunction()` draws a background that's used for all frames:
+The `backgroundfunction()` draws a background that's used for all frames (animated GIFs like constant backgrounds):
 
     function backgroundfunction(scene::Scene, framenumber)
         background("black")
@@ -114,12 +116,12 @@ Finally a `groundfunction()` draws the ground:
 
 Now define a group of Scenes that make up the movie. The scenes specify which functions are to be used, and for which frames:
 
-    backdrop  = Scene(sun24demo, backgroundfunction, 0:23)
-    nightsky  = Scene(sun24demo, nightskyfunction, 0:6)
-    nightsky1 = Scene(sun24demo, nightskyfunction, 17:23)
-    daysky    = Scene(sun24demo, dayskyfunction, 5:19)
-    sun       = Scene(sun24demo, sunfunction, 6:18)
-    ground    = Scene(sun24demo, groundfunction, 0:23)
+    backdrop  = Scene(sun24demo, backgroundfunction, 0:23)   # every frame
+    nightsky  = Scene(sun24demo, nightskyfunction, 0:6)      # midnight to 06:00
+    nightsky1 = Scene(sun24demo, nightskyfunction, 17:23)    # 17:00 to 23:00
+    daysky    = Scene(sun24demo, dayskyfunction, 5:19)       # 05:00 to 19:00
+    sun       = Scene(sun24demo, sunfunction, 6:18)          # 06:00 to 18:00
+    ground    = Scene(sun24demo, groundfunction, 0:23)       # every frame
 
 Finally, the `animate` function scans the scenes in the scenelist for a movie, and calls the functions for each frame to build the animation:
 
@@ -129,7 +131,27 @@ Finally, the `animate` function scans the scenes in the scenelist for a movie, a
 
 ![sun24 animation](assets/figures/sun24.gif)
 
-Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. Also notice that the order of scenes and the use of backgrounds can be important.
+Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. Also notice that the order of scenes and the use of backgrounds is important.
+
+An alternative approach is to use the incoming framenumber as the master parameter that determines the position and appearance of all the graphics.
+
+```
+function frame(scene, framenumber)
+    background("black")
+    n   = rescale(framenumber, scene.framerange.start, scene.framerange.stop, 0, 1)
+    n2π = rescale(n, 0, 1, 0, 2π)    
+    sethue(n, 0.5, 0.5)
+    box(BoundingBox(), :fill)
+    if 0.25 < n < 0.75
+        sethue("yellow")
+        circle(polar(150, n2π + π/2), 20, :fill)
+    end
+    if n < 0.25 || n > 0.75
+        sethue("white")
+        circle(polar(150, n2π + π/2), 20, :fill)
+    end
+end
+```
 
 ## Easing functions
 

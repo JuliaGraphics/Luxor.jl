@@ -30,13 +30,13 @@ finish()
 nothing # hide
 ```
 
-![text placement](assets/figures/turtles.png)
+![turtles](assets/figures/turtles.png)
 
 The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!), and you can have any number of turtles active at a time.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(800, 800, "assets/figures/manyturtles.png") # hide
+Drawing(800, 800, "assets/figures/manyturtles.svg") # hide
 origin() # hide
 background("white") # hide
 quantity = 9
@@ -55,7 +55,7 @@ finish() # hide
 nothing # hide
 ```
 
-![text placement](assets/figures/manyturtles.png)
+![many turtles](assets/figures/manyturtles.svg)
 
 ```@docs
 Turtle

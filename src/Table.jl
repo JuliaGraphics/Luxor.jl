@@ -188,7 +188,6 @@ function Base.iterate(t::Table)
     return ((Point(x, y), 1), (nextpoint, 2))
 end
 
-# v0.7 iteration
 function Base.iterate(t::Table, state)
     if state[2] > t.nrows * t.ncols
         return
