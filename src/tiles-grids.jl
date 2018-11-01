@@ -110,18 +110,12 @@ function Base.size(pt::Tiler)
     return (pt.nrows, pt.ncols)
 end
 
-function Base.length(pt::Tiler)
-    pt.nrows * pt.ncols
-end
-
 Base.lastindex(pt::Tiler) = length(pt)
 Base.firstindex(pt::Tiler) = 1
 
 Base.eltype(::Type{Tiler}) = Tuple
 
 Base.getindex(pt::Tiler, I) = [pt[i] for i in I]
-
-Base.IteratorSize(pt::Tiler) = Base.HasShape{2}()
 
 """
     GridRect(startpoint, xspacing, yspacing, width, height)

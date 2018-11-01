@@ -1,8 +1,21 @@
 # Changelog
 
+## [v1.1.3] - in development
+
+### Added
+
+-
+
+### Changed
+
+- dup def in tiler removed
+- documenter 0.20 support 
+
 ## [v1.1.2] - 2018-10-31
 
 ### Added
+
+-
 
 ### Changed
 
@@ -12,11 +25,17 @@
 
 ### Removed
 
+-
+
 ### Deprecated
+
+-
 
 ## [v1.1.1] - 2018-10-04
 
 ### Added
+
+-
 
 ### Changed
 
@@ -26,7 +45,11 @@
 
 ### Removed
 
+-
+
 ### Deprecated
+
+-
 
 ## [v1.1.0] - 2018-10-04
 
