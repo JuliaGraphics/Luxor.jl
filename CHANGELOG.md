@@ -1,15 +1,27 @@
 # Changelog
 
-## [v1.1.3] - in development
+## [v1.1.3] - 2018-11-07
 
 ### Added
 
--
+- BoundingBox access functions: boxtopleft(), boxtopcenter(),
+  boxtopright(), boxmiddleleft(), boxmiddlecenter(),
+  boxmiddleright(), boxbottomleft(), boxbottomcenter(),
+  boxbottomright()
 
 ### Changed
 
-- dup def in tiler removed
-- documenter 0.20 support 
+- duplicate definition in tiler removed
+- documenter support is now at 0.20
+- use AbstractString rather than String
+
+### Removed
+
+-
+
+### Deprecated
+
+-
 
 ## [v1.1.2] - 2018-10-31
 
@@ -31,7 +43,7 @@
 
 -
 
-## [v1.1.1] - 2018-10-04
+## [v1.1.1] - 2018-10-06
 
 ### Added
 

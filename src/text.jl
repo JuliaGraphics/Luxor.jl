@@ -329,7 +329,7 @@ settext(text::AbstractString, pos::Point; kwargs...) =
 settext(text; kwargs...) = settext(text, O; kwargs...)
 
 """
-    label(txt::String, alignment::Symbol=:N, pos::Point=O;
+    label(txt::AbstractString, alignment::Symbol=:N, pos::Point=O;
         offset=5,
         leader=false)
 
@@ -350,7 +350,7 @@ If `leader` is true, draw a line as well.
 
 TODO: Negative offsets don't give good results.
 """
-function label(txt::String, alignment::Symbol=:N, pos::Point=O;
+function label(txt::AbstractString, alignment::Symbol=:N, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -386,7 +386,7 @@ function label(txt::String, alignment::Symbol=:N, pos::Point=O;
 end
 
 """
-    label(txt::String, rotation::Float64, pos::Point=O;
+    label(txt::AbstractString, rotation::Float64, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -396,7 +396,7 @@ Add a text label at a point, positioned relative to that point, for example,
 
     label("text", pi)          # positions text to the left of the origin
 """
-function label(txt::String, rotation::Real, pos::Point=O;
+function label(txt::AbstractString, rotation::Real, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -451,7 +451,7 @@ function splittext(s)
 end
 
 """
-    textlines(s::String, width::Real;
+    textlines(s::AbstractString, width::Real;
          rightgutter=5)
 
 Split the text in `s` into lines up to `width` units wide (in the current font).
@@ -533,12 +533,12 @@ function textbox(lines::Array, pos::Point=O;
 end
 
 """
-    textbox(s::String, pos::Point=O;
+    textbox(s::AbstractString, pos::Point=O;
         leading = 12,
         linefunc::Function = (linenumber, linetext, startpos, height) -> (),
         alignment=:left)
 """
-textbox(s::String, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s::AbstractString, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
 
 """
     textwrap(s::T where T<:AbstractString, width::Real, pos::Point;

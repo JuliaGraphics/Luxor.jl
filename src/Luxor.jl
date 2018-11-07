@@ -71,7 +71,12 @@ export Drawing,
 
     move, rmove, line, rule, rline, arrow,
 
-    BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio, boxtop, boxbottom,
+    BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
+    boxtop, boxbottom, boxtopleft, boxtopcenter, boxtopright, boxmiddleleft,
+    boxmiddlecenter, boxmiddleright, boxbottomleft, boxbottomcenter,
+    boxbottomright,
+
+    intersectboundingboxes, boundingboxesintersect,
 
     Boxmaptile, boxmap,
 
@@ -79,8 +84,6 @@ export Drawing,
     arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
     intersectlinepoly, polyintersections, circlepointtangent, circletangent2circles,
-
-    intersectboundingboxes, boundingboxesintersect,
 
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,

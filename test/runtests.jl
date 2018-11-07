@@ -97,6 +97,7 @@ function run_all_tests()
 
     @testset "boundingbox" begin
         include("boundingboxtests.jl")
+        include("boundingboxpointtests.jl")
     end
 
     @testset "clipping" begin

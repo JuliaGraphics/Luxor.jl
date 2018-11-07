@@ -29,7 +29,7 @@ function text_wrap_tests(fname)
                 O - (tiles.tilewidth/2 - 2, tiles.tileheight/2 - 2),
                 rightgutter=20)
             else
-                # textwrap(s::String, width::Real, pos::Point, linefunc::Function; rightgutter=5)
+                # textwrap(s::AbstractString, width::Real, pos::Point, linefunc::Function; rightgutter=5)
                textwrap("Luxor is a city in Upper (southern) Egypt. " ^ 12,
                     tiles.tilewidth,
                     O - (tiles.tilewidth/2 - 2,  tiles.tileheight/2 - 2),

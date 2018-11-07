@@ -25,7 +25,7 @@ You can also do:
 
 See also [`setcolor`](@ref).
 """
-function setcolor(col::String)
+function setcolor(col::AbstractString)
     temp = parse(RGBA, col)
     # set Luxor settings
     set_current_redvalue(temp.r)
@@ -107,7 +107,7 @@ alpha opacity.
 
 See also [`setcolor`](@ref).
 """
-function sethue(col::String)
+function sethue(col::AbstractString)
     temp = parse(RGBA,  col)
     set_current_redvalue(temp.r)
     set_current_greenvalue(temp.g)
@@ -233,7 +233,7 @@ Cairo.OPERATOR_COLOR_DODGE, Cairo.OPERATOR_COLOR_BURN, Cairo.OPERATOR_HARD_LIGHT
 =#
 
 """
-    setmode(mode::String)
+    setmode(mode::AbstractString)
 
 Set the compositing/blending mode. `mode` can be one of:
 
@@ -259,7 +259,7 @@ Set the compositing/blending mode. `mode` can be one of:
 
 See the [Cairo documentation](https://www.cairographics.org/operators/) for details.
 """
-function setmode(operator::String)
+function setmode(operator::AbstractString)
     indx = findfirst(isequal(operator), blendingmodes)
     if indx !== nothing
         Cairo.set_operator(get_current_cr(), blendingoperators[indx])

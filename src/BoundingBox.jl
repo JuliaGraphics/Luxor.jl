@@ -2,7 +2,7 @@
 The BoundingBox type holds two Points, `corner1` and `corner2`.
 
     BoundingBox(;centered=true) # the bounding box of the Drawing
-    BoundingBox(s::String)      # the bounding box of a text string
+    BoundingBox(s::AbstractString)      # the bounding box of a text string
     BoundingBox(pt::Array)      # the bounding box of a polygon
 """
 mutable struct BoundingBox
@@ -58,12 +58,12 @@ function BoundingBox(pointlist::AbstractArray{Point, 1})
 end
 
 """
-BoundingBox(str::String)
+BoundingBox(str::AbstractString)
 
 Return a BoundingBox that just encloses a text string, given the current font
 selection.
 """
-function BoundingBox(str::String)
+function BoundingBox(str::AbstractString)
     xbearing, ybearing, width, height, xadvance, yadvance = textextents(str)
     lcorner = Point(xbearing, ybearing)
     ocorner = Point(lcorner.x + width, lcorner.y + height)
@@ -188,20 +188,6 @@ Return the aspect ratio (the height divided by the width) of bounding box `bb`.
 boxaspectratio(bb::BoundingBox) = boxheight(bb)/boxwidth(bb)
 
 """
-    boxtop(bb::BoundingBox)
-
-Return the top center point of bounding box `bb`.
-"""
-boxtop(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb)/2)
-
-"""
-    boxbottom(bb::BoundingBox)
-
-Return the bottom center point of bounding box `bb`.
-"""
-boxbottom(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
-
-"""
     convert(Point, bbox::BoundingBox)
 
 Convert a BoundingBox to a four-point clockwise polygon.
@@ -285,12 +271,14 @@ end
 
 Returns `true` if `pt` is inside bounding box `bb`.
 """
-isinside(p::Point, bb::BoundingBox) = (bb.corner1.x <= p.x <= bb.corner2.x) && (bb.corner1.y <= p.y <= bb.corner2.y)
+isinside(p::Point, bb::BoundingBox) = (bb.corner1.x <= p.x <= bb.corner2.x) &&
+    (bb.corner1.y <= p.y <= bb.corner2.y)
 
 """
     midpoint(bb::BoundingBox)
 
-Returns the point midway between the two points of the BoundingBox.
+Returns the point midway between the two points of the BoundingBox. This should
+also be the center, unless I've been very stupid...
 """
 midpoint(bb::BoundingBox) = midpoint(bb...)
 
@@ -301,3 +289,120 @@ Find a point between the two corners of a BoundingBox corresponding to `x`,
 where `x` is typically between 0 and 1.
 """
 between(bb::BoundingBox, k=0.5) = between(bb[1], bb[2], k)
+
+"""
+    boxtopleft(bb::BoundingBox)
+
+Return the point at the top left of the BoundingBox `bb`.
+
+```
+• ⋅ ⋅
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+```
+
+"""
+boxtopleft(bb::BoundingBox)        = bb[1]
+
+"""
+    boxtopcenter(bb::BoundingBox)
+
+Return the point at the top center of the BoundingBox `bb`.
+```
+⋅ • ⋅
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+```
+
+"""
+boxtopcenter(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb)/2)
+
+"""
+    boxtopright(bb::BoundingBox)
+
+Return the point at the top right of the BoundingBox `bb`.
+```
+⋅ ⋅ •
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+```
+
+"""
+boxtopright(bb::BoundingBox)       = Point(bb[2].x, bb[1].y)
+
+"""
+    boxmiddleleft(bb::BoundingBox)
+
+Return the point at the middle left of the BoundingBox `bb`.
+```
+⋅ ⋅ ⋅
+• ⋅ ⋅
+⋅ ⋅ ⋅
+```
+
+"""
+boxmiddleleft(bb::BoundingBox)     = Point(bb[1].x, midpoint(bb[1], bb[2]).y)
+
+"""
+    boxmiddlecenter(bb::BoundingBox)
+
+Return the point at the center of the BoundingBox `bb`.
+```
+⋅ ⋅ ⋅
+⋅ • ⋅
+⋅ ⋅ ⋅
+```
+"""
+boxmiddlecenter(bb::BoundingBox)   = midpoint(bb[1], bb[2])
+
+"""
+    boxmiddleright(bb::BoundingBox)
+
+Return the point at the midde right of the BoundingBox `bb`.
+```
+⋅ ⋅ ⋅
+⋅ ⋅ •
+⋅ ⋅ ⋅
+```
+"""
+boxmiddleright(bb::BoundingBox)    = Point(bb[2].x, midpoint(bb[1], bb[2]).y)
+
+"""
+    boxbottomleft(bb::BoundingBox)
+
+Return the point at the bottom left of the BoundingBox `bb`.
+```
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+• ⋅ ⋅
+```
+"""
+boxbottomleft(bb::BoundingBox)     = Point(bb[1].x, bb[2].y)
+
+"""
+    boxbottomcenter(bb::BoundingBox)
+
+Return the point at the bottom center of the BoundingBox `bb`.
+```
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+⋅ • ⋅
+```
+"""
+boxbottomcenter(bb::BoundingBox)   = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
+
+"""
+    boxbottomright(bb::BoundingBox)
+
+Return the point at the bottom right of the BoundingBox `bb`.
+```
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+⋅ ⋅ •
+```
+"""
+boxbottomright(bb::BoundingBox)    = bb[2]
+
+# legacy defs
+boxtop(bb::BoundingBox) = boxtopcenter(bb)
+boxbottom(bb::BoundingBox) = boxbottomcenter(bb)
