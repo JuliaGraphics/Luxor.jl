@@ -35,7 +35,7 @@ animate(bang, [
 struct Movie
     width::Float64
     height::Float64
-    movietitle::String
+    movietitle::AbstractString
     movieframerange::AbstractRange
 end
 
@@ -45,7 +45,7 @@ end
 Define a movie, specifying the width, height, and a title. The title will be used to
 make the output file name. The range defaults to `1:250`.
 """
-Movie(width, height, movietitle::String) = Movie(width, height, movietitle, 1:250)
+Movie(width, height, movietitle::AbstractString) = Movie(width, height, movietitle, 1:250)
 
 """default linear transition - no easing, no acceleration"""
 function lineartween(t, b, c, d)

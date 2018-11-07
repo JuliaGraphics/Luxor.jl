@@ -72,62 +72,78 @@ Sometimes you want to construct an animation that has different components, laye
 
 As an example, consider a simple example showing the sun for each hour of a 24 hour day.
 
-    sun24demo = Movie(400, 400, "sun24", 0:23)
+ sun24demo = Movie(400, 400, "sun24", 0:23)
 
 The `backgroundfunction()` draws a background that's used for all frames (animated GIFs like constant backgrounds):
 
-    function backgroundfunction(scene::Scene, framenumber)
-        background("black")
-    end
+```
+function backgroundfunction(scene::Scene, framenumber)
+    background("black")
+end
+```
 
 A `nightskyfunction()` draws the night sky:
 
-    function nightskyfunction(scene::Scene, framenumber)
-        sethue("midnightblue")
-        box(O, 400, 400, :fill)
-    end
+```
+function nightskyfunction(scene::Scene, framenumber)
+    sethue("midnightblue")
+    box(O, 400, 400, :fill)
+end
+```
 
 A `dayskyfunction()` draws the daytime sky:
 
-    function dayskyfunction(scene::Scene, framenumber)
-        sethue("skyblue")
-        box(O, 400, 400, :fill)
-    end
+```
+function dayskyfunction(scene::Scene, framenumber)
+    sethue("skyblue")
+    box(O, 400, 400, :fill)
+end
+```
 
 The `sunfunction()` draws a sun at 24 positions during the day:
 
-    function sunfunction(scene::Scene, framenumber)
-        i = rescale(framenumber, 0, 23, 2pi, 0)
-        gsave()
-        sethue("yellow")
-        circle(polar(150, i), 20, :fill)
-        grestore()
-    end
+```
+function sunfunction(scene::Scene, framenumber)
+    i = rescale(framenumber, 0, 23, 2pi, 0)
+    gsave()
+    sethue("yellow")
+    circle(polar(150, i), 20, :fill)
+    grestore()
+end
+```
 
 Finally a `groundfunction()` draws the ground:
 
-    function groundfunction(scene::Scene, framenumber)
-        gsave()
-        sethue("brown")
-        box(Point(O.x, O.y + 100), 400, 200, :fill)
-        grestore()
-        sethue("white")
-    end
+```
+function groundfunction(scene::Scene, framenumber)
+    gsave()
+    sethue("brown")
+    box(Point(O.x, O.y + 100), 400, 200, :fill)
+    grestore()
+    sethue("white")
+end
+```
 
 Now define a group of Scenes that make up the movie. The scenes specify which functions are to be used, and for which frames:
 
-    backdrop  = Scene(sun24demo, backgroundfunction, 0:23)   # every frame
-    nightsky  = Scene(sun24demo, nightskyfunction, 0:6)      # midnight to 06:00
-    nightsky1 = Scene(sun24demo, nightskyfunction, 17:23)    # 17:00 to 23:00
-    daysky    = Scene(sun24demo, dayskyfunction, 5:19)       # 05:00 to 19:00
-    sun       = Scene(sun24demo, sunfunction, 6:18)          # 06:00 to 18:00
-    ground    = Scene(sun24demo, groundfunction, 0:23)       # every frame
+```
+backdrop  = Scene(sun24demo, backgroundfunction, 0:23)   # every frame
+nightsky  = Scene(sun24demo, nightskyfunction, 0:6)      # midnight to 06:00
+nightsky1 = Scene(sun24demo, nightskyfunction, 17:23)    # 17:00 to 23:00
+daysky    = Scene(sun24demo, dayskyfunction, 5:19)       # 05:00 to 19:00
+sun       = Scene(sun24demo, sunfunction, 6:18)          # 06:00 to 18:00
+ground    = Scene(sun24demo, groundfunction, 0:23)       # every frame
+```
 
 Finally, the `animate` function scans the scenes in the scenelist for a movie, and calls the functions for each frame to build the animation:
 
-    animate(sun24demo, [backdrop, nightsky, nightsky1, daysky, sun, ground],
-        framerate=5,
-        creategif=true)
+```
+animate(sun24demo, [
+   backdrop, nightsky, nightsky1, daysky, sun, ground
+   ],
+   framerate=5,
+   creategif=true)
+```
 
 ![sun24 animation](assets/figures/sun24.gif)
 
@@ -139,7 +155,7 @@ An alternative approach is to use the incoming framenumber as the master paramet
 function frame(scene, framenumber)
     background("black")
     n   = rescale(framenumber, scene.framerange.start, scene.framerange.stop, 0, 1)
-    n2π = rescale(n, 0, 1, 0, 2π)    
+    n2π = rescale(n, 0, 1, 0, 2π)
     sethue(n, 0.5, 0.5)
     box(BoundingBox(), :fill)
     if 0.25 < n < 0.75
@@ -159,25 +175,27 @@ Transitions for animations often use non-constant and non-linear motions, and th
 
 Most easing functions have names constructed like this:
 
-    ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
+```
+ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
+```
 
 and there's an `easingflat()` linear transition.
 
 ```@setup draweasingfunctions
 using Luxor # hide
 function draweasingfunction(f, pos, w, h)
-  @layer begin
-    translate(pos)
-    setline(0.5)
-    sethue("black")
-    box(O, w, h, :stroke)
-    sethue("purple")
-    for i in 0:0.005:1.0
-      circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)
+    @layer begin
+        translate(pos)
+        setline(0.5)
+        sethue("black")
+        box(O, w, h, :stroke)
+        sethue("purple")
+        for i in 0:0.005:1.0
+            circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)
+        end
+        sethue("black")
+        text(replace(string(f), "Luxor." => ""), Point(0, h/2 - 20), halign=:center)
     end
-    sethue("black")
-    text(replace(string(f), "Luxor." => ""), Point(0, h/2 - 20), halign=:center)
-  end
 end
 
 Drawing(650, 650, "assets/figures/easingfunctions.png") # hide
@@ -188,8 +206,8 @@ margin=5
 fontsize(10)
 fontface("Menlo")
 for (pos, n) in t
-  n > length(Luxor.easingfunctions) && continue
-  draweasingfunction(Luxor.easingfunctions[n], pos, t.tilewidth-margin, t.tileheight-margin)
+    n > length(Luxor.easingfunctions) && continue
+    draweasingfunction(Luxor.easingfunctions[n], pos, t.tilewidth-margin, t.tileheight-margin)
 end
 
 finish() # hide
@@ -245,10 +263,12 @@ animate(fastandfurious, [
 
 Here's the definition of one of the easing functions:
 
-    function easeoutquad(t, b, c, d)
-       t /= d
-       return -c * t * (t - 2) + b
-    end
+```
+function easeoutquad(t, b, c, d)
+    t /= d
+    return -c * t * (t - 2) + b
+end
+```
 
 Here:
 

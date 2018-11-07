@@ -1,7 +1,7 @@
 mutable struct Drawing
     width::Float64
     height::Float64
-    filename::String
+    filename::AbstractString
     surface::CairoSurface
     cr::CairoContext
     surfacetype::Symbol
@@ -202,7 +202,7 @@ creates the drawing A4 landscape size.
 PDF files default to a white background, but PNG defaults to transparent, unless you specify
 one using `background()`.
 """
-function Drawing(w=800.0, h=800.0, f::String="luxor-drawing.png")
+function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
     (path, ext)         = splitext(f)
     currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f)
     if isempty(CURRENTDRAWING)
@@ -213,7 +213,7 @@ function Drawing(w=800.0, h=800.0, f::String="luxor-drawing.png")
     return currentdrawing
 end
 
-function Drawing(paper_size::String, f="luxor-drawing.png")
+function Drawing(paper_size::AbstractString, f="luxor-drawing.png")
   if occursin("landscape", paper_size)
     psize = replace(paper_size, "landscape" => "")
     h, w = paper_sizes[psize]

@@ -93,7 +93,7 @@ function addstop(b::Blend, offset, col::ColorTypes.Colorant)
     Cairo.pattern_add_color_stop_rgba(b, offset, temp.r, temp.g, temp.b, temp.alpha)
 end
 
-function addstop(b::Blend, offset, col::String)
+function addstop(b::Blend, offset, col::AbstractString)
     temp = parse(RGBA, col)
     Cairo.pattern_add_color_stop_rgba(b, offset, temp.r, temp.g, temp.b, temp.alpha)
 end

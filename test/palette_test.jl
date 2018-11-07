@@ -37,7 +37,7 @@ function palette_test(fname)
 
     # sequential_palette(h, [N::Int=100; c=0.88, s=0.6, b=0.75, w=0.15, d=0.0, wcolor=RGB(1,1,0), dcolor=RGB(0,0,1), logscale=false])
     # diverging_palette(h1, h2 [, N::Int=100; mid=0.5,c=0.88, s=0.6, b=0.75, w=0.15, d1=0.0, d2=0.0, wcolor=RGB(1,1,0), dcolor1=RGB(1,0,0), dcolor2=RGB(0,0,1), logscale=false])
-    # colormap(cname::String [, N::Int=100; mid=0.5, logscale=false, kvs...])
+    # colormap(cname::AbstractString [, N::Int=100; mid=0.5, logscale=false, kvs...])
 
     draw_color_bars(20, 20, 50, diverging_palette(0, 360, 50, mid=0.1), "diverging 0 360 mid 0.1")
     draw_color_bars(120, 20, 50, sequential_palette(0, 50), "sequential 0 #50")

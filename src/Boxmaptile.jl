@@ -125,7 +125,7 @@ using Luxor
     pt = Point(-200, -200)
     a = rand(10:200, 15)
     tiles = boxmap(a, Point(-200, -200), 400, 400)
-     for (n, t) in enumerate(tiles)
+    for (n, t) in enumerate(tiles)
         randomhue()
         bb = BoundingBox(t)
         box(bb - 2, :stroke)

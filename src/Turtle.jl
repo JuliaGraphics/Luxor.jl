@@ -50,6 +50,8 @@ Turtle(pos::Point, pendown::Bool, orientation) = Turtle(pos.x, pos.y, pendown, o
 Turtle(pos::Point, pendown::Bool, orientation, col::NTuple{3,Number}) = Turtle(pos.x, pos.y, pendown, orientation, col)
 Turtle(pos::Point, pendown::Bool, orientation, r, g, b) = Turtle(pos.x, pos.y, pendown, orientation, (r, g, b))
 
+Base.broadcastable(t::Turtle) = Ref(t)
+
 # a stack to hold pushed/popped turtle positions
 const queue = Array{Array{Float64,1},1}()
 
@@ -213,7 +215,7 @@ function Pencolor(t::Turtle, col::ColorTypes.Colorant)
     Pencolor(t::Turtle, temp.r, temp.g, temp.b)
 end
 
-function Pencolor(t::Turtle, col::String)
+function Pencolor(t::Turtle, col::AbstractString)
     temp = parse(RGBA, col)
     Pencolor(t::Turtle, temp.r, temp.g, temp.b)
 end

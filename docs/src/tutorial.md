@@ -71,7 +71,7 @@ This example illustrates a few things about Luxor drawings:
 
 - There are default values which you don't have to set if you don't want to (file names, colors, font sizes, and so on).
 
-- Positions on the drawing are specified with coordinates stored in the Point type, and you can sometimes omit positions altogether.
+- Positions on the drawing are specified with x and y coordinates stored in the Point type, and you can sometimes omit positions altogether.
 
 - The text was placed at the origin point (0/0), and by default it's left aligned.
 
@@ -91,7 +91,7 @@ end
 
 ```@setup hw2
 using Luxor
-Drawing(725, 500, "assets/figures/tutorial-hello-world-2.png")
+Drawing(725, 502, "assets/figures/tutorial-hello-world-2.png")
 background("white")
 origin()
 sethue("black")
@@ -102,6 +102,8 @@ finish()
 ```
 
 ![point example](assets/figures/tutorial-hello-world-2.png)
+
+The x-coordinates usually run from left to right, the y-coordinates from top to bottom. So here, `Point(0, 250)` is a point at the left/right center, but at the bottom of the drawing.
 
 ## Euclidean eggs
 
