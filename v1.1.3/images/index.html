@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Images · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="../index.html"><img class="logo" src="../assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Introduction to Luxor</a></li><li><a class="toctext" href="../examples/">A few examples</a></li><li><a class="toctext" href="../tutorial/">Tutorial</a></li><li><a class="toctext" href="../basics/">Basic concepts</a></li><li><a class="toctext" href="../simplegraphics/">Simple shapes</a></li><li><a class="toctext" href="../moregraphics/">More graphics</a></li><li><a class="toctext" href="../geometrytools/">Geometry tools</a></li><li><a class="toctext" href="../tables-grids/">Tables and grids</a></li><li><a class="toctext" href="../colors-styles/">Colors and styles</a></li><li><a class="toctext" href="../polygons/">Polygons and paths</a></li><li><a class="toctext" href="../text/">Text</a></li><li><a class="toctext" href="../transforms/">Transforms and matrices</a></li><li><a class="toctext" href="../clipping/">Clipping</a></li><li class="current"><a class="toctext" href>Images</a><ul class="internal"><li><a class="toctext" href="#Placing-images-1">Placing images</a></li><li><a class="toctext" href="#Clipping-images-1">Clipping images</a></li><li><a class="toctext" href="#Transforming-images-1">Transforming images</a></li><li><a class="toctext" href="#Drawing-on-images-1">Drawing on images</a></li><li><a class="toctext" href="#Image-compositing-1">Image compositing</a></li></ul></li><li><a class="toctext" href="../turtle/">Turtle graphics</a></li><li><a class="toctext" href="../animation/">Animation</a></li><li><a class="toctext" href="../moreexamples/">More examples</a></li><li><a class="toctext" href="../functionindex/">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Images</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/images.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Images</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Images-1" href="#Images-1">Images</a></h1><h2><a class="nav-anchor" id="Placing-images-1" href="#Placing-images-1">Placing images</a></h2><p>There is some limited support for placing PNG images on the drawing. First, load a PNG image using <code>readpng(filename)</code>.</p><p>Then use <code>placeimage()</code> to place it by its top left corner at point <code>x/y</code> or <code>pt</code>. Access the image&#39;s dimensions with <code>.width</code> and <code>.height</code>.</p><div><pre><code class="language-julia">img = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
+w = img.width
+h = img.height
+rulers()
+scale(0.3, 0.3)
+rotate(pi/4)
+placeimage(img, -w/2, -h/2, .5)
+sethue(&quot;red&quot;)
+circle(-w/2, -h/2, 15, :fill)</code></pre></div><p><img src="../assets/figures/images.png" alt="&quot;Images&quot;"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.readpng" href="#Luxor.readpng"><code>Luxor.readpng</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">readpng(pathname)</code></pre><p>Read a PNG file.</p><p>This returns a image object suitable for placing on the current drawing with <code>placeimage()</code>. You can access its <code>width</code> and <code>height</code> fields:</p><pre><code class="language-none">image = readpng(&quot;/tmp/test-image.png&quot;)
+w = image.width
+h = image.height</code></pre></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.placeimage" href="#Luxor.placeimage"><code>Luxor.placeimage</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">placeimage(img, xpos, ypos; centered=false)</code></pre><p>Place a PNG image on the drawing at (<code>xpos</code>/<code>ypos</code>). The image <code>img</code> has been previously loaded using <code>readpng()</code>.</p><p>Use keyword <code>centered=true</code> to place the center of the image at the position.</p></div></div><div><div><pre><code class="language-none">placeimage(img, pos; centered=false)</code></pre><p>Place the top left corner of the PNG image on the drawing at <code>pos</code>.</p><p>Use keyword <code>centered=true</code> to place the center of the image at the position.</p></div></div><div><div><pre><code class="language-none">placeimage(img, xpos, ypos, a; centered=false)</code></pre><p>Place a PNG image on the drawing at (<code>xpos</code>/<code>ypos</code>) with transparency <code>a</code>.</p><p>Use keyword <code>centered=true</code> to place the center of the image at the position.</p></div></div><div><div><pre><code class="language-none">placeimage(img, pos, a; centered=false)</code></pre><p>Place a PNG image on the drawing at <code>pos</code> with transparency <code>a</code>.</p><p>Use keyword <code>centered=true</code> to place the center of the image at the position.</p></div></div></section><h2><a class="nav-anchor" id="Clipping-images-1" href="#Clipping-images-1">Clipping images</a></h2><p>You can clip images. The following script repeatedly places the image using a circle to define a clipping path:</p><p><img src="../assets/figures/test-image.png" alt="&quot;Images&quot;"/></p><pre><code class="language-julia">using Luxor
+
+width, height = 4000, 4000
+margin = 500
+
+fname = &quot;/tmp/test-image.pdf&quot;
+Drawing(width, height, fname)
+origin()
+background(&quot;grey25&quot;)
+
+setline(5)
+sethue(&quot;green&quot;)
+
+image = readpng(dirname(@__FILE__) * &quot;assets/figures/julia-logo-mask.png&quot;)
+
+w = image.width
+h = image.height
+
+pagetiles = Tiler(width, height, 7, 9)
+tw = pagetiles.tilewidth/2
+for (pos, n) in pagetiles
+    circle(pos, tw, :stroke)
+    circle(pos, tw, :clip)
+    gsave()
+    translate(pos)
+    scale(.95, .95)
+    rotate(rand(0.0:pi/8:2pi))
+    placeimage(image, O, centered=true)
+    grestore()
+    clipreset()
+end
+
+finish()</code></pre><h2><a class="nav-anchor" id="Transforming-images-1" href="#Transforming-images-1">Transforming images</a></h2><p>You can transform images by setting the current matrix, either with <code>scale()</code> and <code>rotate()</code> and similar, or by modifying it directly. This code skews the image and scales and rotates it in a circle:</p><div><pre><code class="language-julia">img = readpng(&quot;assets/figures/clipping-tests.png&quot;)
+w = img.width
+h = img.height
+for theta in 0:pi/6:2pi
+    gsave()
+        scale(.5, .5)
+        rotate(theta)
+        transform([1, 0, -pi/4, 1, 250, 0])
+        placeimage(img, -w/2, -h/2, .75)
+    grestore()
+end</code></pre></div><p><img src="../assets/figures/transform-images.png" alt="transforming images"/></p><h2><a class="nav-anchor" id="Drawing-on-images-1" href="#Drawing-on-images-1">Drawing on images</a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In these examples, we&#39;ll annotate a PNG file.</p><div><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
+
+w = image.width
+h = image.height
+
+# create a drawing surface of the same size
+
+fname = &quot;drawing_on_images.png&quot;
+Drawing(w, h, fname)
+
+# place the image on the Drawing - it&#39;s positioned by its top/left corner
+
+placeimage(image, 0, 0)
+
+# now you can annotate the image. The (0/0) is at the top left.
+
+sethue(&quot;red&quot;)
+setline(1)
+fontsize(16)
+circle(Point(150, 50), 2, :fill)
+label(&quot;(150/50)&quot;, :NE, Point(150, 50), leader=true, offset=25)
+
+arrow(Point(w/2, 90), Point(0, 90))
+arrow(Point(w/2, 90), Point(w, 90))
+text(&quot;width $w&quot;, Point(w/2, 70), halign=:center)
+
+# to divide up the image into rectangular areas and number them,
+# temporarily position the axes at the center:
+
+@layer begin
+  setline(0.5)
+  sethue(&quot;green&quot;)
+  fontsize(12)
+  translate(w/2, h/2)
+  tiles = Tiler(w, h, 8, 8, margin=0)
+  for (pos, n) in tiles
+      box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
+      text(string(n-1), pos, halign=:center)
+  end
+end</code></pre></div><p><img src="../assets/figures/drawing_on_images.png" alt="drawing on images"/></p><h3><a class="nav-anchor" id="Adding-text-to-transformed-images-1" href="#Adding-text-to-transformed-images-1">Adding text to transformed images</a></h3><p>The above approach works well, but suppose you want to locate the working origin at the lower left of the image, ie you want all coordinates to be relative to the bottom left corner of the image?</p><p>To do this, use <code>translate()</code> and <code>transform()</code> to modify the drawing space:</p><div><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
+w = image.width
+h = image.height
+fname = &quot;drawing_on_images_2.png&quot;
+Drawing(w, h, fname)
+placeimage(image, 0, 0)
+
+# Move the axes to the bottom:
+
+translate(0, h)
+
+# and reflect in the x-axis
+
+transform([1 0 0 -1 0 0])
+
+# now 0/0 is at the bottom left corner, and 100/100 is up and to the right.
+
+sethue(&quot;blue&quot;)
+arrow(Point(200, 300), Point(160, 300))
+
+# However, don&#39;t draw text while flipped, because it will be reversed!
+
+fontsize(20)
+sethue(&quot;black&quot;)
+text(&quot;Oh no!&quot;, Point(30, 250))
+
+# To work around this, define a text function
+# that flips the workspace over the x-axis just for the text:
+
+function textoverlay(t, pos; kwargs...)
+    @layer begin
+        translate(pos)
+        transform([1 0 0 -1 0 0])
+        text(t, O; kwargs...)
+    end
+end
+
+textoverlay(&quot;a tittle!&quot;, Point(200, 300), halign=:left, valign=:middle)
+textoverlay(&quot;0/0&quot;, O)
+arrow(Point(130, 400), Point(130, 340))</code></pre></div><p><img src="../assets/figures/drawing_on_images_2.png" alt="drawing on transformed images"/></p><h2><a class="nav-anchor" id="Image-compositing-1" href="#Image-compositing-1">Image compositing</a></h2><p>You should be using <a href="https://github.com/JuliaImages">Images.jl</a> for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by <code>setmode()</code>.</p><div><pre><code class="language-julia">img = readpng(&quot;assets/figures/textcurvecenteredexample.png&quot;)
+w = img.width
+h = img.height
+
+placeimage(img, -w/2, -h/2, .5)
+setmode(&quot;saturate&quot;)
+translate(50, 0)
+placeimage(img, -w/2, -h/2, .5)</code></pre></div><p><img src="../assets/figures/image-compositing.png" alt="transforming images"/></p><footer><hr/><a class="previous" href="../clipping/"><span class="direction">Previous</span><span class="title">Clipping</span></a><a class="next" href="../turtle/"><span class="direction">Next</span><span class="title">Turtle graphics</span></a></footer></article></body></html>
