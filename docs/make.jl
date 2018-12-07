@@ -3,6 +3,7 @@ using Documenter, Luxor
 makedocs(
     modules = [Luxor],
     sitename = "Luxor",
+    html_prettyurls = get(ENV, "CI", nothing) == "true",
     pages    = Any[
         "Introduction to Luxor"   => "index.md",
         "A few examples"          => "examples.md",
@@ -27,6 +28,5 @@ makedocs(
 
 deploydocs(
     repo = "github.com/JuliaGraphics/Luxor.jl.git",
-    target = "build",
+    target = "build"
 )
- 

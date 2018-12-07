@@ -13,10 +13,23 @@ function testtable(fname)
     Drawing(currentwidth, currentheight, fname)
     origin()
     background("white")
+    setline(0.5)
+
+    # test single cell tables
+    t = Table(1, 1, 0, 0)
+    for n in t
+        pt = n[1]
+        i = n[2]
+    end
 
     t = Table(
         collect(range(30, stop=85, length=10)),
         collect(range(20, stop=75, length=10)))
+    for n in t
+        pt = n[1]
+        i = n[2]
+    end
+
     sethue("red")
     circle.(t[:, 3], 10, :fill)
     sethue("blue")
@@ -32,6 +45,8 @@ function testtable(fname)
         randomhue()
         circle.(t[:, rand(1:10)], 6, :fill)
     end
+
+    highlightcells(t, 1:3:length(t), offset=0.1)
 
     sethue("black")
     fontsize(10)

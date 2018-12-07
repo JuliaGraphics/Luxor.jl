@@ -10,7 +10,8 @@ Draw a polygon.
 A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
 to allow for clipping.
 """
-function poly(pointlist::AbstractArray{Point, 1}, action::Symbol = :nothing; close::Bool=false, reversepath::Bool=false)
+function poly(pointlist::AbstractArray{Point, 1}, action::Symbol = :nothing;
+        close::Bool=false, reversepath::Bool=false)
     if action != :path
         newpath()
     end

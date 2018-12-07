@@ -125,7 +125,8 @@ export Drawing,
 
     GridHex, GridRect, nextgridpoint,
 
-    Table,
+    Table, highlightcells,
+    
     readpng, placeimage,
 
     julialogo, juliacircles,

@@ -85,7 +85,7 @@ black':
     background(RGBA(0, 0, 0, 0))
 
 """
-function background(col::AbstractString)
+function background(col::T) where T <: AbstractString
    setcolor(col)
    paint()
    return (get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
