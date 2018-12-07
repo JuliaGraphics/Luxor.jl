@@ -180,7 +180,7 @@ function Base.iterate(t::Table)
     x = t.leftmargin + (t.colwidths[1]/2)
     y = t.topmargin  + (t.rowheights[1]/2)
     cellnumber = 2
-    t.currentrow = div(cellnumber - 1, t.ncols) + 1
+    t.currentrow = min(div(cellnumber - 1, t.ncols) + 1, 1)
     t.currentcol = mod1(cellnumber, t.ncols)
     x1 = t.leftmargin + sum(t.colwidths[1:t.currentcol - 1]) + t.colwidths[t.currentcol]/2
     y1 = t.topmargin  + sum(t.rowheights[1:t.currentrow - 1]) + t.rowheights[t.currentrow]/2
@@ -266,4 +266,33 @@ function box(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)
 
     cellw, cellh = t.colwidths[c], t.rowheights[r]
     box(t[r, c], cellw, cellh, action; vertices=vertices)
+end
+
+"""
+    highlightcells(t::Table, cellnumbers, action::Symbol=:stroke;
+            color::Colorant=colorant"red",
+            offset = 0)
+
+Highlight (draw or fill) one or more cells of table `t`. `cellnumbers` is a range,
+array, or an array of row/column tuples.
+
+    highlightcells(t, 1:10, :fill, color=colorant"blue")
+    highlightcells(t, vcat(1:5, 150), :stroke, color=colorant"magenta")
+    highlightcells(t, [(4, 5), (3, 6)])
+"""
+function highlightcells(t::Table, cellnumbers, action::Symbol=:stroke;
+        color::Colorant=colorant"red",
+        offset = 0)
+    sethue(color)
+    for cell in cellnumbers
+        if isa(cell, Tuple)
+            row, col = cell
+            box(t[row, col], t.colwidths[col] + offset, t.rowheights[row] + offset, action)
+        else
+            ci = CartesianIndices((t.ncols, t.nrows))[cell]
+            col = ci.I[1]
+            row = ci.I[2]
+            box(t[cell], t.colwidths[col] + offset, t.rowheights[row] + offset, action)
+        end
+    end
 end

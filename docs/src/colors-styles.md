@@ -7,7 +7,7 @@ DocTestSetup = quote
 
 ## Color and opacity
 
-For color definitions and conversions, you can use Colors.jl.
+For color definitions and conversions, you can use [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).
 
 `setcolor()` and `sethue()` apply a single solid or transparent color to shapes.
 

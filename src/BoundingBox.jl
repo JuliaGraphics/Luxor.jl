@@ -1,9 +1,9 @@
 """
 The BoundingBox type holds two Points, `corner1` and `corner2`.
 
-    BoundingBox(;centered=true) # the bounding box of the Drawing
-    BoundingBox(s::AbstractString)      # the bounding box of a text string
-    BoundingBox(pt::Array)      # the bounding box of a polygon
+    BoundingBox(;centered=true)     # the bounding box of the Drawing
+    BoundingBox(s::AbstractString)  # the bounding box of a text string
+    BoundingBox(pt::Array)          # the bounding box of a polygon
 """
 mutable struct BoundingBox
    corner1::Point

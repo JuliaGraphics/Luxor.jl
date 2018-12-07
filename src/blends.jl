@@ -171,5 +171,3 @@ function blendmatrix(b::Blend, m)
     cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
     Cairo.set_matrix(b, cm)
 end
-
-# end

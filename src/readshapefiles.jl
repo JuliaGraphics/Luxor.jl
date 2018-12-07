@@ -4,7 +4,7 @@ Base.convert() methods to convert shapefile geometry to Luxor geometry.
 
 Use `include()` to include this file if you've installed Shapefile.jl.
 
-Luxor y coordinates increase downwards, but maps and shapefile coordinates increase upwards. 
+Luxor y coordinates increase downwards, but maps and shapefile coordinates increase upwards.
 In the Northern hemisphere, 0 longitude is North Pole, so we negate y coordinates.
 
 =#
@@ -31,13 +31,13 @@ end
 
 # Convert Shapefile Polygon to a Luxor poly.
 # some Shapefile polygons have multiple parts, but these aren't subpaths, just
-# extra polygons. For example, France (in Europe) and French Guiana in (South America) 
-# belong to the same Shapefile.Polygon and the return value will include these and other 
+# extra polygons. For example, France (in Europe) and French Guiana in (South America)
+# belong to the same Shapefile.Polygon and the return value will include these and other
 # polygons in the array.
 
 function Base.convert(::Type{Array{Luxor.Point, 1}}, pl::Shapefile.Polygon)
     bbox = [Luxor.Point(pl.MBR.left, -pl.MBR.top), pl.MBR.right - pl.MBR.left, pl.MBR.top - pl.MBR.bottom]
-    polygons = [] # to hold all the polygons for a shape
+    polygons = Array{Point, 1}[] # to hold all the polygons for a shape
     if length(pl.parts) >= 2
         points = Luxor.Point[]
         for i in 1:length(pl.parts) - 1

@@ -1,5 +1,24 @@
 # Changelog
 
+## [v1.1.4] - to be released soon
+
+### Added
+
+- highlightcells()
+
+### Changed
+
+- fixed bug in single cell tables
+- shapefiles convert now has typed array declaration (oops)
+
+### Removed
+
+-
+
+### Deprecated
+
+-
+
 ## [v1.1.3] - 2018-11-07
 
 ### Added
