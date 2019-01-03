@@ -89,7 +89,7 @@ prettypoly(p, :fill, () -&gt;
         circle(O, 10, :fill)
     end,
     close=true)</code></pre><p>The optional keyword argument <code>vertexlabels</code> lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle &quot;1 of 3&quot;, &quot;2 of 3&quot;, and &quot;3 of 3&quot; using:</p><pre><code class="language-none">prettypoly(triangle, :stroke,
-    vertexlabels = (n, l) -&gt; (text(string(n, &quot; of &quot;, l))))</code></pre></div></div><div><div><pre><code class="language-none">prettypoly(bbox::BoundingBox, :action; kwargs...)</code></pre><p>Make a decorated polygon around the BoundingBox in <code>bbox</code>.</p></div></div></section><p>Recursive decoration is possible:</p><div><pre><code class="language-julia">decorate(pos, p, level) = begin
+    vertexlabels = (n, l) -&gt; (text(string(n, &quot; of &quot;, l))))</code></pre><p>TODO Does it render paths with no points correctly ?!</p></div></div><div><div><pre><code class="language-none">prettypoly(bbox::BoundingBox, :action; kwargs...)</code></pre><p>Make a decorated polygon around the BoundingBox in <code>bbox</code>.</p></div></div></section><p>Recursive decoration is possible:</p><div><pre><code class="language-julia">decorate(pos, p, level) = begin
     if level &lt; 4
         randomhue()
         scale(0.25, 0.25)
