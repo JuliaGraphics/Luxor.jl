@@ -5,11 +5,13 @@
 ### Added
 
 - highlightcells()
+- textoutlines()
 
 ### Changed
 
 - fixed bug in single cell tables
 - shapefiles convert now has typed array declaration (oops)
+- off-by-one bug in table iterator fixed (yikes!)
 
 ### Removed
 

@@ -365,7 +365,6 @@ nothing # hide
 ![intersecting bounding boxes](assets/figures/bbox3.png)
 
 ```@docs
-BoundingBox
 boxaspectratio
 boxdiagonal
 boxwidth

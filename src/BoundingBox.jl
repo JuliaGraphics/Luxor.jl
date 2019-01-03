@@ -1,5 +1,5 @@
 """
-The BoundingBox type holds two Points, `corner1` and `corner2`.
+    The BoundingBox type holds two Points, `corner1` and `corner2`.
 
     BoundingBox(;centered=true)     # the bounding box of the Drawing
     BoundingBox(s::AbstractString)  # the bounding box of a text string
@@ -15,7 +15,7 @@ function Base.show(io::IO, bbox::BoundingBox)
 end
 
 """
-BoundingBox()
+    BoundingBox(;centered=true)
 
 Return a BoundingBox the same size and position as the current drawing, assuming
 the origin (0//0) is at the center.
@@ -41,7 +41,7 @@ function BoundingBox(;centered=true)
 end
 
 """
-BoundingBox(pointlist::AbstractArray)
+    BoundingBox(pointlist::AbstractArray)
 
 Return the BoundingBox of a polygon (array of points).
 """
@@ -58,7 +58,7 @@ function BoundingBox(pointlist::AbstractArray{Point, 1})
 end
 
 """
-BoundingBox(str::AbstractString)
+    BoundingBox(str::AbstractString)
 
 Return a BoundingBox that just encloses a text string, given the current font
 selection.
@@ -283,7 +283,7 @@ also be the center, unless I've been very stupid...
 midpoint(bb::BoundingBox) = midpoint(bb...)
 
 """
-between(bb::BoundingBox, x)
+    between(bb::BoundingBox, x)
 
 Find a point between the two corners of a BoundingBox corresponding to `x`,
 where `x` is typically between 0 and 1.
@@ -403,6 +403,6 @@ Return the point at the bottom right of the BoundingBox `bb`.
 """
 boxbottomright(bb::BoundingBox)    = bb[2]
 
-# legacy defs
+# legacy defs will be deprecated
 boxtop(bb::BoundingBox) = boxtopcenter(bb)
 boxbottom(bb::BoundingBox) = boxbottomcenter(bb)

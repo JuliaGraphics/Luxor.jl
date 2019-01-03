@@ -45,8 +45,8 @@ function testtable(fname)
         randomhue()
         circle.(t[:, rand(1:10)], 6, :fill)
     end
-
-    highlightcells(t, 1:3:length(t), offset=0.1)
+    setline(2)
+    highlightcells(t, 1:3:length(t), offset=2)
 
     sethue("black")
     fontsize(10)
