@@ -54,10 +54,26 @@ end
 function get_path_test(fname)
     Drawing(500, 500, fname)
     origin()
+    @layer begin
+        fontsize(24)
+        fontface("Times-Italic")
+        setline(0.5)
+        translate(-100, -100)
+        for theta in range(0, length=20, stop=2π)
+            @layer begin
+                rotate(theta)
+                translate(30, 0)
+                sethue("red")
+                textoutlines("Luxor", O, :fill, halign=:left, valign=:baseline)
+                sethue("blue")
+                textoutlines("Luxor", O, :stroke, halign=:left, valign=:baseline)
+            end
+        end
+    end
     fontsize(80)
     get_path("Luxor")
+    sethue("magenta")
     @test finish() == true
     println("...finished test: output in $(fname)")
 end
-
 get_path_test("get-path-test.pdf")

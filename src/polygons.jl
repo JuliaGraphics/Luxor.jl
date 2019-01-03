@@ -298,6 +298,8 @@ and "3 of 3" using:
 
     prettypoly(triangle, :stroke,
         vertexlabels = (n, l) -> (text(string(n, " of ", l))))
+
+TODO Does it render paths with no points correctly ?!
 """
 function prettypoly(pointlist::AbstractArray{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
     close=false,

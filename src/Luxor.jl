@@ -107,7 +107,7 @@ export Drawing,
     getpath, getpathflat, pathtopoly,
 
     fontface, fontsize, text, textpath, label,
-    textextents, textcurve, textcentred, textcentered, textright,
+    textextents, textoutlines, textcurve, textcentred, textcentered, textright,
     textcurvecentred, textcurvecentered,
     textwrap, textlines, splittext, textbox,
 
@@ -126,7 +126,7 @@ export Drawing,
     GridHex, GridRect, nextgridpoint,
 
     Table, highlightcells,
-    
+
     readpng, placeimage,
 
     julialogo, juliacircles,

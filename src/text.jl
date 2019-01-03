@@ -161,9 +161,55 @@ textextents(str) = Cairo.text_extents(get_current_cr(), str)
     textpath(t)
 
 Convert the text in string `t` to a new path, for subsequent filling/stroking etc...
+
+Typically you'll have to use `pathtopoly()` or `getpath()` or `getpathflat()` then
+work through the one or more path(s). Or use `textoutlines()`.
 """
 function textpath(t)
     Cairo.text_path(get_current_cr(), t)
+end
+
+"""
+    textoutlines(s::String, pos::Point=O, action::Symbol=:none;
+        halign=:left,
+        valign=:baseline)
+
+Convert text to a graphic path and apply `action`.
+"""
+function textoutlines(s::String, pos::Point=O, action::Symbol=:none;
+    halign=:left,
+    valign=:baseline)
+
+    # TODO this duplicates text() too much; re-factor needed
+    xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(s)
+    halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
+    if halignment == nothing
+        halignment = 1
+    elseif halignment == 4
+        halignment = 2
+    end
+    textpointx = pos.x - [0, textwidth/2, textwidth][halignment]
+    valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
+    if valignment == nothing
+        valignment = 3
+    end
+    textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+    @layer begin
+        translate(Point(textpointx, textpointy))
+        te = textextents(s)
+        textpath(s)
+        tp = pathtopoly()
+        if length(tp) == 1
+            poly.(tp, action, close=true)
+        else
+            for path in tp
+                poly(path, :path, close=true)
+                newsubpath()
+            end
+            closepath()
+            do_action(action)
+        end
+    end
 end
 
 """

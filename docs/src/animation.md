@@ -306,13 +306,3 @@ easeoutcirc
 easeinoutcirc
 easeinoutinversequad
 ```
-
-```@example
-using Plots
-anim = @animate for i=1:100
-    plot(sin, i .+ rand(10))
-end
-gif(anim, "assets/figures/testanim.gif", fps = 15)
-```
-
-![plots](assets/figures/testanim.gif)

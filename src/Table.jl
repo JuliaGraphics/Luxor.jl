@@ -181,7 +181,7 @@ function Base.iterate(t::Table)
     y = t.topmargin  + (t.rowheights[1]/2)
     cellnumber = 2
     t.currentrow = min(div(cellnumber - 1, t.ncols) + 1, 1)
-    t.currentcol = mod1(cellnumber, t.ncols)
+    t.currentcol = mod1(cellnumber - 1, t.ncols)
     x1 = t.leftmargin + sum(t.colwidths[1:t.currentcol - 1]) + t.colwidths[t.currentcol]/2
     y1 = t.topmargin  + sum(t.rowheights[1:t.currentrow - 1]) + t.rowheights[t.currentrow]/2
     nextpoint = Point(x1, y1)

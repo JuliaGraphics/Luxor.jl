@@ -173,6 +173,30 @@ Cairo (and hence Luxor) doesn't support emoji currently. 😢
 
 ## Text to paths
 
+`textoutlines(string, position, action)` converts the text into graphic path(s), places them starting at `position`, and applies the `action`.
+
+```@example
+using Luxor # hide
+Drawing(400, 400, "assets/figures/textoutlines.png") # hide
+origin() # hide
+background("white") # hide
+fontface("Times-Roman")
+fontsize(500)
+setline(4)
+sethue("maroon2")
+textoutlines("&", O, :fill, valign=:middle, halign=:center)
+sethue("black")
+textoutlines("&", O, :stroke, valign=:middle, halign=:center)
+finish() # hide
+nothing # hide
+```
+
+![text outlines](assets/figures/textoutlines.png)
+
+```@docs
+textoutlines
+```
+
 `textpath()` converts the text into graphic paths suitable for further manipulation.
 
 ```@docs
