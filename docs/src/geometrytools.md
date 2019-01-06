@@ -194,7 +194,6 @@ intersection
 intersectionlinecircle
 intersection2circles
 intersectioncirclecircle
-boundingboxesintersect
 ```
 
 ## Arrows

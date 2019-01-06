@@ -1,9 +1,17 @@
 """
-    The BoundingBox type holds two Points, `corner1` and `corner2`.
+The BoundingBox type holds two Points, `corner1` and `corner2`.
 
     BoundingBox(;centered=true)     # the bounding box of the Drawing
     BoundingBox(s::AbstractString)  # the bounding box of a text string
     BoundingBox(pt::Array)          # the bounding box of a polygon
+
+`BoundingBox(;centered=true)` returns a BoundingBox the same size and position as the current drawing, assuming
+the origin (0, 0) is at the center.
+
+The `centered` option defaults to `true`, and assumes the drawing is currently
+centered. If `false`, the function assumes that the origin is at the top left
+of the drawing. So this function doesn't really work if the current matrix has
+been modified (by `translate()`, `scale()`, `rotate()` etc.)
 """
 mutable struct BoundingBox
    corner1::Point
@@ -14,17 +22,6 @@ function Base.show(io::IO, bbox::BoundingBox)
   print(io, " ⤡ ", bbox.corner1, " : ", bbox.corner2)
 end
 
-"""
-    BoundingBox(;centered=true)
-
-Return a BoundingBox the same size and position as the current drawing, assuming
-the origin (0//0) is at the center.
-
-The `centered` option defaults to `true`, and assumes the drawing is currently
-centered. If `false`, the function assumes that the origin is at the top left
-of the drawing. So this function doesn't really work if the current matrix has
-been modified (by `translate()`, `scale()`, `rotate()` etc.)
-"""
 function BoundingBox(;centered=true)
     if centered
         # ignore current matrix
@@ -225,6 +222,12 @@ Make a decorated polygon around the BoundingBox in `bbox`.
 prettypoly(bbox::BoundingBox, action::Symbol=:nothing; kwargs...) =
     prettypoly(convert(Vector{Point}, bbox), action; kwargs...)
 
+"""
+    boundingboxesintersect(bbox1::BoundingBox, bbox2::BoundingBox)
+    boundingboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)
+
+Return true if the two bounding boxes intersect.
+"""
 function boundingboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Point, bcorner2::Point)
     minax, maxax = minmax(acorner1.x, acorner2.x)
     minay, maxay = minmax(acorner1.y, acorner2.y)
@@ -240,18 +243,13 @@ function boundingboxesintersect(acorner1::Point, acorner2::Point, bcorner1::Poin
     return true # boxes overlap
 end
 
-"""
-    boundingboxesintersect(bbox1::BoundingBox, bbox2::BoundingBox)
-
-Return true if the two bounding boxes intersect.
-"""
 boundingboxesintersect(bbox1::BoundingBox, bbox2::BoundingBox) =
     boundingboxesintersect(bbox1.corner1, bbox1.corner2, bbox2.corner1, bbox2.corner2)
 
 """
-    intersectionboundingboxes(bb1::BoundingBox, bb2::BoundingBox)
+    intersectboundingboxes(bb1::BoundingBox, bb2::BoundingBox)
 
-Returns a bounding box intersection.
+Return a BoundingBox that's an intersection of the two bounding boxes.
 """
 function intersectboundingboxes(bb1::BoundingBox, bb2::BoundingBox)
     !boundingboxesintersect(bb1, bb2) && return BoundingBox(O, O)

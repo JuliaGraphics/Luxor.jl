@@ -170,13 +170,13 @@ function textpath(t)
 end
 
 """
-    textoutlines(s::String, pos::Point=O, action::Symbol=:none;
+    textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
         halign=:left,
         valign=:baseline)
 
 Convert text to a graphic path and apply `action`.
 """
-function textoutlines(s::String, pos::Point=O, action::Symbol=:none;
+function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     halign=:left,
     valign=:baseline)
 
@@ -196,20 +196,22 @@ function textoutlines(s::String, pos::Point=O, action::Symbol=:none;
     textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
     @layer begin
         translate(Point(textpointx, textpointy))
+        newpath() # forget any current path
         te = textextents(s)
         textpath(s)
         tp = pathtopoly()
         if length(tp) == 1
-            poly.(tp, action, close=true)
+            poly.(tp, :path, close=true) # don't clip yet
         else
+            newpath()
             for path in tp
                 poly(path, :path, close=true)
                 newsubpath()
             end
             closepath()
-            do_action(action)
         end
     end
+    do_action(action)
 end
 
 """
