@@ -164,6 +164,12 @@ nothing # hide
 
 ![strange attractor in vectors](assets/figures/strange-vector.png)
 
+## More animations
+
+[![strange attractor in vectors](assets/figures/animation-screengrab.jpg)](https://youtu.be/1FA2FgJU6dM)
+
+Most of the animations on [this YouTube channel](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg) are made with Luxor.
+
 ## Hipster logo: text on curves
 
 ```@example

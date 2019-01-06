@@ -56,7 +56,7 @@ animate
 
 ## Making the animation
 
-For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selction, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's installed. Inside `animate()`, the first pass creates a GIF color palette, the second builds the file:
+For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's already installed. Inside `animate()`, the first pass creates a GIF color palette, the second builds the file:
 
 ```julia
 run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)
