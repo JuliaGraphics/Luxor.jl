@@ -184,9 +184,10 @@ fontface("Times-Roman")
 fontsize(500)
 setline(4)
 sethue("maroon2")
-textoutlines("&", O, :fill, valign=:middle, halign=:center)
+textoutlines("&", O, :path, valign=:middle, halign=:center)
+fillpreserve()
 sethue("black")
-textoutlines("&", O, :stroke, valign=:middle, halign=:center)
+strokepath()
 finish() # hide
 nothing # hide
 ```
