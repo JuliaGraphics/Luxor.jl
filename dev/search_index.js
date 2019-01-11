@@ -2525,7 +2525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.Scene",
     "category": "type",
-    "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nthe movie created by Movie()\nthe framefunction is a function taking two arguments: the scene and the framenumber.\nthe framerange determines which frames are processed by the function. Defaults to the entire movie.\nthe optional easingfunction can be accessed by the framefunction to vary the transition speed\n\n\n\n\n\n"
+    "text": "The Scene type defines a function to be used to render a range of frames in a movie.\n\nthe movie created by Movie()\nthe framefunction is a function taking two arguments: the scene and the framenumber.\nthe framerange determines which frames are processed by the function. Defaults to the entire movie.\nthe optional easingfunction can be accessed by the framefunction to vary the transition speed\nthe optional opts which is a single argument of an abstract type which can be accessed within the framefunction\n\n\n\n\n\n"
 },
 
 {
