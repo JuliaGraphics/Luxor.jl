@@ -120,7 +120,11 @@ function squircle(center::Point, hradius, vradius, action=:none;
         ypos = center.y + ^(abs(sin(theta)), rt) * vradius * sign(sin(theta))
         push!(points, Point(xpos, ypos))
     end
-    vertices ? points : poly(points, action, close=true, reversepath=reversepath)
+    result = reversepath ? reverse(points) : points
+    if !vertices
+        poly(points, action, close=true, reversepath=reversepath)
+    end
+    return result
 end
 
 """

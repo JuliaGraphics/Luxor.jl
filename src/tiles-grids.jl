@@ -166,9 +166,7 @@ Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis a
 then along the y-axis, `radius` is the radius of a circle that encloses each hexagon.
 The distance in `x` between the centers of successive hexagons is:
 
-```math
-\\frac{\\sqrt{(3)} radius}{2}
-```
+``\\frac{\\sqrt{(3)} radius}{2}``
 
 To get the next point from the grid, use `nextgridpoint(g::Grid)`.
 
