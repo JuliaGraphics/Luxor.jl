@@ -449,7 +449,7 @@ using Luxor # hide
 Drawing(600, 600, "assets/figures/mesh2.png") # hide
 origin() # hide
 background("white") # hide
-pl = ngon(O, 250, 3, pi/6, vertices=true)
+pl = ngon(O, 250, 3, π/6, vertices=true)
 mesh1 = mesh(pl, [
     "purple",
     "green",

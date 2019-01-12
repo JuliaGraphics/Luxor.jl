@@ -69,11 +69,21 @@ mutable struct Scene
     opts::Any
 end
 
-Scene(movie::Movie, framefunction::Function; easingfunction=lineartween) = Scene(movie, framefunction, movie.movieframerange, easingfunction, nothing)
-Scene(movie, framefunction, framerange; easingfunction=lineartween) = Scene(movie, framefunction, framerange, easingfunction, nothing)
+"""
+    Scene(movie, function, range;
+        easingfunction=easinoutquad,
+        optarg=nothing)
 
-Scene(movie::Movie, framefunction::Function; easingfunction=lineartween, optarg=nothing) = Scene(movie, framefunction, movie.movieframerange, easingfunction, optarg)
-Scene(movie, framefunction, framerange; easingfunction=lineartween, optarg=nothing) = Scene(movie, framefunction, framerange, easingfunction, optarg)
+Use the Scene() constructor function to create a scene. Supply a movie, a function
+to generate the scene, and a range of frames. Optionally you can supply an
+easing function, and other information, in `optarg`.
+"""
+Scene(movie::Movie, framefunction::Function;
+    easingfunction=lineartween, optarg=nothing) =
+    Scene(movie, framefunction, movie.movieframerange, easingfunction, optarg)
+Scene(movie::Movie, framefunction::Function, framerange::AbstractRange;
+    easingfunction=lineartween, optarg=nothing) =
+    Scene(movie, framefunction, framerange, easingfunction, optarg)
 
 """
     animate(movie::Movie, scenelist::AbstractArray{Scene, 1};

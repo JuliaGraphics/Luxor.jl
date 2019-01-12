@@ -173,8 +173,8 @@ clipreset()
 
 sethue("black")
 
-text(string(150^2 * pi |> round), c1[1] - (125, 0))
-text(string(150^2 * pi |> round), c2[1] + (100, 0))
+text(string(150^2 * π |> round), c1[1] - (125, 0))
+text(string(150^2 * π |> round), c2[1] + (100, 0))
 sethue("white")
 text(string(intersection2circles(c1..., c2...) |> round),
      midpoint(c1[1], c2[1]), halign=:center)
@@ -209,7 +209,7 @@ sethue("steelblue4") # hide
 setline(2) # hide
 arrow(O, Point(0, -65))
 arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
-arrow(O, 100, pi, pi/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
+arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
 finish() # hide
 nothing # hide
 ```
@@ -266,7 +266,7 @@ Drawing(400, 200, "assets/figures/bboxpoly.png") # hide
 background("white") # hide
 origin() # hide
 
-p = star(O, 100, 5, 0.1, pi/3.3, vertices=true)
+p = star(O, 100, 5, 0.1, π/3.3, vertices=true)
 sethue("antiquewhite")
 box(BoundingBox(p), :fill)
 
@@ -369,8 +369,14 @@ boxdiagonal
 boxwidth
 boxheight
 intersectboundingboxes
-boxtop
-boxbottom
+boxbottomleft
+boxbottomright
+boxmiddlecenter
+boxmiddleleft
+boxmiddleright
+boxtopcenter
+boxtopleft
+boxtopright
 ```
 
 ## Noise

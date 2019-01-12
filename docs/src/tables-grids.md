@@ -277,7 +277,7 @@ grid = GridHex(O, radius, 600)
 for i in 1:15
     randomhue()
     p = nextgridpoint(grid)
-    ngon(p, radius-5, 6, pi/2, :fillstroke)
+    ngon(p, radius-5, 6, π/2, :fillstroke)
     sethue("white")
     text(string(i), p, halign=:center)
 end

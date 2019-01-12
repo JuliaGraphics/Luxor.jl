@@ -7,6 +7,7 @@ using Test
 using Colors
 
 using Random
+
 Random.seed!(42)
 
 demomovie = Movie(400, 400, "test", 0:359)
@@ -48,12 +49,22 @@ function frame3(scene, framenumber)
     circle(Point(-180 + (360 * eased_n), 20), 10, :fill)
 end
 
+function frame4(scene, framenumber)
+    sethue("red")
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 20), 10, :fill)
+    sethue("white")
+    fontsize(20)
+    text(string(scene.opts))
+end
+
 mktempdir() do tmpdir
     @test animate(demo, [
         Scene(demo, backdrop, 0:200),
         Scene(demo, frame1,   0:200, easingfunction=easeinsine),
         Scene(demo, frame2,   0:200, easingfunction=easeinoutcubic),
-        Scene(demo, frame3,   0:200, easingfunction=easeinoutquint)
+        Scene(demo, frame3,   0:200, easingfunction=easeinoutquint),
+        Scene(demo, frame4,   0:200, easingfunction=easeinoutquint, optarg=42),
         ],
         creategif=false) == true
 end

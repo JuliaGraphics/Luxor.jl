@@ -20,8 +20,6 @@ There are four steps to creating an animation.
 ## Example
 
 ```julia
-using Luxor, Colors
-
 demo = Movie(400, 400, "test")
 
 function backdrop(scene, framenumber)
@@ -31,22 +29,28 @@ end
 function frame(scene, framenumber)
     sethue(Colors.HSV(framenumber, 1, 1))
     eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
-    circle(polar(100, -pi/2 - (eased_n * 2pi)), 80, :fill)
+    circle(polar(100, -π/2 - (eased_n * 2π)), 80, :fill)
     text(string("frame $framenumber of $(scene.framerange.stop)"),
         Point(O.x, O.y-190),
         halign=:center)
+    text(scene.opts,
+        boxbottomcenter(BoundingBox()),
+        halign=:center,
+        valign=:bottom)
 end
 
 animate(demo, [
     Scene(demo, backdrop, 0:359),
-    Scene(demo, frame, 0:359, easingfunction=easeinoutcubic)
+    Scene(demo, frame, 0:359,
+        easingfunction=easeinoutcubic,
+        optarg="made with Julia")
     ],
     creategif=true)
 ```
 
 ![animation example](assets/figures/animation.gif)
 
-In this example, for each frame numbered 0 to 359, the graphics are drawn by the `backdrop()` and `frame()` functions, in that order. A drawing is automatically created (in PNG format) and centered (`origin()`) so you can start drawing immediately. The `finish()` function is automatically called when all the drawing functions in the scenes have completed, and the process starts afresh for the next frame.
+In this example, the movie uses two scenes, each specifying a function to draw frames from 0 to 359. For each frame numbered 0 to 359, the graphics are drawn by both the `backdrop()` and `frame()` functions, in that order. A drawing is automatically created (in PNG format) and centered (`origin()`) so you can start drawing immediately. The `finish()` function is automatically called when all the drawing functions in the scenes have completed, and the process starts afresh for the next frame. The second scene, calling the `frame()` function, shows how you can pass optional information to the function.
 
 ```@docs
 Movie

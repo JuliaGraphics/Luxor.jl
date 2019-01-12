@@ -575,9 +575,9 @@ Notice that this function doesn't define anything about what color it is, or whe
 ```julia
 @png begin
     setopacity(0.7)
-    for theta in range(0, step=pi/6, length=12)
+    for θ in range(0, step=π/6, length=12)
         @layer begin
-            rotate(theta)
+            rotate(θ)
             translate(0, -150)
             egg(50, :path)
             setline(10)
@@ -626,9 +626,9 @@ end
 background("white")
 origin()
 setopacity(0.7)
-for theta in range(0, step=pi/6, length=12)
+for θ in range(0, step=π/6, length=12)
     @layer begin
-        rotate(theta)
+        rotate(θ)
         translate(0, -150)
         egg(50, :path)
         setline(10)
@@ -839,7 +839,7 @@ using Luxor, Colors
     @layer begin
        for i in 360:-4:1
            sethue(Colors.HSV(i, 1.0, 0.8))
-           rotate(pi/30)
+           rotate(π/30)
            ngon(O, i, 5, 0, :stroke)
        end
     end
@@ -890,7 +890,7 @@ eg(:clip)
 @layer begin
    for i in 360:-4:1
        sethue(Colors.HSV(i, 1.0, 0.8))
-       rotate(pi/30)
+       rotate(π/30)
        ngon(O, i, 5, 0, :stroke)
    end
 end

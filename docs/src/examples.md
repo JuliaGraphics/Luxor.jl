@@ -60,10 +60,10 @@ using Luxor
 Drawing(600, 400, "assets/figures/julia-logos.png")
 origin()
 background("white")
-for theta in range(0, step=pi/8, length=16)
+for θ in range(0, step=π/8, length=16)
     gsave()
     scale(0.25)
-    rotate(theta)
+    rotate(θ)
     translate(250, 0)
     randomhue()
     julialogo(action=:fill, color=false)
@@ -122,7 +122,7 @@ end
 
 function draw(n)
     circle(O, 75, :clip)
-    points = ngon(O, 150, 3, -pi/2, vertices=true)
+    points = ngon(O, 150, 3, -π/2, vertices=true)
     sierpinski(points, n)
 end
 

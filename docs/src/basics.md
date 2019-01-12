@@ -154,7 +154,7 @@ finish()
 preview()
 ```
 
-They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename. For multiple lines, use either:
+They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -179,7 +179,7 @@ or
 @pdf
 ```
 
-If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files create with the macros are created in your current working directory as `luxor-drawing-` followed by a time stamp.
+If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp.
 
 If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:
 
@@ -198,7 +198,7 @@ preview()
 
 ### Drawings in memory
 
-You can choose to store the drawing in memory. The advantage to this is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
+You can choose to store the drawing in memory. The advantage is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
 
 ```
 Drawing(width, height, surfacetype, [filename])
@@ -265,7 +265,7 @@ The `@layer` macro is a synonym for a `gsave()`...`grestore()` pair.
 ```julia
 @svg begin
     circle(O, 100, :stroke)
-    @layer (sethue("red"); rule(O); rule(O, pi/2))
+    @layer (sethue("red"); rule(O); rule(O, π/2))
     circle(O, 200, :stroke)
 end
 ```
