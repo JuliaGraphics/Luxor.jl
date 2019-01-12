@@ -40,7 +40,7 @@ Drawing(800, 800, "assets/figures/manyturtles.svg") # hide
 origin() # hide
 background("white") # hide
 quantity = 9
-turtles = [Turtle(O, true, 2pi * rand(), (rand(), rand(), 0.5)...) for i in 1:quantity]
+turtles = [Turtle(O, true, 2π * rand(), (rand(), rand(), 0.5)...) for i in 1:quantity]
 Reposition.(turtles, first.(collect(Tiler(800, 800, 3, 3))))
 n = 10
 Penwidth.(turtles, 0.5)

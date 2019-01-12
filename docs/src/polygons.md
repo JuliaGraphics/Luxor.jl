@@ -325,7 +325,7 @@ sethue("black") # hide
 setline(1) # hide
 fontsize(20) # hide
 translate(0, -120) # hide
-sincurve = [Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi]
+sincurve = [Point(6x, 80sin(x)) for x in -5π:π/20:5π]
 prettypoly(collect(sincurve), :stroke,
     () -> begin
             sethue("red")
@@ -912,7 +912,7 @@ sethue("black") # hide
 numbervertices(l, n) = label(string(l), :N, O)
 drawvertices() = ngon(O, 3, 4, 0, :fill)
 
-pts = [Point(30x, 20sin(x)) for x in -2pi:pi/6:2pi]
+pts = [Point(30x, 20sin(x)) for x in -2π:π/6:2π]
 
 prettypoly(pts, "stroke", drawvertices, vertexlabels = numbervertices)
 

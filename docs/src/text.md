@@ -110,8 +110,7 @@ background("white") # hide
 sethue("black") # hide
 fontsize(10)
 fontface("Georgia")
-[text(string(theta), Point(40cos(theta), 40sin(theta)), angle=theta)
-  for theta in 0:pi/12:47pi/24]
+[text(string(θ), Point(40cos(θ), 40sin(θ)), angle=θ) for θ in 0:π/12:47π/24]
 finish() # hide
 nothing # hide
 ```
@@ -260,7 +259,7 @@ fontface("Menlo") # hide
 sethue("royalblue4") # hide
 textstring = join(names(Base), " ")
 textcurve("this spiral contains every word in julia names(Base): " * textstring,
-    -pi/2,
+    -π/2,
     800, 0, 0,
     spiral_in_out_shift = -18.0,
     letter_spacing = 0,
@@ -287,12 +286,12 @@ sethue("black") # hide
 setdash("dot") # hide
 setline(0.25) # hide
 circle(O, 100, :stroke)
-textcurvecentered("hello world", -pi/2, 100, O;
+textcurvecentered("hello world", -π/2, 100, O;
     clockwise = true,
     letter_spacing = 0,
     baselineshift = -20
     )
-textcurvecentered("hello world", pi/2, 100, O;
+textcurvecentered("hello world", π/2, 100, O;
     clockwise = false,
     letter_spacing = 0,
     baselineshift = 10

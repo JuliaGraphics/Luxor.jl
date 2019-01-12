@@ -21,7 +21,7 @@ w = img.width
 h = img.height
 rulers()
 scale(0.3, 0.3)
-rotate(pi/4)
+rotate(π/4)
 placeimage(img, -w/2, -h/2, .5)
 sethue("red")
 circle(-w/2, -h/2, 15, :fill)
@@ -68,7 +68,7 @@ for (pos, n) in pagetiles
     gsave()
     translate(pos)
     scale(.95, .95)
-    rotate(rand(0.0:pi/8:2pi))
+    rotate(rand(0.0:π/8:2π))
     placeimage(image, O, centered=true)
     grestore()
     clipreset()
@@ -88,11 +88,11 @@ origin() # hide
 img = readpng("assets/figures/clipping-tests.png")
 w = img.width
 h = img.height
-for theta in 0:pi/6:2pi
+for θ in 0:π/6:2π
     gsave()
         scale(.5, .5)
-        rotate(theta)
-        transform([1, 0, -pi/4, 1, 250, 0])
+        rotate(θ)
+        transform([1, 0, -π/4, 1, 250, 0])
         placeimage(img, -w/2, -h/2, .75)
     grestore()
 end

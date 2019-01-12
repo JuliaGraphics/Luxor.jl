@@ -6,7 +6,7 @@ end
 
 # Introduction to Luxor
 
-Luxor is a Julia package for drawing simple static vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, animations, and shapefiles.
+Luxor is a Julia package for drawing simple static vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG images, turtle graphics, and simple animations.
 
 The focus of Luxor is on simplicity and ease of use: it should be easier to use than plain [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions.
 
@@ -46,9 +46,11 @@ or
 julia> @png juliacircles()
 ```
 
+which should create a graphic file and possibly also display and/or open it, depending on your environment.
+
 ## Documentation
 
-The documentation was built using [Documenter.jl](https://github.com/JuliaDocs).
+This documentation was built using [Documenter.jl](https://github.com/JuliaDocs).
 
 ```@example
 using Dates # hide

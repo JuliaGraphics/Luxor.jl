@@ -68,7 +68,7 @@ for i in 1:8
     squircle(Point(40, 0), 20, 30, :fillpreserve)
     sethue("black")
     strokepath()
-    rotate(pi/4)
+    rotate(π/4)
 end
 finish() # hide
 nothing # hide

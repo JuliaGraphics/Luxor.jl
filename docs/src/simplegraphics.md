@@ -184,7 +184,7 @@ ellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)
 [ begin
     setgray(rescale(c, 150, 1, 0, 1))
     poly(offsetpoly(ellipsepoly, c), close=true, :fill);
-    rotate(pi/20)
+    rotate(π/20)
   end
      for c in 150:-10:1 ]
 finish() # hide
@@ -328,9 +328,9 @@ Drawing(600, 200, "assets/figures/sector.png") # hide
 background("white") # hide
 origin() # hide
 sethue("tomato")
-sector(50, 90, pi/2, 0, :fill)
+sector(50, 90, π/2, 0, :fill)
 sethue("olive")
-sector(Point(O.x + 200, O.y), 50, 90, 0, pi/2, :fill)
+sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, :fill)
 finish() # hide
 nothing # hide
 ```
@@ -345,9 +345,9 @@ Drawing(600, 200, "assets/figures/sectorrounded.png") # hide
 background("white") # hide
 origin() # hide
 sethue("tomato")
-sector(50, 90, pi/2, 0, 15, :fill)
+sector(50, 90, π/2, 0, 15, :fill)
 sethue("olive")
-sector(Point(O.x + 200, O.y), 50, 90, 0, pi/2, 15, :fill)
+sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, 15, :fill)
 finish() # hide
 nothing # hide
 ```
@@ -366,7 +366,7 @@ Drawing(400, 300, "assets/figures/pie.png") # hide
 background("white") # hide
 origin() # hide
 sethue("magenta") # hide
-pie(0, 0, 100, pi/2, pi, :fill)
+pie(0, 0, 100, π/2, π, :fill)
 finish() # hide
 nothing # hide
 ```
@@ -400,7 +400,7 @@ grid = GridRect(O - (200, 0), 130, 50)
 for aspiral in spiraldata
     @layer begin
         translate(nextgridpoint(grid))
-        spiral(last(aspiral), first(aspiral), period=20pi, :stroke)
+        spiral(last(aspiral), first(aspiral), period=20π, :stroke)
         label(aspiral[2], :S, offset=100)
     end
 end
@@ -432,7 +432,7 @@ grid = GridRect(O - (200, 0), 175, 50)
 for aspiral in spiraldata
     @layer begin
         translate(nextgridpoint(grid))
-        spiral(first(aspiral), last(aspiral), log=true, period=10pi, :stroke)
+        spiral(first(aspiral), last(aspiral), log=true, period=10π, :stroke)
         label(string(aspiral), :S, offset=100)
     end
 end
@@ -544,7 +544,7 @@ y = 10
 for x in 10 .^ range(0, length=100, stop=3)
     global y
     circle(Point(x, y), 2, :fill)
-    rule(Point(x, y), -pi/2, boundingbox=BoundingBox(centered=false))
+    rule(Point(x, y), -π/2, boundingbox=BoundingBox(centered=false))
     y += 2
 end
 
@@ -565,8 +565,8 @@ sethue("black") # hide
 setline(0.75) # hide
 box(BoundingBox() * 0.9, :stroke)
 for x in 10 .^ range(0, length=100, stop=3)
-    rule(Point(x, 0), pi/2,  boundingbox=BoundingBox() * 0.9)
-    rule(Point(-x, 0), pi/2, boundingbox=BoundingBox() * 0.9)
+    rule(Point(x, 0), π/2,  boundingbox=BoundingBox() * 0.9)
+    rule(Point(-x, 0), π/2, boundingbox=BoundingBox() * 0.9)
 end
 finish() # hide
 ```

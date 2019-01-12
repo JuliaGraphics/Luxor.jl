@@ -216,6 +216,7 @@ Draw an annular sector centered at `centerpoint`.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
                 endangle::Real, action::Symbol=:none)
+    (innerradius > outerradius) && throw(DomainError(outerradius, "outer radius must be larger than inner radius $(innerradius)"))
     gsave()
     translate(centerpoint)
     newpath()
@@ -253,6 +254,7 @@ The cornerradius is reduced from the supplied value if neceesary to prevent over
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
                 endangle::Real, cornerradius::Real, action::Symbol=:none)
+    (innerradius > outerradius) && throw(DomainError(outerradius, "outer radius must be larger than inner radius $(innerradius)"))
     gsave()
     translate(centerpoint)
     # some work is done using polar coords to calculate the points

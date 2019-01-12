@@ -1,17 +1,37 @@
 # Changelog
 
-## [v1.1.4] - to be released soon
+## [v1.1.5] - future release
+
+### Added
+
+-
+
+### Changed
+
+-
+
+### Removed
+
+-
+
+### Deprecated
+
+-
+
+## [v1.1.4] - 2019-01-12
 
 ### Added
 
 - highlightcells()
 - textoutlines()
+- additional option for Scene to pass information
 
 ### Changed
 
 - fixed bug in single cell tables
 - shapefiles convert now has typed array declaration (oops)
 - off-by-one bug in table iterator fixed (yikes!)
+- logo and readme image
 
 ### Removed
 

@@ -30,7 +30,7 @@ circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
 sethue("gold")
 setopacity(0.7)
 setline(10)
-for i in 0:pi/36:2pi - pi/36
+for i in 0:π/36:2π - π/36
     move(0, 0)
     line(cos(i) * 600, sin(i) * 600 )
     strokepath()
@@ -177,7 +177,7 @@ using Luxor
 function hipster(fname, toptext, bottomtext)
     Drawing(400, 350, fname)
     origin()
-    rotate(pi/8)
+    rotate(π/8)
 
     circle(O, 135, :clip)
     sethue("antiquewhite2")
@@ -195,11 +195,11 @@ function hipster(fname, toptext, bottomtext)
     sethue("wheat")
     fontsize(20)
     fontface("Helvetica-Bold")
-    textcurvecentered(toptext, (3pi)/2, 100, O, clockwise=true,  letter_spacing=1, baselineshift = -4)
-    textcurvecentered(bottomtext, pi/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
+    textcurvecentered(toptext, 3π/2, 100, O, clockwise=true,  letter_spacing=1, baselineshift = -4)
+    textcurvecentered(bottomtext, π/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
 
     sethue("gray20")
-    map(pt -> star(pt, 40, 3, 0.5, -pi/2, :fill), ngon(O, 40, 3, 0, vertices=true))
+    map(pt -> star(pt, 40, 3, 0.5, -π/2, :fill), ngon(O, 40, 3, 0, vertices=true))
     circle(O.x + 30, O.y - 55, 15, :fill)
 
     # cheap weathered texture:
