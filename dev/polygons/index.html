@@ -98,7 +98,7 @@ prettypoly(p, :fill, () -&gt;
 end
 
 apoly = star(O, 100, 7, 0.6, 0, vertices=true)
-prettypoly(apoly, :fill, () -&gt; decorate(O, apoly, 1), close=true)</code></pre></div><p><img src="../assets/figures/prettypolyrecursive.png" alt="prettypoly"/></p><p>Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via <code>simplify()</code>.</p><div><pre><code class="language-julia">sincurve = [Point(6x, 80sin(x)) for x in -5pi:pi/20:5pi]
+prettypoly(apoly, :fill, () -&gt; decorate(O, apoly, 1), close=true)</code></pre></div><p><img src="../assets/figures/prettypolyrecursive.png" alt="prettypoly"/></p><p>Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via <code>simplify()</code>.</p><div><pre><code class="language-julia">sincurve = [Point(6x, 80sin(x)) for x in -5π:π/20:5π]
 prettypoly(collect(sincurve), :stroke,
     () -&gt; begin
             sethue(&quot;red&quot;)
@@ -380,7 +380,7 @@ for (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))
 end</code></pre></div><p><img src="../assets/figures/polysample.png" alt="polysampling"/></p><p>There is a <code>closed</code> option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is first sampled as a closed polygon, then as a non-closed one.</p><div><pre><code class="language-julia">numbervertices(l, n) = label(string(l), :N, O)
 drawvertices() = ngon(O, 3, 4, 0, :fill)
 
-pts = [Point(30x, 20sin(x)) for x in -2pi:pi/6:2pi]
+pts = [Point(30x, 20sin(x)) for x in -2π:π/6:2π]
 
 prettypoly(pts, &quot;stroke&quot;, drawvertices, vertexlabels = numbervertices)
 

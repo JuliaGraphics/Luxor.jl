@@ -16,8 +16,7 @@ text(&quot;6&quot;,  pt3, halign=:right,  valign = :top)
 sethue(&quot;red&quot;)
 map(p -&gt; circle(p, 4, :fill), [pt1, pt2, pt3])</code></pre></div><p><img src="../assets/figures/text-placement.png" alt="text placement"/></p><div><pre><code class="language-julia">fontsize(10)
 fontface(&quot;Georgia&quot;)
-[text(string(theta), Point(40cos(theta), 40sin(theta)), angle=theta)
-  for theta in 0:pi/12:47pi/24]</code></pre></div><p><img src="../assets/figures/text-rotation.png" alt="text rotation"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.text" href="#Luxor.text"><code>Luxor.text</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">text(str)
+[text(string(θ), Point(40cos(θ), 40sin(θ)), angle=θ) for θ in 0:π/12:47π/24]</code></pre></div><p><img src="../assets/figures/text-rotation.png" alt="text rotation"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.text" href="#Luxor.text"><code>Luxor.text</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">text(str)
 text(str, pos)
 text(str, pos, angle=pi/2)
 text(str, x, y)
@@ -42,9 +41,10 @@ settext(text;
 fontsize(500)
 setline(4)
 sethue(&quot;maroon2&quot;)
-textoutlines(&quot;&amp;&quot;, O, :fill, valign=:middle, halign=:center)
+textoutlines(&quot;&amp;&quot;, O, :path, valign=:middle, halign=:center)
+fillpreserve()
 sethue(&quot;black&quot;)
-textoutlines(&quot;&amp;&quot;, O, :stroke, valign=:middle, halign=:center)</code></pre></div><p><img src="../assets/figures/textoutlines.png" alt="text outlines"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textoutlines" href="#Luxor.textoutlines"><code>Luxor.textoutlines</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
+strokepath()</code></pre></div><p><img src="../assets/figures/textoutlines.png" alt="text outlines"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textoutlines" href="#Luxor.textoutlines"><code>Luxor.textoutlines</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     halign=:left,
     valign=:baseline)</code></pre><p>Convert text to a graphic path and apply <code>action</code>.</p></div></div></section><p><code>textpath()</code> converts the text into graphic paths suitable for further manipulation.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textpath" href="#Luxor.textpath"><code>Luxor.textpath</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textpath(t)</code></pre><p>Convert the text in string <code>t</code> to a new path, for subsequent filling/stroking etc...</p><p>Typically you&#39;ll have to use <code>pathtopoly()</code> or <code>getpath()</code> or <code>getpathflat()</code> then work through the one or more path(s). Or use <code>textoutlines()</code>.</p></div></div></section><h2><a class="nav-anchor" id="Font-dimensions-(&quot;Toy&quot;-API)-1" href="#Font-dimensions-(&quot;Toy&quot;-API)-1">Font dimensions (&quot;Toy&quot; API)</a></h2><p>The <code>textextents(str)</code> function gets an array of dimensions of the string <code>str</code>, given the current font.</p><p><img src="../assets/figures/textextents.png" alt="textextents"/></p><p>The green dot is the text placement point and reference point for the font, the yellow circle shows the text block&#39;s x and y bearings, and the blue dot shows the advance point where the next character should be placed.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textextents" href="#Luxor.textextents"><code>Luxor.textextents</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textextents(str)</code></pre><p>Return an array of six Float64s containing the measurements of the string <code>str</code> when set using the current font settings (Toy API):</p><p>1 x_bearing</p><p>2 y_bearing</p><p>3 width</p><p>4 height</p><p>5 x_advance</p><p>6 y_advance</p><p>The x and y bearings are the displacement from the reference point to the upper-left corner of the bounding box. It is often zero or a small positive value for x displacement, but can be negative x for characters like &quot;j&quot;; it&#39;s almost always a negative value for y displacement.</p><p>The width and height then describe the size of the bounding box. The advance takes you to the suggested reference point for the next letter. Note that bounding boxes for subsequent blocks of text can overlap if the bearing is negative, or the advance is smaller than the width would suggest.</p><p>Example:</p><pre><code class="language-none">textextents(&quot;R&quot;)</code></pre><p>returns</p><pre><code class="language-none">[1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]</code></pre></div></div></section><h2><a class="nav-anchor" id="Labels-1" href="#Labels-1">Labels</a></h2><p>The <code>label()</code> function places text relative to a specific point, and you can use compass points to indicate where it should be. So <code>:N</code> (for North) places a text label directly above the point.</p><div><pre><code class="language-julia">sethue(&quot;black&quot;)
 fontsize(15)
@@ -65,7 +65,7 @@ label(&quot;text&quot;, :N, pt, offset=20)  # positions text North of pt, offset
     leader=false,
     leaderoffsets=[0.0, 1.0])</code></pre><p>Add a text label at a point, positioned relative to that point, for example, <code>0.0</code> is East, <code>pi</code> is West.</p><pre><code class="language-none">label(&quot;text&quot;, pi)          # positions text to the left of the origin</code></pre></div></div></section><h2><a class="nav-anchor" id="Text-on-a-curve-1" href="#Text-on-a-curve-1">Text on a curve</a></h2><p>Use <code>textcurve(str)</code> to draw a string <code>str</code> on a circular arc or spiral.</p><div><pre><code class="language-julia">textstring = join(names(Base), &quot; &quot;)
 textcurve(&quot;this spiral contains every word in julia names(Base): &quot; * textstring,
-    -pi/2,
+    -π/2,
     800, 0, 0,
     spiral_in_out_shift = -18.0,
     letter_spacing = 0,
@@ -74,12 +74,12 @@ fontsize(35)
 fontface(&quot;Avenir-Black&quot;)
 textcentered(&quot;julia names(Base)&quot;, 0, 0)</code></pre></div><p><img src="../assets/figures/text-spiral.png" alt="text on a curve or spiral"/></p><p>For shorter strings, <code>textcurvecentered()</code> tries to place the text on a circular arc by its center point.</p><div><pre><code class="language-julia">fontface(&quot;Arial-Black&quot;)
 circle(O, 100, :stroke)
-textcurvecentered(&quot;hello world&quot;, -pi/2, 100, O;
+textcurvecentered(&quot;hello world&quot;, -π/2, 100, O;
     clockwise = true,
     letter_spacing = 0,
     baselineshift = -20
     )
-textcurvecentered(&quot;hello world&quot;, pi/2, 100, O;
+textcurvecentered(&quot;hello world&quot;, π/2, 100, O;
     clockwise = false,
     letter_spacing = 0,
     baselineshift = 10

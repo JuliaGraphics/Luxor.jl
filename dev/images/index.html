@@ -4,7 +4,7 @@ w = img.width
 h = img.height
 rulers()
 scale(0.3, 0.3)
-rotate(pi/4)
+rotate(π/4)
 placeimage(img, -w/2, -h/2, .5)
 sethue(&quot;red&quot;)
 circle(-w/2, -h/2, 15, :fill)</code></pre></div><p><img src="../assets/figures/images.png" alt="&quot;Images&quot;"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.readpng" href="#Luxor.readpng"><code>Luxor.readpng</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">readpng(pathname)</code></pre><p>Read a PNG file.</p><p>This returns a image object suitable for placing on the current drawing with <code>placeimage()</code>. You can access its <code>width</code> and <code>height</code> fields:</p><pre><code class="language-none">image = readpng(&quot;/tmp/test-image.png&quot;)
@@ -35,7 +35,7 @@ for (pos, n) in pagetiles
     gsave()
     translate(pos)
     scale(.95, .95)
-    rotate(rand(0.0:pi/8:2pi))
+    rotate(rand(0.0:π/8:2π))
     placeimage(image, O, centered=true)
     grestore()
     clipreset()
@@ -44,11 +44,11 @@ end
 finish()</code></pre><h2><a class="nav-anchor" id="Transforming-images-1" href="#Transforming-images-1">Transforming images</a></h2><p>You can transform images by setting the current matrix, either with <code>scale()</code> and <code>rotate()</code> and similar, or by modifying it directly. This code skews the image and scales and rotates it in a circle:</p><div><pre><code class="language-julia">img = readpng(&quot;assets/figures/clipping-tests.png&quot;)
 w = img.width
 h = img.height
-for theta in 0:pi/6:2pi
+for θ in 0:π/6:2π
     gsave()
         scale(.5, .5)
-        rotate(theta)
-        transform([1, 0, -pi/4, 1, 250, 0])
+        rotate(θ)
+        transform([1, 0, -π/4, 1, 250, 0])
         placeimage(img, -w/2, -h/2, .75)
     grestore()
 end</code></pre></div><p><img src="../assets/figures/transform-images.png" alt="transforming images"/></p><h2><a class="nav-anchor" id="Drawing-on-images-1" href="#Drawing-on-images-1">Drawing on images</a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In these examples, we&#39;ll annotate a PNG file.</p><div><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)

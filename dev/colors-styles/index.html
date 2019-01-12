@@ -210,7 +210,7 @@ mesh1 = mesh(bp, [
 setmesh(mesh1)
 box(O, 500, 500, :fillpreserve)
 sethue(&quot;grey50&quot;)
-strokepath()</code></pre></div><p><img src="../assets/figures/mesh1.png" alt="mesh 1"/></p><p>The second example uses a polygon defined by <code>ngon()</code> as the outline of the mesh. The mesh is drawn when the path is stroked.</p><div><pre><code class="language-julia">pl = ngon(O, 250, 3, pi/6, vertices=true)
+strokepath()</code></pre></div><p><img src="../assets/figures/mesh1.png" alt="mesh 1"/></p><p>The second example uses a polygon defined by <code>ngon()</code> as the outline of the mesh. The mesh is drawn when the path is stroked.</p><div><pre><code class="language-julia">pl = ngon(O, 250, 3, π/6, vertices=true)
 mesh1 = mesh(pl, [
     &quot;purple&quot;,
     &quot;green&quot;,
