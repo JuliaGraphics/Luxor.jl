@@ -16,21 +16,40 @@ function rect(xmin, ymin, w, h, action::Symbol=:nothing)
 end
 
 """
-    rect(cornerpoint, w, h, action)
+    rect(cornerpoint, w, h, action;
+        vertices=false)
 
-Create a rectangle with one corner at `cornerpoint` with width `w` and height `h` and do an
-action.
+Create a rectangle with one corner at `cornerpoint` with width `w` and height
+`h` and do an action.
+
+Use `vertices=true` to return an array of the four corner points: bottom left,
+top left, top right, bottom right.
 """
-rect(cornerpoint::Point, w, h, action::Symbol) =
-    rect(cornerpoint.x, cornerpoint.y, w, h, action)
+function rect(cornerpoint::Point, w, h, action::Symbol=:nothing;
+        vertices=false)
+    if vertices
+        return [
+            Point(cornerpoint.x,     cornerpoint.y + h),
+            Point(cornerpoint.x,     cornerpoint.y),
+            Point(cornerpoint.x + w, cornerpoint.y),
+            Point(cornerpoint.x + w, cornerpoint.y + h)
+        ]
+    else
+        rect(cornerpoint.x, cornerpoint.y, w, h, action)
+    end
+end
 
 """
-    box(cornerpoint1, cornerpoint2, action=:nothing; vertices=false)
+    box(cornerpoint1, cornerpoint2, action=:nothing;
+        vertices=false)
 
-Create a rectangle between two points and do an action. Use `vertices=true` to
-return an array of the four corner points rather than draw the box.
+Create a rectangle between two points and do an action.
+
+Use `vertices=true` to return an array of the four corner points: bottom left,
+top left, top right, bottom right.
 """
-function box(corner1::Point, corner2::Point, action::Symbol=:nothing; vertices=false)
+function box(corner1::Point, corner2::Point, action::Symbol=:nothing;
+    vertices=false)
     if vertices
        return  [
        Point(corner1.x, corner1.y),
@@ -42,13 +61,18 @@ function box(corner1::Point, corner2::Point, action::Symbol=:nothing; vertices=f
         rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
     end
 end
+
 """
     box(points::AbstractArray, action=:nothing)
 
 Create a box/rectangle using the first two points of an array of Points to defined
 opposite corners.
+
+Use `vertices=true` to return an array of the four corner points: bottom left,
+top left, top right, bottom right.
 """
-box(bbox::AbstractArray, action::Symbol=:nothing) = box(bbox[1], bbox[2], action)
+box(bbox::AbstractArray, action::Symbol=:nothing; kwargs...) =
+    box(bbox[1], bbox[2], action; kwargs...)
 
 """
     box(pt::Point, width, height, action=:nothing; vertices=false)
@@ -128,10 +152,14 @@ end
     ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
         vertices=false, reversepath=false)
 
-Find the vertices of a regular n-sided polygon centered at `x`, `y` with circumradius `radius`.
+Find the vertices of a regular n-sided polygon centered at `x`, `y` with
+circumradius `radius`.
 
-`ngon()` draws the shapes: if you just want the raw points, use keyword argument
-`vertices=true`, which returns the array of points instead. Compare:
+The polygon is drawn counterclockwise, starting with the first vertex drawn
+below the positive x-axis.
+
+If you just want the raw points, use keyword argument `vertices=true`, which
+returns the array of points instead. Compare:
 
 ```julia
 ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:

@@ -4,7 +4,7 @@
 
 ### Added
 
--
+- a few more box functions take vertices=true/false
 
 ### Changed
 
