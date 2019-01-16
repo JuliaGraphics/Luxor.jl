@@ -60,12 +60,12 @@ function test_bboxes(fname)
     sethue("green")
     box(box4, :fill)
 
-    @test isapprox(boxaspectratio(box1), 1.1666, atol = 0.01)
-    @test isapprox(boxdiagonal(box1), 614.63629, atol = 0.01)
+    @test isapprox(boxaspectratio(box1), 1.166, atol = 0.01)
+    @test isapprox(boxdiagonal(box1), 614.636, atol = 0.01)
 
     # get vertices
     bv = box(box1, vertices=true)
-    @test isapprox(bv[1].y, -433.33333, atol = 0.01)
+    @test isapprox(bv[1].y, 33.333, atol = 0.1)
 
     setline(1)
     # contains
