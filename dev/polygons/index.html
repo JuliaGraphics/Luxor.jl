@@ -27,7 +27,7 @@ preview()</code></pre><p>If you want to specify the side length rather than the 
     sethue(&quot;black&quot;)
     ngonside(O, 75, i, 0, :stroke)
 end</code></pre></div><p><img src="../assets/figures/ngonside.png" alt="stars"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.ngon" href="#Luxor.ngon"><code>Luxor.ngon</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
-    vertices=false, reversepath=false)</code></pre><p>Find the vertices of a regular n-sided polygon centered at <code>x</code>, <code>y</code> with circumradius <code>radius</code>.</p><p><code>ngon()</code> draws the shapes: if you just want the raw points, use keyword argument <code>vertices=true</code>, which returns the array of points instead. Compare:</p><pre><code class="language-julia">ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon&#39;s points:
+    vertices=false, reversepath=false)</code></pre><p>Find the vertices of a regular n-sided polygon centered at <code>x</code>, <code>y</code> with circumradius <code>radius</code>.</p><p>The polygon is drawn counterclockwise, starting with the first vertex drawn below the positive x-axis.</p><p>If you just want the raw points, use keyword argument <code>vertices=true</code>, which returns the array of points instead. Compare:</p><pre><code class="language-julia">ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon&#39;s points:
 
     4-element Array{Luxor.Point,1}:
     Luxor.Point(2.4492935982947064e-16,4.0)
@@ -89,7 +89,7 @@ prettypoly(p, :fill, () -&gt;
         circle(O, 10, :fill)
     end,
     close=true)</code></pre><p>The optional keyword argument <code>vertexlabels</code> lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle &quot;1 of 3&quot;, &quot;2 of 3&quot;, and &quot;3 of 3&quot; using:</p><pre><code class="language-none">prettypoly(triangle, :stroke,
-    vertexlabels = (n, l) -&gt; (text(string(n, &quot; of &quot;, l))))</code></pre><p>TODO Does it render paths with no points correctly ?!</p></div></div><div><div><pre><code class="language-none">prettypoly(bbox::BoundingBox, :action; kwargs...)</code></pre><p>Make a decorated polygon around the BoundingBox in <code>bbox</code>.</p></div></div></section><p>Recursive decoration is possible:</p><div><pre><code class="language-julia">decorate(pos, p, level) = begin
+    vertexlabels = (n, l) -&gt; (text(string(n, &quot; of &quot;, l))))</code></pre><p>TODO Does it render paths with no points correctly ?!</p></div></div><div><div><pre><code class="language-none">prettypoly(bbox::BoundingBox, :action; kwargs...)</code></pre><p>Make a decorated polygon around the BoundingBox in <code>bbox</code>. The vertices are in the order: bottom left, top left, top right, and bottom right.</p></div></div></section><p>Recursive decoration is possible:</p><div><pre><code class="language-julia">decorate(pos, p, level) = begin
     if level &lt; 4
         randomhue()
         scale(0.25, 0.25)
