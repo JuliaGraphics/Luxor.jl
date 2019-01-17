@@ -175,7 +175,8 @@ end
     HueShift(t::Turtle, inc=1.0)
 
 Shift the Hue of the turtle's pen forward by `inc`. Hue values range between
-0 and 360.
+0 and 360. (Don't start with black, otherwise the saturation and brightness values
+will be black.)
 """
 function HueShift(t::Turtle, inc=1.0)
     r, g, b = t.pencolor

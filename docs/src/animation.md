@@ -76,7 +76,9 @@ Sometimes you want to construct an animation that has different components, laye
 
 As an example, consider a simple example showing the sun for each hour of a 24 hour day.
 
- sun24demo = Movie(400, 400, "sun24", 0:23)
+```
+sun24demo = Movie(400, 400, "sun24", 0:23)
+```
 
 The `backgroundfunction()` draws a background that's used for all frames (animated GIFs like constant backgrounds):
 
