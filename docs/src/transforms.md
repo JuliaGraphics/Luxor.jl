@@ -53,7 +53,7 @@ nothing # hide
 ![scale](assets/figures/scale.png)
 
 
-`rotate()` rotates the current workspace by the specifed amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
+`rotate()` rotates the current workspace by the specified amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
 
 ```@example
 using Luxor, Random # hide
