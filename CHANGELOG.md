@@ -1,14 +1,15 @@
 # Changelog
 
-## [v1.1.5] - future release
+## [v1.1.5] - 2019-01-26
 
 ### Added
 
-- a few more box functions take vertices=true/false
+- more box functions take vertices=true/false
+- added setdash(dashes)
 
 ### Changed
 
--
+- tried to fix odd bug in `rule(..., π/2)`
 
 ### Removed
 

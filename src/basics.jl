@@ -137,8 +137,8 @@ newpath() = Cairo.new_path(get_current_cr())
 """
     newsubpath()
 
-Add a new subpath to the current path. This is Cairo's `new_sub_path()` function. It can
-be used for example to make holes in shapes.
+Add a new subpath to the current path. This is Cairo's `new_sub_path()`
+function. It can be used for example to make holes in shapes.
 """
 newsubpath() = Cairo.new_sub_path(get_current_cr())
 
@@ -152,8 +152,8 @@ closepath() = Cairo.close_path(get_current_cr())
 """
     strokepath()
 
-Stroke the current path with the current line width, line join, line cap, and dash settings.
-The current path is then cleared.
+Stroke the current path with the current line width, line join, line cap, and
+dash settings. The current path is then cleared.
 """
 strokepath() = Cairo.stroke(get_current_cr())
 
@@ -284,13 +284,30 @@ function setlinejoin(str="miter")
 end
 
 """
-    setlinedash("dot")
+    setdash("dot")
 
-Set the dash pattern to one of: "solid", "dotted", "dot", "dotdashed", "longdashed",
-"shortdashed", "dash", "dashed", "dotdotdashed", "dotdotdotdashed"
+Set the dash pattern to one of: "solid", "dotted", "dot", "dotdashed",
+"longdashed", "shortdashed", "dash", "dashed", "dotdotdashed",
+"dotdotdotdashed".
+
+Use `setdash(dashes::Vector)` to specify the pattern numerically.
 """
-function setdash(dashing)
+function setdash(dashing::AbstractString)
     Cairo.set_line_type(get_current_cr(), dashing)
+end
+
+"""
+    setdash(dashes::Vector, offset=0.0)
+
+Set the dash pattern to the values in `dashes`. The first number is the length of the ink, the second the gap, and so on.
+
+The `offset` specifies an offset into the pattern at which the stroke begins. So an offset of 10 means that the stroke starts at `dashes[1] + 10` into the pattern.
+
+Or use `setdash("dot")` etc.
+"""
+function setdash(dashes::Vector, offset=0.0)
+    # no negative dashes
+    Cairo.set_dash(get_current_cr(), abs.(Float64.(dashes)), offset)
 end
 
 """
@@ -357,14 +374,10 @@ draws a line that spans a bounding box half the width and height of the drawing.
 function rule(pos, theta=0.0;
         boundingbox=BoundingBox())
     bbox       = box(boundingbox, vertices=true)
-    topside    = bbox[1:2]
-    rightside  = bbox[2:3]
-    bottomside = bbox[3:4]
-    leftside   = vcat(bbox[4], bbox[1])
-
-    #if !isinside(pos, bbox, allowonedge=true)
-    #    #@warn "position is not inside bounding box"
-    #end
+    topside    = bbox[2:3]
+    rightside  = bbox[3:4]
+    bottomside = vcat(bbox[4], bbox[1])
+    leftside   = bbox[1:2]
 
     # ruled line could be as long as the diagonal so add a bit extra
     r = boxdiagonal(boundingbox)/2 + 10
@@ -376,7 +389,7 @@ function rule(pos, theta=0.0;
     interpoints = Set{Point}()
 
     # check for intersection with top of bounding box
-    flag, ip = intersection(ruledline[1], ruledline[2], topside[1], topside[2])
+    flag, ip = intersection(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly=true)
     if flag
         if !(ip.x > topside[2].x || ip.x < topside[1].x)
             push!(interpoints, ip)
@@ -384,7 +397,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for right intersection
-    flag, ip = intersection(ruledline[1], ruledline[2], rightside[1], rightside[2])
+    flag, ip = intersection(ruledline[1], ruledline[2], rightside[1], rightside[2], crossingonly=true)
     if flag
         if !(ip.y > rightside[2].y || ip.y < rightside[1].y)
             push!(interpoints, ip)
@@ -392,7 +405,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for bottom intersection
-    flag, ip = intersection(ruledline[1], ruledline[2], bottomside[1], bottomside[2])
+    flag, ip = intersection(ruledline[1], ruledline[2], bottomside[1], bottomside[2], crossingonly=true)
     if flag
         if !(ip.x < bottomside[2].x || ip.x > bottomside[1].x)
             push!(interpoints, ip)
@@ -400,7 +413,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for left intersection
-    flag, ip = intersection(ruledline[1], ruledline[2], leftside[1], leftside[2])
+    flag, ip = intersection(ruledline[1], ruledline[2], leftside[1], leftside[2], crossingonly=true)
     if flag
         if !(ip.y > leftside[1].y || ip.y < leftside[2].y)
             push!(interpoints, ip)

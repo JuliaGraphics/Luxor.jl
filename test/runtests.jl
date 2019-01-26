@@ -130,6 +130,7 @@ function run_all_tests()
         include("cropmarkstest.jl")
         include("boxmaptest.jl")
         include("noise-test.jl")
+        include("dashtests.jl")
     end
 end
 
