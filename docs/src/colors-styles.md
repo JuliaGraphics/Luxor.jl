@@ -114,6 +114,49 @@ nothing # hide
 
 ![dashes](assets/figures/dashes.png)
 
+To define more complicated dash patterns in Luxor, supply a vector to `setdash()`.
+
+```julia
+dashes = [50.0,  # ink
+          10.0,  # skip
+          10.0,  # ink
+          10.0   # skip
+          ]
+setdash(dashes)
+```
+
+```@example
+using Luxor # hide
+Drawing(600, 180, "assets/figures/moredashes.svg") # hide
+background("white") # hide
+origin() # hide
+function dashing()
+    fontsize(12) # hide
+    sethue("black") # hide
+    setline(8)
+    setlinecap("butt")
+    patterns = [10, 4, 50, 25, 14, 100]
+    table = Table(fill(20, length(patterns)), [40, 325])
+    for p in 1:length(patterns)
+        setdash(patterns)
+        pt = table[p, 2]
+        text(string(patterns), table[p, 1], halign=:right, valign=:middle)        
+        line(pt - (150, 0), pt + (200, 0), :stroke)
+        patterns = circshift(patterns, 1)
+        pop!(patterns)
+    end
+end
+
+dashing()
+
+finish() # hide
+nothing # hide
+```
+
+![more dashes](assets/figures/moredashes.svg)
+
+Notice that odd-numbered patterns flip the ink and skip numbers each time through.
+
 ```@docs
 setline
 setlinecap
@@ -126,18 +169,6 @@ strokepreserve
 fillpreserve
 paint
 do_action
-```
-
-Soon you'll be able to define dash patterns in Luxor. For now:
-
-```julia
-dashes = [50.0,  # ink
-          10.0,  # skip
-          10.0,  # ink
-          10.0   # skip
-          ]
-offset = -50.0
-Cairo.set_dash(get_current_cr()(), dashes, offset)
 ```
 
 ## Blends

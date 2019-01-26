@@ -3,7 +3,7 @@ using Documenter, Luxor
 makedocs(
     modules = [Luxor],
     sitename = "Luxor",
-    html_prettyurls = get(ENV, "CI", nothing) == "true",
+    format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
     pages    = Any[
         "Introduction to Luxor"   => "index.md",
         "A few examples"          => "examples.md",

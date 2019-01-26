@@ -5,8 +5,7 @@ module Luxor
 
 using Juno, Cairo, Colors, FileIO, Dates
 
-#= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface,
-CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
+#= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface, CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
 CairoContext, arc, arc_negative, circle, clip, clip_preserve, close_path,
 convert_cairo_path_data, copy_path, copy_path_flat, curve_to, destroy, fill,
 fill_preserve, finish, get_matrix, get_operator, height, image, line_to,
@@ -16,10 +15,10 @@ move_to, new_path, new_sub_path,paint, paint_with_alpha,
 pattern_add_color_stop_rgba, pattern_create_linear, pattern_create_radial,
 read_from_png, rectangle, rel_line_to, rel_move_to, reset_clip, restore, rotate,
 save, scale, select_font_face, set_antialias, set_font_face, set_font_size,
-set_line_cap, set_line_join, set_line_type, set_line_width, set_matrix,
-set_operator, set_source, set_source_rgba, set_source_surface, show_text,
-status, stroke, stroke_preserve, text, text_extents, text_path, translate,
-width, write_to_png =#
+set_line_cap, set_line_join, set_dash, set_line_type, set_line_width,
+set_matrix, set_operator, set_source, set_source_rgba, set_source_surface,
+show_text, status, stroke, stroke_preserve, text, text_extents, text_path,
+translate, width, write_to_png =#
 
 include("drawings.jl")
 include("point.jl")
