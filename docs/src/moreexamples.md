@@ -10,46 +10,6 @@ One place to look for examples is the `Luxor/test` directory.
 
 !["tiled images"](assets/figures/tiled-images.png)
 
-## An early test
-
-![Luxor test](assets/figures/basic-test.png)
-
-```julia
-using Luxor
-Drawing(1200, 1400, "basic-test.png") # or PDF/SVG filename for PDF or SVG
-origin()
-background("purple")
-setopacity(0.7)                      # opacity from 0 to 1
-sethue(0.3,0.7,0.9)                  # sethue sets the color but doesn't change the opacity
-setline(20)                          # line width
-
-rect(-400,-400,800,800, :fill)       # or :stroke, :fillstroke, :clip
-randomhue()
-circle(0, 0, 460, :stroke)
-circle(0,-200,400,:clip)             # a circular clipping mask above the x axis
-sethue("gold")
-setopacity(0.7)
-setline(10)
-for i in 0:π/36:2π - π/36
-    move(0, 0)
-    line(cos(i) * 600, sin(i) * 600 )
-    strokepath()
-end
-clipreset()                           # finish clipping/masking
-fontsize(60)
-setcolor("turquoise")
-fontface("Optima-ExtraBlack")
-textwidth = textextents("Luxor")[5]
-textcentred("Luxor", 0, current_height()/2 - 400)
-fontsize(18)
-fontface("Avenir-Black")
-
-# text on curve starting at angle 0 rads centered on origin with radius 550
-textcurve("THIS IS TEXT ON A CURVE " ^ 14, 0, 550, O)
-finish()
-preview() # on macOS, opens in Preview
-```
-
 ## Illustrating this document
 
 This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the HTML pages are built: the Julia source for the image is stored in the Markdown source document, and the code to create the images runs each time the documentation is generated.
@@ -170,55 +130,126 @@ nothing # hide
 
 Most of the animations on [this YouTube channel](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg) are made with Luxor.
 
-## Hipster logo: text on curves
+## The Luxor logo
 
 ```@example
-using Luxor
-function hipster(fname, toptext, bottomtext)
-    Drawing(400, 350, fname)
-    origin()
-    rotate(π/8)
+using Luxor, Colors
 
-    circle(O, 135, :clip)
-    sethue("antiquewhite2")
-    paint()
-
-    sethue("gray20")
-    setline(3)
-    circle(O, 130, :stroke)
-    circle(O, 135, :stroke)
-    circle(O, 125, :fill)
-
-    sethue("antiquewhite2")
-    circle(O, 85, :fill)
-
-    sethue("wheat")
-    fontsize(20)
-    fontface("Helvetica-Bold")
-    textcurvecentered(toptext, 3π/2, 100, O, clockwise=true,  letter_spacing=1, baselineshift = -4)
-    textcurvecentered(bottomtext, π/2, 100, O, clockwise=false, letter_spacing=2, baselineshift = -15)
-
-    sethue("gray20")
-    map(pt -> star(pt, 40, 3, 0.5, -π/2, :fill), ngon(O, 40, 3, 0, vertices=true))
-    circle(O.x + 30, O.y - 55, 15, :fill)
-
-    # cheap weathered texture:
-    sethue("antiquewhite2")
-    setline(0.4)
-    setdash("dot")
-    for i in 1:500
-        line(randompoint(Point(-200, -350), Point(200, 350)),
-             randompoint(Point(-200, -350), Point(200, 350)),
-             :stroke)
+function multistrokepath(lightness, chroma, hue)
+    # takes the current path and multistrokes it
+    @layer begin
+        for n in 1:2:15
+            sethue(LCHab(5n, chroma, hue))
+            setline(rescale(n, 1, 15, 15, 1))
+            strokepreserve()
+        end
     end
+end
+
+function multifillpath(lightness, chroma, hue)
+    # takes the current path and multifills it
+    @layer begin
+        p = pathtopoly()[1]
+        for n in 0:2:40
+            sethue(LCHab(3n, chroma + n/2, hue))
+            setopacity(rescale(n, 1, 40, 1, 0.1))
+            poly(offsetpoly(p, -n), :fill, close=true)
+        end
+    end
+end
+
+function scarab(pos)
+    @layer begin
+        translate(pos)
+        setline(15)
+        setlinecap("round")
+        setlinejoin("round")
+        #legs
+        @layer begin
+            for i in 1:2
+                # right front leg
+                move(O)
+                rline.((polar(80, -π/6),
+                polar(60, -π/2),
+                polar(12, -5π/6),
+                polar(60, -π/4)))
+                #middle leg
+                move(0, 35)
+                rline.((
+                polar(100, -π/6),
+                polar(40, π/2)))
+                #back leg
+                move(0, 100)
+                rline.((polar(120, -π/6),
+                polar(100, π/2)))
+                multistrokepath(50, 20, 240)
+                # other side
+                transform([-1 0 0 1 0 0])
+            end
+            # body
+            @layer begin
+                squircle(Point(0, -25), 26, 75, :fillpreserve)
+                multifillpath(60, 20, 260)            
+
+                squircle(Point(0, 0), 50, 70, :fillpreserve)
+                multifillpath(60, 20, 260)
+
+                squircle(Point(0, 40), 65, 90, :fillpreserve)
+                multifillpath(60, 20, 260)                
+            end
+        end
+    end
+end
+
+function draw()
+    Drawing(500, 500, "assets/figures/luxor-logo.png")
+    origin()
+    background(1, 1, 1, 0)
+    setopacity(1.0)
+    width = 180
+    height= 240
+    # cartouche
+    @layer begin
+        setcolor("goldenrod")
+        squircle(O, width, height, rt=0.4, :fill)
+    end
+
+    sethue("gold3")
+    setline(14)
+    squircle(O, width, height, rt=0.4, :stroke)
+
+    # interior shadow
+    @layer begin
+        sethue("grey20")
+        setline(2)
+        for n in 10:30
+            setopacity(rescale(n, 10, 30, 0.5, 0.0))
+            squircle(O, width-n, height-n, rt=0.4, :stroke)
+        end
+    end
+
+    # draw scarab
+    scale(0.9)
+    translate(0, 50)
+    scarab(O)
+
+    # julia/sun
+    @layer begin
+        translate(0, -190)
+        sethue("grey20")
+        circle(O, 52, :fill)
+        sethue("gold")
+        circle(O, 51, :fill)
+        sethue(LCHab(20, 55, 15))
+        circle(O, 48, :fill)
+        juliacircles(20)
+    end
+
+    clipreset()
     finish()
 end
 
-hipster("assets/figures/textcurvecenteredexample.png",
-    "• DRAWN WITH LUXOR • ",
-    "VECTOR GRAPHICS FOR JULIA")
-
-nothing # hide
+draw()
 ```
 
-![text on a curve](assets/figures/textcurvecenteredexample.png)
+![Luxor logo](assets/figures/luxor-logo.png)
