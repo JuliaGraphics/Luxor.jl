@@ -28,17 +28,21 @@ Draw the Julia logo. The default action is to fill the logo and use the colors:
 
     julialogo()
 
-If `color` is `false`, the logo will use the current color, and the dots won't be colored
-in the usual way.
+If `color` is `false`, the logo will use the current color, and the dots won't
+be colored in the usual way.
 
-The logo's dimensions are about 330 wide and 240 high, and the
-`0/0` point is at the bottom left corner. To place the logo by locating its center,
-do this:
+The logo can be difficult to position well due to its asymmetric design.
+The `0/0` point is at the top left corner, the total width is 315pt, the total height is 214pts. The optical center is _somewhere_ between 163-180pts in x, and 96-114pts in y. The gap to the left edge of "j"s descender is 16; the distance between the left edge of the "j" (not the descender) and the right edge of the "a" is at 268pts.
 
-    gsave()
-    translate(-165, -120)
-    julialogo() # locate center at 0/0
-    grestore()
+So, to place the logo by locating its center at a point, do this:
+
+```
+gsave()
+translate(-165, -114) # anything between (-163 to -180, -96 to -114)
+# scale if required
+julialogo()
+grestore()
+```
 
 To use the logo as a clipping mask:
 
