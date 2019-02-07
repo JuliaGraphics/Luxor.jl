@@ -90,7 +90,7 @@ The `refpoint` can be chosen, but the minimum point is usually OK too:
 function polysortbyangle(pointlist::AbstractArray{Point, 1}, refpoint=minimum(pointlist))
     angles = Float64[]
     for pt in pointlist
-        push!(angles, atan(refpoint.y - pt.y, refpoint.x - pt.x))
+        push!(angles, mod2pi(atan(pt.y - refpoint.y, pt.x - refpoint.x)))
     end
     return pointlist[sortperm(angles)]
 end
