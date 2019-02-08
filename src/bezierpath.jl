@@ -24,10 +24,10 @@ function Base.iterate(bps::BezierPathSegment, s)
     return bps[s], s+1
 end
 
-function Base.show(io::IO, bps::BezierPathSegment)
-    println(io, "p1  $(bps.p1)  cp1 $(bps.cp1)")
-    println(io, "cp2  $(bps.cp2)  p2 $(bps.p2)")
-end
+# function Base.show(io::IO, bps::BezierPathSegment)
+#     println(io, "p1  $(bps.p1)  cp1 $(bps.cp1)")
+#     println(io, "cp2  $(bps.cp2)  p2 $(bps.p2)")
+# end
 
 mutable struct BezierPath <: AbstractArray{BezierPathSegment, 1}
     segments::Vector{BezierPathSegment}
@@ -45,8 +45,8 @@ Base.IndexStyle(::Type{<:BezierPath}) = IndexLinear()
 
 Base.push!(bp::BezierPath, v::BezierPathSegment) = Base.push!(bp.segments, v)
 
-Base.show(io::IO, bp::BezierPath) =
-    print(io, "BezierPath with $(length(bp.segments)) segments")
+# Base.show(io::IO, bp::BezierPath) =
+#     print(io, "BezierPath with $(length(bp.segments)) segments")
 
 """
     bezier(t, A::Point, A1::Point, B1::Point, B::Point)
