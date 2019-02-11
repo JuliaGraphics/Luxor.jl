@@ -83,13 +83,13 @@ textcurvecentered(&quot;hello world&quot;, π/2, 100, O;
     clockwise = false,
     letter_spacing = 0,
     baselineshift = 10
-    )</code></pre></div><p><img src="../assets/figures/text-centered.png" alt="text centered on curve"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textcurve" href="#Luxor.textcurve"><code>Luxor.textcurve</code></a> — <span class="docstring-category">Function</span>.</div><div><div><p>Place a string of text on a curve. It can spiral in or out.</p><pre><code class="language-none">textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
-          # optional keyword arguments:
-          spiral_ring_step = 0,    # step out or in by this amount
-          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
-          spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards
-          clockwise = true
-          )</code></pre><p><code>start_angle</code> is relative to +ve x-axis, arc/circle is centered on <code>(x_pos,y_pos)</code> with radius <code>start_radius</code>.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textcurvecentered" href="#Luxor.textcurvecentered"><code>Luxor.textcurvecentered</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textcurvecentered(the_text, the_angle, the_radius, center::Point;
+    )</code></pre></div><p><img src="../assets/figures/text-centered.png" alt="text centered on curve"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textcurve" href="#Luxor.textcurve"><code>Luxor.textcurve</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
+      # optional keyword arguments:
+      spiral_ring_step = 0,    # step out or in by this amount
+      letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
+      spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards
+      clockwise = true
+      )</code></pre><p>Place a string of text on a curve. It can spiral in or out.</p><p><code>start_angle</code> is relative to +ve x-axis, arc/circle is centered on <code>(x_pos,y_pos)</code> with radius <code>start_radius</code>.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textcurvecentered" href="#Luxor.textcurvecentered"><code>Luxor.textcurvecentered</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textcurvecentered(the_text, the_angle, the_radius, center::Point;
       clockwise = true,
       letter_spacing = 0,
       baselineshift = 0</code></pre><p>This version of the <code>textcurve()</code> function is designed for shorter text strings that need positioning around a circle. (A cheesy effect much beloved of hipster brands and retronauts.)</p><p><code>letter_spacing</code> adjusts the tracking/space between chars, tighter is (-), looser is (+)).  <code>baselineshift</code> moves the text up or down away from the baseline.</p><p>textcurvecentred (UK spelling) is a synonym</p></div></div></section><h2><a class="nav-anchor" id="Text-clipping-1" href="#Text-clipping-1">Text clipping</a></h2><p>You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:</p><p><img src="../assets/figures/text-path-clipping.png" alt="text clipping"/></p><pre><code class="language-julia">using Luxor
@@ -197,7 +197,15 @@ text(string(counter(0), &quot; characters&quot;), O + (0, 230))</code></pre></di
     leading=0)
 textwrap(s::T where T&lt;:AbstractString, width::Real, pos::Point, linefunc::Function;
     rightgutter=5,
-    leading=0)</code></pre><p>Draw the string in <code>s</code> by splitting it at whitespace characters into lines, so that each line is no longer than <code>width</code> units. The text starts at <code>pos</code> such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below <code>pos</code>.</p><p>See also <code>textbox()</code>.</p><p>If you don&#39;t supply a value for <code>leading</code>, the font&#39;s built-in extents are used.</p><p>Text with no whitespace characters won&#39;t wrap. You can write a simple chunking function to split a string or array into chunks:</p><pre><code class="language-none">chunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]</code></pre></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textbox" href="#Luxor.textbox"><code>Luxor.textbox</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textbox(lines::Array, pos::Point=O;
+    leading=0)</code></pre><p>Draw the string in <code>s</code> by splitting it at whitespace characters into lines, so that each line is no longer than <code>width</code> units. The text starts at <code>pos</code> such that the first line of text is drawn entirely below a line drawn horizontally through that position. Each line is aligned on the left side, below <code>pos</code>.</p><p>See also <code>textbox()</code>.</p><p>Optionally, before each line, execute the function <code>linefunc(linenumber, linetext, startpos, height)</code>.</p><p>If you don&#39;t supply a value for <code>leading</code>, the font&#39;s built-in extents are used.</p><p>Text with no whitespace characters won&#39;t wrap. You can write a simple chunking function to split a string or array into chunks:</p><pre><code class="language-none">chunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]</code></pre><p>For example:</p><pre><code class="language-none">textwrap(the_text, 300, boxtopleft(BoundingBox()) + 20,
+    (ln, lt, sp, ht) -&gt; begin
+        c = count(t -&gt; occursin(r&quot;[[:punct:]]&quot;, t), split(lt, &quot;&quot;))
+        @layer begin
+            fontface(&quot;Menlo&quot;)
+            sethue(&quot;darkred&quot;)
+            text(string(&quot;[&quot;, c, &quot;]&quot;), sp + (310, 0))
+        end
+    end)</code></pre><p>puts a count of the number of punctuation characters in each line at the end of the line.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.textbox" href="#Luxor.textbox"><code>Luxor.textbox</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">textbox(lines::Array, pos::Point=O;
     leading = 12,
     linefunc::Function = (linenumber, linetext, startpos, height) -&gt; (),
     alignment=:left)</code></pre><p>Draw the strings in the array <code>lines</code> vertically downwards. <code>leading</code> controls the spacing between each line (default 12), and <code>alignment</code> determines the horizontal alignment (default <code>:left</code>).</p><p>Optionally, before each line, execute the function <code>linefunc(linenumber, linetext, startpos, height)</code>.</p><p>See also <code>textwrap()</code>, which modifies the text so that the lines fit into a specified width.</p></div></div><div><div><pre><code class="language-none">textbox(s::AbstractString, pos::Point=O;
