@@ -894,7 +894,7 @@ nothing # hide
 
 ![polysampling](assets/figures/polysample.png)
 
-There is a `closed` option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is first sampled as a closed polygon, then as a non-closed one.
+There is a `closed` option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is drawn in black, then sampled as a closed polygon (in blue), then as a non-closed one (magenta).
 
 ```@example
 using Luxor # hide
@@ -909,14 +909,21 @@ translate(0, -50) # hide
 setline(1) # hide
 sethue("black") # hide
 
+# original polygon
+
 numbervertices(l, n) = label(string(l), :N, O)
 drawvertices() = ngon(O, 3, 4, 0, :fill)
 
 pts = [Point(30x, 20sin(x)) for x in -2π:π/6:2π]
 
+# 1: drawn as defined
+
 prettypoly(pts, "stroke", drawvertices, vertexlabels = numbervertices)
 
 translate(0, 50)
+
+
+# 2: resampled as closed
 
 npoints = 40
 
@@ -925,6 +932,8 @@ prettypoly(polysample(pts, npoints, closed=true), :stroke, drawvertices,
     vertexlabels = numbervertices)
 
 translate(0, 50)
+
+# 3: resampled as open
 
 sethue("magenta")
 prettypoly(polysample(pts, npoints, closed=false), :stroke, drawvertices,
