@@ -143,7 +143,11 @@ export Drawing,
     easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad,
 
     # noise
-    noise, seednoise
+    noise, seednoise,
+
+    # experimental polygon functions
+    polyremovecollinearpoints, polytriangulate!, polyselfintersections,
+    ispointinsidetriangle, ispolyclockwise, polyorientation
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

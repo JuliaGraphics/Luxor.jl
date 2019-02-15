@@ -1,11 +1,12 @@
 # Changelog
 
-## [v1.1.5] - 2019-01-26
+## [v1.2.0] - 2019-02-15
 
 ### Added
 
 - more box functions take vertices=true/false
 - added setdash(dashes)
+- miscellaneous polygon functions tho they're largely untested and needing improvements
 
 ### Changed
 
@@ -13,7 +14,7 @@
 
 ### Removed
 
--
+- Luxor.juliacolorsceheme, it's no longer compatible with ColorSchemes.jl
 
 ### Deprecated
 
@@ -354,7 +355,7 @@ Misc updates and bug fixes
 
 ## [v0.9.2] - 2017-09-26
 
-Miscellanous changes and documentation improvements
+Miscellaneous changes and documentation improvements
 
 ### Added
 -

@@ -1,25 +1,16 @@
 # the current julia logo and graphics
 
-const darker_blue = (0.251, 0.388, 0.847)
-const lighter_blue = (0.4, 0.51, 0.878)
-const darker_purple = (0.584, 0.345, 0.698)
-const lighter_purple  = (0.667, 0.475, 0.757)
-const darker_green  = (0.22, 0.596, 0.149)
+const darker_blue    = (0.251, 0.388, 0.847)
+const lighter_blue   = (0.4, 0.51, 0.878)
+const darker_purple  = (0.584, 0.345, 0.698)
+const lighter_purple = (0.667, 0.475, 0.757)
+const darker_green   = (0.22, 0.596, 0.149)
 const lighter_green  = (0.376, 0.678, 0.318)
-const darker_red  = (0.796, 0.235, 0.2)
-const lighter_red  = (0.835, 0.388, 0.361)
-const purples = (darker_purple, lighter_purple)
-const greens = (darker_green, lighter_green)
-const reds = (darker_red, lighter_red)
-
-const juliacolorscheme = [
-    RGB(Luxor.darker_purple...),
-    RGB(Luxor.darker_red...),
-    RGB(Luxor.darker_red...),
-    RGB(Luxor.darker_green...),
-    RGB(Luxor.darker_green...),
-    RGB(Luxor.darker_purple...)
-    ]
+const darker_red     = (0.796, 0.235, 0.2)
+const lighter_red    = (0.835, 0.388, 0.361)
+const purples        = (darker_purple, lighter_purple)
+const greens         = (darker_green, lighter_green)
+const reds           = (darker_red, lighter_red)
 
 """
     julialogo(;action=:fill, color=true)
