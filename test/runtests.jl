@@ -32,6 +32,7 @@ function run_all_tests()
         include("star-test-1.jl")
         include("star-test.jl")
         include("test-holes.jl")
+        include("morepolytests.jl")
     end
 
     @testset "text" begin

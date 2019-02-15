@@ -20,6 +20,8 @@ function arrow(startpoint::Point, endpoint::Point;
     gsave()
     setlinejoin("butt")
     setline(linewidth)
+
+    isapprox(startpoint, endpoint) && throw(error("can't draw arrow between two identical points"))
     shaftlength = distance(startpoint, endpoint)
     shaftangle = atan(startpoint.y - endpoint.y, startpoint.x - endpoint.x)
     arrowheadtopsideangle = shaftangle + arrowheadangle

@@ -175,6 +175,26 @@ function frame(scene, framenumber)
 end
 ```
 
+### Passing information to the frame() function
+
+If you want to pass information to the frame function, such as an array of values, try these:
+
+``
+function frame(scene, framenumber, datapoints)
+...
+end
+
+somedata = Datapoints[...]
+
+animate(demo, [
+    Scene(demo, (s, f) -> frame(s, f, somedata),
+        0:100,
+        optarg=somedata)
+    ],
+    creategif=true,
+    pathname="...")
+```
+
 ## Easing functions
 
 Transitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some of the basic easing functions and they're listed in the (unexported) array `Luxor.easingfunctions`. Each scene can have one easing function.

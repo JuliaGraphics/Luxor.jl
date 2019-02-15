@@ -740,7 +740,7 @@ end
     polyarea(p::AbstractArray)
 
 Find the area of a simple polygon. It works only for polygons that don't
-self-intersect.
+self-intersect. See also `polyorientation()`.
 """
 function polyarea(plist::AbstractArray{Point, 1})
     n = length(plist)
@@ -779,6 +779,7 @@ end
 Return an array of the points in polygon S plus the points where polygon S crosses
 polygon C. Calls `intersectlinepoly()`.
 
+TODO This code is experimental...
 """
 function polyintersections(S::AbstractArray{Point, 1}, C::AbstractArray{Point, 1})
     Splusintersectionpoints = Point[]
@@ -790,4 +791,169 @@ function polyintersections(S::AbstractArray{Point, 1}, C::AbstractArray{Point, 1
         end
     end
     return Splusintersectionpoints
+end
+
+# TODO these experimental functions don't work all the time
+# use with caution... :)
+
+"""
+    polyorientation(pgon)
+
+Returns a number which is positive if the polygon is clockwise in Luxor...
+
+TODO This code is still experimental...
+"""
+function polyorientation(pgon::AbstractArray{Point, 1})
+    # in Luxor polys are usually clockwise
+    # perhaps this is because the Y axis goes down...
+    sum = 0.0
+    for i in 1:length(pgon)
+        sum += crossproduct(pgon[i], pgon[mod1(i + 1, end)])
+    end
+    return sum
+end
+
+polyorientation(pt1, pt2, pt3) = polyorientation(Point[pt1, pt2, pt3])
+
+"""
+    ispolyclockwise(pgon)
+
+Returns true if polygon is clockwise. WHEN VIEWED IN A LUXOR DRAWING...?
+
+TODO This code is still experimental...
+"""
+function ispolyclockwise(pgon::AbstractArray{Point, 1})
+    polyorientation(pgon) > 0.0
+end
+
+"""
+    ispointinsidetriangle(p, p1, p2, p3)
+    ispointinsidetriangle(p, triangle::Array{Point, 1})
+
+Returns false if `p` is not inside triangle p1 p2 p3.
+"""
+
+function ispointinsidetriangle(p::Point, p1::Point, p2::Point, p3::Point)
+    if polyorientation([p1, p2, p3]) < 0.0
+        p1, p3 = p3, p1
+    end
+    # barycentric method?
+    s = p1.y * p3.x - p1.x * p3.y + (p3.y - p1.y) * p.x + (p1.x - p3.x) * p.y
+    t = p1.x * p2.y - p1.y * p2.x + (p1.y - p2.y) * p.x + (p2.x - p1.x) * p.y
+
+    if s < 0 != t < 0
+        return false
+    end
+    A = -p2.y * p3.x + p1.y * (p3.x - p2.x) + p1.x * (p2.y - p3.y) + p2.x * p3.y
+    return A < 0 ?
+        (s <= 0 && s + t >= A) :
+        (s >= 0 && s + t <= A)
+end
+
+ispointinsidetriangle(p::Point, triangle::Array{Point,1}) =
+    ispointinsidetriangle(p, triangle[1], triangle[2], triangle[3])
+
+"""
+    polyselfintersections(pgon::AbstractArray{Point, 1};
+        findfirst=false)
+
+return a set of points defining the intersecting lines.
+
+Crossings are usually included twice... ?
+
+If `findfirst` is true, only the first one is returned, which should be quicker.
+
+TODO This code is still experimental... Needs some thought about closed
+polygons where the first and last points are the same...?
+"""
+function polyselfintersections(S::AbstractArray{Point, 1};
+        findfirst=false)
+    selfcrossings = Array{Point, 1}[]
+    for i in 1:length(S)
+        for j in 1:length(S)
+            flag, p = intersection(
+                S[i], S[mod1(i+1, length(S))],
+                S[j], S[mod1(j+1, length(S))],
+                    crossingonly = true,
+                    commonendpoints = true)
+            if flag
+                push!(selfcrossings, Point[
+                    S[i],
+                    S[mod1(i+1, length(S))],
+                    S[j],
+                    S[mod1(j+1, length(S))]
+                    ])
+            end
+            if findfirst
+                length(selfcrossings) > 0 && break
+            end
+        end
+    end
+    return selfcrossings
+end
+
+"""
+    polytriangulate!(pgon::AbstractArray{Point, 1})
+
+Replace the polygon with an array of triangles which triangulate the polygon.
+
+Caution: this destroys the polygon in place.
+
+TODO This code is still experimental...
+"""
+function polytriangulate!(pgon::AbstractArray{Point, 1})
+    if !ispolyclockwise(pgon)
+        pgon = reverse(pgon)
+    end
+    triangles = Array{Point, 1}[]
+    sz = length(pgon)
+    while sz >= 3
+        istriangleremoved = false
+        for i in 1:sz-1
+            sz = length(pgon)
+            p1 = pgon[mod1(i, sz)]
+            p2 = pgon[mod1(i + 1, sz)]
+            p3 = pgon[mod1(i + 2, sz)]
+            iscw = (polyorientation(p1, p2, p3) > 0.0)
+            !iscw && continue
+            overlappingpoints = 0
+            for v in 1:sz-1
+                v == i || v == i + 1 || v == i + 2 && continue
+                if ispointinsidetriangle(pgon[mod1(v, sz)], p1, p2, p3)
+                    overlappingpoints += 1
+                end
+                overlappingpoints > 0 && continue
+            end
+            push!(triangles, Point[p1, p2, p3])
+            deleteat!(pgon, mod1(i + 1, sz))
+            sz = length(pgon)
+            istriangleremoved = true
+        end
+        !istriangleremoved && break
+    end
+    return triangles
+end
+
+"""
+    polyremovecollinearpoints(pgon::AbstractArray{Point, 1})
+
+Return copy of polygon with no collinear points.
+
+Caution: may return an empty polygon... !
+
+TODO This code is still experimental...
+"""
+function polyremovecollinearpoints(pgon::AbstractArray{Point, 1})
+    markfordeletion = []
+    for n in 1:length(pgon)
+        p1 = pgon[n]
+
+        pfirst = pgon[mod1(n - 1, length(pgon))]
+        plast = pgon[mod1(n + 1, length(pgon))]
+
+        if ispointonline(p1, pfirst, plast, extended=true, atol=0.1)
+            push!(markfordeletion, n)
+        end
+    end
+    return pgon[setdiff(1:length(pgon), markfordeletion)]
 end
