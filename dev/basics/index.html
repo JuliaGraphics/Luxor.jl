@@ -106,6 +106,8 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg (setline(10);
 background(1, 1, 1, 0)
 origin()
 setline(30)
+# current opacity is 0.0, so use setcolor() rather than sethue()
+# or use setopacity()
 setcolor(&quot;green&quot;)
 box(BoundingBox() - 50, :stroke)
 finish()
