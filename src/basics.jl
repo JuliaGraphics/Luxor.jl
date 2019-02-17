@@ -380,7 +380,7 @@ function rule(pos, theta=0.0;
     leftside   = bbox[1:2]
 
     # ruled line could be as long as the diagonal so add a bit extra
-    r = boxdiagonal(boundingbox)/2 + 10
+    r = boxdiagonal(boundingbox) + 10
     rcosa = r * cos(theta)
     rsina = r * sin(theta)
     ruledline = (pos - (rcosa, rsina), pos + (rcosa, rsina))

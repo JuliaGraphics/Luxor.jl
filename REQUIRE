@@ -2,7 +2,6 @@ julia 0.7
 Cairo
 Juno
 Colors
-Dates
 FileIO
 @linux ImageMagick
 @mac QuartzImageIO
