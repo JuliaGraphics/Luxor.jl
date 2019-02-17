@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.2.0] - 2019-02-15
+## [v1.2.0] - 2019-02
 
 ### Added
 
@@ -11,6 +11,7 @@
 ### Changed
 
 - tried to fix odd bug in `rule(..., π/2)`
+- bug in rule() fixed
 
 ### Removed
 

@@ -168,6 +168,8 @@ although typically this lists only those fonts in `/System/Library/Fonts` and `/
 
 In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).
 
+One difference between `settext()` and `text()` (on macOS) is that many more missing Unicode glyphs are automatically substituted by other fonts when you use the former. 
+
 Cairo (and hence Luxor) doesn't support emoji currently. 😢
 
 ## Text to paths
