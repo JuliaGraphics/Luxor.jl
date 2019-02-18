@@ -17,6 +17,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "#How-can-you-contribute?-1",
+    "page": "Introduction to Luxor",
+    "title": "How can you contribute?",
+    "category": "section",
+    "text": "If you know any geometry you probably know more than me, so there are plenty of improvements to algorithms waiting to be made. There are some TODO comments sprinkled through the code, but plenty more opportunities for improvement.Update the code, most of which was written for Julia versions 0.2, v0.3 and 0.4 (remember when broadcasting wasn\'t a thing?) so there are probably many areas where the code could take more advantage of version 1.There can always be more tests, as the present tests are mainly visual, showing that something works, but there should be much more testing of things that shouldn\'t work - inappropriate input, overlapping polygons, coincident or collinear points, anticlockwise polygons, etc.More systematic error-handling particularly of geometry errors would be a good idea, rather than sprinkling throw(error())s around when things look wrong."
+},
+
+{
     "location": "#Installation-and-basic-usage-1",
     "page": "Introduction to Luxor",
     "title": "Installation and basic usage",
@@ -81,51 +89,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/#More-examples-1",
+    "location": "examples/#Feature-gallery-1",
     "page": "A few examples",
-    "title": "More examples",
+    "title": "Feature gallery",
     "category": "section",
-    "text": ""
-},
-
-{
-    "location": "examples/#Maps-1",
-    "page": "A few examples",
-    "title": "Maps",
-    "category": "section",
-    "text": "Luxor can read polygons from shapefiles, so you can create simple maps. For example, here\'s part of a map of the world built from a single shapefile, together with the locations of most airports read in from a text file and overlaid.(Image: \"simple world map detail\")The latitude and longitude coordinates are converted directly to drawing coordinates. The latitude coordinates have to be negated because y-coordinates in Luxor typically increase down the page, whereas latitude values increase as you travel North.This is the full map:(Image: \"simple world map\")You\'ll need to install the Shapefile package before running the code:using Shapefile, Luxor\ninclude(joinpath(dirname(pathof(Luxor)), \"readshapefiles.jl\"))\nfunction drawairportmap(outputfilename, countryoutlines, airportdata)\n    Drawing(4000, 2000, outputfilename)\n    origin()\n    scale(10, 10)\n    setline(1.0)\n    fontsize(0.075)\n    gsave()\n    setopacity(0.25)\n    for shape in countryoutlines.shapes\n        randomhue()\n        pgons, bbox = convert(Array{Luxor.Point, 1}, shape)\n        for pgon in pgons\n            poly(pgon, :fill)\n        end\n    end\n    grestore()\n    sethue(\"black\")\n    for airport in airportdata\n        city, country, lat, long = split(chomp(airport), \",\")\n        location = Point(Meta.parse(long), -Meta.parse(lat)) # flip y-coordinate\n        circle(location, .01, :fill)\n        text(string(city), location.x, location.y - 0.02)\n    end\n    finish()\n    preview()\nend\nworldshapefile = joinpath(dirname(pathof(Luxor)), \"../docs/src/assets/examples/outlines-of-world-countries.shp\")\nairportdata = readlines(joinpath(dirname(pathof(Luxor)), \"../docs/src/assets/examples/airports.csv\"))\n\nworldshapes = open(worldshapefile) do f\n    read(f, Shapefile.Handle)\nend\ndrawairportmap(\"/tmp/airport-map.pdf\", worldshapes, airportdata)link to Julia source | link to PDF map"
-},
-
-{
-    "location": "examples/#Sector-chart-1",
-    "page": "A few examples",
-    "title": "Sector chart",
-    "category": "section",
-    "text": "(Image: \"benchmark sector chart\")This sector chart takes raw benchmark scores for a number of languages (from the Julia website and tries to render them literally as radiating sectors. The larger the sector area, the slower the performance; it\'s difficult to see the Julia scores sometimes...!link to PDF | link to Julia source"
-},
-
-{
-    "location": "examples/#Ampersands-1",
-    "page": "A few examples",
-    "title": "Ampersands",
-    "category": "section",
-    "text": "Here are a few ampersands collected together, mainly of interest to typomaniacs and fontophiles. It was necessary to vary the font size of each font, since they\'re naturally different.(Image: \"iloveampersands\")link to PDF original | link to Julia source"
-},
-
-{
-    "location": "examples/#Moon-phases-1",
-    "page": "A few examples",
-    "title": "Moon phases",
-    "category": "section",
-    "text": "Looking upwards again, this moon phase chart shows the calculated phase of the moon for every day in a year.(Image: \"benchmark sector chart\")link to PDF original | link to github repository"
-},
-
-{
-    "location": "examples/#Misc-images-1",
-    "page": "A few examples",
-    "title": "Misc images",
-    "category": "section",
-    "text": "Sometimes you just want to take a line for a walk:(Image: \"pointless\")"
+    "text": "Here\'s a quick visual overview of some of the features in Luxor.jl:(Image: \"luxor gallery\")"
 },
 
 {
@@ -2045,7 +2013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Text",
     "title": "Notes on fonts",
     "category": "section",
-    "text": "On macOS, the fontname required by the Toy API\'s fontface() should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.On macOS, a list of currently activated fonts can be found (after a while) with the shell command:system_profiler SPFontsDataTypeFonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer currently).On macOS, you can obtain a list of fonts that fontconfig considers are installed and available for use (via the Pro Text API with setfont()) using the shell command:fc-list | cut -f 2 -d \":\"although typically this lists only those fonts in /System/Library/Fonts and /Library/Fonts, and not ~/Library/Fonts.(There is a Julia interface to fontconfig at Fontconfig.jl.)In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).Cairo (and hence Luxor) doesn\'t support emoji currently. 😢"
+    "text": "On macOS, the fontname required by the Toy API\'s fontface() should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.On macOS, a list of currently activated fonts can be found (after a while) with the shell command:system_profiler SPFontsDataTypeFonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer currently).On macOS, you can obtain a list of fonts that fontconfig considers are installed and available for use (via the Pro Text API with setfont()) using the shell command:fc-list | cut -f 2 -d \":\"although typically this lists only those fonts in /System/Library/Fonts and /Library/Fonts, and not ~/Library/Fonts.(There is a Julia interface to fontconfig at Fontconfig.jl.)In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).One difference between settext() and text() (on macOS) is that many more missing Unicode glyphs are automatically substituted by other fonts when you use the former.Cairo (and hence Luxor) doesn\'t support emoji currently. 😢"
 },
 
 {
@@ -2653,7 +2621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Making the animation",
     "category": "section",
-    "text": "For best results, you\'ll have to learn how to use something like ffmpeg, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The creategif option for the animate function makes an attempt at running ffmpeg and assumes that it\'s already installed. Inside animate(), the first pass creates a GIF color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline."
+    "text": "For best results, you\'ll have to learn how to use something like ffmpeg, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The creategif option for the animate function makes an attempt at running ffmpeg and assumes that it\'s already installed. Inside animate(), the first pass creates a GIF color palette, the second builds the file:run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen\n    -y $(seq.stitle)-palette.png`)\n\nrun(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png\n    -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline."
 },
 
 {
@@ -2669,7 +2637,207 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Passing information to the frame() function",
     "category": "section",
-    "text": "If you want to pass information to the frame function, such as an array of values, try these:`` function frame(scene, framenumber, datapoints) ... endsomedata = Datapoints[...]animate(demo, [     Scene(demo, (s, f) -> frame(s, f, somedata),         0:100,         optarg=somedata)     ],     creategif=true,     pathname=\"...\")\n## Easing functions\n\nTransitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some of the basic easing functions and they\'re listed in the (unexported) array `Luxor.easingfunctions`. Each scene can have one easing function.\n\nMost easing functions have names constructed like this:\nease[in|out|inout][expo|circ|quad|cubic|quart|quint]\nand there\'s an `easingflat()` linear transition.\n@setup draweasingfunctions using Luxor # hide function draweasingfunction(f, pos, w, h)     @layer begin         translate(pos)         setline(0.5)         sethue(\"black\")         box(O, w, h, :stroke)         sethue(\"purple\")         for i in 0:0.005:1.0             circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)         end         sethue(\"black\")         text(replace(string(f), \"Luxor.\" => \"\"), Point(0, h/2 - 20), halign=:center)     end endDrawing(650, 650, \"assets/figures/easingfunctions.png\") # hide background(\"white\") # hide origin() # hide t = Tiler(650, 650, 5, 5) margin=5 fontsize(10) fontface(\"Menlo\") for (pos, n) in t     n > length(Luxor.easingfunctions) && continue     draweasingfunction(Luxor.easingfunctions[n], pos, t.tilewidth-margin, t.tileheight-margin) endfinish() # hide nothing # hide\nIn these graphs, the horizontal axis is time (between 0 and 1), and the vertical axis is the parameter value (between 0 and 1).\n\n![easing function summary](assets/figures/easingfunctions.png)\n\nOne way to use an easing function in a frame-making function is like this:\njulia function moveobject(scene, framenumber)     background(\"white\")     ...     easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)     ...\nThis takes the current frame number, compares it with the end frame number of the scene, then adjusts it.\n\nIn the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.\n\n![animation easing example](assets/figures/animation-easing.gif)\njulia fastandfurious = Movie(400, 100, \"easingtests\") backdrop(scene, framenumber) =  background(\"black\") function frame1(scene, framenumber)     sethue(\"purple\")     easedn = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)     circle(Point(-180 + (360 * easedn), -20), 10, :fill) end function frame2(scene, framenumber)     sethue(\"green\")     easedn = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)     circle(Point(-180 + (360 * easedn), 0), 10, :fill) end function frame3(scene, framenumber)     sethue(\"red\")     easedn = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)     circle(Point(-180 + (360 * easedn), 20), 10, :fill) end animate(fastandfurious, [     Scene(fastandfurious, backdrop, 0:200),     Scene(fastandfurious, frame1,   0:200, easingfunction=easeinsine),     Scene(fastandfurious, frame2,   0:200, easingfunction=easeinoutcubic),     Scene(fastandfurious, frame3,   0:200, easingfunction=easeinoutquint)     ],     creategif=true)\nHere\'s the definition of one of the easing functions:\nfunction easeoutquad(t, b, c, d)     t /= d     return -c * t * (t - 2) + b end\nHere:\n\n- `t` is the current time (framenumber) of the transition\n\n- `b` is the beginning value of the property\n\n- `c` is the change between the beginning and destination value of the property\n\n- `d` is the total length of the transition\n@docs easingflat lineartween easeinquad easeoutquad easeinoutquad easeincubic easeoutcubic easeinoutcubic easeinquart easeoutquart easeinoutquart easeinquint easeoutquint easeinoutquint easeinsine easeoutsine easeinoutsine easeinexpo easeoutexpo easeinoutexpo easeincirc easeoutcirc easeinoutcirc easeinoutinversequad ```"
+    "text": "If you want to pass information to the frame function, such as an array of values, try these:function frame(scene, framenumber, datapoints)\n...\nend\n\nsomedata = Datapoints[...]\n\nanimate(demo, [\n    Scene(demo, (s, f) -> frame(s, f, somedata),\n        0:100,\n        optarg=somedata)\n    ],\n    creategif=true,\n    pathname=\"...\")"
+},
+
+{
+    "location": "animation/#Luxor.easingflat",
+    "page": "Animation",
+    "title": "Luxor.easingflat",
+    "category": "function",
+    "text": "easingflat(t, b, c, d)\n\nA flat easing function, same as lineartween().\n\nFor all easing functions, the four parameters are:\n\nt time, ie the current framenumber\nb beginning position or bottom value of the range\nc total change in position or top value of the range\nd duration, ie a framecount\n\nt/d or t/=d normalizes t to between 0 and 1\n... * c scales up to the required range value\n... + b adds the initial offset\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.lineartween",
+    "page": "Animation",
+    "title": "Luxor.lineartween",
+    "category": "function",
+    "text": "default linear transition - no easing, no acceleration\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinquad",
+    "page": "Animation",
+    "title": "Luxor.easeinquad",
+    "category": "function",
+    "text": "easeinquad(t, b, c, d)\n\nquadratic easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutquad",
+    "page": "Animation",
+    "title": "Luxor.easeoutquad",
+    "category": "function",
+    "text": "easeoutquad(t, b, c, d)\n\nquadratic easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutquad",
+    "page": "Animation",
+    "title": "Luxor.easeinoutquad",
+    "category": "function",
+    "text": "easeinoutquad(t, b, c, d)\n\nquadratic easing in/out - acceleration until halfway, then deceleration\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeincubic",
+    "page": "Animation",
+    "title": "Luxor.easeincubic",
+    "category": "function",
+    "text": "easeincubic(t, b, c, d)\n\ncubic easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutcubic",
+    "page": "Animation",
+    "title": "Luxor.easeoutcubic",
+    "category": "function",
+    "text": "easeoutcubic(t, b, c, d)\n\ncubic easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutcubic",
+    "page": "Animation",
+    "title": "Luxor.easeinoutcubic",
+    "category": "function",
+    "text": "easeinoutcubic(t, b, c, d)\n\ncubic easing in/out - acceleration until halfway, then deceleration\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinquart",
+    "page": "Animation",
+    "title": "Luxor.easeinquart",
+    "category": "function",
+    "text": "easeinquart(t, b, c, d)\n\nquartic easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutquart",
+    "page": "Animation",
+    "title": "Luxor.easeoutquart",
+    "category": "function",
+    "text": "easeoutquart(t, b, c, d)\n\nquartic easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutquart",
+    "page": "Animation",
+    "title": "Luxor.easeinoutquart",
+    "category": "function",
+    "text": "easeinoutquart(t, b, c, d)\n\nquartic easing in/out - acceleration until halfway, then deceleration\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinquint",
+    "page": "Animation",
+    "title": "Luxor.easeinquint",
+    "category": "function",
+    "text": "easeinquint(t, b, c, d)\n\nquintic easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutquint",
+    "page": "Animation",
+    "title": "Luxor.easeoutquint",
+    "category": "function",
+    "text": "easeoutquint(t, b, c, d)\n\nquintic easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutquint",
+    "page": "Animation",
+    "title": "Luxor.easeinoutquint",
+    "category": "function",
+    "text": "easeinoutquint(t, b, c, d)\n\nquintic easing in/out - acceleration until halfway, then deceleration\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinsine",
+    "page": "Animation",
+    "title": "Luxor.easeinsine",
+    "category": "function",
+    "text": "easeinsine(t, b, c, d)\n\nsinusoidal easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutsine",
+    "page": "Animation",
+    "title": "Luxor.easeoutsine",
+    "category": "function",
+    "text": "easeoutsine(t, b, c, d)\n\nsinusoidal easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutsine",
+    "page": "Animation",
+    "title": "Luxor.easeinoutsine",
+    "category": "function",
+    "text": "easeinoutsine(t, b, c, d)\n\nsinusoidal easing in/out - accelerating until halfway, then decelerating\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinexpo",
+    "page": "Animation",
+    "title": "Luxor.easeinexpo",
+    "category": "function",
+    "text": "easeinexpo(t, b, c, d)\n\nexponential easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutexpo",
+    "page": "Animation",
+    "title": "Luxor.easeoutexpo",
+    "category": "function",
+    "text": "easeoutexpo(t, b, c, d)\n\nexponential easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutexpo",
+    "page": "Animation",
+    "title": "Luxor.easeinoutexpo",
+    "category": "function",
+    "text": "easeinoutexpo(t, b, c, d)\n\nexponential easing in/out - accelerating until halfway, then decelerating\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeincirc",
+    "page": "Animation",
+    "title": "Luxor.easeincirc",
+    "category": "function",
+    "text": "easeincirc(t, b, c, d)\n\ncircular easing in - accelerating from zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeoutcirc",
+    "page": "Animation",
+    "title": "Luxor.easeoutcirc",
+    "category": "function",
+    "text": "easeoutcirc(t, b, c, d)\n\ncircular easing out - decelerating to zero velocity\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutcirc",
+    "page": "Animation",
+    "title": "Luxor.easeinoutcirc",
+    "category": "function",
+    "text": "easeinoutcirc(t, b, c, d)\n\ncircular easing in/out - acceleration until halfway, then deceleration\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Luxor.easeinoutinversequad",
+    "page": "Animation",
+    "title": "Luxor.easeinoutinversequad",
+    "category": "function",
+    "text": "easeinoutinversequad(t, b, c, d)\n\nease in, then slow down, then speed up, and ease out\n\n\n\n\n\n"
+},
+
+{
+    "location": "animation/#Easing-functions-1",
+    "page": "Animation",
+    "title": "Easing functions",
+    "category": "section",
+    "text": "Transitions for animations often use non-constant and non-linear motions, and these are usually provided by easing functions. Luxor defines some of the basic easing functions and they\'re listed in the (unexported) array Luxor.easingfunctions. Each scene can have one easing function.Most easing functions have names constructed like this:ease[in|out|inout][expo|circ|quad|cubic|quart|quint]and there\'s an easingflat() linear transition.using Luxor # hide\nfunction draweasingfunction(f, pos, w, h)\n    @layer begin\n        translate(pos)\n        setline(0.5)\n        sethue(\"black\")\n        box(O, w, h, :stroke)\n        sethue(\"purple\")\n        for i in 0:0.005:1.0\n            circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)\n        end\n        sethue(\"black\")\n        text(replace(string(f), \"Luxor.\" => \"\"), Point(0, h/2 - 20), halign=:center)\n    end\nend\n\nDrawing(650, 650, \"assets/figures/easingfunctions.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nt = Tiler(650, 650, 5, 5)\nmargin=5\nfontsize(10)\nfontface(\"Menlo\")\nfor (pos, n) in t\n    n > length(Luxor.easingfunctions) && continue\n    draweasingfunction(Luxor.easingfunctions[n], pos,\n        t.tilewidth-margin, t.tileheight-margin)\nend\n\nfinish() # hide\nnothing # hideIn these graphs, the horizontal axis is time (between 0 and 1), and the vertical axis is the parameter value (between 0 and 1).(Image: easing function summary)One way to use an easing function in a frame-making function is like this:function moveobject(scene, framenumber)\n    background(\"white\")\n    ...\n    easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    ...This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.(Image: animation easing example)fastandfurious = Movie(400, 100, \"easingtests\")\nbackdrop(scene, framenumber) =  background(\"black\")\nfunction frame1(scene, framenumber)\n    sethue(\"purple\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(Point(-180 + (360 * eased_n), -20), 10, :fill)\nend\nfunction frame2(scene, framenumber)\n    sethue(\"green\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(Point(-180 + (360 * eased_n), 0), 10, :fill)\nend\nfunction frame3(scene, framenumber)\n    sethue(\"red\")\n    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)\n    circle(Point(-180 + (360 * eased_n), 20), 10, :fill)\nend\nanimate(fastandfurious, [\n    Scene(fastandfurious, backdrop, 0:200),\n    Scene(fastandfurious, frame1,   0:200, easingfunction=easeinsine),\n    Scene(fastandfurious, frame2,   0:200, easingfunction=easeinoutcubic),\n    Scene(fastandfurious, frame3,   0:200, easingfunction=easeinoutquint)\n    ],\n    creategif=true)Here\'s the definition of one of the easing functions:function easeoutquad(t, b, c, d)\n    t /= d\n    return -c * t * (t - 2) + b\nendHere:t is the current time (framenumber) of the transition\nb is the beginning value of the property\nc is the change between the beginning and destination value of the property\nd is the total length of the transitioneasingflat\nlineartween\neaseinquad\neaseoutquad\neaseinoutquad\neaseincubic\neaseoutcubic\neaseinoutcubic\neaseinquart\neaseoutquart\neaseinoutquart\neaseinquint\neaseoutquint\neaseinoutquint\neaseinsine\neaseoutsine\neaseinoutsine\neaseinexpo\neaseoutexpo\neaseinoutexpo\neaseincirc\neaseoutcirc\neaseinoutcirc\neaseinoutinversequad"
 },
 
 {
@@ -2725,7 +2893,7 @@ var documenterSearchIndex = {"docs": [
     "page": "More examples",
     "title": "The Luxor logo",
     "category": "section",
-    "text": "using Luxor, Colors\n\nfunction multistrokepath(lightness, chroma, hue)\n    # takes the current path and multistrokes it\n    @layer begin\n        for n in 1:2:15\n            sethue(LCHab(5n, chroma, hue))\n            setline(rescale(n, 1, 15, 15, 1))\n            strokepreserve()\n        end\n    end\nend\n\nfunction multifillpath(lightness, chroma, hue)\n    # takes the current path and multifills it\n    @layer begin\n        p = pathtopoly()[1]\n        for n in 0:2:40\n            sethue(LCHab(3n, chroma + n/2, hue))\n            setopacity(rescale(n, 1, 40, 1, 0.1))\n            poly(offsetpoly(p, -n), :fill, close=true)\n        end\n    end\nend\n\nfunction scarab(pos)\n    @layer begin\n        translate(pos)\n        setline(15)\n        setlinecap(\"round\")\n        setlinejoin(\"round\")\n        #legs\n        @layer begin\n            for i in 1:2\n                # right front leg\n                move(O)\n                rline.((polar(80, -π/6),\n                polar(60, -π/2),\n                polar(12, -5π/6),\n                polar(60, -π/4)))\n                #middle leg\n                move(0, 35)\n                rline.((\n                polar(100, -π/6),\n                polar(40, π/2)))\n                #back leg\n                move(0, 100)\n                rline.((polar(120, -π/6),\n                polar(100, π/2)))\n                multistrokepath(50, 20, 240)\n                # other side\n                transform([-1 0 0 1 0 0])\n            end\n            # body\n            @layer begin\n                squircle(Point(0, -25), 26, 75, :fillpreserve)\n                multifillpath(60, 20, 260)            \n\n                squircle(Point(0, 0), 50, 70, :fillpreserve)\n                multifillpath(60, 20, 260)\n\n                squircle(Point(0, 40), 65, 90, :fillpreserve)\n                multifillpath(60, 20, 260)                \n            end\n        end\n    end\nend\n\nfunction draw()\n    Drawing(500, 500, \"assets/figures/luxor-logo.png\")\n    origin()\n    background(1, 1, 1, 0)\n    setopacity(1.0)\n    width = 180\n    height= 240\n    # cartouche\n    @layer begin\n        setcolor(\"goldenrod\")\n        squircle(O, width, height, rt=0.4, :fill)\n    end\n\n    sethue(\"gold3\")\n    setline(14)\n    squircle(O, width, height, rt=0.4, :stroke)\n\n    # interior shadow\n    @layer begin\n        sethue(\"grey20\")\n        setline(2)\n        for n in 10:30\n            setopacity(rescale(n, 10, 30, 0.5, 0.0))\n            squircle(O, width-n, height-n, rt=0.4, :stroke)\n        end\n    end\n\n    # draw scarab\n    scale(0.9)\n    translate(0, 50)\n    scarab(O)\n\n    # julia/sun\n    @layer begin\n        translate(0, -190)\n        sethue(\"grey20\")\n        circle(O, 52, :fill)\n        sethue(\"gold\")\n        circle(O, 51, :fill)\n        sethue(LCHab(20, 55, 15))\n        circle(O, 48, :fill)\n        juliacircles(20)\n    end\n\n    clipreset()\n    finish()\nend\n\ndraw()(Image: Luxor logo)"
+    "text": "using Luxor, Colors\n\nfunction multistrokepath(lightness, chroma, hue)\n    # takes the current path and multistrokes it\n    @layer begin\n        for n in 1:2:15\n            sethue(LCHab(5n, chroma, hue))\n            setline(rescale(n, 1, 15, 15, 1))\n            strokepreserve()\n        end\n    end\nend\n\nfunction multifillpath(lightness, chroma, hue)\n    # takes the current path and multifills it\n    @layer begin\n        p = pathtopoly()[1]\n        for n in 0:2:40\n            sethue(LCHab(3n, chroma + n/2, hue))\n            setopacity(rescale(n, 1, 40, 1, 0.1))\n            poly(offsetpoly(p, -n), :fill, close=true)\n        end\n    end\nend\n\nfunction scarab(pos)\n    @layer begin\n        translate(pos)\n        setline(15)\n        setlinecap(\"round\")\n        setlinejoin(\"round\")\n        #legs\n        @layer begin\n            for i in 1:2\n                # right front leg\n                move(O)\n                rline.((polar(80, -π/6),\n                polar(60, -π/2),\n                polar(12, -5π/6),\n                polar(60, -π/4)))\n                #middle leg\n                move(0, 35)\n                rline.((\n                polar(100, -π/6),\n                polar(40, π/2)))\n                #back leg\n                move(0, 100)\n                rline.((polar(120, -π/6),\n                polar(100, π/2)))\n                multistrokepath(50, 20, 240)\n                # other side\n                transform([-1 0 0 1 0 0])\n            end\n            # body\n            @layer begin\n                squircle(Point(0, -25), 26, 75, :fillpreserve)\n                multifillpath(60, 20, 260)            \n\n                squircle(Point(0, 0), 50, 70, :fillpreserve)\n                multifillpath(60, 20, 260)\n\n                squircle(Point(0, 40), 65, 90, :fillpreserve)\n                multifillpath(60, 20, 260)                \n            end\n        end\n    end\nend\n\nfunction draw()\n    Drawing(500, 500, \"assets/figures/luxor-logo.png\")\n    origin()\n    background(1, 1, 1, 0)\n    setopacity(1.0)\n    width = 180\n    height= 240\n    # cartouche\n    @layer begin\n        setcolor(\"goldenrod\")\n        squircle(O, width, height, rt=0.4, :fill)\n    end\n\n    sethue(\"gold3\")\n    setline(14)\n    squircle(O, width, height, rt=0.4, :stroke)\n\n    # interior shadow\n    @layer begin\n        sethue(\"grey20\")\n        setline(2)\n        for n in 10:30\n            setopacity(rescale(n, 10, 30, 0.5, 0.0))\n            squircle(O, width-n, height-n, rt=0.4, :stroke)\n        end\n    end\n\n    # draw scarab\n    scale(0.9)\n    translate(0, 50)\n    scarab(O)\n\n    # julia/sun\n    @layer begin\n        translate(0, -190)\n        sethue(\"grey20\")\n        circle(O, 52, :fill)\n        sethue(\"gold\")\n        circle(O, 51, :fill)\n        sethue(LCHab(20, 55, 15))\n        circle(O, 48, :fill)\n        juliacircles(20)\n    end\n\n    clipreset()\n    finish()\nend\ndraw()\nnothing #hide(Image: Luxor logo)"
 },
 
 {
