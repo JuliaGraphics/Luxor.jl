@@ -63,9 +63,11 @@ animate
 For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's already installed. Inside `animate()`, the first pass creates a GIF color palette, the second builds the file:
 
 ```julia
-run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(seq.stitle)-palette.png`)
+run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen
+    -y $(seq.stitle)-palette.png`)
 
-run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)
+run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png
+    -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)
 ```
 
 Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.
@@ -179,7 +181,7 @@ end
 
 If you want to pass information to the frame function, such as an array of values, try these:
 
-``
+```
 function frame(scene, framenumber, datapoints)
 ...
 end
@@ -207,7 +209,7 @@ ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
 
 and there's an `easingflat()` linear transition.
 
-```@setup draweasingfunctions
+```@example
 using Luxor # hide
 function draweasingfunction(f, pos, w, h)
     @layer begin
@@ -233,7 +235,8 @@ fontsize(10)
 fontface("Menlo")
 for (pos, n) in t
     n > length(Luxor.easingfunctions) && continue
-    draweasingfunction(Luxor.easingfunctions[n], pos, t.tilewidth-margin, t.tileheight-margin)
+    draweasingfunction(Luxor.easingfunctions[n], pos,
+        t.tilewidth-margin, t.tileheight-margin)
 end
 
 finish() # hide

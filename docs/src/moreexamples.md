@@ -248,8 +248,8 @@ function draw()
     clipreset()
     finish()
 end
-
 draw()
+nothing #hide
 ```
 
 ![Luxor logo](assets/figures/luxor-logo.png)

@@ -1,17 +1,19 @@
 # Changelog
 
-## [v1.2.0] - 2019-02
+## [v1.2.0] - 2019-02-18
 
 ### Added
 
 - more box functions take vertices=true/false
 - added setdash(dashes)
 - miscellaneous polygon functions tho they're largely untested and needing improvements
+- eachindex for Table
+- feature gallery illustration
 
 ### Changed
 
-- tried to fix odd bug in `rule(..., π/2)`
-- bug in rule() fixed
+- tried to fix bugs in `rule()`
+- settext() now rescales from 96dpi to 72dpi
 
 ### Removed
 
