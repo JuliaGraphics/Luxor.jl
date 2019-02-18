@@ -3,8 +3,11 @@
 using Luxor, Colors, Test, Random
 Random.seed!(42)
 
+Drawing(800, 800, "morepolytests.png")
+origin()
+background("white")
+
 @testset "collinear points tests" begin
-    Drawing()
     pgon = box(BoundingBox(), vertices=true)
     @test length(pgon) == 4
 
@@ -31,11 +34,9 @@ Random.seed!(42)
     l = length(polyremovecollinearpoints(badpgon))
     @test l == 0
 
-    finish()
 end
 
 @testset "clockwise tests" begin
-    Drawing()
     pgon = box(BoundingBox(), vertices=true)
     @test ispolyclockwise(pgon) == true
     pgon1 = reverse(pgon)
@@ -61,11 +62,9 @@ end
     # looks like it's not clockwise
     @test ispolyclockwise(pgon) == false
     @test ispolyclockwise([O, O + (10, 0)]) == false
-    finish()
 end
 
 @testset "polyorientation tests" begin
-    Drawing()
     # clockwise
     orientations = Float64[]
     for i in 1.0:-0.1:0.1
@@ -167,15 +166,23 @@ end
 end
 
 @testset "polytriangulate tests" begin
-    pgon = star(O, 100, 12, 0.7, vertices=true)
+    pgon = star(O, 200, 12, 0.7, vertices=true)
+
+    sethue("black")
+    poly(pgon, :stroke, close=true)
+
     triangles = polytriangulate!(copy(pgon))
+
+    for t in triangles
+        randomhue()
+        poly(t, :fill)
+    end
 
     # area of all the little triangles should add up to area of big pgon
     @test isapprox(sum(polyarea.(triangles)), polyarea(pgon))
 
     @test length(triangles) == 22
 
-    Drawing()
     pgon = box(BoundingBox(), vertices=true)
     triangles = polytriangulate!(copy(pgon))
 
@@ -183,5 +190,6 @@ end
     @test isapprox(sum(polyarea.(triangles)), polyarea(pgon))
 
     @test length(triangles) == 2
-    finish()    
 end
+
+@test finish() == true

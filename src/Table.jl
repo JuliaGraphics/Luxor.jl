@@ -244,6 +244,8 @@ Base.getindex(t::Table, r::Int64, ::Colon) = [t[r, n] for n in 1:t.ncols]
 # get column: t[:, 3]
 Base.getindex(t::Table, ::Colon, c::Int64) = [t[n, c] for n in 1:t.nrows]
 
+Base.eachindex(t::Table) = 1:length(t)
+
 # box extensions
 """
     box(t::Table, r::Int, c::Int, action::Symbol=:nothing)
