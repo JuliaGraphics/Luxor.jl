@@ -389,7 +389,7 @@ function rule(pos, theta=0.0;
     interpoints = Set{Point}()
 
     # check for intersection with top of bounding box
-    flag, ip = intersection(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly=true)
     if flag
         if !(ip.x > topside[2].x || ip.x < topside[1].x)
             push!(interpoints, ip)
@@ -397,7 +397,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for right intersection
-    flag, ip = intersection(ruledline[1], ruledline[2], rightside[1], rightside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], rightside[1], rightside[2], crossingonly=true)
     if flag
         if !(ip.y > rightside[2].y || ip.y < rightside[1].y)
             push!(interpoints, ip)
@@ -405,7 +405,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for bottom intersection
-    flag, ip = intersection(ruledline[1], ruledline[2], bottomside[1], bottomside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], bottomside[1], bottomside[2], crossingonly=true)
     if flag
         if !(ip.x < bottomside[2].x || ip.x > bottomside[1].x)
             push!(interpoints, ip)
@@ -413,7 +413,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for left intersection
-    flag, ip = intersection(ruledline[1], ruledline[2], leftside[1], leftside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], leftside[1], leftside[2], crossingonly=true)
     if flag
         if !(ip.y > leftside[1].y || ip.y < leftside[2].y)
             push!(interpoints, ip)

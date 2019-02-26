@@ -75,9 +75,10 @@ function run_all_tests()
 #        include("tiling-images.jl")
     end
 
-    @testset "arrows" begin
+    @testset "arrows and dimensions" begin
         include("arrow-arc-test.jl")
         include("arrow-line-test.jl")
+        include("dimensioning.jl")
     end
 
     @testset "getpath" begin
@@ -121,6 +122,7 @@ function run_all_tests()
     @testset "intersection" begin
         include("line-intersection-options.jl")
         include("intersection-line-circle.jl")
+        include("line-intersections.jl")
     end
     @testset "misc" begin
         include("luxor-test1.jl")

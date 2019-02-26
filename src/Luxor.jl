@@ -68,7 +68,7 @@ export Drawing,
 
     setantialias, setline, setlinecap, setlinejoin, setdash,
 
-    move, rmove, line, rule, rline, arrow,
+    move, rmove, line, rule, rline, arrow, dimension,
 
     BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
     boxtop, boxbottom, boxtopleft, boxtopcenter, boxtopright, boxmiddleleft,
@@ -87,7 +87,7 @@ export Drawing,
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,
 
-    Point, O, randompoint, randompointarray, midpoint, between, slope, intersection,
+    Point, O, randompoint, randompointarray, midpoint, between, slope, intersectionlines,
     pointlinedistance, getnearestpointonline, isinside,
     perpendicular, crossproduct, dotproduct, distance,
     prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
