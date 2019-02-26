@@ -280,28 +280,7 @@ end
 
 Find intersection of two lines `p1`-`p2` and `p3`-`p4`
 
-This returns a tuple: `(boolean, point(x, y))`.
-
-Keyword options and default values:
-
-    crossingonly = false
-
-If `crossingonly = true`, lines must actually cross. The function returns
-`(false, intersectionpoint)` if the lines don't actually cross, but would eventually
-intersect at `intersectionpoint` if continued beyond their current endpoints.
-
-If `false`, the function returns `(true, Point(x, y))` if the lines intersect somewhere
-eventually at `intersectionpoint`.
-
-    commonendpoints = false
-
-If `commonendpoints= true`, will return `(false, Point(0, 0))` if the lines share a common
-end point (because that's not so much an intersection, more a meeting).
-
-Function returns `(false, Point(0, 0))` if the lines are undefined.
-
-If you want collinear points to be considered to intersect, set `collinearintersect` to
-`true`, although it defaults to `false`.
+Deprecated. Use `intersectionlines().`
 """
 function intersection(A::Point, B::Point, C::Point, D::Point;
         commonendpoints = false,
@@ -457,3 +436,85 @@ produces
     Luxor.Point(7.071067811865475,7.0710678118654755)
 """
 polar(r, theta) = Point(r * cos(theta), r * sin(theta))
+
+"""
+    intersectionlines(p0, p1, p2, p3,
+        crossingonly=false)
+
+Find point where two lines intersect.
+
+If `crossingonly == true` the point of intersection must lie on both lines.
+
+If `crossingonly == false` the point of intersection can be where the lines meet
+if extended almost to 'infinity'.
+
+Accordng to this function, collinear, overlapping, and parallel lines never
+intersect. Ie, the line segments might be collinear but have no points in
+common, or the lines segments might be collinear and have many points in
+common, or the line segments might be collinear and one is entirely contained
+within the other.
+
+If the lines are collinear and share a point in common, that
+is the intersection point.
+"""
+function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
+        crossingonly = false)
+    resultflag = false
+    resultip = Point(0.0, 0.0)
+    if p0 == p1 # no lines at all
+    elseif p2 == p3
+    elseif p0 == p2 && p1 == p3 # lines are the same
+    elseif p0 == p3 && p1 == p2
+    elseif p0 == p2 # common end points
+        resultflag = true
+        resultip = p0
+    elseif p0 == p3
+        resultflag = true
+        resultip = p0
+    elseif p1 == p2
+        resultflag = true
+        resultip = p1
+    elseif p1 == p3
+        resultflag = true
+        resultip = p1
+    else
+        # Cramers rule
+        a1 = p0.y - p1.y
+        b1 = p1.x - p0.x
+        c1 = p0.x * p1.y - p1.x * p0.y
+
+        l1 = (a1, b1, -c1)
+
+        a2 = p2.y - p3.y
+        b2 = p3.x - p2.x
+        c2 = p2.x * p3.y - p3.x * p2.y
+
+        l2 = (a2, b2, -c2)
+
+        d  = l1[1] * l2[2] - l1[2] * l2[1]
+        dx = l1[3] * l2[2] - l1[2] * l2[3]
+        dy = l1[1] * l2[3] - l1[3] * l2[1]
+
+        if !iszero(d)
+            resultip = pt = Point(dx/d, dy/d)
+            if crossingonly == true
+                if ispointonline(resultip, p0, p1) && ispointonline(resultip, p2, p3)
+                    resultflag = true
+                else
+                    resultflag = false
+                end
+            else
+                if ispointonline(resultip, p0, p1, extended=true) &&
+                   ispointonline(resultip, p2, p3, extended=true)
+                    resultflag = true
+                else
+                    resultflag = false
+                end
+            end
+        else
+            resultflag = false
+            resultip =  Point(0, 0)
+        end
+    end
+    return (resultflag, resultip)
+end

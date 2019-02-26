@@ -17,8 +17,6 @@ function run_line_intersection_test(fname)
     for (pos, n) in tiles
         gsave()
         randomhue()
-        setlinecap(["butt", "round", "square"][rand(1:end)])
-        setlinejoin(["round", "miter", "bevel"][rand(1:end)])
         translate(pos)
         topleft = Point(-tiles.tilewidth/2, -tiles.tileheight/2)
         bottomright = Point(tiles.tilewidth/2, tiles.tileheight/2)
@@ -29,10 +27,10 @@ function run_line_intersection_test(fname)
         line(a, b, :stroke)
         line(c, d, :stroke)
         if n % 2 == 0
-            (flag, ip) = intersection(a, b, c, d, crossingonly=true)
+            (flag, ip) = intersectionlines(a, b, c, d, crossingonly=true)
             text("crossingonly", O)
         else
-            (flag, ip) = intersection(a, b, c, d, crossingonly=false)
+            (flag, ip) = intersectionlines(a, b, c, d, crossingonly=false)
             text("any intersection", O)
         end
         if flag
@@ -49,6 +47,7 @@ function run_line_intersection_test(fname)
             else
                 arrow(d, ip, arrowheadlength=1)
             end
+            sethue("red")
             circle(ip, 2, :fill)
             grestore()
         else

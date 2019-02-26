@@ -1,5 +1,24 @@
 # Changelog
 
+## [v1.3.0] - future release
+
+### Added
+
+- dimension()
+
+- intersectionlines()
+
+### Changed
+
+- functions that used intersection() now use intersectionlines()
+
+### Removed
+
+### Deprecated
+
+- intersection() is deprecated, in favour of intersectionlines(). It should be
+more reliable, and has fewer options/special cases for collinearity.
+
 ## [v1.2.0] - 2019-02-18
 
 ### Added

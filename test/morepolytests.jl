@@ -153,7 +153,7 @@ end
     @test length(psi) == 16 # loads, doublecounted, that's why
 
     # check the results
-    flag, ip = intersection(psi[1][1], psi[1][2], psi[1][3], psi[1][4])
+    flag, ip = intersectionlines(psi[1][1], psi[1][2], psi[1][3], psi[1][4])
     @test flag
     @test isapprox(ip, Point(22.9594915033906, -96.97732560024204))
 

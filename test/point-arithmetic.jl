@@ -44,29 +44,28 @@ function general_tests()
     pt1 = Point(5, 5)
     pt2 = Point(6, 5)
     @test pt1 + pt2 == Point(11.0,10.0)
-    @test intersection(pt1, pt1, pt1, pt1)[1] == false
-    @test intersection(pt1, pt2, pt1, pt2, crossingonly=true)[1] == false
-    @test intersection(pt1, pt2, pt2, pt1)[1] == false
+    @test intersectionlines(pt1, pt1, pt1, pt1)[1] == false
+    @test intersectionlines(pt1, pt2, pt1, pt2, crossingonly=true)[1] == false
+    @test intersectionlines(pt1, pt2, pt2, pt1)[1] == false
     pt3 = Point(6, 6)
     pt4 = Point(5, 6)
-    @test intersection(pt1, pt2, pt3, pt4)[1] == false
+    @test intersectionlines(pt1, pt2, pt3, pt4)[1] == false
 
-    @test intersection(pt1, pt2, pt3, pt2, commonendpoints = false) == (true,Luxor.Point(6.0,5.0))
-    @test intersection(pt1, pt2, pt3, pt2, commonendpoints = true) == (false,Luxor.Point(0.0,0.0))
+    @test intersectionlines(pt1, pt2, pt3, pt2) == (true,Luxor.Point(6.0,5.0))
 
     # not crossing
     pt1 = Point(5, 5)
     pt2 = Point(5, 5)
     pt3 = Point(5, 5)
     pt4 = Point(5, 5)
-    @test intersection(shuffle([pt1, pt2, pt3, pt4])...)[1] == false
+    @test intersectionlines(shuffle([pt1, pt2, pt3, pt4])...)[1] == false
 
     # parallel
     pt1 = Point(5, 5)
     pt2 = Point(5, 6)
     pt3 = Point(6, 5)
     pt4 = Point(6, 6)
-    @test intersection(pt1, pt2, pt3, pt4)[1] == false
+    @test intersectionlines(pt1, pt2, pt3, pt4)[1] == false
 
     @test pt1 * pt2 == Luxor.Point(25.0, 30.0)
     @test pt1 ^ 2 == Luxor.Point(25.0, 25.0)

@@ -95,7 +95,7 @@ ispointonline
 
 ## Intersections
 
-`intersection()` finds the intersection of two lines.
+`intersectionlines()` finds the intersection of two lines.
 
 ```@example
 using Luxor # hide
@@ -109,7 +109,7 @@ label.(["P1", "P2", "P3", "P4"], :N, [P1, P2, P3, P4])
 line(P1, P2, :stroke)
 line(P4, P3, :stroke)
 
-flag, ip =  intersection(P1, P2, P4, P3)
+flag, ip =  intersectionlines(P1, P2, P4, P3)
 if flag
     circle(ip, 5, :fill)
 end
@@ -119,8 +119,6 @@ nothing # hide
 ```
 
 ![arc](assets/figures/intersection.png)
-
-Notice that the order in which the points define the lines is important (P1 to P2, P4 to P3). The `collinearintersect=true` option may also help.
 
 `intersectionlinecircle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
 
@@ -190,7 +188,7 @@ nothing # hide
 ![intersection of two circles](assets/figures/intersection2circles.png)
 
 ```@docs
-intersection
+intersectionlines
 intersectionlinecircle
 intersection2circles
 intersectioncirclecircle

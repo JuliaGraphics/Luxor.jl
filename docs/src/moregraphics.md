@@ -97,6 +97,81 @@ nothing # hide
 cropmarks
 ```
 
+## Dimensioning
+
+Simple dimensioning graphics can be generated with `dimension()`. To convert from the default unit (PostScript points), or to modify the dimensioning text, supply a function to the `format` keyword argument.
+
+![dimensioning](assets/figures/dimensioning.svg)
+
+```@example
+using Luxor # hide
+Drawing(700, 350, "assets/figures/dimensioning.svg")  # hide
+origin() # hide
+background("white") # hide
+setline(0.75)
+sethue("purple")
+pentagon = ngonside(O, 120, 5, vertices=true)
+poly(pentagon, :stroke, close=true)
+circle.(pentagon, 2, :fill)
+fontsize(6)
+label.(split("12345", ""), :NE, pentagon)
+fontface("Menlo")
+fontsize(10)
+sethue("grey30")
+
+dimension(O, pentagon[4],
+    fromextension = [0, 0])
+
+dimension(pentagon[1], pentagon[2],
+    offset        = -60,
+    fromextension = [20, 50],
+    toextension   = [20, 50],
+    textrotation  = 2π/5,
+    textgap       = 20,
+    format        = (d) -> string(round(d, digits=4), "pts"))
+
+dimension(pentagon[2], pentagon[3],
+     offset        = -40,
+     format        =  string)
+
+dimension(pentagon[5], Point(pentagon[5].x, pentagon[4].y),
+    offset        = 60,
+    format        = (d) -> string("approximately ",round(d, digits=4)),
+    fromextension = [5, 5],
+    toextension   = [80, 5])
+
+dimension(pentagon[1], midpoint(pentagon[1], pentagon[5]),
+    offset               = 70,
+    fromextension        = [65, -5],
+    toextension          = [65, -5],
+    texthorizontaloffset = -5,
+    arrowheadlength      = 5,
+    format               = (d) ->
+        begin
+            if isapprox(d, 60.0)
+                string("exactly ", round(d, digits=4), "pts")
+            else
+                string("≈ ", round(d, digits=4), "pts")
+            end
+        end)
+
+dimension(pentagon[1], pentagon[5],
+    offset               = 120,
+    fromextension        = [5, 5],
+    toextension          = [115, 5],
+    textverticaloffset   = 0.5,
+    texthorizontaloffset = 0,
+    textgap              = 5)
+
+finish() # hide
+nothing # hide
+```
+
+```@docs
+dimension
+```
+
+
 ## Bars
 
 For simple bars, use the `bars()` function, supplying an array of numbers:
