@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More graphics · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="../index.html"><img class="logo" src="../assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Introduction to Luxor</a></li><li><a class="toctext" href="../examples/">A few examples</a></li><li><a class="toctext" href="../tutorial/">Tutorial</a></li><li><a class="toctext" href="../basics/">Basic concepts</a></li><li><a class="toctext" href="../simplegraphics/">Simple shapes</a></li><li class="current"><a class="toctext" href>More graphics</a><ul class="internal"><li><a class="toctext" href="#Julia-logos-1">Julia logos</a></li><li><a class="toctext" href="#Hypotrochoids-1">Hypotrochoids</a></li><li><a class="toctext" href="#Cropmarks-1">Cropmarks</a></li><li><a class="toctext" href="#Bars-1">Bars</a></li><li><a class="toctext" href="#Box-maps-1">Box maps</a></li></ul></li><li><a class="toctext" href="../geometrytools/">Geometry tools</a></li><li><a class="toctext" href="../tables-grids/">Tables and grids</a></li><li><a class="toctext" href="../colors-styles/">Colors and styles</a></li><li><a class="toctext" href="../polygons/">Polygons and paths</a></li><li><a class="toctext" href="../text/">Text</a></li><li><a class="toctext" href="../transforms/">Transforms and matrices</a></li><li><a class="toctext" href="../clipping/">Clipping</a></li><li><a class="toctext" href="../images/">Images</a></li><li><a class="toctext" href="../turtle/">Turtle graphics</a></li><li><a class="toctext" href="../animation/">Animation</a></li><li><a class="toctext" href="../moreexamples/">More examples</a></li><li><a class="toctext" href="../functionindex/">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>More graphics</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/moregraphics.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>More graphics</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="More-graphics-1" href="#More-graphics-1">More graphics</a></h1><h2><a class="nav-anchor" id="Julia-logos-1" href="#Julia-logos-1">Julia logos</a></h2><p>A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:</p><div><pre><code class="language-julia">for (pos, n) in Tiler(750, 250, 1, 2)
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More graphics · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="../index.html"><img class="logo" src="../assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Introduction to Luxor</a></li><li><a class="toctext" href="../examples/">A few examples</a></li><li><a class="toctext" href="../tutorial/">Tutorial</a></li><li><a class="toctext" href="../basics/">Basic concepts</a></li><li><a class="toctext" href="../simplegraphics/">Simple shapes</a></li><li class="current"><a class="toctext" href>More graphics</a><ul class="internal"><li><a class="toctext" href="#Julia-logos-1">Julia logos</a></li><li><a class="toctext" href="#Hypotrochoids-1">Hypotrochoids</a></li><li><a class="toctext" href="#Cropmarks-1">Cropmarks</a></li><li><a class="toctext" href="#Dimensioning-1">Dimensioning</a></li><li><a class="toctext" href="#Bars-1">Bars</a></li><li><a class="toctext" href="#Box-maps-1">Box maps</a></li></ul></li><li><a class="toctext" href="../geometrytools/">Geometry tools</a></li><li><a class="toctext" href="../tables-grids/">Tables and grids</a></li><li><a class="toctext" href="../colors-styles/">Colors and styles</a></li><li><a class="toctext" href="../polygons/">Polygons and paths</a></li><li><a class="toctext" href="../text/">Text</a></li><li><a class="toctext" href="../transforms/">Transforms and matrices</a></li><li><a class="toctext" href="../clipping/">Clipping</a></li><li><a class="toctext" href="../images/">Images</a></li><li><a class="toctext" href="../turtle/">Turtle graphics</a></li><li><a class="toctext" href="../animation/">Animation</a></li><li><a class="toctext" href="../moreexamples/">More examples</a></li><li><a class="toctext" href="../functionindex/">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>More graphics</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/moregraphics.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>More graphics</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="More-graphics-1" href="#More-graphics-1">More graphics</a></h1><h2><a class="nav-anchor" id="Julia-logos-1" href="#Julia-logos-1">Julia logos</a></h2><p>A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:</p><div><pre><code class="language-julia">for (pos, n) in Tiler(750, 250, 1, 2)
     gsave()
     translate(pos - Point(150, 100))
     if n == 1
@@ -35,7 +35,90 @@ end</code></pre></div><p><img src="../assets/figures/hypotrochoid.png" alt="hypo
         vertices=false)</code></pre><p>Make a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius <code>r</code> rolling around the outside of a fixed circle of radius <code>R</code>, where the point is a distance <code>d</code> from the center of the circle. Things get interesting if you supply non-integral values.</p><p><code>stepby</code>, the angular step value, controls the amount of detail, ie the smoothness of the polygon.</p><p>If <code>period</code> is not supplied, or 0, the lowest period is calculated for you.</p><p>The function can return a polygon (a list of points), or draw the points directly using the supplied <code>action</code>. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of <code>pi</code>).</p></div></div></section><h2><a class="nav-anchor" id="Cropmarks-1" href="#Cropmarks-1">Cropmarks</a></h2><p>If you want cropmarks (aka trim marks), use the <code>cropmarks()</code> function, supplying the centerpoint, followed by the width and height:</p><pre><code class="language-none">cropmarks(O, 1200, 1600)
 cropmarks(O, paper_sizes[&quot;A0&quot;]...)</code></pre><div><pre><code class="language-julia">sethue(&quot;red&quot;)
 box(O, 150, 150, :stroke)
-cropmarks(O, 150, 150)</code></pre></div><p><img src="../assets/figures/cropmarks.png" alt="cropmarks"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.cropmarks" href="#Luxor.cropmarks"><code>Luxor.cropmarks</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">cropmarks(center, width, height)</code></pre><p>Draw cropmarks (also known as trim marks).</p></div></div></section><h2><a class="nav-anchor" id="Bars-1" href="#Bars-1">Bars</a></h2><p>For simple bars, use the <code>bars()</code> function, supplying an array of numbers:</p><div><pre><code class="language-julia">fontsize(7)
+cropmarks(O, 150, 150)</code></pre></div><p><img src="../assets/figures/cropmarks.png" alt="cropmarks"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.cropmarks" href="#Luxor.cropmarks"><code>Luxor.cropmarks</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">cropmarks(center, width, height)</code></pre><p>Draw cropmarks (also known as trim marks).</p></div></div></section><h2><a class="nav-anchor" id="Dimensioning-1" href="#Dimensioning-1">Dimensioning</a></h2><p>Simple dimensioning graphics can be generated with <code>dimension()</code>. To convert from the default unit (PostScript points), or to modify the dimensioning text, supply a function to the <code>format</code> keyword argument.</p><p><img src="../assets/figures/dimensioning.svg" alt="dimensioning"/></p><div><pre><code class="language-julia">setline(0.75)
+sethue(&quot;purple&quot;)
+pentagon = ngonside(O, 120, 5, vertices=true)
+poly(pentagon, :stroke, close=true)
+circle.(pentagon, 2, :fill)
+fontsize(6)
+label.(split(&quot;12345&quot;, &quot;&quot;), :NE, pentagon)
+fontface(&quot;Menlo&quot;)
+fontsize(10)
+sethue(&quot;grey30&quot;)
+
+dimension(O, pentagon[4],
+    fromextension = [0, 0])
+
+dimension(pentagon[1], pentagon[2],
+    offset        = -60,
+    fromextension = [20, 50],
+    toextension   = [20, 50],
+    textrotation  = 2π/5,
+    textgap       = 20,
+    format        = (d) -&gt; string(round(d, digits=4), &quot;pts&quot;))
+
+dimension(pentagon[2], pentagon[3],
+     offset        = -40,
+     format        =  string)
+
+dimension(pentagon[5], Point(pentagon[5].x, pentagon[4].y),
+    offset        = 60,
+    format        = (d) -&gt; string(&quot;approximately &quot;,round(d, digits=4)),
+    fromextension = [5, 5],
+    toextension   = [80, 5])
+
+dimension(pentagon[1], midpoint(pentagon[1], pentagon[5]),
+    offset               = 70,
+    fromextension        = [65, -5],
+    toextension          = [65, -5],
+    texthorizontaloffset = -5,
+    arrowheadlength      = 5,
+    format               = (d) -&gt;
+        begin
+            if isapprox(d, 60.0)
+                string(&quot;exactly &quot;, round(d, digits=4), &quot;pts&quot;)
+            else
+                string(&quot;≈ &quot;, round(d, digits=4), &quot;pts&quot;)
+            end
+        end)
+
+dimension(pentagon[1], pentagon[5],
+    offset               = 120,
+    fromextension        = [5, 5],
+    toextension          = [115, 5],
+    textverticaloffset   = 0.5,
+    texthorizontaloffset = 0,
+    textgap              = 5)</code></pre></div><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.dimension" href="#Luxor.dimension"><code>Luxor.dimension</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">dimension(p1::Point, p2::Point;
+    format::Function   = (d) -&gt; string(d), # process the measured value into a string
+    offset             = 0.0,              # left/right, parallel with x axis
+    fromextension      = [10.0, 10.0],     # length of extensions lines left and right
+    toextension        = [10.0, 10.0],     #
+    textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)
+    texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)
+    textgap            = 5,                # gap between start of each arrow (≈ fontsize?)
+    textrotation       = 0.0,
+    arrowlinewidth     = 1.0,
+    arrowheadlength    = 10,
+    arrowheadangle     = π/8)</code></pre><p>Calculate and draw dimensioning graphics for the distance between <code>p1</code> and <code>p2</code>. The value can be formatted with function <code>format</code>.</p><p><code>p1</code> is the lower on the page (ie probably the higher y value) point, <code>p2</code> is the higher on the page (ie probably lower y) point.</p><p><code>offset</code> is to the left (-x) when negative.</p><p>Dimension graphics will be rotated to align with a line between <code>p1</code> and <code>p2</code>.</p><pre><code class="language-none">        toextension
+        [5  ,  5]
+       &lt;---&gt; &lt;---&gt;
+                             to
+       -----------            +
+            ^
+            |
+
+           -50
+
+            |
+            v
+       ----------            +
+                            from
+       &lt;---&gt; &lt;---&gt;
+         [5 , 5]
+       fromextension
+
+            &lt;----------------&gt;
+                  offset</code></pre><p>Returns the measured distance and the text.</p></div></div></section><h2><a class="nav-anchor" id="Bars-1" href="#Bars-1">Bars</a></h2><p>For simple bars, use the <code>bars()</code> function, supplying an array of numbers:</p><div><pre><code class="language-julia">fontsize(7)
 sethue(&quot;black&quot;)
 v = rand(-100:100, 25)
 bars(v)</code></pre></div><p><img src="../assets/figures/bars.png" alt="bars"/></p><p>To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to <code>bars()</code>:</p><div><pre><code class="language-julia">function mybarfunction(low::Point, high::Point, value;
