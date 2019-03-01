@@ -76,7 +76,22 @@ end
 
 Use the Scene() constructor function to create a scene. Supply a movie, a function
 to generate the scene, and a range of frames. Optionally you can supply an
-easing function, and other information, in `optarg`.
+easing function, and other information, in `optarg`, which can be accessed as
+`scene.opts`.
+
+### Example
+
+```
+function initial(scene, framenumber)
+    balls = scene.opts
+    ...
+end
+
+animate(poolmovie, [
+    Scene(poolmovie, initial, optarg=balls,   1:20),
+    ...
+    ])
+```
 """
 Scene(movie::Movie, framefunction::Function;
     easingfunction=lineartween, optarg=nothing) =
@@ -99,7 +114,7 @@ If `creategif` is `true`, the function tries to call `ffmpeg` on the resulting f
 build a GIF animation. This will be stored in `pathname` (an existing file will be
 overwritten; use a ".gif" suffix), or in `(movietitle).gif` in a temporary directory.
 
-Example
+### Example
 
 ```
 animate(bang, [

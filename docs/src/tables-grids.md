@@ -37,8 +37,6 @@ for (pos, n) in tiles
         gsave()
         translate(pos)
         subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
-
-        @show tiles[n]
         for (pos1, n1) in subtiles
             randomhue()
             box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
