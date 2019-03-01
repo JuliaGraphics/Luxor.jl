@@ -63,7 +63,7 @@ function box(corner1::Point, corner2::Point, action::Symbol=:nothing;
 end
 
 """
-    box(points::AbstractArray, action=:nothing)
+    box(points::Array, action=:nothing)
 
 Create a box/rectangle using the first two points of an array of Points to defined
 opposite corners.
@@ -71,7 +71,7 @@ opposite corners.
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-box(bbox::AbstractArray, action::Symbol=:nothing; kwargs...) =
+box(bbox::Array, action::Symbol=:nothing; kwargs...) =
     box(bbox[1], bbox[2], action; kwargs...)
 
 """

@@ -96,6 +96,8 @@ export Drawing,
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
     polyarea, polysample,
 
+    polymove!, polyscale!, polyrotate!,
+
     @polar, polar,
 
     strokepreserve, fillpreserve,

@@ -41,6 +41,17 @@ function simple_polys()
         end
     end
     grestore()
+
+    @layer begin
+        translate(BoundingBox()[1] + (0, 130))
+        pgon = ngonside(O, 20, 5, vertices=true)
+        for i in 1:10
+            polymove!(pgon, O, Point(50, 0))
+            poly(pgon, :stroke, close=true)
+            polyrotate!(pgon, rand() * π, center=polycentroid(pgon))
+            polyscale!(pgon, isodd(i) ? 1.5 : 1/1.5, center=polycentroid(pgon))
+        end
+    end
 end
 
 function hex_mixtures()

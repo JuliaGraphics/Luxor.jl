@@ -101,7 +101,7 @@ Scene(movie::Movie, framefunction::Function, framerange::AbstractRange;
     Scene(movie, framefunction, framerange, easingfunction, optarg)
 
 """
-    animate(movie::Movie, scenelist::AbstractArray{Scene, 1};
+    animate(movie::Movie, scenelist::Array{Scene, 1};
             creategif=false,
             pathname=""
             framerate=30,
@@ -124,7 +124,7 @@ animate(bang, [
     pathname="/tmp/animationtest.gif")
 ```
 """
-function animate(movie::Movie, scenelist::AbstractArray{Scene, 1};
+function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
         framerate=30,
         pathname="",

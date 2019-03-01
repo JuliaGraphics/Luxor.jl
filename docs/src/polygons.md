@@ -405,7 +405,40 @@ randompoint
 randompointarray
 ```
 
-There are some experimental polygon functions. These don't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
+### Quickly changing polygons
+
+If you want to quickly change a polygon, there's `polymove!()`, `polyscale!()`, and `polyrotate!()`.
+
+```@example
+using Luxor # hide
+Drawing(400, 350, "assets/figures/polychange.png") # hide
+origin() # hide
+
+sethue("black") # hide
+shape = star(O, 10, 5, 0.5, 0, vertices=true)
+
+circle(O, 3, :stroke)
+
+polymove!(shape, O, O + (0, 50))
+
+poly(shape, :stroke, close=true)
+
+for i in 1:20
+    poly(polyrotate!(shape, π/5), :fill, close=true)
+    polyscale!(shape, 19//18)
+end
+
+finish() # hide
+nothing # hide
+```
+
+The polygons are changed (notice the `!` in the function names).
+
+![poly changing](assets/figures/polychange.png)
+
+### Other functions
+
+There are a number of experimental polygon functions. These won't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
 
 ```@example
 using Luxor, Random # hide
