@@ -130,13 +130,18 @@ end
         arrowheadlength    = 10,
         arrowheadangle     = π/8)
 
-Calculate and draw dimensioning graphics for the distance between `p1` and `p2`. The value can be formatted with function `format`.
+Calculate and draw dimensioning graphics for the distance between `p1` and `p2`.
+The value can be formatted with function `format`.
 
-`p1` is the lower on the page (ie probably the higher y value) point, `p2` is the higher on the page (ie probably lower y) point.
+`p1` is the lower on the page (ie probably the higher y value) point, `p2` is
+the higher on the page (ie probably lower y) point.
 
 `offset` is to the left (-x) when negative.
 
 Dimension graphics will be rotated to align with a line between `p1` and `p2`.
+
+In `textverticaloffset`, "vertical" and "horizontal" are best understood by "looking" along the line from the first point to the
+second. `textverticaloffset` ranges from -1 to 1, `texthorizontaloffset` in default units.
 
 ```
         toextension
@@ -169,7 +174,7 @@ function dimension(p1::Point, p2::Point;
     fromextension      = [10.0, 10.0],     # length of extensions lines left and right
     toextension        = [10.0, 10.0],     #
     textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)
-    texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)
+    texthorizontaloffset = 0.0,            #
     textgap            = 5,                # gap between start of each arrow (≈ fontsize?)
     textrotation       = 0.0,
     arrowlinewidth     = 1.0,
@@ -202,10 +207,6 @@ function dimension(p1::Point, p2::Point;
         @layer begin
             translate(tpos)
             rotate(textrotation)
-            @layer begin
-                sethue("white")
-                box(O, te[3], te[2], :fill)
-            end
             text(t, halign=:center, valign=:middle)
         end
     end
