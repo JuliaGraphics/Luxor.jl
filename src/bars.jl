@@ -1,5 +1,5 @@
 """
-    bars(values::AbstractArray;
+    bars(values::Array;
             yheight = 200,
             xwidth = 25,
             labels = true,
@@ -32,7 +32,7 @@ bars(v, labelfunction = (args...; extremes=[], barnumber=0, bartotal=0) ->  setg
 
 To suppress the text labels, use optional keyword `labels=false`.
 """
-function bars(values::AbstractArray;
+function bars(values::Array;
     yheight = 200,
     xwidth = 25,
     barfunction   = (bottom::Point, top::Point, value;

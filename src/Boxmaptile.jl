@@ -98,7 +98,7 @@ function buildboxmap(A, x, y, w, h)
 end
 
 """
-    boxmap(A::AbstractArray, pt, w, h)
+    boxmap(A::Array, pt, w, h)
 
 Build a box map of the values in `A` with one corner at `pt` and width `w` and
 height `h`. There are `length(A)` boxes. The areas of the boxes are proportional
@@ -136,7 +136,7 @@ using Luxor
 end 400 400 "/tmp/boxmap.svg"
 ```
 """
-function boxmap(A::AbstractArray, pt::Point, w, h)
+function boxmap(A::Array, pt::Point, w, h)
     # algorithm basically from Bruls, Huizing, van Wijk, "Squarified Treemaps"
     # without the silly name
     !all(n -> n > 0, A) && error("all values must be positive")
