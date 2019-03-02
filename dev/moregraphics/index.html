@@ -99,7 +99,7 @@ dimension(pentagon[1], pentagon[5],
     textrotation       = 0.0,
     arrowlinewidth     = 1.0,
     arrowheadlength    = 10,
-    arrowheadangle     = π/8)</code></pre><p>Calculate and draw dimensioning graphics for the distance between <code>p1</code> and <code>p2</code>. The value can be formatted with function <code>format</code>.</p><p><code>p1</code> is the lower on the page (ie probably the higher y value) point, <code>p2</code> is the higher on the page (ie probably lower y) point.</p><p><code>offset</code> is to the left (-x) when negative.</p><p>Dimension graphics will be rotated to align with a line between <code>p1</code> and <code>p2</code>.</p><pre><code class="language-none">        toextension
+    arrowheadangle     = π/8)</code></pre><p>Calculate and draw dimensioning graphics for the distance between <code>p1</code> and <code>p2</code>. The value can be formatted with function <code>format</code>.</p><p><code>p1</code> is the lower on the page (ie probably the higher y value) point, <code>p2</code> is the higher on the page (ie probably lower y) point.</p><p><code>offset</code> is to the left (-x) when negative.</p><p>Dimension graphics will be rotated to align with a line between <code>p1</code> and <code>p2</code>.</p><p>In <code>textverticaloffset</code>, &quot;vertical&quot; and &quot;horizontal&quot; are best understood by &quot;looking&quot; along the line from the first point to the second. <code>textverticaloffset</code> ranges from -1 to 1, <code>texthorizontaloffset</code> in default units.</p><pre><code class="language-none">        toextension
         [5  ,  5]
        &lt;---&gt; &lt;---&gt;
                              to
@@ -144,7 +144,7 @@ function mylabelfunction(low::Point, high::Point, value;
 end
 
 v = rand(1:100, 25)
-bars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)</code></pre></div><p><img src="../assets/figures/bars1.png" alt="bars 1"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.bars" href="#Luxor.bars"><code>Luxor.bars</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">bars(values::AbstractArray;
+bars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)</code></pre></div><p><img src="../assets/figures/bars1.png" alt="bars 1"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.bars" href="#Luxor.bars"><code>Luxor.bars</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">bars(values::Array;
         yheight = 200,
         xwidth = 25,
         labels = true,
@@ -174,7 +174,7 @@ for (n, t) in enumerate(tiles)
         midpoint(bb[1], bb[2]),
         halign=:center,
             valign=:middle)
-end</code></pre></div><p><img src="../assets/figures/boxmap.png" alt="boxmap"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.boxmap" href="#Luxor.boxmap"><code>Luxor.boxmap</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">boxmap(A::AbstractArray, pt, w, h)</code></pre><p>Build a box map of the values in <code>A</code> with one corner at <code>pt</code> and width <code>w</code> and height <code>h</code>. There are <code>length(A)</code> boxes. The areas of the boxes are proportional to the original values, scaled as necessary.</p><p>The return value is an array of BoxmapTiles. For example:</p><pre><code class="language-none">[BoxmapTile(0.0, 0.0, 10.0, 20.0)
+end</code></pre></div><p><img src="../assets/figures/boxmap.png" alt="boxmap"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.boxmap" href="#Luxor.boxmap"><code>Luxor.boxmap</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">boxmap(A::Array, pt, w, h)</code></pre><p>Build a box map of the values in <code>A</code> with one corner at <code>pt</code> and width <code>w</code> and height <code>h</code>. There are <code>length(A)</code> boxes. The areas of the boxes are proportional to the original values, scaled as necessary.</p><p>The return value is an array of BoxmapTiles. For example:</p><pre><code class="language-none">[BoxmapTile(0.0, 0.0, 10.0, 20.0)
  BoxmapTile(10.0, 0.0, 10.0, 13.3333)
  BoxmapTile(10.0, 13.3333, 10.0, 6.66667)]</code></pre><p>with each tile containing <code>(x, y, w, h)</code>. <code>box()</code> and <code>BoundingBox()</code> can work with BoxmapTiles as well.</p><p><strong>Example</strong></p><pre><code class="language-none">using Luxor
 @svg begin

@@ -236,7 +236,7 @@ poly(pl, :strokepreserve, close=true)
 setline(5)
 sethue(&quot;black&quot;)
 strokepath()</code></pre></div><p><img src="../assets/figures/mesh2.png" alt="mesh 2"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.mesh" href="#Luxor.mesh"><code>Luxor.mesh</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">mesh(bezierpath::BezierPath,
-     colors=AbstractArray{ColorTypes.Colorant, 1})</code></pre><p>Create a mesh. The first three or four elements of the supplied <code>bezierpath</code> define the three or four sides of the mesh shape.</p><p>The <code>colors</code> array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.</p><p>Use <code>setmesh()</code> to select the mesh, which will be used to fill shapes.</p><p><strong>Example</strong></p><pre><code class="language-none">@svg begin
+     colors=Array{ColorTypes.Colorant, 1})</code></pre><p>Create a mesh. The first three or four elements of the supplied <code>bezierpath</code> define the three or four sides of the mesh shape.</p><p>The <code>colors</code> array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.</p><p>Use <code>setmesh()</code> to select the mesh, which will be used to fill shapes.</p><p><strong>Example</strong></p><pre><code class="language-none">@svg begin
     bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))
     mesh1 = mesh(bp, [
         &quot;red&quot;,
@@ -246,8 +246,8 @@ strokepath()</code></pre></div><p><img src="../assets/figures/mesh2.png" alt="me
         ])
     setmesh(mesh1)
     box(O, 500, 500, :fill)
-end</code></pre></div></div><div><div><pre><code class="language-none">mesh(points::AbstractArray{Point},
-     colors=AbstractArray{ColorTypes.Colorant, 1})</code></pre><p>Create a mesh.</p><p>Create a mesh. The first three or four sides of the supplied <code>points</code> polygon define the three or four sides of the mesh shape.</p><p>The <code>colors</code> array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.</p><p><strong>Example</strong></p><pre><code class="language-none">@svg begin
+end</code></pre></div></div><div><div><pre><code class="language-none">mesh(points::Array{Point},
+     colors=Array{ColorTypes.Colorant, 1})</code></pre><p>Create a mesh.</p><p>Create a mesh. The first three or four sides of the supplied <code>points</code> polygon define the three or four sides of the mesh shape.</p><p>The <code>colors</code> array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.</p><p><strong>Example</strong></p><pre><code class="language-none">@svg begin
     pl = ngon(O, 250, 3, pi/6, vertices=true)
     mesh1 = mesh(pl, [
         &quot;purple&quot;,

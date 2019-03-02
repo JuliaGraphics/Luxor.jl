@@ -397,7 +397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Simple shapes",
     "title": "Luxor.box",
     "category": "function",
-    "text": "box(cornerpoint1, cornerpoint2, action=:nothing;\n    vertices=false)\n\nCreate a rectangle between two points and do an action.\n\nUse vertices=true to return an array of the four corner points: bottom left, top left, top right, bottom right.\n\n\n\n\n\nbox(points::AbstractArray, action=:nothing)\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\nUse vertices=true to return an array of the four corner points: bottom left, top left, top right, bottom right.\n\n\n\n\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\n\n\n\n\nbox(x, y, width, height, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height.\n\n\n\n\n\nbox(x, y, width, height, cornerradius, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height. Round each corner by cornerradius.\n\n\n\n\n\nbox(t::Table, r::Int, c::Int, action::Symbol=:nothing)\n\nDraw a box in table t at row r and column c.\n\n\n\n\n\nbox(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)\n\nDraw box cellnumber in table t.\n\n\n\n\n\nbox(bbox::BoundingBox, :action;\n        vertices=false)\n\nMake a box using the bounds in bbox.\n\nUse vertices=true to return an array of the four corner points: bottom left, top left, top right, bottom right.\n\n\n\n\n\nbox(tile::BoxmapTile, action::Symbol=:nothing; vertices=false)\n\nUse a Boxmaptile to make or draw a rectangular box. Use vertices=true to obtain the coordinates.\n\nCreate boxmaps using boxmap().\n\n\n\n\n\n"
+    "text": "box(cornerpoint1, cornerpoint2, action=:nothing;\n    vertices=false)\n\nCreate a rectangle between two points and do an action.\n\nUse vertices=true to return an array of the four corner points: bottom left, top left, top right, bottom right.\n\n\n\n\n\nbox(points::Array, action=:nothing)\n\nCreate a box/rectangle using the first two points of an array of Points to defined opposite corners.\n\nUse vertices=true to return an array of the four corner points: bottom left, top left, top right, bottom right.\n\n\n\n\n\nbox(pt::Point, width, height, action=:nothing; vertices=false)\n\nCreate a box/rectangle centered at point pt with width and height. Use vertices=true to return an array of the four corner points rather than draw the box.\n\n\n\n\n\nbox(x, y, width, height, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height.\n\n\n\n\n\nbox(x, y, width, height, cornerradius, action=:nothing)\n\nCreate a box/rectangle centered at point x/y with width and height. Round each corner by cornerradius.\n\n\n\n\n\nbox(t::Table, r::Int, c::Int, action::Symbol=:nothing)\n\nDraw a box in table t at row r and column c.\n\n\n\n\n\nbox(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)\n\nDraw box cellnumber in table t.\n\n\n\n\n\nbox(bbox::BoundingBox, :action;\n        vertices=false)\n\nMake a box using the bounds in bbox.\n\nUse vertices=true to return an array of the four corner points: bottom left, top left, top right, bottom right.\n\n\n\n\n\nbox(tile::BoxmapTile, action::Symbol=:nothing; vertices=false)\n\nUse a Boxmaptile to make or draw a rectangular box. Use vertices=true to obtain the coordinates.\n\nCreate boxmaps using boxmap().\n\n\n\n\n\n"
 },
 
 {
@@ -725,7 +725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "More graphics",
     "title": "Luxor.dimension",
     "category": "function",
-    "text": "dimension(p1::Point, p2::Point;\n    format::Function   = (d) -> string(d), # process the measured value into a string\n    offset             = 0.0,              # left/right, parallel with x axis\n    fromextension      = [10.0, 10.0],     # length of extensions lines left and right\n    toextension        = [10.0, 10.0],     #\n    textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)\n    texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)\n    textgap            = 5,                # gap between start of each arrow (≈ fontsize?)\n    textrotation       = 0.0,\n    arrowlinewidth     = 1.0,\n    arrowheadlength    = 10,\n    arrowheadangle     = π/8)\n\nCalculate and draw dimensioning graphics for the distance between p1 and p2. The value can be formatted with function format.\n\np1 is the lower on the page (ie probably the higher y value) point, p2 is the higher on the page (ie probably lower y) point.\n\noffset is to the left (-x) when negative.\n\nDimension graphics will be rotated to align with a line between p1 and p2.\n\n        toextension\n        [5  ,  5]\n       <---> <--->\n                             to\n       -----------            +\n            ^\n            |\n\n           -50\n\n            |\n            v\n       ----------            +\n                            from\n       <---> <--->\n         [5 , 5]\n       fromextension\n\n            <---------------->\n                  offset\n\nReturns the measured distance and the text.\n\n\n\n\n\n"
+    "text": "dimension(p1::Point, p2::Point;\n    format::Function   = (d) -> string(d), # process the measured value into a string\n    offset             = 0.0,              # left/right, parallel with x axis\n    fromextension      = [10.0, 10.0],     # length of extensions lines left and right\n    toextension        = [10.0, 10.0],     #\n    textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)\n    texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)\n    textgap            = 5,                # gap between start of each arrow (≈ fontsize?)\n    textrotation       = 0.0,\n    arrowlinewidth     = 1.0,\n    arrowheadlength    = 10,\n    arrowheadangle     = π/8)\n\nCalculate and draw dimensioning graphics for the distance between p1 and p2. The value can be formatted with function format.\n\np1 is the lower on the page (ie probably the higher y value) point, p2 is the higher on the page (ie probably lower y) point.\n\noffset is to the left (-x) when negative.\n\nDimension graphics will be rotated to align with a line between p1 and p2.\n\nIn textverticaloffset, \"vertical\" and \"horizontal\" are best understood by \"looking\" along the line from the first point to the second. textverticaloffset ranges from -1 to 1, texthorizontaloffset in default units.\n\n        toextension\n        [5  ,  5]\n       <---> <--->\n                             to\n       -----------            +\n            ^\n            |\n\n           -50\n\n            |\n            v\n       ----------            +\n                            from\n       <---> <--->\n         [5 , 5]\n       fromextension\n\n            <---------------->\n                  offset\n\nReturns the measured distance and the text.\n\n\n\n\n\n"
 },
 
 {
@@ -741,7 +741,7 @@ var documenterSearchIndex = {"docs": [
     "page": "More graphics",
     "title": "Luxor.bars",
     "category": "function",
-    "text": "bars(values::AbstractArray;\n        yheight = 200,\n        xwidth = 25,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array. The bars will fit in a box yheight high (even if there are negative values).\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nand pass them like this:\n\nbars(v, yheight=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)\n\nor:\n\nbars(v, labelfunction = (args...; extremes=[], barnumber=0, bartotal=0) ->  setgray(rand()))\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n\n\n"
+    "text": "bars(values::Array;\n        yheight = 200,\n        xwidth = 25,\n        labels = true,\n        barfunction = f,\n        labelfunction = f,\n    )\n\nDraw some bars where each bar is the height of a value in the array. The bars will fit in a box yheight high (even if there are negative values).\n\nTo control the drawing of the text and bars, define functions that process the end points:\n\nmybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nmylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)\n\nand pass them like this:\n\nbars(v, yheight=10, xwidth=10, barfunction=mybarfunction)\nbars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)\n\nor:\n\nbars(v, labelfunction = (args...; extremes=[], barnumber=0, bartotal=0) ->  setgray(rand()))\n\nTo suppress the text labels, use optional keyword labels=false.\n\n\n\n\n\n"
 },
 
 {
@@ -757,7 +757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "More graphics",
     "title": "Luxor.boxmap",
     "category": "function",
-    "text": "boxmap(A::AbstractArray, pt, w, h)\n\nBuild a box map of the values in A with one corner at pt and width w and height h. There are length(A) boxes. The areas of the boxes are proportional to the original values, scaled as necessary.\n\nThe return value is an array of BoxmapTiles. For example:\n\n[BoxmapTile(0.0, 0.0, 10.0, 20.0)\n BoxmapTile(10.0, 0.0, 10.0, 13.3333)\n BoxmapTile(10.0, 13.3333, 10.0, 6.66667)]\n\nwith each tile containing (x, y, w, h). box() and BoundingBox() can work with BoxmapTiles as well.\n\nExample\n\nusing Luxor\n@svg begin\n    fontsize(16)\n    fontface(\"HelveticaBold\")\n    pt = Point(-200, -200)\n    a = rand(10:200, 15)\n    tiles = boxmap(a, Point(-200, -200), 400, 400)\n    for (n, t) in enumerate(tiles)\n        randomhue()\n        bb = BoundingBox(t)\n        box(bb - 2, :stroke)\n        box(bb - 5, :fill)\n        sethue(\"white\")\n        text(string(n), midpoint(bb[1], bb[2]), halign=:center)\n    end\nend 400 400 \"/tmp/boxmap.svg\"\n\n\n\n\n\n"
+    "text": "boxmap(A::Array, pt, w, h)\n\nBuild a box map of the values in A with one corner at pt and width w and height h. There are length(A) boxes. The areas of the boxes are proportional to the original values, scaled as necessary.\n\nThe return value is an array of BoxmapTiles. For example:\n\n[BoxmapTile(0.0, 0.0, 10.0, 20.0)\n BoxmapTile(10.0, 0.0, 10.0, 13.3333)\n BoxmapTile(10.0, 13.3333, 10.0, 6.66667)]\n\nwith each tile containing (x, y, w, h). box() and BoundingBox() can work with BoxmapTiles as well.\n\nExample\n\nusing Luxor\n@svg begin\n    fontsize(16)\n    fontface(\"HelveticaBold\")\n    pt = Point(-200, -200)\n    a = rand(10:200, 15)\n    tiles = boxmap(a, Point(-200, -200), 400, 400)\n    for (n, t) in enumerate(tiles)\n        randomhue()\n        bb = BoundingBox(t)\n        box(bb - 2, :stroke)\n        box(bb - 5, :fill)\n        sethue(\"white\")\n        text(string(n), midpoint(bb[1], bb[2]), halign=:center)\n    end\nend 400 400 \"/tmp/boxmap.svg\"\n\n\n\n\n\n"
 },
 
 {
@@ -1109,7 +1109,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tables and grids",
     "title": "Tiles and partitions",
     "category": "section",
-    "text": "The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the Tiler and Partition iterators.The Tiler iterator returns the center point and tile number of each tile in turn.In this example, every third tile is divided up into subtiles and colored:using Luxor, Random # hide\nDrawing(800, 500, \"assets/figures/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nRandom.seed!(1) # hide\nfontsize(20) # hide\ntiles = Tiler(800, 500, 4, 5, margin=5)\nfor (pos, n) in tiles\n    randomhue()\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    if n % 3 == 0\n        gsave()\n        translate(pos)\n        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)\n\n        @show tiles[n]\n        for (pos1, n1) in subtiles\n            randomhue()\n            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)\n        end\n        grestore()\n    end\n    sethue(\"white\")\n    textcentered(string(n), pos + Point(0, 5))\nend\nfinish() # hide\nnothing # hide(Image: tiler)Partition is like Tiler, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.Tiler\nPartitionYou can obtain the centerpoints of all the tiles in one go with:first.(collect(tiles))or obtain ranges with:tiles[1:2:end]"
+    "text": "The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the Tiler and Partition iterators.The Tiler iterator returns the center point and tile number of each tile in turn.In this example, every third tile is divided up into subtiles and colored:using Luxor, Random # hide\nDrawing(800, 500, \"assets/figures/tiler.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nRandom.seed!(1) # hide\nfontsize(20) # hide\ntiles = Tiler(800, 500, 4, 5, margin=5)\nfor (pos, n) in tiles\n    randomhue()\n    box(pos, tiles.tilewidth, tiles.tileheight, :fill)\n    if n % 3 == 0\n        gsave()\n        translate(pos)\n        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)\n        for (pos1, n1) in subtiles\n            randomhue()\n            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)\n        end\n        grestore()\n    end\n    sethue(\"white\")\n    textcentered(string(n), pos + Point(0, 5))\nend\nfinish() # hide\nnothing # hide(Image: tiler)Partition is like Tiler, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.Tiler\nPartitionYou can obtain the centerpoints of all the tiles in one go with:first.(collect(tiles))or obtain ranges with:tiles[1:2:end]"
 },
 
 {
@@ -1421,7 +1421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Colors and styles",
     "title": "Luxor.mesh",
     "category": "function",
-    "text": "mesh(bezierpath::BezierPath,\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh. The first three or four elements of the supplied bezierpath define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nUse setmesh() to select the mesh, which will be used to fill shapes.\n\nExample\n\n@svg begin\n    bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))\n    mesh1 = mesh(bp, [\n        \"red\",\n        Colors.RGB(0, 1, 0),\n        Colors.RGB(0, 1, 1),\n        Colors.RGB(1, 0, 1)\n        ])\n    setmesh(mesh1)\n    box(O, 500, 500, :fill)\nend\n\n\n\n\n\nmesh(points::AbstractArray{Point},\n     colors=AbstractArray{ColorTypes.Colorant, 1})\n\nCreate a mesh.\n\nCreate a mesh. The first three or four sides of the supplied points polygon define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nExample\n\n@svg begin\n    pl = ngon(O, 250, 3, pi/6, vertices=true)\n    mesh1 = mesh(pl, [\n        \"purple\",\n        Colors.RGBA(0.0, 1.0, 0.5, 0.5),\n        \"yellow\"\n        ])\n    setmesh(mesh1)\n    setline(180)\n    ngon(O, 250, 3, pi/6, :strokepreserve)\n    setline(5)\n    sethue(\"black\")\n    strokepath()\nend\n\n\n\n\n\n"
+    "text": "mesh(bezierpath::BezierPath,\n     colors=Array{ColorTypes.Colorant, 1})\n\nCreate a mesh. The first three or four elements of the supplied bezierpath define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nUse setmesh() to select the mesh, which will be used to fill shapes.\n\nExample\n\n@svg begin\n    bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))\n    mesh1 = mesh(bp, [\n        \"red\",\n        Colors.RGB(0, 1, 0),\n        Colors.RGB(0, 1, 1),\n        Colors.RGB(1, 0, 1)\n        ])\n    setmesh(mesh1)\n    box(O, 500, 500, :fill)\nend\n\n\n\n\n\nmesh(points::Array{Point},\n     colors=Array{ColorTypes.Colorant, 1})\n\nCreate a mesh.\n\nCreate a mesh. The first three or four sides of the supplied points polygon define the three or four sides of the mesh shape.\n\nThe colors array define the color of each corner point. Colors are reused if necessary. At least one color should be supplied.\n\nExample\n\n@svg begin\n    pl = ngon(O, 250, 3, pi/6, vertices=true)\n    mesh1 = mesh(pl, [\n        \"purple\",\n        Colors.RGBA(0.0, 1.0, 0.5, 0.5),\n        \"yellow\"\n        ])\n    setmesh(mesh1)\n    setline(180)\n    ngon(O, 250, 3, pi/6, :strokepreserve)\n    setline(5)\n    sethue(\"black\")\n    strokepath()\nend\n\n\n\n\n\n"
 },
 
 {
@@ -1501,7 +1501,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.poly",
     "category": "function",
-    "text": "Draw a polygon.\n\npoly(pointlist::AbstractArray{Point, 1}, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn\'t close or fill the polygon, to allow for clipping.\n\n\n\n\n\npoly(bbox::BoundingBox, :action; kwargs...)\n\nMake a polygon around the BoundingBox in bbox.\n\n\n\n\n\n"
+    "text": "Draw a polygon.\n\npoly(pointlist::Array{Point, 1}, action = :nothing;\n    close=false,\n    reversepath=false)\n\nA polygon is an Array of Points. By default poly() doesn\'t close or fill the polygon, to allow for clipping.\n\n\n\n\n\npoly(bbox::BoundingBox, :action; kwargs...)\n\nMake a polygon around the BoundingBox in bbox.\n\n\n\n\n\n"
 },
 
 {
@@ -1509,7 +1509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.prettypoly",
     "category": "function",
-    "text": "prettypoly(points::AbstractArray{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);\n    close=false,\n    reversepath=false,\n    vertexlabels = (n, l) -> ()\n    )\n\nDraw the polygon defined by points, possibly closing and reversing it, using the current parameters, and then evaluate the vertexfunction function at every vertex of the polygon.\n\nThe default vertexfunction draws a 2 pt radius circle.\n\nTo mark each vertex of a polygon with a randomly colored filled circle:\n\np = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(p, :fill, () ->\n    begin\n        randomhue()\n        circle(O, 10, :fill)\n    end,\n    close=true)\n\nThe optional keyword argument vertexlabels lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle \"1 of 3\", \"2 of 3\", and \"3 of 3\" using:\n\nprettypoly(triangle, :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l))))\n\nTODO Does it render paths with no points correctly ?!\n\n\n\n\n\nprettypoly(bbox::BoundingBox, :action; kwargs...)\n\nMake a decorated polygon around the BoundingBox in bbox. The vertices are in the order: bottom left, top left, top right, and bottom right.\n\n\n\n\n\n"
+    "text": "prettypoly(points::Array{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);\n    close=false,\n    reversepath=false,\n    vertexlabels = (n, l) -> ()\n    )\n\nDraw the polygon defined by points, possibly closing and reversing it, using the current parameters, and then evaluate the vertexfunction function at every vertex of the polygon.\n\nThe default vertexfunction draws a 2 pt radius circle.\n\nTo mark each vertex of a polygon with a randomly colored filled circle:\n\np = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(p, :fill, () ->\n    begin\n        randomhue()\n        circle(O, 10, :fill)\n    end,\n    close=true)\n\nThe optional keyword argument vertexlabels lets you supply a function with two arguments that can access the current vertex number and the total number of vertices at each vertex. For example, you can label the vertices of a triangle \"1 of 3\", \"2 of 3\", and \"3 of 3\" using:\n\nprettypoly(triangle, :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l))))\n\nTODO Does it render paths with no points correctly ?!\n\n\n\n\n\nprettypoly(bbox::BoundingBox, :action; kwargs...)\n\nMake a decorated polygon around the BoundingBox in bbox. The vertices are in the order: bottom left, top left, top right, and bottom right.\n\n\n\n\n\n"
 },
 
 {
@@ -1517,7 +1517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.simplify",
     "category": "function",
-    "text": "Simplify a polygon:\n\nsimplify(pointlist::AbstractArray, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n\n\n"
+    "text": "Simplify a polygon:\n\nsimplify(pointlist::Array, detail=0.1)\n\ndetail is the smallest permitted distance between two points in pixels.\n\n\n\n\n\n"
 },
 
 {
@@ -1545,6 +1545,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "polygons/#Polygons-1",
+    "page": "Polygons and paths",
+    "title": "Polygons",
+    "category": "section",
+    "text": "Use poly() to draw lines connecting the points and/or just fill the area:using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/simplepoly.png\") # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\norigin() # hide\nsethue(\"orchid4\") # hide\ntiles = Tiler(600, 250, 1, 2, margin=20)\ntile1, tile2 = collect(tiles)\n\nrandompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]\n\ngsave()\ntranslate(tile1[1])\npoly(randompoints, :stroke)\ngrestore()\n\ngsave()\ntranslate(tile2[1])\npoly(randompoints, :fill)\ngrestore()\n\nfinish() # hide\nnothing # hide(Image: simple poly)polyA polygon can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor # hide\nDrawing(400, 250, \"assets/figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(5)\nsethue(\"gold\")\nline(Point(-200, 0), Point(200, 0), :stroke)\nsethue(\"orchid4\")\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide\nnothing # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the supplied vertexfunction function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolybasic.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () ->\n        begin\n            randomhue()\n            circle(O, 10, :fill)\n        end,\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)An optional keyword argument vertexlabels lets you pass a function that can number each vertex. The function can use two arguments, the current vertex number, and the total number of points in the polygon:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolyvertex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 80, 5, 0.6, 0, vertices=true)\nprettypoly(apoly,\n    :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l), halign=:center)),\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)prettypolyRecursive decoration is possible:using Luxor, Random # hide\nDrawing(400, 260, \"assets/figures/prettypolyrecursive.png\") # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\norigin() # hide\nsethue(\"magenta\") # hide\nsetopacity(0.5) # hide\n\ndecorate(pos, p, level) = begin\n    if level < 4\n        randomhue()\n        scale(0.25, 0.25)\n        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)\n    end\nend\n\napoly = star(O, 100, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor # hide\nDrawing(600, 500, \"assets/figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve = [Point(6x, 80sin(x)) for x in -5π:π/20:5π]\nprettypoly(collect(sincurve), :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide\nnothing # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor # hide\nDrawing(500, 500, \"assets/figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\napolygon = star(O, 200, 8, 0.5, 0, vertices=true)\nfor pt in collect(first.(Table(30, 30, 15, 15)))\n    sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))\n    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, :fill) : circle(pt, 3, :fill)\nend\n\nfinish() # hide\nnothing # hide(Image: isinside)isinsideYou can use randompoint() and randompointarray() to create a random Point or list of Points.using Luxor, Random # hide\nDrawing(400, 250, \"assets/figures/randompoints.png\") # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\norigin() # hide\n\npt1 = Point(-100, -100)\npt2 = Point(100, 100)\n\nsethue(\"gray80\")\nmap(pt -> circle(pt, 6, :fill), (pt1, pt2))\nbox(pt1, pt2, :stroke)\n\nsethue(\"red\")\ncircle(randompoint(pt1, pt2), 7, :fill)\n\nsethue(\"blue\")\nmap(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))\n\nfinish() # hide\nnothing # hide(Image: isinside)randompoint\nrandompointarray"
+},
+
+{
+    "location": "polygons/#Quickly-changing-polygons-1",
+    "page": "Polygons and paths",
+    "title": "Quickly changing polygons",
+    "category": "section",
+    "text": "If you want to quickly change a polygon, there\'s polymove!(), polyscale!(), and polyrotate!().using Luxor # hide\nDrawing(400, 350, \"assets/figures/polychange.png\") # hide\norigin() # hide\n\nsethue(\"black\") # hide\nshape = star(O, 10, 5, 0.5, 0, vertices=true)\n\ncircle(O, 3, :stroke)\n\npolymove!(shape, O, O + (0, 50))\n\npoly(shape, :stroke, close=true)\n\nfor i in 1:20\n    poly(polyrotate!(shape, π/5), :fill, close=true)\n    polyscale!(shape, 19//18)\nend\n\nfinish() # hide\nnothing # hideThe polygons are changed (notice the ! in the function names).(Image: poly changing)"
+},
+
+{
     "location": "polygons/#Luxor.polysplit",
     "page": "Polygons and paths",
     "title": "Luxor.polysplit",
@@ -1565,7 +1581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polysortbyangle",
     "category": "function",
-    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::AbstractArray, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n\n\n"
+    "text": "Sort the points of a polygon into order. Points are sorted according to the angle they make with a specified point.\n\npolysortbyangle(pointlist::Array, refpoint=minimum(pointlist))\n\nThe refpoint can be chosen, but the minimum point is usually OK too:\n\npolysortbyangle(parray, polycentroid(parray))\n\n\n\n\n\n"
 },
 
 {
@@ -1577,11 +1593,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "polygons/#Polygons-1",
+    "location": "polygons/#Other-functions-1",
     "page": "Polygons and paths",
-    "title": "Polygons",
+    "title": "Other functions",
     "category": "section",
-    "text": "Use poly() to draw lines connecting the points and/or just fill the area:using Luxor, Random # hide\nDrawing(600, 250, \"assets/figures/simplepoly.png\") # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\norigin() # hide\nsethue(\"orchid4\") # hide\ntiles = Tiler(600, 250, 1, 2, margin=20)\ntile1, tile2 = collect(tiles)\n\nrandompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]\n\ngsave()\ntranslate(tile1[1])\npoly(randompoints, :stroke)\ngrestore()\n\ngsave()\ntranslate(tile2[1])\npoly(randompoints, :fill)\ngrestore()\n\nfinish() # hide\nnothing # hide(Image: simple poly)polyA polygon can contain holes. The reversepath keyword changes the direction of the polygon. The following piece of code uses ngon() to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:using Luxor # hide\nDrawing(400, 250, \"assets/figures/holes.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsetline(5)\nsethue(\"gold\")\nline(Point(-200, 0), Point(200, 0), :stroke)\nsethue(\"orchid4\")\nngon(0, 0, 60, 6, 0, :path)\nnewsubpath()\nngon(0, 0, 40, 6, 0, :path, reversepath=true)\nfillstroke()\nfinish() # hide\nnothing # hide(Image: holes)The prettypoly() function can place graphics at each vertex of a polygon. After the polygon action, the supplied vertexfunction function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolybasic.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 70, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () ->\n        begin\n            randomhue()\n            circle(O, 10, :fill)\n        end,\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)An optional keyword argument vertexlabels lets you pass a function that can number each vertex. The function can use two arguments, the current vertex number, and the total number of points in the polygon:using Luxor # hide\nDrawing(400, 250, \"assets/figures/prettypolyvertex.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"steelblue4\") # hide\n\napoly = star(O, 80, 5, 0.6, 0, vertices=true)\nprettypoly(apoly,\n    :stroke,\n    vertexlabels = (n, l) -> (text(string(n, \" of \", l), halign=:center)),\n    close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)prettypolyRecursive decoration is possible:using Luxor, Random # hide\nDrawing(400, 260, \"assets/figures/prettypolyrecursive.png\") # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\norigin() # hide\nsethue(\"magenta\") # hide\nsetopacity(0.5) # hide\n\ndecorate(pos, p, level) = begin\n    if level < 4\n        randomhue()\n        scale(0.25, 0.25)\n        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)\n    end\nend\n\napoly = star(O, 100, 7, 0.6, 0, vertices=true)\nprettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)\nfinish() # hide\nnothing # hide(Image: prettypoly)Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via simplify().using Luxor # hide\nDrawing(600, 500, \"assets/figures/simplify.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\nsethue(\"black\") # hide\nsetline(1) # hide\nfontsize(20) # hide\ntranslate(0, -120) # hide\nsincurve = [Point(6x, 80sin(x)) for x in -5π:π/20:5π]\nprettypoly(collect(sincurve), :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(collect(sincurve))), 0, 100)\ntranslate(0, 200)\nsimplercurve = simplify(collect(sincurve), 0.5)\nprettypoly(simplercurve, :stroke,\n    () -> begin\n            sethue(\"red\")\n            circle(O, 3, :fill)\n          end)\ntext(string(\"number of points: \", length(simplercurve)), 0, 100)\nfinish() # hide\nnothing # hide(Image: simplify)simplifyThe isinside() function returns true if a point is inside a polygon.using Luxor # hide\nDrawing(500, 500, \"assets/figures/isinside.png\") # hide\nbackground(\"white\") # hide\norigin() # hide\n\napolygon = star(O, 200, 8, 0.5, 0, vertices=true)\nfor pt in collect(first.(Table(30, 30, 15, 15)))\n    sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))\n    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, :fill) : circle(pt, 3, :fill)\nend\n\nfinish() # hide\nnothing # hide(Image: isinside)isinsideYou can use randompoint() and randompointarray() to create a random Point or list of Points.using Luxor, Random # hide\nDrawing(400, 250, \"assets/figures/randompoints.png\") # hide\nbackground(\"white\") # hide\nRandom.seed!(42) # hide\norigin() # hide\n\npt1 = Point(-100, -100)\npt2 = Point(100, 100)\n\nsethue(\"gray80\")\nmap(pt -> circle(pt, 6, :fill), (pt1, pt2))\nbox(pt1, pt2, :stroke)\n\nsethue(\"red\")\ncircle(randompoint(pt1, pt2), 7, :fill)\n\nsethue(\"blue\")\nmap(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))\n\nfinish() # hide\nnothing # hide(Image: isinside)randompoint\nrandompointarrayThere are some experimental polygon functions. These don\'t work well for polygons that aren\'t simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here\'s polysplit():using Luxor, Random # hide\nDrawing(400, 150, \"assets/figures/polysplit.png\") # hide\norigin() # hide\nsetopacity(0.7) # hide\nRandom.seed!(42) # hide\nsethue(\"black\") # hide\ns = squircle(O, 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide\nnothing # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid"
+    "text": "There are a number of experimental polygon functions. These won\'t work well for polygons that aren\'t simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here\'s polysplit():using Luxor, Random # hide\nDrawing(400, 150, \"assets/figures/polysplit.png\") # hide\norigin() # hide\nsetopacity(0.7) # hide\nRandom.seed!(42) # hide\nsethue(\"black\") # hide\ns = squircle(O, 60, 60, vertices=true)\npt1 = Point(0, -120)\npt2 = Point(0, 120)\nline(pt1, pt2, :stroke)\npoly1, poly2 = polysplit(s, pt1, pt2)\nrandomhue()\npoly(poly1, :fill)\nrandomhue()\npoly(poly2, :fill)\nfinish() # hide\nnothing # hide(Image: polysplit)polysplit\npolysortbydistance\npolysortbyangle\npolycentroid"
 },
 
 {
@@ -1605,7 +1621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.offsetpoly",
     "category": "function",
-    "text": "offsetpoly(path::AbstractArray{Point, 1}, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm \'flip\' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them\n\n\n\n\n\n"
+    "text": "offsetpoly(path::Array{Point, 1}, d)\n\nReturn a polygon that is offset from a polygon by d units.\n\nThe incoming set of points path is treated as a polygon, and another set of points is created, which form a polygon lying d units away from the source poly.\n\nPolygon offsetting is a topic on which people have written PhD theses and published academic papers, so this short brain-dead routine will give good results for simple polygons up to a point (!). There are a number of issues to be aware of:\n\nvery short lines tend to make the algorithm \'flip\' and produce larger lines\nsmall polygons that are counterclockwise and larger offsets may make the new polygon appear the wrong side of the original\nvery sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity\nduplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them\n\n\n\n\n\n"
 },
 
 {
@@ -1621,7 +1637,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyfit",
     "category": "function",
-    "text": "polyfit(plist::AbstractArray, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n\n\n"
+    "text": "polyfit(plist::Array, npoints=30)\n\nBuild a polygon that constructs a B-spine approximation to it. The resulting list of points makes a smooth path that runs between the first and last points.\n\n\n\n\n\n"
 },
 
 {
@@ -1749,7 +1765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.makebezierpath",
     "category": "function",
-    "text": "makebezierpath(pgon::AbstractArray{Point, 1}; smoothing=1)\n\nReturn a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier path is an array of segments (tuples of 4 points); each segment contains the four points that make up a section of the entire Bézier path. smoothing determines how closely the curve follows the polygon. A value of 0 returns a straight-sided path; as values move above 1 the paths deviate further from the original polygon\'s edges.\n\n\n\n\n\n"
+    "text": "makebezierpath(pgon::Array{Point, 1}; smoothing=1)\n\nReturn a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier path is an array of segments (tuples of 4 points); each segment contains the four points that make up a section of the entire Bézier path. smoothing determines how closely the curve follows the polygon. A value of 0 returns a straight-sided path; as values move above 1 the paths deviate further from the original polygon\'s edges.\n\n\n\n\n\n"
 },
 
 {
@@ -1813,7 +1829,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polysample",
     "category": "function",
-    "text": "polysample(p::AbstractArray{Point, 1}, npoints::Int64;\n        closed=true)\n\nSample the polygon p, returning a polygon with npoints to represent it. The first sampled point is:\n\n 1/`npoints` * `perimeter of p`\n\naway from the original first point of p.\n\nIf npoints is the same as length(p) the returned polygon is the same as the original, but the first point finishes up at the end (so new=circshift(old, 1)).\n\nIf closed is true, the entire polygon (including the edge joining the last point to the first point) is sampled.\n\n\n\n\n\n"
+    "text": "polysample(p::Array{Point, 1}, npoints::Int64;\n        closed=true)\n\nSample the polygon p, returning a polygon with npoints to represent it. The first sampled point is:\n\n 1/`npoints` * `perimeter of p`\n\naway from the original first point of p.\n\nIf npoints is the same as length(p) the returned polygon is the same as the original, but the first point finishes up at the end (so new=circshift(old, 1)).\n\nIf closed is true, the entire polygon (including the edge joining the last point to the first point) is sampled.\n\n\n\n\n\n"
 },
 
 {
@@ -1837,7 +1853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyperimeter",
     "category": "function",
-    "text": "polyperimeter(p::AbstractArray{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n\n\n"
+    "text": "polyperimeter(p::Array{Point, 1}; closed=true)\n\nFind the total length of the sides of polygon p.\n\n\n\n\n\n"
 },
 
 {
@@ -1845,7 +1861,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyportion",
     "category": "function",
-    "text": "polyportion(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they\'ll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n\n\n"
+    "text": "polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they\'ll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyremainder() function to return the other part.\n\n\n\n\n\n"
 },
 
 {
@@ -1853,7 +1869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyremainder",
     "category": "function",
-    "text": "polyremainder(p::AbstractArray{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn the rest of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three quarters, 0.75 the last quarter, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they\'ll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyportion() function to return the other part.\n\n\n\n\n\n"
+    "text": "polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])\n\nReturn the rest of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three quarters, 0.75 the last quarter, and so on.\n\nIf you already have a list of the distances between each point in the polygon (the \"polydistances\"), you can pass them in pdist, otherwise they\'ll be calculated afresh, using polydistances(p, closed=closed).\n\nUse the complementary polyportion() function to return the other part.\n\n\n\n\n\n"
 },
 
 {
@@ -1861,7 +1877,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polydistances",
     "category": "function",
-    "text": "polydistances(p::AbstractArray{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n\n\n"
+    "text": "polydistances(p::Array{Point, 1}; closed=true)\n\nReturn an array of the cumulative lengths of a polygon.\n\n\n\n\n\n"
 },
 
 {
@@ -1877,7 +1893,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyarea",
     "category": "function",
-    "text": "polyarea(p::AbstractArray)\n\nFind the area of a simple polygon. It works only for polygons that don\'t self-intersect. See also polyorientation().\n\n\n\n\n\n"
+    "text": "polyarea(p::Array)\n\nFind the area of a simple polygon. It works only for polygons that don\'t self-intersect. See also polyorientation().\n\n\n\n\n\n"
 },
 
 {
@@ -1901,7 +1917,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Polygons and paths",
     "title": "Luxor.polyintersections",
     "category": "function",
-    "text": "polyintersections(S::AbstractArray{Point, 1}, C::AbstractArray{Point, 1})\n\nReturn an array of the points in polygon S plus the points where polygon S crosses polygon C. Calls intersectlinepoly().\n\nTODO This code is experimental...\n\n\n\n\n\n"
+    "text": "polyintersections(S::Array{Point, 1}, C::Array{Point, 1})\n\nReturn an array of the points in polygon S plus the points where polygon S crosses polygon C. Calls intersectlinepoly().\n\nTODO This code is experimental...\n\n\n\n\n\n"
 },
 
 {
@@ -2205,7 +2221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.setmatrix",
     "category": "function",
-    "text": "setmatrix(m::AbstractArray)\n\nChange the current matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n\n\n"
+    "text": "setmatrix(m::Array)\n\nChange the current matrix to matrix m. Use getmatrix() to get the current matrix.\n\n\n\n\n\n"
 },
 
 {
@@ -2213,7 +2229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Transforms and matrices",
     "title": "Luxor.transform",
     "category": "function",
-    "text": "transform(a::AbstractArray)\n\nModify the current matrix by multiplying it by matrix a.\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n\n\n"
+    "text": "transform(a::Array)\n\nModify the current matrix by multiplying it by matrix a.\n\nFor example, to skew the current state by 45 degrees in x and move by 20 in y direction:\n\ntransform([1, 0, tand(45), 1, 0, 20])\n\nUse getmatrix() to get the current matrix.\n\n\n\n\n\n"
 },
 
 {
@@ -2621,7 +2637,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Animation",
     "title": "Luxor.animate",
     "category": "function",
-    "text": "animate(movie::Movie, scenelist::AbstractArray{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30,\n        tempdirectory=\".\")\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n\n\n"
+    "text": "animate(movie::Movie, scenelist::Array{Scene, 1};\n        creategif=false,\n        pathname=\"\"\n        framerate=30,\n        tempdirectory=\".\")\n\nCreate the movie defined in movie by rendering the frames define in the array of scenes in scenelist.\n\nIf creategif is true, the function tries to call ffmpeg on the resulting frames to build a GIF animation. This will be stored in pathname (an existing file will be overwritten; use a \".gif\" suffix), or in (movietitle).gif in a temporary directory.\n\nExample\n\nanimate(bang, [\n    Scene(bang, backdrop, 0:200),\n    Scene(bang, frame1, 0:200, easingfunction=easeinsine)],\n    creategif=true,\n    pathname=\"/tmp/animationtest.gif\")\n\n\n\n\n\nanimate(movie::Movie, scene::Scene; creategif=false, framerate=30)\n\nCreate the movie defined in movie by rendering the frames define in scene.\n\n\n\n\n\n"
 },
 
 {

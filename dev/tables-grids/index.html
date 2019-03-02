@@ -7,8 +7,6 @@ for (pos, n) in tiles
         gsave()
         translate(pos)
         subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
-
-        @show tiles[n]
         for (pos1, n1) in subtiles
             randomhue()
             box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
@@ -17,12 +15,7 @@ for (pos, n) in tiles
     end
     sethue(&quot;white&quot;)
     textcentered(string(n), pos + Point(0, 5))
-end</code></pre><pre><code class="language-none">tiles[n] = (Point(0.0, -183.75), 3)
-tiles[n] = (Point(-316.0, -61.25), 6)
-tiles[n] = (Point(158.0, -61.25), 9)
-tiles[n] = (Point(-158.0, 61.25), 12)
-tiles[n] = (Point(316.0, 61.25), 15)
-tiles[n] = (Point(0.0, 183.75), 18)</code></pre></div><p><img src="../assets/figures/tiler.png" alt="tiler"/></p><p><code>Partition</code> is like <code>Tiler</code>, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.Tiler" href="#Luxor.Tiler"><code>Luxor.Tiler</code></a> — <span class="docstring-category">Type</span>.</div><div><div><pre><code class="language-none">tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)</code></pre><p>A Tiler is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)</p></li><li><p>the number of the tile</p></li></ul><p><code>areawidth</code> and <code>areaheight</code> are the dimensions of the area to be tiled, <code>nrows</code>/<code>ncols</code> are the number of rows and columns required, and <code>margin</code> is applied to all four edges of the area before the function calculates the tile sizes required.</p><p>Tiler and Partition are similar:</p><ul><li><p>Partition lets you specify the width and height of a cell</p></li><li><p>Tiler lets you specify how many rows and columns of cells you want, and a margin:</p></li></ul><pre><code class="language-none">tiles = Tiler(1000, 800, 4, 5, margin=20)
+end</code></pre></div><p><img src="../assets/figures/tiler.png" alt="tiler"/></p><p><code>Partition</code> is like <code>Tiler</code>, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.Tiler" href="#Luxor.Tiler"><code>Luxor.Tiler</code></a> — <span class="docstring-category">Type</span>.</div><div><div><pre><code class="language-none">tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)</code></pre><p>A Tiler is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)</p></li><li><p>the number of the tile</p></li></ul><p><code>areawidth</code> and <code>areaheight</code> are the dimensions of the area to be tiled, <code>nrows</code>/<code>ncols</code> are the number of rows and columns required, and <code>margin</code> is applied to all four edges of the area before the function calculates the tile sizes required.</p><p>Tiler and Partition are similar:</p><ul><li><p>Partition lets you specify the width and height of a cell</p></li><li><p>Tiler lets you specify how many rows and columns of cells you want, and a margin:</p></li></ul><pre><code class="language-none">tiles = Tiler(1000, 800, 4, 5, margin=20)
 for (pos, n) in tiles
     # the point pos is the center of the tile
 end</code></pre><p>You can access the calculated tile width and height like this:</p><pre><code class="language-none">tiles = Tiler(1000, 800, 4, 5, margin=20)
