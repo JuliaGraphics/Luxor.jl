@@ -965,7 +965,7 @@ Move (permanently) a polygon from `frompoint` to `topoints`.
 """
 function polymove!(pgon, frompoint::Point, topoint::Point)
     d = topoint - frompoint
-    for i in eachindex(pgon)
+    @inbounds for i in eachindex(pgon)
         pgon[i] = Point(pgon[i].x + d.x, pgon[i].y + d.y)
     end
     return pgon
@@ -979,7 +979,7 @@ Scale (permanently) a polygon by `s`, relative to `center`.
 """
 function polyscale!(pgon, s;
         center=O)
-    for i in eachindex(pgon)
+    @inbounds for i in eachindex(pgon)
         pgon[i] = between(center, pgon[i], s)
     end
     return pgon
@@ -995,7 +995,7 @@ function polyrotate!(pgon, θ;
         center=O)
     costheta = cos(θ)
     sintheta = sin(θ)
-    for i in eachindex(pgon)
+    @inbounds for i in eachindex(pgon)
         pgon[i] = Point(
             (pgon[i].x - center.x) * costheta  -  ((pgon[i].y - center.y) * sintheta) + center.x,
             (pgon[i].x - center.x) * sintheta  +  ((pgon[i].y - center.y) * costheta) + center.y)

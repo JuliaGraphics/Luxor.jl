@@ -4,9 +4,11 @@
 
 ### Added
 
-- dimension()
+- dimension() for dimensioning
 
-- intersectionlines()
+- polymove!(), polyrotate!(), polyscale!() for changing polygons
+
+- intersectionlines() replaces intersection()
 
 ### Changed
 
