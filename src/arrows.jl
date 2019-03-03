@@ -4,13 +4,14 @@
         arrowheadlength = 10,
         arrowheadangle = pi/8)
 
-Draw a line between two points and add an arrowhead at the end. The arrowhead length will be
-the length of the side of the arrow's head, and the arrowhead angle is the angle between the
-sloping side of the arrowhead and the arrow's shaft.
+Draw a line between two points and add an arrowhead at the end. The arrowhead
+length will be the length of the side of the arrow's head, and the arrowhead
+angle is the angle between the sloping side of the arrowhead and the arrow's
+shaft.
 
-Arrows don't use the current linewidth setting (`setline()`), and defaults to 1, but you can
-specify another value. It doesn't need stroking/filling, the shaft is stroked and the
-head filled with the current color.
+Arrows don't use the current linewidth setting (`setline()`), and defaults to 1,
+but you can specify another value. It doesn't need stroking/filling, the shaft
+is stroked and the head filled with the current color.
 
 """
 function arrow(startpoint::Point, endpoint::Point;

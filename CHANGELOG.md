@@ -13,6 +13,8 @@
 ### Changed
 
 - functions that used intersection() now use intersectionlines()
+- more functions return points or arrays (or true) rather than unions of Booleans/points or nothing
+- rescale(x, a, b) defaults to rescale(x, a, b, 0.0, 1.0)
 
 ### Removed
 

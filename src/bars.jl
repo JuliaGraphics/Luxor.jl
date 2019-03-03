@@ -7,15 +7,17 @@
             labelfunction = f,
         )
 
-Draw some bars where each bar is the height of a value in the array. The bars will fit in
-a box `yheight` high (even if there are negative values).
+Draw some bars where each bar is the height of a value in the array. The bars
+will fit in a box `yheight` high (even if there are negative values).
 
 To control the drawing of the text and bars, define functions that process the
 end points:
 
-`mybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)`
+`mybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0,
+bartotal=0)`
 
-`mylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0, bartotal=0)`
+`mylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=0,
+bartotal=0)`
 
 and pass them like this:
 

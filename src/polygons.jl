@@ -26,6 +26,7 @@ function poly(pointlist::Array{Point, 1}, action::Symbol = :nothing;
         closepath()
     end
     do_action(action)
+    return pointlist
 end
 
 """
@@ -225,12 +226,15 @@ end
 """
     polysplit(p, p1, p2)
 
-Split a polygon into two where it intersects with a line. It returns two polygons:
+Split a polygon into two where it intersects with a line. It returns two
+polygons:
 
-    (poly1, poly2)
+```
+(poly1, poly2)
+```
 
-This doesn't always work, of course. For example, a polygon the shape of the letter "E"
-might end up being divided into more than two parts.
+This doesn't always work, of course. For example, a polygon the shape of the
+letter "E" might end up being divided into more than two parts.
 """
 function polysplit(pointlist::Array{Point, 1}, p1::Point, p2::Point)
     # the two-pass version
@@ -330,6 +334,7 @@ function prettypoly(pointlist::Array{Point, 1}, action=:nothing, vertexfunction 
         grestore()
         pointnumber += 1
     end
+    return pointlist
 end
 
 function getproportionpoint(point::Point, segment, length, dx, dy)
@@ -456,23 +461,23 @@ end
 
 Return a polygon that is offset from a polygon by `d` units.
 
-The incoming set of points `path` is treated as a polygon, and another set of points is
-created, which form a polygon lying `d` units away from the source poly.
+The incoming set of points `path` is treated as a polygon, and another set of
+points is created, which form a polygon lying `d` units away from the source
+poly.
 
-Polygon offsetting is a topic on which people have written PhD theses and published academic
-papers, so this short brain-dead routine will give good results for simple polygons up to a
-point (!). There are a number of issues to be aware of:
+Polygon offsetting is a topic on which people have written PhD theses and
+published academic papers, so this short brain-dead routine will give good
+results for simple polygons up to a point (!). There are a number of issues to
+be aware of:
 
 - very short lines tend to make the algorithm 'flip' and produce larger lines
 
-- small polygons that are counterclockwise and larger offsets may make the new polygon appear
-  the wrong side of the original
+- small polygons that are counterclockwise and larger offsets may make the new
+polygon appear the wrong side of the original
 
-- very sharp vertices will produce even sharper offsets, as the calculated intersection point
-  veers off to infinity
+- very sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity
 
-- duplicated adjacent points might cause the routine to scratch its head and wonder how to
-  draw a line parallel to them
+- duplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them
 """
 function offsetpoly(path::Array{Point, 1}, d)
     # don't try to calculate offset of two identical points
@@ -557,7 +562,6 @@ end
 Convert the current path to an array of polygons.
 
 Returns an array of polygons.
-
 """
 function pathtopoly()
     originalpath = getpathflat()
@@ -617,8 +621,8 @@ end
 """
     nearestindex(polydistancearray, value)
 
-Return a tuple of the index of the largest value in `polydistancearray` less than `value`,
-and the difference value. Array is assumed to be sorted.
+Return a tuple of the index of the largest value in `polydistancearray` less
+than `value`, and the difference value. Array is assumed to be sorted.
 
 (Designed for use with `polydistances()`).
 """
@@ -636,9 +640,13 @@ end
 """
     polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
 
-Return a portion of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first quarter, 0.75 the first three quarters, and so on.
+Return a portion of a polygon, starting at a value between 0.0 (the beginning)
+and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first
+quarter, 0.75 the first three quarters, and so on.
 
-If you already have a list of the distances between each point in the polygon (the "polydistances"), you can pass them in `pdist`, otherwise they'll be calculated afresh, using `polydistances(p, closed=closed)`.
+If you already have a list of the distances between each point in the polygon
+(the "polydistances"), you can pass them in `pdist`, otherwise they'll be
+calculated afresh, using `polydistances(p, closed=closed)`.
 
 Use the complementary `polyremainder()` function to return the other part.
 """
@@ -669,9 +677,13 @@ end
 """
     polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
 
-Return the rest of a polygon, starting at a value between 0.0 (the beginning) and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three quarters, 0.75 the last quarter, and so on.
+Return the rest of a polygon, starting at a value between 0.0 (the beginning)
+and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three
+quarters, 0.75 the last quarter, and so on.
 
-If you already have a list of the distances between each point in the polygon (the "polydistances"), you can pass them in `pdist`, otherwise they'll be calculated afresh, using `polydistances(p, closed=closed)`.
+If you already have a list of the distances between each point in the polygon
+(the "polydistances"), you can pass them in `pdist`, otherwise they'll be
+calculated afresh, using `polydistances(p, closed=closed)`.
 
 Use the complementary `polyportion()` function to return the other part.
 """

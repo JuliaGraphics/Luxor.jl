@@ -92,4 +92,33 @@ after some type work, there's a slight improvement in allocations
     samples:          6164
     evals/sample:     1
 
+3:  Julia v1.1 Luxor v1.3.0-master iMac 2019-03-03 17:30:20
+
+  julia-1.1> @benchmark bm1()
+    BenchmarkTools.Trial:
+      memory estimate:  39.50 KiB
+      allocs estimate:  787
+      --------------
+      minimum time:     1.917 ms (0.00% GC)
+      median time:      2.145 ms (0.00% GC)
+      mean time:        2.247 ms (1.18% GC)
+      maximum time:     47.751 ms (91.55% GC)
+      --------------
+      samples:          2217
+      evals/sample:     1
+
+    julia-1.1> @benchmark bm2()
+    BenchmarkTools.Trial:
+      memory estimate:  50.27 KiB
+      allocs estimate:  1190
+      --------------
+      minimum time:     623.612 μs (0.00% GC)
+      median time:      781.187 μs (0.00% GC)
+      mean time:        856.280 μs (1.62% GC)
+      maximum time:     48.690 ms (95.28% GC)
+      --------------
+      samples:          5793
+      evals/sample:     1
+
+
  =#

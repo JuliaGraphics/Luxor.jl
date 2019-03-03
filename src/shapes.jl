@@ -27,16 +27,15 @@ top left, top right, bottom right.
 """
 function rect(cornerpoint::Point, w, h, action::Symbol=:nothing;
         vertices=false)
-    if vertices
-        return [
-            Point(cornerpoint.x,     cornerpoint.y + h),
-            Point(cornerpoint.x,     cornerpoint.y),
-            Point(cornerpoint.x + w, cornerpoint.y),
-            Point(cornerpoint.x + w, cornerpoint.y + h)
-        ]
-    else
+    if !vertices
         rect(cornerpoint.x, cornerpoint.y, w, h, action)
     end
+    return [
+        Point(cornerpoint.x,     cornerpoint.y + h),
+        Point(cornerpoint.x,     cornerpoint.y),
+        Point(cornerpoint.x + w, cornerpoint.y),
+        Point(cornerpoint.x + w, cornerpoint.y + h)
+    ]
 end
 
 """
@@ -50,16 +49,15 @@ top left, top right, bottom right.
 """
 function box(corner1::Point, corner2::Point, action::Symbol=:nothing;
     vertices=false)
-    if vertices
-       return  [
-       Point(corner1.x, corner1.y),
-       Point(corner2.x, corner1.y),
-       Point(corner2.x, corner2.y),
-       Point(corner1.x, corner2.y)
-       ]
-    else
+    if !vertices
         rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
     end
+    return [
+        Point(corner1.x, corner1.y),
+        Point(corner2.x, corner1.y),
+        Point(corner2.x, corner2.y),
+        Point(corner1.x, corner2.y)
+    ]
 end
 
 """
@@ -81,13 +79,15 @@ Create a box/rectangle centered at point `pt` with width and height. Use `vertic
 return an array of the four corner points rather than draw the box.
 """
 function box(pt::Point, width, height, action::Symbol=:nothing; vertices=false)
-    if vertices
-        return [Point(pt.x - width/2, pt.y + height/2),
-                Point(pt.x - width/2, pt.y - height/2),
-                Point(pt.x + width/2, pt.y - height/2),
-                Point(pt.x + width/2, pt.y + height/2)]
+    if !vertices
+        rect(pt.x - width/2, pt.y - height/2, width, height, action)
     end
-    rect(pt.x - width/2, pt.y - height/2, width, height, action)
+    return [
+        Point(pt.x - width/2, pt.y + height/2),
+        Point(pt.x - width/2, pt.y - height/2),
+        Point(pt.x + width/2, pt.y - height/2),
+        Point(pt.x + width/2, pt.y + height/2)
+    ]
 end
 
 """
@@ -101,8 +101,8 @@ box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing) =
 """
     box(x, y, width, height, cornerradius, action=:nothing)
 
-Create a box/rectangle centered at point `x/y` with `width` and `height`. Round each corner
-by `cornerradius`.
+Create a box/rectangle centered at point `x/y` with `width` and `height` and
+round each corner by `cornerradius`.
 """
 function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:stroke)
     gsave()
@@ -182,11 +182,10 @@ function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0, actio
               reversepath=false)
     ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
                     y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
-    if vertices
-        ptlist
-    else
+    if !vertices
         poly(ptlist, action, close=true, reversepath=reversepath)
     end
+    return ptlist
 end
 
 """
@@ -237,11 +236,10 @@ function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
     if reversepath
         result = reverse(result)
     end
-    if vertices
-        result
-    else
+    if !vertices
         poly(result, action, close=true)
     end
+    return result
 end
 
 """

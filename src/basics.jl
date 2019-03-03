@@ -27,13 +27,16 @@ function origin(pt)
 end
 
 """
-    rescale(x, from_min, from_max, to_min, to_max)
+    rescale(x, from_min, from_max, to_min=0.0, to_max=1.0)
 
-Convert `x` from one linear scale (`from_min` to `from_max`) to another (`to_min` to `to_max`).
+Convert `x` from one linear scale (`from_min` to `from_max`) to another
+(`to_min` to `to_max`).
 
 The scales can also be supplied in tuple form:
 
-    rescale(x, (from_min, from_max), (to_min, to_max))
+```
+rescale(x, (from_min, from_max), (to_min, to_max))
+```
 
 ```jldoctest
 using Luxor
@@ -57,7 +60,7 @@ julia> rescale(15, (0, 100), (1000, 0))
 ```
 
 """
-rescale(x, from_min, from_max, to_min, to_max) =
+rescale(x, from_min, from_max, to_min=0.0, to_max=1.0) =
     ((x - from_min) / (from_max - from_min)) * (to_max - to_min) + to_min
 rescale(x, from::NTuple{2,Number}, to::NTuple{2, Number}) =
     ((x - from[1]) / (from[2] - from[1])) * (to[2] - to[1]) + to[1]
@@ -84,6 +87,7 @@ black':
 
     background(RGBA(0, 0, 0, 0))
 
+Returns the colors in a tuple.
 """
 function background(col::T) where T <: AbstractString
    setcolor(col)
@@ -362,14 +366,20 @@ Draw a straight line through `pos` at an angle `theta` from the x axis.
 By default, the line spans the entire drawing, but you can supply a BoundingBox
 to change the extent of the line.
 
-    rule(O)       # draws an x axis
-    rule(O, pi/2) # draws a  y axis
+```
+rule(O)       # draws an x axis
+rule(O, pi/2) # draws a  y axis
+```
 
 The function:
 
-    rule(O, pi/2, boundingbox=BoundingBox()/2)
+```
+rule(O, pi/2, boundingbox=BoundingBox()/2)
+```
 
 draws a line that spans a bounding box half the width and height of the drawing.
+
+Returns a Set of end points.
 """
 function rule(pos, theta=0.0;
         boundingbox=BoundingBox())
@@ -481,7 +491,9 @@ Scale workspace by `x` and `y`.
 
 Example:
 
-    scale(0.2, 0.3)
+```
+scale(0.2, 0.3)
+```
 
 """
 scale(sx::Real, sy::Real) = Cairo.scale(get_current_cr(), sx, sy)
@@ -569,12 +581,12 @@ function rulers()
         w = 20
         setopacity(0.5)
         setline(0.25)
-        sethue("darkorange")
+        sethue(1.0, 0.549, 0.0) # darkorange
         #x axis
         box(O, O + (n, -w), :fillstroke)
         #y axis
         box(O - (w, 0), O + (0, n), :fillstroke)
-        sethue("darkgoldenrod")
+        sethue(0.722, 0.525, 0.043) # darkgoldenrod
         setopacity(1)
         [line(Point(x, 0), Point(x, -w/4), :stroke) for x in 0:10:n]
         [line(Point(-w/4, y), Point(0, y), :stroke) for y in 0:10:n]
@@ -589,7 +601,7 @@ function rulers()
         fontsize(15)
         text("X", O + (n-w/2, w), halign=:right, valign=:middle)
         text("Y", O + (-3w/2, n-w), halign=:right, valign=:middle, angle=pi/2)
-        sethue("white")
+        sethue(1.0, 1.0, 1.0)
         text("X", O + (w, -w/2), halign=:right, valign=:middle)
         text("Y", O + (-w/3, w/3), halign=:right, valign=:middle, angle=pi/2)
         #center
@@ -597,4 +609,5 @@ function rulers()
         setopacity(0.5)
         fillpath()
     end
+    return true
 end
