@@ -4,8 +4,9 @@ Drawing(700, 350, "dimensioning-test.svg")
 origin()
 background("white")
 pentagon = ngonside(O, 120, 5, vertices=true)
+sethue("black")
+setline(.2)
 poly(pentagon, :stroke, close=true)
-
 
 @testset "dimensioning" begin
     d, t = dimension(O, pentagon[4],

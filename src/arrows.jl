@@ -120,8 +120,8 @@ end
     dimension(p1::Point, p2::Point;
         format::Function   = (d) -> string(d), # process the measured value into a string
         offset             = 0.0,              # left/right, parallel with x axis
-        fromextension      = [10.0, 10.0],     # length of extensions lines left and right
-        toextension        = [10.0, 10.0],     #
+        fromextension      = (10.0, 10.0),     # length of extensions lines left and right
+        toextension        = (10.0, 10.0),     #
         textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)
         texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)
         textgap            = 5,                # gap between start of each arrow (≈ fontsize?)
@@ -171,8 +171,8 @@ Returns the measured distance and the text.
 function dimension(p1::Point, p2::Point;
     format::Function   = (d) -> string(d), # process the measured value into a string
     offset             = 0.0,              # left/right, parallel with x axis
-    fromextension      = [10.0, 10.0],     # length of extensions lines left and right
-    toextension        = [10.0, 10.0],     #
+    fromextension      = (10.0, 10.0),     # length of extensions lines left and right
+    toextension        = (10.0, 10.0),     #
     textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)
     texthorizontaloffset = 0.0,            #
     textgap            = 5,                # gap between start of each arrow (≈ fontsize?)
