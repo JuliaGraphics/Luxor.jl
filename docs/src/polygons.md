@@ -15,7 +15,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 
 ```@setup polytable
 using Luxor, DelimitedFiles
-Drawing(800, 275, "assets/figures/polytable.png")
+Drawing(800, 400, "assets/figures/polytable.png")
 background("white")
 origin()
 tabledata = readdlm(IOBuffer(
@@ -28,6 +28,9 @@ polygon       ngon()                polysmooth()          poly()             isi
 -             polyfit()             -                     -                  boundingbox()     polysortbyangle()
 -             hyptrochoid()         -                     -                  -                 polysortbydistance()
 -             epitrochoid()         -                     -                  -                 polyintersections()
+-             -                     -                     -                  -                 polymove!()
+-             -                     -                     -                  -                 polyscale!()
+-             -                     -                     -                  -                 polyrotate!()
 path          getpath()             pathtopoly()          -                  -                 -
 -             getpathflat()         -                     -                  -                 -  
 bezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -
@@ -56,12 +59,12 @@ t = Table(fill(20, nrows), widths)
 for r in 1:size(t)[1]
    for c in 1:size(t)[2]
         @layer begin
-        sethue("thistle1")
+        sethue("thistle")
         if r >= 2 && c >= 2
             if isodd(c)
-                setopacity(0.5)
+                setopacity(0.1)
             else
-                setopacity(0.75)
+                setopacity(0.4)
             end
             box(t, r, c, :fill)
         end
@@ -84,33 +87,42 @@ A polygon is an array of points. The points can be joined with straight lines.
 
 You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
 
-![n-gons](assets/figures/n-gon.png)
 
-```julia
-using Luxor, Colors
-Drawing(1200, 1400)
+```@example
+using Luxor, Colors # hide
+Drawing(700, 600, "assets/figures/n-gon.png") # hide
 
-origin()
-cols = diverging_palette(60, 120, 20) # hue 60 to hue 120
-background(cols[1])
-setopacity(0.7)
+origin() # hide
+background("white") # hide
+cols = distinguishable_colors(10) # hue 60 to hue 120
 setline(2)
+fontsize(12)
+tiles = Tiler(700, 600, 3, 3)
 
-# circumradius of 500
-ngon(0, 0, 500, 8, 0, :clip)
+for (pos, n) in tiles
+    @layer begin
+        translate(pos)
 
-for y in -500:50:500
-    for x in -500:50:500
-        setcolor(cols[rand(1:20)])
-        ngon(x, y, rand(20:25), rand(3:12), 0, :fill)
-        setcolor(cols[rand(1:20)])
-        ngon(x, y, rand(10:20), rand(3:12), 0, :stroke)
+        p = ngon(O, 80, n, vertices=true)
+
+        sethue(cols[n])
+
+        poly(p, :fill, close=true)
+        sethue("black")
+        poly(p, :stroke, close=true)
+
+        circle(O, 4, :fill)
+
+        label.([string(i) for i in 1:n], slope.(O, p), p, offset=5)
     end
 end
 
-finish()
-preview()
+finish() # hide
+
+nothing # hide
 ```
+
+![n-gons](assets/figures/n-gon.png)
 
 If you want to specify the side length rather than the circumradius, use `ngonside()`.
 
@@ -432,7 +444,7 @@ finish() # hide
 nothing # hide
 ```
 
-The polygons are changed (notice the `!` in the function names).
+The polygon is continually modified (notice the `!` in the function names).
 
 ![poly changing](assets/figures/polychange.png)
 
