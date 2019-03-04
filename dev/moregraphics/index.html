@@ -91,8 +91,8 @@ dimension(pentagon[1], pentagon[5],
     textgap              = 5)</code></pre></div><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.dimension" href="#Luxor.dimension"><code>Luxor.dimension</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-none">dimension(p1::Point, p2::Point;
     format::Function   = (d) -&gt; string(d), # process the measured value into a string
     offset             = 0.0,              # left/right, parallel with x axis
-    fromextension      = [10.0, 10.0],     # length of extensions lines left and right
-    toextension        = [10.0, 10.0],     #
+    fromextension      = (10.0, 10.0),     # length of extensions lines left and right
+    toextension        = (10.0, 10.0),     #
     textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)
     texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)
     textgap            = 5,                # gap between start of each arrow (≈ fontsize?)
