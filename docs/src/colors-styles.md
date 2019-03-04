@@ -9,11 +9,11 @@ DocTestSetup = quote
 
 For color definitions and conversions, you can use [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).
 
-`setcolor()` and `sethue()` apply a single solid or transparent color to shapes.
+`setcolor()` and `sethue()` will apply a single solid or transparent color to new graphics.
 
-`setblend()` applies a smooth transition between two or more colors.
+`setblend()` will apply a smooth transition between two or more colors to new graphics.
 
-`setmesh()` applies a color mesh.
+`setmesh()` will apply a color mesh to new graphics.
 
 The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
 
