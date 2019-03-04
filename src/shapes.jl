@@ -42,7 +42,7 @@ end
     box(cornerpoint1, cornerpoint2, action=:nothing;
         vertices=false)
 
-Create a rectangle between two points and do an action.
+Create a box (rectangle) between two points and do an action.
 
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
@@ -63,8 +63,8 @@ end
 """
     box(points::Array, action=:nothing)
 
-Create a box/rectangle using the first two points of an array of Points to defined
-opposite corners.
+Create a box/rectangle using the first two points of an array of Points to
+defined opposite corners.
 
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
@@ -75,8 +75,9 @@ box(bbox::Array, action::Symbol=:nothing; kwargs...) =
 """
     box(pt::Point, width, height, action=:nothing; vertices=false)
 
-Create a box/rectangle centered at point `pt` with width and height. Use `vertices=true` to
-return an array of the four corner points rather than draw the box.
+Create a box/rectangle centered at point `pt` with width and height. Use
+`vertices=true` to return an array of the four corner points rather than draw
+the box.
 """
 function box(pt::Point, width, height, action::Symbol=:nothing; vertices=false)
     if !vertices
@@ -101,7 +102,7 @@ box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing) =
 """
     box(x, y, width, height, cornerradius, action=:nothing)
 
-Create a box/rectangle centered at point `x/y` with `width` and `height` and
+Draw a box/rectangle centered at point `x/y` with `width` and `height` and
 round each corner by `cornerradius`.
 """
 function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:stroke)
@@ -155,11 +156,11 @@ end
 Find the vertices of a regular n-sided polygon centered at `x`, `y` with
 circumradius `radius`.
 
-The polygon is drawn counterclockwise, starting with the first vertex drawn
-below the positive x-axis.
+The polygon is constructed counterclockwise, starting with the first vertex
+drawn below the positive x-axis.
 
 If you just want the raw points, use keyword argument `vertices=true`, which
-returns the array of points instead. Compare:
+returns the array of points. Compare:
 
 ```julia
 ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
