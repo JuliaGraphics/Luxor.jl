@@ -133,10 +133,10 @@ To get points from the grid, use `nextgridpoint(g::Grid)`.
 
     julia> grid = GridRect(O, 0, 40);
     julia> nextgridpoint(grid)
-    Luxor.Point(0.0,0.0)
+    Luxor.Point(0.0, 0.0)
 
     julia> nextgridpoint(grid)
-    Luxor.Point(0.0,40.0)
+    Luxor.Point(0.0, 40.0)
 
 When you run out of grid points, you'll wrap round and start again.
 """

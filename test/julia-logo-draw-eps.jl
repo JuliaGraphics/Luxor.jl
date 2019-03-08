@@ -73,17 +73,17 @@ function colorgrid_eps()
 end
 
 function draw_logo(fname)
-    Drawing(1600,1600, fname)
+    Drawing(1600, 1600, fname)
     origin()
     background("white")
 
-    translate(-500,-200)
+    translate(-500, -200)
     spiral_logo_eps()
 
-    translate(750,0)
+    translate(750, 0)
     expandingspiral_eps()
 
-    translate(-1000,500)
+    translate(-1000, 500)
     dropshadow_eps()
 
     translate(700, -100)

@@ -383,9 +383,9 @@ For artistic graphics you might prefer noisy input values to purely random ones.
 
 In this example, the gray value varies gradually as the `noise()` function returns values between 0 and 1 depending on the location of the two input values `pos.x` and `pos.y`.
 
-The top two quadrants use a lower value for the `detail` keyword argument, an integer specifying how many "octaves" of noise you want. You can see that the detail level is low.
+The top two quadrants use a lower value for the `detail` keyword argument, an integer ()>= 1) specifying how many "octaves" of noise you want.
 
-The left two quadrants use a lower value for the `persistence` keyword argument, a floating point number specifying how quickly the amplitude diminishes for each successive level of detail. There is more fine detail when the persistence is higher, particularly when the `detail` setting is also high.
+The left two quadrants use a lower value for the `persistence` keyword argument, a floating point number specifying how the amplitude diminishes for each successive level of detail. There is more fine detail when the persistence is higher, particularly when the `detail` setting is also high.
 
 ```@example
 using Luxor, Colors # hide
@@ -396,11 +396,13 @@ origin() # hide
 
 tiles = Tiler(800, 400, 200, 200)
 sethue("black")
-for (pos, n) in tiles
-    freq = 0.005
-    pos.y < 0 ? d = 2 : d = 4
-    pos.x < 0 ? pers = 0.35 : pers = 1.25
-    ns = noise(freq * pos.x, freq * pos.y, detail=d, persistence=pers)
+or (pos, n) in tiles
+    freq = 0.05
+    pos.y < 0 ? d = 1      : d = 4
+    pos.x < 0 ? pers = 0.3 : pers = 1.0
+    ns = noise(freq * pos.x, freq * pos.y,
+        detail=d,
+        persistence=pers)
     setgray(ns)
     box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
 end
@@ -413,5 +415,5 @@ nothing # hide
 
 ```@docs
 noise
-seednoise
+initnoise
 ```

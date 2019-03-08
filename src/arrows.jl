@@ -51,7 +51,7 @@ function arrow(startpoint::Point, endpoint::Point;
     arrowheadbottomsideangle = shaftangle - arrowheadangle
     botx = endpoint.x + cos(arrowheadbottomsideangle) * arrowheadlength
     boty = endpoint.y + sin(arrowheadbottomsideangle) * arrowheadlength
-    poly([Point(topx,topy), endpoint, Point(botx,boty)], :fill)
+    poly([Point(topx, topy), endpoint, Point(botx, boty)], :fill)
     grestore()
 end
 
@@ -113,7 +113,7 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     topy =                     endpoint.y + sin(arrowheadinnersideangle) * arrowheadlength
     botx =                     endpoint.x + cos(arrowheadoutersideangle) * arrowheadlength
     boty =                     endpoint.y + sin(arrowheadoutersideangle) * arrowheadlength
-    poly([Point(topx,topy), Point(endpoint.x, endpoint.y), Point(botx,boty)], :fill)
+    poly([Point(topx, topy), Point(endpoint.x, endpoint.y), Point(botx, boty)], :fill)
     grestore()
 end
 

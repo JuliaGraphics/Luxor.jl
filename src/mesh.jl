@@ -51,7 +51,7 @@ function mesh(bezierpath::BezierPath,
 end
 
 # old style for compatibility
-mesh(bezierpath::Array{NTuple{4,Point}}, colors=Array{ColorTypes.Colorant, 1}) =
+mesh(bezierpath::Array{NTuple{4, Point}}, colors=Array{ColorTypes.Colorant, 1}) =
     mesh(BezierPath(bezierpath), colors)
 
 """

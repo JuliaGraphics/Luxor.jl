@@ -10,7 +10,7 @@ mutable struct Drawing
     bluevalue::Float64
     alpha::Float64
     buffer::IOBuffer # Keeping both buffer and data because I think the buffer might get GC'ed otherwise
-    bufferdata::Array{UInt8,1} # Direct access to data
+    bufferdata::Array{UInt8, 1} # Direct access to data
 
     function Drawing(w, h, stype::Symbol, f::AbstractString="")
         bufdata = UInt8[]
@@ -19,11 +19,11 @@ mutable struct Drawing
         if stype == :pdf
             the_surface     =  Cairo.CairoPDFSurface(iobuf, w, h)
         elseif stype == :png # default to PNG
-            the_surface     = Cairo.CairoARGBSurface(w,h)
+            the_surface     = Cairo.CairoARGBSurface(w, h)
         elseif stype == :eps
-            the_surface     = Cairo.CairoEPSSurface(iobuf, w,h)
+            the_surface     = Cairo.CairoEPSSurface(iobuf, w, h)
         elseif stype == :svg
-            the_surface     = Cairo.CairoSVGSurface(iobuf, w,h)
+            the_surface     = Cairo.CairoSVGSurface(iobuf, w, h)
         else
             error("Unknown Luxor surface type $stype")
         end
@@ -104,7 +104,7 @@ function Base.show(io::IO, d::Luxor.Drawing)
 
 # in memory:
 
-Base.showable(::MIME"image/svg+xml",d::Luxor.Drawing) = d.surfacetype == :svg
+Base.showable(::MIME"image/svg+xml", d::Luxor.Drawing) = d.surfacetype == :svg
 Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
 
 # file-based

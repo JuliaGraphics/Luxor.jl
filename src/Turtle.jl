@@ -37,7 +37,7 @@ mutable struct Turtle
     ypos::Float64
     pendown::Bool
     orientation::Float64 # stored in radians but set in degrees
-    pencolor::Tuple{Float64,Float64,Float64} # it's an RGB turtle
+    pencolor::Tuple{Float64, Float64, Float64} # it's an RGB turtle
     function Turtle(xpos, ypos, pendown::Bool, orientation, pencolor=(0.0, 0.0, 0.0))
         new(xpos, ypos, pendown, orientation, pencolor)
     end
@@ -47,13 +47,13 @@ Turtle(x, y) = Turtle(x, y, true, 0, (0, 0, 0))
 Turtle(pos::Point=O) = Turtle(pos.x, pos.y, true, 0, (0, 0, 0))
 Turtle(pos::Point, pendown::Bool) = Turtle(pos.x, pos.y, pendown, 0, (0, 0, 0))
 Turtle(pos::Point, pendown::Bool, orientation) = Turtle(pos.x, pos.y, pendown, orientation, (0, 0, 0))
-Turtle(pos::Point, pendown::Bool, orientation, col::NTuple{3,Number}) = Turtle(pos.x, pos.y, pendown, orientation, col)
+Turtle(pos::Point, pendown::Bool, orientation, col::NTuple{3, Number}) = Turtle(pos.x, pos.y, pendown, orientation, col)
 Turtle(pos::Point, pendown::Bool, orientation, r, g, b) = Turtle(pos.x, pos.y, pendown, orientation, (r, g, b))
 
 Base.broadcastable(t::Turtle) = Ref(t)
 
 # a stack to hold pushed/popped turtle positions
-const queue = Array{Array{Float64,1},1}()
+const queue = Array{Array{Float64, 1}, 1}()
 
 """
     Forward(t::Turtle, d=1)
@@ -221,7 +221,7 @@ function Pencolor(t::Turtle, col::AbstractString)
     Pencolor(t::Turtle, temp.r, temp.g, temp.b)
 end
 
-Pencolor(t::Turtle, col::NTuple{3,Number}) = Pencolor(t, col...)
+Pencolor(t::Turtle, col::NTuple{3, Number}) = Pencolor(t, col...)
 
 """
     Reposition(t::Turtle, pos::Point)

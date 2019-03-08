@@ -29,8 +29,8 @@ So, to place the logo by locating its center at a point, do this:
 
 ```
 gsave()
-translate(-165, -114) # anything between (-163 to -180, -96 to -114)
-# scale if required
+# scale() first if required
+translate(-165, -114) # anything between (x: -163 to -180, y: -96 to -114)
 julialogo()
 grestore()
 ```

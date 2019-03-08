@@ -29,7 +29,7 @@ function background_text(str_array)
 end
 
 function heart()
-    move(127,1) # damn, it's offset from 0/0, who drew this :/
+    move(127, 1) # damn, it's offset from 0/0, who drew this :/
     curve(134.2, -6.5, 134.2, -6.5, 156.1, -29.6)
     curve(185.8, -60.5, 198.1, -74.3, 213.7, -95.3)
     curve(240.4, -131, 253.3, -163.7, 253.3, -194.9)
@@ -47,23 +47,23 @@ end
 
 function heart_with_julias(x=0, y=0)
     gsave()
-    translate(x,y)
+    translate(x, y)
     setcolor("lavenderblush")
     heart()
     fillpreserve()
     clip()
-    translate(-50,-300)
+    translate(-50, -300)
     for y in 0:30:500
         gsave()
         for x in 0:30:250
-            translate(30,0)
+            translate(30, 0)
             gsave()
                 scale(0.1, 0.1)
                 julialogo()
             grestore()
         end
         grestore()
-        translate(0,20)
+        translate(0, 20)
     end
     clipreset()
     grestore()

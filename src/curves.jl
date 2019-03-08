@@ -44,7 +44,7 @@ returns `(centerpoint, radius)` of a circle. Then you can use `circle()` to plac
 circle, or `arc()` to draw an arc passing through those points.
 
 If there's no such circle, then you'll see an error message in the console and the function
-returns `(Point(0,0), 0)`.
+returns `(Point(0, 0), 0)`.
 """
 function center3pts(a::Point, b::Point, c::Point)
     midAB = midpoint(a, b)
@@ -55,7 +55,7 @@ function center3pts(a::Point, b::Point, c::Point)
     crossp = crossproduct(perpAB, perpBC)
     if isapprox(crossp, 0)
         @info("no circle passes through all three points")
-        return Point(0,0), 0
+        return Point(0, 0), 0
     end
     centerX = ((midAB.y * perpAB.x * perpBC.x) +
                (midBC.x * perpAB.x * perpBC.y) -
@@ -222,7 +222,7 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     newpath()
     move(innerradius * cos(startangle), innerradius * sin(startangle))
     line(outerradius * cos(startangle), outerradius * sin(startangle))
-    arc(0, 0, outerradius, startangle, endangle,:none)
+    arc(0, 0, outerradius, startangle, endangle, :none)
     line(innerradius * cos(endangle), innerradius * sin(endangle))
     carc(0, 0, innerradius, endangle, startangle, :none)
     closepath()

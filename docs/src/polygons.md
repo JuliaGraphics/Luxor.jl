@@ -94,7 +94,7 @@ Drawing(700, 600, "assets/figures/n-gon.png") # hide
 
 origin() # hide
 background("white") # hide
-cols = distinguishable_colors(10) # hue 60 to hue 120
+cols = distinguishable_colors(10) 
 setline(2)
 fontsize(12)
 tiles = Tiler(700, 600, 3, 3)

@@ -62,7 +62,7 @@ isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x, atol=0.00000001) &&
 isapprox(p1::Point, p2::Point)        = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
 isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
 !=(p1::Point, p2::Point)              = !isequal(p1, p2)
-<(p1::Point, p2::Point)               = isless(p1,p2)
+<(p1::Point, p2::Point)               = isless(p1, p2)
 >(p1::Point, p2::Point)               = p2 < p1
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
 
@@ -416,7 +416,7 @@ Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.
 
 produces
 
-    Luxor.Point(7.0710678118654755,7.071067811865475)
+    Luxor.Point(7.0710678118654755, 7.071067811865475)
 """
 macro polar(p)
     quote
@@ -433,7 +433,7 @@ Convert point in polar form (radius and angle) to a Point.
 
 produces
 
-    Luxor.Point(7.071067811865475,7.0710678118654755)
+    Luxor.Point(7.071067811865475, 7.0710678118654755)
 """
 polar(r, theta) = Point(r * cos(theta), r * sin(theta))
 

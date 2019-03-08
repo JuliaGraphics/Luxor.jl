@@ -35,7 +35,7 @@ poly(pentagon, :stroke, close=true)
 
     d, t = dimension(pentagon[5], Point(pentagon[5].x, pentagon[4].y),
         offset        = 60,
-        format        = (d) -> string("approximately ",round(d, digits=4)),
+        format        = (d) -> string("approximately ", round(d, digits=4)),
         fromextension = [5, 5],
         toextension   = [80, 5])
 
