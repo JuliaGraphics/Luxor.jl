@@ -185,7 +185,7 @@ inadequacy. By default these will generate errors, but you can suppress these by
 function isinside(p::Point, pointlist::Array{Point, 1};
         allowonedge::Bool=false)
     c = false
-    @inbounds for counter in eachindex(pointlist)
+    for counter in eachindex(pointlist)
         q1 = pointlist[counter]
         # if reached last point, set "next point" to first point
         if counter == length(pointlist)
@@ -862,7 +862,7 @@ function ispointinsidetriangle(p::Point, p1::Point, p2::Point, p3::Point)
         (s >= 0 && s + t <= A)
 end
 
-ispointinsidetriangle(p::Point, triangle::Array{Point,1}) =
+ispointinsidetriangle(p::Point, triangle::Array{Point, 1}) =
     ispointinsidetriangle(p, triangle[1], triangle[2], triangle[3])
 
 """
@@ -977,7 +977,7 @@ Move (permanently) a polygon from `frompoint` to `topoints`.
 """
 function polymove!(pgon, frompoint::Point, topoint::Point)
     d = topoint - frompoint
-    @inbounds for i in eachindex(pgon)
+    for i in eachindex(pgon)
         pgon[i] = Point(pgon[i].x + d.x, pgon[i].y + d.y)
     end
     return pgon
@@ -991,7 +991,7 @@ Scale (permanently) a polygon by `s`, relative to `center`.
 """
 function polyscale!(pgon, s;
         center=O)
-    @inbounds for i in eachindex(pgon)
+    for i in eachindex(pgon)
         pgon[i] = between(center, pgon[i], s)
     end
     return pgon
@@ -1007,7 +1007,7 @@ function polyrotate!(pgon, θ;
         center=O)
     costheta = cos(θ)
     sintheta = sin(θ)
-    @inbounds for i in eachindex(pgon)
+    for i in eachindex(pgon)
         pgon[i] = Point(
             (pgon[i].x - center.x) * costheta  -  ((pgon[i].y - center.y) * sintheta) + center.x,
             (pgon[i].x - center.x) * sintheta  +  ((pgon[i].y - center.y) * costheta) + center.y)

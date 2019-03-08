@@ -234,6 +234,7 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
     spiral_in_out_shift = 0,
     clockwise = true
     )
+    # TODO this is all very hacky and out of date...
     refangle = start_angle
     current_radius = start_radius
     spiral_space_step = 0
@@ -265,7 +266,7 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
         else
             rotate(-pi/2 + refangle)
         end
-        textcentered(glyph, 0, 0)
+        textcentered(glyph, 0, 0) # TODO this is deprecated?
         grestore()
         current_radius < 10 && break
     end
@@ -303,6 +304,7 @@ function textcurvecentered(the_text, the_angle, the_radius, center::Point;
         baselineradius = the_radius - baselineshift  # could be adjusted if we knew font height
     end
 
+    # TODO
     # hack to adjust starting angle for the letter spacing
     # to do it accurately would take lots more code and brain cells
     lspaced = length(the_text) * letter_spacing

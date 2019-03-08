@@ -11,7 +11,7 @@ convert_cairo_path_data, copy_path, copy_path_flat, curve_to, destroy, fill,
 fill_preserve, finish, get_matrix, get_operator, height, image, line_to,
 mesh_pattern_begin_patch, mesh_pattern_curve_to, mesh_pattern_end_patch,
 mesh_pattern_line_to, mesh_pattern_move_to, mesh_pattern_set_corner_color_rgba,
-move_to, new_path, new_sub_path,paint, paint_with_alpha,
+move_to, new_path, new_sub_path, paint, paint_with_alpha,
 pattern_add_color_stop_rgba, pattern_create_linear, pattern_create_radial,
 read_from_png, rectangle, rel_line_to, rel_move_to, reset_clip, restore, rotate,
 save, scale, select_font_face, set_antialias, set_font_face, set_font_size,
@@ -145,7 +145,7 @@ export Drawing,
     easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad,
 
     # noise
-    noise, seednoise,
+    noise, initnoise,
 
     # experimental polygon functions
     polyremovecollinearpoints, polytriangulate!, polyselfintersections,

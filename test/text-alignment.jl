@@ -24,7 +24,7 @@ end
 
 function text_alignment_tests(fname)
     legend = String[]
-    Drawing(1400,1400, fname)
+    Drawing(1400, 1400, fname)
     origin()
     setopacity(0.8)
     sethue("black")

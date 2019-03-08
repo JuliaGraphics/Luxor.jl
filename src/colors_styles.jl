@@ -12,11 +12,11 @@ Use `sethue()` for changing colors without changing current opacity level.
 
     julia> setcolor(sethue("red")..., .8)
 
-    (1.0,0.0,0.0,0.8)
+    (1.0, 0.0, 0.0, 0.8)
 
     julia> sethue(setcolor("red")[1:3]...)
 
-    (1.0,0.0,0.0)
+    (1.0, 0.0, 0.0)
 
 You can also do:
 
@@ -137,7 +137,7 @@ end
 """
     sethue(0.3, 0.7, 0.9)
 
-Set the color's `r`, `g`, `b` values. Use `setcolor(r,g,b,a)` to set transparent colors.
+Set the color's `r`, `g`, `b` values. Use `setcolor(r, g, b, a)` to set transparent colors.
 """
 function sethue(r, g, b)
     set_current_redvalue(r)
@@ -153,28 +153,28 @@ end
 
 Set the color to the tuple's values.
 """
-sethue(col::NTuple{3,Number}) = sethue(col...)
+sethue(col::NTuple{3, Number}) = sethue(col...)
 
 """
     sethue((r, g, b, a))
 
 Set the color to the tuple's values.
 """
-sethue(col::NTuple{4,Number}) = sethue(col...)
+sethue(col::NTuple{4, Number}) = sethue(col...)
 
 """
     setcolor((r, g, b))
 
 Set the color to the tuple's values.
 """
-setcolor(col::NTuple{3,Number}) = setcolor(col...)
+setcolor(col::NTuple{3, Number}) = setcolor(col...)
 
 """
     setcolor((r, g, b, a))
 
 Set the color to the tuple's values.
 """
-setcolor(col::NTuple{4,Number}) = setcolor(col...)
+setcolor(col::NTuple{4, Number}) = setcolor(col...)
 
 """
     setopacity(alpha)

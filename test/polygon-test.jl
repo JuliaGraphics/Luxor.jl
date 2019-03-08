@@ -16,7 +16,7 @@ end
 
 function simple_polys()
     gsave()
-    sethue(0,0,0)
+    sethue(0, 0, 0)
     vstep = 50
     hstep = 50
     x = 0
@@ -73,15 +73,15 @@ function hex_mixtures()
                  setopacity(0.3)
                  randomhue()
                  poly([
-                        Point(rand() * -100,rand() * 100),
-                        Point(rand() * -100,rand() * 100),
-                        Point(rand() * -100,rand() * 100),
-                        Point(rand() * -100,rand() * 100)
+                        Point(rand() * -100, rand() * 100),
+                        Point(rand() * -100, rand() * 100),
+                        Point(rand() * -100, rand() * 100),
+                        Point(rand() * -100, rand() * 100)
                      ], :fill)
             grestore()
             sethue(backgroundcolors[rand(1:end)])
             gsave()
-                 translate(x,y)
+                 translate(x, y)
                  ngon(x, y, 50, rand(3:13), 0, :stroke)
                  rotate(rand() * pi)
                  poly(hexagon(rand() * 5, rand() * 5, 15 + rand() * 5), :stroke)

@@ -13,7 +13,7 @@ function sinecurves()
     gsave()
     translate(100, 100)
     setline(0.25)
-    sethue(0,0,0)
+    sethue(0, 0, 0)
     x_vals = collect(0:pi/180: 40pi)
     # generate array of Points
     plist = [Point(d * 2pi , -sin(d) * cos(20 * d) * 8 * sin(d/10)) for d in x_vals]
@@ -32,7 +32,7 @@ function test(pagewidth, pageheight)
     translate(100, pageheight/2)
     g = GridRect(O, 0, 60)
     setline(0.25)
-    sethue(0,0,0)
+    sethue(0, 0, 0)
     x_vals = collect(0:pi/100: 4pi)
     polyline = [Point(d * 20pi, 5 * -sin(d) * cos(12 * d) * 8 * sin(d/10)) for d in x_vals]
     poly(polyline, :stroke)

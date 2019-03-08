@@ -98,11 +98,11 @@ function addstop(b::Blend, offset, col::AbstractString)
     Cairo.pattern_add_color_stop_rgba(b, offset, temp.r, temp.g, temp.b, temp.alpha)
 end
 
-function addstop(b::Blend, offset, col::NTuple{4,Number})
+function addstop(b::Blend, offset, col::NTuple{4, Number})
     Cairo.pattern_add_color_stop_rgba(b, offset, col[1], col[2], col[3], col[4])
 end
 
-function addstop(b::Blend, offset, col::NTuple{3,Number})
+function addstop(b::Blend, offset, col::NTuple{3, Number})
     currentopacity = get_current_alpha()
     Cairo.pattern_add_color_stop_rgba(b, offset, col[1], col[2], col[3], currentopacity)
 end

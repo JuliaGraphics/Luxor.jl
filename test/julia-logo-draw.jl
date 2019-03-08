@@ -49,7 +49,7 @@ function dropshadow()
     setopacity(0.1)
     for i in 1:steps
         sethue(gramp[i])
-        translate(-0.6,-0.5)
+        translate(-0.6, -0.5)
         julialogo(color=false)
     end
     julialogo()
@@ -88,17 +88,17 @@ function boxes_and_rectangles(pt::Point)
 end
 
 function draw_julia_logos(fname)
-    Drawing(1600,1600, fname)
+    Drawing(1600, 1600, fname)
     origin()
     background("white")
 
-    translate(-500,-200)
+    translate(-500, -200)
     spirals()
 
-    translate(750,0)
+    translate(750, 0)
     expandingspirals()
 
-    translate(-1000,500)
+    translate(-1000, 500)
     dropshadow()
 
     translate(800, 50)

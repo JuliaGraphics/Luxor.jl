@@ -1,26 +1,30 @@
-#!/usr/bin/env julia
+using Luxor, Test, Colors, Random
 
-using Luxor, Test, Colors
-
-using Random
 Random.seed!(42)
 
 function noisetest(fname)
     Drawing(800, 800, fname)
-    background("skyblue")
+    background("chartreuse4")
     origin()
 
-    seednoise(rand(1:12, 512))
-    Luxor.initnoise()
+    initnoise(rand(1:12))
 
-    @test noise(0, 0, 0) == 0.5
+    @test 0.0 < noise(.5) <= 1.0
+    @test 0.0 < noise(0.1, 0.5) <= 1.0
+    @test 0.0 < noise(0.1, 0.1, -0.1) <= 1.0
+    @test 0.0 < noise(0.5, 2.0, -2.0, 0.1) <= 1.0
 
+    freq = 0.02
     tiles = Tiler(800, 800, 150, 150)
     for k in 1:2:10
         for (pos, n) in tiles
             f, d = .01, k
-            ns = noise(pos.x * 0.006, pos.y * 0.006, detail=3, persistence=.15)
-            sethue(ns, ns, 1)
+            ns = noise(pos.x * freq, pos.y * freq, detail=3, persistence=.3)
+            ns1 = noise(ns, detail = 3, persistence=2)
+            ns2 = noise(pos.x * freq, pos.y * freq, ns, detail = 2)
+            ns3 = noise(pos.x * freq, pos.y * freq, ns2)
+            setopacity(ns3)
+            sethue(LCHab(80ns, 100 * ns1, 360 * ns2))
             box(pos, tiles.tilewidth, tiles.tileheight, :fill)
         end
     end

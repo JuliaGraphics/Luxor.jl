@@ -62,7 +62,7 @@ julia> rescale(15, (0, 100), (1000, 0))
 """
 rescale(x, from_min, from_max, to_min=0.0, to_max=1.0) =
     ((x - from_min) / (from_max - from_min)) * (to_max - to_min) + to_min
-rescale(x, from::NTuple{2,Number}, to::NTuple{2, Number}) =
+rescale(x, from::NTuple{2, Number}, to::NTuple{2, Number}) =
     ((x - from[1]) / (from[2] - from[1])) * (to[2] - to[1]) + to[1]
 
 """
@@ -319,7 +319,7 @@ end
 
 Move to a point.
 """
-move(x, y)      = Cairo.move_to(get_current_cr(),x, y)
+move(x, y)      = Cairo.move_to(get_current_cr(), x, y)
 move(pt)        = move(pt.x, pt.y)
 
 """
@@ -327,7 +327,7 @@ move(pt)        = move(pt.x, pt.y)
 
 Move relative to current position by the `pt`'s x and y:
 """
-rmove(x, y)     = Cairo.rel_move_to(get_current_cr(),x, y)
+rmove(x, y)     = Cairo.rel_move_to(get_current_cr(), x, y)
 rmove(pt)       = rmove(pt.x, pt.y)
 
 """
@@ -335,7 +335,7 @@ rmove(pt)       = rmove(pt.x, pt.y)
 
 Draw a line from the current position to the `pt`.
 """
-line(x, y)      = Cairo.line_to(get_current_cr(),x, y)
+line(x, y)      = Cairo.line_to(get_current_cr(), x, y)
 line(pt)        = line(pt.x, pt.y)
 
 """
@@ -435,7 +435,7 @@ function rule(pos, theta=0.0;
     return interpoints
 end
 
-saved_colors = Tuple{Float64,Float64,Float64,Float64}[]
+saved_colors = Tuple{Float64, Float64, Float64, Float64}[]
 
 # I originally used simple Cairo save() but the colors/opacity
 # thing I've got going didn't save/restore properly, hence the stack

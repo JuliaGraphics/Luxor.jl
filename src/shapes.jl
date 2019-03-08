@@ -165,11 +165,11 @@ returns the array of points. Compare:
 ```julia
 ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
 
-    4-element Array{Luxor.Point,1}:
-    Luxor.Point(2.4492935982947064e-16,4.0)
-    Luxor.Point(-4.0,4.898587196589413e-16)
-    Luxor.Point(-7.347880794884119e-16,-4.0)
-    Luxor.Point(4.0,-9.797174393178826e-16)
+    4-element Array{Luxor.Point, 1}:
+    Luxor.Point(2.4492935982947064e-16, 4.0)
+    Luxor.Point(-4.0, 4.898587196589413e-16)
+    Luxor.Point(-7.347880794884119e-16, -4.0)
+    Luxor.Point(4.0, -9.797174393178826e-16)
 ```
 
 whereas

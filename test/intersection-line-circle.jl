@@ -51,8 +51,8 @@ function test_intersections(fname)
         box(O, tiles.tilewidth, tiles.tileheight, :stroke)
         grestore()
     end
-    l1 = Luxor.Point(-100.0,-100.0)
-    l2 = Luxor.Point(300.0,200.0)
+    l1 = Luxor.Point(-100.0, -100.0)
+    l2 = Luxor.Point(300.0, 200.0)
     cpoint = Point(0, 0)
     @test intersectionlinecircle(l1, l2, cpoint, 15)[1] == 0
     @test intersectionlinecircle(l1, l2, cpoint, 20)[1] == 1
