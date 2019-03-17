@@ -145,6 +145,33 @@ function arrow(centerpos::Point, radius, startangle, endangle;
 end
 
 """
+    arrow(left::Point, C1::Point, C2::Point, right::Point, action=:fill;
+        linewidth=1.0, headlength=10, headangle=pi/8, leftarrow=false, rightarrow=true)
+
+Draw an Bezier curved arrow, from `left` to `right`, arrow head can be added by tweaking
+flags `leftarrow` and `rightarrow`.
+"""
+function arrow(left::Point, C1::Point, C2::Point, right::Point, action=:fill;
+    linewidth=1.0, headlength=10, headangle=pi/8, leftarrow=false, rightarrow=true)
+    gsave()
+    setlinejoin("butt")
+    setline(linewidth)
+
+    move(left)
+    curve(C1, C2, right)
+    do_action(action)
+
+    v = C2 - right
+    right_shaftangle = atan(v.y / v.x)
+    v = left - C1
+    left_shaftangle = atan(v.y / v.x)
+    rightarrow && arrowhead(right, action, shaftangle=right_shaftangle)
+    leftarrow && arrowhead(left, action, shaftangle=left_shaftangle)
+    grestore()
+end
+
+
+"""
     dimension(p1::Point, p2::Point;
         format::Function   = (d) -> string(d), # process the measured value into a string
         offset             = 0.0,              # left/right, parallel with x axis
