@@ -154,22 +154,20 @@ flags `leftarrow` and `rightarrow`.
 function arrow(left::Point, C1::Point, C2::Point, right::Point, action=:fill;
     linewidth=1.0, headlength=10, headangle=pi/8, leftarrow=false, rightarrow=true)
     gsave()
-    setlinejoin("butt")
     setline(linewidth)
 
     move(left)
     curve(C1, C2, right)
-    do_action(action)
+    do_action(:stroke)
 
-    v = C2 - right
+    v = right - C2
     right_shaftangle = atan(v.y / v.x)
     v = left - C1
     left_shaftangle = atan(v.y / v.x)
-    rightarrow && arrowhead(right, action, shaftangle=right_shaftangle)
+    rightarrow && arrowhead(right, action, shaftangle=pi + right_shaftangle)
     leftarrow && arrowhead(left, action, shaftangle=left_shaftangle)
     grestore()
 end
-
 
 """
     dimension(p1::Point, p2::Point;
