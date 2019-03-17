@@ -68,7 +68,7 @@ export Drawing,
 
     setantialias, setline, setlinecap, setlinejoin, setdash,
 
-    move, rmove, line, rule, rline, arrow, dimension,
+    move, rmove, line, rule, rline, arrow, arrowhead, imension,
 
     BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
     boxtop, boxbottom, boxtopleft, boxtopcenter, boxtopright, boxmiddleleft,
