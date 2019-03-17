@@ -331,7 +331,7 @@ Examples
          end 1200, 1200
 """
 macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
-     _add_ext(fname, :svg)
+     fname = _add_ext(fname, :svg)
      quote
         Drawing($width, $height, $fname)
         origin()
@@ -374,7 +374,7 @@ Examples
          end 1200 1200
 """
 macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
-    _add_ext(fname, :png)
+    fname = _add_ext(fname, :png)
     quote
         Drawing($width, $height, $fname)
         origin()
@@ -416,7 +416,7 @@ Examples
          end 1200, 1200
 """
 macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
-     _add_ext(fname, :pdf)
+     fname = _add_ext(fname, :pdf)
      quote
         Drawing($width, $height, $fname)
         origin()
