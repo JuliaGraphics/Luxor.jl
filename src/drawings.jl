@@ -293,6 +293,13 @@ function preview()
     return returnvalue
 end
 
+function _add_ext(fname, ext)
+    if match(Regex("[^\\\\]*\\.$ext"), fname) === nothing
+        return join([fname, ".png"])
+    end
+    return fname
+end
+
 """
     @svg drawing-instructions [width] [height] [filename]
 
@@ -324,6 +331,7 @@ Examples
          end 1200, 1200
 """
 macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
+     _add_ext(fname, :svg)
      quote
         Drawing($width, $height, $fname)
         origin()
@@ -366,7 +374,8 @@ Examples
          end 1200 1200
 """
 macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
-     quote
+    _add_ext(fname, :png)
+    quote
         Drawing($width, $height, $fname)
         origin()
         background("white")
@@ -407,6 +416,7 @@ Examples
          end 1200, 1200
 """
 macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
+     _add_ext(fname, :pdf)
      quote
         Drawing($width, $height, $fname)
         origin()
