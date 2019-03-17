@@ -712,7 +712,7 @@ function polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
 end
 
 """
-    polysample(p::Array{Point, 1}, npoints::Int64;
+    polysample(p::Array{Point, 1}, npoints::T where T <: Integer;
             closed=true)
 
 Sample the polygon `p`, returning a polygon with `npoints` to represent it. The
@@ -729,7 +729,7 @@ original, but the first point finishes up at the end (so `new=circshift(old,
 If `closed` is true, the entire polygon (including the edge joining the last
 point to the first point) is sampled.
 """
-function polysample(p::Array{Point, 1}, npoints::Int64;
+function polysample(p::Array{Point, 1}, npoints::T where T <: Integer;
         closed=true)
     length(p) < 2 && error("not enough points in polygon to take samples")
     npoints < 2  && return p[[1, end]]

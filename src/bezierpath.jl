@@ -8,8 +8,8 @@ end
 Base.size(bps::BezierPathSegment) = (4, )
 Base.length(bps::BezierPathSegment) = 4
 Base.eltype(::Type{BezierPathSegment}) = Luxor.Point
-Base.getindex(bps::BezierPathSegment, i::Int64) = [bps.p1, bps.cp1, bps.cp2, bps.p2][i]
-Base.setindex!(bp::BezierPathSegment, v, i::Int64) = [bps.p1, bps.cp1, bps.cp2, bps.p2][i] = v
+Base.getindex(bps::BezierPathSegment, i::T) where T <: Integer = [bps.p1, bps.cp1, bps.cp2, bps.p2][i]
+Base.setindex!(bp::BezierPathSegment, v, i::T) where T <: Integer = [bps.p1, bps.cp1, bps.cp2, bps.p2][i] = v
 Base.IndexStyle(::Type{<:BezierPathSegment}) = IndexLinear()
 
 # state is integer referring to one of the four points
@@ -39,8 +39,8 @@ BezierPath() = BezierPath([])
 Base.size(bp::BezierPath) = size(bp.segments)
 Base.length(bp::BezierPath) = length(bp.segments)
 Base.eltype(::Type{BezierPath}) = BezierPathSegment
-Base.getindex(bp::BezierPath, i::Int64) = bp.segments[i]
-Base.setindex!(bp::BezierPath, v, i::Int64) = bp.segments[i] = v
+Base.getindex(bp::BezierPath, i::T) where T <: Integer = bp.segments[i]
+Base.setindex!(bp::BezierPath, v, i::T) where T <: Integer = bp.segments[i] = v
 Base.IndexStyle(::Type{<:BezierPath}) = IndexLinear()
 
 Base.push!(bp::BezierPath, v::BezierPathSegment) = Base.push!(bp.segments, v)

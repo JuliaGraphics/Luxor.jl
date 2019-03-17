@@ -3,7 +3,7 @@
 using Random
 
 """
-    seednoise(seed::Int=42)
+    seednoise(seed::T=42) where T <: Integer
 
 Change the initial seed value for noise generation.
 
@@ -12,7 +12,7 @@ seednoise()
 seednoise(12)
 ```
 """
-function seednoise(seed::Int=42)
+function seednoise(seed::T=42) where T <: Integer
     initsimplexnoise(seed)
 end
 
@@ -26,23 +26,70 @@ Generate a noise value between 0.0 and 1.0 corresponding to the `x`, `y`,
 `z`, and `w` values. An `x` value on its own produces 1D noise, `x` and `y`
 make 2D noise, and so on.
 
-The `detail` value is an integer (>+ 1) specifying how many octaves of noise
+The `detail` value is an integer (>= 1) specifying how many octaves of noise
 you want.
 
 The `persistence` value, typically between 0.0 and 1.0, controls how quickly the
 amplitude diminishes for each successive octave for values of `detail` greater
 than 1.
 """
-noise(x; detail::Int64 = 1, persistence = 1.0) =
+noise(x; detail::T = 1, persistence = 1.0) where T <: Integer =
     _octaves([x], octaves=detail, persistence=persistence)
-noise(x, y; detail::Int64 = 1, persistence = 1.0) =
+
+noise(x, y; detail::T = 1, persistence = 1.0) where T <: Integer =
     _octaves([x, y], octaves=detail, persistence=persistence)
-noise(x, y, z; detail::Int64 = 1, persistence = 1.0) =
+
+noise(x, y, z; detail::T = 1, persistence = 1.0) where T <: Integer =
     _octaves([x, y, z], octaves=detail, persistence=persistence)
-noise(x, y, z, w; detail::Int64 = 1, persistence = 1.0) =
+
+noise(x, y, z, w; detail::T = 1, persistence = 1.0) where T <: Integer =
     _octaves([x, y, z, w], octaves=detail, persistence=persistence)
 
-# I converted this code to Julia but I don't understand it all... [cormullion] 
+# call simplexnoise on values in array
+# coords is [x] or [x, y] or [x, y, z] or [x, y, z, w]
+function _octaves(coords::Array{T, 1} where T <: Real;
+        octaves::Int = 1,
+        persistence=1.0)
+    total     = 0.0
+    frequency = 1.0
+    amplitude = 1.0
+    maxval    = 0.0
+    # TODO this seems very clumsy to duplicate the loop code like this?
+    l = length(coords)
+    if l == 1
+        for i in 1:octaves
+            total += simplexnoise(coords[1] * frequency) * amplitude
+            maxval += amplitude
+            amplitude *= persistence
+            frequency *= 2
+        end
+    elseif l == 2
+        for i in 1:octaves
+            total += simplexnoise(coords[1] * frequency, coords[2] * frequency) * amplitude
+            maxval += amplitude
+            amplitude *= persistence
+            frequency *= 2
+        end
+    elseif l == 3
+        for i in 1:octaves
+            total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency) * amplitude
+            maxval += amplitude
+            amplitude *= persistence
+            frequency *= 2
+        end
+    elseif l == 4
+        for i in 1:octaves
+            total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency, coords[4] * frequency) * amplitude
+            maxval += amplitude
+            amplitude *= persistence
+            frequency *= 2
+        end
+    end
+    return total / maxval
+end
+
+# The rest of this file is the original OpenSimplexNoise code.
+# I converted it to Julia but I don't understand it all... [cormullion]
 
 # OpenSimplex Noise
 # by Kurt Spencer
@@ -2082,46 +2129,4 @@ function simplexnoise(x, y, z, w)
     res = value / NORM_CONSTANT_4D
     # convert to [0 -> 1]
     return clamp((res + 1) / 2, 0.0, 1.0)
-end
-
-# coords is [x] or [x, y] or [x, y, z] or [x, y, z, w]
-function _octaves(coords::Array{T, 1} where T <: Real;
-        octaves::Int = 1,
-        persistence=1.0)
-    total     = 0.0
-    frequency = 1.0
-    amplitude = 1.0
-    maxval    = 0.0
-    # TODO this seems very clumsy to duplicate the loop code like this?
-    l = length(coords)
-    if l == 1
-        for i in 1:octaves
-            total += simplexnoise(coords[1] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    elseif l == 2
-        for i in 1:octaves
-            total += simplexnoise(coords[1] * frequency, coords[2] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    elseif l == 3
-        for i in 1:octaves
-            total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    elseif l == 4
-        for i in 1:octaves
-            total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency, coords[4] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    end
-    return total / maxval
 end
