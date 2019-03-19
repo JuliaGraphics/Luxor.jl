@@ -145,27 +145,25 @@ function arrow(centerpos::Point, radius, startangle, endangle;
 end
 
 """
-    arrow(left::Point, C1::Point, C2::Point, right::Point, action=:fill;
-        linewidth=1.0, headlength=10, headangle=pi/8, leftarrow=false, rightarrow=true)
+    arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+        linewidth=1.0, headlength=10, headangle=pi/8, startarrow=false, finisharrow=true)
 
-Draw an Bezier curved arrow, from `left` to `right`, arrow head can be added by tweaking
-flags `leftarrow` and `rightarrow`.
+Draw an Bezier curved arrow, from `start` to `finish`, arrow head can be added by tweaking
+flags `startarrow` and `finisharrow`.
 """
-function arrow(left::Point, C1::Point, C2::Point, right::Point, action=:fill;
-    linewidth=1.0, headlength=10, headangle=pi/8, leftarrow=false, rightarrow=true)
+function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+    linewidth=1.0, headlength=10, headangle=pi/8, startarrow=false, finisharrow=true)
     gsave()
     setline(linewidth)
 
-    move(left)
-    curve(C1, C2, right)
+    move(start)
+    curve(C1, C2, finish)
     do_action(:stroke)
 
-    v = right - C2
-    right_shaftangle = atan(v.y / v.x)
-    v = left - C1
-    left_shaftangle = atan(v.y / v.x)
-    rightarrow && arrowhead(right, action, shaftangle=pi + right_shaftangle)
-    leftarrow && arrowhead(left, action, shaftangle=left_shaftangle)
+    start_shaftangle  = slope(start, C1)
+    finish_shaftangle = slope(C2, finish)
+    finisharrow && arrowhead(finish, action, shaftangle=pi + finish_shaftangle)
+    startarrow && arrowhead(start, action, shaftangle=start_shaftangle)
     grestore()
 end
 
