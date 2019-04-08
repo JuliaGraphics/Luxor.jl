@@ -14,6 +14,8 @@
 
 - animate() has new option to choose ffmpeg command
 
+- Bezier (bidirectional) `arrow` method added
+
 ### Changed
 
 - functions that used intersection() now use intersectionlines()
