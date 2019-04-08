@@ -17,19 +17,19 @@ polysmooth(p, 40, :fill, debug=true)
 finish() # hide
 ```
 
-![polysmooth](assets/figures/polysmooth-pathological.png)</code></pre><p>and after you run Documenter&#39;s build process the HTML output looks like this:</p><div><pre><code class="language-julia">p = star(O, 60, 5, 0.35, 0, vertices=true)
+![polysmooth](assets/figures/polysmooth-pathological.png)</code></pre><p>and after you run Documenter&#39;s build process the HTML output looks like this:</p><pre><code class="language-julia">p = star(O, 60, 5, 0.35, 0, vertices=true)
 setdash(&quot;dot&quot;)
 sethue(&quot;red&quot;)
 prettypoly(p, close=true, :stroke)
 setdash(&quot;solid&quot;)
 sethue(&quot;black&quot;)
-polysmooth(p, 40, :fill, debug=true)</code></pre></div><p><img src="../assets/figures/polysmoothy.png" alt="polysmooth"/></p><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-turtles?-1">Why turtles?</a></h2><p>An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here&#39;s an example of how a complex pattern can emerge from a simple set of rules, taken from <a href="https://github.com/cormullion/Lindenmayer.jl">Lindenmayer.jl</a>:</p><p><img src="../assets/figures/penrose.png" alt="penrose"/></p><p>The definition of this figure is:</p><pre><code class="language-none">penrose = LSystem(Dict(&quot;X&quot;  =&gt;  &quot;PM++QM----YM[-PM----XM]++t&quot;,
+polysmooth(p, 40, :fill, debug=true)</code></pre><p><img src="../assets/figures/polysmoothy.png" alt="polysmooth"/></p><h2><a class="nav-anchor" id="Why-turtles?-1" href="#Why-turtles?-1">Why turtles?</a></h2><p>An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here&#39;s an example of how a complex pattern can emerge from a simple set of rules, taken from <a href="https://github.com/cormullion/Lindenmayer.jl">Lindenmayer.jl</a>:</p><p><img src="../assets/figures/penrose.png" alt="penrose"/></p><p>The definition of this figure is:</p><pre><code class="language-none">penrose = LSystem(Dict(&quot;X&quot;  =&gt;  &quot;PM++QM----YM[-PM----XM]++t&quot;,
                        &quot;Y&quot;  =&gt; &quot;+PM--QM[---XM--YM]+t&quot;,
                        &quot;P&quot;  =&gt; &quot;-XM++YM[+++PM++QM]-t&quot;,
                        &quot;Q&quot;  =&gt; &quot;--PM++++XM[+QM++++YM]--YMt&quot;,
                        &quot;M&quot;  =&gt; &quot;F&quot;,
                        &quot;F&quot;  =&gt; &quot;&quot;),
-                  &quot;1[Y]++[Y]++[Y]++[Y]++[Y]&quot;)</code></pre><p>where some of the characters—eg &quot;F&quot;, &quot;+&quot;, &quot;-&quot;, and &quot;t&quot;—issue turtle control commands, and others—&quot;X,&quot;, &quot;Y&quot;, &quot;P&quot;, and &quot;Q&quot;—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.</p><h2><a class="nav-anchor" id="Strange-1" href="#Strange-1">Strange</a></h2><p>It&#39;s usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it&#39;s an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it&#39;s better to target PNG rather than SVG or PDF for this example!).</p><div><pre><code class="language-julia">using Luxor, Colors
+                  &quot;1[Y]++[Y]++[Y]++[Y]++[Y]&quot;)</code></pre><p>where some of the characters—eg &quot;F&quot;, &quot;+&quot;, &quot;-&quot;, and &quot;t&quot;—issue turtle control commands, and others—&quot;X,&quot;, &quot;Y&quot;, &quot;P&quot;, and &quot;Q&quot;—refer to specific components of the design. The execution of the l-system involves replacing every occurrence in the drawing code of every dictionary key with the matching values.</p><h2><a class="nav-anchor" id="Strange-1" href="#Strange-1">Strange</a></h2><p>It&#39;s usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it&#39;s an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it&#39;s better to target PNG rather than SVG or PDF for this example!).</p><pre><code class="language-julia">using Luxor, Colors
 function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
     Drawing(w, w, &quot;assets/figures/strange-vector.png&quot;)
@@ -61,7 +61,7 @@ function strange(dotsize, w=800.0)
     finish()
 end
 
-strange(.3, 800)</code></pre></div><p><img src="../assets/figures/strange-vector.png" alt="strange attractor in vectors"/></p><h2><a class="nav-anchor" id="More-animations-1" href="#More-animations-1">More animations</a></h2><p><a href="https://youtu.be/1FA2FgJU6dM"><img src="../assets/figures/animation-screengrab.jpg" alt="strange attractor in vectors"/></a></p><p>Most of the animations on <a href="https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg">this YouTube channel</a> are made with Luxor.</p><h2><a class="nav-anchor" id="The-Luxor-logo-1" href="#The-Luxor-logo-1">The Luxor logo</a></h2><div><pre><code class="language-julia">using Luxor, Colors
+strange(.3, 800)</code></pre><p><img src="../assets/figures/strange-vector.png" alt="strange attractor in vectors"/></p><h2><a class="nav-anchor" id="More-animations-1" href="#More-animations-1">More animations</a></h2><p><a href="https://youtu.be/1FA2FgJU6dM"><img src="../assets/figures/animation-screengrab.jpg" alt="strange attractor in vectors"/></a></p><p>Most of the animations on <a href="https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg">this YouTube channel</a> are made with Luxor.</p><h2><a class="nav-anchor" id="The-Luxor-logo-1" href="#The-Luxor-logo-1">The Luxor logo</a></h2><pre><code class="language-julia">using Luxor, Colors
 
 function multistrokepath(lightness, chroma, hue)
     # takes the current path and multistrokes it
@@ -176,4 +176,4 @@ function draw()
     clipreset()
     finish()
 end
-draw()</code></pre></div><p><img src="../assets/figures/luxor-logo.png" alt="Luxor logo"/></p><footer><hr/><a class="previous" href="../animation/"><span class="direction">Previous</span><span class="title">Animation</span></a><a class="next" href="../functionindex/"><span class="direction">Next</span><span class="title">Index</span></a></footer></article></body></html>
+draw()</code></pre><p><img src="../assets/figures/luxor-logo.png" alt="Luxor logo"/></p><footer><hr/><a class="previous" href="../animation/"><span class="direction">Previous</span><span class="title">Animation</span></a><a class="next" href="../functionindex/"><span class="direction">Next</span><span class="title">Index</span></a></footer></article></body></html>
