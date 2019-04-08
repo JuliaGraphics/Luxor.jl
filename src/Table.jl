@@ -210,6 +210,11 @@ function Base.size(t::Table)
     return (t.nrows, t.ncols)
 end
 
+function Base.size(t::Table, n::Int)
+    return n == 1 ? t.nrows :
+           n == 2 ? t.ncols : 1
+end
+
 function Base.length(t::Table)
     t.nrows * t.ncols
 end

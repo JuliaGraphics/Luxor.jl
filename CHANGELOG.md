@@ -10,6 +10,8 @@
 
 - intersectionlines() replaces intersection()
 
+- Bezier (bidirectional) `arrow` method added
+
 ### Changed
 
 - functions that used intersection() now use intersectionlines()
