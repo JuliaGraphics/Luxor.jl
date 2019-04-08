@@ -138,33 +138,6 @@ end
     @test_throws BoundsError ispointinsidetriangle(O, badtriangle)
 end
 
-
-@testset "polyselfintersections tests" begin
-
-    # no selfintersections yet
-    goodpoly  = [Point(100cos(θ), 100sin(θ)) for θ in 0:π/12:2π-π/12]
-    psi = polyselfintersections(goodpoly, findfirst=false)
-    @test length(psi) == 0
-
-    # make it selfintersect
-    goodpoly[end] = Point(-150, 150)
-    goodpoly[4] = Point(0, -150)
-    psi = polyselfintersections(goodpoly)
-    @test length(psi) == 16 # loads, doublecounted, that's why
-
-    # check the results
-    flag, ip = intersectionlines(psi[1][1], psi[1][2], psi[1][3], psi[1][4])
-    @test flag
-    @test isapprox(ip, Point(22.9594915033906, -96.97732560024204))
-
-    psi = polyselfintersections(goodpoly, findfirst=true)
-    @test length(psi) == 1 # just found the first one
-
-    psi = polyselfintersections(star(O, 200, 12, 0.1, vertices=true), findfirst=true)
-    @test length(psi) == 0 # there aren't any
-
-end
-
 @testset "polytriangulate tests" begin
     pgon = star(O, 200, 12, 0.7, vertices=true)
 

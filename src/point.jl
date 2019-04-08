@@ -272,74 +272,74 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
     end
 end
 
-"""
-    intersection(p1::Point, p2::Point, p3::Point, p4::Point;
-        commonendpoints = false,
-        crossingonly = false,
-        collinearintersect = false)
-
-Find intersection of two lines `p1`-`p2` and `p3`-`p4`
-
-Deprecated. Use `intersectionlines().`
-"""
-function intersection(A::Point, B::Point, C::Point, D::Point;
-        commonendpoints = false,
-        crossingonly = false,
-        collinearintersect = false
-        )
-    # false if either line is undefined
-    if (A == B) || (C == D)
-        return (false, Point(0, 0))
-    end
-
-    # false if the lines share a common end point
-    if commonendpoints
-        if (A == C) || (B == C) || (A == D) || (B == D)
-            return (false, Point(0, 0))
-        end
-    end
-
-    # Cramer's ?
-    A1 = (A.y - B.y)
-    B1 = (B.x - A.x)
-    C1 = (A.x * B.y - B.x * A.y)
-
-    L1 = (A1, B1, -C1)
-
-    A2 = (C.y - D.y)
-    B2 = (D.x - C.x)
-    C2 = (C.x * D.y - D.x * C.y)
-
-    L2 = (A2, B2, -C2)
-
-    d  = L1[1] * L2[2] - L1[2] * L2[1]
-    dx = L1[3] * L2[2] - L1[2] * L2[3]
-    dy = L1[1] * L2[3] - L1[3] * L2[1]
-
-    # if you ask me collinear points don't really intersect
-    if (C1 == C2) && (collinearintersect == false)
-        return (false, Point(0, 0))
-    end
-
-    if d != 0
-        pt = Point(dx/d, dy/d)
-        if crossingonly == true
-            if ispointonline(pt, A, B) && ispointonline(pt, C, D)
-               return (true, pt)
-            else
-               return (false, pt)
-            end
-        else
-            if ispointonline(pt, A, B, extended=true) && ispointonline(pt, C, D, extended=true)
-                return (true, pt)
-            else
-               return (false, pt)
-            end
-        end
-    else
-        return (false, Point(0, 0))
-    end
-end
+# """
+#     intersection(p1::Point, p2::Point, p3::Point, p4::Point;
+#         commonendpoints = false,
+#         crossingonly = false,
+#         collinearintersect = false)
+#
+# Find intersection of two lines `p1`-`p2` and `p3`-`p4`
+#
+# Deprecated. Use `intersectionlines().`
+# """
+# function intersection(A::Point, B::Point, C::Point, D::Point;
+#         commonendpoints = false,
+#         crossingonly = false,
+#         collinearintersect = false
+#         )
+#     # false if either line is undefined
+#     if (A == B) || (C == D)
+#         return (false, Point(0, 0))
+#     end
+#
+#     # false if the lines share a common end point
+#     if commonendpoints
+#         if (A == C) || (B == C) || (A == D) || (B == D)
+#             return (false, Point(0, 0))
+#         end
+#     end
+#
+#     # Cramer's ?
+#     A1 = (A.y - B.y)
+#     B1 = (B.x - A.x)
+#     C1 = (A.x * B.y - B.x * A.y)
+#
+#     L1 = (A1, B1, -C1)
+#
+#     A2 = (C.y - D.y)
+#     B2 = (D.x - C.x)
+#     C2 = (C.x * D.y - D.x * C.y)
+#
+#     L2 = (A2, B2, -C2)
+#
+#     d  = L1[1] * L2[2] - L1[2] * L2[1]
+#     dx = L1[3] * L2[2] - L1[2] * L2[3]
+#     dy = L1[1] * L2[3] - L1[3] * L2[1]
+#
+#     # if you ask me collinear points don't really intersect
+#     if (C1 == C2) && (collinearintersect == false)
+#         return (false, Point(0, 0))
+#     end
+#
+#     if d != 0
+#         pt = Point(dx/d, dy/d)
+#         if crossingonly == true
+#             if ispointonline(pt, A, B) && ispointonline(pt, C, D)
+#                return (true, pt)
+#             else
+#                return (false, pt)
+#             end
+#         else
+#             if ispointonline(pt, A, B, extended=true) && ispointonline(pt, C, D, extended=true)
+#                 return (true, pt)
+#             else
+#                return (false, pt)
+#             end
+#         end
+#     else
+#         return (false, Point(0, 0))
+#     end
+# end
 
 """
     slope(pointA::Point, pointB::Point)

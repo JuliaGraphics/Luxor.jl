@@ -10,6 +10,10 @@
 
 - intersectionlines() replaces intersection()
 
+- polyselfintersections() removed, it doesn't work at all
+
+- animate() has new option to choose ffmpeg command
+
 ### Changed
 
 - functions that used intersection() now use intersectionlines()

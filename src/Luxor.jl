@@ -148,7 +148,7 @@ export Drawing,
     noise, initnoise,
 
     # experimental polygon functions
-    polyremovecollinearpoints, polytriangulate!, polyselfintersections,
+    polyremovecollinearpoints, polytriangulate!,
     ispointinsidetriangle, ispolyclockwise, polyorientation
 
 # basic unit conversion to Cairo/PostScript points

@@ -102,17 +102,20 @@ Scene(movie::Movie, framefunction::Function, framerange::AbstractRange;
 
 """
     animate(movie::Movie, scenelist::Array{Scene, 1};
-            creategif=false,
-            pathname=""
-            framerate=30,
-            tempdirectory=".")
+        creategif=false,
+        framerate=30,
+        pathname="",
+        tempdirectory="",
+        usenewffmpeg=true)
 
 Create the movie defined in `movie` by rendering the frames define in the array of scenes
 in `scenelist`.
 
-If `creategif` is `true`, the function tries to call `ffmpeg` on the resulting frames to
-build a GIF animation. This will be stored in `pathname` (an existing file will be
-overwritten; use a ".gif" suffix), or in `(movietitle).gif` in a temporary directory.
+If `creategif` is `true`, the function attempts to call the `ffmpeg` utility on
+the resulting frames to build a GIF animation. This will be stored in `pathname`
+(an existing file will be overwritten; use a ".gif" suffix), or in
+`(movietitle).gif` in a temporary directory. `ffmpeg` should be installed and
+available, of course, if this is to work.
 
 ### Example
 
@@ -123,12 +126,19 @@ animate(bang, [
     creategif=true,
     pathname="/tmp/animationtest.gif")
 ```
+
+The `usenewffmpeg` option, true by default, uses complex filtering provided by
+recent versions of the `ffmpeg` utility, mainly to cope with transparent
+backgrounds. If set to default, the behavior is the same as in previous versions
+of Luxor.
 """
 function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
         framerate=30,
         pathname="",
-        tempdirectory="")
+        tempdirectory="",
+        usenewffmpeg=true)
+
     if tempdirectory == ""
         tempdirectory = mktempdir()
     else
@@ -162,8 +172,16 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
     @info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
     if creategif == true
         # these two commands create a palette and then create animated GIF from the resulting images
-        run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
-        run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
+        if !usenewffmpeg
+            # old version of ffmpeg up to 2.1.3
+            # these two commands create a palette and then an animated GIF from the resulting images using the palette
+            run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
+            run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
+        else
+            # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters
+            run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1" -y $(tempdirectory)/$(movie.movietitle).gif`)
+        end
+
         if ! isempty(pathname)
             mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force=true)
             @info("GIF is: $pathname")
