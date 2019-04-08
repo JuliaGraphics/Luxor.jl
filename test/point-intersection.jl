@@ -18,7 +18,7 @@ function point_intersect(fname)
         p2 = Point(rand(-450:450), rand(-450:450))
         p3 = Point(rand(-450:450), rand(-450:450))
         p4 = Point(rand(-450:450), rand(-450:450))
-        flag, intersection_point = intersection(p1, p2, p3, p4, crossingonly=true)
+        flag, intersection_point = intersectionlines(p1, p2, p3, p4, crossingonly=true)
         if flag
             circle(intersection_point, 5, :fill)
             move(p1)

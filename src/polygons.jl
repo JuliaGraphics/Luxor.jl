@@ -246,7 +246,7 @@ function polysplit(pointlist::Array{Point, 1}, p1::Point, p2::Point)
     for i in 1:l
         vertex1 = pointlist[mod1(i, l)]
         vertex2 = pointlist[mod1(i + 1, l)]
-        flag, intersectpoint = intersection(vertex1, vertex2, p1, p2, crossingonly=true)
+        flag, intersectpoint = intersectionlines(vertex1, vertex2, p1, p2, crossingonly=true)
         push!(newpointlist, vertex1)
         if flag
             push!(newpointlist, intersectpoint)
@@ -506,11 +506,11 @@ function offsetpoly(path::Array{Point, 1}, d)
         x4p = p3.x + (d * (p3.y - p2.y))/ L23
         y4p = p3.y + (d * (p2.x - p3.x))/ L23
 
-        intersectionpoint = intersection(
+        intersectionpoint = intersectionlines(
             Point(x1p, y1p),
             Point(x2p, y2p),
             Point(x3p, y3p),
-            Point(x4p, y4p), crossingonly=false, collinearintersect=true)
+            Point(x4p, y4p), crossingonly=false)
 
         if intersectionpoint[1]
             resultpoly[i] = intersectionpoint[2]
@@ -775,7 +775,7 @@ function intersectlinepoly(pt1::Point, pt2::Point, C::Array{Point, 1})
     intersectingpoints = Point[]
     for j in eachindex(C)
         Cpointpair = (C[j], C[mod1(j+1, length(C))])
-        flag, pt = intersection(pt1, pt2, Cpointpair..., crossingonly=true)
+        flag, pt = intersectionlines(pt1, pt2, Cpointpair..., crossingonly=true)
         if flag
             push!(intersectingpoints, pt)
         end
@@ -864,45 +864,6 @@ end
 
 ispointinsidetriangle(p::Point, triangle::Array{Point, 1}) =
     ispointinsidetriangle(p, triangle[1], triangle[2], triangle[3])
-
-"""
-    polyselfintersections(pgon::Array{Point, 1};
-        findfirst=false)
-
-return a set of points defining the intersecting lines.
-
-Crossings are usually included twice... ?
-
-If `findfirst` is true, only the first one is returned, which should be quicker.
-
-TODO This code is still experimental... Needs some thought about closed
-polygons where the first and last points are the same...?
-"""
-function polyselfintersections(S::Array{Point, 1};
-        findfirst=false)
-    selfcrossings = Array{Point, 1}[]
-    for i in 1:length(S)
-        for j in 1:length(S)
-            flag, p = intersection(
-                S[i], S[mod1(i+1, length(S))],
-                S[j], S[mod1(j+1, length(S))],
-                    crossingonly = true,
-                    commonendpoints = true)
-            if flag
-                push!(selfcrossings, Point[
-                    S[i],
-                    S[mod1(i+1, length(S))],
-                    S[j],
-                    S[mod1(j+1, length(S))]
-                    ])
-            end
-            if findfirst
-                length(selfcrossings) > 0 && break
-            end
-        end
-    end
-    return selfcrossings
-end
 
 """
     polytriangulate!(pgon::Array{Point, 1})
