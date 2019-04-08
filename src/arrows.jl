@@ -1,4 +1,31 @@
 """
+    arrowhead(target[, action=:fill];
+        shaftangle=0,
+        headlength=10,
+        headangle=pi/8)
+
+Draw an arrow head. The arrowhead length will be the length of the side of
+the arrow's head, and the arrowhead angle is the angle between the sloping
+side of the arrowhead and the arrow's shaft.
+
+Arrow head don't use the current linewidth setting (`setline()`), and defaults to 1,
+but you can specify another value.
+"""
+function arrowhead(target, action=:fill;
+        shaftangle=0, headlength=10, headangle=pi/8)
+    gsave()
+    topangle = shaftangle + headangle
+    botangle = shaftangle - headangle
+
+    topx = target.x + cos(topangle) * headlength
+    topy = target.y + sin(topangle) * headlength
+    botx = target.x + cos(botangle) * headlength
+    boty = target.y + sin(botangle) * headlength
+    poly([Point(topx, topy), target, Point(botx, boty)], action)
+    grestore()
+end
+
+"""
     arrow(startpoint::Point, endpoint::Point;
         linewidth = 1.0,
         arrowheadlength = 10,
@@ -114,6 +141,29 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     botx =                     endpoint.x + cos(arrowheadoutersideangle) * arrowheadlength
     boty =                     endpoint.y + sin(arrowheadoutersideangle) * arrowheadlength
     poly([Point(topx, topy), Point(endpoint.x, endpoint.y), Point(botx, boty)], :fill)
+    grestore()
+end
+
+"""
+    arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+        linewidth=1.0, headlength=10, headangle=pi/8, startarrow=false, finisharrow=true)
+
+Draw an Bezier curved arrow, from `start` to `finish`, arrow head can be added by tweaking
+flags `startarrow` and `finisharrow`.
+"""
+function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+    linewidth=1.0, headlength=10, headangle=pi/8, startarrow=false, finisharrow=true)
+    gsave()
+    setline(linewidth)
+
+    move(start)
+    curve(C1, C2, finish)
+    do_action(:stroke)
+
+    start_shaftangle  = slope(start, C1)
+    finish_shaftangle = slope(C2, finish)
+    finisharrow && arrowhead(finish, action, shaftangle=pi + finish_shaftangle)
+    startarrow && arrowhead(start, action, shaftangle=start_shaftangle)
     grestore()
 end
 
