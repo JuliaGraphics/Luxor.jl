@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.3.0] - future release
+## [v1.3.0] - future release in April sometime
 
 ### Added
 
