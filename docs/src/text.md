@@ -24,7 +24,7 @@ Drawing(600, 100, "assets/figures/toy-text-example.png") # hide
 origin() # hide
 background("azure") # hide
 sethue("black") # hide
-fontsize(18)
+fontsize(16)
 fontface("Georgia-Bold")
 text("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
 finish() # hide
@@ -32,6 +32,8 @@ nothing # hide
 ```
 
 ![text placement](assets/figures/toy-text-example.png)
+
+(If the specified font is unavailable on the current system configuration, the default, usually Times/Helvetica or DejaVu, is used.)
 
 The `label()` function also uses the Toy API.
 
@@ -48,7 +50,7 @@ Drawing(600, 100, "assets/figures/pro-text-example.png") # hide
 origin() # hide
 background("azure") # hide
 sethue("black") # hide
-setfont("Georgia Bold", 18)
+setfont("Georgia Bold", 16)
 settext("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign="center")
 finish() # hide
 nothing # hide
@@ -154,13 +156,17 @@ On macOS, the fontname required by the Toy API's `fontface()` should be the Post
 
 On macOS, a list of currently activated fonts can be found (after a while) with the shell command:
 
-    system_profiler SPFontsDataType
+```
+system_profiler SPFontsDataType
+```
 
 Fonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer currently).
 
 On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with `setfont()`) using the shell command:
 
-    fc-list | cut -f 2 -d ":"
+```
+fc-list | cut -f 2 -d ":"
+```
 
 although typically this lists only those fonts in `/System/Library/Fonts` and `/Library/Fonts`, and not `~/Library/Fonts`.
 
