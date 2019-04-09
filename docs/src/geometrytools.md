@@ -196,7 +196,7 @@ intersectioncirclecircle
 
 ## Arrows
 
-You can draw lines or arcs with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
+You can draw lines, arcs, and curves with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
 
 ```@example
 using Luxor # hide
@@ -212,6 +212,31 @@ finish() # hide
 nothing # hide
 ```
 ![arrows](assets/figures/arrow.png)
+
+If you provide four points, you can draw a Bézier curve with arrowheads at each end. Use the various options to control the presence and appearance.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/arrowbezier.png") # hide
+background("white") # hide
+origin() # hide
+setline(2) # hide
+pts = ngon(O, 100, 8, vertices=true)
+sethue("mediumvioletred")
+arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
+sethue("cyan4")
+arrow(pts[3:6]..., :fill, startarrow=true, finisharrow=true)
+sethue("midnightblue")
+arrow(pts[[4, 2, 6, 8]]..., :stroke,
+    startarrow=true,
+    finisharrow=true,
+    headangle = π/6,
+    headlength = 35, 
+    linewidth  = 1.5)
+finish() # hide
+nothing # hide
+```
+![arrows](assets/figures/arrowbezier.png)
 
 ```@docs
 arrow
@@ -396,7 +421,7 @@ origin() # hide
 
 tiles = Tiler(800, 400, 200, 200)
 sethue("black")
-or (pos, n) in tiles
+for (pos, n) in tiles
     freq = 0.05
     pos.y < 0 ? d = 1      : d = 4
     pos.x < 0 ? pers = 0.3 : pers = 1.0
