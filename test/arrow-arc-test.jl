@@ -46,7 +46,15 @@ function arrow_arc_test(fname)
       test_circular_arrows_2(pos, pagetiles.tilewidth/2)
     end
   end
-  @test finish() == true
+
+  # test Bezier arrow
+  setopacity(1.0)
+  arrow(pagetiles[1][1], pagetiles[2][1], pagetiles[5][1], pagetiles[6][1],
+    linewidth=5,
+    headlength=30,
+    startarrow=true)
+
+  @test finish() == true  
   println("...finished arrow-test: saved in $(fname)")
 end
 

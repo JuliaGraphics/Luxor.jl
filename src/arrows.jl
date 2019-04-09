@@ -88,9 +88,9 @@ end
         arrowheadlength = 10,
         arrowheadangle = pi/8)
 
-Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and ending at
-`endangle` with an arrowhead at the end. Angles are measured clockwise from the positive
-x-axis.
+Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and
+ending at `endangle` with an arrowhead at the end. Angles are measured clockwise
+from the positive x-axis.
 
 Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
 """
@@ -146,14 +146,23 @@ end
 
 """
     arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
-        linewidth=1.0, headlength=10, headangle=pi/8, startarrow=false, finisharrow=true)
+        linewidth=1.0,
+        headlength=10,
+        headangle=pi/8,
+        startarrow=false,
+        finisharrow=true)
 
-Draw an Bezier curved arrow, from `start` to `finish`, arrow head can be added by tweaking
-flags `startarrow` and `finisharrow`.
+Draw a Bezier curved arrow, from `start` to `finish`, with control points `C1`
+and `C2`. Arrow heads can be added/hidden by changing `startarrow` and
+`finisharrow` options.
 """
 function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
-    linewidth=1.0, headlength=10, headangle=pi/8, startarrow=false, finisharrow=true)
-    gsave()
+        linewidth=1.0,
+        headlength=10,
+        headangle=pi/8,
+        startarrow=false,
+        finisharrow=true)
+        gsave()
     setline(linewidth)
 
     move(start)
@@ -162,8 +171,17 @@ function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
 
     start_shaftangle  = slope(start, C1)
     finish_shaftangle = slope(C2, finish)
-    finisharrow && arrowhead(finish, action, shaftangle=pi + finish_shaftangle)
-    startarrow && arrowhead(start, action, shaftangle=start_shaftangle)
+
+    finisharrow && arrowhead(finish,
+        action,
+        headlength=headlength,
+        headangle=headangle,
+        shaftangle=pi + finish_shaftangle)
+    startarrow && arrowhead(start,
+        action,
+        headlength=headlength,
+        headangle=headangle,
+        shaftangle=start_shaftangle)
     grestore()
 end
 
