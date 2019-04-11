@@ -194,54 +194,6 @@ intersection2circles
 intersectioncirclecircle
 ```
 
-## Arrows
-
-You can draw lines, arcs, and curves with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
-
-```@example
-using Luxor # hide
-Drawing(400, 250, "assets/figures/arrow.png") # hide
-background("white") # hide
-origin() # hide
-sethue("steelblue4") # hide
-setline(2) # hide
-arrow(O, Point(0, -65))
-arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
-arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
-finish() # hide
-nothing # hide
-```
-![arrows](assets/figures/arrow.png)
-
-If you provide four points, you can draw a Bézier curve with arrowheads at each end. Use the various options to control the presence and appearance.
-
-```@example
-using Luxor # hide
-Drawing(600, 400, "assets/figures/arrowbezier.png") # hide
-background("white") # hide
-origin() # hide
-setline(2) # hide
-pts = ngon(O, 100, 8, vertices=true)
-sethue("mediumvioletred")
-arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
-sethue("cyan4")
-arrow(pts[3:6]..., :fill, startarrow=true, finisharrow=true)
-sethue("midnightblue")
-arrow(pts[[4, 2, 6, 8]]..., :stroke,
-    startarrow=true,
-    finisharrow=true,
-    headangle = π/6,
-    headlength = 35, 
-    linewidth  = 1.5)
-finish() # hide
-nothing # hide
-```
-![arrows](assets/figures/arrowbezier.png)
-
-```@docs
-arrow
-```
-
 ## Bounding boxes
 
 The `BoundingBox` type allows you to use rectangular extents to organize and interact with the 2D drawing area. A `BoundingBox` holds two points, the opposite corners of a bounding box.

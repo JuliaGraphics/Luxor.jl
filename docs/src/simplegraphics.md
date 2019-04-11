@@ -318,6 +318,199 @@ circletangent2circles
 circlepointtangent
 ```
 
+## Paths and positions
+
+A path is a sequence of lines and curves. You can add lines and curves to the current path, then use `closepath()` to join the last point to the first.
+
+A path can have subpaths, created with` newsubpath()`, which can form holes.
+
+There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `rline()`, `text()`, `arc()` and `curve()`.
+
+```@docs
+move
+rmove
+newpath
+newsubpath
+closepath
+```
+
+## Lines
+
+Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` adds a line to the current path going from the current position to the point. `rline(pt)` adds a line relative to the current position.
+
+```@docs
+line
+rline
+```
+
+You can use `rule()` to draw a line through a point, optionally at an angle to the current x-axis.
+
+```@example
+using Luxor # hide
+Drawing(700, 200, "assets/figures/rule.png") # hide
+background("white") # hide
+sethue("black") # hide
+setline(0.5) # hide
+y = 10
+for x in 10 .^ range(0, length=100, stop=3)
+    global y
+    circle(Point(x, y), 2, :fill)
+    rule(Point(x, y), -π/2, boundingbox=BoundingBox(centered=false))
+    y += 2
+end
+
+finish() # hide
+nothing # hide
+```
+
+![arc](assets/figures/rule.png)
+
+Use the `boundingbox` keyword argument to crop the ruled lines with a BoundingBox.
+
+```@example
+using Luxor # hide
+Drawing(700, 200, "assets/figures/rulebbox.png") # hide
+origin()
+background("white") # hide
+sethue("black") # hide
+setline(0.75) # hide
+box(BoundingBox() * 0.9, :stroke)
+for x in 10 .^ range(0, length=100, stop=3)
+    rule(Point(x, 0), π/2,  boundingbox=BoundingBox() * 0.9)
+    rule(Point(-x, 0), π/2, boundingbox=BoundingBox() * 0.9)
+end
+finish() # hide
+```
+
+![arc](assets/figures/rulebbox.png)
+
+```@docs
+rule
+```
+
+## Arrows
+
+You can draw lines, arcs, and curves with arrows at the end with `arrow()`. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
+
+```@example
+using Luxor # hide
+Drawing(400, 250, "assets/figures/arrow.png") # hide
+background("white") # hide
+origin() # hide
+sethue("steelblue4") # hide
+setline(2) # hide
+arrow(O, Point(0, -65))
+arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
+arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
+finish() # hide
+nothing # hide
+```
+![arrows](assets/figures/arrow.png)
+
+If you provide four points, you can draw a Bézier curve with arrowheads at each end. Use the various options to control the presence and appearance.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/arrowbezier.png") # hide
+background("white") # hide
+origin() # hide
+setline(2) # hide
+pts = ngon(O, 100, 8, vertices=true)
+sethue("mediumvioletred")
+arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
+sethue("cyan4")
+arrow(pts[3:6]..., :fill, startarrow=true, finisharrow=true)
+sethue("midnightblue")
+arrow(pts[[4, 2, 6, 8]]..., :stroke,
+    startarrow=true,
+    finisharrow=true,
+    headangle = π/6,
+    headlength = 35,
+    linewidth  = 1.5)
+finish() # hide
+nothing # hide
+```
+![arrows](assets/figures/arrowbezier.png)
+
+```@docs
+arrow
+```
+
+## Arcs and curves
+
+There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the `:path` action, followed by a final `:stroke` or similar.
+
+`curve()` constructs Bézier curves from control points:
+
+```@example
+using Luxor # hide
+Drawing(600, 275, "assets/figures/curve.png") # hide
+origin() # hide
+background("white") # hide
+
+sethue("black") # hide
+
+setline(.5)
+pt1 = Point(0, -125)
+pt2 = Point(200, 125)
+pt3 = Point(200, -125)
+
+label.(string.(["O", "control point 1", "control point 2", "control point 3"]),
+    :e,
+    [O, pt1, pt2, pt3])
+
+sethue("red")
+map(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
+
+line(O, pt1, :stroke)
+line(pt2, pt3, :stroke)
+
+sethue("black")
+setline(3)
+
+# start a path
+move(O)
+curve(pt1, pt2, pt3) #  add to current path
+strokepath()
+
+finish()  # hide
+nothing # hide
+```
+
+![curve](assets/figures/curve.png)
+
+`arc2r()` draws a circular arc centered at a point that passes through two other points:
+
+```@example
+using Luxor, Random # hide
+Drawing(700, 200, "assets/figures/arc2r.png") # hide
+origin() # hide
+Random.seed!(42) # hide
+background("white") # hide
+tiles = Tiler(700, 200, 1, 6)
+for (pos, n) in tiles
+    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
+    sethue("black")
+    map(pt -> circle(pt, 4, :fill), [c1, pt3])
+    sethue("red")
+    circle(pt2, 4, :fill)
+    randomhue()
+    arc2r(c1, pt2, pt3, :stroke)
+end
+finish() # hide
+nothing # hide
+```
+
+![arc](assets/figures/arc2r.png)
+
+```@docs
+arc
+arc2r
+carc
+carc2r
+curve
+```
+
 ## More curved shapes: sectors, spirals, and squircles
 
 A sector (technically an "annular sector") has an inner and outer radius, as well as start and end angles.
@@ -506,148 +699,3 @@ finish() # hide
 nothing # hide
 ```
 ![rounded rect](assets/figures/round-rect.png)
-
-## Paths and positions
-
-A path is a sequence of lines and curves. You can add lines and curves to the current path, then use `closepath()` to join the last point to the first.
-
-A path can have subpaths, created with` newsubpath()`, which can form holes.
-
-There is a 'current position' which you can set with `move()`, and can use implicitly in functions like `line()`, `rline()`, `text()`, `arc()` and `curve()`.
-
-```@docs
-move
-rmove
-newpath
-newsubpath
-closepath
-```
-
-## Lines
-
-Use `line()` and `rline()` to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` adds a line to the current path going from the current position to the point. `rline(pt)` adds a line relative to the current position.
-
-```@docs
-line
-rline
-```
-
-You can use `rule()` to draw a line through a point, optionally at an angle to the current x-axis.
-
-```@example
-using Luxor # hide
-Drawing(700, 200, "assets/figures/rule.png") # hide
-background("white") # hide
-sethue("black") # hide
-setline(0.5) # hide
-y = 10
-for x in 10 .^ range(0, length=100, stop=3)
-    global y
-    circle(Point(x, y), 2, :fill)
-    rule(Point(x, y), -π/2, boundingbox=BoundingBox(centered=false))
-    y += 2
-end
-
-finish() # hide
-nothing # hide
-```
-
-![arc](assets/figures/rule.png)
-
-Use the `boundingbox` keyword argument to crop the ruled lines with a BoundingBox.
-
-```@example
-using Luxor # hide
-Drawing(700, 200, "assets/figures/rulebbox.png") # hide
-origin()
-background("white") # hide
-sethue("black") # hide
-setline(0.75) # hide
-box(BoundingBox() * 0.9, :stroke)
-for x in 10 .^ range(0, length=100, stop=3)
-    rule(Point(x, 0), π/2,  boundingbox=BoundingBox() * 0.9)
-    rule(Point(-x, 0), π/2, boundingbox=BoundingBox() * 0.9)
-end
-finish() # hide
-```
-
-![arc](assets/figures/rulebbox.png)
-
-```@docs
-rule
-```
-
-## Arcs and curves
-
-There are a few standard arc-drawing commands, such as `curve()`, `arc()`, `carc()`, and `arc2r()`. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the `:path` action, followed by a final `:stroke` or similar.
-
-`curve()` constructs Bézier curves from control points:
-
-```@example
-using Luxor # hide
-Drawing(600, 275, "assets/figures/curve.png") # hide
-origin() # hide
-background("white") # hide
-
-sethue("black") # hide
-
-setline(.5)
-pt1 = Point(0, -125)
-pt2 = Point(200, 125)
-pt3 = Point(200, -125)
-
-label.(string.(["O", "control point 1", "control point 2", "control point 3"]),
-    :e,
-    [O, pt1, pt2, pt3])
-
-sethue("red")
-map(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
-
-line(O, pt1, :stroke)
-line(pt2, pt3, :stroke)
-
-sethue("black")
-setline(3)
-
-# start a path
-move(O)
-curve(pt1, pt2, pt3) #  add to current path
-strokepath()
-
-finish()  # hide
-nothing # hide
-```
-
-![curve](assets/figures/curve.png)
-
-`arc2r()` draws a circular arc centered at a point that passes through two other points:
-
-```@example
-using Luxor, Random # hide
-Drawing(700, 200, "assets/figures/arc2r.png") # hide
-origin() # hide
-Random.seed!(42) # hide
-background("white") # hide
-tiles = Tiler(700, 200, 1, 6)
-for (pos, n) in tiles
-    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
-    sethue("black")
-    map(pt -> circle(pt, 4, :fill), [c1, pt3])
-    sethue("red")
-    circle(pt2, 4, :fill)
-    randomhue()
-    arc2r(c1, pt2, pt3, :stroke)
-end
-finish() # hide
-nothing # hide
-```
-
-![arc](assets/figures/arc2r.png)
-
-```@docs
-arc
-arc2r
-carc
-carc2r
-curve
-```
