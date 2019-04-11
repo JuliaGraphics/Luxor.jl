@@ -87,6 +87,13 @@ black':
 
     background(RGBA(0, 0, 0, 0))
 
+or
+
+    background(0, 0, 0, 0)
+
+Because this sets the current alpha level to 0.0, change it to something more
+visible before you start drawing.
+
 Returns the colors in a tuple.
 """
 function background(col::T) where T <: AbstractString

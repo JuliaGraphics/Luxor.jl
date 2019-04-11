@@ -11,7 +11,7 @@ function run_line_intersection_test(fname)
     Drawing(2000, 2000, fname)
     origin()
     sethue("magenta")
-    setline(.3)
+    setline(.2)
     fontsize(4)
     tiles = Tiler(1000, 1000, 10, 10)
     for (pos, n) in tiles
@@ -26,13 +26,8 @@ function run_line_intersection_test(fname)
         d = randompoint(topleft, bottomright)
         line(a, b, :stroke)
         line(c, d, :stroke)
-        if n % 2 == 0
-            (flag, ip) = intersectionlines(a, b, c, d, crossingonly=true)
-            text("crossingonly", O)
-        else
-            (flag, ip) = intersectionlines(a, b, c, d, crossingonly=false)
-            text("any intersection", O)
-        end
+        (flag, ip) = intersectionlines(a, b, c, d, crossingonly=true)
+        text("the lines $(flag ? "do" : "don't") cross", O)
         if flag
             gsave()
             setline(.5)
@@ -47,21 +42,21 @@ function run_line_intersection_test(fname)
             else
                 arrow(d, ip, arrowheadlength=1)
             end
-            sethue("red")
             circle(ip, 2, :fill)
             grestore()
         else
             if ip != O
-                circle(ip, 2, :stroke)
+                box(ip, 2, 2, :fill)
             end
             dist = distance(O, ip)
             if dist > 500
-                text("intersection point is $(dist) units away", O)
+                text("intersection point is $(dist) units away", O + (0, 10))
             end
         end
         grestore()
     end
     @test finish() == true
+
 end
 
 fname = "line-intersection-options.pdf"

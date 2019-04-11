@@ -179,7 +179,11 @@ or
 @pdf
 ```
 
-If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp.
+If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't have to specify the suffix:
+
+```
+@svg juliacircles(150) 400 400 "test" # saves in "test.svg"
+```
 
 If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:
 
@@ -188,7 +192,7 @@ Drawing()
 background(1, 1, 1, 0)
 origin()
 setline(30)
-# current opacity is 0.0, so use setcolor() rather than sethue()
+# current opacity is now 0.0, so use setcolor() rather than sethue()
 # or use setopacity()
 setcolor("green")
 box(BoundingBox() - 50, :stroke)

@@ -309,6 +309,12 @@ Here:
 
 - `d` is the total length of the transition
 
+The `easeinoutbezier()` function accepts two additional arguments, two normalized control points of a normalized Bezier curve from Point(0, 0) to Point(1, 1). You can use these to define the shape of a custom easing transition. The Bezier curve's `y` coordinate determines the acceleration. [?]
+
+![animation of bezier easing](assets/figures/animation-bezier-easing.gif)
+
+
+
 ```@docs
 easingflat
 lineartween
@@ -334,4 +340,5 @@ easeincirc
 easeoutcirc
 easeinoutcirc
 easeinoutinversequad
+easeinoutbezier
 ```

@@ -309,26 +309,29 @@ default is 600 by 600). The file is saved in the current working directory as
 
 Examples
 
-    @svg circle(O, 20, :fill)
+```
+@svg circle(O, 20, :fill)
 
-    @svg circle(O, 20, :fill) 400
+@svg circle(O, 20, :fill) 400
 
-    @svg circle(O, 20, :fill) 400 1200
+@svg circle(O, 20, :fill) 400 1200
 
-    @svg circle(O, 20, :fill) 400 1200 "images/test.svg"
+@svg circle(O, 20, :fill) 400 1200 "/tmp/test"
 
-    @svg begin
-            setline(10)
-            sethue("purple")
-            circle(O, 20, :fill)
-         end
+@svg circle(O, 20, :fill) 400 1200 "/tmp/test.svg"
 
+@svg begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end
 
-    @svg begin
-            setline(10)
-            sethue("purple")
-            circle(O, 20, :fill)
-         end 1200, 1200
+@svg begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end 1200, 1200
+```
 """
 macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
      fname = _add_ext(fname, :svg)
@@ -352,26 +355,30 @@ default is 600 by 600). The file is saved in the current working directory as
 
 Examples
 
-    @png circle(O, 20, :fill)
+```
+@png circle(O, 20, :fill)
 
-    @png circle(O, 20, :fill) 400
+@png circle(O, 20, :fill) 400
 
-    @png circle(O, 20, :fill) 400 1200
+@png circle(O, 20, :fill) 400 1200
 
-    @png circle(O, 20, :fill) 400 1200 "images/round.png"
+@png circle(O, 20, :fill) 400 1200 "/tmp/round"
 
-    @png begin
-            setline(10)
-            sethue("purple")
-            circle(O, 20, :fill)
-         end
+@png circle(O, 20, :fill) 400 1200 "/tmp/round.png"
+
+@png begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end
 
 
-    @png begin
-            setline(10)
-            sethue("purple")
-            circle(O, 20, :fill)
-         end 1200 1200
+@png begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end 1200 1200
+```
 """
 macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
     fname = _add_ext(fname, :png)
@@ -395,25 +402,29 @@ default is 600 by 600). The file is saved in the current working directory as
 
 Examples
 
-    @pdf circle(O, 20, :fill)
+```
+@pdf circle(O, 20, :fill)
 
-    @pdf circle(O, 20, :fill) 400
+@pdf circle(O, 20, :fill) 400
 
-    @pdf circle(O, 20, :fill) 400 1200
+@pdf circle(O, 20, :fill) 400 1200
 
-    @pdf circle(O, 20, :fill) 400 1200 "images/A0-version.pdf"
+@pdf circle(O, 20, :fill) 400 1200 "/tmp/A0-version"
 
-    @pdf begin
-            setline(10)
-            sethue("purple")
-            circle(O, 20, :fill)
-         end
+@pdf circle(O, 20, :fill) 400 1200 "/tmp/A0-version.pdf"
 
-    @pdf begin
-            setline(10)
-            sethue("purple")
-            circle(O, 20, :fill)
-         end 1200, 1200
+@pdf begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end
+
+@pdf begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end 1200, 1200
+```
 """
 macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
      fname = _add_ext(fname, :pdf)
