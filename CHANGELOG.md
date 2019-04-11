@@ -10,11 +10,11 @@
 
 - intersectionlines() replaces intersection()
 
-- polyselfintersections() removed, it doesn't work at all
-
 - animate() has new option to choose ffmpeg command
 
 - Bezier (bidirectional) `arrow` method added
+
+- Bezier easing function, `easeinoutbezier()` takes two normalized points to control easing when animating
 
 ### Changed
 
@@ -29,6 +29,7 @@
 ### Removed
 
 - much noise-related code
+- polyselfintersections() removed, it didn't work at all
 
 ### Deprecated
 

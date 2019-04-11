@@ -127,10 +127,10 @@ animate(bang, [
     pathname="/tmp/animationtest.gif")
 ```
 
-The `usenewffmpeg` option, true by default, uses complex filtering provided by
-recent versions of the `ffmpeg` utility, mainly to cope with transparent
-backgrounds. If set to default, the behavior is the same as in previous versions
-of Luxor.
+The `usenewffmpeg` option, `true` by default, uses single-pass palette
+generation and more complex filtering provided by recent versions of the
+`ffmpeg` utility, mainly to cope with transparent backgrounds. If set to
+`false`, the behavior is the same as in previous versions of Luxor.
 """
 function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
@@ -179,7 +179,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
             run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
         else
             # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters
-            run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1" -y $(tempdirectory)/$(movie.movietitle).gif`)
+            run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
         end
 
         if ! isempty(pathname)
@@ -471,6 +471,43 @@ function easeinoutinversequad(t, b, c, d)
    return c/2 * (t * t * t + 1) + b
 end
 
+"""
+    easeinoutbezier(t, b, c, d, cpt1, cpt2)
+
+This easing function takes six arguments, the usual `t`, `b`, `c`, and `d`, but
+also two points. These are the normalized control points of a Bezier curve drawn
+between `Point(0, 0)` to `Point(1.0, 1.0)`. The `y` value of the Bezier is the
+eased value for `t`.
+
+In your `frame()` generating function, if a Scene specifies the `easeinoutbezier` easing function, you can use this:
+
+```
+...
+lineareasing = rescale(framenumber, 1, scene.framerange.stop)
+beziereasing = scene.easingfunction(lineareasing, 0, 1, 1,
+    Point(0.25, 0.25), Point(0.75, 0.75))
+...
+```
+
+These two control points lie on the line between `0/0` and `1/1`, so it's equivalent to a linear easing (`lineartween()` or `easingflat`).
+
+However, in the next example, the two control points define a wave-like curve
+that changes direction before changing back. When animating with this easing
+function, an object will 'go retrograde' for a while.
+
+```
+lineareasing = rescale(framenumber, 1, scene.framerange.stop)
+beziereasing = scene.easingfunction(lineareasing, 0, 1, 1,
+    Point(0.01, 1.99), Point(0.99, -1.5))
+```
+
+"""
+function easeinoutbezier(t, b, c, d, cpt1::Point=Point(0.25, 0.25), cpt2::Point=Point(0.75, 0.75))
+    t /= d + b
+    bez = bezier(t, Point(0, 0), cpt1, cpt2, Point(1.0, 1.0))
+    return bez.y * c
+end
+
 easingfunctions = [lineartween,
                     easeinquad,
                     easeoutquad,
@@ -494,4 +531,5 @@ easingfunctions = [lineartween,
                     easeoutcirc,
                     easeinoutcirc,
                     easingflat,
-                    easeinoutinversequad]
+                    easeinoutinversequad,
+                    easeinoutbezier]

@@ -142,7 +142,7 @@ export Drawing,
     lineartween, easeinquad, easeoutquad, easeinoutquad, easeincubic, easeoutcubic,
     easeinoutcubic, easeinquart, easeoutquart, easeinoutquart, easeinquint, easeoutquint,
     easeinoutquint, easeinsine, easeoutsine, easeinoutsine, easeinexpo, easeoutexpo,
-    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad,
+    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad, easeinoutbezier,
 
     # noise
     noise, initnoise,
