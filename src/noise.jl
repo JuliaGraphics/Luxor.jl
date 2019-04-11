@@ -88,7 +88,7 @@ function _octaves(coords::Array{T, 1} where T <: Real;
     return total / maxval
 end
 
-# The rest of this file is the original OpenSimplexNoise code.
+# Most of this file is the original OpenSimplexNoise code.
 # I converted it to Julia but I don't understand it all... [cormullion]
 
 # OpenSimplex Noise
@@ -122,10 +122,10 @@ const DEFAULT_SEED        = 0
 # vertices of an octagon from the center.
 
 const gradients2D = Int8[
- 5,  2,    2,  5,
--5,  2,   -2,  5,
- 5, -2,    2, -5,
--5, -2,   -2, -5]
+ 5,  2,  2,  5,
+-5,  2, -2,  5,
+ 5, -2,  2, -5,
+-5, -2, -2, -5]
 
 # Gradients for 3D. They approximate the directions to the
 # vertices of a rhombicuboctahedron from the center, skewed so
@@ -202,6 +202,11 @@ end
 const perm            = Array{Int8}(undef, 256)
 const permGradIndex3D = Array{Int8}(undef, 256)
 
+"""
+    initnoise(seed::Int=42)
+
+Initialize the noise generation code.
+"""
 function initnoise(seed::Int=42)
     for i in 1:256
         perm[i]            = rand(Int8)
@@ -217,8 +222,6 @@ initnoise()
 simplexnoise(x) = simplexnoise(x, 0)
 #
 ###############################################################################
-
-
 
 ###############################################################################
 #
