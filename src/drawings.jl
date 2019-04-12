@@ -295,7 +295,7 @@ end
 
 function _add_ext(fname, ext)
     if match(Regex("[^\\\\]*\\.$ext"), fname) === nothing
-        return join([fname, ".png"])
+        return join([fname, string(".", ext)])
     end
     return fname
 end
