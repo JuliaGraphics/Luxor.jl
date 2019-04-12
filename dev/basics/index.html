@@ -52,14 +52,15 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg (setline(10);
 
 @svg circle(O, 20, :fill) 400 1200
 
-@svg circle(O, 20, :fill) 400 1200 &quot;images/test.svg&quot;
+@svg circle(O, 20, :fill) 400 1200 &quot;/tmp/test&quot;
+
+@svg circle(O, 20, :fill) 400 1200 &quot;/tmp/test.svg&quot;
 
 @svg begin
         setline(10)
         sethue(&quot;purple&quot;)
         circle(O, 20, :fill)
      end
-
 
 @svg begin
         setline(10)
@@ -71,7 +72,9 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg (setline(10);
 
 @png circle(O, 20, :fill) 400 1200
 
-@png circle(O, 20, :fill) 400 1200 &quot;images/round.png&quot;
+@png circle(O, 20, :fill) 400 1200 &quot;/tmp/round&quot;
+
+@png circle(O, 20, :fill) 400 1200 &quot;/tmp/round.png&quot;
 
 @png begin
         setline(10)
@@ -90,7 +93,9 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg (setline(10);
 
 @pdf circle(O, 20, :fill) 400 1200
 
-@pdf circle(O, 20, :fill) 400 1200 &quot;images/A0-version.pdf&quot;
+@pdf circle(O, 20, :fill) 400 1200 &quot;/tmp/A0-version&quot;
+
+@pdf circle(O, 20, :fill) 400 1200 &quot;/tmp/A0-version.pdf&quot;
 
 @pdf begin
         setline(10)
@@ -102,11 +107,11 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg (setline(10);
         setline(10)
         sethue(&quot;purple&quot;)
         circle(O, 20, :fill)
-     end 1200, 1200</code></pre></div></div></section><p>If you don&#39;t specify a size, the defaults are 600 by 600. If you don&#39;t specify a file name, files created with the macros are placed in your current working directory as <code>luxor-drawing-</code> followed by a time stamp.</p><p>If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:</p><pre><code class="language-julia">Drawing()
+     end 1200, 1200</code></pre></div></div></section><p>If you don&#39;t specify a size, the defaults are 600 by 600. If you don&#39;t specify a file name, files created with the macros are placed in your current working directory as <code>luxor-drawing-</code> followed by a time stamp. You don&#39;t have to specify the suffix:</p><pre><code class="language-none">@svg juliacircles(150) 400 400 &quot;test&quot; # saves in &quot;test.svg&quot;</code></pre><p>If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:</p><pre><code class="language-julia">Drawing()
 background(1, 1, 1, 0)
 origin()
 setline(30)
-# current opacity is 0.0, so use setcolor() rather than sethue()
+# current opacity is now 0.0, so use setcolor() rather than sethue()
 # or use setopacity()
 setcolor(&quot;green&quot;)
 box(BoundingBox() - 50, :stroke)
@@ -125,7 +130,7 @@ end</code></pre><p><img src="../assets/figures/backgrounds.png" alt="background"
 origin()
 rulers()</code></pre><p><img src="../assets/figures/axes.png" alt="axes"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.background" href="#Luxor.background"><code>Luxor.background</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">background(color)</code></pre><p>Fill the canvas with a single color. Returns the (red, green, blue, alpha) values.</p><p>Examples:</p><pre><code class="language-none">background(&quot;antiquewhite&quot;)
 background(&quot;ivory&quot;)</code></pre><p>If Colors.jl is installed:</p><pre><code class="language-none">background(RGB(0, 0, 0))
-background(Luv(20, -20, 30))</code></pre><p>If you don&#39;t specify a background color for a PNG drawing, the background will be transparent. You can set a partly or completely transparent background for PNG files by passing a color with an alpha value, such as this &#39;transparent black&#39;:</p><pre><code class="language-none">background(RGBA(0, 0, 0, 0))</code></pre><p>Returns the colors in a tuple.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.rulers" href="#Luxor.rulers"><code>Luxor.rulers</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">rulers()</code></pre><p>Draw and label two rulers starting at <code>O</code>, the current 0/0, and continuing out along the current positive x and y axes.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.origin" href="#Luxor.origin"><code>Luxor.origin</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">origin()</code></pre><p>Reset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).</p><p>You can refer to the 0/0 point as <code>O</code>. (O = <code>Point(0, 0)</code>),</p></div></div><div><div><pre><code class="language-none">origin(pt:Point)</code></pre><p>Reset the current matrix, then move the <code>0/0</code> position to <code>pt</code>.</p></div></div></section><h2><a class="nav-anchor" id="Save-and-restore-1" href="#Save-and-restore-1">Save and restore</a></h2><p><code>gsave()</code> saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next <code>grestore()</code> is called, all changes you&#39;ve made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used <code>gsave()</code>. <code>gsave()</code> and <code>grestore()</code> should always be balanced in pairs.</p><p>The <code>@layer</code> macro is a synonym for a <code>gsave()</code>...<code>grestore()</code> pair.</p><pre><code class="language-julia">@svg begin
+background(Luv(20, -20, 30))</code></pre><p>If you don&#39;t specify a background color for a PNG drawing, the background will be transparent. You can set a partly or completely transparent background for PNG files by passing a color with an alpha value, such as this &#39;transparent black&#39;:</p><pre><code class="language-none">background(RGBA(0, 0, 0, 0))</code></pre><p>or</p><pre><code class="language-none">background(0, 0, 0, 0)</code></pre><p>Because this sets the current alpha level to 0.0, change it to something more visible before you start drawing.</p><p>Returns the colors in a tuple.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.rulers" href="#Luxor.rulers"><code>Luxor.rulers</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">rulers()</code></pre><p>Draw and label two rulers starting at <code>O</code>, the current 0/0, and continuing out along the current positive x and y axes.</p></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.origin" href="#Luxor.origin"><code>Luxor.origin</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">origin()</code></pre><p>Reset the current matrix, and then set the 0/0 origin to the center of the drawing (otherwise it will stay at the top left corner, the default).</p><p>You can refer to the 0/0 point as <code>O</code>. (O = <code>Point(0, 0)</code>),</p></div></div><div><div><pre><code class="language-none">origin(pt:Point)</code></pre><p>Reset the current matrix, then move the <code>0/0</code> position to <code>pt</code>.</p></div></div></section><h2><a class="nav-anchor" id="Save-and-restore-1" href="#Save-and-restore-1">Save and restore</a></h2><p><code>gsave()</code> saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next <code>grestore()</code> is called, all changes you&#39;ve made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used <code>gsave()</code>. <code>gsave()</code> and <code>grestore()</code> should always be balanced in pairs.</p><p>The <code>@layer</code> macro is a synonym for a <code>gsave()</code>...<code>grestore()</code> pair.</p><pre><code class="language-julia">@svg begin
     circle(O, 100, :stroke)
     @layer (sethue(&quot;red&quot;); rule(O); rule(O, π/2))
     circle(O, 200, :stroke)
