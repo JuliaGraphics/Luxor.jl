@@ -52,7 +52,6 @@ nothing # hide
 
 ![scale](assets/figures/scale.png)
 
-
 `rotate()` rotates the current workspace by the specified amount about the current 0/0 point. It's relative to the previous rotation, not to the document's original.
 
 ```@example
@@ -85,6 +84,18 @@ scale
 rotate
 translate
 ```
+
+## Scaling of lines
+
+Line thicknesses are not scaled. For example, with a line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that after say `setline(1)`, lines change thickness after calls to `scale(n)`, you could define your own `strokeraw()` function that calls the `cairo_stroke` primitive directly:
+
+```
+import Cairo
+function strokeraw()
+    ccall((:cairo_stroke, Cairo._jl_libcairo), Nothing, (Ptr{Nothing},), Luxor.get_current_cr().ptr)
+end
+```
+
 
 # Matrices and transformations
 
