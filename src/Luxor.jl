@@ -80,7 +80,8 @@ export Drawing,
     Boxmaptile, boxmap,
 
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
-    arc, carc, arc2r, carc2r, spiral, sector, intersection2circles,
+    arc, carc, arc2r, carc2r, arc2sagitta, carc2sagitta,
+    spiral, sector, intersection2circles,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
     intersectlinepoly, polyintersections, circlepointtangent, circletangent2circles,
 

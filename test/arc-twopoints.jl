@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Random
+using Luxor, Random, Colors
 
 Random.seed!(42)
 
