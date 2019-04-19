@@ -782,43 +782,57 @@ end
 """
     arc2sagitta(p1::Point, p2::Point, s, action=:nothing)
 
-Make a clockwise arc starting at `p1` and ending at `p2`, reaching a height of `s`, the sagitta, at the middle. Might append to current path...
+Make a clockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
 
-Return tuple of center point and radius of arc.
+Return tuple of the center point and the radius of the arc.
 """
 function arc2sagitta(p1::Point, p2::Point, s, action=:nothing)
     if isapprox(s, 0.0)
-        throw(error("$s should be greater than 0.0"))
+        throw(error("Height of arc $s should be greater than 0.0"))
     end
     l = distance(p1, p2)/2
-    r = max(l, (s^2 + l^2) / 2s)
+    r = (s^2 + l^2) / 2s
     flag, ip1, ip2 = intersectioncirclecircle(p1, r, p2, r)
-    # looks to be always ip2
     if flag
-        arc2r(ip2, p1, p2, action)
+        if r <= s
+            arc2r(ip1, p1, p2, action)
+            result = (ip1, r)
+        else
+            arc2r(ip2, p1, p2, action)
+            result = (ip2, r)
+        end
+    else
+        result = (O, 0)
     end
-    return (ip2, r)
+    return result
 end
 
 """
     carc2sagitta(p1::Point, p2::Point, s, action=:nothing)
 
-Make a counterclockwise arc starting at `p1` and ending at `p2`, reaching a height of `s`, the sagitta, at the middle. Might append to current path...
+Make a counterclockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
 
 Return tuple of center point and radius of arc.
 """
 function carc2sagitta(p1::Point, p2::Point, s, action=:nothing)
     if isapprox(s, 0.0)
-        throw(error("$s should be greater than 0.0"))
+        throw(error("Height of arc $s should be greater than 0.0"))
     end
     l = distance(p1, p2)/2
-    r = max(l, (s^2 + l^2) / 2s)
+    r = (s^2 + l^2) / 2s
     flag, ip1, ip2 = intersectioncirclecircle(p1, r, p2, r)
-    # looks to be always ip2
     if flag
-        carc2r(ip1, p1, p2, action)
+        if r <= s
+            carc2r(ip2, p1, p2, action)
+            result = (ip1, r)
+        else
+            carc2r(ip1, p1, p2, action)
+            result = (ip2, r)
+        end
+    else
+        result = (O, 0)
     end
-    return (ip1, r)
+    return result
 end
 
 # eof

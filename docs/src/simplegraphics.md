@@ -503,13 +503,44 @@ nothing # hide
 
 ![arc](assets/figures/arc2r.png)
 
+`arc2sagitta()` and `carc2sagitta()` make circular arcs based on two points and the sagitta (the maximum height from the chord).
+
+```@example
+using Luxor, Colors # hide
+Drawing(400, 250, "assets/figures/arc2sagitta.svg") # hide
+origin() # hide
+background("white") # hide
+setline(.5) # hide
+translate(0, 50) # hide
+pt1 = Point(-100, 0)
+pt2 = Point(100, 0)
+for n in reverse(range(1, length=7, stop=120))
+    sethue("red")
+    rule(Point(0, -n))
+    sethue(LCHab(70, 80, rescale(n, 120, 1, 0, 359)))
+    pt, r = arc2sagitta(pt1, pt2, n, :fillpreserve)
+    sethue("black")
+    strokepath()
+    text(string(round(n)), O + (120, -n))
+end
+circle.((pt1, pt2), 5, :fill)
+finish() # hide
+nothing # hide
+```
+
+![arc](assets/figures/arc2sagitta.svg)
+
 ```@docs
 arc
 arc2r
 carc
 carc2r
+arc2sagitta
+carc2sagitta
 curve
 ```
+
+
 
 ## More curved shapes: sectors, spirals, and squircles
 
