@@ -1,12 +1,12 @@
 # Changelog
 
-## [v1.3.0] - future release in April sometime
+## [v1.3.0] - future release in April/May sometime
 
 ### Added
 
 - dimension() for dimensioning
 
-- polymove!(), polyrotate!(), polyscale!() for changing polygons
+- polymove!(), polyrotate!(), polyscale!() for really changing polygons
 
 - intersectionlines() replaces intersection()
 
@@ -14,8 +14,9 @@
 
 - Bezier (bidirectional) `arrow` method added
 
-- Bezier easing function, `easeinoutbezier()` takes two normalized points to control easing when animating
+- Bezier easing function, `easeinoutbezier()` takes two normalized control points to control easing when animating
 
+- arc2sagitta()/carc2sagitta() functions added
 
 ### Changed
 
