@@ -802,7 +802,7 @@ function arc2sagitta(p1::Point, p2::Point, s, action=:nothing)
             result = (ip2, r)
         end
     else
-        result = (O, 0)
+        result = (O, 0.0)
     end
     return result
 end
@@ -830,7 +830,7 @@ function carc2sagitta(p1::Point, p2::Point, s, action=:nothing)
             result = (ip2, r)
         end
     else
-        result = (O, 0)
+        result = (O, 0.0)
     end
     return result
 end
