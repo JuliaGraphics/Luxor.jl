@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.3.0] - future release in April/May sometime
+## [v1.3.0] - April 28 2019
 
 ### Added
 
