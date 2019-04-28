@@ -18,6 +18,7 @@ function test_arc_sagitta(fname)
 
     sethue("red")
     for s in 1:4:150
+        @test isarcclockwise(O, p1, p2) == false
         cp, r = arc2sagitta(p1, p2, s, :stroke)
         @test r >= 150
     end
@@ -36,6 +37,10 @@ function test_arc_sagitta(fname)
 
     sethue("red")
     for s in 1:4:150
+        # the arc is neither clockwise or counterclockwise
+        # because points are collinear!
+        @test isarcclockwise(O, p2, p1) == false
+        @test isarcclockwise(O, p1, p2) == false
         cp, r = arc2sagitta(p1, p2, s, :stroke)
         @test r >= 150
     end

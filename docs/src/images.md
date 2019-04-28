@@ -119,7 +119,7 @@ h = image.height
 
 # create a drawing surface of the same size
 
-fname = "drawing_on_images.png"
+fname = "assets/figures/drawing_on_images.png"
 Drawing(w, h, fname)
 
 # place the image on the Drawing - it's positioned by its top/left corner
@@ -172,7 +172,7 @@ using Luxor # hide
 image = readpng("assets/figures/julia-logo-mask.png")
 w = image.width
 h = image.height
-fname = "drawing_on_images_2.png"
+fname = "assets/figures/drawing_on_images_2.png"
 Drawing(w, h, fname)
 placeimage(image, 0, 0)
 

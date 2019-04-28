@@ -294,7 +294,8 @@ function preview()
 end
 
 function _add_ext(fname, ext)
-    if match(Regex("[^\\\\]*\\.$ext"), fname) === nothing
+    # TODO doesn't work if fname contains $(n) filename generator
+    if match(Regex("[^\\\\]*\\.$(ext)"), fname) === nothing
         return join([fname, string(".", ext)])
     end
     return fname
