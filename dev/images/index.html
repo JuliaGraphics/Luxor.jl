@@ -58,7 +58,7 @@ h = image.height
 
 # create a drawing surface of the same size
 
-fname = &quot;drawing_on_images.png&quot;
+fname = &quot;assets/figures/drawing_on_images.png&quot;
 Drawing(w, h, fname)
 
 # place the image on the Drawing - it&#39;s positioned by its top/left corner
@@ -93,7 +93,7 @@ text(&quot;width $w&quot;, Point(w/2, 70), halign=:center)
 end</code></pre><p><img src="../assets/figures/drawing_on_images.png" alt="drawing on images"/></p><h3><a class="nav-anchor" id="Adding-text-to-transformed-images-1" href="#Adding-text-to-transformed-images-1">Adding text to transformed images</a></h3><p>The above approach works well, but suppose you want to locate the working origin at the lower left of the image, ie you want all coordinates to be relative to the bottom left corner of the image?</p><p>To do this, use <code>translate()</code> and <code>transform()</code> to modify the drawing space:</p><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
 w = image.width
 h = image.height
-fname = &quot;drawing_on_images_2.png&quot;
+fname = &quot;assets/figures/drawing_on_images_2.png&quot;
 Drawing(w, h, fname)
 placeimage(image, 0, 0)
 
