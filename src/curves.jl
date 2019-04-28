@@ -210,6 +210,20 @@ function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
 end
 
 """
+    isarcclockwise(c::Point, A::Point, B::Point)
+
+Return `true` if an arc centered at `c` going from `A` to `B` is clockwise.
+
+If `c`, `A`, and `B` are collinear, then a hemispherical arc could be
+either clockwise or not.
+"""
+function isarcclockwise(c::Point, A::Point, B::Point)
+    a = A - O
+    b = B - O
+    return crossproduct(a, b) > 0
+end
+
+"""
     sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)
 
 Draw an annular sector centered at `centerpoint`.

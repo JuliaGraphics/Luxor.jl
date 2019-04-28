@@ -518,3 +518,30 @@ function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
     end
     return (resultflag, resultip)
 end
+
+"""
+    pointinverse(A::Point, centerpoint::Point, rad)
+
+Find `A′`, the inverse of a point A with respect to a circle `centerpoint`/`rad`, such that:
+
+```
+distance(centerpoint, A) * distance(centerpoint, A′) == rad^2
+```
+
+Return (true, A′) or (false, A).
+"""
+function pointinverse(A::Point, centerpoint, rad)
+    A == centerpoint && throw(error("pointinverse(): point $A and centerpoint $centerpoint are the same"))
+    result = (false, A)
+    n, C, pt2 = intersectionlinecircle(centerpoint, A, centerpoint, rad)
+    if n > 0
+        B = polar(rad, 0.7)                # arbitrary point on circle
+        h = getnearestpointonline(B, C, A) # perp
+        d = between(A, h, 2)               # reflection
+        flag, A′ = intersectionlines(B, d, centerpoint, A, crossingonly = false)
+        if flag == true
+            result = (true, A′)
+        end
+    end
+    return result
+end

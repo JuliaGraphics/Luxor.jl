@@ -63,7 +63,6 @@ between
 
 `center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
 
-
 `getnearestpointonline()` finds perpendiculars.
 
 ```@example
@@ -81,6 +80,38 @@ nothing # hide
 ```
 ![arc](assets/figures/perpendicular.png)
 
+## Points and arcs
+
+Use `isarcclockwise(c, p1, p2)` to check whether an arc centered at `c` running from `p1` to `p2` is clockwise.
+
+The `pointinverse()` function finds the inverse of a point relative to a reference circle (centerpoint and radius). In the image, each vertex on the star is linked by an arrow to its inverse.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/pointinverse.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+
+radius = 80
+starradius = 70
+sethue("black")
+points = star(O, starradius, 5, 0.5, π/5, vertices=true)
+antipoints = last.(pointinverse.(points, O, radius))
+
+@layer (sethue("grey90"); poly(antipoints, :fill))
+@layer (sethue("grey75"); poly(points, :fill))
+circle(O, radius, :stroke)
+
+prettypoly.((points, antipoints), :none,
+    vertexlabels = (n, l) -> (label(string(n), :ne)))
+foreach(x -> arrow(x[1] , x[2]), zip(points, antipoints))
+
+finish() # hide
+nothing # hide
+```
+![arc](assets/figures/pointinverse.png)
+
 ```@docs
 distance
 getnearestpointonline
@@ -91,6 +122,8 @@ dotproduct
 @polar
 polar
 ispointonline
+isarcclockwise
+pointinverse
 ```
 
 ## Intersections

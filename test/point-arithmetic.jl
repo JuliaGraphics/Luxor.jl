@@ -85,6 +85,22 @@ function general_tests()
     p2 = Point(0, 50)
     @test perpendicular(p1, p2, 10) == Luxor.Point(-10.0, 0.0)
     @test perpendicular(p1, p2, 20) == Luxor.Point(-20.0, 0.0)
+
+    # test pointinverse
+    p1 = Point(10, 10)
+    cpt = O
+    rad = 50
+    flag, antipoint = pointinverse(p1, cpt, rad)
+    @test flag == true
+    @test isapprox(antipoint, Point(125, 125))
+
+    p2 = Point(20, 0.0)
+    flag, antipoint = pointinverse(p2, cpt, rad)
+    @test flag == true
+    @test isapprox(antipoint.y, 0.0)
+
+    # point shouldn't be centerpoint
+    @test_throws ErrorException pointinverse(cpt, cpt, rad)
 end
 
 function point_arithmetic_test(fname, npoints=20)
