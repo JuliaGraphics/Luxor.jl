@@ -476,7 +476,7 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
     cpoint = midpoint(focus1, focus2)
     dc = distance(focus1, cpoint)
     b = sqrt(abs(a^2 - dc^2)) # minor axis, hopefuly not 0
-    phi = slope(O, focus2) # angle between the major axis and the x-axis
+    phi = slope(focus1, focus2) # angle between the major axis and the x-axis
     points = Point[]
     drawing = false
     for t in 0:stepvalue:2pi
