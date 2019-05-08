@@ -975,3 +975,29 @@ function polyrotate!(pgon, θ;
     end
     return pgon
 end
+
+"""
+    insertvertices!(pgon;
+        ratio=0.5)
+
+Insert a new vertex into each edge of a polygon `pgon`. The default `ratio` of
+0.5 divides the original edge of the polygon into half.
+"""
+function insertvertices!(pgon;
+        ratio=0.5)
+    counter = 1
+    vertexnumber = 2
+    originallength = length(pgon)
+    while true
+        insert!(pgon, vertexnumber,
+        between(pgon[mod1(vertexnumber - 1, length(pgon))],
+            pgon[mod1(vertexnumber, length(pgon))],
+            ratio))
+        vertexnumber += 2
+        counter += 1
+        if counter > originallength
+            break
+        end
+    end
+    return pgon
+end

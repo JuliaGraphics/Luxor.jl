@@ -20,7 +20,7 @@ background("white")
 origin()
 tabledata = readdlm(IOBuffer(
 """
--             create                convert               draw               info              other             
+-             create                convert               draw               info              edit             
 polygon       ngon()                polysmooth()          poly()             isinside()        simplify()
 -             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()
 -             star()                -                     polysmooth()       polyarea()        polyportion()
@@ -31,6 +31,8 @@ polygon       ngon()                polysmooth()          poly()             isi
 -             -                     -                     -                  -                 polymove!()
 -             -                     -                     -                  -                 polyscale!()
 -             -                     -                     -                  -                 polyrotate!()
+-             -                     -                     -                  -                 polysample()
+-             -                     -                     -                  -                 insertvertices!()
 path          getpath()             pathtopoly()          -                  -                 -
 -             getpathflat()         -                     -                  -                 -  
 bezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -
@@ -94,7 +96,7 @@ Drawing(700, 600, "assets/figures/n-gon.png") # hide
 
 origin() # hide
 background("white") # hide
-cols = distinguishable_colors(10) 
+cols = distinguishable_colors(10)
 setline(2)
 fontsize(12)
 tiles = Tiler(700, 600, 3, 3)
@@ -873,9 +875,9 @@ nothing # hide
 
 ![polyperimeter](assets/figures/polyperimeter.png)
 
-### Polygon resampling
+## Polygon selection and modification
 
-Luxor functions can return the first part or last part of a polygon. Or you can ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the "lines" joining the vertices) or decrease them (which changes the shape of the polygon).
+There are Luxor functions to return the first part or last part of a polygon. You can also ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the "lines" joining the vertices) or decrease them (which changes the shape of the polygon). It's also possible to insert vertices automatically.
 
 `polyportion()` and `polyremainder()` return part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns the first half of polygon `p`, `polyremainder(p, .75)` returns the last quarter of it.
 
@@ -914,7 +916,34 @@ nothing # hide
 
 ![polyportion](assets/figures/polyportion.png)
 
-To resample a polygon, use `polysample()`. In this example, the same four-sided polygon is sampled at multiples of 4, with different circle radii at each multiple. This adds more points to the original polygon.
+You can insert vertices in the edges of a polygon with `insertvertices!()`. For example, this code inserts a new vertex into each side of a polygon five times. The polygon ends up with 128 vertices.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/insertvertices.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+sethue("black") # hide
+
+pts = box(O, 500, 200, vertices=true)
+prettypoly(pts, :stroke, close=true)
+
+for i in 1:5
+    insertvertices!(pts)
+    prettypoly(pts, :stroke, close=true)
+    fontsize(16)
+    label(string(length(pts)), :ne, pts[1], offset=10)
+    scale(0.8)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![poly insert vertices](assets/figures/insertvertices.png)
+
+To resample a polygon, use `polysample()`. In this example, the same four-sided polygon is resampled at multiples of 4, with different circle radii at each multiple. This adds more points to the new copy of the original polygon.
 
 ```@example
 using Luxor # hide
@@ -993,6 +1022,7 @@ nothing # hide
 
 ```@docs
 polysample
+insertvertices!
 ```
 
 ### Polygon side lengths

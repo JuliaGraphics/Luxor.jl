@@ -165,4 +165,10 @@ end
     @test length(triangles) == 2
 end
 
+@testset "insertvertices tests" begin
+    pgon = star(Point(20, 20), 200, 12, 0.7, π/7, vertices=true)
+    originallength = length(pgon)
+    @test length(insertvertices!(pgon)) == 2originallength
+end
+
 @test finish() == true

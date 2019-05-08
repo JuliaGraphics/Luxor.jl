@@ -92,6 +92,20 @@ animate(poolmovie, [
     ...
     ])
 ```
+
+To use an easing function inside the frame-generating function, you can create a normalized
+value with, for example:
+
+```
+eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+```
+
+Or, if the scene doesn't start at frame 1, calculate normalized easing function like this:
+
+```
+eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+    0, 1, scene.framerange.stop - scene.framerange.start)
+```
 """
 Scene(movie::Movie, framefunction::Function;
     easingfunction=lineartween, optarg=nothing) =
