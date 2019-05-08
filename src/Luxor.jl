@@ -96,7 +96,7 @@ export Drawing,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit,
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
-    polyarea, polysample,
+    polyarea, polysample, insertvertices!,
 
     polymove!, polyscale!, polyrotate!,
 

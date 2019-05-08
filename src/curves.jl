@@ -488,6 +488,24 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
 end
 
 """
+    ellipse(focus1::Point, focus2::Point, pt::Point, action=:none;
+            stepvalue=pi/100,
+            vertices=false,
+            reversepath=false)
+
+Build a polygon approximation to an ellipse, given two points and a point somewhere on the
+ellipse.
+"""
+function ellipse(focus1::Point, focus2::Point, pt::Point, action=:none;
+                 stepvalue=pi/100,
+                 vertices=false,
+                 reversepath=false)
+    k = distance(focus1, pt) + distance(focus2, pt)
+    ellipse(focus1, focus2, k, action, stepvalue=stepvalue,
+        vertices=vertices, reversepath=reversepath)
+end
+
+"""
     hypotrochoid(R, r, d, action=:none;
             stepby=0.01,
             period=0.0,

@@ -1,5 +1,20 @@
 # Changelog
 
+## forthcoming release
+
+### Added
+
+- another method for ellipse that takes three points
+- insertvertices!(pgon) inserts a vertex into each edge of a polygon
+
+### Changed
+
+- fixed bug in ellipse() (thanks @Ryngetsu!)
+
+### Removed
+
+### Deprecated
+
 ## [v1.3.0] - April 28 2019
 
 ### Added
@@ -23,7 +38,6 @@
 - isarcclockwise() added
 
 - pointinverse() added
-
 
 ### Changed
 
