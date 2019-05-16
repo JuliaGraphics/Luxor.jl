@@ -136,7 +136,7 @@ export Drawing,
 
     bars,
 
-    mesh, setmesh,
+    mesh, setmesh, mask, 
 
     # animation
     Sequence, Movie, Scene, animate,

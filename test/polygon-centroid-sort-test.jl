@@ -20,11 +20,22 @@ function drawpoly(p, x, y, counter)
     gsave()
     translate(x, y)
     sethue("purple")
+
+    # label old points
+    @layer begin
+        sethue("grey50")
+        fontsize(8)
+        for (n, pt) in enumerate(p)
+            circle(pt, 1, :fill)
+            label(string(n), :NW, pt, offset=5)
+        end
+    end
+
     psort = polysortbyangle(p)
     drawpolyboundingbox(psort)
     poly(psort, close=true, :stroke)
 
-    # label points
+    # label sorted points
     for (n, pt) in enumerate(psort)
         circle(pt, 1, :fill)
         text(string(n), pt.x, pt.y)
@@ -52,7 +63,11 @@ function polycentroidsort(width, height)
     pagetiles = Tiler(width, height, 5, 5, margin=50)
     tilesize = pagetiles.tilewidth/2
     for (pos, n) in pagetiles
+
         p = randompointarray(rand(-tilesize:-tilesize), rand(-tilesize:-tilesize), rand(tilesize:tilesize), rand(tilesize:tilesize), rand(5:12))
+
+        # check for axis-aligned edges too
+        rand(1:10) > 7 && (p = Random.shuffle!(box(O, 250, 300, vertices=true)))
         drawpoly(p, pos.x, pos.y, n)
     end
 end
@@ -61,12 +76,13 @@ function polycentroidtest(fname)
     width, height = 3000, 3000
     Drawing(width, height, fname)
     fontsize(20)
+    background("white")
     origin()
     polycentroidsort(width, height)
     @test finish() == true
 end
 
-fname = "polycentroidsort.pdf"
+fname = "polycentroidsort.png"
 polycentroidtest(fname)
 
 println("...finished test: output in $(fname)")

@@ -6,10 +6,13 @@
 
 - another method for ellipse that takes three points
 - insertvertices!(pgon) inserts a vertex into each edge of a polygon
+- julialogo() option bodycolor to make light-colored logo for dark modes
 
 ### Changed
 
 - fixed bug in ellipse() (thanks @Ryngetsu!)
+- fixed polysortbyangle(), tan() problems
+- julialogo() and juliacircles() now produce 3-color rather than 6-color circles
 
 ### Removed
 
