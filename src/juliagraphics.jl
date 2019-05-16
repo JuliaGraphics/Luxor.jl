@@ -1,5 +1,13 @@
 # the current julia logo and graphics
 
+# not exported
+
+const julia_blue    = (0.251, 0.388, 0.847)
+const julia_purple  = (0.584, 0.345, 0.698)
+const julia_green   = (0.22, 0.596, 0.149)
+const julia_red     = (0.796, 0.235, 0.2)
+
+# to be deprecated
 const darker_blue    = (0.251, 0.388, 0.847)
 const lighter_blue   = (0.4, 0.51, 0.878)
 const darker_purple  = (0.584, 0.345, 0.698)
@@ -13,7 +21,10 @@ const greens         = (darker_green, lighter_green)
 const reds           = (darker_red, lighter_red)
 
 """
-    julialogo(;action=:fill, color=true)
+    julialogo(;
+        action=:fill,
+        color=true,
+        bodycolor=colorant"black")
 
 Draw the Julia logo. The default action is to fill the logo and use the colors:
 
@@ -42,11 +53,13 @@ To use the logo as a clipping mask:
 (In this case the `color` setting is automatically ignored.)
 
 """
-function julialogo(;action=:fill, color=true)
+function julialogo(;action=:fill,
+        color=true,
+        bodycolor=colorant"black")
     # save current color
-    r, g, b, a = get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha()
+    r, g, b, a = Luxor.get_current_redvalue(), Luxor.get_current_greenvalue(), Luxor.get_current_bluevalue(), Luxor.get_current_alpha()
     # "j"
-    color && setcolor("black")
+    setcolor(bodycolor)
     move(72.872, 177.311)
     curve(72.872, 184.847, 72.024, 190.932, 70.329, 195.567)
     curve(68.633, 200.202, 66.222, 203.8, 63.094, 206.362)
@@ -161,36 +174,36 @@ function julialogo(;action=:fill, color=true)
     line(314.111, 177.311)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.796, 0.235, 0.2) # dark red
+    color && setcolor(julia_red) #  red
     circle(Point(240.272, 68.091), Point(205.272, 68.091), :path)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.835, 0.388, 0.361) # light red
-    circle(Point(206.772, 68.091), Point(238.772, 68.091), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
+    # color && setcolor(0.835, 0.388, 0.361) # light red
+    # circle(Point(206.772, 68.091), Point(238.772, 68.091), :path)
+    # (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.251, 0.388, 0.847) # dark blue
+    color && setcolor(julia_blue) # blue
     circle(Point(77.954, 68.091), Point(42.954, 68.091), :path)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.4, 0.51, 0.878) # light blue
-    circle(Point(44.454, 68.091), Point(76.454, 68.091), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
+    # color && setcolor(0.4, 0.51, 0.878) # light blue
+    # circle(Point(44.454, 68.091), Point(76.454, 68.091), :path)
+    # (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.584, 0.345, 0.698) # dark purple
+    color && setcolor(julia_purple) # dark purple
     circle(Point(282.321, 68.091), Point(247.321, 68.091), :path)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.667, 0.475, 0.757) # lighter purple
-    circle(Point(248.821, 68.091), Point(280.821, 68.091), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
+    # color && setcolor(0.667, 0.475, 0.757) # lighter purple
+    # circle(Point(248.821, 68.091), Point(280.821, 68.091), :path)
+    # (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.22, 0.596, 0.149) # dark green
+    color && setcolor(julia_green) # green
     circle(Point(261.299, 31.672), Point(226.299, 31.672), :path)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    color && setcolor(0.376, 0.678, 0.318) # light green
-    circle(Point(227.799, 31.672), Point(259.799, 31.672), :path)
+    # color && setcolor(0.376, 0.678, 0.318) # light green
+    # circle(Point(227.799, 31.672), Point(259.799, 31.672), :path)
 
     if action == :clip
         clip()
@@ -204,23 +217,23 @@ end
 """
     juliacircles(radius=100)
 
-Draw the three Julia circles in color centered at the origin.
+Draw the three Julia circles ("dots") in color centered at the origin.
 
-The distance of the centers of the circles from the origin is `radius`.
-The optional keyword arguments `outercircleratio` (default 0.75) and `innercircleratio`
-(default 0.65) control the radius of the individual colored circles relative to the `radius`.
-So you can get relatively smaller or larger circles by adjusting the ratios.
+The distance of the centers of each circle from the origin is `radius`.
+
+The optional keyword argument `outercircleratio` (default 0.75) determines the radius of each circle relative to the main radius. So the default is to draw circles of radius 75 points around a larger circle of radius 100.
+
+Return the three centerpoints.
+
+The `innercircleratio` (default 0.65) no longer does anything useful (it used to draw the smaller circles) and will be deprecated.
 """
 function juliacircles(radius=100; outercircleratio=0.75, innercircleratio=0.65)
     # clockwise, from bottom left
-    color_sequence = [reds, greens, purples]
-
+    color_sequence = [julia_red, julia_green, julia_purple]
     points = ngon(O, radius, 3, pi/6, vertices=true)
-
     for (n, p) in enumerate(points)
-        setcolor(color_sequence[n][1]...)
+        setcolor(color_sequence[n]...)
         circle(p, outercircleratio * radius, :fill)
-        setcolor(color_sequence[n][2]...)
-        circle(p, innercircleratio * radius, :fill)
     end
+    return points
 end

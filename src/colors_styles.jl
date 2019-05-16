@@ -274,3 +274,27 @@ Return the current compositing/blending mode as a string.
 function getmode()
     return blendingmodes[Cairo.get_operator(get_current_cr()) + 1]
 end
+
+"""
+    mask(point::Point, focus::Point, radius)
+        max = 1.0,
+        min = 0.0,
+        easingfunction = easingflat)
+
+Calculate a value between 0 and 1 for a `point` relative to a circular area defined by `focus` and `radius`. The value will approach `max` (1.0) at the center of the circular area, and `min` (0.0) at the circumference.
+"""
+function mask(point::Point, focus::Point, radius;
+        max = 1.0,
+        min = 0.0,
+        easingfunction = easingflat)
+    angle = slope(focus, point)
+    d = distance(focus, point)
+    dref = distance(focus, focus + polar(radius, angle))
+    if d < dref
+        k = rescale(d, 0.0, dref, max, min)
+        ratio = easingfunction(k, 0.0, 1.0, 1.0)
+    else
+        ratio = 0.0
+    end
+    return ratio
+end
