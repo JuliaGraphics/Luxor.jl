@@ -502,3 +502,29 @@ nothing # hide
 mesh
 setmesh
 ```
+
+## Masks
+
+A simple mask function lets you use a circular mask to control graphics in a circular area. `mask()` takes a position and a position/radius that defines a circle, and returns a value between 0 and 1 for that position.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/mask.png") # hide
+origin() # hide
+
+tiles = Tiler(600, 600, 15, 15)
+bd = boxdiagonal(BoundingBox())
+for (pos, n) in tiles
+    setgray(mask(pos, O, bd/2))
+    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![mask](assets/figures/mask.png)
+
+```@docs
+mask
+```

@@ -5,8 +5,9 @@
 ### Added
 
 - another method for ellipse that takes three points
-- insertvertices!(pgon) inserts a vertex into each edge of a polygon
+- insertvertices!(pgon) inserts a vertex into every edge of a polygon
 - julialogo() option bodycolor to make light-colored logo for dark modes
+- mask() does simple mask calculation
 
 ### Changed
 
