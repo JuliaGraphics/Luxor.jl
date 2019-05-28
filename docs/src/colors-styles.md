@@ -505,7 +505,7 @@ setmesh
 
 ## Masks
 
-A simple mask function lets you use a circular mask to control graphics in a circular area. `mask()` takes a position and a position/radius that defines a circle, and returns a value between 0 and 1 for that position.
+A simple mask function lets you use a circular mask to control graphics in a circular area. `mask()` takes a position and a position/radius that defines a circle, and returns a value between 0 and 1 for that position. In this example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bd/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
 
 ```@example
 using Luxor # hide

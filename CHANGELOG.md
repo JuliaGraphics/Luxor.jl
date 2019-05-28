@@ -1,19 +1,19 @@
 # Changelog
 
-## forthcoming release
+## [v1.4.0] - May 28 2019
 
 ### Added
 
-- another method for ellipse that takes three points
-- insertvertices!(pgon) inserts a vertex into every edge of a polygon
-- julialogo() option bodycolor to make light-colored logo for dark modes
-- mask() does simple mask calculation
+- another method for `ellipse()` that takes three points
+- `insertvertices!(pgon)` inserts a vertex into every edge of a polygon
+- `julialogo()` option `bodycolor` to make light-colored logo for dark modes
+- `mask()` does simple circular mask calculation
 
 ### Changed
 
-- fixed bug in ellipse() (thanks @Ryngetsu!)
-- fixed polysortbyangle(), tan() problems
-- julialogo() and juliacircles() now produce 3-color rather than 6-color circles
+- fixed bug in `ellipse()` (thanks @Ryngetsu!)
+- fixed `polysortbyangle()`, `tan()` problems
+- `julialogo()` and `juliacircles()` now produce new 3-color rather than 6-color circles
 
 ### Removed
 
