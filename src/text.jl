@@ -68,6 +68,7 @@ function text(t, pt::Point;
     Cairo.rotate(get_current_cr(), angle)
     Cairo.show_text(get_current_cr(), t)
     grestore()
+    return Point(textpointx, textpointy)
 end
 
 text(t; kwargs...) = text(t, O; kwargs...)
