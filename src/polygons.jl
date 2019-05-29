@@ -959,6 +959,21 @@ function polyscale!(pgon, s;
 end
 
 """
+    polyscale!(pgon, sh, sv;
+        center=O)
+
+Scale (permanently) a polygon by `sh` horizontally and `sv` vertically,
+relative to `center`.
+"""
+function polyscale!(pgon, sh, sv;
+        center=O)
+    for i in eachindex(pgon)
+        pgon[i] = (pgon[i] - center) * (sh, sv)
+    end
+    return pgon
+end
+
+"""
     polyrotate!(pgon, θ;
         center=O)
 
