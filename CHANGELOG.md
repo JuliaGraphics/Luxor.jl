@@ -1,5 +1,19 @@
 # Changelog
 
+## future release - June ? 2019
+
+### Added
+
+- `polyreflect!()`
+
+- `polyscale!()` now can do scaling in h and v separately
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v1.4.0] - May 28 2019
 
 ### Added

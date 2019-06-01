@@ -98,7 +98,7 @@ export Drawing,
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
     polyarea, polysample, insertvertices!,
 
-    polymove!, polyscale!, polyrotate!,
+    polymove!, polyscale!, polyrotate!, polyreflect!,
 
     @polar, polar,
 
@@ -136,7 +136,7 @@ export Drawing,
 
     bars,
 
-    mesh, setmesh, mask, 
+    mesh, setmesh, mask,
 
     # animation
     Sequence, Movie, Scene, animate,

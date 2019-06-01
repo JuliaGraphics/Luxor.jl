@@ -31,6 +31,7 @@ polygon       ngon()                polysmooth()          poly()             isi
 -             -                     -                     -                  -                 polymove!()
 -             -                     -                     -                  -                 polyscale!()
 -             -                     -                     -                  -                 polyrotate!()
+-             -                     -                     -                  -                 polyreflect!()
 -             -                     -                     -                  -                 polysample()
 -             -                     -                     -                  -                 insertvertices!()
 path          getpath()             pathtopoly()          -                  -                 -
@@ -421,7 +422,7 @@ randompointarray
 
 ### Quickly changing polygons
 
-If you want to quickly change a polygon, there's `polymove!()`, `polyscale!()`, and `polyrotate!()`.
+If you want to quickly and permanently modify a polygon, there's `polymove!()`, `polyscale!()`, `polyreflect!()`, and `polyrotate!()`.
 
 ```@example
 using Luxor # hide
@@ -449,6 +450,33 @@ nothing # hide
 The polygon is continually modified (notice the `!` in the function names).
 
 ![poly changing](assets/figures/polychange.png)
+
+```@example
+using Luxor, Random # hide
+Drawing(400, 350, "assets/figures/polyreflect.png") # hide
+origin() # hide
+Random.seed!(34) # hide
+setopacity(0.7) # hide
+sethue("grey60") # hide
+pgon = randompointarray(BoundingBox()/2 ..., 10)
+polymove!(pgon, O, Point(-80, 0))
+poly(pgon, :fill, close=true)
+# reflect in y axis:
+polyreflect!(pgon, Point(0, 0), Point(0, 100))
+sethue("blue")
+poly(pgon, :fill, close=true)
+finish() # hide
+nothing # hide
+```
+
+![poly reflect](assets/figures/polyreflect.png)
+
+```@docs
+polyscale!
+polymove!
+polyreflect!
+polyrotate!
+```
 
 ### Other functions
 
