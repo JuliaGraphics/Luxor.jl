@@ -992,6 +992,21 @@ function polyrotate!(pgon, θ;
 end
 
 """
+    polyreflect!(pgon, pt1 = O, pt2 = O + (0, 100)
+
+Reflect (permanently) a polygon in a line (default to the y-axis)
+joining two points.
+
+"""
+function polyreflect!(pgon, pt1=O, pt2 = O + (0, 100))
+    for i in eachindex(pgon)
+        gnp = getnearestpointonline(pt1, pt2, pgon[i])
+        pgon[i] = between(pgon[i], gnp, 2.0)
+    end
+    return pgon
+end
+
+"""
     insertvertices!(pgon;
         ratio=0.5)
 
