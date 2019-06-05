@@ -8,6 +8,10 @@
 
 - `polyscale!()` now can do scaling in h and v separately
 
+- `pointcrossesboundingbox()`
+
+- `mask()` does rectangular areas
+
 ### Changed
 
 ### Removed

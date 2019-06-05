@@ -75,7 +75,7 @@ export Drawing,
     boxmiddlecenter, boxmiddleright, boxbottomleft, boxbottomcenter,
     boxbottomright,
 
-    intersectboundingboxes, boundingboxesintersect,
+    intersectboundingboxes, boundingboxesintersect, pointcrossesboundingbox,
 
     Boxmaptile, boxmap,
 

@@ -505,7 +505,9 @@ setmesh
 
 ## Masks
 
-A simple mask function lets you use a circular mask to control graphics in a circular area. `mask()` takes a position and a position/radius that defines a circle, and returns a value between 0 and 1 for that position. In this example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bd/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
+A simple mask function lets you use a shape to control graphics that are drawn inside a circular or rectangular shape. `mask()` takes a position and a shape, and returns a value between 0 and 1 for that position.
+
+In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bd/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
 
 ```@example
 using Luxor # hide
@@ -524,6 +526,28 @@ nothing # hide
 ```
 
 ![mask](assets/figures/mask.png)
+
+The second example uses a rectangular area to determine the extent of the gray color used for each tile.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/mask1.png") # hide
+origin() # hide
+
+tiles = Tiler(600, 600, 30, 30)
+
+bw = boxwidth(BoundingBox())
+for (pos, n) in tiles
+    mv = mask(pos, O, bw, bw)
+    setgray(mv)
+    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![mask](assets/figures/mask1.png)
 
 ```@docs
 mask
