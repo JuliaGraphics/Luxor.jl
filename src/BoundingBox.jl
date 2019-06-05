@@ -419,3 +419,45 @@ boxbottomright(bb::BoundingBox)    = bb[2]
 # legacy defs will be deprecated
 boxtop(bb::BoundingBox) = boxtopcenter(bb)
 boxbottom(bb::BoundingBox) = boxbottomcenter(bb)
+
+"""
+    pointcrossesboundingbox(pt, bbox::BoundingBox)
+
+Find and return the point where a line from the center of bounding box
+`bbox` to point `pt` would, if continued, cross the edges of the box.
+"""
+function pointcrossesboundingbox(pt, bbox::BoundingBox)
+    minpt, maxpt = extrema(bbox)
+    mp = midpoint(minpt, maxpt)
+    midX, midY = mp.x, mp.y
+
+    m = (midY - pt.y) / (midX - pt.x)
+    if pt.x <= midX # left
+        min_Xy = m * (minpt.x - pt.x) + pt.y
+        if minpt.y <= min_Xy && min_Xy <= maxpt.y
+            return Point(minpt.x, min_Xy)
+        end
+    end
+    if pt.x >= midX # right
+        max_Xy = m * (maxpt.x - pt.x) + pt.y
+        if minpt.y <= max_Xy && max_Xy <= maxpt.y
+            return Point(maxpt.x, max_Xy)
+        end
+    end
+    if pt.y <= midY # top
+        min_Yx = (minpt.y - pt.y) / m + pt.x
+        if minpt.x <= min_Yx && min_Yx <= maxpt.x
+            return Point(min_Yx, minpt.y)
+        end
+    end
+    if pt.y >= midY # bottom
+        max_Yx = (maxpt.y - pt.y) / m + pt.x
+        if minpt.x <= max_Yx && max_Yx <= maxpt.x
+            return Point(max_Yx, maxpt.y)
+        end
+    end
+    if pt.x == midX && pt.y == midY
+        return Point(pt.x, pt.y)
+    end
+    error("oh dear, something has gone wrong but I don't know what")
+end

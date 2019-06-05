@@ -371,12 +371,42 @@ nothing # hide
 
 ![intersecting bounding boxes](assets/figures/bbox3.png)
 
+To find out where a line starting at the center of a bounding box passing through a point crosses or would cross the edges of the box, use `pointcrossesboundingbox()`.
+
+```@example
+using Luxor, Random # hide
+Drawing(600, 400, "assets/figures/bbox4.png") # hide
+background("white") # hide
+Random.seed!(42) # hide
+origin() # hide
+bx = BoundingBox(box(O, 200, 200, :none))
+setline(1)
+sethue("black") # hide
+box(bx, :stroke)
+for i in 1:10
+    pt = randompoint((1.5bx)...)
+    pt2 = pointcrossesboundingbox(pt, bx)
+
+    sethue("grey50")
+    arrow(O, pt)
+    sethue("red")
+    circle(pt2, 3, :stroke)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![point crosses bounding box](assets/figures/bbox4.png)
+
+
 ```@docs
 boxaspectratio
 boxdiagonal
 boxwidth
 boxheight
 intersectboundingboxes
+pointcrossesboundingbox
 boxbottomleft
 boxbottomright
 boxmiddlecenter
