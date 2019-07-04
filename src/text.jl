@@ -559,28 +559,30 @@ horizontal alignment (default `:left`).
 Optionally, before each line, execute the function
 `linefunc(linenumber, linetext, startpos, height)`.
 
+Returns the position of what would have been the next line.
+
 See also `textwrap()`, which modifies the text so that the lines fit into a
 specified width.
 """
 function textbox(lines::Array, pos::Point=O;
-    leading = 12,
-    linefunc::Function = (linenumber, linetext, startpos, height) -> (),
-    alignment=:left)
+        leading = 0,
+        linefunc::Function = (linenumber, linetext, startpos, leading) -> (),
+        alignment=:left)
 
     # find height of first non-empty line
     firstrealline = filter(!isempty, lines)[1]
     te = textextents(firstrealline)
-
-    height = leading - te[4] - te[2]
-    # pos is top left corner, not baseline, so move first line down
-    startpos = Point(pos.x, pos.y + height)
-    for (linenumber, linetext) in enumerate(lines)
-        linefunc(linenumber, linetext, startpos, height)
-        text(linetext, startpos, halign=alignment)
-        startpos = Point(startpos.x, startpos.y + height)
+    if leading == 0
+        leading = te[4]
     end
+    startpos = Point(pos.x, pos.y + leading)
+    for (linenumber, linetext) in enumerate(lines)
+        linefunc(linenumber, linetext, startpos, leading)
+        text(linetext, startpos, halign=alignment)
+        startpos = Point(startpos.x, startpos.y + leading)
+    end
+    return startpos
 end
-
 """
     textbox(s::AbstractString, pos::Point=O;
         leading = 12,
@@ -604,7 +606,7 @@ aligned on the left side, below `pos`.
 
 See also `textbox()`.
 
-Optionally, before each line, execute the function `linefunc(linenumber, linetext, startpos, height)`.
+Optionally, before each line, execute the function `linefunc(linenumber, linetext, startpos, leading)`.
 
 If you don't supply a value for `leading`, the font's built-in extents are used.
 
@@ -631,16 +633,15 @@ textwrap(the_text, 300, boxtopleft(BoundingBox()) + 20,
 
 puts a count of the number of punctuation characters in each line at the end
 of the line.
+
+Returns the position of what would have been the next line.
 """
 function textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
         rightgutter=5,
         leading=0)
     lines = textlines(s, width; rightgutter=rightgutter)
-    # find height of first non-empty line
-    firstrealline = filter(!isempty, lines)[1]
-    te = textextents(firstrealline)
-    leading == 0 ? height = min(te[4] - te[2]) : height = leading
-    textbox(lines, pos, linefunc=linefunc, leading=height)
+    lines = textlines(s, width; rightgutter=rightgutter)
+    textbox(lines, pos, linefunc=linefunc, leading=leading)
 end
 
 textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =

@@ -505,29 +505,31 @@ setmesh
 
 ## Masks
 
-A simple mask function lets you use a shape to control graphics that are drawn inside a circular or rectangular shape. `mask()` takes a position and a shape, and returns a value between 0 and 1 for that position.
+A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. `mask()` takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.
 
-In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bd/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
+In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bw/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "assets/figures/mask.png") # hide
+Drawing(610, 610, "assets/figures/mask.png") # hide
 origin() # hide
 
-tiles = Tiler(600, 600, 15, 15)
-bd = boxdiagonal(BoundingBox())
+tiles = Tiler(600, 600, 15, 15, margin=0)
+bw = boxwidth(BoundingBox())
 for (pos, n) in tiles
-    setgray(mask(pos, O, bd/2))
+    setgray(mask(pos, O, bw/2))
     box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
 end
 
+sethue("white")
+circle(O, bw/2, :stroke)
 finish() # hide
 nothing # hide
 ```
 
 ![mask](assets/figures/mask.png)
 
-The second example uses a rectangular area to determine the extent of the gray color used for each tile.
+The second example uses the distance of each tile relative to the rectangle `O, bw, bw` to determine the gray color.
 
 ```@example
 using Luxor # hide
@@ -537,8 +539,9 @@ origin() # hide
 tiles = Tiler(600, 600, 30, 30)
 
 bw = boxwidth(BoundingBox())
+bh = boxheight(BoundingBox())
 for (pos, n) in tiles
-    mv = mask(pos, O, bw, bw)
+    mv = mask(pos, O, bw, bh, easingfunction=easeinoutcubic)
     setgray(mv)
     box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
 end

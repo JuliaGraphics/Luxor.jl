@@ -366,7 +366,8 @@ rline(pt)       = rline(pt.x, pt.y)
 
 """
     rule(pos, theta;
-        boundingbox=BoundingBox())
+        boundingbox=BoundingBox(),
+        vertices=false)
 
 Draw a straight line through `pos` at an angle `theta` from the x axis.
 
@@ -384,12 +385,12 @@ The function:
 rule(O, pi/2, boundingbox=BoundingBox()/2)
 ```
 
-draws a line that spans a bounding box half the width and height of the drawing.
-
-Returns a Set of end points.
+draws a line that spans a bounding box half the width and height of the drawing, and returns a Set of end points. If you just want the vertices and don't want to draw anything, use `vertices=true`.
 """
 function rule(pos, theta=0.0;
-        boundingbox=BoundingBox())
+        boundingbox=BoundingBox(),
+        vertices=false)
+    #TODO interaction with clipping regions needs work
     bbox       = box(boundingbox, vertices=true)
     topside    = bbox[2:3]
     rightside  = bbox[3:4]
@@ -438,7 +439,9 @@ function rule(pos, theta=0.0;
     end
 
     # finally draw the line if we have two points
-    length(interpoints) == 2 && line(interpoints..., :stroke)
+    if vertices == false && length(interpoints) == 2
+        line(interpoints..., :stroke)
+    end
     return interpoints
 end
 
