@@ -316,7 +316,7 @@ function mask(point::Point, focus::Point, width, height;
     min = 0.0,
     easingfunction = easingflat)
 
-    bb = BoundingBox(box(focus, width, height, :none))
+    bb = BoundingBox(box(focus, width, height, vertices=true))
     ptcross = pointcrossesboundingbox(point, bb)
     d = distance(focus, point)
     dref = distance(focus, ptcross)

@@ -1,6 +1,6 @@
 # Changelog
 
-## future release - June ? 2019
+## [v1.5.0] - July 4 2019
 
 ### Added
 
@@ -8,11 +8,17 @@
 
 - `polyscale!()` now can do scaling in h and v separately
 
-- `pointcrossesboundingbox()`
+- `pointcrossesboundingbox()` does something
 
-- `mask()` does rectangular areas
+- `mask()` does rectangular areas too
+
+- `textbox()` and `textwrap()` return a position
+
+- `rule()` has `vertices` option to return points rather than draw lines 
 
 ### Changed
+
+- `textwrap()` no longer inserts a blank line at the top
 
 ### Removed
 

@@ -30,8 +30,7 @@ Draw the Julia logo. The default action is to fill the logo and use the colors:
 
     julialogo()
 
-If `color` is `false`, the logo will use the current color, and the dots won't
-be colored in the usual way.
+If `color` is `false`, the `bodycolor` color is used for the logo..
 
 The logo can be difficult to position well due to its asymmetric design.
 The `0/0` point is at the top left corner, the total width is 315pt, the total height is 214pts. The optical center is _somewhere_ between 163-180pts in x, and 96-114pts in y. The gap to the left edge of "j"s descender is 16; the distance between the left edge of the "j" (not the descender) and the right edge of the "a" is at 268pts.
@@ -231,9 +230,11 @@ function juliacircles(radius=100; outercircleratio=0.75, innercircleratio=0.65)
     # clockwise, from bottom left
     color_sequence = [julia_red, julia_green, julia_purple]
     points = ngon(O, radius, 3, pi/6, vertices=true)
-    for (n, p) in enumerate(points)
-        setcolor(color_sequence[n]...)
-        circle(p, outercircleratio * radius, :fill)
+    @layer begin
+        for (n, p) in enumerate(points)
+            setcolor(color_sequence[n]...)
+            circle(p, outercircleratio * radius, :fill)
+        end
     end
     return points
 end

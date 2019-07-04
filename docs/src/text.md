@@ -422,7 +422,7 @@ quis, mattis hendrerit nunc. Nullam vehicula leo ac
 leo tristique, a condimentum tortor faucibus."""
 
 textwrap(loremipsum, 200, O - (200/2, 200/2),
-    (lnumber, str, pt, h) -> begin
+    (lnumber, str, pt, l) -> begin
         sethue(Colors.HSB(rescale(lnumber, 1, 15, 0, 360), 1, 1))
         text(string("line ", lnumber), pt - (50, 0))
     end)
@@ -435,7 +435,7 @@ nothing # hide
 
 The `textbox()` function also draws text inside a box, but doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The `leading` argument specifies the distance between the lines, so should be set relative to the current font size (as set with `fontsize()`).
 
-This example counts the number of characters drawn, using a simple closure.
+This example counts the number of characters drawn, using a simple closure. The function returns the position of the start of what would have been the next line.
 
 ```@example
 using Luxor, Colors # hide
@@ -459,12 +459,12 @@ leo tristique, a condimentum tortor faucibus."""
 _counter() = (a = 0; (n) -> a += n)
 counter = _counter()
 
-translate(Point(-600/2, -300/2) + (50, 50))
+translate(boxtopleft(BoundingBox()))
 fontface("Georgia")
 fontsize(20)
 
-textbox(filter(!isempty, split(loremipsum, "\n")),
-    O,
+finishpos = textbox(filter(!isempty, split(loremipsum, "\n")),
+    O + (5, 0),
     leading = 28,
     linefunc = (lnumber, str, pt, h) -> begin
         text(string(lnumber), pt - (30, 0))
@@ -472,7 +472,7 @@ textbox(filter(!isempty, split(loremipsum, "\n")),
     end)
 
 fontsize(10)
-text(string(counter(0), " characters"), O + (0, 230))
+text(string(counter(0), " characters"), finishpos)
 
 finish() # hide
 nothing # hide
