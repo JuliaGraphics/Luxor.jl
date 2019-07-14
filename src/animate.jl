@@ -152,6 +152,12 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         pathname="",
         tempdirectory="",
         usenewffmpeg=true)
+        
+    if isdir(pathname)
+        suggestedpathname = joinpath(pathname, "myanimation.gif")
+        @error("Parameter pathname=$pathname points to a directory. Please pass a filename like '$suggestedpathname' as pathname parameter!")
+        return false
+    end
 
     if tempdirectory == ""
         tempdirectory = mktempdir()
