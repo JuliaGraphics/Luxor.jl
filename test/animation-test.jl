@@ -69,4 +69,24 @@ mktempdir() do tmpdir
         creategif=false) == true
 end
 
+@testset "test pathname parameter of animate()" begin
+    mktempdir() do tmpdir
+        # test that animation is saved to 'pathname' if valid pathname is given
+        testfile = joinpath(tmpdir, "test.gif")
+        @test !isfile(testfile)
+        @test animate(demo, Scene(demo, backdrop, 0:200),
+            creategif=true,
+            pathname=testfile) == true
+         @test isfile(testfile)
+         
+        # test that error is thrown if the passed pathname points to a directory
+        # and that the content of that directory is not removed (ticket #57)
+        @test isdir(tmpdir)
+        @test animate(demo, Scene(demo, backdrop, 0:200),
+            creategif=true,
+            pathname=tmpdir) == false
+         @test isfile(testfile)
+    end
+end
+
 println("...finished animation tests")
