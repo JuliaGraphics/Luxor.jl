@@ -125,6 +125,8 @@ finish() # hide
 nothing # hide
 ```
 
+The initial orientation of the polygon defaults to 0.
+
 ![n-gons](assets/figures/n-gon.png)
 
 If you want to specify the side length rather than the circumradius, use `ngonside()`.
@@ -148,6 +150,19 @@ nothing # hide
 ```
 
 ![stars](assets/figures/ngonside.png)
+
+The functions return the vertices, or you can use the `vertices=true` option.
+
+```julia
+ngon(O, 10, 5)
+```
+```5-element Array{Point,1}:
+ Point(3.0901699437494745, 9.510565162951535)
+ Point(-8.090169943749473, 5.877852522924733)
+ Point(-8.090169943749475, -5.87785252292473)
+ Point(3.0901699437494723, -9.510565162951536)
+ Point(10.0, -2.4492935982947065e-15)
+```
 
 ```@docs
 ngon

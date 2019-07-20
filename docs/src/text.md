@@ -7,9 +7,7 @@ DocTestSetup = quote
 
 ## A tale of two APIs
 
-There are two ways to draw text in Luxor. You can use either the so-called 'toy' API or the 'pro' API.
-
-Both have their advantages and disadvantages, and, given that trying to write anything definitive about font usage on three very different operating systems is an impossibility, trial and error will eventually lead to code patterns that work for you, if not other people.
+There are two ways to draw text in Luxor. You can use either the so-called 'toy' API or the 'pro' API. Both have their advantages and disadvantages. Also, font selection and availability varies a lot across the three operating systems. You may have to experiment to find code patterns that work for you.
 
 #### The Toy API
 
@@ -42,7 +40,7 @@ The `label()` function also uses the Toy API.
 Use:
 
 - `setfont(fontname, fontsize)` to specify the fontname and size in points
-- `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any Pango-flavored markup.
+- `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any pseudo-Pango-flavored markup.
 
 ```@example
 using Luxor # hide

@@ -11,28 +11,34 @@ A couple of functions in Luxor provide you with instant access to the Julia logo
 
 ```@example
 using Luxor, Random # hide
-Drawing(750, 250, "assets/figures/julia-logo.png")  # hide
+Drawing(750, 300, "assets/figures/julia-logo.png")  # hide
 Random.seed!(42) # hide
 origin()  # hide
 background("white") # hide
 
-for (pos, n) in Tiler(750, 250, 1, 2)
-    gsave()
-    translate(pos - Point(150, 100))
-    if n == 1
-        julialogo()
-    elseif n == 2
-        julialogo(action=:clip)
-        for i in 1:500
-            gsave()
+cells = Table([300], [350, 350])
+
+@layer begin
+    translate(cells[1])
+    translate(-165, -114)
+    rulers()
+    julialogo()
+end
+
+@layer begin
+    translate(cells[2])
+    translate(-165, -114)
+    rulers()
+    julialogo(action=:clip)
+    for i in 1:500
+        @layer begin
             translate(rand(0:400), rand(0:250))
             juliacircles(10)
-            grestore()
         end
-        clipreset()
     end
-    grestore()
-end
+    clipreset()
+    end
+
 finish() # hide
 nothing # hide
 ```
