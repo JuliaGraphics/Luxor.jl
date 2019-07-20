@@ -79,6 +79,7 @@ translate(200, -150)
 scale(0.3)
 julialogo()
 finish()
+# preview()
 nothing # hide
 ```
 

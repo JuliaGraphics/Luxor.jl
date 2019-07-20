@@ -12,7 +12,7 @@ You often want to position graphics at regular locations on the drawing. The pos
 - `Grid` and `GridHex` a rectangular or hexagonal grid, on demand
 - `Table`: a rectangular grid which you specify by providing row and column numbers, row heights and column widths
 
-These are types which act as iterators.
+These are types which act as iterators. Their job is to provide you with centerpoints; you'll probably want to use these in combination with the cell's widths and heights.
 
 ## Tiles and partitions
 
@@ -74,7 +74,13 @@ tiles[1:2:end]
 
 ## Tables
 
-The `Table` iterator can be used to define tables: rectangular grids with a specific number of rows and columns. The columns can have different widths, and the rows can have different heights. Tables don't store data, but are designed to help you draw tabular data.
+The `Table` iterator can be used to define tables: rectangular grids with a specific number of rows and columns.
+
+Unlike a Tiler, the Table iterator lets you have columns can have different widths, and rows with different heights.
+
+(Luxor generally tries to keep to the Julia convention of 'width' -> 'height', 'row' -> 'column'. This flavour of consistency can sometimes be confusing if you're expecting other kinds of consistency, such as 'x before y'...)
+
+Tables don't store data, of course, but are designed to help you draw tabular data.
 
 To create a simple table with 3 rows and 4 columns, using the default width and height (100):
 

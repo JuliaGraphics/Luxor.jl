@@ -50,6 +50,19 @@ rect
 box
 ```
 
+`box()` also returns the coordinates of the corners.
+
+```julia
+box(O, 100, 100, :none)
+```
+```
+4-element Array{Point,1}:
+ Point(-50.0, 50.0)
+ Point(-50.0, -50.0)
+ Point(50.0, -50.0)
+ Point(50.0, 50.0)
+```
+
 For regular polygons, triangles, pentagons, and so on, see the next section on Polygons.
 
 ## Circles and ellipses

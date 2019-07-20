@@ -153,6 +153,26 @@ end
     ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
         vertices=false, reversepath=false)
 
+Draw a regular polygon centered at point `centerpos`.
+"""
+function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0, action=:nothing;
+              vertices=false,
+              reversepath=false)
+    ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
+                    y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
+    if !vertices
+        poly(ptlist, action, close=true, reversepath=reversepath)
+    end
+    return ptlist
+end
+
+"""
+    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing;
+        vertices=false,
+        reversepath=false)
+
+Draw a regular polygon centered at point `centerpos`.
+
 Find the vertices of a regular n-sided polygon centered at `x`, `y` with
 circumradius `radius`.
 
@@ -178,25 +198,7 @@ whereas
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0, action=:nothing;
-              vertices=false,
-              reversepath=false)
-    ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
-                    y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
-    if !vertices
-        poly(ptlist, action, close=true, reversepath=reversepath)
-    end
-    return ptlist
-end
-
-"""
-    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing;
-        vertices=false,
-        reversepath=false)
-
-Draw a regular polygon centered at point `centerpos`:
-"""
-ngon(centerpoint::Point, radius::Real, sides::Int=5, orientation=0, action=:nothing; kwargs...) =
+ngon(centerpoint::Point, radius, sides::Int=5, orientation=0.0, action=:nothing; kwargs...) =
     ngon(centerpoint.x, centerpoint.y, radius, sides, orientation, action; kwargs...)
 
 """

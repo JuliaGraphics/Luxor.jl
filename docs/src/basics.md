@@ -134,6 +134,10 @@ finish
 preview
 ```
 
+!!! note
+
+    SVGs are text based, and can get quite big. Up to a certain size, SVGs will be previewable as easily and quickly as PNGs. But very large drawings in SVG format won't necessarily  be displayed.
+
 ## Quick drawings with macros
 
 The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
@@ -173,6 +177,7 @@ or
      )
 ```
 
+
 ```@docs
 @svg
 @png
@@ -201,6 +206,8 @@ preview()
 ```
 
 ![transparent background](assets/figures/transparentbackground.png)
+
+Similarly, if you want to programmatically define document pathname,s you should use the full `Drawing()` ... `finish()` workflow.
 
 ### Drawings in memory
 
