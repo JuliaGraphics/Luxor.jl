@@ -260,7 +260,8 @@ end</code></pre></div></div><div><div><pre><code class="language-none">mesh(poin
     setline(5)
     sethue(&quot;black&quot;)
     strokepath()
-end</code></pre></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.setmesh" href="#Luxor.setmesh"><code>Luxor.setmesh</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">setmesh(mesh::Mesh)</code></pre><p>Select a mesh previously created with <code>mesh()</code> for filling shapes.</p></div></div></section><h2><a class="nav-anchor" id="Masks-1" href="#Masks-1">Masks</a></h2><p>A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. <code>mask()</code> takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.</p><p>In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle <code>(O, bw/2)</code>; the value is <code>1.0</code> at the center, and <code>0.0</code> at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.</p><pre><code class="language-julia">tiles = Tiler(600, 600, 15, 15, margin=0)
+end</code></pre></div></div></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.setmesh" href="#Luxor.setmesh"><code>Luxor.setmesh</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">setmesh(mesh::Mesh)</code></pre><p>Select a mesh previously created with <code>mesh()</code> for filling shapes.</p></div></div></section><h2><a class="nav-anchor" id="Masks-1" href="#Masks-1">Masks</a></h2><p>A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. <code>mask()</code> takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.</p><p>In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle <code>(O, bw/2)</code>; the value is <code>1.0</code> at the center, and <code>0.0</code> at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.</p><pre><code class="language-julia">println(&quot;generating mask.png now...&quot;)
+tiles = Tiler(600, 600, 15, 15, margin=0)
 bw = boxwidth(BoundingBox())
 for (pos, n) in tiles
     setgray(mask(pos, O, bw/2))
@@ -268,7 +269,7 @@ for (pos, n) in tiles
 end
 
 sethue(&quot;white&quot;)
-circle(O, bw/2, :stroke)</code></pre><p><img src="../assets/figures/mask.png" alt="mask"/></p><p>The second example uses the distance of each tile relative to the rectangle <code>O, bw, bw</code> to determine the gray color.</p><pre><code class="language-julia">tiles = Tiler(600, 600, 30, 30)
+circle(O, bw/2, :stroke)</code></pre><pre><code class="language-none">generating mask.png now...</code></pre><p><img src="../assets/figures/mask.png" alt="mask"/></p><p>The second example uses the distance of each tile relative to the rectangle <code>O, bw, bw</code> to determine the gray color.</p><pre><code class="language-julia">tiles = Tiler(600, 600, 30, 30)
 
 bw = boxwidth(BoundingBox())
 bh = boxheight(BoundingBox())
@@ -276,7 +277,7 @@ for (pos, n) in tiles
     mv = mask(pos, O, bw, bh, easingfunction=easeinoutcubic)
     setgray(mv)
     box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
-end</code></pre><p><img src="../assets/figures/mask1.png" alt="mask"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.mask" href="#Luxor.mask"><code>Luxor.mask</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">mask(point::Point, focus::Point, radius)
+end</code></pre><p><img src="../assets/figures/mask1.png" alt="mask1"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.mask" href="#Luxor.mask"><code>Luxor.mask</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">mask(point::Point, focus::Point, radius)
     max = 1.0,
     min = 0.0,
     easingfunction = easingflat)</code></pre><p>Calculate a value between 0 and 1 for a <code>point</code> relative to a circular area defined by <code>focus</code> and <code>radius</code>. The value will approach <code>max</code> (1.0) at the center of the circular area, and <code>min</code> (0.0) at the circumference.</p></div></div><div><div><pre><code class="language-none">mask(point::Point, focus::Point, width, height)
