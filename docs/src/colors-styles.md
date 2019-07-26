@@ -513,7 +513,7 @@ In the first example, the gray color of each tile is determined by its location 
 using Luxor # hide
 Drawing(610, 610, "assets/figures/mask.png") # hide
 origin() # hide
-
+println("generating mask.png now...")
 tiles = Tiler(600, 600, 15, 15, margin=0)
 bw = boxwidth(BoundingBox())
 for (pos, n) in tiles
@@ -550,7 +550,7 @@ finish() # hide
 nothing # hide
 ```
 
-![mask](assets/figures/mask1.png)
+![mask1](assets/figures/mask1.png)
 
 ```@docs
 mask

@@ -79,13 +79,13 @@ finish()
 
 ## Transforming images
 
-You can transform images by setting the current matrix, either with `scale()` and `rotate()` and similar, or by modifying it directly. This code skews the image and scales and rotates it in a circle:
+You can transform images by setting the current matrix, either with `scale()` and `rotate()` and similar, or by modifying it directly. This code skews an image made in an earlier chapter of this document and scales and rotates it in a circle:
 
 ```@example
 using Luxor # hide
 Drawing(600, 400, "assets/figures/transform-images.png") # hide
 origin() # hide
-img = readpng("assets/figures/clipping-tests.png")
+img = readpng("assets/figures/textoutlines.png")
 w = img.width
 h = img.height
 for θ in 0:π/6:2π
@@ -226,7 +226,7 @@ You should be using [Images.jl](https://github.com/JuliaImages) for most tasks i
 using Luxor # hide
 Drawing(600, 400, "assets/figures/image-compositing.png") # hide
 origin() # hide
-img = readpng("assets/figures/textcurvecenteredexample.png")
+img = readpng("assets/figures/textoutlines.png")
 w = img.width
 h = img.height
 

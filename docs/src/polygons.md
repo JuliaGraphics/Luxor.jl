@@ -532,7 +532,7 @@ The original polygon is shown in red; the smoothed polygon is shown on top:
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polysmooth.png") # hide
+Drawing(600, 250, "assets/figures/polysmooth.svg") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.5) # hide
@@ -541,10 +541,8 @@ setline(0.7) # hide
 tiles = Tiler(600, 250, 1, 5, margin=10)
 for (pos, n) in tiles
     p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)
-    setdash("dot")
     sethue("red")
-    prettypoly(p, close=true, :stroke)
-    setdash("solid")
+    poly(p, close=true, :stroke)
     sethue("black")
     polysmooth(p, n * 2, :fill)
 end
@@ -553,13 +551,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](assets/figures/polysmooth.png)
+![polysmooth](assets/figures/polysmooth.svg)
 
 The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
+Drawing(600, 250, "assets/figures/polysmooth-pathological.svg") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -576,7 +574,7 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](assets/figures/polysmooth-pathological.png)
+![polysmooth](assets/figures/polysmooth-pathological.svg)
 
 ```@docs
 polysmooth
