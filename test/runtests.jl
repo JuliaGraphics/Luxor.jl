@@ -5,6 +5,10 @@ Random.seed!(42)
 
 function run_all_tests()
 
+    @testset "Basics" begin
+        include("basic-test.jl")
+    end
+
     @testset "animation (Unix only)" begin
         if ! Sys.iswindows()
             include("animation-test.jl")
