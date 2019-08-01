@@ -461,3 +461,22 @@ function pointcrossesboundingbox(pt, bbox::BoundingBox)
     end
     error("oh dear, something has gone wrong but I don't know what")
 end
+
+"""
+    rand(bbox::BoundingBox)
+Return a random `Point` that lies inside `bbox`.
+"""
+Base.rand(bb::BoundingBox) = Point(
+    rand(bb.corner1[1]:bb.corner2[1]),
+    rand(bb.corner1[2]:bb.corner2[2])
+    )
+
+"""
+    in(pt, bbox::BoundingBox)
+Test whether `pt` is inside `bbox`.
+"""
+function Base.in(p::Point,bb::BoundingBox)
+    minx, maxx = minmax(bb.corner1[1], bb.corner2[1])
+    miny, maxy = minmax(bb.corner1[2], bb.corner2[2])
+    return (minx <= p[1] <= maxx) && (miny <= p[2] <= maxy)
+end
