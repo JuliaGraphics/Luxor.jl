@@ -55,7 +55,7 @@ export Drawing,
     finish, preview,
     origin, rulers, background,
 
-    @png, @pdf, @svg,
+    @png, @pdf, @svg, @eps,
 
     newpath, closepath, newsubpath,
 
@@ -83,8 +83,8 @@ export Drawing,
     arc, carc, arc2r, carc2r, isarcclockwise, arc2sagitta, carc2sagitta,
     spiral, sector, intersection2circles,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
-    intersectlinepoly, polyintersections, circlepointtangent, circletangent2circles,
-    pointinverse,
+    intersectlinepoly, polyintersect, polyintersections, circlepointtangent,
+    circletangent2circles, pointinverse,
 
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,

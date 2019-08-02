@@ -1031,3 +1031,38 @@ function insertvertices!(pgon;
     end
     return pgon
 end
+
+"""
+    polyintersect(p1::AbstractArray{Point, 1}, p2::AbstractArray{Point, 1};
+        closed=true)
+
+TODO: Fix/test/improve this experimental polygon intersection routine.
+
+Return the points where polygon p1 and polygon p2 cross.
+
+If `closed` is false, the intersection points must lie on the first `n - 1` lines of each polygon.
+
+"""
+function polyintersect(p1::AbstractArray{Point, 1}, p2::AbstractArray{Point, 1};
+    closed=true)
+    length(p1) < 3 || length(p2) < 3 && error("not enough points")
+    temp = Point[]
+    for i in eachindex(p1)
+        Spointpair = (p1[i], p1[mod1(i + 1, length(p1))])
+        for pt in intersectlinepoly(Spointpair..., p2)
+            push!(temp, pt)
+        end
+    end
+    # if not closed polygons, remove ipts that are on close side
+    if closed == false
+        ripts = Point[]
+        for ipt in temp
+            if !(ispointonline(ipt, p1[end], p1[1]) || ispointonline(ipt, p2[end], p2[1]) )
+                push!(ripts, ipt)
+            end
+        end
+        return ripts
+    else
+        return temp
+    end
+end

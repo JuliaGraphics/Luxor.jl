@@ -439,3 +439,51 @@ macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates
         preview()
     end
 end
+
+"""
+    @eps drawing-instructions [width] [height] [filename]
+
+Create and preview an EPS drawing, optionally specifying width and height (the
+default is 600 by 600). The file is saved in the current working directory as
+`filename` if supplied, or `luxor-drawing(timestamp).eps`.
+
+On some platforms, EPS files are converted automatically to PDF when previewed.
+
+Examples
+
+```
+@eps circle(O, 20, :fill)
+
+@eps circle(O, 20, :fill) 400
+
+@eps circle(O, 20, :fill) 400 1200
+
+@eps circle(O, 20, :fill) 400 1200 "/tmp/A0-version"
+
+@eps circle(O, 20, :fill) 400 1200 "/tmp/A0-version.eps"
+
+@eps begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end
+
+@eps begin
+        setline(10)
+        sethue("purple")
+        circle(O, 20, :fill)
+     end 1200, 1200
+```
+"""
+macro eps(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).eps")
+     fname = _add_ext(fname, :eps)
+     quote
+        Drawing($width, $height, $fname)
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        preview()
+    end
+end

@@ -73,7 +73,7 @@ end
     mktempdir() do tmpdir
         # test that animation is saved to 'pathname' if valid pathname is given
         testfile = joinpath(tmpdir, "test.gif")
-        
+
         #= ffmpeg is not supported on travis and co -> disable gif generation
         # dependent test
         @test !isfile(testfile)
@@ -81,17 +81,17 @@ end
         @test animate(demo, Scene(demo, backdrop, 0:200),
             creategif=false,
             pathname=testfile) == true
-            
+
         touch(testfile)
         @test isfile(testfile)
-         
+
         # test that error is thrown if the passed pathname points to a directory
         # and that the content of that directory is not removed (ticket #57)
         @test isdir(tmpdir)
         @test animate(demo, Scene(demo, backdrop, 0:200),
             creategif=false,
             pathname=tmpdir) == false
-         @test isfile(testfile)
+        @test isfile(testfile)
     end
 end
 
