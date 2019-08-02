@@ -467,12 +467,11 @@ end
 Return a random `Point` that lies inside `bbox`.
 """
 Base.rand(bb::BoundingBox) = Point(
-    bb.corner2[1]*rand()+bb.corner1[1],
-    bb.corner2[2]*rand()+bb.corner1[2]
-    )
+    (bb.corner2.x - bb.corner1.x) * rand() + bb.corner1.x,
+    (bb.corner2.y - bb.corner1.y) * rand() + bb.corner1.y)
 
 """
     in(pt, bbox::BoundingBox)
 Test whether `pt` is inside `bbox`.
 """
-Base.in(pt,bbox) = isinside(pt,bbox)
+Base.in(pt::Point, bbox::BoundingBox) = isinside(pt, bbox::BoundingBox)
