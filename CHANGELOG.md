@@ -4,6 +4,9 @@
 
 ### Added
 
+ - @eps macro
+ - polyintersect()
+
 ### Changed
 
 ### Removed
