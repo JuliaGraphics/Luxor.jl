@@ -43,6 +43,11 @@ Base.getindex(p::Point, i) = [p.x, p.y][i]
 
 Base.broadcastable(x::Point) = Ref(x)
 
+# for iteration
+Base.eltype(::Point) = Float64
+Base.iterate(p::Point, state = 1) = state > length(p) ? nothing : (p[state], state + 1)
+Base.length(::Point) = 2
+
 """
     dotproduct(a::Point, b::Point)
 
