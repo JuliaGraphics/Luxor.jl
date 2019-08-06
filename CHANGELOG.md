@@ -1,15 +1,15 @@
 # Changelog
 
-## [v1.6.0] - ... 2019
+## [v1.6.0] - future release Aug/Sept 2019
 
 ### Added
 
- - @eps macro
  - polyintersect()
  - rand(bb::BoundingBox)
- - in(pt, bb) alias isinside(pt, bb)
+ - in(pt, bb) aliases isinside(pt, bb)
  - texttrack() does line-spacing
- 
+ - @eps macro
+
 ### Changed
 
 ### Removed
