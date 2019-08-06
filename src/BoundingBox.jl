@@ -58,7 +58,7 @@ end
     BoundingBox(str::AbstractString)
 
 Return a BoundingBox that just encloses a text string, given the current font
-selection.
+selection. Uses the Toy text API (ie `text()`).
 """
 function BoundingBox(str::AbstractString)
     xbearing, ybearing, width, height, xadvance, yadvance = textextents(str)
