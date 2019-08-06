@@ -5,24 +5,27 @@ using Luxor
 using Test
 
 using Random
+
+using Colors
+
 Random.seed!(42)
 
 function background_text(str_array)
     colorband = diverging_palette(0, 10, 100)
     gsave()
     setopacity(0.5)
-    x = -currentwidth/2
-    y = -currentheight/2
+    x = -currentwidth / 2
+    y = -currentheight / 2
     fontsize(12)
-    while y < currentheight/2
+    while y < currentheight / 2
         sethue(colorband[rand(1:end)])
         s = str_array[rand(1:end)]
         text(s, x, y)
         se = textextents(s)
         x += se[5] # move to the right
-        if x > currentwidth/2
-           x = -currentwidth/2 # next row
-           y += 10
+        if x > currentwidth / 2
+            x = -currentwidth / 2 # next row
+            y += 10
         end
     end
     grestore()
@@ -45,7 +48,7 @@ function heart()
     closepath()
 end
 
-function heart_with_julias(x=0, y=0)
+function heart_with_julias(x = 0, y = 0)
     gsave()
     translate(x, y)
     setcolor("lavenderblush")
@@ -58,8 +61,8 @@ function heart_with_julias(x=0, y=0)
         for x in 0:30:250
             translate(30, 0)
             gsave()
-                scale(0.1, 0.1)
-                julialogo()
+            scale(0.1, 0.1)
+            julialogo()
             grestore()
         end
         grestore()
@@ -88,11 +91,11 @@ function julia_heart(fname)
 
     origin()
     background("black")
-    namelist = map(x->string(x), names(Base)) # list of names in Base.
+    namelist = map(x -> string(x), names(Base)) # list of names in Base.
 
     background_text(namelist)
     for n in 1:5
-        rotate(2pi/5)
+        rotate(2pi / 5)
         outlined_heart()
     end
     @test finish() == true

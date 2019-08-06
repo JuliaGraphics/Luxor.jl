@@ -89,7 +89,7 @@ The `refpoint` can be chosen, but the minimum point is usually OK too:
     polysortbyangle(parray, polycentroid(parray))
 """
 function polysortbyangle(pointlist::Array{Point, 1}, refpoint=minimum(pointlist))
-    angles = Float64[]
+    angles = Float64[] ; sizehint!(angles, length(pointlist))
     for pt in pointlist
         push!(angles, slope(pt, refpoint))
     end
@@ -105,7 +105,7 @@ the nearest point to that, and so on.
 You can end up with convex (self-intersecting) polygons, unfortunately.
 """
 function polysortbydistance(pointlist::Array{Point, 1}, starting::Point)
-    route = [starting]
+    route = [starting]; sizehint!(route, length(pointlist))
     # start with the first point in pointlist
     remaining = setdiff(pointlist, route)
     while length(remaining) > 0

@@ -4,6 +4,8 @@ using Luxor
 
 using Test
 
+using Colors
+
 using Random
 Random.seed!(42)
 
