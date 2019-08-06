@@ -8,6 +8,7 @@
  - polyintersect()
  - rand(bb::BoundingBox)
  - in(pt, bb) alias isinside(pt, bb)
+ - texttrack() does line-spacing
  
 ### Changed
 

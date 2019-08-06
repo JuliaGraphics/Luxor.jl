@@ -647,3 +647,24 @@ end
 textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =
     textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> ();
              kwargs...)
+
+"""
+    texttrack(txt, pos, tracking, fontsize=12)
+
+Place the text in `txt` at `pos`, left-justified, and letter space ('track') the text using the value in `tracking`.
+
+The tracking units depend on the current font size! 1 is 1/1000 em. In a 6‑point font, 1 em equals 6 points;
+in a 10‑point font, 1 em equals 10 points.
+
+A value of -50 would tighten the letter spacing noticeably. A value of 50 would make the text more open.
+"""
+function texttrack(txt, pos, tracking, fontsize=12)
+    te = textextents(txt)
+    for i in txt
+        glyph = string(i)
+        glyph_x_bearing, glyph_y_bearing, glyph_width, glyph_height, glyph_x_advance, glyph_y_advance = textextents(glyph)
+        text(glyph, pos)
+        x = glyph_x_advance + (tracking/1000) * fontsize
+        pos += (x, 0)
+    end
+end

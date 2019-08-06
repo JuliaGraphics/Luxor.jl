@@ -209,7 +209,7 @@ textoutlines
 textpath
 ```
 
-## Font dimensions ("Toy" API)
+## Font dimensions ("Toy" API only)
 
 The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
 
@@ -220,6 +220,9 @@ The green dot is the text placement point and reference point for the font, the 
 ```@docs
 textextents
 ```
+
+There is currently no equivalent for the "Pro" API.
+
 ## Labels
 
 The `label()` function places text relative to a specific point, and you can use compass
@@ -482,4 +485,50 @@ nothing # hide
 textwrap
 textbox
 splittext
+```
+
+## Text tracking
+
+Use `texttrack()` to letter-space text. The units are 1/1000 em, so the amount of tracking is relative to the current font size.
+
+But really, don’t.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/texttrack.svg") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+
+function text_tracking()
+    fonts = [
+        "Verdana",
+        "TrebuchetMS",
+        "Times-Roman",
+        "Georgia",
+        "Monaco"]
+    fsize = 16
+    grid = GridRect(boxtopleft(BoundingBox() * 0.9), 0, 20)
+    tracking = 50
+    for f in fonts
+        fontsize(fsize)
+        fontface(f)
+        texttrack("This is some text in $(f): it’s been tracked by +$(tracking)",
+            nextgridpoint(grid), tracking, fsize)
+        text("This is some text in $(f): it’s not been tracked",
+            nextgridpoint(grid))
+        texttrack("This is some text in $(f): it’s been tracked by -$(tracking)",
+            nextgridpoint(grid), -tracking, fsize)
+    end
+    finish() # hide
+end
+
+text_tracking()
+nothing # hide
+```
+
+![textbox](assets/figures/texttrack.svg)
+
+```@docs
+texttrack
 ```

@@ -327,7 +327,7 @@ nothing # hide
 
 ![bounding boxes 2](assets/figures/bbox2.png)
 
-You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created and drawn differently depending on whether they're inside the intersection or outside.
+You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created (you can pass a bounding box to `rand()` to get a random point inside the box) and drawn differently depending on whether they're inside the intersection or outside.
 
 ```@example
 using Luxor, Random # hide
@@ -355,7 +355,7 @@ bothboxes = intersectboundingboxes(bbox1, bbox2)
 box(bothboxes, :fill)
 
 for i in 1:500
-    pt = randompoint(bbox1 + bbox2...)
+    pt = rand(bbox1 + bbox2)
     if isinside(pt, bothboxes)
         sethue("white")
         circle(pt, 3, :fill)
