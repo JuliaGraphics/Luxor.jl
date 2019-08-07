@@ -182,8 +182,9 @@ end
 
 drawtest()
 
-@btime benchone();
-#=
+
+
+#= Tuesday 6 August 2019
 ────────────────────────────────────────────────────────────────────────────────────
                                              Time                   Allocations
                                      ──────────────────────   ───────────────────────
@@ -214,5 +215,48 @@ drawtest()
  polyscale                       10   4.40μs  0.00%   440ns     0.00B  0.00%    0.00B
  polymove                        10   4.33μs  0.00%   434ns     0.00B  0.00%    0.00B
  ────────────────────────────────────────────────────────────────────────────────────
+
+and
+
+@btime benchone();
+
   103.993 ms (3177473 allocations: 120.12 MiB)
- =#
+=#
+
+#= Wednesday 7 August 2019
+────────────────────────────────────────────────────────────────────────────────────
+                                             Time                   Allocations
+                                     ──────────────────────   ───────────────────────
+          Tot / % measured:               116ms / 99.3%            123MiB / 100%
+
+ Section                     ncalls     time   %tot     avg     alloc   %tot      avg
+ ────────────────────────────────────────────────────────────────────────────────────
+ polytriangulate                 10   68.7ms  59.7%  6.87ms    102MiB  83.0%  10.2MiB
+ polyintersect                   10   16.4ms  14.3%  1.64ms   1.26MiB  1.03%   129KiB
+ polyintersections               10   16.3ms  14.2%  1.63ms   1.20MiB  0.98%   123KiB
+ polysmooth                      10   4.31ms  3.74%   431μs   2.67MiB  2.17%   273KiB
+ polyfit                         10   2.90ms  2.52%   290μs   9.50MiB  7.72%   973KiB
+ polysortbydistance              10   2.40ms  2.08%   240μs   1.93MiB  1.57%   198KiB
+ polysample                      10   1.02ms  0.89%   102μs   1.21MiB  0.98%   124KiB
+ polyorientation                 10    657μs  0.57%  65.7μs   1.26MiB  1.03%   129KiB
+ polyportion                     10    466μs  0.40%  46.6μs    302KiB  0.24%  30.2KiB
+ offsetpoly                      10    464μs  0.40%  46.4μs   79.7KiB  0.06%  7.97KiB
+ polyremovecollinearpoints       10    321μs  0.28%  32.1μs    546KiB  0.43%  54.6KiB
+ polysortbyangle                 10    316μs  0.27%  31.6μs    177KiB  0.14%  17.7KiB
+ polyremainder                   10    295μs  0.26%  29.5μs    299KiB  0.24%  29.9KiB
+ polysplit                       10    261μs  0.23%  26.1μs    314KiB  0.25%  31.4KiB
+ polyreflect                     10   82.3μs  0.07%  8.23μs     0.00B  0.00%    0.00B
+ polydistances                   10   51.4μs  0.04%  5.14μs    128KiB  0.10%  12.8KiB
+ polyperimeter                   10   49.1μs  0.04%  4.91μs    128KiB  0.10%  12.8KiB
+ polyrotate                      10   34.4μs  0.03%  3.44μs     0.00B  0.00%    0.00B
+ polyarea                        10   24.4μs  0.02%  2.44μs     0.00B  0.00%    0.00B
+ polycentroid                    10   9.91μs  0.01%   991ns     0.00B  0.00%    0.00B
+ polyscale                       10   3.37μs  0.00%   337ns     0.00B  0.00%    0.00B
+ polymove                        10   3.32μs  0.00%   332ns     0.00B  0.00%    0.00B
+ ────────────────────────────────────────────────────────────────────────────────────
+
+and
+
+  104.612 ms (3173873 allocations: 123.20 MiB)
+
+=#
