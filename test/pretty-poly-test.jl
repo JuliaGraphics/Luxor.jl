@@ -108,6 +108,8 @@ function test_pretty_poly(fname)
     Drawing(width, height, fname)
     origin()
     background("ivory")
+    # test empty prettypoly
+    prettypoly(Point[], :stroke)
     draw_lots_of_polys(width, height)
     @test finish() == true
 end
