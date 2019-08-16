@@ -15,6 +15,9 @@ function test_ellipse(fname)
     setopacity(0.5)
     setline(0.3)
 
+    @test_throws ErrorException Partition(0, pageheight, 200, 200)
+    @test_throws ErrorException Partition(pagewidth, 0, 200, 200)
+
     pagetiles = Partition(pagewidth, pageheight, 200, 200)
     for (pos, n) in pagetiles
         randomhue()
