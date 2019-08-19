@@ -33,6 +33,7 @@ polygon       ngon()                polysmooth()          poly()             isi
 -             -                     -                     -                  -                 polyrotate!()
 -             -                     -                     -                  -                 polyreflect!()
 -             -                     -                     -                  -                 polysample()
+-             -                     -                     -                  -                 polytriangulate()
 -             -                     -                     -                  -                 insertvertices!()
 path          getpath()             pathtopoly()          -                  -                 -
 -             getpathflat()         -                     -                  -                 -  
@@ -1172,7 +1173,11 @@ nearestindex
 polyarea
 ```
 
-## Polygon intersections (WIP)
+## Other polygon operations
+
+These functions are still in development. Expect varying degrees of success when using them.
+
+### Intersections
 
 `intersectlinepoly(pt1, pt2, polygon)` returns an array containing the points where a line from `pt1` to `pt2` crosses the perimeter of the `polygon`.
 
@@ -1206,26 +1211,24 @@ nothing # hide
 
 ![line/polygon intersections](assets/figures/linepolyintersections.png)
 
-`polyintersections` calculates the intersection points of two polygons.
+`polyintersect` calculates the intersection points of two polygons.
 
 ```@example
 using Luxor # hide
 Drawing(600, 550, "assets/figures/polyintersections.png") # hide
+
 origin() # hide
 background("white") # hide
 sethue("grey60") # hide
 setopacity(0.8) # hide
 pentagon = ngon(O, 250, 5, vertices=true)
-square = box(O + (80, 20), 280, 280, vertices=true)
+square = box(O + (80, 20), 280, 400, vertices=true)
 
 poly(pentagon, :stroke, close=true)
 poly(square, :stroke, close=true)
 
 sethue("orange")
-circle.(polyintersections(pentagon, square), 8, :fill)
-
-sethue("green")
-circle.(polyintersections(square, pentagon), 4, :fill)
+circle.(polyintersect(pentagon, square), 8, :fill)
 
 finish() # hide
 nothing # hide
@@ -1237,5 +1240,51 @@ The returned polygon includes all the points in the first (source) polygon plus 
 
 ```@docs
 intersectlinepoly
-polyintersections
+polyintersect
+```
+
+### Triangulation
+
+Use `polytriangulate()` to join the vertices of a polygon to form triangles.
+
+```@example
+using Luxor, Random # hide
+Drawing(600, 550, "assets/figures/polytriangulate.png") # hide
+
+origin() # hide
+background("white") # hide
+
+Random.seed!(40) # hide
+setline(1) # hide
+
+rawpts = star(O, 250, 9, 0.2, vertices=true)
+
+sethue("black")
+poly(rawpts, :stroke)
+
+for i in 1:10 # add some random points to make it more interesting
+    push!(rawpts, rand(BoundingBox(rawpts)))
+end
+
+pt = polytriangulate(rawpts)
+
+for (n, p) in enumerate(pt)    
+    randomhue()
+    pgon = Point[p[1], p[2], p[3]]
+    poly(pgon, :fillpreserve, close = true)
+    sethue("white")
+    strokepath()
+end
+
+sethue("white")
+circle.(rawpts, 4, :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![polygon triangulation](assets/figures/polytriangulate.png)
+
+```@docs
+polytriangulate
 ```

@@ -1,20 +1,23 @@
 # Changelog
 
-## [v1.6.0] - future release Aug/Sept 2019
+## [v1.6.0] - 19 August 2019
 
 ### Added
 
- - polyintersect()
- - rand(bb::BoundingBox)
- - in(pt, bb) aliases isinside(pt, bb)
- - texttrack() does line-spacing
- - @eps macro
+- polyintersect()
+- polytriangulate()
+- rand(bb::BoundingBox)
+- in(pt, bb) aliases isinside(pt, bb)
+- texttrack() does line-spacing
+- @eps macro
 
 ### Changed
 
 ### Removed
 
 ### Deprecated
+
+- polytriangulate!() -> polytriangulate()
 
 ## [v1.5.0] - July 25 2019
 

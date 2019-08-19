@@ -25,6 +25,7 @@ include("point.jl")
 include("basics.jl")
 include("Turtle.jl")
 include("shapes.jl")
+include("BoundingBox.jl")
 include("polygons.jl")
 include("curves.jl")
 include("tiles-grids.jl")
@@ -40,7 +41,6 @@ include("bars.jl")
 include("bezierpath.jl")
 include("mesh.jl")
 include("Table.jl")
-include("BoundingBox.jl")
 include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
@@ -150,7 +150,7 @@ export Drawing,
     noise, initnoise,
 
     # experimental polygon functions
-    polyremovecollinearpoints, polytriangulate!,
+    polyremovecollinearpoints, polytriangulate!, polytriangulate,
     ispointinsidetriangle, ispolyclockwise, polyorientation
 
 # basic unit conversion to Cairo/PostScript points
