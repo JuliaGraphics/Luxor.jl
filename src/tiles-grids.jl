@@ -296,7 +296,7 @@ mutable struct Partition
     function Partition(areawidth, areaheight, tilewidth, tileheight)
         ncols = areawidth  / tilewidth  |> floor |> Integer
         nrows = areaheight / tileheight |> floor |> Integer
-        if ncols <= 2 || nrows <= 2
+        if ncols < 1 || nrows < 1
             throw(error("partition(): not enough space for tiles that size"))
         end
         currentrow = 1
