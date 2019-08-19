@@ -42,8 +42,8 @@ function polycentroid(pointlist::Array{Point,1})
     # Points are immutable, use separate variables for these calculations
     centroid_x = 0.0
     centroid_y = 0.0
-    signedArea = 0.0
-    vertexCount = length(pointlist)
+    signedarea = 0.0
+    vertexcount = length(pointlist)
     x0 = 0.0 # Current vertex X
     y0 = 0.0 # Current vertex Y
     x1 = 0.0 # Next vertex X
@@ -52,29 +52,29 @@ function polycentroid(pointlist::Array{Point,1})
 
     # For all vertices except last
     i = 1
-    @inbounds for i in 1:vertexCount-1
+    @inbounds for i in 1:vertexcount-1
         x0 = pointlist[i].x
         y0 = pointlist[i].y
         x1 = pointlist[i+1].x
         y1 = pointlist[i+1].y
         a = x0 * y1 - x1 * y0
-        signedArea += a
+        signedarea += a
         centroid_x += (x0 + x1) * a
         centroid_y += (y0 + y1) * a
     end
     # Do last vertex separately to avoid performing an expensive
     # modulus operation in each iteration.
-    x0 = pointlist[vertexCount].x
-    y0 = pointlist[vertexCount].y
+    x0 = pointlist[vertexcount].x
+    y0 = pointlist[vertexcount].y
     x1 = pointlist[1].x
     y1 = pointlist[1].y
     a = x0 * y1 - x1 * y0
-    signedArea += a
+    signedarea += a
     centroid_x += (x0 + x1) * a
     centroid_y += (y0 + y1) * a
-    signedArea *= 0.5
-    centroid_x /= (6.0 * signedArea)
-    centroid_y /= (6.0 * signedArea)
+    signedarea *= 0.5
+    centroid_x /= (6.0 * signedarea)
+    centroid_y /= (6.0 * signedarea)
     return Point(centroid_x, centroid_y)
 end
 
@@ -879,48 +879,6 @@ ispointinsidetriangle(p::Point, triangle::Array{Point, 1}) =
     ispointinsidetriangle(p, triangle[1], triangle[2], triangle[3])
 
 """
-    polytriangulate!(pgon::Array{Point, 1})
-
-Replace the polygon with an array of triangles which triangulate the polygon.
-
-Caution: this destroys the polygon in place.
-
-TODO This code is still experimental...
-"""
-function polytriangulate!(pgon::Array{Point, 1})
-    if !ispolyclockwise(pgon)
-        pgon = reverse(pgon)
-    end
-    triangles = Array{Point, 1}[] ; sizehint!(triangles, length(pgon))
-    sz = length(pgon)
-    while sz >= 3
-        istriangleremoved = false
-        @inbounds for i in 1:sz-1
-            sz = length(pgon)
-            p1 = pgon[mod1(i, sz)]
-            p2 = pgon[mod1(i + 1, sz)]
-            p3 = pgon[mod1(i + 2, sz)]
-            iscw = (polyorientation(p1, p2, p3) > 0.0)
-            !iscw && continue
-            overlappingpoints = 0
-            for v in 1:sz-1
-                v == i || v == i + 1 || v == i + 2 && continue
-                if ispointinsidetriangle(pgon[mod1(v, sz)], p1, p2, p3)
-                    overlappingpoints += 1
-                end
-                overlappingpoints > 0 && continue
-            end
-            push!(triangles, Point[p1, p2, p3])
-            deleteat!(pgon, mod1(i + 1, sz))
-            sz = length(pgon)
-            istriangleremoved = true
-        end
-        !istriangleremoved && break
-    end
-    return triangles
-end
-
-"""
     polyremovecollinearpoints(pgon::Array{Point, 1})
 
 Return copy of polygon with no collinear points.
@@ -1078,4 +1036,142 @@ function polyintersect(p1::AbstractArray{Point, 1}, p2::AbstractArray{Point, 1};
     else
         return temp
     end
+end
+
+function _smallesttriangle(bb::BoundingBox)
+    # find the smallest triangle that completely encloses bounding box
+    diag = boxdiagonal(bb)
+
+    # circle that encloses this box
+    circ = (center = boxmiddlecenter(bb), radius = diag / 2)
+
+    # three equally spaced points on circle
+    side1pt = circ.center + polar(circ.radius, 0)
+    side2pt = circ.center + polar(circ.radius, 2π / 3)
+    side3pt = circ.center + polar(circ.radius, 4π / 3)
+
+    # make them clockwise
+    pgon = [side1pt, side2pt, side3pt]
+    if !ispolyclockwise(pgon)
+        reverse!(pgon)
+    end
+    return offsetpoly(pgon, circ.radius / 2)
+end
+
+mutable struct TriEdge
+    spt::Point
+    ept::Point
+    valid::Bool
+end
+
+function _edgesequal(edge1::TriEdge, edge2::TriEdge)
+    !edge1.valid && return false
+    !edge2.valid && return false
+    if ((edge1.spt ≈ edge2.spt) && (edge1.ept ≈ edge2.ept)) ||
+       ((edge1.spt ≈ edge2.ept) && (edge1.ept ≈ edge2.spt))
+        return true
+    else
+        return false
+    end
+end
+
+"""
+    polytriangulate(plist::Array{Point,1}; epsilon = -0.01)
+
+Triangulate the polygon in `plist`.
+
+This uses the Bowyer–Watson/Delaunay algorithm to make triangles. It returns an array of triangular polygons.
+
+TODO: This is another experimental polygon function which works for simpler
+polygons but may start glitching out for more complex ones. It's also not very
+efficient, because it first copies the list (to avoid modifying the original), and then sorts it, before making triangles.
+"""
+function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
+    trianglelist = Vector{Point}[]
+    pointlist = deepcopy(plist)
+    vertexcount = length(pointlist)
+
+    # make enclosing supertriangle
+    bb = BoundingBox(pointlist)
+    supertriangle = Luxor._smallesttriangle(bb)
+
+    # add the supertriangle to the trianglelist
+    push!(trianglelist, supertriangle)
+
+    # add the supertriangle’s vertices to the point list
+    push!(pointlist, supertriangle[1])
+    push!(pointlist, supertriangle[2])
+    push!(pointlist, supertriangle[3])
+
+    # sorting the list of points, not sure why atm
+    pointlist = polysortbyangle(pointlist)
+
+    @inbounds for point in pointlist
+        edgebuffer = Vector{Luxor.TriEdge}() # to store edges
+        tobedeleted = Int64[]
+        for ntriangle in eachindex(trianglelist)
+            # for each triangle currently in the trianglelist
+            # calculate the triangle circumcircle center and radius
+            triangle = trianglelist[ntriangle]
+            cp, r = center3pts(triangle[1], triangle[2], triangle[3])
+            # if this fails, r is zero, so no problem with adding edges/deleting triangles
+            if distance(point, cp) < (r + epsilon)
+                # if the point lies in the triangle's circumcircle,
+                # add the triangle's edges to the edge buffer
+                push!(edgebuffer, Luxor.TriEdge(triangle[1], triangle[2], true))
+                push!(edgebuffer, Luxor.TriEdge(triangle[2], triangle[3], true))
+                push!(edgebuffer, Luxor.TriEdge(triangle[3], triangle[1], true))
+                # and mark the triangle to be deleted
+                push!(tobedeleted, ntriangle)
+            end
+        end
+        deleteat!(trianglelist, tobedeleted)
+
+        # find all shared edges in the edge buffer
+        # when they're removed, the edges of the enclosing polygon are left
+        j = 1
+        while j <= length(edgebuffer)
+            k = j + 1
+            while k <= length(edgebuffer)
+                if Luxor._edgesequal(edgebuffer[j], edgebuffer[k]) == true
+                    edgebuffer[j].valid = false
+                    edgebuffer[k].valid = false
+                end
+                k += 1
+            end
+            j += 1
+        end
+
+        # make new triangles around the current point
+        # skip over any tagged edges
+        j = 1
+        while j <= length(edgebuffer)
+            if edgebuffer[j].valid
+                # the order is important, don't know why
+                pgon = [edgebuffer[j].ept, point, edgebuffer[j].spt]
+                # make sure every polygon is clockwise
+                if !ispolyclockwise(pgon)
+                    reverse!(pgon)
+                end
+                push!(trianglelist, pgon)
+            end
+            j += 1
+        end
+    end # do next point
+
+    # # tidy up
+    # # remove any triangles that use the supertriangle's vertices
+    indexes = Int64[]
+    for n in eachindex(trianglelist)
+        triangle = trianglelist[n]
+        for tpt in Point[triangle[1], triangle[2], triangle[3]]
+            for stpt in Point[supertriangle[1], supertriangle[2], supertriangle[3]]
+                if tpt ≈ stpt
+                    push!(indexes, n) # mark for deletion
+                end
+            end
+        end
+    end
+    deleteat!(trianglelist, unique(indexes))
+    return trianglelist
 end

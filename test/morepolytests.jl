@@ -138,33 +138,6 @@ end
     @test_throws BoundsError ispointinsidetriangle(O, badtriangle)
 end
 
-@testset "polytriangulate tests" begin
-    pgon = star(O, 200, 12, 0.7, vertices=true)
-
-    sethue("black")
-    poly(pgon, :stroke, close=true)
-
-    triangles = polytriangulate!(copy(pgon))
-
-    for t in triangles
-        randomhue()
-        poly(t, :fill)
-    end
-
-    # area of all the little triangles should add up to area of big pgon
-    @test isapprox(sum(polyarea.(triangles)), polyarea(pgon))
-
-    @test length(triangles) == 22
-
-    pgon = box(BoundingBox(), vertices=true)
-    triangles = polytriangulate!(copy(pgon))
-
-    # areas should add up to area of big pgon
-    @test isapprox(sum(polyarea.(triangles)), polyarea(pgon))
-
-    @test length(triangles) == 2
-end
-
 @testset "insertvertices tests" begin
     pgon = star(Point(20, 20), 200, 12, 0.7, π/7, vertices=true)
     originallength = length(pgon)
