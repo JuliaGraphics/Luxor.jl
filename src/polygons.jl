@@ -492,17 +492,18 @@ polygon appear the wrong side of the original
 """
 function offsetpoly(path::Array{Point, 1}, d)
     # don't try to calculate offset of two identical points
-    if path[1] == path[end]
-        popfirst!(path)
-    end
     l = length(path)
     resultpoly = Array{Point}(undef, l)
+    previouspoint = path[end]
     for i in 1:l
+        path[i] == previouspoint && continue
         p1 = path[mod1(i, l)]
         p2 = path[mod1(i + 1, l)]
         p3 = path[mod1(i + 2, l)]
 
-        # should check for identical points here too...
+        p1 == p2 && continue
+        p2 == p3 && continue
+
         L12 = distance(p1, p2)
         L23 = distance(p2, p3)
         # the offset line of p1 - p2
@@ -526,6 +527,7 @@ function offsetpoly(path::Array{Point, 1}, d)
         if intersectionpoint[1]
             resultpoly[i] = intersectionpoint[2]
         end
+        previouspoint = path[i]
     end
     return resultpoly
 end
@@ -1038,6 +1040,8 @@ function polyintersect(p1::AbstractArray{Point, 1}, p2::AbstractArray{Point, 1};
     end
 end
 
+# triangulation functions
+
 function _smallesttriangle(bb::BoundingBox)
     # find the smallest triangle that completely encloses bounding box
     diag = boxdiagonal(bb)
@@ -1082,9 +1086,7 @@ Triangulate the polygon in `plist`.
 
 This uses the Bowyer–Watson/Delaunay algorithm to make triangles. It returns an array of triangular polygons.
 
-TODO: This is another experimental polygon function which works for simpler
-polygons but may start glitching out for more complex ones. It's also not very
-efficient, because it first copies the list (to avoid modifying the original), and then sorts it, before making triangles.
+TODO: This experimental polygon function is not very efficient, because it first copies the list of points (to avoid modifying the original), and sorts it, before making triangles.
 """
 function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
     trianglelist = Vector{Point}[]
@@ -1103,21 +1105,29 @@ function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
     push!(pointlist, supertriangle[2])
     push!(pointlist, supertriangle[3])
 
-    # sorting the list of points, not sure why atm
-    pointlist = polysortbyangle(pointlist)
+    # sorting the list of points by x coordinate
+    sort!(pointlist)
 
     @inbounds for point in pointlist
         edgebuffer = Vector{Luxor.TriEdge}() # to store edges
         tobedeleted = Int64[]
+
         for ntriangle in eachindex(trianglelist)
             # for each triangle currently in the trianglelist
             # calculate the triangle circumcircle center and radius
             triangle = trianglelist[ntriangle]
             cp, r = center3pts(triangle[1], triangle[2], triangle[3])
+
+            #as soon as the x component of the distance from the current point to the
+            #circumcircle center is greater than the circumcircle radius, that triangle need
+            #never be considered for later points, as further points will never again be on
+            #the interior of that triangles circumcircle.
+            abs(point.x - cp.x) > r && continue
+
             # if this fails, r is zero, so no problem with adding edges/deleting triangles
             if distance(point, cp) < (r + epsilon)
-                # if the point lies in the triangle's circumcircle,
-                # add the triangle's edges to the edge buffer
+                # if the point lies in the triangle’s circumcircle,
+                # add the triangle’s edges to the edge buffer
                 push!(edgebuffer, Luxor.TriEdge(triangle[1], triangle[2], true))
                 push!(edgebuffer, Luxor.TriEdge(triangle[2], triangle[3], true))
                 push!(edgebuffer, Luxor.TriEdge(triangle[3], triangle[1], true))
@@ -1128,7 +1138,7 @@ function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
         deleteat!(trianglelist, tobedeleted)
 
         # find all shared edges in the edge buffer
-        # when they're removed, the edges of the enclosing polygon are left
+        # when they’re removed, the edges of the enclosing polygon are left
         j = 1
         while j <= length(edgebuffer)
             k = j + 1
@@ -1147,8 +1157,8 @@ function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
         j = 1
         while j <= length(edgebuffer)
             if edgebuffer[j].valid
-                # the order is important, don't know why
-                pgon = [edgebuffer[j].ept, point, edgebuffer[j].spt]
+                # the order is important
+                pgon = sort([edgebuffer[j].ept, point, edgebuffer[j].spt])
                 # make sure every polygon is clockwise
                 if !ispolyclockwise(pgon)
                     reverse!(pgon)
@@ -1160,12 +1170,12 @@ function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
     end # do next point
 
     # # tidy up
-    # # remove any triangles that use the supertriangle's vertices
+    # # remove any triangles that use the supertriangle’s vertices
     indexes = Int64[]
     for n in eachindex(trianglelist)
         triangle = trianglelist[n]
-        for tpt in Point[triangle[1], triangle[2], triangle[3]]
-            for stpt in Point[supertriangle[1], supertriangle[2], supertriangle[3]]
+        for tpt in triangle
+            for stpt in supertriangle
                 if tpt ≈ stpt
                     push!(indexes, n) # mark for deletion
                 end

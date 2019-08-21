@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.7.0] - September/October 2019
+
+### Added
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v1.6.0] - 19 August 2019
 
 ### Added

@@ -1236,7 +1236,7 @@ nothing # hide
 
 ![polygon intersections](assets/figures/polyintersections.png)
 
-The returned polygon includes all the points in the first (source) polygon plus the points where the source polygon overlaps the target polygon.
+The returned polygon contains the points where one polygon crosses another.
 
 ```@docs
 intersectlinepoly
@@ -1245,7 +1245,7 @@ polyintersect
 
 ### Triangulation
 
-Use `polytriangulate()` to join the vertices of a polygon to form triangles.
+Use `polytriangulate()` to join the vertices of a polygon to form triangles. It returns an array of triangular polygons.
 
 ```@example
 using Luxor, Random # hide
@@ -1253,31 +1253,25 @@ Drawing(600, 550, "assets/figures/polytriangulate.png") # hide
 
 origin() # hide
 background("white") # hide
+fontsize(18) # hide
 
-Random.seed!(40) # hide
-setline(1) # hide
+pts = ngon(O, 200, 7, vertices=true)
+triangles = polytriangulate(pts)
 
-rawpts = star(O, 250, 9, 0.2, vertices=true)
-
-sethue("black")
-poly(rawpts, :stroke)
-
-for i in 1:10 # add some random points to make it more interesting
-    push!(rawpts, rand(BoundingBox(rawpts)))
-end
-
-pt = polytriangulate(rawpts)
-
-for (n, p) in enumerate(pt)    
-    randomhue()
-    pgon = Point[p[1], p[2], p[3]]
-    poly(pgon, :fillpreserve, close = true)
+for (n, tri) in enumerate(triangles)
+    sethue([Luxor.julia_purple,
+            Luxor.julia_blue,
+            Luxor.julia_red,  
+            Luxor.julia_green
+            ][mod1(n, end)])
+    poly(offsetpoly(tri, -2), :fill, close = true)
     sethue("white")
-    strokepath()
+    text(string(n), polycentroid(tri), halign=:center)
 end
 
-sethue("white")
-circle.(rawpts, 4, :fill)
+sethue("red")
+setline(3)
+poly(pts, :stroke, close=true)
 
 finish() # hide
 nothing # hide
