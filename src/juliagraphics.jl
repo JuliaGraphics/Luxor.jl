@@ -177,32 +177,17 @@ function julialogo(;action=:fill,
     circle(Point(240.272, 68.091), Point(205.272, 68.091), :path)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    # color && setcolor(0.835, 0.388, 0.361) # light red
-    # circle(Point(206.772, 68.091), Point(238.772, 68.091), :path)
-    # (action == :clip) ? newsubpath() : do_action(action)
-
     color && setcolor(julia_blue) # blue
     circle(Point(77.954, 68.091), Point(42.954, 68.091), :path)
     (action == :clip) ? newsubpath() : do_action(action)
-
-    # color && setcolor(0.4, 0.51, 0.878) # light blue
-    # circle(Point(44.454, 68.091), Point(76.454, 68.091), :path)
-    # (action == :clip) ? newsubpath() : do_action(action)
 
     color && setcolor(julia_purple) # dark purple
     circle(Point(282.321, 68.091), Point(247.321, 68.091), :path)
     (action == :clip) ? newsubpath() : do_action(action)
 
-    # color && setcolor(0.667, 0.475, 0.757) # lighter purple
-    # circle(Point(248.821, 68.091), Point(280.821, 68.091), :path)
-    # (action == :clip) ? newsubpath() : do_action(action)
-
     color && setcolor(julia_green) # green
     circle(Point(261.299, 31.672), Point(226.299, 31.672), :path)
     (action == :clip) ? newsubpath() : do_action(action)
-
-    # color && setcolor(0.376, 0.678, 0.318) # light green
-    # circle(Point(227.799, 31.672), Point(259.799, 31.672), :path)
 
     if action == :clip
         clip()
