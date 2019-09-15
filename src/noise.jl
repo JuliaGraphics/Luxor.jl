@@ -3,20 +3,6 @@
 using Random
 
 """
-    seednoise(seed::T=42) where T <: Integer
-
-Change the initial seed value for noise generation.
-
-```
-seednoise()
-seednoise(12)
-```
-"""
-function seednoise(seed::T=42) where T <: Integer
-    initsimplexnoise(seed)
-end
-
-"""
     noise(x)          ; detail = 1, persistence = 1.0) # 1D
     noise(x, y)       ; detail = 1, persistence = 1.0) # 2D
     noise(x, y, z)    ; detail = 1, persistence = 1.0) # 3D
@@ -88,7 +74,7 @@ function _octaves(coords::Array{T, 1} where T <: Real;
     return total / maxval
 end
 
-# Most of this file is the original OpenSimplexNoise code.
+# Most of this code is the original OpenSimplexNoise code.
 # I converted it to Julia but I don't understand it all... [cormullion]
 
 # OpenSimplex Noise
@@ -203,11 +189,39 @@ const perm            = Array{Int8}(undef, 256)
 const permGradIndex3D = Array{Int8}(undef, 256)
 
 """
-    initnoise(seed::Int=42)
+    initnoise(seed::Int)
+    initnoise()
 
 Initialize the noise generation code.
+
+```
+julia> initnoise(); noise(1)
+0.7453148982810598
+
+julia> initnoise(); noise(1)
+0.7027617067916981
+```
+
+If you provide an integer seed, it will be used
+to seed `Random.seed!()`` when the noise code is initialized:
+
+```
+julia> initnoise(41); noise(1) # yesterday
+0.7134000046640385
+
+julia> initnoise(41); noise(1) # today
+0.7134000046640385
+```
 """
-function initnoise(seed::Int=42)
+function initnoise(seed)
+    Random.seed!(seed)
+    for i in 1:256
+        perm[i]            = rand(Int8)
+        permGradIndex3D[i] = rand(Int8)
+    end
+end
+
+function initnoise()
     for i in 1:256
         perm[i]            = rand(Int8)
         permGradIndex3D[i] = rand(Int8)

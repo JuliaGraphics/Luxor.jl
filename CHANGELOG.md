@@ -6,9 +6,15 @@
 
 ### Changed
 
+- initnoise() is correctly seedable
+- center3pts() changed
+
 ### Removed
 
+- seednoise()
+
 ### Deprecated
+
 
 ## [v1.6.0] - 19 August 2019
 
