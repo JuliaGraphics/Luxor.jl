@@ -54,7 +54,7 @@ function center3pts(a::Point, b::Point, c::Point)
     # do the lines intersect?
     crossp = crossproduct(perpAB, perpBC)
     if isapprox(crossp, 0)
-        @info("no circle passes through all three points")
+        @info("no circle passes through the points $a $b $c")
         return Point(0, 0), 0
     end
     centerX = ((midAB.y * perpAB.x * perpBC.x) +
@@ -62,7 +62,7 @@ function center3pts(a::Point, b::Point, c::Point)
                (midAB.x * perpAB.y * perpBC.x) -
                (midBC.y * perpAB.x * perpBC.x)) / crossp
     centerY = ((centerX - midAB.x) * perpAB.y / perpAB.x)  + midAB.y
-    radius = hypot(centerX - a.x, centerY - a.y)
+    radius = hypot(abs(centerX - a.x), abs(centerY - a.y))
     return Point(centerX, centerY), radius
 end
 
