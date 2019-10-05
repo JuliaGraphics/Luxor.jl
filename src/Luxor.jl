@@ -55,7 +55,7 @@ export Drawing,
     finish, preview,
     origin, rulers, background,
 
-    @png, @pdf, @svg, @eps,
+    @png, @pdf, @svg, @eps, @draw,
 
     newpath, closepath, newsubpath,
 
