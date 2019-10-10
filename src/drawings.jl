@@ -487,3 +487,51 @@ macro eps(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates
         preview()
     end
 end
+
+"""
+    @draw drawing-instructions [width] [height]
+
+Preview an PNG drawing, optionally specifying width and height (the
+default is 600 by 600). The file is saved in the temporary directory.
+
+Examples
+
+```
+@draw circle(O, 20, :fill)
+
+@draw circle(O, 20, :fill) 400
+
+@draw circle(O, 20, :fill) 400 1200
+
+
+@draw begin
+         setline(10)
+         sethue("purple")
+         circle(O, 20, :fill)
+      end
+
+
+@draw begin
+         setline(10)
+         sethue("purple")
+         circle(O, 20, :fill)
+      end 1200 1200
+```
+"""
+macro draw(body, width=600, height=600)
+    quote
+        Drawing($width, $height, :png)
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        (isdefined(Main, :IJulia) && Main.IJulia.inited) ? jupyter = true : jupyter = false
+        Juno.isactive() ? juno = true : juno = false
+        if juno || jupyter
+            display(CURRENTDRAWING[1])
+        else
+            @info "use Juno or Jupyter"
+        end
+    end
+end
