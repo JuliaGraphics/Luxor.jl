@@ -48,7 +48,7 @@
   <use xlink:href="#glyph0-4" x="339.086914" y="74.832031"/>
   <use xlink:href="#glyph0-3" x="342.265625" y="74.832031"/>
 </g>
-<path style="fill:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0 94.667969 L 400 94.667969 "/>
+<path style="fill:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 400 94.667969 L 0 94.667969 "/>
 <path style="fill-rule:nonzero;fill:rgb(52.180131%,73.517745%,3.260011%);fill-opacity:1;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 100 175 C 110.359375 128.078125 151.949219 94.667969 200 94.667969 C 248.050781 94.667969 289.640625 128.078125 300 175 "/>
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
   <use xlink:href="#glyph0-5" x="320" y="94.667969"/>
