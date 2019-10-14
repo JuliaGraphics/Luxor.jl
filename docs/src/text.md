@@ -184,7 +184,6 @@ Cairo (and hence Luxor) doesn't support emoji currently. 😢
 using Luxor # hide
 Drawing(400, 400, "assets/figures/textoutlines.png") # hide
 origin() # hide
-background("white") # hide
 fontface("Times-Roman")
 fontsize(500)
 setline(4)

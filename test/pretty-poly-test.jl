@@ -52,18 +52,15 @@ function test2(p)
     )
 end
 
-function get_all_png_files(folder)
-    tempfolder = pwd()
-    cd(folder)
+function get_png_files()
+    folder = dirname(dirname(pathof(Luxor))) * "/test/"
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
-    imagelist = filter(f -> !startswith(f, "tiled-images"), imagelist) # don't recurse... :)
-    imagepathlist = map(realpath, imagelist)
-    cd(tempfolder)
+    imagepathlist = map(fn -> folder * "/" * fn, imagelist)
     return imagepathlist
 end
 
 function test3(p)
-    imagelist = get_all_png_files(dirname(@__FILE__))
+    imagelist = get_png_files()
     shuffle!(imagelist)
     img = readpng(imagelist[1])
     w = img.width

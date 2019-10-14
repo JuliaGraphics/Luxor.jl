@@ -140,7 +140,7 @@ preview
 
 ## Quick drawings with macros
 
-The `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
+The `@draw`, `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
 
 ```julia
 @svg circle(O, 20, :stroke) 50 50
@@ -158,7 +158,7 @@ finish()
 preview()
 ```
 
-They just save a bit of typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
+They're short-cuts - designed to save typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -177,11 +177,13 @@ or
      )
 ```
 
+The `@draw` macro creates an im-memory drawing. You should see it displayed if you're working in Juno or Jupyter.
 
 ```@docs
 @svg
 @png
 @pdf
+@draw
 ```
 
 If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't have to specify the suffix:
@@ -211,13 +213,13 @@ Similarly, if you want to programmatically define document pathname,s you should
 
 ### Drawings in memory
 
-You can choose to store the drawing in memory. The advantage is that in-memory drawings are quicker, and can be passed as Julia data. This syntax for the `Drawing()` function:
+You can choose to store the drawing in memory. The advantage is that in-memory drawings are quicker, and can be passed as Julia data. It's useful in some environments to not have to worry about writing files. This syntax for the `Drawing()` function:
 
 ```
 Drawing(width, height, surfacetype, [filename])
 ```
 
-lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
+lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. The `@draw` macro creates PNG files in memory.
 
 ## The drawing surface
 

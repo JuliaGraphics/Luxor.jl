@@ -1,20 +1,23 @@
 # Changelog
 
-## [v1.7.0] - September/October 2019
+## [v1.7.0] - 14 October 2019
 
 ### Added
+
+- @draw (thanks hr0m m3m0ry!)
 
 ### Changed
 
 - initnoise() is correctly seedable
 - center3pts() changed
+- use of realpath() in test removed - it seems error-prone
+- testing OpenType fonts in docs
 
 ### Removed
 
 - seednoise()
 
 ### Deprecated
-
 
 ## [v1.6.0] - 19 August 2019
 
