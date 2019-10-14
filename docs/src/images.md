@@ -85,22 +85,20 @@ You can transform images by setting the current matrix, either with `scale()` an
 using Luxor # hide
 Drawing(600, 400, "assets/figures/transform-images.png") # hide
 origin() # hide
-img = readpng("assets/figures/textoutlines.png")
+img = readpng(dirname(dirname(pathof(Luxor))) * "/docs/src/assets/figures/textoutlines.png")
 w = img.width
 h = img.height
-for θ in 0:π/6:2π
+for θ in 0:π/6:2π-π/6
     gsave()
-        scale(.5, .5)
-        rotate(θ)
-        transform([1, 0, -π/4, 1, 250, 0])
-        placeimage(img, -w/2, -h/2, .75)
+    scale(.4, .4)
+    rotate(θ)
+    translate(300, 0)
+    placeimage(img, -w/2, -h/2, 0.9)
     grestore()
 end
-
 finish() # hide
 nothing # hide
 ```
-
 ![transforming images](assets/figures/transform-images.png)
 
 ## Drawing on images

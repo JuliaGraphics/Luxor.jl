@@ -51,6 +51,24 @@ end
 ```
 ![background](assets/figures/circle-dots.png)
 
+The `@draw` macro is useful if you work in Juno or Jupyter and don't need to save work in files. It creates a PNG format drawing in memory, rather than saved in a file. It's displayed in the plot pane or the next cell.
+
+```julia
+@draw begin
+    setopacity(0.85)
+    steps = 20
+    gap   = 2
+    for (n, θ) in enumerate(range(0, step=2π/steps, length=steps))
+        sethue([Luxor.julia_green,
+            Luxor.julia_red,
+            Luxor.julia_purple,
+            Luxor.julia_blue][mod1(n, 4)])
+        sector(O, 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), :fill)
+    end
+end
+```
+![background](assets/figures/drawmacro.png)
+
 ## The Julia logos
 
 Luxor contains built-in functions that draw the Julia logo, either in color or a single color, and the three Julia circles.

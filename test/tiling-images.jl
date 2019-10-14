@@ -5,14 +5,14 @@ using Luxor
 using Test
 
 using Random
+
 Random.seed!(42)
 
-function get_png_files(folder)
-    tempfolder = pwd()
-    cd(folder)
+function get_png_files()
+    folder = dirname(dirname(pathof(Luxor))) * "/docs/src/assets/figures/"
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
-    imagepathlist = map(realpath, imagelist)
-    cd(tempfolder)
+    imagepathlist = map(fn -> folder * "/" * fn, imagelist)
+    @show imagepathlist
     return imagepathlist
 end
 
@@ -44,7 +44,8 @@ function addimagetile(imgfile, xcenter, ycenter, tilewidth, tileheight; cropping
     grestore()
 end
 
-imagelist = get_png_files(".")
+
+imagelist = get_png_files()
 
 shuffle!(imagelist)
 
