@@ -41,15 +41,15 @@ for (pos, n) in pagetiles
     clipreset()
 end
 
-finish()</code></pre><h2><a class="nav-anchor" id="Transforming-images-1" href="#Transforming-images-1">Transforming images</a></h2><p>You can transform images by setting the current matrix, either with <code>scale()</code> and <code>rotate()</code> and similar, or by modifying it directly. This code skews an image made in an earlier chapter of this document and scales and rotates it in a circle:</p><pre><code class="language-julia">img = readpng(&quot;assets/figures/textoutlines.png&quot;)
+finish()</code></pre><h2><a class="nav-anchor" id="Transforming-images-1" href="#Transforming-images-1">Transforming images</a></h2><p>You can transform images by setting the current matrix, either with <code>scale()</code> and <code>rotate()</code> and similar, or by modifying it directly. This code skews an image made in an earlier chapter of this document and scales and rotates it in a circle:</p><pre><code class="language-julia">img = readpng(dirname(dirname(pathof(Luxor))) * &quot;/docs/src/assets/figures/textoutlines.png&quot;)
 w = img.width
 h = img.height
-for θ in 0:π/6:2π
+for θ in 0:π/6:2π-π/6
     gsave()
-        scale(.5, .5)
-        rotate(θ)
-        transform([1, 0, -π/4, 1, 250, 0])
-        placeimage(img, -w/2, -h/2, .75)
+    scale(.4, .4)
+    rotate(θ)
+    translate(300, 0)
+    placeimage(img, -w/2, -h/2, 0.9)
     grestore()
 end</code></pre><p><img src="../assets/figures/transform-images.png" alt="transforming images"/></p><h2><a class="nav-anchor" id="Drawing-on-images-1" href="#Drawing-on-images-1">Drawing on images</a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In these examples, we&#39;ll annotate a PNG file.</p><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
 

@@ -20,7 +20,18 @@ preview()</code></pre><p><code>Drawing(1000, 1000, &quot;hello-world.png&quot;)<
     sethue(&quot;black&quot;)
     foreach(f -&gt; arrow(f, between(f, randpoint, .1), arrowheadlength=6),
         first.(collect(Table(fill(20, 15), fill(20, 15)))))
-end</code></pre><p><img src="../assets/figures/circle-dots.png" alt="background"/></p><h2><a class="nav-anchor" id="The-Julia-logos-1" href="#The-Julia-logos-1">The Julia logos</a></h2><p>Luxor contains built-in functions that draw the Julia logo, either in color or a single color, and the three Julia circles.</p><pre><code class="language-julia">using Luxor
+end</code></pre><p><img src="../assets/figures/circle-dots.png" alt="background"/></p><p>The <code>@draw</code> macro is useful if you work in Juno or Jupyter and don&#39;t need to save work in files. It creates a PNG format drawing in memory, rather than saved in a file. It&#39;s displayed in the plot pane or the next cell.</p><pre><code class="language-julia">@draw begin
+    setopacity(0.85)
+    steps = 20
+    gap   = 2
+    for (n, θ) in enumerate(range(0, step=2π/steps, length=steps))
+        sethue([Luxor.julia_green,
+            Luxor.julia_red,
+            Luxor.julia_purple,
+            Luxor.julia_blue][mod1(n, 4)])
+        sector(O, 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), :fill)
+    end
+end</code></pre><p><img src="../assets/figures/drawmacro.png" alt="background"/></p><h2><a class="nav-anchor" id="The-Julia-logos-1" href="#The-Julia-logos-1">The Julia logos</a></h2><p>Luxor contains built-in functions that draw the Julia logo, either in color or a single color, and the three Julia circles.</p><pre><code class="language-julia">using Luxor
 Drawing(600, 400, &quot;assets/figures/julia-logos.png&quot;)
 origin()
 background(&quot;white&quot;)

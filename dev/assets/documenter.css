@@ -13,6 +13,12 @@
  */
 
 /* fonts */
+
+@font-face {
+    font-family: JuliaMono;
+    src: url("https://cormullion.github.io/assets/fonts/JuliaMono-Regular.woff");
+}
+
 body, input {
   font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
@@ -21,8 +27,9 @@ body, input {
 }
 
 pre, code, kbd {
-  font-family: 'Roboto Mono', Monaco, courier, monospace;
-  font-size: 0.90em;
+    /* font-family: 'Roboto Mono', Monaco, courier, monospace; */
+     font-family: JuliaMono, 'Roboto Mono', Menlo, courier, monospace;
+    font-size: 0.90em;
 }
 
 pre code {
@@ -80,10 +87,6 @@ h4, h5, h6 {
 }
 
 img {
-    max-width: 100%;
-}
-
-video {
     max-width: 100%;
 }
 
