@@ -750,7 +750,7 @@ For a final experiment with our `egg()` function, here's Luxor's `offsetpoly()` 
 ```julia
 @png begin
     egg(80, :path)
-    pgon = first(pathtopoly())
+    pgon = first(pathtopoly()) |> unique
     pc = polycentroid(pgon)
 
     for pt in 1:2:length(pgon)
@@ -800,7 +800,7 @@ background("white")
 origin()
 Random.seed!(42)
 egg(80, :path)
-pgon = first(pathtopoly())
+pgon = first(pathtopoly()) |> unique
 pc = polycentroid(pgon)
 circle(pc, 5, :fill)
 
