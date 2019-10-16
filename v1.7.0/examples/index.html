@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>A few examples · Luxor</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="../"><img class="logo" src="../assets/logo.png" alt="Luxor logo"/></a><h1>Luxor</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Introduction to Luxor</a></li><li class="current"><a class="toctext" href>A few examples</a><ul class="internal"><li><a class="toctext" href="#The-obligatory-&quot;Hello-World&quot;-1">The obligatory &quot;Hello World&quot;</a></li><li><a class="toctext" href="#The-Julia-logos-1">The Julia logos</a></li><li><a class="toctext" href="#Something-a-bit-more-complicated:-a-Sierpinski-triangle-1">Something a bit more complicated: a Sierpinski triangle</a></li><li><a class="toctext" href="#Working-in-Jupyter-and-Juno-1">Working in Jupyter and Juno</a></li><li><a class="toctext" href="#Feature-gallery-1">Feature gallery</a></li></ul></li><li><a class="toctext" href="../tutorial/">Tutorial</a></li><li><a class="toctext" href="../basics/">Basic concepts</a></li><li><a class="toctext" href="../simplegraphics/">Simple shapes</a></li><li><a class="toctext" href="../moregraphics/">More graphics</a></li><li><a class="toctext" href="../geometrytools/">Geometry tools</a></li><li><a class="toctext" href="../tables-grids/">Tables and grids</a></li><li><a class="toctext" href="../colors-styles/">Colors and styles</a></li><li><a class="toctext" href="../polygons/">Polygons and paths</a></li><li><a class="toctext" href="../text/">Text</a></li><li><a class="toctext" href="../transforms/">Transforms and matrices</a></li><li><a class="toctext" href="../clipping/">Clipping</a></li><li><a class="toctext" href="../images/">Images</a></li><li><a class="toctext" href="../turtle/">Turtle graphics</a></li><li><a class="toctext" href="../animation/">Animation</a></li><li><a class="toctext" href="../moreexamples/">More examples</a></li><li><a class="toctext" href="../functionindex/">Index</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>A few examples</a></li></ul><a class="edit-page" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/examples.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>A few examples</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Examples-1" href="#Examples-1">Examples</a></h1><h2><a class="nav-anchor" id="The-obligatory-&quot;Hello-World&quot;-1" href="#The-obligatory-&quot;Hello-World&quot;-1">The obligatory &quot;Hello World&quot;</a></h2><p>Here&#39;s the &quot;Hello world&quot;:</p><p><img src="../assets/figures/hello-world.png" alt="&quot;Hello world&quot;"/></p><pre><code class="language-julia">using Luxor
+Drawing(1000, 1000, &quot;hello-world.png&quot;)
+origin()
+background(&quot;black&quot;)
+sethue(&quot;red&quot;)
+fontsize(50)
+text(&quot;hello world&quot;)
+finish()
+preview()</code></pre><p><code>Drawing(1000, 1000, &quot;hello-world.png&quot;)</code> defines the width, height, location, and type of the finished image. <code>origin()</code> moves the 0/0 point to the centre of the drawing surface (by default it&#39;s at the top left corner). Thanks to <code>Colors.jl</code> we can specify colors by name as well as by numeric value: <code>background(&quot;black&quot;)</code> defines the color of the background of the drawing. <code>text(&quot;helloworld&quot;)</code> draws the text. It&#39;s placed at the current 0/0 point and left-justified if you don&#39;t specify otherwise. <code>finish()</code> completes the drawing and saves the PNG image in the file. <code>preview()</code> tries to open the saved file using some other application (eg Preview on macOS).</p><p>The macros <code>@png</code>, <code>@svg</code>, and <code>@pdf</code> provide shortcuts for making and previewing graphics without having to provide the usual set-up and finish instructions:</p><pre><code class="language-julia"># using Luxor
+
+@png begin
+        fontsize(50)
+        circle(O, 150, :stroke)
+        text(&quot;hello world&quot;, halign=:center, valign=:middle)
+     end</code></pre><p><img src="../assets/figures/hello-world-macro.png" alt="background"/></p><pre><code class="language-julia">@svg begin
+    sethue(&quot;red&quot;)
+    randpoint = Point(rand(-200:200), rand(-200:200))
+    circle(randpoint, 2, :fill)
+    sethue(&quot;black&quot;)
+    foreach(f -&gt; arrow(f, between(f, randpoint, .1), arrowheadlength=6),
+        first.(collect(Table(fill(20, 15), fill(20, 15)))))
+end</code></pre><p><img src="../assets/figures/circle-dots.png" alt="background"/></p><p>The <code>@draw</code> macro is useful if you work in Juno or Jupyter and don&#39;t need to save work in files. It creates a PNG format drawing in memory, rather than saved in a file. It&#39;s displayed in the plot pane or the next cell.</p><pre><code class="language-julia">@draw begin
+    setopacity(0.85)
+    steps = 20
+    gap   = 2
+    for (n, θ) in enumerate(range(0, step=2π/steps, length=steps))
+        sethue([Luxor.julia_green,
+            Luxor.julia_red,
+            Luxor.julia_purple,
+            Luxor.julia_blue][mod1(n, 4)])
+        sector(O, 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), :fill)
+    end
+end</code></pre><p><img src="../assets/figures/drawmacro.png" alt="background"/></p><h2><a class="nav-anchor" id="The-Julia-logos-1" href="#The-Julia-logos-1">The Julia logos</a></h2><p>Luxor contains built-in functions that draw the Julia logo, either in color or a single color, and the three Julia circles.</p><pre><code class="language-julia">using Luxor
+Drawing(600, 400, &quot;assets/figures/julia-logos.png&quot;)
+origin()
+background(&quot;white&quot;)
+for θ in range(0, step=π/8, length=16)
+    gsave()
+    scale(0.25)
+    rotate(θ)
+    translate(250, 0)
+    randomhue()
+    julialogo(action=:fill, color=false)
+    grestore()
+end
+
+gsave()
+scale(0.3)
+juliacircles()
+grestore()
+
+translate(200, -150)
+scale(0.3)
+julialogo()
+finish()
+# preview()</code></pre><p><img src="../assets/figures/julia-logos.png" alt="background"/></p><p>The <code>gsave()</code> function saves the current drawing parameters, and any subsequent changes such as the <code>scale()</code> and <code>rotate()</code> operations are discarded by the next <code>grestore()</code> function.</p><p>Use the extension to specify the format: for example change <code>julia-logos.png</code> to <code>julia-logos.svg</code> or <code>julia-logos.pdf</code> or <code>julia-logos.eps</code> to produce SVG, PDF, or EPS format output.</p><h2><a class="nav-anchor" id="Something-a-bit-more-complicated:-a-Sierpinski-triangle-1" href="#Something-a-bit-more-complicated:-a-Sierpinski-triangle-1">Something a bit more complicated: a Sierpinski triangle</a></h2><p>Here&#39;s a version of the Sierpinski recursive triangle, clipped to a circle.</p><p><img src="../assets/figures/sierpinski.png" alt="Sierpinski"/></p><pre><code class="language-julia"># Subsequent examples will omit these setup and finishing functions:
+#
+# using Luxor, Colors
+# Drawing()
+# background(&quot;white&quot;)
+# origin()
+
+function triangle(points, degree)
+    sethue(cols[degree])
+    poly(points, :fill)
+end
+
+function sierpinski(points, degree)
+    triangle(points, degree)
+    if degree &gt; 1
+        p1, p2, p3 = points
+        sierpinski([p1, midpoint(p1, p2),
+                        midpoint(p1, p3)], degree-1)
+        sierpinski([p2, midpoint(p1, p2),
+                        midpoint(p2, p3)], degree-1)
+        sierpinski([p3, midpoint(p3, p2),
+                        midpoint(p1, p3)], degree-1)
+    end
+end
+
+function draw(n)
+    circle(O, 75, :clip)
+    points = ngon(O, 150, 3, -π/2, vertices=true)
+    sierpinski(points, n)
+end
+
+depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
+cols = distinguishable_colors(depth) # from Colors.jl
+draw(depth)
+
+# finish()
+# preview()</code></pre><p>The Point type is an immutable composite type containing <code>x</code> and <code>y</code> fields that specify a 2D point.</p><h2><a class="nav-anchor" id="Working-in-Jupyter-and-Juno-1" href="#Working-in-Jupyter-and-Juno-1">Working in Jupyter and Juno</a></h2><p>You can use an environment such as a Jupyter notebook or the Juno IDE, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)</p><p><img src="../assets/figures/jupyter-basic.png" alt="Jupyter"/></p><h2><a class="nav-anchor" id="Feature-gallery-1" href="#Feature-gallery-1">Feature gallery</a></h2><p>Here&#39;s a quick visual overview of some of the features in Luxor.jl:</p><p><img src="../assets/figures/luxorgallery.png" alt="&quot;luxor gallery&quot;"/></p><footer><hr/><a class="previous" href="../"><span class="direction">Previous</span><span class="title">Introduction to Luxor</span></a><a class="next" href="../tutorial/"><span class="direction">Next</span><span class="title">Tutorial</span></a></footer></article></body></html>
