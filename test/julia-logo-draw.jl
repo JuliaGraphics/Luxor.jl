@@ -48,9 +48,8 @@ function dropshadow()
     rect(O, 5, 10, :stroke)
     setopacity(0.1)
     for i in 1:steps
-        sethue(gramp[i])
         translate(-0.6, -0.5)
-        julialogo(color=false)
+        julialogo(bodycolor=gramp[i], color=false)
     end
     julialogo()
     grestore()

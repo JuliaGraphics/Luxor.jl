@@ -31,12 +31,13 @@ Some basic matrix transforms:
 
 `transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])` rotates around to `a` radians
 
-    rotate around O: [c -s s c 0 0]
+rotate around O: [c -s s c 0 0]
 
 - shear
 
 `transform([1 0 a 1 0 0])` shears in x direction by `a`
--  shear in y: [1  B 0  1 0 0]
+
+shear in y direction by `a`: [1 a 0 1 0 0]
 
 - x-skew
 

@@ -574,29 +574,34 @@ end
 
 Convert the current path to an array of polygons.
 
-Returns an array of polygons.
+Returns an array of polygons, corresponding to the paths and subpaths of the original path.
 """
 function pathtopoly()
     originalpath = getpathflat()
     polygonlist = Array{Point, 1}[] ; sizehint!(polygonlist, length(originalpath))
-    pointslist = Point[]
     if length(originalpath) > 0
+        pointslist = Point[]
         for e in originalpath
             if e.element_type == Cairo.CAIRO_PATH_MOVE_TO                # 0
-                pointslist = Point[]
-                push!(pointslist, Point(e.points[1], e.points[2]))
+                push!(pointslist, Point(first(e.points), last(e.points)))
             elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO            # 1
-                push!(pointslist, Point(e.points[1], e.points[2]))
+                push!(pointslist, Point(first(e.points), last(e.points)))
             elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH         # 3
-                closepath()
+                if last(pointslist) == first(pointslist)
+                    # don’t repeat first point, we can close it ourselves
+                    if length(pointslist) > 2
+                        pop!(pointslist)
+                    end
+                end
                 push!(polygonlist, pointslist)
+                pointslist = Point[]
             else
                 error("pathtopoly(): unknown CairoPathEntry " * repr(e.element_type))
                 error("pathtopoly(): unknown CairoPathEntry " * repr(e.points))
             end
         end
-        if length(pointslist) > 1
-            # if length is 1, there's a stray moveto point which we don't want
+        # the path was never closed, so flush
+        if length(pointslist) > 0
             push!(polygonlist, pointslist)
         end
     end
