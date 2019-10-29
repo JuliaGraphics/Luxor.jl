@@ -176,7 +176,7 @@ filename "luxor-drawing.png".
 
 creates a PDF drawing in the file "my-drawing.pdf", 400 by 300 pixels.
 
-    Drawing(1200, 800, "my-drawing.svg")`
+    Drawing(1200, 800, "my-drawing.svg")
 
 creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
@@ -492,7 +492,7 @@ end
     @draw drawing-instructions [width] [height]
 
 Preview an PNG drawing, optionally specifying width and height (the
-default is 600 by 600). The file is saved in the temporary directory.
+default is 600 by 600). The drawing is stored in memory, not in a file on disk.
 
 Examples
 
@@ -531,7 +531,7 @@ macro draw(body, width=600, height=600)
         if juno || jupyter
             display(CURRENTDRAWING[1])
         else
-            @info "use Juno or Jupyter"
+            @info "Use Juno or Jupyter; the drawing is stored in memory, not in a file."
         end
     end
 end

@@ -149,7 +149,7 @@ The `@draw`, `@svg`, `@png`, and `@pdf` macros are designed to let you quickly c
 expands to
 
 ```julia
-Drawing(50, 50, "luxor-drawing-(timestamp).png")
+Drawing(50, 50, "luxor-drawing-(timestamp).svg")
 origin()
 background("white")
 sethue("black")

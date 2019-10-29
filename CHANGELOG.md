@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.8.0] - future release November-ish 2019
+
+### Added
+
+### Changed
+
+- pathtopoly() revised
+- generate docs on macOS again
+
+### Removed
+
+### Deprecated
+
 ## [v1.7.0] - 14 October 2019
 
 ### Added
