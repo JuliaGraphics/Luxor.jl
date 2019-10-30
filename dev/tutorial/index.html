@@ -157,7 +157,7 @@ end 800 800 &quot;/tmp/eggstravaganza.png&quot;</code></pre><div></div><p><img s
     poly(pgon, :stroke)
 end</code></pre><div></div><p><img src="../assets/figures/tutorial-egg-8.png" alt="point example"/></p><p>The uneven appearance of the interior points here looks to be a result of the default line join settings. Experiment with <code>setlinejoin(&quot;round&quot;)</code> to see if this makes the geometry look tidier.</p><p>For a final experiment with our <code>egg()</code> function, here&#39;s Luxor&#39;s <code>offsetpoly()</code> function struggling to draw around the spiky egg-based polygon.</p><pre><code class="language-julia">@png begin
     egg(80, :path)
-    pgon = first(pathtopoly())
+    pgon = first(pathtopoly()) |&gt; unique
     pc = polycentroid(pgon)
 
     for pt in 1:2:length(pgon)
