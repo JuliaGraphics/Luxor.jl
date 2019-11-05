@@ -142,25 +142,47 @@ arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.
 sethue(&quot;mediumvioletred&quot;)
 arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
 sethue(&quot;cyan4&quot;)
-arrow(pts[3:6]..., :fill, startarrow=true, finisharrow=true)
+arrow(pts[3:6]..., startarrow=true, finisharrow=true)
 sethue(&quot;midnightblue&quot;)
 arrow(pts[[4, 2, 6, 8]]..., :stroke,
     startarrow=true,
     finisharrow=true,
-    headangle = π/6,
-    headlength = 35,
-    linewidth  = 1.5)</code></pre><p><img src="../assets/figures/arrowbezier.png" alt="arrows"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.arrow" href="#Luxor.arrow"><code>Luxor.arrow</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">arrow(startpoint::Point, endpoint::Point;
+    arrowheadangle = π/6,
+    arrowheadlength = 35,
+    linewidth  = 1.5)</code></pre><p><img src="../assets/figures/arrowbezier.png" alt="arrows"/></p><p>The <code>arrow()</code> functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function:</p><pre><code class="language-none">function marker(n, t)
+    @layer begin
+        sethue(&quot;purple&quot;)
+        circle(O, 20,  :fill)
+        sethue(&quot;white&quot;)
+        fontsize(30)
+        text(string(t), halign=:center, valign=:middle)
+    end
+end</code></pre><p>and then pass it to the <code>decorate</code> keyword:</p><pre><code class="language-julia">pts = ngon(O, 100, 5, vertices=true)
+
+sethue(&quot;mediumvioletred&quot;)
+
+arrow(pts[1:4]..., decorate = () -&gt; marker(10, 3))
+
+sethue(&quot;olivedrab&quot;)
+
+arrow(pts[1:4]..., decorate = () -&gt; ngon(O, 20, 4, 0, :fill), decoration = 0.75, :none)</code></pre><p>Use the <code>decoration</code> keyword to specify a location other than the default 0.5, which places the decoration graphics at the midpoint of the curve.</p><p>The graphics environment provided by the <code>decorate</code> function is centered at the point, and rotated to the slope of the curve at that point. [TODO The slope looks slightly odd - perhaps  the first derivative isn&#39;t ideal for the slope?]</p><p><img src="../assets/figures/arrowbezierdecoration.png" alt="arrows with decoration"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.arrow" href="#Luxor.arrow"><code>Luxor.arrow</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">arrow(startpoint::Point, endpoint::Point;
     linewidth = 1.0,
     arrowheadlength = 10,
-    arrowheadangle = pi/8)</code></pre><p>Draw a line between two points and add an arrowhead at the end. The arrowhead length will be the length of the side of the arrow&#39;s head, and the arrowhead angle is the angle between the sloping side of the arrowhead and the arrow&#39;s shaft.</p><p>Arrows don&#39;t use the current linewidth setting (<code>setline()</code>), and defaults to 1, but you can specify another value. It doesn&#39;t need stroking/filling, the shaft is stroked and the head filled with the current color.</p></div></div><div><div><pre><code class="language-none">arrow(centerpos::Point, radius, startangle, endangle;
+    arrowheadangle = pi/8,
+    decoration = 0.5,
+    decorate = () -&gt; ())</code></pre><p>Draw a line between two points and add an arrowhead at the end. The arrowhead length will be the length of the side of the arrow&#39;s head, and the arrowhead angle is the angle between the sloping side of the arrowhead and the arrow&#39;s shaft.</p><p>Arrows don&#39;t use the current linewidth setting (<code>setline()</code>), and defaults to 1, but you can specify another value. It doesn&#39;t need stroking/filling, the shaft is stroked and the head filled with the current color.</p><p>The <code>decorate</code> keyword argument accepts a function that can execute code at a location on the arrow&#39;s shaft. The inherited graphic environment is centered at a point on the curve between 0 and 1 given by <code>decoration</code>, and the x-axis is aligned with the direction of the curve at that point.</p></div></div><div><div><pre><code class="language-none">arrow(centerpos::Point, radius, startangle, endangle;
     linewidth = 1.0,
     arrowheadlength = 10,
-    arrowheadangle = pi/8)</code></pre><p>Draw a curved arrow, an arc centered at <code>centerpos</code> starting at <code>startangle</code> and ending at <code>endangle</code> with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.</p><p>Arrows don&#39;t use the current linewidth setting (<code>setline()</code>); you can specify the linewidth.</p></div></div><div><div><pre><code class="language-none">arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+    arrowheadangle = pi/8,
+    decoration = 0.5,
+    decorate = () -&gt; ())</code></pre><p>Draw a curved arrow, an arc centered at <code>centerpos</code> starting at <code>startangle</code> and ending at <code>endangle</code> with an arrowhead at the end. Angles are measured clockwise from the positive x-axis.</p><p>Arrows don&#39;t use the current linewidth setting (<code>setline()</code>); you can specify the linewidth.</p><p>The <code>decorate</code> keyword argument accepts a function that can execute code at a location on the arrow&#39;s shaft. The inherited graphic environment is centered at a point on the curve between 0 and 1 given by <code>decoration</code>, and the x-axis is aligned with the direction of the curve at that point.</p></div></div><div><div><pre><code class="language-none">arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke;
     linewidth=1.0,
-    headlength=10,
-    headangle=pi/8,
+    arrowheadlength=10,
+    arrowheadangle=pi/8,
     startarrow=false,
-    finisharrow=true)</code></pre><p>Draw a Bezier curved arrow, from <code>start</code> to <code>finish</code>, with control points <code>C1</code> and <code>C2</code>. Arrow heads can be added/hidden by changing <code>startarrow</code> and <code>finisharrow</code> options.</p></div></div></section><h2><a class="nav-anchor" id="Arcs-and-curves-1" href="#Arcs-and-curves-1">Arcs and curves</a></h2><p>There are a few standard arc-drawing commands, such as <code>curve()</code>, <code>arc()</code>, <code>carc()</code>, and <code>arc2r()</code>. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the <code>:path</code> action, followed by a final <code>:stroke</code> or similar.</p><p><code>curve()</code> constructs Bézier curves from control points:</p><pre><code class="language-julia">setline(.5)
+    finisharrow=true,
+    decoration = 0.5,
+    decorate = () -&gt; ()))</code></pre><p>Draw a Bezier curved arrow, from <code>start</code> to <code>finish</code>, with control points <code>C1</code> and <code>C2</code>. Arrow heads can be added/hidden by changing <code>startarrow</code> and <code>finisharrow</code> options.</p><p>The <code>decorate</code> keyword argument accepts a function that can execute code at a location on the arrow&#39;s shaft. The inherited graphic environment is centered at a point on the curve given by <code>decoration</code>, and the x-axis is aligned with the direction of the curve at that point (TODO - more or less - is it actually correct?).</p></div></div></section><h2><a class="nav-anchor" id="Arcs-and-curves-1" href="#Arcs-and-curves-1">Arcs and curves</a></h2><p>There are a few standard arc-drawing commands, such as <code>curve()</code>, <code>arc()</code>, <code>carc()</code>, and <code>arc2r()</code>. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the <code>:path</code> action, followed by a final <code>:stroke</code> or similar.</p><p><code>curve()</code> constructs Bézier curves from control points:</p><pre><code class="language-julia">setline(.5)
 pt1 = Point(0, -125)
 pt2 = Point(200, 125)
 pt3 = Point(200, -125)
