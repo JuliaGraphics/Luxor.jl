@@ -56,9 +56,9 @@ Return the result of evaluating the Bezier cubic curve function, `t` going from
 (controlling B).
 """
 bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
-      A * (1 - t)^3 +
-      (A1 * 3t * (1 - t)^2) +
-      (B1 * 3t^2 * (1 - t)) +
+      A * (1.0 - t)^3 +
+      (A1 * 3t * (1.0 - t)^2) +
+      (B1 * 3t^2 * (1.0 - t)) +
       (B * t^3)
 
 """
@@ -66,10 +66,10 @@ bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
 
 Return the first derivative of the Bezier function.
 """
-bezier′(t, A, A1, B1, B) = 3(1-t)^2 * (A1-A) + 6(1-t) * t * (B1-A1) + 3t^2 * (B-B1)
+bezier′(t, A, A1, B1, B) = 3(1.0-t)^2 * (A1-A) + 6(1.0-t) * t * (B1-A1) + 3t^2 * (B-B1)
 
 """
-    bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
+    bezier′′(t, A::Point, A1::Point, B1::Point, B::Point)
 
 Return the second derivative of Bezier function.
 """

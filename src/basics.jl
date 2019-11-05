@@ -38,7 +38,7 @@ The scales can also be supplied in tuple form:
 rescale(x, (from_min, from_max), (to_min, to_max))
 ```
 
-```jldoctest
+```
 using Luxor
 julia> rescale(15, 0, 100, 0, 1)
 0.15
@@ -57,6 +57,7 @@ julia> rescale(25, 0, 1, 0, 1.609344)
 
 julia> rescale(15, (0, 100), (1000, 0))
 850.0
+
 ```
 
 """
