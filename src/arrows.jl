@@ -8,7 +8,7 @@ Draw an arrow head. The arrowhead length will be the length of the side of
 the arrow's head, and the arrowhead angle is the angle between the sloping
 side of the arrowhead and the arrow's shaft.
 
-Arrow head don't use the current linewidth setting (`setline()`), and defaults to 1,
+This doesn't use the current linewidth setting (`setline()`), and defaults to 1,
 but you can specify another value.
 """
 function arrowhead(target, action=:fill;
@@ -29,7 +29,9 @@ end
     arrow(startpoint::Point, endpoint::Point;
         linewidth = 1.0,
         arrowheadlength = 10,
-        arrowheadangle = pi/8)
+        arrowheadangle = pi/8,
+        decoration = 0.5,
+        decorate = () -> ())
 
 Draw a line between two points and add an arrowhead at the end. The arrowhead
 length will be the length of the side of the arrow's head, and the arrowhead
@@ -40,11 +42,14 @@ Arrows don't use the current linewidth setting (`setline()`), and defaults to 1,
 but you can specify another value. It doesn't need stroking/filling, the shaft
 is stroked and the head filled with the current color.
 
+The `decorate` keyword argument accepts a function that can execute code at a location on the arrow's shaft. The inherited graphic environment is centered at a point on the curve between 0 and 1 given by `decoration`, and the x-axis is aligned with the direction of the curve at that point.
 """
 function arrow(startpoint::Point, endpoint::Point;
         linewidth=1.0,
         arrowheadlength=10,
-        arrowheadangle=pi/8)
+        arrowheadangle=pi/8,
+        decoration = 0.5,
+        decorate = () -> ())
     gsave()
     setlinejoin("butt")
     setline(linewidth)
@@ -79,6 +84,16 @@ function arrow(startpoint::Point, endpoint::Point;
     botx = endpoint.x + cos(arrowheadbottomsideangle) * arrowheadlength
     boty = endpoint.y + sin(arrowheadbottomsideangle) * arrowheadlength
     poly([Point(topx, topy), endpoint, Point(botx, boty)], :fill)
+
+    # prepare to add decoration at a point along shaft
+    decorationpoint = between(startpoint, endpoint, decoration)
+    slp = slope(startpoint, endpoint)
+
+    @layer begin
+        translate(decorationpoint)
+        rotate(slp)
+        decorate()
+    end
     grestore()
 end
 
@@ -86,18 +101,24 @@ end
     arrow(centerpos::Point, radius, startangle, endangle;
         linewidth = 1.0,
         arrowheadlength = 10,
-        arrowheadangle = pi/8)
+        arrowheadangle = pi/8,
+        decoration = 0.5,
+        decorate = () -> ())
 
 Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and
 ending at `endangle` with an arrowhead at the end. Angles are measured clockwise
 from the positive x-axis.
 
 Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
+
+The `decorate` keyword argument accepts a function that can execute code at a location on the arrow's shaft. The inherited graphic environment is centered at a point on the curve between 0 and 1 given by `decoration`, and the x-axis is aligned with the direction of the curve at that point.
 """
 function arrow(centerpos::Point, radius, startangle, endangle;
         linewidth=1.0,
         arrowheadlength=10,
-        arrowheadangle=pi/8)
+        arrowheadangle=pi/8,
+        decoration = 0.5,
+        decorate = () -> ())
     gsave()
     setlinejoin("butt")
     setline(linewidth)
@@ -142,47 +163,68 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     boty =                     endpoint.y + sin(arrowheadoutersideangle) * arrowheadlength
     poly([Point(topx, topy), Point(endpoint.x, endpoint.y), Point(botx, boty)], :fill)
     grestore()
+
+    # prepare to add decoration at a point along shaft
+    decorationangle = rescale(decoration, 0, 1, startangle, newendangle)
+    decorationpoint = Point(radius * cos(decorationangle), radius * sin(decorationangle))
+    perp = perpendicular(decorationpoint)
+    @layer begin
+        translate(decorationpoint)
+        rotate(slope(decorationpoint, perp))
+        decorate()
+    end
 end
 
 """
-    arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+    arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke;
         linewidth=1.0,
-        headlength=10,
-        headangle=pi/8,
+        arrowheadlength=10,
+        arrowheadangle=pi/8,
         startarrow=false,
-        finisharrow=true)
+        finisharrow=true,
+        decoration = 0.5,
+        decorate = () -> ()))
 
 Draw a Bezier curved arrow, from `start` to `finish`, with control points `C1`
 and `C2`. Arrow heads can be added/hidden by changing `startarrow` and
 `finisharrow` options.
+
+The `decorate` keyword argument accepts a function that can execute code at a location on the arrow's shaft. The inherited graphic environment is centered at a point on the curve given by `decoration`, and the x-axis is aligned with the direction of the curve at that point (TODO - more or less - is it actually correct?).
 """
-function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:fill;
+function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke;
+        # optional
         linewidth=1.0,
-        headlength=10,
-        headangle=pi/8,
+        arrowheadlength=10,
+        arrowheadangle=pi/8,
+        arrowheadfill=true,
         startarrow=false,
-        finisharrow=true)
-        gsave()
-    setline(linewidth)
+        finisharrow=true,
+        decoration = 0.5,
+        decorate = () -> ())
+    @layer begin
+        setline(linewidth)
 
-    move(start)
-    curve(C1, C2, finish)
-    do_action(:stroke)
+        move(start)
+        curve(C1, C2, finish)
+        do_action(action)
 
-    start_shaftangle  = slope(start, C1)
-    finish_shaftangle = slope(C2, finish)
+        start_shaftangle  = slope(start, C1)
+        finish_shaftangle = slope(C2, finish)
 
-    finisharrow && arrowhead(finish,
-        action,
-        headlength=headlength,
-        headangle=headangle,
-        shaftangle=pi + finish_shaftangle)
-    startarrow && arrowhead(start,
-        action,
-        headlength=headlength,
-        headangle=headangle,
-        shaftangle=start_shaftangle)
-    grestore()
+        finisharrow && arrowhead(finish, arrowheadfill == true ? :fill : :stroke, headlength = arrowheadlength, headangle = arrowheadangle, shaftangle = π + finish_shaftangle)
+        startarrow && arrowhead(start, arrowheadfill == true ? :fill : :stroke, headlength = arrowheadlength, headangle = arrowheadangle,   shaftangle = start_shaftangle)
+
+        # prepare to add decoration at a point along shaft
+        decorationpoint = bezier(decoration, start, C1, C2, finish)
+        firstderiv = bezier′(decoration, start, C1, C2, finish)
+
+        @layer begin
+            translate(decorationpoint)
+            rotate(slope(decorationpoint, firstderiv))
+            decorate()
+        end
+
+    end # layer
 end
 
 """

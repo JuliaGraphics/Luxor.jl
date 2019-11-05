@@ -4,10 +4,13 @@
 
 ### Added
 
+- `arrow()` arrows can have decoration (arbitrary graphics) drawn at a location along the shaft
+
 ### Changed
 
-- pathtopoly() revised
-- generate docs on macOS again
+- `pathtopoly()`` revised
+- now generating docs on macOS again
+- some `arrowhead` options renamed to be more consistent
 
 ### Removed
 

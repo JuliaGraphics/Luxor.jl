@@ -432,18 +432,72 @@ pts = ngon(O, 100, 8, vertices=true)
 sethue("mediumvioletred")
 arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
 sethue("cyan4")
-arrow(pts[3:6]..., :fill, startarrow=true, finisharrow=true)
+arrow(pts[3:6]..., startarrow=true, finisharrow=true)
 sethue("midnightblue")
 arrow(pts[[4, 2, 6, 8]]..., :stroke,
     startarrow=true,
     finisharrow=true,
-    headangle = π/6,
-    headlength = 35,
+    arrowheadangle = π/6,
+    arrowheadlength = 35,
     linewidth  = 1.5)
 finish() # hide
 nothing # hide
 ```
 ![arrows](assets/figures/arrowbezier.png)
+
+The `arrow()` functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function:
+
+```
+function marker(n, t)
+    @layer begin
+        sethue("purple")
+        circle(O, 20,  :fill)
+        sethue("white")
+        fontsize(30)
+        text(string(t), halign=:center, valign=:middle)
+    end
+end
+```
+
+and then pass it to the `decorate` keyword:
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/arrowbezierdecoration.png") # hide
+background("white") # hide
+origin() # hide
+setline(2) # hide
+
+function marker(n, t) #hide
+    @layer begin #hide
+        sethue("purple") #hide
+        circle(O, 20,  :fill) #hide
+        sethue("white") #hide
+        fontsize(30) #hide
+        text(string(t), halign=:center, valign=:middle) #hide
+    end #hide
+end #hide
+
+pts = ngon(O, 100, 5, vertices=true)
+
+sethue("mediumvioletred")
+
+arrow(pts[1:4]..., decorate = () -> marker(10, 3))
+
+sethue("olivedrab")
+
+arrow(pts[1:4]..., decorate = () -> ngon(O, 20, 4, 0, :fill), decoration = 0.75, :none)
+
+finish() # hide
+nothing # hide
+```
+
+Use the `decoration` keyword to specify a location other than the default 0.5, which places the decoration graphics at the midpoint of the curve.
+
+The graphics environment provided by the `decorate` function is centered at the point, and rotated to the slope of the curve at that point. [TODO The slope looks slightly odd - perhaps  the first derivative isn't ideal for the slope?]
+
+![arrows with decoration](assets/figures/arrowbezierdecoration.png)
+
 
 ```@docs
 arrow

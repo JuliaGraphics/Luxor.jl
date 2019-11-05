@@ -49,14 +49,17 @@ function arrow_arc_test(fname)
 
   # test Bezier arrow
   setopacity(1.0)
-  arrow(pagetiles[1][1], pagetiles[2][1], pagetiles[5][1], pagetiles[6][1],
+  sethue("red")
+  arrow(pagetiles[1][1], pagetiles[3][1], pagetiles[6][1], pagetiles[7][1],
     linewidth=5,
-    headlength=30,
+    arrowheadlength=50,
+    arrowheadfill = false,
+    arrowheadangle=π/4,
     startarrow=true)
 
-  @test finish() == true  
+  @test finish() == true
   println("...finished arrow-test: saved in $(fname)")
 end
 
-fname = "arrow-arctest.pdf"
+fname = "arrow-arctest.png"
 arrow_arc_test(fname)

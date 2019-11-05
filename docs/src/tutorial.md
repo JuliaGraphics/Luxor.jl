@@ -136,7 +136,7 @@ Next, make two points, A and B, which will lie either side of the origin point. 
     A, B = [Point(x, 0) for x in [-radius, radius]]
 ```
 
-`x` uses two values from the inner array, and a Point using each value is created and stored in a new array. It seems hardly worth doing for two points, but it shows how you can assign more than one variable at the same time, and also how to generate more than two points.
+`x` uses two values from the inner array, and a Point using each value is created and stored in its own variable. It seems hardly worth doing for two points, but it shows how you can assign more than one variable at the same time, and also how to generate points.
 
 With two points defined, draw a line from A to B, and stroke it.
 
