@@ -420,7 +420,7 @@ nothing # hide
 ```
 ![arrows](assets/figures/arrow.png)
 
-If you provide four points, you can draw a Bézier curve with arrowheads at each end. Use the various options to control the presence and appearance.
+If you provide four points, you can draw a Bézier curve with optional arrowheads at each end. Use the various options to control their presence and appearance.
 
 ```@example
 using Luxor # hide
@@ -445,13 +445,13 @@ nothing # hide
 ```
 ![arrows](assets/figures/arrowbezier.png)
 
-The `arrow()` functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function:
+The `arrow()` functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function that draws text `t` in a circle of radius `r` :
 
 ```
-function marker(n, t)
+function marker(r, t)
     @layer begin
         sethue("purple")
-        circle(O, 20,  :fill)
+        circle(O, r,  :fill)
         sethue("white")
         fontsize(30)
         text(string(t), halign=:center, valign=:middle)
@@ -459,7 +459,7 @@ function marker(n, t)
 end
 ```
 
-and then pass it to the `decorate` keyword:
+and then pass it to the `decorate` keyword. By default, the graphics origin when the function is called is placed at the midpoint (0.5) of the arrow's shaft.
 
 ```@example
 using Luxor # hide
@@ -468,12 +468,12 @@ background("white") # hide
 origin() # hide
 setline(2) # hide
 
-function marker(n, t) #hide
+function marker(r, t) #hide
     @layer begin #hide
         sethue("purple") #hide
-        circle(O, 20,  :fill) #hide
+        circle(O, r,  :fill) #hide
         sethue("white") #hide
-        fontsize(30) #hide
+        fontsize(25) #hide
         text(string(t), halign=:center, valign=:middle) #hide
     end #hide
 end #hide
@@ -482,22 +482,22 @@ pts = ngon(O, 100, 5, vertices=true)
 
 sethue("mediumvioletred")
 
+# using an anonymous function
 arrow(pts[1:4]..., decorate = () -> marker(10, 3))
 
 sethue("olivedrab")
 
+# no arrow, just a graphic, at 0.75
 arrow(pts[1:4]..., decorate = () -> ngon(O, 20, 4, 0, :fill), decoration = 0.75, :none)
 
 finish() # hide
 nothing # hide
 ```
-
-Use the `decoration` keyword to specify a location other than the default 0.5, which places the decoration graphics at the midpoint of the curve.
-
-The graphics environment provided by the `decorate` function is centered at the point, and rotated to the slope of the curve at that point. [TODO The slope looks slightly odd - perhaps  the first derivative isn't ideal for the slope?]
-
 ![arrows with decoration](assets/figures/arrowbezierdecoration.png)
 
+Use the `decoration` keyword to specify a location other than the default 0.5.
+
+The graphics environment provided by the `decorate` function is centered at the decoration point, and rotated to the slope of the curve at that point.
 
 ```@docs
 arrow

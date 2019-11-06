@@ -20,12 +20,13 @@ function arrow_test(fname)
     setlinejoin()
     randomhue()
     gsave()
-    arrow(pos, Point(pos.x + 200, pos.y), linewidth=rand(1:20), arrowheadlength=rand(1:30), arrowheadangle=rand(pi/20:pi/12:pi/3))
+    arrow(pos, Point(pos.x + 200, pos.y), decorate = () -> circle(O, 5, :stroke), linewidth=rand(1:20), arrowheadlength=rand(1:30), arrowheadangle=rand(pi/20:pi/12:pi/3))
     # same length as a non-arrow line?
     line(Point(pos.x, pos.y+10), Point(pos.x + 200, pos.y+10), :stroke)
     grestore()
   end
   @test finish() == true
+
 end
 
 Random.seed!(42)
