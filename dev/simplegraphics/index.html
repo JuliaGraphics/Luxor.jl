@@ -138,7 +138,7 @@ end</code></pre><pre><code class="language-none">true</code></pre><p><img src=".
     vertices=false)</code></pre><p>Draw a straight line through <code>pos</code> at an angle <code>theta</code> from the x axis.</p><p>By default, the line spans the entire drawing, but you can supply a BoundingBox to change the extent of the line.</p><pre><code class="language-none">rule(O)       # draws an x axis
 rule(O, pi/2) # draws a  y axis</code></pre><p>The function:</p><pre><code class="language-none">rule(O, pi/2, boundingbox=BoundingBox()/2)</code></pre><p>draws a line that spans a bounding box half the width and height of the drawing, and returns a Set of end points. If you just want the vertices and don&#39;t want to draw anything, use <code>vertices=true</code>.</p></div></div></section><h2><a class="nav-anchor" id="Arrows-1" href="#Arrows-1">Arrows</a></h2><p>You can draw lines, arcs, and curves with arrows at the end with <code>arrow()</code>. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the <code>arrowheadlength</code> and <code>arrowheadangle</code> of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to <code>setline(1)</code>), but you can specify another.</p><pre><code class="language-julia">arrow(O, Point(0, -65))
 arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
-arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)</code></pre><p><img src="../assets/figures/arrow.png" alt="arrows"/></p><p>If you provide four points, you can draw a Bézier curve with arrowheads at each end. Use the various options to control the presence and appearance.</p><pre><code class="language-julia">pts = ngon(O, 100, 8, vertices=true)
+arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)</code></pre><p><img src="../assets/figures/arrow.png" alt="arrows"/></p><p>If you provide four points, you can draw a Bézier curve with optional arrowheads at each end. Use the various options to control their presence and appearance.</p><pre><code class="language-julia">pts = ngon(O, 100, 8, vertices=true)
 sethue(&quot;mediumvioletred&quot;)
 arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
 sethue(&quot;cyan4&quot;)
@@ -149,23 +149,25 @@ arrow(pts[[4, 2, 6, 8]]..., :stroke,
     finisharrow=true,
     arrowheadangle = π/6,
     arrowheadlength = 35,
-    linewidth  = 1.5)</code></pre><p><img src="../assets/figures/arrowbezier.png" alt="arrows"/></p><p>The <code>arrow()</code> functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function:</p><pre><code class="language-none">function marker(n, t)
+    linewidth  = 1.5)</code></pre><p><img src="../assets/figures/arrowbezier.png" alt="arrows"/></p><p>The <code>arrow()</code> functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function that draws text <code>t</code> in a circle of radius <code>r</code> :</p><pre><code class="language-none">function marker(r, t)
     @layer begin
         sethue(&quot;purple&quot;)
-        circle(O, 20,  :fill)
+        circle(O, r,  :fill)
         sethue(&quot;white&quot;)
         fontsize(30)
         text(string(t), halign=:center, valign=:middle)
     end
-end</code></pre><p>and then pass it to the <code>decorate</code> keyword:</p><pre><code class="language-julia">pts = ngon(O, 100, 5, vertices=true)
+end</code></pre><p>and then pass it to the <code>decorate</code> keyword. By default, the graphics origin when the function is called is placed at the midpoint (0.5) of the arrow&#39;s shaft.</p><pre><code class="language-julia">pts = ngon(O, 100, 5, vertices=true)
 
 sethue(&quot;mediumvioletred&quot;)
 
+# using an anonymous function
 arrow(pts[1:4]..., decorate = () -&gt; marker(10, 3))
 
 sethue(&quot;olivedrab&quot;)
 
-arrow(pts[1:4]..., decorate = () -&gt; ngon(O, 20, 4, 0, :fill), decoration = 0.75, :none)</code></pre><p>Use the <code>decoration</code> keyword to specify a location other than the default 0.5, which places the decoration graphics at the midpoint of the curve.</p><p>The graphics environment provided by the <code>decorate</code> function is centered at the point, and rotated to the slope of the curve at that point. [TODO The slope looks slightly odd - perhaps  the first derivative isn&#39;t ideal for the slope?]</p><p><img src="../assets/figures/arrowbezierdecoration.png" alt="arrows with decoration"/></p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.arrow" href="#Luxor.arrow"><code>Luxor.arrow</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">arrow(startpoint::Point, endpoint::Point;
+# no arrow, just a graphic, at 0.75
+arrow(pts[1:4]..., decorate = () -&gt; ngon(O, 20, 4, 0, :fill), decoration = 0.75, :none)</code></pre><p><img src="../assets/figures/arrowbezierdecoration.png" alt="arrows with decoration"/></p><p>Use the <code>decoration</code> keyword to specify a location other than the default 0.5.</p><p>The graphics environment provided by the <code>decorate</code> function is centered at the decoration point, and rotated to the slope of the curve at that point.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="Luxor.arrow" href="#Luxor.arrow"><code>Luxor.arrow</code></a> — <span class="docstring-category">Function</span>.</div><div><div><pre><code class="language-julia">arrow(startpoint::Point, endpoint::Point;
     linewidth = 1.0,
     arrowheadlength = 10,
     arrowheadangle = pi/8,
