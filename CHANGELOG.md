@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.8.0] - future release November-ish 2019
+## [v1.8.0] - 17 November 2019
 
 ### Added
 
@@ -8,9 +8,11 @@
 
 ### Changed
 
-- `pathtopoly()`` revised
-- now generating docs on macOS again
+- `pathtopoly()` revised
+- generating docs on macOS again, now that Travis/Cairo/macOS is back to normal
 - some `arrowhead` options renamed to be more consistent
+- bug fixed in `box()` with rounded corners (Thanks Anthony!)
+- mktempdir()
 
 ### Removed
 
@@ -26,7 +28,7 @@
 
 - initnoise() is correctly seedable
 - center3pts() changed
-- use of realpath() in test removed - it seems error-prone
+- use of realpath() in test removed - it seems error-prone on recent macOS systems
 - testing OpenType fonts in docs
 
 ### Removed

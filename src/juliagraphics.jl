@@ -187,12 +187,11 @@ function julialogo(;action=:fill,
 
     color && setcolor(julia_green) # green
     circle(Point(261.299, 31.672), Point(226.299, 31.672), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
 
-    if action == :clip
-        clip()
-    else
+    if action ≠ :clip
         do_action(action)
+    else
+        clip()
     end
     # restore saved color
     setcolor(r, g, b, a)
