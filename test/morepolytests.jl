@@ -140,8 +140,14 @@ end
 
 @testset "insertvertices tests" begin
     pgon = star(Point(20, 20), 200, 12, 0.7, π/7, vertices=true)
+    setline(5)
+    sethue("magenta")
+    prettypoly(pgon, :stroke, () -> circle(O, 20, :fill))
     originallength = length(pgon)
     @test length(insertvertices!(pgon)) == 2originallength
+    sethue("black")
+    setline(2)
+    prettypoly(pgon, :stroke, () -> circle(O, 10, :stroke))
 end
 
 @test finish() == true

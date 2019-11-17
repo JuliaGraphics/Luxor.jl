@@ -161,7 +161,7 @@ textextents(str) = Cairo.text_extents(get_current_cr(), str)
 """
     textpath(t)
 
-Convert the text in string `t` to a new path, for subsequent filling/stroking etc...
+Convert the text in string `t` and adds closed paths to the current path, for subsequent filling/stroking etc...
 
 Typically you'll have to use `pathtopoly()` or `getpath()` or `getpathflat()` then
 work through the one or more path(s). Or use `textoutlines()`.
@@ -176,6 +176,8 @@ end
         valign=:baseline)
 
 Convert text to a graphic path and apply `action`.
+
+Note that this function discards any current path, so use `textpath()` to include text into other graphic constructions.
 """
 function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     halign=:left,

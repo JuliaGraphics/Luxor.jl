@@ -100,9 +100,9 @@ box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing) =
     rect(x - width/2.0, y - height/2.0, width, height, action)
 
 """
-    box(x, y, width, height, cornerradius, action=:nothing)
+    box(pt, width, height, cornerradius, action=:nothing)
 
-Draw a box/rectangle centered at point `x/y` with `width` and `height` and
+Draw a box/rectangle centered at point `pt` with `width` and `height` and
 round each corner by `cornerradius`.
 """
 function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:stroke)
@@ -142,7 +142,6 @@ function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:st
 
     arc(p4center, cornerradius, (3pi)/2, 2pi, :none)
     line(p4end)
-    line(p1start)
 
     closepath()
     do_action(action)

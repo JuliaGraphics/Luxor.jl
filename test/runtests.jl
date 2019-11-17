@@ -145,10 +145,15 @@ function run_all_tests()
 end
 
 if get(ENV, "LUXOR_KEEP_TEST_RESULTS", false) == "true"
-        cd(mktempdir())
-        @info("...Keeping the results")
+        # they changed mktempdir in v1.3
+        if VERSION <= v"1.2"
+            cd(mktempdir())
+        else
+            cd(mktempdir(cleanup=false))
+        end
+        @info("...Keeping the results in: $(pwd())")
         run_all_tests()
-        @info("Test images saved in: $(pwd())")
+        @info("Test images were saved in: $(pwd())")
 else
     mktempdir() do tmpdir
         cd(tmpdir) do
