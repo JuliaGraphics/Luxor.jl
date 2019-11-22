@@ -196,7 +196,7 @@ $(document).ready(function() {
             fields: ["title"],
             boost: 10,
             usePipeline: false,
-            editDistance: 0,
+            editDistance: 2,
             wildcard: lunr.Query.wildcard.NONE
           })
           q.term(t.toString(), {
