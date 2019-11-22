@@ -88,6 +88,7 @@ end
         # test that error is thrown if the passed pathname points to a directory
         # and that the content of that directory is not removed (ticket #57)
         @test isdir(tmpdir)
+        @warn "This is about to error..."
         @test animate(demo, Scene(demo, backdrop, 0:200),
             creategif=false,
             pathname=tmpdir) == false

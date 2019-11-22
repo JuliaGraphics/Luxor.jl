@@ -83,6 +83,7 @@ function run_all_tests()
 
     @testset "arrows and dimensions" begin
         include("arrow-arc-test.jl")
+        include("arrow-bezier-test.jl")
         include("arrow-line-test.jl")
         include("dimensioning.jl")
     end

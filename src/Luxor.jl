@@ -44,6 +44,7 @@ include("Table.jl")
 include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
+include("graphlayout.jl")
 #include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
 export Drawing,
@@ -151,7 +152,10 @@ export Drawing,
 
     # experimental polygon functions
     polyremovecollinearpoints, polytriangulate!, polytriangulate,
-    ispointinsidetriangle, ispolyclockwise, polyorientation
+    ispointinsidetriangle, ispolyclockwise, polyorientation,
+
+    # misc
+    layoutgraph
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0
