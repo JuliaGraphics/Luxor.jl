@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.9.0] - perhaps christmas 2019?
+
+### Added
+
+- Bezier `arrow()`s can also be defined by height now
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v1.8.0] - 17 November 2019
 
 ### Added

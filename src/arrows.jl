@@ -228,6 +228,50 @@ function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke
 end
 
 """
+    arrow(start::Point, finish::Point, height::Vector, action=:stroke;
+        keyword arguments...)
+
+Draw a Bézier arrow between `start` and `finish`, with control points defined to fit in
+an imaginary box defined by the two supplied `height` values (see `bezierfrompoints()`). If the height values are different signs, the arrow will change direction on its way.
+
+Keyword arguments are the same as [`arrow(pt1, pt2, pt3, pt4)`](@ref).
+"""
+function arrow(start::Point, finish::Point, height::Vector, action=:stroke;
+        # optional kwargs
+        linewidth=1.0,
+        arrowheadlength=10,
+        arrowheadangle=pi/8,
+        arrowheadfill=true,
+        startarrow=false,
+        finisharrow=true,
+        decoration = 0.5,
+        decorate = () -> ())
+    @layer begin
+        s = slope(start, finish)
+        perp1 = start +  polar(height[1], s - π/2)
+        perp2 = finish + polar(height[2], s - π/2)
+    end
+
+    cpt1 = between(perp1, perp2, 0.33)
+    cpt2 = between(perp1, perp2, 0.66)
+    pts = bezierfrompoints([start,
+        cpt1,
+        cpt2,
+        finish])
+
+    # i've forgotten how to do this better...
+    arrow(pts[1], pts[2], pts[3], pts[4], action,
+        linewidth=linewidth,
+        arrowheadlength=arrowheadlength,
+        arrowheadangle=arrowheadangle,
+        arrowheadfill=arrowheadfill,
+        startarrow=startarrow,
+        finisharrow=finisharrow,
+        decoration = decoration,
+        decorate = decorate)
+end
+
+"""
     dimension(p1::Point, p2::Point;
         format::Function   = (d) -> string(d), # process the measured value into a string
         offset             = 0.0,              # left/right, parallel with x axis
