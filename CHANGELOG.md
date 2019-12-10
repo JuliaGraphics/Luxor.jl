@@ -1,10 +1,12 @@
 # Changelog
 
-## [v1.9.0] - perhaps christmas 2019?
+## [v1.9.0] - December 2019
+
+- changed compatibility versions in Project.toml
 
 ### Added
 
-- Bezier `arrow()`s can also be defined by height now
+- Bezier `arrow()`s can also be defined by height of box
 
 ### Changed
 

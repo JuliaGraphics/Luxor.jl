@@ -68,7 +68,7 @@ function layout_spring(adjmatrix::Array{T,2} where T;
     densityconstant = 2.0,
     maxiterations = 100,
     initialtemperature = 2.0,
-    boundingbox = BoundingBox() * 0.9)
+    boundingbox =  BoundingBox(O - (250, 250), O + (250, 250)))
 
     N = size(adjmatrix, 1)
     if N != size(adjmatrix, 2)
