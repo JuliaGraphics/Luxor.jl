@@ -3,7 +3,7 @@
 <defs>
 <g>
 <symbol overflow="visible" id="glyph0-0">
-<path style="stroke:none;" d=""/>
+<path style="stroke:none;" d="M 0.386719 0 L 0.386719 -8.609375 L 7.21875 -8.609375 L 7.21875 0 Z M 6.140625 -1.078125 L 6.140625 -7.53125 L 1.464844 -7.53125 L 1.464844 -1.078125 Z M 6.140625 -1.078125 "/>
 </symbol>
 <symbol overflow="visible" id="glyph0-1">
 <path style="stroke:none;" d="M 0.75 -8.664062 L 3 -8.664062 L 3 -7.804688 L 1.746094 -7.804688 L 1.746094 1.5 L 3 1.5 L 3 2.359375 L 0.75 2.359375 Z M 0.75 -8.664062 "/>
@@ -35,7 +35,7 @@
 </symbol>
 </g>
 </defs>
-<g id="surface205">
+<g id="surface206">
 <rect x="0" y="0" width="600" height="180" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
   <use xlink:href="#glyph0-1" x="18.964844" y="44.332031"/>
