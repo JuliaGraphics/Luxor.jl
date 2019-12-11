@@ -7624,7 +7624,7 @@ html.theme--documenter-dark {
 
 
 
-/* font tests */
+/* alterations to shipped css */
 
 @font-face {
     font-family: JuliaMono;
@@ -7633,4 +7633,10 @@ html.theme--documenter-dark {
 
 pre, code, kbd {
     font-family: JuliaMono, 'Roboto Mono', Menlo, courier, monospace !important;
+}
+
+p > code {
+	color: #eed !important;
+	background-color: #111 !important;
+	font-size: 1em !important;
 }
