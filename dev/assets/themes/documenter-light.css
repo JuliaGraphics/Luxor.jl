@@ -7608,7 +7608,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 .hljs-strong {
   font-weight: bold; }
 
-/* font tests */
+/* local modifications to default */
 
 @font-face {
     font-family: JuliaMono;
@@ -7617,4 +7617,8 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 
 pre, code, kbd {
     font-family: JuliaMono, 'Roboto Mono', Menlo, courier, monospace !important;
+}
+
+p > code {
+	color: #533 !important;
 }
