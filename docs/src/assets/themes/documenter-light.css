@@ -7620,5 +7620,7 @@ pre, code, kbd {
 }
 
 p > code {
-	color: #533 !important;
+	color: #333 !important;
+	background-color: #eee !important;
+	font-size: 1em !important;
 }
