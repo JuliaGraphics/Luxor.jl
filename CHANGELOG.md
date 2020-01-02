@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.10.0] - January 2020
+
+- changed compatibility versions in Project.toml (Colors/Cairo)
+
+### Added
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v1.9.0] - December 2019
 
 - changed compatibility versions in Project.toml

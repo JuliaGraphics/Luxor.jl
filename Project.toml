@@ -1,7 +1,7 @@
 name = "Luxor"
 uuid = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
 authors = ["cormullion <cormullion@mac.com>"]
-version = "1.9.0"
+version = "1.10.0"
 
 [deps]
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
@@ -21,8 +21,8 @@ test = ["Test"]
 
 [compat]
 julia         = "1"
-Cairo         = "0.5, 0.6, 0.7, 0.8, 1.0"
-Colors        = "0.6, 0.9, 1.0"
+Cairo         = "^1"
+Colors        = "0, ^1"
 FileIO        = "^1.0"
 ImageMagick   = "^0.7"
 Juno          = "^0.7"
