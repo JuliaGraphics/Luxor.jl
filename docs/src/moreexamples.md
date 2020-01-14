@@ -255,6 +255,9 @@ nothing #hide
 ![Luxor logo](assets/figures/luxor-logo.png)
 
 ## A Japanese-style Temple scene
+
+This code was created by **kfung**, a student that participated in [Google Code-in](https://codein.withgoogle.com/about/) 2019 competition.
+
 ```@example
 using Luxor
 Drawing(1280, 720, "temple.png")
