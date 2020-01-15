@@ -369,7 +369,7 @@ sethue("black")
 circle(-10, 260, 4, :fill)
 circle(10, 260, 4, :fill)
 finish()
-preview()
+nothing # hide
 ```
 
 ![temple](assets/figures/temple.png)
