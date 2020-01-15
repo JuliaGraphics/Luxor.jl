@@ -2,7 +2,7 @@
 # adapted from various places, modified for use with Luxor
 
 """
-    layoutgraph(am)
+    layoutgraph(am::Array{T,2}; kwargs...)
 
 Layout the graph in adjacency matrix `am`, using a spring-based method. Returns a tuple of `([xcoords], [ycoords])`.
 
@@ -13,31 +13,6 @@ Layout the graph in adjacency matrix `am`, using a spring-based method. Returns 
 ```maxiterations = 100```
 
 ```initialtemperature = 2.0```
-
-See [`layout_spring`](@ref).
-"""
-layoutgraph(a::Array{T,2} where T; kwargs...) = layout_spring(a; kwargs...)
-
-"""
-    layoutgraph(al)
-
-Layout the graph in adjacency list `al`, assuming the graph is a tree layout with a single root node. Return a list of Luxor points that can be used to lay out the nodes of the tree.
-
-### Keyword arguments
-
-```nodesize=ones(size(adjlist, 1)))```
-
-`nodesize` is a vector of values that define the area occupied by each node. No idea how it works yet...
-
-See [`layout_tree`](@ref).
-"""
-layoutgraph(a::AbstractVector; kwargs...) = layout_tree(a; kwargs...)
-
-"""
-    layout_spring(adjmatrix::Array{T,2} where T;
-        densityconstant = 2.0,
-        maxiterations = 100,
-        initialtemperature = 2.0)
 
 Layout the graph in `adjmatrix` using the spring/repulsion model of Fruchterman and Reingold (1991).
 
@@ -61,13 +36,47 @@ Repulsive force:  `f_r(d) = -k^2 / d`, where d is distance between two vertices 
 `initialtemperature`
     the initial temperature controls movement per iteration
 
+`locs_x`
+    the starting x values. Randomized to between -1 and 1.
+
+`locs_y`
+    the starting y values. Randomized to between -1 and 1.
+
 `boundingbox`
-    BoundingBox into which the graphs coordinates will fit
+    BoundingBox into which the graphs coordinates will fit. Defaults to 500 × 500.
+"""
+layoutgraph(a::Array{T,2} where T; kwargs...) = layout_spring(a; kwargs...)
+
+"""
+    layoutgraph(al::AbstractVector; kwargs)
+
+Layout the graph in adjacency list `al`, assuming the graph is a tree layout with a single root node. Return a list of Luxor points that can be used to lay out the nodes of the tree.
+
+### Keyword arguments
+
+```nodesize=ones(size(adjlist, 1)))```
+
+`nodesize` is a vector of values that define the area occupied by each node. No idea how it works yet...
+
+Return a list of Luxor points that can be used to lay out a tree defined in adjacency list `adjlist`.
+"""
+layoutgraph(a::AbstractVector; kwargs...) = layout_tree(a; kwargs...)
+
+"""
+    layout_spring(adjmatrix::Array{T,2} where T;
+        densityconstant = 2.0,
+        maxiterations = 100,
+        initialtemperature = 2.0,
+        boundingbox=BoundingBox(O - (250, 250), O + (250, 250)))
+
+
 """
 function layout_spring(adjmatrix::Array{T,2} where T;
     densityconstant = 2.0,
     maxiterations = 100,
     initialtemperature = 2.0,
+    locs_x = 2rand(size(adjmatrix, 1)) .- 1.0,
+    locs_y = 2rand(size(adjmatrix, 1)) .- 1.0,
     boundingbox =  BoundingBox(O - (250, 250), O + (250, 250)))
 
     N = size(adjmatrix, 1)
@@ -76,8 +85,6 @@ function layout_spring(adjmatrix::Array{T,2} where T;
     end
 
     # randomize results arrays, normalized to between -1 and 1
-    locs_x = 2rand(N) .- 1.0
-    locs_y = 2rand(N) .- 1.0
 
     # the optimal distance bewteen normalized vertices
     K = densityconstant * sqrt(4.0 / N)
@@ -97,10 +104,10 @@ function layout_spring(adjmatrix::Array{T,2} where T;
                 d_y = locs_y[j] - locs_y[i]
                 d   = sqrt(d_x^2 + d_y^2)
                 if adjmatrix[i,j] != zero(eltype(adjmatrix)) || adjmatrix[j,i] != zero(eltype(adjmatrix))
-                    F_d = d / K - K^2 / d^2
+                    F_d = d^2 / K
                 else
                     # Just repulsive
-                    F_d = -K^2 / d^2
+                    F_d = -K^2 / d
                 end
                 force_vec_x += F_d * d_x
                 force_vec_y += F_d * d_y
@@ -160,10 +167,6 @@ end
 """
    layout_tree(adjlist;
        nodesize=ones(size(am, 1)))
-
-Return a list of Luxor points that can be used to lay out a tree defined in adjacency list `adjlist`.
-
-`nodesize` is a vector of values that define the area occupied by each node. No idea how it works yet...
 """
 function layout_tree(adjlist::AbstractVector;
    nodesize=ones(size(adjlist, 1)))
