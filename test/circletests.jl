@@ -12,6 +12,12 @@ function testareaintersection()
     c2 = (O + (100, 0), 150)
     cia = intersection2circles(c1..., c2...)
     @test isapprox(cia, 41251.0, atol=0.1)
+
+    (c1, c2) = ((Point(77.9836, -187.97), 111), (Point(219.95, -13.042), 155))
+
+    cia = intersection2circles(c1..., c2...)
+    @test isapprox(cia, 1873.6, atol=0.1)
+
 end
 
 function test_circles(fname)

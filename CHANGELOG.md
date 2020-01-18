@@ -1,5 +1,21 @@
 # Changelog
 
+## [v1.11.0] - perhaps February 2020?
+
+- changed compatibility versions in Project.toml (Colors/Cairo)
+
+### Added
+
+### Changed
+
+- operation of @pdf/svg/png/eps macros should hopefully allow string interpolation in filenames, if my macro-fu has worked
+
+- intersection2circles negative output fixed
+
+### Removed
+
+### Deprecated
+
 ## [v1.10.0] - January 2020
 
 - changed compatibility versions in Project.toml (Colors/Cairo)
