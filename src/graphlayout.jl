@@ -4,48 +4,38 @@
 """
     layoutgraph(am::Array{T,2}; kwargs...)
 
-Layout the graph in adjacency matrix `am`, using a spring-based method. Returns a tuple of `([xcoords], [ycoords])`.
+Layout the graph in adjacency matrix `am`, using a spring-based method. Returns a tuple of `([xcoords], [ycoords])`, which are scaled according to the supplied BoundingBox.
 
 ### Keyword arguments
 
-```densityconstant = 2.0```
-
-```maxiterations = 100```
-
-```initialtemperature = 2.0```
-
-Layout the graph in `adjmatrix` using the spring/repulsion model of Fruchterman and Reingold (1991).
-
-Returns a tuple of `([xcoords], [ycoords])`.
-
-Attractive force: `f_a(d) =  d^2 / k`
-
-Repulsive force:  `f_r(d) = -k^2 / d`, where d is distance between two vertices and the optimal distance between vertices k is defined as densityconstant * sqrt( area / num_vertices ) where `densityconstant` is a parameter we can adjust.
+Lay out the graph in `adjmatrix` using the spring/repulsion model of Fruchterman and Reingold (1991). Returns a tuple of `([xcoords], [ycoords])`.
 
 ## Arguments
 
-`adjmatrix`
-    Adjacency matrix of some type. Non-zero of the eltype of the matrix is used to determine if a link exists, but currently no sense of magnitude
+`am`
+    An adjacency matrix of some type. Non-zero of the eltype of the matrix is used to determine if a link exists, but currently no sense of magnitude
 
 `densityconstant`
-    Constant to adjust the density of resulting layout
+    Constant to adjust the density of resulting layout. The default value is 2.0.
 
 `maxiterations`
     how many iterations for applying the forces
 
 `initialtemperature`
-    the initial temperature controls movement per iteration
+    the initial temperature controls movement per iteration. The default value is 2.0. Each iteration uses a lower temperature (TEMP = initialtemperature / iter). The idea is that the displacements of vertices are limited to some maximum temperature value, and this decreases over time. As the layout becomes better, the amount of adjustment becomes smaller.
 
 `locs_x`
-    the starting x values. Randomized to between -1 and 1.
+    the starting x values, between -1 and 1. The default values are randomly selected.
 
 `locs_y`
-    the starting y values. Randomized to between -1 and 1.
+    the starting y values, between -1 and 1. The default values are randomly selected.
 
 `boundingbox`
-    BoundingBox into which the graphs coordinates will fit. Defaults to 500 × 500.
+    The Luxor BoundingBox into which the graph's coordinates will fit. Defaults to 500 × 500.
+
+
 """
-layoutgraph(a::Array{T,2} where T; kwargs...) = layout_spring(a; kwargs...)
+layoutgraph(am::Array{T,2} where T; kwargs...) = layout_spring(am; kwargs...)
 
 """
     layoutgraph(al::AbstractVector; kwargs)
@@ -60,7 +50,7 @@ Layout the graph in adjacency list `al`, assuming the graph is a tree layout wit
 
 Return a list of Luxor points that can be used to lay out a tree defined in adjacency list `adjlist`.
 """
-layoutgraph(a::AbstractVector; kwargs...) = layout_tree(a; kwargs...)
+layoutgraph(al::AbstractVector; kwargs...) = layout_tree(al; kwargs...)
 
 """
     layout_spring(adjmatrix::Array{T,2} where T;
@@ -68,7 +58,6 @@ layoutgraph(a::AbstractVector; kwargs...) = layout_tree(a; kwargs...)
         maxiterations = 100,
         initialtemperature = 2.0,
         boundingbox=BoundingBox(O - (250, 250), O + (250, 250)))
-
 
 """
 function layout_spring(adjmatrix::Array{T,2} where T;

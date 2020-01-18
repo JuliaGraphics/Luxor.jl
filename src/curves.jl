@@ -665,31 +665,34 @@ end
 
 Find the area of intersection between two circles, the first centered at `pt1` with radius
 `r1`, the second centered at `pt2` with radius `r2`.
+
+If one circle is entirely within another, that circle's area is returned.
 """
 function intersection2circles(pt1, r1, pt2, r2)
     r1squared = r1^2
     r2squared = r2^2
     d = distance(pt1, pt2)
     intersectionarea = 0.0
-    if (d > r2 + r1)
+    if d > (r2 + r1)
         # circles do not overlap
         intersectionarea = 0.0
-    elseif (d <= abs(r1 - r2) && r1 >= r2)
-        # circle1 is completely inside circle0
+    elseif d <= abs(r1 - r2) && r1 >= r2
+        # circle2 is completely inside circle1
+        # return area of circle2
+        intersectionarea = π * r2squared
+    elseif d <= abs(r1 - r2) && r1 < r2
+        # circle1 is completely inside circle2
         # return area of circle1
-        intersectionarea = pi * r2squared
-    elseif (d <= abs(r1 - r2) && r1 < r2)
-        # circle0 is completely inside circle1
-        # return area of circle0
-        intersectionarea = pi * r1squared
+        intersectionarea = π * r1squared
     else
         # circles partially overlap
         # return area of intersection
-        phi = (acos((r1squared + (d * d) - r2squared) / (2 * r1 * d))) * 2
-        theta = (acos((r2squared + (d * d) - r1squared) / (2 * r2 * d))) * 2
-        area1 = 0.5 * theta * r2squared - 0.5 * r2squared * sin(theta)
-        area2 = 0.5 * phi * r1squared - 0.5 * r2squared * sin(phi)
-        intersectionarea = area1 + area2
+        phi = (acos((r1squared + (d * d)   - r2squared) / (2r1 * d))) * 2
+        theta = (acos((r2squared + (d * d) - r1squared) / (2r2 * d))) * 2
+        area1 = 0.5 * theta * r2squared  -  0.5 * r2squared * sin(theta)
+        area2 = 0.5 * phi * r1squared    -  0.5 * r2squared * sin(phi)
+        # areas are sometimes negative? (why?)
+        intersectionarea = abs(area1 + area2)
     end
     return intersectionarea
 end

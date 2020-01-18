@@ -292,13 +292,41 @@ function preview()
     end
     return returnvalue
 end
+#
+# function _add_ext(fname, ext)
+#     # TODO doesn't work if fname contains $(n) filename generator
+#     if match(Regex("[^\\\\]*\\.$(ext)"), fname) === nothing
+#         return join([fname, string(".", ext)])
+#     end
+#     return fname
+# end
+
+# for filename, the @pdf/png/svg macros may pass either
+# a string or an expression (with
+# interpolation) which may or may not contain a valid
+# extension
 
 function _add_ext(fname, ext)
-    # TODO doesn't work if fname contains $(n) filename generator
-    if match(Regex("[^\\\\]*\\.$(ext)"), fname) === nothing
-        return join([fname, string(".", ext)])
+    if isa(fname, Expr)
+        # fname is an expression
+        if endswith(string(last(fname.args)), string(ext))
+            # suffix has been passed
+            return fname
+        else
+            # there was no suffix
+            push!(fname.args, string(".", ext))
+            return fname
+        end
+    else
+        # fname is a string
+        if endswith(fname, string(ext))
+            # file had a suffix
+            return fname
+        else
+            # file did not have a suffix
+            return string(fname, ".", ext)
+        end
     end
-    return fname
 end
 
 """
@@ -335,9 +363,9 @@ Examples
 ```
 """
 macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
-     fname = _add_ext(fname, :svg)
-     quote
-        Drawing($width, $height, $fname)
+    quote
+        local lfname = _add_ext($(esc(fname)), :svg)
+        Drawing($width, $height, lfname)
         origin()
         background("white")
         sethue("black")
@@ -382,9 +410,9 @@ Examples
 ```
 """
 macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
-    fname = _add_ext(fname, :png)
     quote
-        Drawing($width, $height, $fname)
+        local lfname = _add_ext($(esc(fname)), :png)
+        Drawing($width, $height, lfname)
         origin()
         background("white")
         sethue("black")
@@ -428,9 +456,9 @@ Examples
 ```
 """
 macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
-     fname = _add_ext(fname, :pdf)
      quote
-        Drawing($width, $height, $fname)
+        local lfname = _add_ext($(esc(fname)), :pdf)
+        Drawing($width, $height, lfname)
         origin()
         background("white")
         sethue("black")
@@ -476,9 +504,9 @@ Examples
 ```
 """
 macro eps(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).eps")
-     fname = _add_ext(fname, :eps)
-     quote
-        Drawing($width, $height, $fname)
+    quote
+       local lfname = _add_ext($(esc(fname)), :eps)
+       Drawing($width, $height, lfname)
         origin()
         background("white")
         sethue("black")
