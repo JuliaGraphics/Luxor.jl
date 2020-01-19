@@ -168,7 +168,7 @@ They're short-cuts - designed to save typing. You can omit the width and height 
 end
 ```
 
-or
+or (less nicely):
 
 ```julia
 @svg (setline(10);
@@ -192,7 +192,7 @@ If you don't specify a size, the defaults are 600 by 600. If you don't specify a
 @svg juliacircles(150) 400 400 "test" # saves in "test.svg"
 ```
 
-If you want to create drawings with transparent backgrounds, use the longer form for creating drawings, rather than the macros:
+If you want to create drawings with transparent backgrounds, or located other than in the center, use the longer form rather than the macros:
 
 ```julia
 Drawing()
@@ -208,8 +208,6 @@ preview()
 ```
 
 ![transparent background](assets/figures/transparentbackground.png)
-
-Similarly, if you want to programmatically define document pathname,s you should use the full `Drawing()` ... `finish()` workflow.
 
 ### Drawings in memory
 
