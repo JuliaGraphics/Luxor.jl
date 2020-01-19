@@ -10,7 +10,7 @@
 
 - operation of @pdf/svg/png/eps macros should hopefully allow string interpolation in filenames, if my macro-fu has worked
 
-- intersection2circles negative output fixed
+- intersection2circles domain errors and negative output fixed (thanks casey & Júlio) 😊
 
 ### Removed
 

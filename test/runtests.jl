@@ -53,6 +53,7 @@ function run_all_tests()
     @testset "curves" begin
         include("arc-twopoints.jl")
         include("circletests.jl")
+        include("circleintersectiontests.jl")
         include("circle-as-path.jl")
         include("randomsinecurves.jl")
         include("sector-test.jl")
