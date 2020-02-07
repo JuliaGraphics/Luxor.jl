@@ -557,7 +557,8 @@ end
         highhandle = 0.7,
         randomopacity = true,
         tidystart = false,
-        action = :fill)
+        action = :fill,
+        tweakfunction! = (nbpb) -> nbpb))
 
 Draw a composite brush stroke made up of some randomized individual filled
 Bezier paths.
@@ -575,8 +576,8 @@ function brush(pt1, pt2, width=10;
         highhandle = 0.7,
         randomopacity = true,
         tidystart = false,
-        action = :fill
-        )
+        action = :fill,
+        tweakfunction! = (nbpb) -> nbpb)
     @layer begin
         sl = slope(pt1, pt2)
         n = distance(pt1, pt2)
@@ -600,6 +601,7 @@ function brush(pt1, pt2, width=10;
                     angles  = [twist * rand(minwidth:widthsteps:maxwidth), -twist * rand(minwidth:widthsteps:maxwidth)],
                     handles = [rand(lowhandle:0.01:highhandle, 2)...]
                     )
+                tweakfunction!(nbpb)
                 drawbezierpath(nbpb, action, close=false)
             end
         end

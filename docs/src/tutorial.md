@@ -566,7 +566,7 @@ function egg(radius, action=:none)
 end
 ```
 
-This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is the required actions.
+This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is the required action.
 
 (Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)
 

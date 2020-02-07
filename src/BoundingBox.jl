@@ -148,6 +148,12 @@ end
     Point(bb1.corner1.x - shift[1], bb1.corner1.y - shift[2]),
     Point(bb1.corner2.x - shift[1], bb1.corner2.y - shift[2]))
 
+# also add/subtract a point to a bounding box shifts the box
+    +(bb1::BoundingBox, pt::Point) = +(bb1::BoundingBox, (pt.x, pt.y))
+    +(pt::Point, bb1::BoundingBox) = +(bb1, pt)
+    -(bb1::BoundingBox, pt::Point) = -(bb1::BoundingBox, (pt.x, pt.y))
+    -(pt::Point, bb1::BoundingBox) = -(bb1, pt)
+
 # if you add two bounding boxes, you get the biggest enclosing box
 function +(bb1::BoundingBox, bb2::BoundingBox)
     pts = [bb1.corner1, bb1.corner2, bb2.corner1, bb2.corner2]
@@ -309,7 +315,7 @@ between(bb::BoundingBox, k=0.5) = between(bb[1], bb[2], k)
 Return the point at the top left of the BoundingBox `bb`.
 
 ```
-• ⋅ ⋅
+■ ⋅ ⋅
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
 ```
@@ -322,7 +328,7 @@ boxtopleft(bb::BoundingBox)        = bb[1]
 
 Return the point at the top center of the BoundingBox `bb`.
 ```
-⋅ • ⋅
+⋅ ■ ⋅
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
 ```
@@ -335,7 +341,7 @@ boxtopcenter(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) - (0, boxheight
 
 Return the point at the top right of the BoundingBox `bb`.
 ```
-⋅ ⋅ •
+⋅ ⋅ ■
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
 ```
@@ -349,7 +355,7 @@ boxtopright(bb::BoundingBox)       = Point(bb[2].x, bb[1].y)
 Return the point at the middle left of the BoundingBox `bb`.
 ```
 ⋅ ⋅ ⋅
-• ⋅ ⋅
+■ ⋅ ⋅
 ⋅ ⋅ ⋅
 ```
 
@@ -362,7 +368,7 @@ boxmiddleleft(bb::BoundingBox)     = Point(bb[1].x, midpoint(bb[1], bb[2]).y)
 Return the point at the center of the BoundingBox `bb`.
 ```
 ⋅ ⋅ ⋅
-⋅ • ⋅
+⋅ ■ ⋅
 ⋅ ⋅ ⋅
 ```
 """
@@ -374,7 +380,7 @@ boxmiddlecenter(bb::BoundingBox)   = midpoint(bb[1], bb[2])
 Return the point at the midde right of the BoundingBox `bb`.
 ```
 ⋅ ⋅ ⋅
-⋅ ⋅ •
+⋅ ⋅ ■
 ⋅ ⋅ ⋅
 ```
 """
@@ -387,7 +393,7 @@ Return the point at the bottom left of the BoundingBox `bb`.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
-• ⋅ ⋅
+■ ⋅ ⋅
 ```
 """
 boxbottomleft(bb::BoundingBox)     = Point(bb[1].x, bb[2].y)
@@ -399,7 +405,7 @@ Return the point at the bottom center of the BoundingBox `bb`.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
-⋅ • ⋅
+⋅ ■ ⋅
 ```
 """
 boxbottomcenter(bb::BoundingBox)   = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
@@ -411,7 +417,7 @@ Return the point at the bottom right of the BoundingBox `bb`.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
-⋅ ⋅ •
+⋅ ⋅ ■
 ```
 """
 boxbottomright(bb::BoundingBox)    = bb[2]

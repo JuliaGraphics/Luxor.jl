@@ -1,10 +1,13 @@
 # Changelog
 
-## [v1.11.0] - perhaps February 2020?
+## [v1.11.0] - perhaps February 2020
 
 - changed compatibility versions in Project.toml (Colors/Cairo)
 
 ### Added
+
+- add/subtract Point to BoundingBox
+- tweak function to `brush()`
 
 ### Changed
 

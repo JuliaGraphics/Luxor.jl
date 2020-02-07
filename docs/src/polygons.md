@@ -848,26 +848,69 @@ nothing # hide
 
 ![path to polygon](assets/figures/pathtobezierpaths.png)
 
-### Brush strokes
+## Brush strokes
+
+The `brush()` function builds Bezier paths in a quasi-random fashion, that could look like brush strokes. The optional keyword arguments allow a range of different effects.
+
+You can pass a function that can adjust various drawing settings before the shapes are drawn.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/brush.png") # hide
+
+tweak!(nbpb) = begin
+    setline(1)
+    setopacity(0.3)
+    drawbezierpath(nbpb, :stroke)
+    sethue(0.2, 0.3, rand(0.3:0.01:0.65))
+    return nbpb
+end
+
+function numberit(pos, n)
+    @layer begin
+        sethue("black")
+        text(string(n), pos)
+    end    
+end
+
+Drawing(800, 700, "assets/figures/brush1.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
-sethue("black") # hide
-brush(Point(-250, 0), Point(250, 0), 20,
-    strokes=15,
-    tidystart=true,
-    twist=-5,
-    lowhandle=-0.5,
-    highhandle=0.5)
+t  = Tiler(800, 700, 5, 1)
+sethue("orange3")
+fontsize(20)
+for (pos, n) in t
+    start, finish = pos - (200, 0), pos + (200, 0)
+    if n == 1
+        # five brush strokes
+        brush(start, finish, 1)
+        numberit(pos, n)
+    elseif n == 2
+        # minwidth and maxwidth control the, er, width
+         brush(start, finish, 5, minwidth = -5, maxwidth = 2)
+         numberit(pos, n)
+    elseif n == 3
+        # dont have to have transparent strokes
+         brush(start, finish, 20, minwidth = .2, randomopacity = false)
+         numberit(pos, n)
+    elseif n == 4
+        # twist and adjust handles to taste
+         brush(start, finish, minwidth = -.1, maxwidth = .2,
+             twist = 2, highhandle = 2, tidystart=false)
+         numberit(pos, n)    
+    elseif n == 5   
+        # call a function to modify each stroke
+        brush(start, finish, 1, minwidth = -2.2, maxwidth = .8,
+            lowhandle = -.4, highhandle = 1.5, twist = .5,  
+            tweakfunction! = tweak!)
+        numberit(pos, n)
+    end
+end
 finish() # hide
 nothing # hide
 ```
 
-![brush](assets/figures/brush.png)
+![brush 1](assets/figures/brush1.png)
 
 For more information (and more than you probably wanted to know) about Luxor's Bézier paths, visit [https://cormullion.github.io/blog/2018/06/21/bezier.html](https://cormullion.github.io/blog/2018/06/21/bezier.html).
 
