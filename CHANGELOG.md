@@ -7,7 +7,8 @@
 ### Added
 
 - add/subtract Point to BoundingBox
-- tweak function to `brush()`
+- `strokefunction` added to `brush()`
+- error checking for `readpng()` #81
 
 ### Changed
 
