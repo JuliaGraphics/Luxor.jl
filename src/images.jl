@@ -11,7 +11,11 @@ You can access its `width` and `height` fields:
     h = image.height
 """
 function readpng(pathname)
-    return Cairo.read_from_png(pathname)
+    im = Cairo.read_from_png(pathname)
+    if iszero(im.width) || iszero(im.height)
+        throw(error("can't read this PNG image from $(pathname). Either it's not a valid PNG file, or the format is different from what Cairo is expecting."))
+    end
+    return im
 end
 
 function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)

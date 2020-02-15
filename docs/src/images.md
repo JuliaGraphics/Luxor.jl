@@ -7,7 +7,7 @@ DocTestSetup = quote
 
 ## Placing images
 
-There is some limited support for placing PNG images on the drawing. First, load a PNG image using `readpng(filename)`.
+There is some limited support for placing PNG images on the drawing. First, load a PNG image using `readpng(filename)`. JPEGs aren't supported.
 
 Then use `placeimage()` to place it by its top left corner at point `x/y` or `pt`. Access the image's dimensions with `.width` and `.height`.
 

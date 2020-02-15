@@ -1,10 +1,7 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Test, Random
 
-using Test
-
-using Random
 Random.seed!(42)
 
 function image_testing(fname)
@@ -15,7 +12,11 @@ function image_testing(fname)
     background("grey25")
     setline(5)
     sethue("green")
-    image = readpng(dirname(@__FILE__) * "/stackoverflow.png")
+
+    # try a nonpng
+    @test_throws ErrorException readpng(dirname(dirname(pathof(Luxor))) * "/test/test-image.jl")
+
+    image = readpng(dirname(dirname(pathof(Luxor))) * "/test/stackoverflow.png")
     w = image.width
     h = image.height
     pagetiles = Tiler(width, height, 7, 9)

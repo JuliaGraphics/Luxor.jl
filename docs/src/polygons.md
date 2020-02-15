@@ -857,7 +857,7 @@ You can pass a function that can adjust various drawing settings before the shap
 ```@example
 using Luxor, Random # hide
 
-tweak!(nbpb) = begin
+brushα(nbpb) = begin
     setline(1)
     setopacity(0.3)
     drawbezierpath(nbpb, :stroke)
@@ -902,7 +902,7 @@ for (pos, n) in t
         # call a function to modify each stroke
         brush(start, finish, 1, minwidth = -2.2, maxwidth = .8,
             lowhandle = -.4, highhandle = 1.5, twist = .5,  
-            tweakfunction! = tweak!)
+            strokefunction = brushα)
         numberit(pos, n)
     end
 end

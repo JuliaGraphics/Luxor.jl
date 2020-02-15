@@ -558,10 +558,12 @@ end
         randomopacity = true,
         tidystart = false,
         action = :fill,
-        tweakfunction! = (nbpb) -> nbpb))
+        strokefunction = (nbpb) -> nbpb))
 
 Draw a composite brush stroke made up of some randomized individual filled
 Bezier paths.
+
+`strokefunction` allows a function to process a BezierPathSegment or do other things before it's drawn.
 
 !!! note
 
@@ -577,7 +579,7 @@ function brush(pt1, pt2, width=10;
         randomopacity = true,
         tidystart = false,
         action = :fill,
-        tweakfunction! = (nbpb) -> nbpb)
+        strokefunction = (nbpb) -> nbpb)
     @layer begin
         sl = slope(pt1, pt2)
         n = distance(pt1, pt2)
@@ -601,7 +603,7 @@ function brush(pt1, pt2, width=10;
                     angles  = [twist * rand(minwidth:widthsteps:maxwidth), -twist * rand(minwidth:widthsteps:maxwidth)],
                     handles = [rand(lowhandle:0.01:highhandle, 2)...]
                     )
-                tweakfunction!(nbpb)
+                strokefunction(nbpb)
                 drawbezierpath(nbpb, action, close=false)
             end
         end
