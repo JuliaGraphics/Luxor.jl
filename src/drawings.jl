@@ -292,19 +292,11 @@ function preview()
     end
     return returnvalue
 end
-#
-# function _add_ext(fname, ext)
-#     # TODO doesn't work if fname contains $(n) filename generator
-#     if match(Regex("[^\\\\]*\\.$(ext)"), fname) === nothing
-#         return join([fname, string(".", ext)])
-#     end
-#     return fname
-# end
 
-# for filename, the @pdf/png/svg macros may pass either
+# for filenames, the @pdf/png/svg macros may pass either
 # a string or an expression (with
 # interpolation) which may or may not contain a valid
-# extension
+# extension ... yikes
 
 function _add_ext(fname, ext)
     if isa(fname, Expr)

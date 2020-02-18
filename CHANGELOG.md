@@ -1,18 +1,24 @@
 # Changelog
 
-## [v1.11.0] - perhaps February 2020
+## [v1.11.0] - 2020 February 18
 
 - changed compatibility versions in Project.toml (Colors/Cairo)
 
 ### Added
 
-- add/subtract Point to BoundingBox
-- `strokefunction` added to `brush()`
-- error checking for `readpng()` #81
+- add/subtract Point to BoundingBox to shift it by that amount
+- `strokefunction` argument added to `brush()`
+- error checking for `readpng()` #81 (thanks Avik!)
 
 ### Changed
 
-- operation of @pdf/svg/png/eps macros should hopefully allow string interpolation in filenames, if my macro-fu has worked
+- operation of @pdf/svg/png/eps macros should now hopefully allow string interpolation in filenames, if my macro-fu has worked. So this should work:
+
+    for i in 1:10
+        @png begin
+            circle(O, i, :fill)
+        end 300 300 "/tmp/circle-$(i).png"
+    end
 
 - intersection2circles domain errors and negative output fixed (thanks casey & Júlio) 😊
 
