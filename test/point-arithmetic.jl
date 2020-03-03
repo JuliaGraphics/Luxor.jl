@@ -79,6 +79,18 @@ function general_tests()
     @test isequal(between(pt1, pt3, 0.0), pt1)
     @test isequal(between(pt1, pt3, 1.0), pt3)
 
+    # test uniqueness and those pesky -0.0s
+    @test length(unique([pt1, pt2, pt3, pt4])) == 4
+    @test length(unique([pt1, pt2, pt3, pt3])) == 3
+    @test length(unique([pt1, pt3, pt3, pt3])) == 2
+    @test length(unique([pt3, pt3, pt3, pt3])) == 1
+    @test length(unique([])) == 0
+    @test length(unique([Point(0.0, 0.0), Point(0.0, 0.0)])) == 1
+    @test length(unique([Point(0.0, -0.0), Point(0.0, 0.0)])) == 1
+    @test length(unique([Point(0.0, -0.0), Point(-0.0, 0.0)])) == 1
+    @test length(unique([Point(0.0, -0.0), Point(-0.0, -0.0)])) == 1
+    @test length(unique([Point(0.0, 0.0), Point(0, 0)])) == 1
+    @test length(unique([Point(0, 0), Point(-0, -0)])) == 1
 
     # test drop perpendicular
     p1 = Point(0, 0)

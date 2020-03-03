@@ -1,5 +1,20 @@
 # Changelog
 
+## [v1.12.0] - forthcoming release in March/April 2020
+
+### Added
+
+- `startnewpath` option for `textoutlines()`
+- `unique` defined for Points
+
+### Changed
+
+- internals of rule doesn't use sets any more
+
+### Removed
+
+### Deprecated
+
 ## [v1.11.0] - 2020 February 18
 
 - changed compatibility versions in Project.toml (Colors/Cairo)

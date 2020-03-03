@@ -404,8 +404,7 @@ function rule(pos, theta=0.0;
     rsina = r * sin(theta)
     ruledline = (pos - (rcosa, rsina), pos + (rcosa, rsina))
 
-    # use set to avoid duplicating points
-    interpoints = Set{Point}()
+    interpoints = Array{Point, 1}()
 
     # check for intersection with top of bounding box
     flag, ip = intersectionlines(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly=true)
@@ -439,11 +438,14 @@ function rule(pos, theta=0.0;
         end
     end
 
+    # eliminate duplicates due to rounding errors
+    ruledline = unique(interpoints)
+
     # finally draw the line if we have two points
-    if vertices == false && length(interpoints) == 2
-        line(interpoints..., :stroke)
+    if vertices == false && length(ruledline) == 2
+        line(ruledline..., :stroke)
     end
-    return interpoints
+    return ruledline
 end
 
 saved_colors = Tuple{Float64, Float64, Float64, Float64}[]

@@ -48,6 +48,7 @@ Base.eltype(::Point) = Float64
 Base.iterate(p::Point, state = 1) = state > length(p) ? nothing : (p[state], state + 1)
 Base.length(::Point) = 2
 
+
 """
     dotproduct(a::Point, b::Point)
 
@@ -72,6 +73,18 @@ isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) &&
 ==(p1::Point, p2::Point)              = isequal(p1, p2)
 
 cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
+
+# a unique that works better on points?
+# I think this uses ==
+function Base.unique(pts::Array{Point, 1})
+    apts = Point[]
+    for pt in pts
+        if pt ∉ apts
+            push!(apts, pt)
+        end
+    end
+    return apts
+end
 
 """
     distance(p1::Point, p2::Point)
