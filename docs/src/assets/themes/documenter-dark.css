@@ -7626,13 +7626,8 @@ html.theme--documenter-dark {
 
 /* alterations to shipped css */
 
-@font-face {
-    font-family: JuliaMono;
-    src: url("https://cormullion.github.io/assets/fonts/JuliaMono-Regular.woff");
-}
-
 pre, code, kbd {
-    font-family: JuliaMono, 'Roboto Mono', Menlo, courier, monospace !important;
+    font-family: 'SF Mono', 'Roboto Mono', Menlo, courier, monospace !important;
 }
 
 p > code {

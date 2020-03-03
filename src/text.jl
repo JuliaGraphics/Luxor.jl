@@ -173,15 +173,19 @@ end
 """
     textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
         halign=:left,
-        valign=:baseline)
+        valign=:baseline,
+        startnewpath=true)
 
 Convert text to a graphic path and apply `action`.
 
-Note that this function discards any current path, so use `textpath()` to include text into other graphic constructions.
+By default this function discards any current path, unless you use `startnewpath=false`
+
+See also `textpath()`.
 """
 function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     halign=:left,
-    valign=:baseline)
+    valign=:baseline,
+    startnewpath=true)
 
     # TODO this duplicates text() too much; re-factor needed
     xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(s)
@@ -199,7 +203,9 @@ function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
     @layer begin
         translate(Point(textpointx, textpointy))
-        newpath() # forget any current path
+        if startnewpath
+           newpath() # forget any current path, start a new one
+        end
         te = textextents(s)
         textpath(s)
         tp = pathtopoly()
