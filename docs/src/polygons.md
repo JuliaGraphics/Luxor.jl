@@ -15,7 +15,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 
 ```@setup polytable
 using Luxor, DelimitedFiles
-Drawing(800, 400, "assets/figures/polytable.png")
+Drawing(800, 500, "assets/figures/polytable.png")
 background("white")
 origin()
 tabledata = readdlm(IOBuffer(

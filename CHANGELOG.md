@@ -6,6 +6,7 @@
 
 - `startnewpath` option for `textoutlines()`
 - `unique` defined for Points
+- Travis/Appveyor cache
 
 ### Changed
 
