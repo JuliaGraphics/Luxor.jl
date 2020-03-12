@@ -219,6 +219,27 @@ Drawing(width, height, surfacetype, [filename])
 
 lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. The `@draw` macro creates PNG files in memory.
 
+### Interactive graphics with IJulia and Interact
+
+Currently, you should use an in-memory SVG drawing to display graphics if you're using Interact.jl. This example provides an HSB color widget.
+
+```julia
+using Interact, Colors, Luxor
+@manipulate for h in 0:360, s in 0:0.01:1, b in 0:0.01:1
+    d = Drawing(300, 300, :svg)
+    sethue(Colors.HSB(h, s, b))
+    origin()
+    circle(O, 100, :fill)  
+    circle(polar(110, deg2rad(h)), 10, :fill)
+    sethue("black")
+    label(string(h, "°"), deg2rad(h), polar(120, deg2rad(h)))
+        finish()
+    d
+end
+```
+
+![interactive](assets/figures/interact.png)
+
 ## The drawing surface
 
 The origin (0/0) starts off at the top left: the x axis runs left to right across the page, and the y axis runs top to bottom down the page.
