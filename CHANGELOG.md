@@ -7,6 +7,7 @@
 - `startnewpath` option for `textoutlines()`
 - `unique` defined for Points
 - Travis/Appveyor cache
+- GIFs preview in Juno
 
 ### Changed
 

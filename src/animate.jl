@@ -114,6 +114,11 @@ Scene(movie::Movie, framefunction::Function, framerange::AbstractRange;
     easingfunction=lineartween, optarg=nothing) =
     Scene(movie, framefunction, framerange, easingfunction, optarg)
 
+"Wraps the location of an animated gif so that it can be displayed"
+struct AnimatedGif
+    filename::String
+end
+
 """
     animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
@@ -130,6 +135,8 @@ the resulting frames to build a GIF animation. This will be stored in `pathname`
 (an existing file will be overwritten; use a ".gif" suffix), or in
 `(movietitle).gif` in a temporary directory. `ffmpeg` should be installed and
 available, of course, if this is to work.
+
+In suitable environments (eg Juno), the resulting animation is displayed in the Plots window.
 
 ### Example
 
@@ -152,7 +159,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         pathname="",
         tempdirectory="",
         usenewffmpeg=true)
-        
+
     if isdir(pathname)
         suggestedpathname = joinpath(pathname, "myanimation.gif")
         @error("Parameter pathname=$pathname points to a directory. Please pass a filename like '$suggestedpathname' as pathname parameter!")
@@ -190,26 +197,29 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         filecounter += 1
     end
     @info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
-    if creategif == true
-        # these two commands create a palette and then create animated GIF from the resulting images
-        if !usenewffmpeg
-            # old version of ffmpeg up to 2.1.3
-            # these two commands create a palette and then an animated GIF from the resulting images using the palette
-            run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
-            run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
-        else
-            # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters
-            run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
-        end
-
-        if ! isempty(pathname)
-            mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force=true)
-            @info("GIF is: $pathname")
-        else
-            @info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
-        end
+    if creategif == false
+        return true # we're done
     end
-    return true
+    # these two commands create a palette and then create animated GIF from the resulting images
+    if !usenewffmpeg
+        # old version of ffmpeg up to 2.1.3
+        # these two commands create a palette and then an animated GIF from the resulting images using the palette
+        run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
+        run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
+    else
+        # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters
+        run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+    end
+
+    if ! isempty(pathname)
+        mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force=true)
+        @info("GIF is: $pathname")
+        giffn  = pathname
+    else
+        @info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
+        giffn  = tempdirectory * "/" * movie.movietitle * ".gif"
+    end
+    AnimatedGif(giffn)
 end
 
 """
@@ -218,6 +228,31 @@ end
 Create the movie defined in `movie` by rendering the frames define in `scene`.
 """
 animate(movie::Movie, scene::Scene; kwargs...) = animate(movie, [scene]; kwargs...)
+
+# write out the HTML to view the gif
+function Base.show(io::IO, ::MIME"text/html", agif::AnimatedGif)
+    ext = last(splitext(agif.filename))
+    if ext == ".gif"
+        html = "<img src=\"data:image/gif;base64," * base64encode(read(agif.filename)) * "\" />"
+    elseif ext in (".mov", ".mp4")
+        mimetype = ext == ".mov" ? "video/quicktime" : "video/mp4"
+        html = "<video controls><source src=\"data:$mimetype;base64," *
+               base64encode(read(agif.filename)) *
+               "\" type = \"$mimetype\"></video>"
+    else
+        error("Cannot show animation with extension $ext: $agif")
+    end
+
+    write(io, html)
+    return nothing
+end
+
+# Only gifs can be shown via image/gif
+Base.showable(::MIME"image/gif", agif::AnimatedGif) = lowercase(last(splitext(agif.filename))) == ".gif"
+
+function Base.show(io::IO, ::MIME"image/gif", agif::AnimatedGif)
+    open(fio -> write(io, fio), agif.filename)
+end
 
 """
     easingflat(t, b, c, d)
