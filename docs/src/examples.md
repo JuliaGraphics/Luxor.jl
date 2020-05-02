@@ -32,7 +32,7 @@ The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewin
 
 @png begin
         fontsize(50)
-        circle(O, 150, :stroke)
+        circle(O, 150, :stroke) # note the capital O (not 0) as the first argument
         text("hello world", halign=:center, valign=:middle)
      end
 ```
