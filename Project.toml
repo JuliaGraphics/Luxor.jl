@@ -1,7 +1,7 @@
 name = "Luxor"
 uuid = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
 authors = ["cormullion <cormullion@mac.com>"]
-version = "1.11.0"
+version = "1.12.0"
 
 [deps]
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
