@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.12.0] - forthcoming release in March/April 2020
+## [v1.12.0] - 2020 May 4 
 
 ### Added
 
@@ -11,6 +11,7 @@
 
 ### Changed
 
+- attempt to make arrow shafts not stick out of arrow heads
 - internals of rule doesn't use sets any more
 
 ### Removed

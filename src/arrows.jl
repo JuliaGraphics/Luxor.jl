@@ -189,7 +189,10 @@ Draw a Bezier curved arrow, from `start` to `finish`, with control points `C1`
 and `C2`. Arrow heads can be added/hidden by changing `startarrow` and
 `finisharrow` options.
 
-The `decorate` keyword argument accepts a function that can execute code at a location on the arrow's shaft. The inherited graphic environment is centered at a point on the curve given by `decoration`, and the x-axis is aligned with the direction of the curve at that point (TODO - more or less - is it actually correct?).
+The `decorate` keyword argument accepts a function that can execute code at a
+location on the arrow's shaft. The inherited graphic environment is centered at
+a point on the curve given by `decoration`, and the x-axis is aligned with the
+direction of the curve at that point (TODO - more or less - is it actually correct?).
 """
 function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke;
         # optional
@@ -203,9 +206,27 @@ function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke
         decorate = () -> ())
     @layer begin
         setline(linewidth)
+        overlap = 0.1 # radians of fudginess
+        # TODO rewrite all this
+        # arrow heads are a pain
+        # length of proposed arrow
+        bezlength = polyperimeter(beziertopoly(BezierPathSegment(start, C1, C2, finish)))
+        if startarrow && arrowheadfill
+            # calculate the shorter version
+            actualcurvestart = bezier((arrowheadlength * cos(arrowheadangle + overlap))/bezlength, start, C1, C2, finish)
+        else
+            actualcurvestart = start
+        end
+        if finisharrow && arrowheadfill
+            # calculate the shorter version
+            actualcurvefinish = bezier(1 - (arrowheadlength * cos(arrowheadangle + overlap))/bezlength, start, C1, C2, finish)
+        else
+            actualcurvefinish = finish
+        end
 
-        move(start)
-        curve(C1, C2, finish)
+        move(actualcurvestart)
+        curve(C1, C2, actualcurvefinish)
+
         do_action(action)
 
         start_shaftangle  = slope(start, C1)
