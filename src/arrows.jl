@@ -1,3 +1,9 @@
+# arrowhead(target, action=:fill;  - draw arrowhead
+# arrow(startpoint::Point, endpoint::Point; - simple arrow
+# arrow(centerpos::Point, radius, startangle, endangle; - circular arrow
+# arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke; - bezier arrow 1
+# arrow(start::Point, finish::Point, height::Vector, action=:stroke; - bezier arrow 2
+
 """
     arrowhead(target[, action=:fill];
         shaftangle=0,
@@ -42,7 +48,10 @@ Arrows don't use the current linewidth setting (`setline()`), and defaults to 1,
 but you can specify another value. It doesn't need stroking/filling, the shaft
 is stroked and the head filled with the current color.
 
-The `decorate` keyword argument accepts a function that can execute code at a location on the arrow's shaft. The inherited graphic environment is centered at a point on the curve between 0 and 1 given by `decoration`, and the x-axis is aligned with the direction of the curve at that point.
+The `decorate` keyword argument accepts a function that can execute code at
+locations on the arrow's shaft. The inherited graphic environment is centered at
+each point on the curve between 0 and 1 given by scalar or vector `decoration`,
+and the x-axis is aligned with the direction of the curve at that point.
 """
 function arrow(startpoint::Point, endpoint::Point;
         linewidth=1.0,
@@ -85,14 +94,15 @@ function arrow(startpoint::Point, endpoint::Point;
     boty = endpoint.y + sin(arrowheadbottomsideangle) * arrowheadlength
     poly([Point(topx, topy), endpoint, Point(botx, boty)], :fill)
 
-    # prepare to add decoration at a point along shaft
-    decorationpoint = between(startpoint, endpoint, decoration)
-    slp = slope(startpoint, endpoint)
-
-    @layer begin
-        translate(decorationpoint)
-        rotate(slp)
-        decorate()
+    # prepare to add decorations at point along shaft
+    for decpos in decoration
+        decpoint = between(startpoint, endpoint, decpos)
+        slp = slope(startpoint, endpoint)
+        @layer begin
+            translate(decpoint)
+            rotate(slp)
+            decorate()
+        end
     end
     grestore()
 end
@@ -109,9 +119,13 @@ Draw a curved arrow, an arc centered at `centerpos` starting at `startangle` and
 ending at `endangle` with an arrowhead at the end. Angles are measured clockwise
 from the positive x-axis.
 
-Arrows don't use the current linewidth setting (`setline()`); you can specify the linewidth.
+Arrows don't use the current linewidth setting (`setline()`); you can specify
+the linewidth.
 
-The `decorate` keyword argument accepts a function that can execute code at a location on the arrow's shaft. The inherited graphic environment is centered at a point on the curve between 0 and 1 given by `decoration`, and the x-axis is aligned with the direction of the curve at that point.
+The `decorate` keyword argument accepts a function that can execute code at
+locations on the arrow's shaft. The inherited graphic environment is centered at
+points on the curve between 0 and 1 given by scalar or vector `decoration`, and
+the x-axis is aligned with the direction of the curve at that point.
 """
 function arrow(centerpos::Point, radius, startangle, endangle;
         linewidth=1.0,
@@ -164,14 +178,17 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     poly([Point(topx, topy), Point(endpoint.x, endpoint.y), Point(botx, boty)], :fill)
     grestore()
 
-    # prepare to add decoration at a point along shaft
-    decorationangle = rescale(decoration, 0, 1, startangle, newendangle)
-    decorationpoint = Point(radius * cos(decorationangle), radius * sin(decorationangle))
-    perp = perpendicular(decorationpoint)
-    @layer begin
-        translate(decorationpoint)
-        rotate(slope(decorationpoint, perp))
-        decorate()
+    # prepare to add decorations at points along shaft
+
+    for decpos in decoration
+        decorationangle = rescale(decpos, 0, 1, startangle, newendangle)
+        decorationpoint = Point(radius * cos(decorationangle), radius * sin(decorationangle))
+        perp = perpendicular(decorationpoint)
+        @layer begin
+            translate(decorationpoint)
+            rotate(slope(decorationpoint, perp))
+            decorate()
+        end
     end
 end
 
@@ -189,10 +206,11 @@ Draw a Bezier curved arrow, from `start` to `finish`, with control points `C1`
 and `C2`. Arrow heads can be added/hidden by changing `startarrow` and
 `finisharrow` options.
 
-The `decorate` keyword argument accepts a function that can execute code at a
-location on the arrow's shaft. The inherited graphic environment is centered at
-a point on the curve given by `decoration`, and the x-axis is aligned with the
-direction of the curve at that point (TODO - more or less - is it actually correct?).
+The `decorate` keyword argument accepts a function that can execute code at
+locations on the arrow's shaft. The inherited graphic environment is centered at
+each point on the curve given by scalar or vector `decoration`, and the x-axis
+is aligned with the direction of the curve at that point (TODO - more or less -
+is it actually correct?).
 """
 function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke;
         # optional
@@ -235,16 +253,17 @@ function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke
         finisharrow && arrowhead(finish, arrowheadfill == true ? :fill : :stroke, headlength = arrowheadlength, headangle = arrowheadangle, shaftangle = π + finish_shaftangle)
         startarrow && arrowhead(start, arrowheadfill == true ? :fill : :stroke, headlength = arrowheadlength, headangle = arrowheadangle,   shaftangle = start_shaftangle)
 
-        # prepare to add decoration at a point along shaft
-        decorationpoint = bezier(decoration, start, C1, C2, finish)
-        firstderiv = bezier′(decoration, start, C1, C2, finish)
-
-        @layer begin
-            translate(decorationpoint)
-            rotate(slope(decorationpoint, firstderiv))
-            decorate()
+        # prepare to add decorations at points along shaft
+        for decpos in decoration
+            # decpoint = between(start, finish, decpos)
+            decpoint = bezier(decpos, start, C1, C2, finish)
+            slp = slope(start, finish)
+            @layer begin
+                translate(decpoint)
+                rotate(slp)
+                decorate()
+            end
         end
-
     end # layer
 end
 

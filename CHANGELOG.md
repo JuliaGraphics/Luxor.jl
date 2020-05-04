@@ -1,6 +1,18 @@
 # Changelog
 
-## [v1.12.0] - 2020 May 4 
+## [v1.13.0] - forthcoming
+
+### Added
+
+- arrow decoration
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+## [v1.12.0] - 2020 May 4
 
 ### Added
 
