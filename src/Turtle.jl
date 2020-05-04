@@ -14,7 +14,8 @@ export  Turtle,
         Pencolor,
         Penwidth,
         Pen_opacity_random,
-        Reposition
+        Reposition,
+        Towards
 
 """
     Turtle()
@@ -88,6 +89,20 @@ Set the turtle's orientation to `r` degrees. See also `Turn`.
 """
 function Orientation(t::Turtle, r=0.0)
     t.orientation = mod2pi(deg2rad(r))
+end
+
+"""
+    Towards(t::Turtle, pos::Point)
+
+Rotate the turtle to face towards a given point.
+"""
+function Towards(t::Turtle, pos::Point)
+    x, y = pos
+
+    dx = x - t.xpos
+    dy = y - t.ypos
+
+    t.orientation -= atan(dy, dx)
 end
 
 """
