@@ -47,6 +47,13 @@ function test_turtles(fname)
         Reposition(🐢, O)
         Rectangle(🐢, 10, 10)
     end
+    
+    for i in 150:250
+        Reposition(raphael, Point(300, -2i))
+        Towards(raphael, Point(400, -400))
+        Forward(raphael, 200)
+        HueShift(raphael, 5)
+    end
 
     fontsize(30)
     Reposition(raphael, Point(400, -100));   Reposition(michaelangelo, 400, -50)
