@@ -102,7 +102,7 @@ function Towards(t::Turtle, pos::Point)
     dx = x - t.xpos
     dy = y - t.ypos
 
-    t.orientation -= atan(dy, dx)
+    t.orientation = atan(dy, dx)
 end
 
 """
