@@ -40,37 +40,25 @@ function _octaves(coords::Array{T, 1} where T <: Real;
     frequency = 1.0
     amplitude = 1.0
     maxval    = 0.0
-    # TODO this seems very clumsy to duplicate the loop code like this?
+    
     l = length(coords)
-    if l == 1
-        for i in 1:octaves
+    
+    for i in 1:octaves
+        if l == 1
             total += simplexnoise(coords[1] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    elseif l == 2
-        for i in 1:octaves
+        elseif l == 2
             total += simplexnoise(coords[1] * frequency, coords[2] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    elseif l == 3
-        for i in 1:octaves
+        elseif l == 3
             total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
-        end
-    elseif l == 4
-        for i in 1:octaves
+        elseif l == 4
             total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency, coords[4] * frequency) * amplitude
-            maxval += amplitude
-            amplitude *= persistence
-            frequency *= 2
         end
+            
+        maxval += amplitude
+        amplitude *= persistence
+        frequency *= 2
     end
+    
     return total / maxval
 end
 
