@@ -155,7 +155,7 @@ export Drawing,
     ispointinsidetriangle, ispolyclockwise, polyorientation,
 
     # misc
-    layoutgraph
+    layoutgraph, image_as_matrix
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

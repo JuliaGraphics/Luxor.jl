@@ -219,6 +219,8 @@ Drawing(width, height, surfacetype, [filename])
 
 lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. The `@draw` macro creates PNG files in memory.
 
+You can specify `:image` as the surface type. This allows you to copy the current drawing into a 2D matrix (using `image_as_matrix()`). See the Images chapter for more information.
+
 ### Interactive graphics with IJulia and Interact
 
 Currently, you should use an in-memory SVG drawing to display graphics if you're using Interact.jl. This example provides an HSB color widget.
