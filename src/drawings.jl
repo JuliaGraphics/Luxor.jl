@@ -17,15 +17,17 @@ mutable struct Drawing
         iobuf = IOBuffer(bufdata, read=true, write=true)
         the_surfacetype = stype
         if stype == :pdf
-            the_surface     =  Cairo.CairoPDFSurface(iobuf, w, h)
+            the_surface     = Cairo.CairoPDFSurface(iobuf, w, h)
         elseif stype == :png # default to PNG
             the_surface     = Cairo.CairoARGBSurface(w, h)
         elseif stype == :eps
             the_surface     = Cairo.CairoEPSSurface(iobuf, w, h)
         elseif stype == :svg
             the_surface     = Cairo.CairoSVGSurface(iobuf, w, h)
+        elseif stype == :image
+            the_surface     = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
-            error("Unknown Luxor surface type $stype")
+            error("Unknown Luxor surface type" \"$stype\"")
         end
         the_cr  = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
@@ -67,7 +69,7 @@ current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 
 
 # How Luxor output works. You start by creating a drawing either aimed at a
-# file (PDF, EPS, PNG, SVG) or aimed at an in-memory buffer (:SVG and :PNG); you
+# file (PDF, EPS, PNG, SVG) or aimed at an in-memory buffer (:svg, :png, or :image); you
 # could be working in Jupyter or Atom, or a terminal, and on either Mac, Linux,
 # or Windows.  (The @svg/@png/@pdf macros are shortcuts to file-based drawings.)
 # When a drawing is finished, you go `finish()` (that's the last line of the
@@ -158,12 +160,15 @@ const paper_sizes = Dict{String, Tuple}(
   "E"      => (3168, 2448))
 
 """
-Create a new drawing, and optionally specify file type (PNG, PDF, SVG, or EPS) and dimensions.
+Create a new drawing, and optionally specify file type (PNG, PDF, SVG, EPS),
+file-based or in-memory, and dimensions.
 
     Drawing()
 
 creates a drawing, defaulting to PNG format, default filename "luxor-drawing.png",
 default size 800 pixels square.
+
+# Extended help
 
 You can specify the dimensions, and assume the default output filename:
 
@@ -182,7 +187,8 @@ creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
     Drawing(width, height, surfacetype, [filename])
 
-creates a new drawing of the given surface type (e.g. :svg, :png), storing the image only in memory if no filename is provided.
+creates a new drawing of the given surface type (e.g. :svg, :png), storing the picture
+only in memory if no filename is provided.
 
     Drawing(1200, 1200/Base.Mathconstants.golden, "my-drawing.eps")
 
@@ -201,6 +207,12 @@ creates the drawing A4 landscape size.
 
 PDF files default to a white background, but PNG defaults to transparent, unless you specify
 one using `background()`.
+
+    Drawing(width, height, :image)
+
+creates the drawing in an image buffer in memory. You can obtain the data as a matrix with
+`image_as_matrix()`.
+
 """
 function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
     (path, ext)         = splitext(f)
@@ -255,6 +267,8 @@ If working in Jupyter (IJulia), display a PNG or SVG file in the notebook.
 
 If working in Juno, display a PNG or SVG file in the Plot pane.
 
+Drawings of type :image can be converted to a matrix with `image_as_matrix()`.
+
 Otherwise:
 
 - on macOS, open the file in the default application, which is probably the Preview.app for
@@ -270,12 +284,13 @@ function preview()
         Main.IJulia.clear_output(true)
         returnvalue = nothing
         if current_surface_type() == :png
-            # avoid world age errors
-            # Base.invokelatest(display, "image/png", load(current_filename()))
             display_ijulia(MIME("image/png"), current_filename())
         elseif current_surface_type() == :svg
             display_ijulia(MIME("image/svg+xml"), current_filename())
         end
+    elseif current_surface_type() == :image
+        @info "drawing is :image. Use `image_as_matrix()` to convert to matrix"
+        returnvalue = nothing
     elseif candisplay && juno
         display(CURRENTDRAWING[1])
         returnvalue = nothing
@@ -554,4 +569,43 @@ macro draw(body, width=600, height=600)
             @info "Use Juno or Jupyter; the drawing is stored in memory, not in a file."
         end
     end
+end
+
+"""
+    image_as_matrix()
+
+If drawing is an :image type, return a matrix of the data.
+
+```
+using Luxor, Images
+
+Drawing(50, 50, :image)
+origin()
+background(randomhue()...)
+sethue("white")
+fontsize(40)
+fontface("Georgia")
+text("42", halign=:center, valign=:middle)
+mat = image_as_matrix()
+finish()
+
+# working in Images:
+img = Gray.(reinterpret(ARGB32, permutedims(mat, (2, 1))))
+display(imresize(img, 150, 150))
+
+```
+"""
+function image_as_matrix()
+    if length(CURRENTDRAWING) != 1
+        error("no current drawing")
+    end
+    surface = current_surface()
+    w = Int(surface.width)
+    h = Int(surface.height)
+    z = zeros(UInt32, w, h)
+    imagesurface = Cairo.CairoImageSurface(z, Cairo.FORMAT_ARGB32)
+    cr = Cairo.CairoContext(imagesurface)
+    Cairo.set_source_surface(cr, surface, 0, 0)
+    Cairo.paint(cr)
+    return imagesurface.data
 end

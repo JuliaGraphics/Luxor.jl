@@ -4,7 +4,8 @@
 
 ### Added
 
-- arrow decoration
+- arrow decorations
+- :image type
 
 ### Changed
 
