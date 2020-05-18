@@ -51,15 +51,17 @@ for θ in 0:π/6:2π-π/6
     translate(300, 0)
     placeimage(img, -w/2, -h/2, 0.9)
     grestore()
-end</code></pre><p><img src="../assets/figures/transform-images.png" alt="transforming images"/></p><h1 id="Converting-a-drawing-to-an-image-1"><a class="docs-heading-anchor" href="#Converting-a-drawing-to-an-image-1">Converting a drawing to an image</a><a class="docs-heading-anchor-permalink" href="#Converting-a-drawing-to-an-image-1" title="Permalink"></a></h1><p>You can specify an <code>:image</code> type of picture when you create a drawing using <code>Drawing()</code>. This stores the graphics on the drawing in memory, and you can copy the data in the form of a matrix, using the <code>image_as_matrix()</code> function.</p><p><code>image_as_matrix()</code> returns an <code>Array{UInt32, 2}:</code>, an array of numbers that encode the alpha, Red, Green, and Blue values of each pixel into a single number. For example, <code>0xff008000</code> is a pixel that&#39;s not transparent and is green.</p><p>The following example draws a character as usual, then copies the data into a matrix called <code>mat</code>. The second drawing reads the values in from the matrix and draws them as square tiles.</p><pre><code class="language-julia">Drawing(40, 40, :image)
+end</code></pre><p><img src="../assets/figures/transform-images.png" alt="transforming images"/></p><h1 id="Converting-a-drawing-to-an-image-1"><a class="docs-heading-anchor" href="#Converting-a-drawing-to-an-image-1">Converting a drawing to an image</a><a class="docs-heading-anchor-permalink" href="#Converting-a-drawing-to-an-image-1" title="Permalink"></a></h1><p>You can specify an <code>:image</code> type of picture when you create a drawing using <code>Drawing()</code>. This stores the graphics on the drawing in memory, and at any time you can copy the data in the form of a matrix, using the <code>image_as_matrix()</code> function.</p><p><code>image_as_matrix()</code> returns an <code>Array{UInt32, 2}:</code>, an array of numbers that encode the alpha, Red, Green, and Blue values of each pixel into a single number. For example, <code>0xff008000</code> is a pixel that&#39;s not transparent and is green.</p><p>The following example draws a character as usual, then copies the data into a matrix called <code>mat</code>. The second drawing reads the values in from the matrix and draws them as square tiles.</p><pre><code class="language-julia">Drawing(40, 40, :image)
 origin()
 background(&quot;black&quot;)
 sethue(&quot;white&quot;)
 fontsize(38)
 fontface(&quot;Georgia&quot;)
 text(&quot;42&quot;, halign=:center, valign=:middle)
+
 mat = image_as_matrix()
 
+finish()
 
 # second drawing
 
@@ -73,7 +75,10 @@ for (pos, n) in tiles
         randomhue()
         box(pos, tiles.tilewidth - 1, tiles.tileheight - 1, :fill)
     end
-end</code></pre><pre><code class="language-none">true</code></pre><p><img src="../assets/figures/image-drawings.svg" alt="image drawings"/></p><p>If you&#39;re working with Images.jl, you might want to reinterpret the array:</p><pre><code class="language-none">using Luxor, Images
+end
+nothing</code></pre><p><img src="../assets/figures/image-drawings.svg" alt="image drawings"/></p><p>If you&#39;re working with Images.jl, you will probably want to reinterpret the array:</p><pre><code class="language-none">using Luxor, Images
+
+# in Luxor
 
 Drawing(50, 50, :image)
 origin()
@@ -84,6 +89,8 @@ fontface(&quot;Georgia&quot;)
 text(&quot;42&quot;, halign=:center, valign=:middle)
 mat = image_as_matrix()
 finish()
+
+# in Images
 
 img = Gray.(reinterpret(ARGB32, permutedims(mat, (2, 1))))
 display(imresize(img, 150, 150))</code></pre><h2 id="Drawing-on-images-1"><a class="docs-heading-anchor" href="#Drawing-on-images-1">Drawing on images</a><a class="docs-heading-anchor-permalink" href="#Drawing-on-images-1" title="Permalink"></a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In these examples, we&#39;ll annotate a PNG file.</p><pre><code class="language-julia">image = readpng(&quot;assets/figures/julia-logo-mask.png&quot;)
@@ -171,4 +178,4 @@ h = img.height
 placeimage(img, -w/2, -h/2, .5)
 setmode(&quot;saturate&quot;)
 translate(50, 0)
-placeimage(img, -w/2, -h/2, .5)</code></pre><p><img src="../assets/figures/image-compositing.png" alt="transforming images"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../clipping/">« Clipping</a><a class="docs-footer-nextpage" href="../turtle/">Turtle graphics »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 17 May 2020 17:22">Sunday 17 May 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+placeimage(img, -w/2, -h/2, .5)</code></pre><p><img src="../assets/figures/image-compositing.png" alt="transforming images"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../clipping/">« Clipping</a><a class="docs-footer-nextpage" href="../turtle/">Turtle graphics »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Monday 18 May 2020 10:07">Monday 18 May 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
