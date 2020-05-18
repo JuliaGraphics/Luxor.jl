@@ -104,8 +104,9 @@ nothing # hide
 # Converting a drawing to an image
 
 You can specify an `:image` type of picture when you create a drawing using
-`Drawing()`. This stores the graphics on the drawing in memory, and you can copy
-the data in the form of a matrix, using the `image_as_matrix()` function.
+`Drawing()`. This stores the graphics on the drawing in memory, and at any time
+you can copy the data in the form of a matrix, using the `image_as_matrix()`
+function.
 
 `image_as_matrix()` returns an `Array{UInt32, 2}:`, an array of numbers that
 encode the alpha, Red, Green, and Blue values of each pixel into a single
@@ -126,9 +127,10 @@ sethue("white")
 fontsize(38)
 fontface("Georgia")
 text("42", halign=:center, valign=:middle)
+
 mat = image_as_matrix()
 
-finish() # hide
+finish()
 
 # second drawing
 
@@ -144,14 +146,17 @@ for (pos, n) in tiles
     end
 end
 finish() # hide
+nothing
 ```
 
 ![image drawings](assets/figures/image-drawings.svg)
 
-If you're working with Images.jl, you might want to reinterpret the array:
+If you're working with Images.jl, you will probably want to reinterpret the array:
 
 ```
 using Luxor, Images
+
+# in Luxor
 
 Drawing(50, 50, :image)
 origin()
@@ -162,6 +167,8 @@ fontface("Georgia")
 text("42", halign=:center, valign=:middle)
 mat = image_as_matrix()
 finish()
+
+# in Images
 
 img = Gray.(reinterpret(ARGB32, permutedims(mat, (2, 1))))
 display(imresize(img, 150, 150))

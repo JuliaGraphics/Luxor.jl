@@ -82,6 +82,10 @@ function run_all_tests()
 #        include("tiling-images.jl")
     end
 
+    @testset "imagematrix" begin
+        include("imagematrix.jl")
+    end
+
     @testset "arrows and dimensions" begin
         include("arrow-arc-test.jl")
         include("arrow-bezier-test.jl")
