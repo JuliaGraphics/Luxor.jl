@@ -238,8 +238,8 @@ end
 """
     finish()
 
-Finish the drawing, and close the file. You may be able to open it in an external viewer
-application with `preview()`.
+Finish the drawing, and close the file. You may be able to open it in an
+external viewer application with `preview()`.
 """
 function finish()
     if current_surface_ptr() == C_NULL
@@ -267,7 +267,8 @@ If working in Jupyter (IJulia), display a PNG or SVG file in the notebook.
 
 If working in Juno, display a PNG or SVG file in the Plot pane.
 
-Drawings of type :image can be converted to a matrix with `image_as_matrix()`.
+Drawings of type :image should be converted to a matrix with `image_as_matrix()`
+before calling `finish()`.
 
 Otherwise:
 
@@ -574,7 +575,9 @@ end
 """
     image_as_matrix()
 
-If drawing is an :image type, return a matrix of the data.
+If drawing is an :image type, return a `Array{UInt32,2}` matrix of the data.
+Each pixel is of the form `0xAARRGGBB`, where `AA` is alpha, `RR` red, and so
+on. Use `reinterpret(ARGB32, mat)` to convert to a useful image format.
 
 ```
 using Luxor, Images
@@ -592,20 +595,21 @@ finish()
 # working in Images:
 img = Gray.(reinterpret(ARGB32, permutedims(mat, (2, 1))))
 display(imresize(img, 150, 150))
-
 ```
 """
 function image_as_matrix()
     if length(CURRENTDRAWING) != 1
         error("no current drawing")
     end
-    surface = current_surface()
-    w = Int(surface.width)
-    h = Int(surface.height)
+    w = Int(current_surface().width)
+    h = Int(current_surface().height)
     z = zeros(UInt32, w, h)
     imagesurface = Cairo.CairoImageSurface(z, Cairo.FORMAT_ARGB32)
     cr = Cairo.CairoContext(imagesurface)
-    Cairo.set_source_surface(cr, surface, 0, 0)
+    Cairo.set_source_surface(cr, current_surface(), 0, 0)
     Cairo.paint(cr)
-    return imagesurface.data
+    data = imagesurface.data
+    Cairo.finish(imagesurface)
+    Cairo.destroy(imagesurface)
+    return data
 end
