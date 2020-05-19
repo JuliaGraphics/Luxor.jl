@@ -25,7 +25,7 @@ preview()
 
 `Drawing(1000, 1000, "hello-world.png")` defines the width, height, location, and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name as well as by numeric value: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 point and left-justified if you don't specify otherwise. `finish()` completes the drawing and saves the PNG image in the file. `preview()` tries to open the saved file using some other application (eg Preview on macOS).
 
-The macros `@png`, `@svg`, and `@pdf` provide shortcuts for making and previewing graphics without having to provide the usual set-up and finish instructions:
+The macros `@png`, `@svg`, `@pdf`, `@draw`, and `@imagematrix` provide shortcuts for making and previewing graphics without having to provide the usual set-up and finish instructions:
 
 ```julia
 # using Luxor
@@ -160,6 +160,31 @@ The Point type is an immutable composite type containing `x` and `y` fields that
 You can use an environment such as a Jupyter notebook or the Juno IDE, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
 
 ![Jupyter](assets/figures/jupyter-basic.png)
+
+## Images as matrices
+
+With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. Each element of the matrix is a colored pixel, encoded as `ARGB` (UInt32). This example plots the ampersand as if was a matrix of data points.
+
+```
+using Luxor, Colors
+
+m = @imagematrix begin
+        background("black")
+        sethue("white")
+        fontface("Georgia")
+        fontsize(240)
+        text("&", halign=:center, valign=:middle)
+    end
+
+import SparseArrays
+import Plots
+
+sa = SparseArrays.sparse(convert.(Colors.Gray, m') .> convert(Colors.Gray, ARGB32(0.0, 0.0, 0.0, 1.0)))
+
+Plots.spy(sa, markersize=1.5)
+```
+
+![image matrix](assets/figures/ampersand-matrix.png)
 
 ## Feature gallery
 
