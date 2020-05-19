@@ -158,7 +158,7 @@ finish()
 preview()
 ```
 
-They're short-cuts - designed to save typing. You can omit the width and height (defaulting to 600 by 600), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
+They're short-cuts - designed to save typing. You can omit the width and height (defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -184,6 +184,7 @@ The `@draw` macro creates an im-memory drawing. You should see it displayed if y
 @png
 @pdf
 @draw
+@imagematrix
 ```
 
 If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't have to specify the suffix:
@@ -241,6 +242,78 @@ end
 ```
 
 ![interactive](assets/figures/interact.png)
+
+# Drawing as image matrix
+
+You can specify an `:image` type of picture when you create a drawing using
+`Drawing()` or with the `@imagematrix` macro. This stores the vector graphics on
+the drawing in memory, and at any time you can copy the data in the form of a
+matrix, using the `image_as_matrix()` function.
+
+`image_as_matrix()` returns an `Array{ARGB32, 2}:`, an array of numbers that
+encode the alpha, Red, Green, and Blue values of each pixel into a single
+number.
+
+The following example draws a character as usual, then copies the data into a
+matrix called `mat`. The second drawing reads the values in from the matrix and
+draws them as square tiles if the color value is above (lighter than) black.
+
+```@example
+using Luxor # hide
+
+Drawing(40, 40, :image)
+origin()
+background("black")
+sethue("white")
+fontsize(38)
+fontface("Georgia")
+text("42", halign=:center, valign=:middle)
+
+mat = image_as_matrix()
+
+finish()
+
+# second drawing
+
+Drawing(400, 400, "assets/figures/image-drawings.svg")
+background("darkorange")
+origin()
+tiles = Tiler(400, 400, size(mat)...)
+sethue("white")
+for (pos, n) in tiles
+    if mat[n].color > 0xff000000
+        randomhue()
+        box(pos, tiles.tilewidth - 1, tiles.tileheight - 1, :fill)
+    end
+end
+finish() # hide
+nothing
+```
+
+![image drawings](assets/figures/image-drawings.svg)
+
+If you're working with Images.jl, you will probably want to transpose the array:
+
+```
+using Luxor, Images
+
+# in Luxor
+
+Drawing(50, 50, :image)
+origin()
+background(randomhue()...)
+sethue("white")
+fontsize(40)
+fontface("Georgia")
+text("42", halign=:center, valign=:middle)
+mat = image_as_matrix()
+finish()
+
+# in Images
+
+img = Gray.(permutedims(mat, (2, 1)))
+display(imresize(img, 150, 150))
+```
 
 ## The drawing surface
 

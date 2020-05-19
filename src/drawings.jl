@@ -163,14 +163,16 @@ const paper_sizes = Dict{String, Tuple}(
 Create a new drawing, and optionally specify file type (PNG, PDF, SVG, EPS),
 file-based or in-memory, and dimensions.
 
+    Drawing(width=600, height=600, file="luxor-drawing.png")
+
+# Extended help
+
     Drawing()
 
 creates a drawing, defaulting to PNG format, default filename "luxor-drawing.png",
 default size 800 pixels square.
 
-# Extended help
-
-You can specify the dimensions, and assume the default output filename:
+You can specify dimensions, and assume the default output filename:
 
     Drawing(400, 300)
 
@@ -185,7 +187,7 @@ creates a PDF drawing in the file "my-drawing.pdf", 400 by 300 pixels.
 
 creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
-    Drawing(width, height, surfacetype, [filename])
+    Drawing(width, height, surfacetype | filename)
 
 creates a new drawing of the given surface type (e.g. :svg, :png), storing the picture
 only in memory if no filename is provided.
@@ -198,7 +200,7 @@ high. Only for PNG files must the dimensions be integers.
     Drawing("A4", "my-drawing.pdf")
 
 creates a drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf".
-Other sizes available are:  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal",
+Other sizes available are: "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal",
 "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
     Drawing("A4landscape")
@@ -575,9 +577,8 @@ end
 """
     image_as_matrix()
 
-If drawing is an :image type, return a `Array{UInt32,2}` matrix of the data.
-Each pixel is of the form `0xAARRGGBB`, where `AA` is alpha, `RR` red, and so
-on. Use `reinterpret(ARGB32, mat)` to convert to a useful image format.
+If the current Luxor drawing is an `:image type`, return a `Array{ARGB32,2}`
+matrix of the current state of the picture, where each element is a colored pixel.
 
 ```
 using Luxor, Images
@@ -593,7 +594,7 @@ mat = image_as_matrix()
 finish()
 
 # working in Images:
-img = Gray.(reinterpret(ARGB32, permutedims(mat, (2, 1))))
+img = Gray.(permutedims(mat, (2, 1)))
 display(imresize(img, 150, 150))
 ```
 """
@@ -611,5 +612,49 @@ function image_as_matrix()
     data = imagesurface.data
     Cairo.finish(imagesurface)
     Cairo.destroy(imagesurface)
-    return data
+    return reinterpret(ARGB32, data)
+end
+
+"""
+    Create a drawing and return a matrix of the image.
+
+This macro returns a matrix of pixels that represent the drawing
+produced by the vector graphics instructions. It uses the `image_as_matrix()`
+function.
+
+The default drawing is 256 by 256 units, and is composed of transparent black
+pixels until you draw something different.
+
+```
+m = @imagematrix begin
+        sethue("red")
+        box(O, 20, 20, :fill)
+    end 60 60
+
+julia>  m[1220:1224] |> show
+    ARGB32[ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)]
+
+julia> getfield.(m[1220:1224], :color)
+ 5-element Array{UInt32,1}:
+ 0x00000000
+ 0xffff0000
+ 0xffff0000
+ 0xffff0000
+ 0xffff0000
+```
+
+"""
+macro imagematrix(body, width=256, height=256)
+    quote
+        Drawing($width, $height, :image)
+        origin()
+        $(esc(body))
+        m = image_as_matrix()
+        finish()
+        m
+    end
 end

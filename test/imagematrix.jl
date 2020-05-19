@@ -1,32 +1,24 @@
-using Luxor, Test
+using Luxor, Test, Colors
 
-function imagematrix(fname)
+function imagematrix()
     Drawing(2, 2, :image)
 
     # get image as matrix
     mat = image_as_matrix()
-    @test mat[1] == 0
+    @test mat[1] == Colors.ARGB32(0.0,0.0,0.0,0.0)
     @test mat[1] == mat[2] == mat[3] == mat[4]
 
     # make it red, then get image as matrix again
     setcolor("red")
     paint()
     mat = image_as_matrix()
-    remat = reinterpret(ARGB32, mat)
-
-    @test Float64.(red.(remat))   == [1.0 1.0; 1.0 1.0]
-    @test Float64.(green.(remat)) == [0.0 0.0; 0.0 0.0]
-    @test Float64.(blue.(remat))  == [0.0 0.0; 0.0 0.0]
 
     # make it green, then get image as matrix again
     setcolor(0, 1, 0)
     paint()
     mat = image_as_matrix()
-    remat = reinterpret(ARGB32, mat)
-
-    @test Float64.(red.(remat)) == [0.0 0.0; 0.0 0.0]
-    @test Float64.(green.(remat))   == [1.0 1.0; 1.0 1.0]
-    @test Float64.(blue.(remat))  == [0.0 0.0; 0.0 0.0]
+    @test mat[1] == Colors.ARGB32(0.0, 1.0, 0.0, 1.0)
+    @test mat[1] == mat[2] == mat[3] == mat[4]
 
     @test finish() == true
 
@@ -42,13 +34,14 @@ function imagematrix(fname)
     end
     mat = image_as_matrix()
 
-    @test count(i -> i == 0xffffffff, mat) == 200
-    @test count(i -> i != 0xffffffff, mat) == 200
+    # half the 400 are white
+    @test count(i -> i == ARGB32(1, 1, 1, 1), mat) == 200
+
+    # half are blue - 0r, 0g, 1b, 1a
+    @test count(i -> i == ARGB32(0, 0, 1, 1), mat) == 200
     @test finish() == true
 end
 
-fname = "image-matrix-test.png"
+imagematrix()
 
-imagematrix(fname)
-
-println("...finished test: output in $(fname)")
+println("...finished test")

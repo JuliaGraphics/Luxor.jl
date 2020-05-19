@@ -5,7 +5,7 @@
 ### Added
 
 - arrow decorations
-- :image type and image_as_matrix() to convert current vector drawing to matrix
+- :image type, image_as_matrix(), @imagematrix to convert current vector drawing to matrix
 
 ### Changed
 
