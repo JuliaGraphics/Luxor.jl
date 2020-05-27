@@ -1,14 +1,14 @@
 # arcs, circles, ellipses, curves, pie, sector, bezier
 
 """
-    circle(x, y, r, action=:nothing)
+    circle(x, y, r, action=:none)
 
 Make a circle of radius `r` centered at `x`/`y`.
 
-`action` is one of the actions applied by `do_action`, defaulting to `:nothing`. You can
+`action` is one of the actions applied by `do_action`, defaulting to `:none`. You can
 also use `ellipse()` to draw circles and place them by their centerpoint.
 """
-function circle(x, y, r, action=:nothing)
+function circle(x, y, r, action=:none)
     if action != :path
         newpath()
     end
@@ -17,19 +17,19 @@ function circle(x, y, r, action=:nothing)
 end
 
 """
-    circle(pt, r, action=:nothing)
+    circle(pt, r, action=:none)
 
 Make a circle centered at `pt`.
 """
-circle(centerpoint::Point, r, action=:nothing) =
+circle(centerpoint::Point, r, action=:none) =
     circle(centerpoint.x, centerpoint.y, r, action)
 
 """
-    circle(pt1::Point, pt2::Point, action=:nothing)
+    circle(pt1::Point, pt2::Point, action=:none)
 
 Make a circle that passes through two points that define the diameter:
 """
-function circle(pt1::Point, pt2::Point, action=:nothing)
+function circle(pt1::Point, pt2::Point, action=:none)
     center = midpoint(pt1, pt2)
     radius = distance(pt1, pt2)/2
     circle(center, radius, action)
@@ -128,51 +128,51 @@ function squircle(center::Point, hradius, vradius, action=:none;
 end
 
 """
-    arc(xc, yc, radius, angle1, angle2, action=:nothing)
+    arc(xc, yc, radius, angle1, angle2, action=:none)
 
 Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
 at xc, yc.
 
 Angles are defined relative to the x-axis, positive clockwise.
 """
-function arc(xc, yc, radius, angle1, angle2, action=:nothing)
+function arc(xc, yc, radius, angle1, angle2, action=:none)
     Cairo.arc(get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
 """
-    arc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
+    arc(centerpoint::Point, radius, angle1, angle2, action=:none)
 
 Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
 at `centerpoint`.
 """
-arc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
+arc(centerpoint::Point, radius, angle1, angle2, action=:none) =
     arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
-    carc(xc, yc, radius, angle1, angle2, action=:nothing)
+    carc(xc, yc, radius, angle1, angle2, action=:none)
 
 Add an arc to the current path from `angle1` to `angle2` going counterclockwise,
 centered at `xc`/`yc`.
 
 Angles are defined relative to the x-axis, positive clockwise.
 """
-function carc(xc, yc, radius, angle1, angle2, action=:nothing)
+function carc(xc, yc, radius, angle1, angle2, action=:none)
     Cairo.arc_negative(get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
 """
-    carc(centerpoint::Point, radius, angle1, angle2, action=:nothing)
+    carc(centerpoint::Point, radius, angle1, angle2, action=:none)
 
 Add an arc centered at `centerpoint` to the current path from `angle1` to
 `angle2`, going counterclockwise.
 """
-carc(centerpoint::Point, radius, angle1, angle2, action=:nothing) =
+carc(centerpoint::Point, radius, angle1, angle2, action=:none) =
     carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
 
 """
-      arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
+      arc2r(c1::Point, p2::Point, p3::Point, action=:none)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise,
 to the current path.
@@ -180,7 +180,7 @@ to the current path.
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path,
  it will be used only as an indication of the arc's length, rather than its position.
 """
-function arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
+function arc2r(c1::Point, p2::Point, p3::Point, action=:none)
     r = distance(c1, p2)
     startangle = atan(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan(p3.y - c1.y, p3.x - c1.x)
@@ -191,7 +191,7 @@ function arc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
 end
 
 """
-    carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
+    carc2r(c1::Point, p2::Point, p3::Point, action=:none)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`,
 going counterclockwise, to the current path.
@@ -199,7 +199,7 @@ going counterclockwise, to the current path.
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular
 path, it will be used only as an indication of the arc's length, rather than its position.
 """
-function carc2r(c1::Point, p2::Point, p3::Point, action=:nothing)
+function carc2r(c1::Point, p2::Point, p3::Point, action=:none)
     r = distance(c1, p2)
     startangle = atan(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan(p3.y - c1.y, p3.x - c1.x)
@@ -818,13 +818,13 @@ function circletangent2circles(radius, circle1center::Point, circle1radius, circ
 end
 
 """
-    arc2sagitta(p1::Point, p2::Point, s, action=:nothing)
+    arc2sagitta(p1::Point, p2::Point, s, action=:none)
 
 Make a clockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
 
 Return tuple of the center point and the radius of the arc.
 """
-function arc2sagitta(p1::Point, p2::Point, s, action=:nothing)
+function arc2sagitta(p1::Point, p2::Point, s, action=:none)
     if isapprox(s, 0.0)
         throw(error("Height of arc $s should be greater than 0.0"))
     end
@@ -846,13 +846,13 @@ function arc2sagitta(p1::Point, p2::Point, s, action=:nothing)
 end
 
 """
-    carc2sagitta(p1::Point, p2::Point, s, action=:nothing)
+    carc2sagitta(p1::Point, p2::Point, s, action=:none)
 
 Make a counterclockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
 
 Return tuple of center point and radius of arc.
 """
-function carc2sagitta(p1::Point, p2::Point, s, action=:nothing)
+function carc2sagitta(p1::Point, p2::Point, s, action=:none)
     if isapprox(s, 0.0)
         throw(error("Height of arc $s should be greater than 0.0"))
     end

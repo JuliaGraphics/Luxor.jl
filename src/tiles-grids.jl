@@ -346,3 +346,19 @@ function Base.getindex(pt::Partition, i::Int)
     ycoord = -pt.areaheight/2 + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
     return (Point(xcoord, ycoord), i)
 end
+
+"""
+    box(tiles::Tiler, n::T where T <: Integer, action::Symbol=:none;
+        vertices=false)
+
+Draw a box in tile `n` of tiles `tiles`.
+"""
+function box(tiles::Tiler, n::T where T <: Integer, action::Symbol=:none;
+        vertices=false)
+    tilew, tileh = tiles.tilewidth, tiles.tileheight
+    if vertices == true || action == :none
+        box(first(tiles[n]), tilew, tileh, vertices=true)
+    else
+        box(first(tiles[n]), tilew, tileh, action)
+    end
+end

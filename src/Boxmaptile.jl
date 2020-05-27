@@ -148,14 +148,14 @@ function boxmap(A::Array, pt::Point, w, h)
 end
 
 """
-    box(tile::BoxmapTile, action::Symbol=:nothing; vertices=false)
+    box(tile::BoxmapTile, action::Symbol=:none; vertices=false)
 
 Use a Boxmaptile to make or draw a rectangular box. Use `vertices=true` to obtain
 the coordinates.
 
 Create boxmaps using `boxmap()`.
 """
-function box(tile::BoxmapTile, action::Symbol=:nothing; vertices=false)
+function box(tile::BoxmapTile, action::Symbol=:none; vertices=false)
     if vertices
         return [Point(tile.x,           tile.y + tile.h),
                 Point(tile.x,           tile.y),

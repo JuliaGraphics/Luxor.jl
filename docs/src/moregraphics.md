@@ -178,9 +178,9 @@ dimension
 ```
 
 
-## Bars
+## Barcharts
 
-For simple bars, use the `bars()` function, supplying an array of numbers:
+For simple barcharts, use the `barchart()` function, supplying an array of numbers:
 
 ```@example
 using Luxor # hide
@@ -189,20 +189,20 @@ origin() # hide
 background("white") # hide
 fontsize(7)
 sethue("black")
-translate(-350, 0) # hide
 v = rand(-100:100, 25)
-bars(v)
+barchart(v, labels=true)
 finish() # hide
 nothing # hide
 ```
 
 ![bars](assets/figures/bars.png)
 
-To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments to `bars()`:
+To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments:
 
 ```@example
 using Luxor, Colors, Random # hide
 Drawing(800, 450, "assets/figures/bars1.png")  # hide
+
 Random.seed!(2) # hide
 origin() # hide
 background("white") # hide
@@ -210,32 +210,35 @@ setopacity(0.8) # hide
 fontsize(8) # hide
 fontface("Helvetica-Bold") # hide
 sethue("black") # hide
-translate(-350, 100) # hide
 
-function mybarfunction(low::Point, high::Point, value;
-    extremes=[0, 1], barnumber=0, bartotal=0)
+function mybarfunction(values, i, low, high, barwidth, scaledvalue)
     @layer begin
-        sethue(Colors.HSB(rescale(value, extremes[1], extremes[2], 0, 360), 1.0, 0.5))
-        csize = rescale(value, extremes[1], extremes[2], 5, 25)
+        extremes = extrema(values)
+        sethue(Colors.HSB(rescale(values[i], extremes[1], extremes[2], 0, 360), 1.0, 0.5))
+        csize = rescale(values[i], extremes[1], extremes[2], 5, 15)
         circle(high, csize, :fill)
         setline(1)
         sethue("blue")
-        line(Point(low.x, 0), high + (0, csize), :stroke)
+        line(low, high, :stroke)
         sethue("white")
-        text(string(value), high, halign=:center, valign=:middle)
+        text(string(values[i]), high, halign=:center, valign=:middle)
     end
 end
 
-function mylabelfunction(low::Point, high::Point, value;
-    extremes=[0, 1], barnumber=0, bartotal=0)
+function mylabelfunction(values, i, low, high, barwidth, scaledvalue)
     @layer begin
         translate(low)
-        text(string(value), O + (0, 10), halign=:center, valign=:middle)
+        text(string(values[i]), O + (0, 10), halign=:center, valign=:middle)
     end
 end
 
-v = rand(1:100, 25)
-bars(v, xwidth=25, barfunction=mybarfunction, labelfunction=mylabelfunction)
+v = rand(1:100, 15)
+
+bbox = BoundingBox() * 0.8
+box(bbox, :clip)
+p = barchart(v, boundingbox=bbox, barfunction=mybarfunction, labelfunction=mylabelfunction)
+
+rule(p[1])
 
 finish() # hide
 nothing # hide
@@ -244,7 +247,7 @@ nothing # hide
 ![bars 1](assets/figures/bars1.png)
 
 ```@docs
-bars
+barchart    
 ```
 
 ## Box maps

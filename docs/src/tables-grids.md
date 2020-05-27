@@ -207,7 +207,7 @@ function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
     sethue("gray70")
     box(leftmargin - (0, barheight/2), leftmargin + (cellwidth, barheight/2), :fill)
     boxwidth = rescale(data[row, column], minvalue, maxvalue, 0, cellwidth)
-    sethue("thistle")
+    sethue("red")
     box(leftmargin - (0, barheight/2), leftmargin + (boxwidth, barheight/2), :fill)
     sethue("black")
     line(leftmargin + (boxwidth, -barheight/2),
@@ -217,7 +217,7 @@ function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
          halign=:left)
 end
 
-Drawing(700, 250, "assets/figures/arraytable.png")  # hide
+Drawing(700, 250, "assets/figures/arraytable.svg")  # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -236,7 +236,7 @@ finish() # hide
 nothing # hide
 ```
 
-![array table](assets/figures/arraytable.png)
+![array table](assets/figures/arraytable.svg)
 
 ```@docs
 Table

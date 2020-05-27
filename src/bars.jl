@@ -1,61 +1,97 @@
 """
-    bars(values::Array;
-            yheight = 200,
-            xwidth = 25,
-            labels = true,
-            barfunction = f,
-            labelfunction = f,
-        )
+    barchart(values;
+            boundingbox = BoundingBox(O + (-250, -120), O + (250, 120)),
+            bargap=10,
+            margin = 5,
+            border=false,
+            labels=false,
+            labelfunction = (values, i, lowpos, highpos, barwidth, scaledvalue) -> begin
+                    label(string(values[i]), :n, highpos, offset=10)
+              end,
+            barfunction =  (values, i, lowpos, highpos, barwidth, scaledvalue) -> begin
+                @layer begin
+                    setline(barwidth)
+                    line(lowpos, highpos, :stroke)
+                end
+              end)
 
-Draw some bars where each bar is the height of a value in the array. The bars
-will fit in a box `yheight` high (even if there are negative values).
+Draw a barchart where each bar is the height of a value in the `values` array. The bars
+will be scaled to fit in a bounding box.
 
-To control the drawing of the text and bars, define functions that process the
-end points:
+Text labels are drawn if the keyword `labels=true`.
 
-`mybarfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=1,
-bartotal=0)`
+The function returns a vector of points; each is the bottom center of a bar.
 
-`mylabelfunction(bottom::Point, top::Point, value; extremes=[a, b], barnumber=1,
-bartotal=0)`
-
-and pass them like this:
-
-```julia
-bars(v, yheight=10, xwidth=10, barfunction=mybarfunction)
-bars(v, xwidth=15, yheight=10, labelfunction=mylabelfunction)
-```
-
-or:
-
-```
-bars(v, labelfunction = (args...; extremes=[], barnumber=1, bartotal=0) ->  setgray(rand()))
-```
-
-Draw some Fibonacci sequence numbers:
+Draw a Fibonacci sequence as a barchart:
 
 ```
 fib(n) = n > 2 ? fib(n - 1) + fib(n - 2) : 1
 fibs = fib.(1:15)
 @draw begin
     fontsize(12)
-    fontface("JuliaMono")
-    setline(20)
-    translate(boxbottomleft(BoundingBox() * 0.9))
-    bars(fibs,
-        barfunction = (b, t, v; kwargs...) -> line(b, t, :stroke),
-        labelfunction = (b, t, v; extremes=[], barnumber=1, bartotal=1) ->
-            begin
-                text(string(fibs[barnumber]), t + (0, -20), halign=:center)
-                text(string(barnumber), b + (0, 20), halign=:center)
-            end,
-        xwidth=35)
+    barchart(fibs, labels=true)
 end
 ```
+To control the drawing of the text and bars, define functions that process the
+end points:
 
-To suppress the text labels, use optional keyword `labels=false`.
+`mybarfunction(values, i, lowpos, highpos, barwidth, scaledvalue)`
+
+`mylabelfunction(values, i, lowpos, highpos, barwidth, scaledvalue)`
+
+and pass them like this:
+
+```julia
+barchart(vals, barfunction=mybarfunction)
+barchart(vals, labelfunction=mylabelfunction)
+```
+
 """
-function bars(values::Array;
+function barchart(values;
+        boundingbox = BoundingBox(O + (-250, -120), O + (250, 120)),
+        bargap=10,
+        margin = 5,
+        border=false,
+        labels=false,        labelfunction = (values, i, lowpos, highpos, barwidth, scaledvalue) -> begin
+                label(string(values[i]), :n, highpos, offset=10)
+            end,
+        barfunction =  (values, i, lowpos, highpos, barwidth, scaledvalue) -> begin
+            @layer begin
+                setline(barwidth)
+                line(lowpos, highpos, :stroke)
+            end
+            end)
+    # start
+    minvalue, maxvalue = extrema(values)
+    barchartwidth  = boxwidth(boundingbox)  - 2bargap - 2margin
+    barchartheight = boxheight(boundingbox) - 2margin
+    barwidth = (barchartwidth - 2bargap)/length(values)
+    # if all bars are equal height, this will force a range
+    minbarrange = minvalue - abs(minvalue)
+    maxbarrange = maxvalue + abs(maxvalue)
+    hpositions = between.(
+        boxbottomleft(boundingbox - (0, margin)),
+        boxbottomright(boundingbox - (0, margin)),
+        # skip first and last, then take every other one, which is at halfway
+        range(0.0, 1.0, length=2length(values) + 1))[2:2:end-1]
+    @layer begin
+        if border
+            box(boundingbox, :stroke)
+        end
+        for i in 1:length(values)
+            scaledvalue = rescale(values[i], minbarrange, maxbarrange) * barchartheight
+            lowposition = hpositions[i]
+            highposition = lowposition - (0, scaledvalue) # -y coord
+            barfunction(values, i, lowposition, highposition, barwidth, scaledvalue)
+            labels && labelfunction(values, i, lowposition, highposition, barwidth, scaledvalue)
+        end
+    end
+    return (positions = hpositions)
+end
+
+# this old version is deprecated as of v2.0.0
+
+function bars(values::Array,
     yheight = 200,
     xwidth = 25,
 

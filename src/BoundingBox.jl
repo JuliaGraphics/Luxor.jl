@@ -213,9 +213,9 @@ Make a box using the bounds in `bbox`.
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-function box(bbox::BoundingBox, action::Symbol=:nothing;
+function box(bbox::BoundingBox, action::Symbol=:none;
         vertices=false)
-    if vertices
+    if vertices || action == :none
         botleft  = Point(bbox.corner1.x, bbox.corner2.y)
         topleft  = bbox.corner1
         topright = Point(bbox.corner2.x, bbox.corner1.y)
@@ -231,7 +231,7 @@ end
 
 Make a polygon around the BoundingBox in `bbox`.
 """
-poly(bbox::BoundingBox, action::Symbol=:nothing; kwargs...) =
+poly(bbox::BoundingBox, action::Symbol=:none; kwargs...) =
     poly(convert(Vector{Point}, bbox), action; kwargs...)
 
 """
@@ -240,7 +240,7 @@ poly(bbox::BoundingBox, action::Symbol=:nothing; kwargs...) =
 Make a decorated polygon around the BoundingBox in `bbox`. The vertices are in
 the order: bottom left, top left, top right, and bottom right.
 """
-prettypoly(bbox::BoundingBox, action::Symbol=:nothing; kwargs...) =
+prettypoly(bbox::BoundingBox, action::Symbol=:none; kwargs...) =
     prettypoly(box(bbox, vertices=true), action; kwargs...)
 
 """

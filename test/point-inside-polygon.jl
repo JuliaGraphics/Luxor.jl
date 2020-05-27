@@ -10,7 +10,7 @@ using Test
 using Random
 Random.seed!(42)
 
-function ngon_poly(x, y, radius, sides::Int, orientation=0, action=:nothing; close=true)
+function ngon_poly(x, y, radius, sides::Int, orientation=0, action=:none; close=true)
     [Point(x+cos(orientation + n * 2pi/sides) * radius,
     y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
 end
