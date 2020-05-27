@@ -253,21 +253,21 @@ Base.eachindex(t::Table) = 1:length(t)
 
 # box extensions
 """
-    box(t::Table, r::T, c::T, action::Symbol=:nothing) where T <: Integer
+    box(t::Table, r::T, c::T, action::Symbol=:none) where T <: Integer
 
 Draw a box in table `t` at row `r` and column `c`.
 """
-function box(t::Table, r::T, c::T, action::Symbol=:nothing) where T <: Integer
+function box(t::Table, r::T, c::T, action::Symbol=:none; kwargs...) where T <: Integer
     cellw, cellh = t.colwidths[c], t.rowheights[r]
-    box(t[r, c], cellw, cellh, action)
+    box(t[r, c], cellw, cellh, action; kwargs...)
 end
 
 """
-    box(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)
+    box(t::Table, cellnumber::Int, action::Symbol=:none; vertices=false)
 
 Draw box `cellnumber` in table `t`.
 """
-function box(t::Table, cellnumber::Int, action::Symbol=:nothing; vertices=false)
+function box(t::Table, cellnumber::Int, action::Symbol=:none; vertices=false)
     r = div(cellnumber - 1, t.ncols) + 1
     c = mod1(cellnumber, t.ncols)
 

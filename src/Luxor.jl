@@ -135,7 +135,7 @@ export Drawing,
 
     julialogo, juliacircles,
 
-    bars,
+    barchart,
 
     mesh, setmesh, mask,
 

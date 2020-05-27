@@ -7,7 +7,7 @@ do an action.
 See `box()` for more ways to do similar things, such as supplying two opposite corners,
 placing by centerpoint and dimensions.
 """
-function rect(xmin, ymin, w, h, action::Symbol=:nothing)
+function rect(xmin, ymin, w, h, action::Symbol=:none)
     if action != :path
         newpath()
     end
@@ -25,9 +25,9 @@ Create a rectangle with one corner at `cornerpoint` with width `w` and height
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-function rect(cornerpoint::Point, w, h, action::Symbol=:nothing;
+function rect(cornerpoint::Point, w, h, action::Symbol=:none;
         vertices=false)
-    if !vertices
+    if vertices == false && action != :none
         rect(cornerpoint.x, cornerpoint.y, w, h, action)
     end
     return [
@@ -39,7 +39,7 @@ function rect(cornerpoint::Point, w, h, action::Symbol=:nothing;
 end
 
 """
-    box(cornerpoint1, cornerpoint2, action=:nothing;
+    box(cornerpoint1, cornerpoint2, action=:none;
         vertices=false)
 
 Create a box (rectangle) between two points and do an action.
@@ -47,9 +47,9 @@ Create a box (rectangle) between two points and do an action.
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-function box(corner1::Point, corner2::Point, action::Symbol=:nothing;
-    vertices=false)
-    if !vertices
+function box(corner1::Point, corner2::Point, action::Symbol=:none;
+        vertices=false)
+    if vertices == false && action != :none
         rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
     end
     return [
@@ -61,7 +61,7 @@ function box(corner1::Point, corner2::Point, action::Symbol=:nothing;
 end
 
 """
-    box(points::Array, action=:nothing)
+    box(points::Array, action=:none)
 
 Create a box/rectangle using the first two points of an array of Points to
 defined opposite corners.
@@ -69,18 +69,19 @@ defined opposite corners.
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-box(bbox::Array, action::Symbol=:nothing; kwargs...) =
+box(bbox::Array, action::Symbol=:none; kwargs...) =
     box(bbox[1], bbox[2], action; kwargs...)
 
 """
-    box(pt::Point, width, height, action=:nothing; vertices=false)
+    box(pt::Point, width, height, action=:none; vertices=false)
 
 Create a box/rectangle centered at point `pt` with width and height. Use
 `vertices=true` to return an array of the four corner points rather than draw
 the box.
 """
-function box(pt::Point, width, height, action::Symbol=:nothing; vertices=false)
-    if !vertices
+function box(pt::Point, width, height, action::Symbol=:none;
+        vertices=false)
+    if vertices == false && action != :none
         rect(pt.x - width/2, pt.y - height/2, width, height, action)
     end
     return [
@@ -92,15 +93,15 @@ function box(pt::Point, width, height, action::Symbol=:nothing; vertices=false)
 end
 
 """
-    box(x, y, width, height, action=:nothing)
+    box(x, y, width, height, action=:none)
 
 Create a box/rectangle centered at point `x/y` with width and height.
 """
-box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:nothing) =
+box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:none) =
     rect(x - width/2.0, y - height/2.0, width, height, action)
 
 """
-    box(pt, width, height, cornerradius, action=:nothing)
+    box(pt, width, height, cornerradius, action=:none)
 
 Draw a box/rectangle centered at point `pt` with `width` and `height` and
 round each corner by `cornerradius`.
@@ -149,12 +150,12 @@ function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:st
 end
 
 """
-    ngon(x, y, radius, sides=5, orientation=0, action=:nothing;
+    ngon(x, y, radius, sides=5, orientation=0, action=:none;
         vertices=false, reversepath=false)
 
 Draw a regular polygon centered at point `centerpos`.
 """
-function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0, action=:nothing;
+function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0, action=:none;
               vertices=false,
               reversepath=false)
     ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
@@ -166,7 +167,7 @@ function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0, act
 end
 
 """
-    ngon(centerpos, radius, sides=5, orientation=0, action=:nothing;
+    ngon(centerpos, radius, sides=5, orientation=0, action=:none;
         vertices=false,
         reversepath=false)
 
@@ -197,23 +198,23 @@ whereas
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-ngon(centerpoint::Point, radius, sides::Int=5, orientation=0.0, action=:nothing; kwargs...) =
+ngon(centerpoint::Point, radius, sides::Int=5, orientation=0.0, action=:none; kwargs...) =
     ngon(centerpoint.x, centerpoint.y, radius, sides, orientation, action; kwargs...)
 
 """
     ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
-        action=:nothing; kwargs...)
+        action=:none; kwargs...)
 
 Draw a regular polygon centered at `centerpoint` with `sides` sides of length `sidelength`.
 """
 function ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
-    action=:nothing; kwargs...)
+    action=:none; kwargs...)
     radius = 0.5 * sidelength * csc(pi/sides)
     ngon(centerpoint, radius, sides, orientation, action; kwargs...)
 end
 
 """
-    star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
+    star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:none;
         vertices = false,
         reversepath=false)
 
@@ -223,7 +224,7 @@ larger.
 Use `vertices=true` to return the vertices of a star instead of drawing it.
 """
 function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
-    orientation=0, action=:nothing;
+    orientation=0, action=:none;
     vertices = false,
     reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
@@ -245,13 +246,13 @@ function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
 end
 
 """
-    star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:nothing;
+    star(center, radius, npoints=5, ratio=0.5, orientation=0, action=:none;
         vertices = false, reversepath=false)
 
 Draw a star centered at a position:
 """
 function star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0,
-              action=:nothing;
+              action=:none;
               vertices=false,
               reversepath=false)
     star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action;

@@ -347,11 +347,11 @@ line(x, y)      = Cairo.line_to(get_current_cr(), x, y)
 line(pt)        = line(pt.x, pt.y)
 
 """
-    line(pt1::Point, pt2::Point, action=:nothing)
+    line(pt1::Point, pt2::Point, action=:none)
 
 Make a line between two points, `pt1` and `pt2` and do an action.
 """
-function line(pt1::Point, pt2::Point, action=:nothing)
+function line(pt1::Point, pt2::Point, action=:none)
     move(pt1)
     line(pt2)
     do_action(action)
@@ -392,6 +392,8 @@ function rule(pos, theta=0.0;
         boundingbox=BoundingBox(),
         vertices=false)
     #TODO interaction with clipping regions needs work
+
+    #TODO which boundingbox is providing the default???
     bbox       = box(boundingbox, vertices=true)
     topside    = bbox[2:3]
     rightside  = bbox[3:4]

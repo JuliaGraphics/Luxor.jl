@@ -3,14 +3,14 @@
 """
 Draw a polygon.
 
-    poly(pointlist::Array{Point, 1}, action = :nothing;
+    poly(pointlist::Array{Point, 1}, action = :none;
         close=false,
         reversepath=false)
 
 A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
 to allow for clipping.
 """
-function poly(pointlist::Array{Point, 1}, action::Symbol = :nothing;
+function poly(pointlist::Array{Point, 1}, action::Symbol = :none;
         close::Bool=false, reversepath::Bool=false)
     if action != :path
         newpath()
@@ -274,7 +274,7 @@ function polysplit(pointlist::Array{Point, 1}, p1::Point, p2::Point)
 end
 
 """
-    prettypoly(points::Array{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
+    prettypoly(points::Array{Point, 1}, action=:none, vertexfunction = () -> circle(O, 2, :stroke);
         close=false,
         reversepath=false,
         vertexlabels = (n, l) -> ()
@@ -303,7 +303,7 @@ and "3 of 3" using:
     prettypoly(triangle, :stroke,
         vertexlabels = (n, l) -> (text(string(n, " of ", l))))
 """
-function prettypoly(pointlist::Array{Point, 1}, action=:nothing, vertexfunction = () -> circle(O, 2, :stroke);
+function prettypoly(pointlist::Array{Point, 1}, action=:none, vertexfunction = () -> circle(O, 2, :stroke);
     close=false,
     reversepath=false,
     vertexlabels = (n, l) -> ()

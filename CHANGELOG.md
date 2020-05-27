@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.13.0] - forthcoming
+## [v2.0.0] - forthcoming May/June 2020
 
 ### Added
 
@@ -9,9 +9,14 @@
 
 ### Changed
 
+- some `:nothing`s replaced with `:none`s
+- fixed some `box` bugs, when they were drawn when they shouldn't have been
+
 ### Removed
 
 ### Deprecated
+
+- `bars()` - use `barchart()`
 
 ## [v1.12.0] - 2020 May 4
 

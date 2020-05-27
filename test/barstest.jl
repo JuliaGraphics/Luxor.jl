@@ -1,96 +1,119 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Test, Random
 
-using Test
-
-using Random
 Random.seed!(42)
 
-function barfunc1(low, high, v; extremes=extrema(values), barnumber=0, bartotal=0, mvalue=0)
+function barfunc1(values, i, lowpos, highpos, barwidth, scaledvalue)
+    extremes=extrema(values)
+    barnumber=i
+    bartotal=sum(values)
     @layer begin
-        sethue(rescale(v, 0, extremes[2], 0, 1), rand(), rand())
-        circle(low, 2, :fill)
-        box(Point(low.x - 5, low.y), Point(high.x + 5, high.y), :fill)
+        sethue(rescale(values[i], 0, extremes[2], 0, 1), rand(), rand())
+        circle(lowpos, 2, :fill)
+        box(Point(lowpos.x - 5, lowpos.y), Point(highpos.x + 5, highpos.y), :fill)
         fontsize(6)
         sethue("black")
-        textbox([string(round(v, digits=2))], Point(low.x, 100), leading=5, alignment=:center)
+        textbox([string(round(values[i], digits=2))], Point(lowpos.x, 100), leading=5, alignment=:center)
         sethue("gray80")
         setline(0.5)
         setdash("dot")
-        line(low, Point(low.x, 100), :stroke)
+        line(lowpos, Point(lowpos.x, 100), :stroke)
     end
 end
 
-function barfunc2(low, high, value; extremes=extrema(values), barnumber=0, bartotal=0)
+function barfunc2(values, i, lowpos, highpos, barwidth, scaledvalue)
+    extremes=extrema(values)
+    barnumber=i
+    bartotal=sum(values)
     @layer begin
         sethue("red")
         randomhue()
         setline(4)
         setlinecap("round")
-        line(low, high, :stroke)
-        circle(high, 2, :fill)
+        line(lowpos, highpos, :stroke)
+        circle(highpos, 2, :fill)
+
+        arrow(highpos - (barwidth/2.0, 0), highpos + (barwidth/2.0, 0))
     end
 end
 
-emptylabelfunction(args...; extremes=[], barnumber=0, bartotal=0) = nothing
+emptylabelfunction(args...) = nothing
 
-function mylabelfunction(bottom::Point, top::Point, value;
-        extremes=[], barnumber=0, bartotal=0)
-    t = string(value)
+function mylabelfunction(values, i, lowpos, highpos, scaledvalue)
+    t = string(values[i])
     textoffset = textextents(t)[4]
-    if top.y < 0
-        tp = Point(top.x, min(top.y, bottom.y) - textoffset)
-    else
-        tp = Point(top.x, max(top.y, bottom.y) + textoffset)
-    end
     @layer begin
-        translate(tp)
-        rotate(-pi/2)
+        translate(highpos)
+        rotate(-π/2)
         text(t, O, halign=:left, valign=:middle)
     end
 end
 
-function test_bars(fname)
+function test_barchart(fname)
     pagewidth, pageheight = 1200, 1400
     Drawing(pagewidth, pageheight, fname)
     background("antiquewhite")
-    fontsize(5)
+    fontsize(10)
     sethue("black")
     origin()
-    translate(-200, 0)
-    tiles = Tiler(pagewidth, pageheight, 6, 2, margin=35)
+    tiles = Tiler(pagewidth, pageheight, 3, 2, margin=35)
     for (pos, n) in tiles
         @layer begin
-            translate(pos)
-            if n % 5 == 1
+            if n == 1
                 v = randn(15)
-                bars(v, labelfunction = (args...; extremes=[], barnumber=0, bartotal=0) ->  setgray(rand()))
-            elseif n % 5 == 2
+                text("line bar function, grey label function",pos)
+                barchart(v,
+                    boundingbox=BoundingBox(box(tiles, n)),
+                    barfunction = (values, i, lowpos, highpos, barwidth, scaledvalue) ->  begin
+                      @layer begin
+                        setline(rescale(values[i], extrema(values)..., 1, 50))
+                        setgray(rand())
+                        line(lowpos, highpos, :stroke)
+                      end
+                    end,
+                    labelfunction = (values, i, lowpos, highpos, barwidth, scaledvalue) ->  begin
+                      @layer begin
+                        text(string(i), highpos, halign=:center)
+                      end
+                    end,
+                    border = true)
+                box(tiles, n, :stroke)
+            elseif n == 2
                 # no labels
-                v = rand(1:10, 100)
-                bars(v, xwidth=rand(2:6), yheight=rand(50:100), labelfunction=emptylabelfunction)
-            elseif n % 5 == 3
+                v = rand(1:10, 20)
+                barchart(v,
+                    boundingbox=BoundingBox(box(tiles, n)) * 0.8,
+                    labelfunction=emptylabelfunction)
+            elseif n == 3
                 # a custom label function
                 v = rand(20)
-                bars(v, yheight=rand(10:80), xwidth=rand(5:20), labelfunction=mylabelfunction)
-            elseif n % 5 == 4
+                barchart(v,
+                    boundingbox=BoundingBox(box(pos, tiles.tilewidth, tiles.tileheight, vertices=true)) * 0.8,
+                    labelfunction=mylabelfunction)
+            elseif n == 4
                 # a custom barfunction
                 v = rand(5:0.1:10, 20)
-                bars(v, yheight=30, xwidth=20, labels=false, barfunction = barfunc1)
-            elseif n % 5 == 5
+                barchart(v,
+                    boundingbox=BoundingBox(box(pos, tiles.tilewidth, tiles.tileheight, vertices=true)) * 0.8,
+                    barfunction = barfunc1)
+            elseif n == 5
                 # another custom barfunction
                 v = rand(-20:2:20, 30)
-                bars(v, xwidth=14, barfunction=barfunc2)
+                barchart(v,
+                    boundingbox=BoundingBox(box(pos, tiles.tilewidth, tiles.tileheight, vertices=true)) * 0.8,
+                    barfunction=barfunc2)
             else
                 v = randn(15)
-                bars(v)
+                barchart(v,
+                    boundingbox=BoundingBox(box(pos, tiles.tilewidth, tiles.tileheight, :none)) * 0.8,
+                    barfunction=barfunc2)
             end
         end
     end
     @test finish() == true
     println("...finished barstest, saved in $(fname)")
 end
-
-fname = "bars-test.pdf"
-test_bars(fname)
+println("start test")
+fname = "bars-test.png"
+test_barchart(fname)

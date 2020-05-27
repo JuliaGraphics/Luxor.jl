@@ -445,7 +445,7 @@ using Luxor # hide
 Drawing(400, 350, "assets/figures/polychange.png") # hide
 origin() # hide
 
-sethue("black") # hide
+sethue("magenta") # hide
 shape = star(O, 10, 5, 0.5, 0, vertices=true)
 
 circle(O, 3, :stroke)
