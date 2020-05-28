@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>More graphics · Luxor</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.png" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit">Luxor</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Luxor</a></li><li><a class="tocitem" href="../examples/">A few examples</a></li><li><a class="tocitem" href="../tutorial/">Tutorial</a></li><li><a class="tocitem" href="../basics/">Basic concepts</a></li><li><a class="tocitem" href="../simplegraphics/">Simple shapes</a></li><li class="is-active"><a class="tocitem" href>More graphics</a><ul class="internal"><li><a class="tocitem" href="#Julia-logos-1"><span>Julia logos</span></a></li><li><a class="tocitem" href="#Hypotrochoids-1"><span>Hypotrochoids</span></a></li><li><a class="tocitem" href="#Cropmarks-1"><span>Cropmarks</span></a></li><li><a class="tocitem" href="#Dimensioning-1"><span>Dimensioning</span></a></li><li><a class="tocitem" href="#Barcharts-1"><span>Barcharts</span></a></li><li><a class="tocitem" href="#Box-maps-1"><span>Box maps</span></a></li></ul></li><li><a class="tocitem" href="../geometrytools/">Geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Colors and styles</a></li><li><a class="tocitem" href="../polygons/">Polygons and paths</a></li><li><a class="tocitem" href="../text/">Text</a></li><li><a class="tocitem" href="../transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../clipping/">Clipping</a></li><li><a class="tocitem" href="../images/">Images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Animation</a></li><li><a class="tocitem" href="../moreexamples/">More examples</a></li><li><a class="tocitem" href="../functionindex/">Index</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>More graphics</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>More graphics</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/moregraphics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="More-graphics-1"><a class="docs-heading-anchor" href="#More-graphics-1">More graphics</a><a class="docs-heading-anchor-permalink" href="#More-graphics-1" title="Permalink"></a></h1><h2 id="Julia-logos-1"><a class="docs-heading-anchor" href="#Julia-logos-1">Julia logos</a><a class="docs-heading-anchor-permalink" href="#Julia-logos-1" title="Permalink"></a></h2><p>A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:</p><pre><code class="language-julia">cells = Table([300], [350, 350])
+
+@layer begin
+    translate(cells[1])
+    translate(-165, -114)
+    rulers()
+    julialogo()
+end
+
+@layer begin
+    translate(cells[2])
+    translate(-165, -114)
+    rulers()
+    julialogo(action=:clip)
+    for i in 1:500
+        @layer begin
+            translate(rand(0:400), rand(0:250))
+            juliacircles(10)
+        end
+    end
+    clipreset()
+    end</code></pre><p><img src="../assets/figures/julia-logo.png" alt="get path"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.julialogo" href="#Luxor.julialogo"><code>Luxor.julialogo</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">julialogo(;
+    action=:fill,
+    color=true,
+    bodycolor=colorant&quot;black&quot;)</code></pre><p>Draw the Julia logo. The default action is to fill the logo and use the colors:</p><pre><code class="language-none">julialogo()</code></pre><p>If <code>color</code> is <code>false</code>, the <code>bodycolor</code> color is used for the logo..</p><p>The logo can be difficult to position well due to its asymmetric design. The <code>0/0</code> point is at the top left corner, the total width is 315pt, the total height is 214pts. The optical center is <em>somewhere</em> between 163-180pts in x, and 96-114pts in y. The gap to the left edge of &quot;j&quot;s descender is 16; the distance between the left edge of the &quot;j&quot; (not the descender) and the right edge of the &quot;a&quot; is at 268pts.</p><p>So, to place the logo by locating its center at a point, do this:</p><pre><code class="language-none">gsave()
+# scale() first if required
+translate(-165, -114) # anything between (x: -163 to -180, y: -96 to -114)
+julialogo()
+grestore()</code></pre><p>To use the logo as a clipping mask:</p><pre><code class="language-none">julialogo(action=:clip)</code></pre><p>(In this case the <code>color</code> setting is automatically ignored.)</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.juliacircles" href="#Luxor.juliacircles"><code>Luxor.juliacircles</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">juliacircles(radius=100)</code></pre><p>Draw the three Julia circles (&quot;dots&quot;) in color centered at the origin.</p><p>The distance of the centers of each circle from the origin is <code>radius</code>.</p><p>The optional keyword argument <code>outercircleratio</code> (default 0.75) determines the radius of each circle relative to the main radius. So the default is to draw circles of radius 75 points around a larger circle of radius 100.</p><p>Return the three centerpoints.</p><p>The <code>innercircleratio</code> (default 0.65) no longer does anything useful (it used to draw the smaller circles) and will be deprecated.</p></div></section></article><h2 id="Hypotrochoids-1"><a class="docs-heading-anchor" href="#Hypotrochoids-1">Hypotrochoids</a><a class="docs-heading-anchor-permalink" href="#Hypotrochoids-1" title="Permalink"></a></h2><p><code>hypotrochoid()</code> makes hypotrochoids. The result is a polygon. You can either draw it directly, or pass it on for further polygon fun, as here, which uses <code>offsetpoly()</code> to trace round it a few times.</p><pre><code class="language-julia">origin()
+background(&quot;grey15&quot;)
+sethue(&quot;antiquewhite&quot;)
+setline(1)
+p = hypotrochoid(100, 25, 55, :stroke, stepby=0.01, vertices=true)
+for i in 0:3:15
+    poly(offsetpoly(p, i), :stroke, close=true)
+end</code></pre><p><img src="../assets/figures/hypotrochoid.png" alt="hypotrochoid"/></p><p>There&#39;s a matching <code>epitrochoid()</code> function.</p><article class="docstring"><header><a class="docstring-binding" id="Luxor.hypotrochoid" href="#Luxor.hypotrochoid"><code>Luxor.hypotrochoid</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">hypotrochoid(R, r, d, action=:none;
+        stepby=0.01,
+        period=0.0,
+        vertices=false)</code></pre><p>Make a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius <code>r</code> rolling around the inside  of a fixed circle of radius <code>R</code>, where the point is a distance <code>d</code> from  the center of the interior circle. Things get interesting if you supply non-integral values.</p><p>Special cases include the hypocycloid, if <code>d</code> = <code>r</code>, and an ellipse, if <code>R</code> = <code>2r</code>.</p><p><code>stepby</code>, the angular step value, controls the amount of detail, ie the smoothness of the polygon,</p><p>If <code>period</code> is not supplied, or 0, the lowest period is calculated for you.</p><p>The function can return a polygon (a list of points), or draw the points directly using the supplied <code>action</code>. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of <code>pi</code>).</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.epitrochoid" href="#Luxor.epitrochoid"><code>Luxor.epitrochoid</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">epitrochoid(R, r, d, action=:none;
+        stepby=0.01,
+        period=0,
+        vertices=false)</code></pre><p>Make a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a point attached to a circle of radius <code>r</code> rolling around the outside of a fixed circle of radius <code>R</code>, where the point is a distance <code>d</code> from the center of the circle. Things get interesting if you supply non-integral values.</p><p><code>stepby</code>, the angular step value, controls the amount of detail, ie the smoothness of the polygon.</p><p>If <code>period</code> is not supplied, or 0, the lowest period is calculated for you.</p><p>The function can return a polygon (a list of points), or draw the points directly using the supplied <code>action</code>. If the points are drawn, the function returns a tuple showing how many points were drawn and what the period was (as a multiple of <code>pi</code>).</p></div></section></article><h2 id="Cropmarks-1"><a class="docs-heading-anchor" href="#Cropmarks-1">Cropmarks</a><a class="docs-heading-anchor-permalink" href="#Cropmarks-1" title="Permalink"></a></h2><p>If you want cropmarks (aka trim marks), use the <code>cropmarks()</code> function, supplying the centerpoint, followed by the width and height:</p><pre><code class="language-none">cropmarks(O, 1200, 1600)
+cropmarks(O, paper_sizes[&quot;A0&quot;]...)</code></pre><pre><code class="language-julia">sethue(&quot;red&quot;)
+box(O, 150, 150, :stroke)
+cropmarks(O, 150, 150)</code></pre><p><img src="../assets/figures/cropmarks.png" alt="cropmarks"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.cropmarks" href="#Luxor.cropmarks"><code>Luxor.cropmarks</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">cropmarks(center, width, height)</code></pre><p>Draw cropmarks (also known as trim marks).</p></div></section></article><h2 id="Dimensioning-1"><a class="docs-heading-anchor" href="#Dimensioning-1">Dimensioning</a><a class="docs-heading-anchor-permalink" href="#Dimensioning-1" title="Permalink"></a></h2><p>Simple dimensioning graphics can be generated with <code>dimension()</code>. To convert from the default unit (PostScript points), or to modify the dimensioning text, supply a function to the <code>format</code> keyword argument.</p><p><img src="../assets/figures/dimensioning.svg" alt="dimensioning"/></p><pre><code class="language-julia">setline(0.75)
+sethue(&quot;purple&quot;)
+pentagon = ngonside(O, 120, 5, vertices=true)
+poly(pentagon, :stroke, close=true)
+circle.(pentagon, 2, :fill)
+fontsize(6)
+label.(split(&quot;12345&quot;, &quot;&quot;), :NE, pentagon)
+fontface(&quot;Menlo&quot;)
+fontsize(10)
+sethue(&quot;grey30&quot;)
+
+dimension(O, pentagon[4],
+    fromextension = [0, 0])
+
+dimension(pentagon[1], pentagon[2],
+    offset        = -60,
+    fromextension = [20, 50],
+    toextension   = [20, 50],
+    textrotation  = 2π/5,
+    textgap       = 20,
+    format        = (d) -&gt; string(round(d, digits=4), &quot;pts&quot;))
+
+dimension(pentagon[2], pentagon[3],
+     offset        = -40,
+     format        =  string)
+
+dimension(pentagon[5], Point(pentagon[5].x, pentagon[4].y),
+    offset        = 60,
+    format        = (d) -&gt; string(&quot;approximately &quot;,round(d, digits=4)),
+    fromextension = [5, 5],
+    toextension   = [80, 5])
+
+dimension(pentagon[1], midpoint(pentagon[1], pentagon[5]),
+    offset               = 70,
+    fromextension        = [65, -5],
+    toextension          = [65, -5],
+    texthorizontaloffset = -5,
+    arrowheadlength      = 5,
+    format               = (d) -&gt;
+        begin
+            if isapprox(d, 60.0)
+                string(&quot;exactly &quot;, round(d, digits=4), &quot;pts&quot;)
+            else
+                string(&quot;≈ &quot;, round(d, digits=4), &quot;pts&quot;)
+            end
+        end)
+
+dimension(pentagon[1], pentagon[5],
+    offset               = 120,
+    fromextension        = [5, 5],
+    toextension          = [115, 5],
+    textverticaloffset   = 0.5,
+    texthorizontaloffset = 0,
+    textgap              = 5)</code></pre><article class="docstring"><header><a class="docstring-binding" id="Luxor.dimension" href="#Luxor.dimension"><code>Luxor.dimension</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">dimension(p1::Point, p2::Point;
+    format::Function   = (d) -&gt; string(d), # process the measured value into a string
+    offset             = 0.0,              # left/right, parallel with x axis
+    fromextension      = (10.0, 10.0),     # length of extensions lines left and right
+    toextension        = (10.0, 10.0),     #
+    textverticaloffset = 0.0,              # range 1.0 (top) to -1.0 (bottom)
+    texthorizontaloffset = 0.0,            # range 1.0 (top) to -1.0 (bottom)
+    textgap            = 5,                # gap between start of each arrow (≈ fontsize?)
+    textrotation       = 0.0,
+    arrowlinewidth     = 1.0,
+    arrowheadlength    = 10,
+    arrowheadangle     = π/8)</code></pre><p>Calculate and draw dimensioning graphics for the distance between <code>p1</code> and <code>p2</code>. The value can be formatted with function <code>format</code>.</p><p><code>p1</code> is the lower on the page (ie probably the higher y value) point, <code>p2</code> is the higher on the page (ie probably lower y) point.</p><p><code>offset</code> is to the left (-x) when negative.</p><p>Dimension graphics will be rotated to align with a line between <code>p1</code> and <code>p2</code>.</p><p>In <code>textverticaloffset</code>, &quot;vertical&quot; and &quot;horizontal&quot; are best understood by &quot;looking&quot; along the line from the first point to the second. <code>textverticaloffset</code> ranges from -1 to 1, <code>texthorizontaloffset</code> in default units.</p><pre><code class="language-none">        toextension
+        [5  ,  5]
+       &lt;---&gt; &lt;---&gt;
+                             to
+       -----------            +
+            ^
+            |
+
+           -50
+
+            |
+            v
+       ----------            +
+                            from
+       &lt;---&gt; &lt;---&gt;
+         [5 , 5]
+       fromextension
+
+            &lt;----------------&gt;
+                  offset</code></pre><p>Returns the measured distance and the text.</p></div></section></article><h2 id="Barcharts-1"><a class="docs-heading-anchor" href="#Barcharts-1">Barcharts</a><a class="docs-heading-anchor-permalink" href="#Barcharts-1" title="Permalink"></a></h2><p>For simple barcharts, use the <code>barchart()</code> function, supplying an array of numbers:</p><pre><code class="language-julia">fontsize(7)
+sethue(&quot;black&quot;)
+v = rand(-100:100, 25)
+barchart(v, labels=true)</code></pre><p><img src="../assets/figures/bars.png" alt="bars"/></p><p>To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments:</p><pre><code class="language-julia">function mybarfunction(values, i, low, high, barwidth, scaledvalue)
+    @layer begin
+        extremes = extrema(values)
+        sethue(Colors.HSB(rescale(values[i], extremes[1], extremes[2], 0, 360), 1.0, 0.5))
+        csize = rescale(values[i], extremes[1], extremes[2], 5, 15)
+        circle(high, csize, :fill)
+        setline(1)
+        sethue(&quot;blue&quot;)
+        line(low, high, :stroke)
+        sethue(&quot;white&quot;)
+        text(string(values[i]), high, halign=:center, valign=:middle)
+    end
+end
+
+function mylabelfunction(values, i, low, high, barwidth, scaledvalue)
+    @layer begin
+        translate(low)
+        text(string(values[i]), O + (0, 10), halign=:center, valign=:middle)
+    end
+end
+
+v = rand(1:100, 15)
+
+bbox = BoundingBox() * 0.8
+box(bbox, :clip)
+p = barchart(v, boundingbox=bbox, barfunction=mybarfunction, labelfunction=mylabelfunction)
+
+rule(p[1])</code></pre><p><img src="../assets/figures/bars1.png" alt="bars 1"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.barchart" href="#Luxor.barchart"><code>Luxor.barchart</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">barchart(values;
+        boundingbox = BoundingBox(O + (-250, -120), O + (250, 120)),
+        bargap=10,
+        margin = 5,
+        border=false,
+        labels=false,
+        labelfunction = (values, i, lowpos, highpos, barwidth, scaledvalue) -&gt; begin
+                label(string(values[i]), :n, highpos, offset=10)
+          end,
+        barfunction =  (values, i, lowpos, highpos, barwidth, scaledvalue) -&gt; begin
+            @layer begin
+                setline(barwidth)
+                line(lowpos, highpos, :stroke)
+            end
+          end)</code></pre><p>Draw a barchart where each bar is the height of a value in the <code>values</code> array. The bars will be scaled to fit in a bounding box.</p><p>Text labels are drawn if the keyword <code>labels=true</code>.</p><p><strong>Extended help</strong></p><p>The function returns a vector of points; each is the bottom center of a bar.</p><p>Draw a Fibonacci sequence as a barchart:</p><pre><code class="language-none">fib(n) = n &gt; 2 ? fib(n - 1) + fib(n - 2) : 1
+fibs = fib.(1:15)
+@draw begin
+    fontsize(12)
+    barchart(fibs, labels=true)
+end</code></pre><p>To control the drawing of the text and bars, define functions that process the end points:</p><p><code>mybarfunction(values, i, lowpos, highpos, barwidth, scaledvalue)</code></p><p><code>mylabelfunction(values, i, lowpos, highpos, barwidth, scaledvalue)</code></p><p>and pass them like this:</p><pre><code class="language-julia">barchart(vals, barfunction=mybarfunction)
+barchart(vals, labelfunction=mylabelfunction)</code></pre><pre><code class="language-none">function myprologfunction(values, basepoint, minbarrange, maxbarrange, barchartheight)
+    @layer begin
+        setline(0.2)
+        for i in 0:10:maximum(values)
+            rule(boxbottomcenter(basepoint) + (0, -(rescale(i, minbarrange, maxbarrange) * barchartheight)))
+        end
+    end
+end</code></pre></div></section></article><h2 id="Box-maps-1"><a class="docs-heading-anchor" href="#Box-maps-1">Box maps</a><a class="docs-heading-anchor-permalink" href="#Box-maps-1" title="Permalink"></a></h2><p>The <code>boxmap()</code> function divides a rectangular area into a sorted arrangement of smaller boxes or tiles based on the values of elements in an array.</p><p>This example uses the Fibonacci sequence to determine the area of the boxes. Notice that the values are sorted in reverse, and are scaled to fit in the available area.</p><pre><code class="language-julia">fib = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+
+# make a boxmap and store the tiles
+tiles = boxmap(fib, BoundingBox()[1], 800, 450)
+
+for (n, t) in enumerate(tiles)
+    randomhue()
+    bb = BoundingBox(t)
+    sethue(&quot;black&quot;)
+    box(bb - 5, :stroke)
+
+    randomhue()
+    box(bb - 8, :fill)
+
+    # text labels
+    sethue(&quot;white&quot;)
+
+    # rescale text to fit better
+    fontsize(boxwidth(bb) &gt; boxheight(bb) ? boxheight(bb)/4 : boxwidth(bb)/4)
+    text(string(sort(fib, rev=true)[n]),
+        midpoint(bb[1], bb[2]),
+        halign=:center,
+            valign=:middle)
+end</code></pre><p><img src="../assets/figures/boxmap.png" alt="boxmap"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxmap" href="#Luxor.boxmap"><code>Luxor.boxmap</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxmap(A::Array, pt, w, h)</code></pre><p>Build a box map of the values in <code>A</code> with one corner at <code>pt</code> and width <code>w</code> and height <code>h</code>. There are <code>length(A)</code> boxes. The areas of the boxes are proportional to the original values, scaled as necessary.</p><p>The return value is an array of BoxmapTiles. For example:</p><pre><code class="language-none">[BoxmapTile(0.0, 0.0, 10.0, 20.0)
+ BoxmapTile(10.0, 0.0, 10.0, 13.3333)
+ BoxmapTile(10.0, 13.3333, 10.0, 6.66667)]</code></pre><p>with each tile containing <code>(x, y, w, h)</code>. <code>box()</code> and <code>BoundingBox()</code> can work with BoxmapTiles as well.</p><p><strong>Example</strong></p><pre><code class="language-none">using Luxor
+@svg begin
+    fontsize(16)
+    fontface(&quot;HelveticaBold&quot;)
+    pt = Point(-200, -200)
+    a = rand(10:200, 15)
+    tiles = boxmap(a, Point(-200, -200), 400, 400)
+    for (n, t) in enumerate(tiles)
+        randomhue()
+        bb = BoundingBox(t)
+        box(bb - 2, :stroke)
+        box(bb - 5, :fill)
+        sethue(&quot;white&quot;)
+        text(string(n), midpoint(bb[1], bb[2]), halign=:center)
+    end
+end 400 400 &quot;/tmp/boxmap.svg&quot;</code></pre></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../simplegraphics/">« Simple shapes</a><a class="docs-footer-nextpage" href="../geometrytools/">Geometry tools »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 28 May 2020 12:39">Thursday 28 May 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
