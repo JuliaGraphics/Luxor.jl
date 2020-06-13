@@ -2,7 +2,7 @@ const Mesh = Cairo.CairoPattern
 
 """
     mesh(bezierpath::BezierPath,
-         colors=Array{ColorTypes.Colorant, 1})
+         colors=Array{Colors.Colorant, 1})
 
 Create a mesh. The first three or four elements of the supplied `bezierpath`
 define the three or four sides of the mesh shape.
@@ -29,7 +29,7 @@ end
 ```
 """
 function mesh(bezierpath::BezierPath,
-              colors=Array{ColorTypes.Colorant, 1})
+              colors=Array{Colors.Colorant, 1})
     pattern = Cairo.CairoPatternMesh()
     Cairo.mesh_pattern_begin_patch(pattern)
     Cairo.mesh_pattern_move_to(pattern, bezierpath[1][1].x, bezierpath[1][1].y)
@@ -51,12 +51,12 @@ function mesh(bezierpath::BezierPath,
 end
 
 # old style for compatibility
-mesh(bezierpath::Array{NTuple{4, Point}}, colors=Array{ColorTypes.Colorant, 1}) =
+mesh(bezierpath::Array{NTuple{4, Point}}, colors=Array{Colors.Colorant, 1}) =
     mesh(BezierPath(bezierpath), colors)
 
 """
     mesh(points::Array{Point},
-         colors=Array{ColorTypes.Colorant, 1})
+         colors=Array{Colors.Colorant, 1})
 
 Create a mesh.
 
@@ -85,7 +85,7 @@ end
 ```
 """
 function mesh(plist::Array{Point},
-              colors=Array{ColorTypes.Colorant, 1})
+              colors=Array{Colors.Colorant, 1})
     pattern = Cairo.CairoPatternMesh()
     Cairo.mesh_pattern_begin_patch(pattern)
     Cairo.mesh_pattern_move_to(pattern, plist[1].x, plist[1].y)

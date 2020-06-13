@@ -1,10 +1,7 @@
 #!/usr/bin/env julia
 
-using Luxor
+using Luxor, Colors, Test, Random
 
-using Test
-
-using Random
 Random.seed!(42)
 
 function spirals()
@@ -70,7 +67,6 @@ function colorgrid()
       julialogo(color=false)
       grestore()
     end
-
     grestore()
 end
 
@@ -109,5 +105,39 @@ function draw_julia_logos(fname)
     @test finish() == true
     println("...finished test: output in $(fname)")
 end
-
 draw_julia_logos("julia-logo-draw.png")
+
+# requires Luxor >= 2.0
+function julialogodims(fname)
+      Drawing(1600, 1600, fname)
+      origin()
+      background("white")
+      sethue("black")
+      julialogo(action=:path, centered=true)
+      p = pathtopoly()
+      lox, hix = extrema(first.(collect(Iterators.flatten(p))))
+      loy, hiy = extrema(getfield.(collect(Iterators.flatten(p)), :y))
+      bbx  = BoundingBox(Point(lox, loy), Point(hix, hiy))
+      sethue("grey58")
+      box(bbx, :stroke)
+      rule(boxmiddlecenter(bbx), boundingbox=bbx)
+      rule(boxmiddlecenter(bbx), π/2, boundingbox=bbx)
+      dimension(boxtopleft(bbx),
+         format = (d) -> string(round(d)),
+         boxtopright(bbx),
+         offset=-50,
+         textgap=0,
+         textrotation=-π/2,
+         texthorizontaloffset=20)
+      dimension(boxtopleft(bbx),
+         format = (d) -> string(round(d)),
+         boxbottomleft(bbx),
+         textrotation=π,
+         offset=30,
+         texthorizontaloffset=20)
+         julialogo(centered=true)
+      @test finish() == true
+      println("...finished test: output in $(fname)")
+    end
+
+julialogodims("julia-logo-dims.png")

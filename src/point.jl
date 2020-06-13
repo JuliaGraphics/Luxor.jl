@@ -76,6 +76,8 @@ cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 # a unique that works better on points?
 # I think this uses ==
+# TODO perhaps unique(x -> round(x, sigdigits=13), myarray) ?
+# "any implementation of unique with a tolerance will have some odd behaviors" Steven GJohnson
 function Base.unique(pts::Array{Point, 1})
     apts = Point[]
     for pt in pts

@@ -24,40 +24,52 @@ const reds           = (darker_red, lighter_red)
     julialogo(;
         action=:fill,
         color=true,
-        bodycolor=colorant"black")
+        bodycolor=colorant"black",
+        centered=false)
 
 Draw the Julia logo. The default action is to fill the logo and use the colors:
 
     julialogo()
 
-If `color` is `false`, the `bodycolor` color is used for the logo..
+If `color` is `false`, the `bodycolor` color is used for the logo.
 
-The logo can be difficult to position well due to its asymmetric design.
-The `0/0` point is at the top left corner, the total width is 315pt, the total height is 214pts. The optical center is _somewhere_ between 163-180pts in x, and 96-114pts in y. The gap to the left edge of "j"s descender is 16; the distance between the left edge of the "j" (not the descender) and the right edge of the "a" is at 268pts.
+The function uses the current drawing state (position, scale, etc).
 
-So, to place the logo by locating its center at a point, do this:
-
-```
-gsave()
-# scale() first if required
-translate(-165, -114) # anything between (x: -163 to -180, y: -96 to -114)
-julialogo()
-grestore()
-```
+The `centered` keyword lets you center the logo at its
+mathematical center, but the optical center might lie
+somewhere else - it's difficult to position well due to its
+asymmetric design.
 
 To use the logo as a clipping mask:
 
-    julialogo(action=:clip)
+```
+julialogo(action=:clip)
+```
 
 (In this case the `color` setting is automatically ignored.)
 
+To obtain a stroked (outlined) version:
+
+```
+julialogo(action=:path)
+sethue("red")
+strokepath()
+```
 """
-function julialogo(;action=:fill,
+function julialogo(;
+        action=:fill,
         color=true,
-        bodycolor=colorant"black")
+        bodycolor=colorant"black",
+        centered=false)
+
+    if centered == true
+        translate(-Point(330, 213)/2)
+    end
     # save current color
-    r, g, b, a = Luxor.get_current_redvalue(), Luxor.get_current_greenvalue(), Luxor.get_current_bluevalue(), Luxor.get_current_alpha()
-    # "j"
+    r, g, b, a = get_current_redvalue(), get_current_greenvalue(),
+        get_current_bluevalue(), get_current_alpha()
+
+    # j
     setcolor(bodycolor)
     move(72.872, 177.311)
     curve(72.872, 184.847, 72.024, 190.932, 70.329, 195.567)
@@ -77,9 +89,10 @@ function julialogo(;action=:fill,
     line(46.985, 97.051)
     line(72.872, 89.929)
     line(72.872, 177.311)
+    closepath()
     newsubpath()
 
-    "u"
+    # "u"
     move(109.739, 92.416)
     line(109.739, 152.215)
     curve(109.739, 153.874, 110.06, 155.437, 110.7, 156.907)
@@ -101,25 +114,28 @@ function julialogo(;action=:fill,
     curve(84.739, 159.375, 83.966, 155.908, 83.966, 152.215)
     line(83.966, 92.416)
     line(109.739, 92.416)
+    closepath()
     newsubpath()
 
-    "l"
+    # "l"
     move(197.881, 177.311)
     line(172.221, 177.311)
     line(172.221, 58.278)
     line(197.881, 51.156)
     line(197.881, 177.311)
+    closepath()
     newsubpath()
 
-    "i"
+    # "i"
     move(208.603, 97.051)
     line(234.376, 89.929)
     line(234.376, 177.311)
     line(208.603, 177.311)
     line(208.603, 97.051)
+    closepath()
     newsubpath()
 
-    "a"
+    # "a"
     move(288.225, 133.451)
     curve(285.738, 134.506, 283.232, 135.731, 280.707, 137.124)
     curve(278.183, 138.519, 275.884, 140.045, 273.812, 141.703)
@@ -132,6 +148,7 @@ function julialogo(;action=:fill,
     curve(276.77, 164.763, 278.899, 164.123, 281.047, 162.841)
     curve(283.194, 161.56, 285.587, 159.94, 288.225, 157.981)
     line(288.225, 133.451)
+    closepath()
     newsubpath()
     move(314.111, 177.311)
     line(288.225, 177.311)
@@ -171,30 +188,39 @@ function julialogo(;action=:fill,
     curve(308.609, 98.747, 310.72, 101.196, 312.076, 104.06)
     curve(313.433, 106.923, 314.111, 110.127, 314.111, 113.668)
     line(314.111, 177.311)
-    (action == :clip) ? newsubpath() : do_action(action)
+    closepath()
 
-    color && setcolor(julia_red) #  red
+    in(action, (:clip, :path)) ? newsubpath() : do_action(action)
+
+    color && setcolor(julia_red)
     circle(Point(240.272, 68.091), Point(205.272, 68.091), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
+    in(action, (:clip, :path)) ? newsubpath() : do_action(action)
 
-    color && setcolor(julia_blue) # blue
+    color && setcolor(julia_blue)
     circle(Point(77.954, 68.091), Point(42.954, 68.091), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
+    in(action, (:clip, :path)) ? newsubpath() : do_action(action)
 
-    color && setcolor(julia_purple) # dark purple
+    color && setcolor(julia_purple)
     circle(Point(282.321, 68.091), Point(247.321, 68.091), :path)
-    (action == :clip) ? newsubpath() : do_action(action)
+    in(action, (:clip, :path)) ? newsubpath() : do_action(action)
 
-    color && setcolor(julia_green) # green
+    color && setcolor(julia_green)
     circle(Point(261.299, 31.672), Point(226.299, 31.672), :path)
 
-    if action ≠ :clip
-        do_action(action)
-    else
+    if action == :clip
         clip()
+    elseif action == :path
+        #
+    else
+        do_action(action)
     end
     # restore saved color
     setcolor(r, g, b, a)
+
+    # and position
+    if centered == true
+        translate(Point(330, 213)/2)
+    end
 end
 
 """

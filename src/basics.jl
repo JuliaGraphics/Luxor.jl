@@ -103,7 +103,7 @@ function background(col::T) where T <: AbstractString
    return (get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
 end
 
-function background(col::ColorTypes.Colorant)
+function background(col::Colors.Colorant)
     temp = convert(RGBA,  col)
     setcolor(temp.r, temp.g, temp.b, temp.alpha)
     paint()
@@ -266,12 +266,23 @@ setline(n) = Cairo.set_line_width(get_current_cr(), n)
 """
     setlinecap(s)
 
-Set the line ends. `s` can be "butt" (the default), "square", or "round".
+Set the line ends. `s` can be "butt" or `:butt` (the
+default), "square" or `:square`, or "round" or `:round`.
 """
-function setlinecap(str="butt")
+function setlinecap(str::String="butt")
     if str == "round"
         Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
     elseif str == "square"
+        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_SQUARE)
+    else
+        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_BUTT)
+    end
+end
+
+function setlinecap(sym::Symbol)
+    if sym == :round
+        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
+    elseif sym == :square
         Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_SQUARE)
     else
         Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_BUTT)

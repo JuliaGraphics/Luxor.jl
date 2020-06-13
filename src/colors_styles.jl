@@ -41,7 +41,7 @@ end
     setcolor(r, g, b)
     setcolor(r, g, b, alpha)
     setcolor(color)
-    setcolor(col::ColorTypes.Colorant)
+    setcolor(col::Colors.Colorant)
     setcolor(sethue("red")..., .2)
 
 Set the current color.
@@ -59,7 +59,7 @@ Examples:
 
 See also [`sethue`](@ref).
 """
-function setcolor(col::ColorTypes.Colorant)
+function setcolor(col::Colors.Colorant)
   temp = convert(RGBA, col)
   setcolor(temp.r, temp.g, temp.b, temp.alpha)
   return (temp.r, temp.g, temp.b, temp.alpha)
@@ -120,11 +120,11 @@ function sethue(col::AbstractString)
 end
 
 """
-    sethue(col::ColorTypes.Colorant)
+    sethue(col::Colors.Colorant)
 
 Set the color without changing the current alpha/opacity:
 """
-function sethue(col::ColorTypes.Colorant)
+function sethue(col::Colors.Colorant)
     temp = convert(RGBA,  col)
     set_current_redvalue(temp.r)
     set_current_greenvalue(temp.g)

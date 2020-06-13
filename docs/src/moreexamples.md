@@ -260,7 +260,7 @@ This code was created by **kfung**, a student that participated in [Google Code-
 
 ```@example
 using Luxor
-Drawing(1280, 720, "temple.png")
+Drawing(1280, 720, "assets/figures/temple.png")
 origin()
 setblend(blend(Point(0, -200), Point(0, 300), "#F38070", "#F3C3BC"))
 box(O, 1280, 720, :fill)
