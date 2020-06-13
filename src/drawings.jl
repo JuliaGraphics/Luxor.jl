@@ -82,7 +82,7 @@ current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 # are shortcuts to file-based drawings.) When a drawing is
 # finished, you go `finish()` (that's the last line of the
 # @... macros.). Then, if you want to actually see it, you
-# go `preview()`.
+# go `preview()`, which returns the current drawing.
 
 # Then the code has to decide where you're working, and what
 # type of file it is, then sends it to the right place,
@@ -90,6 +90,13 @@ current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 
 function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     returnvalue = d.filename
+    # When the caller of `show` wants a short description, 
+    # we only print the filename.
+    if get(io, :limit, false)
+        print(io, returnvalue)
+        return
+    end
+    # otherwise, we open the image file
     if Sys.isapple()
         run(`open $(returnvalue)`)
     elseif Sys.iswindows()
@@ -98,8 +105,6 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     elseif Sys.isunix()
         run(`xdg-open $(returnvalue)`)
     end
-    # print(io, returnvalue)
-    nothing
 end
 
 function tidysvg(m::MIME"image/svg+xml", fname)
@@ -547,7 +552,7 @@ macro draw(body, width=600, height=600)
         sethue("black")
         $(esc(body))
         finish()
-        CURRENTDRAWING[1]
+        preview()
     end
 end
 
