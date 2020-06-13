@@ -90,10 +90,10 @@ current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 
 function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     returnvalue = d.filename
-    # When the caller of `show` wants a short description, 
-    # we only print the filename.
-    if get(io, :limit, false)
-        print(io, returnvalue)
+    # IJulia and Juno call the `show` function twice: once for
+    # the image MIME and a second time for the text/plain MIME.
+    # We check if this is such a 'second call':
+    if (get(io, :jupyter, false) || Juno.isactive()) && (d.surfacetype == :svg || d.surfacetype == :png)
         return
     end
     # otherwise, we open the image file
