@@ -88,7 +88,7 @@ Examples:
     addstop(blendredblue, 0.5, setcolor(randomcolor()...))
 
 """
-function addstop(b::Blend, offset, col::ColorTypes.Colorant)
+function addstop(b::Blend, offset, col::Colors.Colorant)
     temp = convert(RGBA,  col)
     Cairo.pattern_add_color_stop_rgba(b, offset, temp.r, temp.g, temp.b, temp.alpha)
 end

@@ -1,6 +1,22 @@
 # Changelog
 
-## [v2.0.0] - forthcoming May/June 2020
+## [???] - forthcoming June/July 2020
+
+### Added
+
+- `julialogo()` centered option
+
+### Changed
+
+- support for Pluto
+- document handling code
+- `julialogo()` tweaks to allow :path action
+
+### Removed
+
+### Deprecated
+
+## [v2.0.0] - 2020 May 30
 
 ### Added
 

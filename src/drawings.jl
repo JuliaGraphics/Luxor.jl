@@ -46,7 +46,14 @@ const CURRENTDRAWING = Array{Drawing, 1}()
 # utility functions that access the internal current Cairo drawing object, which is
 # stored as item 1 in a constant global array
 
-get_current_cr()          = getfield(CURRENTDRAWING[1], :cr)
+function get_current_cr()
+    try
+        getfield(CURRENTDRAWING[1], :cr)
+    catch
+        error("There is no current drawing.")
+    end
+end
+
 get_current_redvalue()    = getfield(CURRENTDRAWING[1], :redvalue)
 get_current_greenvalue()  = getfield(CURRENTDRAWING[1], :greenvalue)
 get_current_bluevalue()   = getfield(CURRENTDRAWING[1], :bluevalue)
@@ -67,24 +74,35 @@ current_surface_type()    = getfield(CURRENTDRAWING[1], :surfacetype)
 current_buffer()          = getfield(CURRENTDRAWING[1], :buffer)
 current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 
+# How Luxor output works. You start by creating a drawing
+# either aimed at a file (PDF, EPS, PNG, SVG) or aimed at an
+# in-memory buffer (:svg, :png, or :image); you could be
+# working in Jupyter or Pluto or Atom, or a terminal, and on
+# either Mac, Linux, or Windows.  (The @svg/@png/@pdf macros
+# are shortcuts to file-based drawings.) When a drawing is
+# finished, you go `finish()` (that's the last line of the
+# @... macros.). Then, if you want to actually see it, you
+# go `preview()`.
 
-# How Luxor output works. You start by creating a drawing either aimed at a
-# file (PDF, EPS, PNG, SVG) or aimed at an in-memory buffer (:svg, :png, or :image); you
-# could be working in Jupyter or Atom, or a terminal, and on either Mac, Linux,
-# or Windows.  (The @svg/@png/@pdf macros are shortcuts to file-based drawings.)
-# When a drawing is finished, you go `finish()` (that's the last line of the
-# @... macros.). Then, if you want to see it, you go `preview()`. Then the code
-# decides where you're working, and what type of file it is, then sends it to the
-# right place, depending on the OS.
+# Then the code has to decide where you're working, and what
+# type of file it is, then sends it to the right place,
+# depending on the OS.
 
-function display_ijulia(m::MIME"image/png", fname)
-    open(fname) do f
-        d = read(f)
-        display(m, d)
+function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
+    returnvalue = d.filename
+    if Sys.isapple()
+        run(`open $(returnvalue)`)
+    elseif Sys.iswindows()
+        cmd = get(ENV, "COMSPEC", "cmd")
+        run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
+    elseif Sys.isunix()
+        run(`xdg-open $(returnvalue)`)
     end
+    # print(io, returnvalue)
+    nothing
 end
 
-function display_ijulia(m::MIME"image/svg+xml", fname)
+function tidysvg(m::MIME"image/svg+xml", fname)
     # rename the elements to avoid display issues
     # I pinched this from Simon's RCall.jl
     open(fname) do f
@@ -96,26 +114,18 @@ function display_ijulia(m::MIME"image/svg+xml", fname)
     end
 end
 
-function Base.show(io::IO, d::Luxor.Drawing)
-    print(io, """\n    width:    $(d.width)
-    height:   $(d.height)
-    filename: $(d.filename)
-    type:     $(d.surfacetype)
-        """)
-    end
-
 # in memory:
 
 Base.showable(::MIME"image/svg+xml", d::Luxor.Drawing) = d.surfacetype == :svg
 Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
 
-# file-based
-
 function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
+    @debug "show MIME:svg "
     write(f, d.bufferdata)
 end
 
 function Base.show(f::IO, ::MIME"image/png", d::Luxor.Drawing)
+    @debug "show MIME:png "
     write(f, d.bufferdata)
 end
 
@@ -265,7 +275,7 @@ end
 """
     preview()
 
-If working in Jupyter (IJulia), display a PNG or SVG file in the notebook.
+If working in a notebook (eg Jupyter/IJulia), display a PNG or SVG file in the notebook.
 
 If working in Juno, display a PNG or SVG file in the Plot pane.
 
@@ -280,35 +290,8 @@ Otherwise:
 - on Windows, pass the filename to `explorer`.
 """
 function preview()
-    in(current_surface_type(), [:png, :svg]) ? candisplay = true : candisplay = false
-    (isdefined(Main, :IJulia) && Main.IJulia.inited) ? jupyter = true : jupyter = false
-    Juno.isactive() ? juno = true : juno = false
-    if candisplay && jupyter
-        Main.IJulia.clear_output(true)
-        returnvalue = nothing
-        if current_surface_type() == :png
-            display_ijulia(MIME("image/png"), current_filename())
-        elseif current_surface_type() == :svg
-            display_ijulia(MIME("image/svg+xml"), current_filename())
-        end
-    elseif current_surface_type() == :image
-        @info "drawing is :image. Use `image_as_matrix()` to convert to matrix"
-        returnvalue = nothing
-    elseif candisplay && juno
-        display(CURRENTDRAWING[1])
-        returnvalue = nothing
-    elseif Sys.isapple()
-        returnvalue = current_filename()
-        run(`open $(returnvalue)`)
-    elseif Sys.iswindows()
-        returnvalue = current_filename()
-        cmd = get(ENV, "COMSPEC", "cmd")
-        run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
-    elseif Sys.isunix()
-        returnvalue = current_filename()
-        run(`xdg-open $(returnvalue)`)
-    end
-    return returnvalue
+    @debug "preview()"
+    return CURRENTDRAWING[1]
 end
 
 # for filenames, the @pdf/png/svg macros may pass either
@@ -369,7 +352,7 @@ Examples
         setline(10)
         sethue("purple")
         circle(O, 20, :fill)
-     end 1200, 1200
+     end 1200 1200
 ```
 """
 macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
@@ -462,7 +445,7 @@ Examples
         setline(10)
         sethue("purple")
         circle(O, 20, :fill)
-     end 1200, 1200
+     end 1200 1200
 ```
 """
 macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
@@ -510,7 +493,7 @@ Examples
         setline(10)
         sethue("purple")
         circle(O, 20, :fill)
-     end 1200, 1200
+     end 1200 1200
 ```
 """
 macro eps(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).eps")
@@ -564,13 +547,7 @@ macro draw(body, width=600, height=600)
         sethue("black")
         $(esc(body))
         finish()
-        (isdefined(Main, :IJulia) && Main.IJulia.inited) ? jupyter = true : jupyter = false
-        Juno.isactive() ? juno = true : juno = false
-        if juno || jupyter
-            display(CURRENTDRAWING[1])
-        else
-            @info "Use Juno or Jupyter; the drawing is stored in memory, not in a file."
-        end
+        CURRENTDRAWING[1]
     end
 end
 

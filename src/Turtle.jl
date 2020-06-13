@@ -226,7 +226,7 @@ function Pencolor(t::Turtle, r, g, b)
     t.pencolor = (r, g, b)
 end
 
-function Pencolor(t::Turtle, col::ColorTypes.Colorant)
+function Pencolor(t::Turtle, col::Colors.Colorant)
     temp = convert(RGBA, col)
     Pencolor(t::Turtle, temp.r, temp.g, temp.b)
 end
