@@ -27,7 +27,7 @@ $ julia
 
 then you're ready to start.
 
-You can work in a Jupyter notebook, or perhaps use the Atom/Juno editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
+You can work in a Jupyter or Pluto notebook, or perhaps use the Atom/Juno or VSCode editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
 
 Ready? Let's begin. The goal of this tutorial is to do a bit of basic 'compass and ruler' Euclidean geometry, to introduce the basic concepts of Luxor drawings.
 

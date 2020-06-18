@@ -1,16 +1,19 @@
 # Changelog
 
-## [???] - forthcoming June/July 2020
+## [v.2.1.0] - 2020 June 18
 
 ### Added
 
 - `julialogo()` centered option
+- `tidysvg()` function to hack glyphnames in SVG files
+  (probably a temporary thing)
+- support for Pluto
 
 ### Changed
 
-- support for Pluto
-- document handling code
+- document handling code (cf Pluto support)
 - `julialogo()` tweaks to allow :path action
+- @svg rendering modified (eg no glyphname hacking done)
 
 ### Removed
 

@@ -121,11 +121,11 @@ paper_sizes
 
 To finish a drawing and close the file, use `finish()`, and, to launch an external application to view it, use `preview()`.
 
-If you're using Jupyter (IJulia), `preview()` tries to display PNG and SVG files in the next notebook cell.
+If you're using a notebook environment, such as Jupyter (IJulia) or Pluto, `preview()` tries to display PNG and SVG files in the next notebook cell.
 
 ![jupyter](assets/figures/jupyter.png)
 
-If you're using Juno, then PNG and SVG files should appear in the Plots pane.
+If you're using Juno or VS Code, then PNG and SVG files should appear in the Plots pane.
 
 ![juno](assets/figures/juno.png)
 
@@ -177,7 +177,7 @@ or (less nicely):
      )
 ```
 
-The `@draw` macro creates an im-memory drawing. You should see it displayed if you're working in Juno or Jupyter.
+The `@draw` macro creates an in-memory drawing. You should see it displayed if you're working in a capable environment (Juno, VSCode, Jupyter, Pluto).
 
 ```@docs
 @svg

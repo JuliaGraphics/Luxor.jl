@@ -1,5 +1,11 @@
 """
 The Luxor package provides a set of vector drawing functions for creating graphical documents.
+
+```
+@draw begin
+    circle(Point(0, 0), 100, :stroke)
+    text("Hello World")
+end
 """
 module Luxor
 
@@ -157,7 +163,10 @@ export Drawing,
     # misc
     layoutgraph, image_as_matrix, @imagematrix,
 
-    Style, applystyle
+    # experimental
+    Style, applystyle,
+
+    tidysvg
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

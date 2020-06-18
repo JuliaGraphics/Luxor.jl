@@ -107,15 +107,32 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     end
 end
 
-function tidysvg(m::MIME"image/svg+xml", fname)
-    # rename the elements to avoid display issues
+"""
+tidysvg(fname)
+
+Read the SVG image in `fname` and write it to a file
+`fname-tidy.svg` with modified glyph names.
+
+SVG images use named defs for text, which cause errors
+problem when used in a notebook.
+[See](https://github.com/jupyter/notebook/issues/333) for example.
+
+A kludgy workround is to rename the elements...
+"""
+function tidysvg(fname)
     # I pinched this from Simon's RCall.jl
-    open(fname) do f
+    path, ext = splitext(fname)
+    if ext == ".svg"
+        open(fname) do f
         r = string(rand(100000:999999))
         d = read(f, String)
         d = replace(d, "id=\"glyph" => "id=\"glyph"*r)
         d = replace(d, "href=\"#glyph" => "href=\"#glyph"*r)
-        display(m, d)
+            open(path * "-tidy" * ext, "w") do out
+                write(out, d)
+            end
+        @info "modified SVG file copied to $(path * "-tidy" * ext)"
+        end
     end
 end
 
@@ -270,6 +287,7 @@ function finish()
     Cairo.finish(current_surface())
     Cairo.destroy(current_surface())
 
+
     if current_filename() != ""
         write(current_filename(), current_bufferdata())
     end
@@ -292,7 +310,7 @@ Otherwise:
 - on macOS, open the file in the default application, which is probably the Preview.app for
   PNG and PDF, and Safari for SVG
 - on Unix, open the file with `xdg-open`
-- on Windows, pass the filename to `explorer`.
+- on Windows, refer to `COMSPEC`.
 """
 function preview()
     @debug "preview()"
