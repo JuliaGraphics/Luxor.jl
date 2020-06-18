@@ -51,7 +51,11 @@ end
 ```
 ![background](assets/figures/circle-dots.png)
 
-The `@draw` macro is useful if you work in Juno or Jupyter and don't need to save work in files. It creates a PNG format drawing in memory, rather than saved in a file. It's displayed in the plot pane or the next cell.
+The `@draw` macro is useful if you work in Juno/VS Code IDEs
+or a notebook environment such as Jupyter or Pluto and
+don't need to save work in files. It creates a PNG format
+drawing in memory, rather than saved in a file. It's
+displayed in the plot pane or the next cell.
 
 ```julia
 @draw begin
@@ -155,11 +159,12 @@ draw(depth)
 
 The Point type is an immutable composite type containing `x` and `y` fields that specify a 2D point.
 
-## Working in Jupyter and Juno
+## Working in IDEs and notebooks
 
-You can use an environment such as a Jupyter notebook or the Juno IDE, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
+You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS Code IDEs, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
 
 ![Jupyter](assets/figures/jupyter-basic.png)
+![VS Code](assets/figures/vscode.png)
 
 ## Images as matrices
 

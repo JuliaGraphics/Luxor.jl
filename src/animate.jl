@@ -136,7 +136,7 @@ the resulting frames to build a GIF animation. This will be stored in `pathname`
 `(movietitle).gif` in a temporary directory. `ffmpeg` should be installed and
 available, of course, if this is to work.
 
-In suitable environments (eg Juno), the resulting animation is displayed in the Plots window.
+In suitable environments, the resulting animation is displayed in the Plots window.
 
 ### Example
 
