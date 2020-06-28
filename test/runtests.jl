@@ -3,6 +3,8 @@ using Test
 using Random
 Random.seed!(42)
 
+ENV["JULIA_DEBUG"] = Main
+
 function run_all_tests()
 
     @testset "Basics" begin
@@ -38,6 +40,7 @@ function run_all_tests()
         include("test-holes.jl")
         include("morepolytests.jl")
         include("polytriangulate.jl")
+        include("pointcircletangent-test.jl")
     end
 
     @testset "text" begin
@@ -67,6 +70,8 @@ function run_all_tests()
         include("bezierstroke-test.jl")
         include("circletangent-test.jl")
         include("arc-sagitta-test.jl")
+        include("circlecircletangent-test.jl")
+        include("pointcircletangent-test.jl")
     end
 
     @testset "color" begin

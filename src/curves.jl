@@ -36,15 +36,24 @@ function circle(pt1::Point, pt2::Point, action=:none)
 end
 
 """
+    circle(pt1::Point, pt2::Point, pt3::Point, action=:none)
+
+Make a circle that passes through three points.
+"""
+function circle(pt1::Point, pt2::Point, pt3::Point, action=:none)
+    center = midpoint(pt1, pt2)
+    radius = distance(pt1, pt2)/2
+    circle(center3pts(pt1, pt2, pt3)..., action)
+end
+
+"""
     center3pts(a::Point, b::Point, c::Point)
 
 Find the radius and center point for three points lying on a circle.
 
-returns `(centerpoint, radius)` of a circle. Then you can use `circle()` to place a
-circle, or `arc()` to draw an arc passing through those points.
+returns `(centerpoint, radius)` of a circle.
 
-If there's no such circle, then you'll see an error message in the console and the function
-returns `(Point(0, 0), 0)`.
+If there's no such circle, the function returns `(Point(0, 0), 0)`.
 """
 function center3pts(a::Point, b::Point, c::Point)
     midAB = midpoint(a, b)
@@ -54,7 +63,7 @@ function center3pts(a::Point, b::Point, c::Point)
     # do the lines intersect?
     crossp = crossproduct(perpAB, perpBC)
     if isapprox(crossp, 0)
-        @info("no circle passes through the points $a $b $c")
+        @debug "no circle passes through the points $a $b $c"
         return Point(0, 0), 0
     end
     centerX = ((midAB.y * perpAB.x * perpBC.x) +
@@ -871,6 +880,75 @@ function carc2sagitta(p1::Point, p2::Point, s, action=:none)
         result = (O, 0.0)
     end
     return result
+end
+
+"""
+    circlecircleoutertangents(cpt1::Point, r1, cpt2::Point, r2)
+
+Return four points, `p1`, `p2, `p3`, `p4`, where a line
+through `p1` and `p2`, and a line through `p3` and `p4`, form the outer
+tangents to the circles defined by `cpt1/r1` and `cpt2/r2`.
+
+Returns four identical points (`O`) if one of the circles lies inside the other.
+"""
+function circlecircleoutertangents(cpt1::Point, r1, cpt2::Point, r2)
+    dx = cpt2.x - cpt1.x
+    dy = cpt2.y - cpt1.y
+    dist = distance(cpt1, cpt2)
+
+    if dist <= abs(r2 - r1)
+        # the circles overlap, no tangents
+        @debug "circlecircleoutertangents: circles overlap"
+        return O, O, O, O
+    end
+
+    # rotation from the x-axis.
+    angle1 = atan(dy, dx)
+
+    # relative angle of the normals
+    angle2 = acos((r1 - r2)/dist)
+
+    pt1 = Point(cpt1.x + r1 * cos(angle1 + angle2),
+        cpt1.y + r1 * sin(angle1 + angle2))
+
+    pt2 = Point(cpt2.x + r2 * cos(angle1 + angle2),
+        cpt2.y + r2 * sin(angle1 + angle2))
+
+    pt3 = Point(cpt1.x + r1 * cos(angle1 - angle2),
+        cpt1.y + r1 * sin(angle1 - angle2))
+
+    pt4 = Point(cpt2.x + r2 * cos(angle1 - angle2),
+        cpt2.y + r2 * sin(angle1 - angle2))
+
+    return pt1, pt2, pt3, pt4
+end
+
+"""
+    pointcircletangent(point::Point, circlecenter::Point, circleradius)
+
+Find the two points on a circle that lie on tangent lines
+passing through an external point.
+
+If both points are O, the external point is inside the
+circle, and the result is `(O, O)`.
+"""
+function pointcircletangent(point::Point, circlecenter::Point, circleradius)
+    d = distance(circlecenter, point)
+    if d <= circleradius # isinside
+        @debug "pointcircletangent: external point is inside circle"
+        # for type stability, return two points anyway?
+        return O, O
+    end
+    dx, dy = point.x - circlecenter.x, point.y - circlecenter.y
+    dxr, dyr = -dy, dx # rotate
+    ρ = circleradius/d
+    ad = ρ^2
+    bd = ρ * sqrt(1 - ρ^2)
+    tangentpoint1x = circlecenter.x + (ad * dx) + (bd * dxr)
+    tangentpoint1y = circlecenter.y + (ad * dy) + (bd * dyr)
+    tangentpoint2x = circlecenter.x + (ad * dx) - (bd * dxr)
+    tangentpoint2y = circlecenter.y + (ad * dy) - (bd * dyr)
+    return Point(tangentpoint1x, tangentpoint1y), Point(tangentpoint2x, tangentpoint2y)
 end
 
 # eof

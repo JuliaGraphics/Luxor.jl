@@ -1,5 +1,19 @@
 # Changelog
 
+## [v.2.2.0] - forthcoming release
+
+### Added
+
+- `currentpoint()`, `has_current_point()`
+- `pointcircletangent()`
+- `circlecircleoutertangents()`
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v.2.1.0] - 2020 June 18
 
 ### Added

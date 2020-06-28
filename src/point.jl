@@ -565,3 +565,23 @@ function pointinverse(A::Point, centerpoint, rad)
     end
     return result
 end
+
+"""
+    currentpoint()
+
+Return the current point.
+"""
+function currentpoint()
+    x, y = Cairo.get_current_point(get_current_cr())
+    return Point(x, y)
+end
+
+"""
+    hascurrentpoint()
+
+Return true if there is a current point. Obtain the current point
+with `currentpoint()`.
+"""
+function hascurrentpoint()
+    return Cairo.has_current_point(get_current_cr())
+end
