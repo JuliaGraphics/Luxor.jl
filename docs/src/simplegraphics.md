@@ -67,30 +67,37 @@ For regular polygons, triangles, pentagons, and so on, see the next section on P
 
 ## Circles and ellipses
 
-There are various ways to make circles, including by center and radius, or passing through two points:
+There are various ways to make circles, including by center and radius, or passing through two or three points:
 
 ```@example
 using Luxor # hide
 Drawing(400, 200, "assets/figures/circles.png") # hide
 background("white") # hide
+
 origin() # hide
-setline(2) # hide
-p1 = O
-p2 = Point(100, 0)
-sethue("red")
-circle(p1, 40, :fill)
-sethue("green")
-circle(p1, p2, :stroke)
+setline(3) # hide
 sethue("black")
-arrow(O, Point(0, -40))
-map(p -> circle(p, 4, :fill), [p1, p2])
+p1 = Point(0, -50)
+p2 = Point(100, 0)
+p3 = Point(0, 65)
+map(p -> circle(p, 4, :fill), [p1, p2, p3])
+sethue("orange")
+circle(center3pts(p1, p2, p3)..., :stroke)
+
+sethue("red")
+p1 = Point(0, 30)
+p2 = Point(20, -40)
+p3 = Point(50, 5)
+circle.((p1, p2, p3), 3, :stroke)
+circle(p1, p2, p3, :stroke)
+
 finish() # hide
 nothing # hide
 ```
 
 ![circles](assets/figures/circles.png)
 
-Or passing through three points. The `center3pts()` function returns the center position and radius of a circle passing through three points:
+The `center3pts()` function returns the center position and radius of a circle passing through three points:
 
 ```@example
 using Luxor, Random # hide
@@ -236,14 +243,72 @@ nothing # hide
 circlepath
 ```
 
-### Circles and tangents
+## Circles and tangents
 
-Functions to make circles that are tangential to other circles include:
+Functions to find tangents to circles include:
 
+- `pointcircletangent()` finds a point on a line joining a point and tangent to a circle
+- `circlecircleoutertangents()` finds the points that lie on outer tangents to two circles
 - `circletangent2circles()` makes circles of a particular radius tangential to two circles
 - `circlepointtangent()` makes circles of a particular radius passing through a point and tangential to another circle
 
-These functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/point-circle-tangents.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+sethue("black") # hide
+
+
+point = Point(-150, 0)
+circlecenter = Point(150, 0)
+circleradius = 80
+
+circle.((point, circlecenter), 5, :fill)
+circle(circlecenter, circleradius, :stroke)
+pt1, pt2 = pointcircletangent(point, circlecenter, circleradius)
+
+sethue("grey65")
+rule(point, slope(point, pt1))
+rule(point, slope(point, pt2))
+
+finish() # hide
+nothing # hide
+```
+
+![point circle tangents](assets/figures/point-circle-tangents.png)
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/circle-circle-outer-tangents.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+sethue("black") # hide
+
+circle1center = Point(-150, 0)
+circle1radius = 60
+circle2center = Point(150, 0)
+circle2radius = 80
+
+circle.((circle1center, circle2center), 5, :fill)
+circle(circle1center, circle1radius, :stroke)
+circle(circle2center, circle2radius, :stroke)
+
+p1, p2, p3, p4 = circlecircleoutertangents(
+    circle1center, circle1radius,
+    circle2center, circle2radius)
+
+sethue("orange")
+rule(p1, slope(p1, p2))
+rule(p3, slope(p3, p4))
+
+finish() # hide
+nothing # hide
+```
+
+![circle circle outer tangents](assets/figures/circle-circle-outer-tangents.png)
 
 `circletangent2circles()` takes the required radius and two existing circles:
 
@@ -325,6 +390,7 @@ nothing # hide
 
 ![circle tangents 2](assets/figures/circle-point-tangent.png)
 
+These last two functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).
 
 ```@docs
 circletangent2circles
