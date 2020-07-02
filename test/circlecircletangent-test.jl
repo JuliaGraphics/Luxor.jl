@@ -56,7 +56,7 @@ function circlecircletangent_test2(fname)
 
             pt1, pt2, pt3, pt4 = circlecircleinnertangents(c1center, c1radius, c2center, c2radius)
 
-            if !all(isapprox(O), (pt1, pt2, pt3, pt4))
+            if !all(pt -> isequal(pt, O), (pt1, pt2, pt3, pt4))
                 sethue("green")
                 circle(c2center, c2radius, :stroke)
                 circle(c1center, c1radius, :stroke)
@@ -68,7 +68,7 @@ function circlecircletangent_test2(fname)
 
             pt1, pt2, pt3, pt4 = circlecircleoutertangents(c1center, c1radius, c2center, c2radius)
 
-            if !all(isapprox(O), (pt1, pt2, pt3, pt4))
+            if !all(pt -> isequal(pt, O), (pt1, pt2, pt3, pt4))
                 sethue("red")
                 arrow(pt1, pt2, linewidth=2)
                 arrow(pt3, pt4, linewidth=2)
