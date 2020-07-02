@@ -951,4 +951,33 @@ function pointcircletangent(point::Point, circlecenter::Point, circleradius)
     return Point(tangentpoint1x, tangentpoint1y), Point(tangentpoint2x, tangentpoint2y)
 end
 
+"""
+circlecircleinnertangents(circle1center::Point, circle1radius, circle2center::Point, circle2radius)
+
+Find the inner tangents of two circles. These are tangent lines that
+cross as they skim past one circle and touch the other.
+
+Returns the four points: tangentpoint1 on circle 1,
+tangentpoint1 on circle2, tangentpoint2 on circle 1,
+tangentpoint2 on circle2.
+
+Returns `(O, O, O, O)` if inner tangents can't be found (eg when the circles overlap).
+
+Use `circlecircleoutertangents()` to find the outer tangents.
+"""
+function circlecircleinnertangents(circle1center::Point, circle1radius, circle2center::Point, circle2radius)
+    # point where the inner tangents will cross
+    ip = (circle2center * circle1radius + circle1center * circle2radius) / (circle1radius + circle2radius)
+    d = distance(circle1center, circle2center)
+    # circles overlap?
+    d < (circle1radius + circle2radius) && return O, O, O, O
+    tp1, tp2 = pointcircletangent(ip, circle1center, circle1radius)
+    tp3, tp4 = pointcircletangent(ip, circle2center, circle2radius)
+    # double check tp1 and tp3 are collinear, just in case the order was wrong
+    if slope(tp1, ip) ≈ slope(ip, tp3)
+        return tp1, tp3, tp2, tp4
+    elseif slope(tp1, ip) ≈ slope(ip, tp4)
+        return tp1, tp4, tp2, tp3
+    end
+end
 # eof
