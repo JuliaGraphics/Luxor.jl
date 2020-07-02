@@ -51,7 +51,7 @@ include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
 include("graphlayout.jl")
-include("style.jl")
+include("Style.jl")
 #include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
 export Drawing,
