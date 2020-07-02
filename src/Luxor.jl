@@ -51,6 +51,7 @@ include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
 include("graphlayout.jl")
+include("style.jl")
 #include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
 export Drawing,
@@ -92,6 +93,7 @@ export Drawing,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
     intersectlinepoly, polyintersect, polyintersections, circlepointtangent,
     circletangent2circles, pointinverse, pointcircletangent, circlecircleoutertangents,
+    circlecircleinnertangents,
 
     ngon, ngonside, star, pie,
     do_action, paint, paint_with_alpha, fillstroke,

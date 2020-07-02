@@ -249,6 +249,7 @@ Functions to find tangents to circles include:
 
 - `pointcircletangent()` finds a point on a line joining a point and tangent to a circle
 - `circlecircleoutertangents()` finds the points that lie on outer tangents to two circles
+- `circlecircleinnertangents()` finds the points that lie on inner tangents to two circles
 - `circletangent2circles()` makes circles of a particular radius tangential to two circles
 - `circlepointtangent()` makes circles of a particular radius passing through a point and tangential to another circle
 
@@ -309,6 +310,43 @@ nothing # hide
 ```
 
 ![circle circle outer tangents](assets/figures/circle-circle-outer-tangents.png)
+
+Finding the inner tangents requires a separate function.
+
+```@example
+using Luxor # hide
+Drawing(600, 250, "assets/figures/circle-circle-inner-tangents.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+sethue("black") # hide
+
+circle1center = Point(-150, 0)
+circle1radius = 60
+circle2center = Point(150, 0)
+circle2radius = 80
+
+circle.((circle1center, circle2center), 5, :fill)
+circle(circle1center, circle1radius, :stroke)
+circle(circle2center, circle2radius, :stroke)
+
+p1, p2, p3, p4 = circlecircleinnertangents(
+    circle1center, circle1radius,
+    circle2center, circle2radius)
+
+label.(("p1", "p2", "p3", "p4"), :n, (p1, p2, p3, p4))
+sethue("orange")
+rule(p1, slope(p1, p2))
+rule(p3, slope(p3, p4))
+
+sethue("purple")
+circle.((p1, p2, p3, p4), 3, :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![circle circle inner tangents](assets/figures/circle-circle-inner-tangents.png)
 
 `circletangent2circles()` takes the required radius and two existing circles:
 
@@ -393,8 +431,11 @@ nothing # hide
 These last two functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).
 
 ```@docs
+pointcircletangent
 circletangent2circles
 circlepointtangent
+circlecircleinnertangents
+circlecircleoutertangents
 ```
 
 ## Paths and positions

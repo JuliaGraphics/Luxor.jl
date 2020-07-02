@@ -1,3 +1,9 @@
+@font-face {
+	font-family: JuliaMono-Regular;
+	font-display: fallback;	/* allow 100 milliseconds then display fallback */
+	src: url("https://juliamono.netlify.app/assets/fonts/JuliaMono-Regular.woff2");
+}
+
 @charset "UTF-8";
 /* Font Awesome 5 mixin. Can be included in any rule that should render Font Awesome icons. */
 @keyframes spinAround {
@@ -316,7 +322,7 @@ code,
 pre {
   -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: auto;
-  font-family: "Roboto Mono", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "DejaVu Sans Mono", monospace; }
+  font-family: "JuliaMono-Regular", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "DejaVu Sans Mono", monospace; }
 
 body {
   color: #222222;
@@ -335,7 +341,7 @@ a {
 
 code {
   background-color: rgba(0, 0, 0, 0.05);
-  color: #da0b00;
+  color: #000000;
   font-size: 0.875em;
   font-weight: normal;
   padding: 0.1em; }
@@ -862,10 +868,10 @@ a.has-text-danger:hover, a.has-text-danger:focus {
   font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Helvetica", "Arial", sans-serif !important; }
 
 .is-family-monospace {
-  font-family: "Roboto Mono", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "DejaVu Sans Mono", monospace !important; }
+  font-family: "JuliaMono-Regular", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "DejaVu Sans Mono", monospace !important; }
 
 .is-family-code {
-  font-family: "Roboto Mono", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "DejaVu Sans Mono", monospace !important; }
+  font-family: "JuliaMono-Regular", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "DejaVu Sans Mono", monospace !important; }
 
 .is-block {
   display: block !important; }
@@ -7383,6 +7389,7 @@ html {
   padding: 0;
   flex: 0 0 18rem;
   z-index: 5;
+  font-size: 1rem;
   position: fixed;
   left: -18rem;
   width: 18rem;
@@ -7424,7 +7431,6 @@ html {
   #documenter .docs-sidebar ul.docs-menu {
     flex-grow: 1;
     user-select: none;
-    font-size: 1rem;
     border-top: 1px solid #dbdbdb;
     padding-bottom: 1.5rem;
     /* Managing collapsible submenus */ }
@@ -7464,15 +7470,20 @@ html {
       display: block;
       padding: 0.5rem 0.5rem; }
       #documenter .docs-sidebar ul.docs-menu .tocitem, #documenter .docs-sidebar ul.docs-menu .tocitem:hover {
-        color: #0a0a0a; }
+        color: #0a0a0a;
+        background: whitesmoke; }
     #documenter .docs-sidebar ul.docs-menu a.tocitem:hover, #documenter .docs-sidebar ul.docs-menu label.tocitem:hover {
+      color: #0a0a0a;
       background-color: #ebebeb; }
     #documenter .docs-sidebar ul.docs-menu li.is-active {
-      border-top: 1px solid #c7c7c7;
+      border-top: 1px solid #dbdbdb;
       border-bottom: 1px solid #dbdbdb;
       background-color: white; }
-      #documenter .docs-sidebar ul.docs-menu li.is-active > .tocitem, #documenter .docs-sidebar ul.docs-menu li.is-active > .tocitem:hover {
+      #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem, #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem:hover {
         background-color: white;
+        color: #0a0a0a; }
+      #documenter .docs-sidebar ul.docs-menu li.is-active ul.internal .tocitem:hover {
+        background-color: #ebebeb;
         color: #0a0a0a; }
     #documenter .docs-sidebar ul.docs-menu > li.is-active:first-child {
       border-top: none; }
@@ -7611,7 +7622,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 /* local modifications to default */
 
 pre, code, kbd {
-    font-family: 'SF Mono', 'Roboto Mono', Menlo, courier, monospace !important;
+    font-family: 'JuliaMono-Regular', 'SF Mono', 'Roboto Mono', Menlo, courier, monospace !important;
 }
 
 p > code {

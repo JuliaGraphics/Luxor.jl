@@ -7,6 +7,7 @@
 - `currentpoint()`, `has_current_point()`
 - `pointcircletangent()`
 - `circlecircleoutertangents()`
+- `circlecircleinnertangents()`
 
 ### Changed
 

@@ -6,28 +6,29 @@ mutable struct Style
     linecap::Symbol
     linejoin::Symbol
     dashpattern::Array
-    function Style(color, linewidth, fontface, fontsize, linecap, linejoin, dashpattern)
-        new(color, linewidth, fontface, fontsize, linecap, linejoin, dashpattern)
+    background::Colorant
+    function Style(color, linewidth, fontface, fontsize, linecap, linejoin, dashpattern, background)
+        new(color, linewidth, fontface, fontsize, linecap, linejoin, dashpattern, background)
     end
 end
 
 # blank
-Style() = Style(colorant"black", 1.0, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0])
+Style() = Style(colorant"black", 1.0, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0], colorant"white")
 
 # color
-Style(col::Colorant) = Style(col,  1.0, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0])
+Style(col::Colorant) = Style(col,  1.0, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0], colorant"white")
 
 # linewidth
-Style(lw::Float64) = Style(colorant"black",  lw, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0])
+Style(lw::Float64) = Style(colorant"black",  lw, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0], colorant"white")
 
 # color linewidth
-Style(col::Colorant, lw::Float64) = Style(col, lw, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0])
+Style(col::Colorant, lw::Float64) = Style(col, lw, "JuliaMono-Regular", 20,  :butt, :miter, [5, 0], colorant"white")
 
 # font fontsize
-Style(ff::String, fs) = Style(colorant"black",  1.0, ff, fs, :butt, :miter, [5, 0])
+Style(ff::String, fs) = Style(colorant"black",  1.0, ff, fs, :butt, :miter, [5, 0], colorant"white")
 
 # color font fontsize
-Style(col::Colorant, ff::String, fs) = Style(col, 1.0, ff, fs, :butt, :miter, [5, 0])
+Style(col::Colorant, ff::String, fs) = Style(col, 1.0, ff, fs, :butt, :miter, [5, 0], colorant"white")
 
 function applystyle(style::Style)
     setcolor(style.color)
