@@ -970,7 +970,7 @@ function circlecircleinnertangents(circle1center::Point, circle1radius, circle2c
     ip = (circle2center * circle1radius + circle1center * circle2radius) / (circle1radius + circle2radius)
     d = distance(circle1center, circle2center)
     # circles overlap?
-    d < (circle1radius + circle2radius) && return O, O, O, O
+    d <= (circle1radius + circle2radius) && return O, O, O, O
     tp1, tp2 = pointcircletangent(ip, circle1center, circle1radius)
     tp3, tp4 = pointcircletangent(ip, circle2center, circle2radius)
     # double check tp1 and tp3 are collinear, just in case the order was wrong
