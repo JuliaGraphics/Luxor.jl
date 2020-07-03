@@ -1,6 +1,18 @@
 # Changelog
 
-## [v.2.2.0] - forthcoming release
+## [v.2.2.1] - patch
+
+### Added
+
+### Changed
+
+- fix circlecircleinnertangents() edge case
+
+### Removed
+
+### Deprecated
+
+## [v.2.2.0] - 2 July 2020
 
 ### Added
 
