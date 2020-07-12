@@ -912,7 +912,7 @@ nothing # hide
 
 ![brush 1](assets/figures/brush1.png)
 
-For more information (and more than you probably wanted to know) about Luxor's Bézier paths, visit [https://cormullion.github.io/blog/2018/06/21/bezier.html](https://cormullion.github.io/blog/2018/06/21/bezier.html).
+For more information (and more than you probably wanted to know) about Luxor's Bézier paths, visit [https://cormullion.github.io/pages/2018-06-20-bezier/](https://cormullion.github.io/pages/2018-06-20-bezier/).
 
 ```@docs
 bezier
