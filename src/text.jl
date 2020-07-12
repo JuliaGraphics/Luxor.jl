@@ -13,8 +13,7 @@
     text(str, pos, valign=:baseline, halign=:left)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
-string at the point. If you omit the point, it's placed at the current `0/0`. In
-Luxor, placing text doesn't affect the current point.
+string at the point. If you omit the point, it's placed at the current `0/0`. 
 
 `angle` specifies the rotation of the text relative to the current x-axis.
 
@@ -82,8 +81,6 @@ text(t, xpos, ypos; kwargs...) = text(t, Point(xpos, ypos); kwargs...)
 Draw text in the string `str` centered at `x`/`y` or `pt`. If you omit the point, it's
 placed at 0/0.
 
-Text doesn't affect the current point!
-
 textcentred (UK spelling) is a synonym.
 """
 textcentered(t, x=0, y=0) = text(t, x, y, halign=:center)
@@ -98,7 +95,6 @@ textcentred = textcentered
 Draw text in the string `str` right-aligned at `x`/`y` or `pt`.
 If you omit the point, it's placed at 0/0.
 
-Text doesn't affect the current point!
 """
 textright(t, x=0, y=0) = text(t, x, y, halign=:right)
 textright(t, pt::Point) = textright(t, pt.x, pt.y)
