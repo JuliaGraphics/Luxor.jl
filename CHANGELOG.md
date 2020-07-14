@@ -1,8 +1,10 @@
 # Changelog
 
-## [v.2.2.1] - patch
+## [v.2.2.1] - patch 14 July 2020
 
 ### Added
+
+- precompile()
 
 ### Changed
 
