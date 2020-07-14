@@ -160,7 +160,7 @@ Simplify a polygon:
 
     simplify(pointlist::Array, detail=0.1)
 
-`detail` is the smallest permitted distance between two points in pixels.
+`detail` is the maximum approximation error of simplified polygon.
 """
 function simplify(pointlist::Array{Point, 1}, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
