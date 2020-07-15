@@ -105,13 +105,9 @@ end
 Find the distance between a point `p` and a line between two points `a` and `b`.
 """
 function pointlinedistance(p::Point, a::Point, b::Point)
-    # area of triangle
-    area = abs(0.5 * (a.x * b.y + b.x * p.y + p.x * a.y - b.x * a.y - p.x * b.y - a.x * p.y))
-    # length of the bottom edge
-    dx = a.x - b.x
-    dy = a.y - b.y
-    bottom = hypot(dx, dy)
-    return area / bottom
+  dx = b.x - a.x
+  dy = b.y - a.y
+  return abs(p.x * dy - p.y * dx + b.x * a.y - b.y * a.x) / hypot(dx, dy);
 end
 
 """
