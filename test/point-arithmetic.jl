@@ -16,6 +16,10 @@ function general_tests()
 
     @test -pt1 == Point(-pt1.x, -pt1.y)
 
+    # constructor with tuple
+    @test Point((1, 2)) == Point(1, 2)
+    @test [Point(3, 1), Point(4.0, 1.0), Point(2//3,3//4)] == Point.([(3.0, 1.0), (4, 1), (2//3,3//4)])
+
     # is point/4 inside a box
     # a: we now have to wrap arguments with Ref() to ensure they  broadcast as scalar
     @test isinside(Ref(pt1) ./ 4, box(O, 10, 10, vertices=true))
