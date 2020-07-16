@@ -43,6 +43,10 @@ function general_tests()
     @test crossproduct(Point(2, 3), Point(3, 2)) == -5.0
     @test crossproduct(Point(-20, 30), Point(60, 20)) < 2000
 
+    @test pointlinedistance(Point(1, 1), Point(0, 0), Point(2, 0)) == 1
+    @test pointlinedistance(Point(1, 1), Point(2, 0), Point(3, 0)) == 1
+    @test pointlinedistance(Point(-1, -1), Point(1, -3), Point(1, 3)) == 2
+    
     # shared end points
     # intersection of (A == C) || (B == C) || (A == D) || (B == D)
     pt1 = Point(5, 5)
