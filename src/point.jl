@@ -37,6 +37,9 @@ const O = Point(0, 0)
 *(p1::Point, shift::NTuple{2, Real}) = Point(p1.x * shift[1], p1.y * shift[2])
 /(p1::Point, shift::NTuple{2, Real}) = Point(p1.x / shift[1], p1.y / shift[2])
 
+# convenience
+Point((x, y)::Tuple{Real, Real}) = Point(x, y)
+
 # for broadcasting
 Base.size(::Point) = 2
 Base.getindex(p::Point, i) = [p.x, p.y][i]
