@@ -76,6 +76,20 @@ julia> Q * (0.5, 0.5)
 Luxor.Point(2.0, 2.5)
 ```
 
+You can also create points from tuples:
+```
+julia> Point((1.0, 14))
+Point(1.0, 14.0)
+
+julia> plist = (1.0, 2.0), (-10, 10), (14.2, 15.4));
+
+julia> Point.(plist)
+3-element Array{Point,1}:
+ Point(1.0, 2.0)
+ Point(-10.0, 10.0)
+ Point(14.2, 15.4)
+```
+
 You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
 
 ```@example
@@ -281,7 +295,8 @@ origin()
 tiles = Tiler(400, 400, size(mat)...)
 sethue("white")
 for (pos, n) in tiles
-    if mat[n].color > 0xff000000
+    # matrix elements are 0xααrrggbb
+    if mat[tiles.currentrow, tiles.currentcol].color > 0xff000000
         randomhue()
         box(pos, tiles.tilewidth - 1, tiles.tileheight - 1, :fill)
     end

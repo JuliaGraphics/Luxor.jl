@@ -577,8 +577,10 @@ end
 """
     image_as_matrix()
 
-If the current Luxor drawing is an `:image type`, return a `Array{ARGB32,2}`
+If the current Luxor drawing is an `:image` type, return an `Array{ARGB32,2}`
 matrix of the current state of the picture, where each element is a colored pixel.
+
+A matrix 50 wide and 30 high => a table 30 rows by 50 cols
 
 ```
 using Luxor, Images
@@ -594,7 +596,7 @@ mat = image_as_matrix()
 finish()
 
 # working in Images:
-img = Gray.(permutedims(mat, (2, 1)))
+img = Gray.(mat)
 display(imresize(img, 150, 150))
 ```
 """
@@ -604,7 +606,7 @@ function image_as_matrix()
     end
     w = Int(current_surface().width)
     h = Int(current_surface().height)
-    z = zeros(UInt32, w, h)
+    z = zeros(UInt32, h, w)
     imagesurface = Cairo.CairoImageSurface(z, Cairo.FORMAT_ARGB32)
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, current_surface(), 0, 0)
@@ -612,7 +614,7 @@ function image_as_matrix()
     data = imagesurface.data
     Cairo.finish(imagesurface)
     Cairo.destroy(imagesurface)
-    return reinterpret(ARGB32, data)
+    return reinterpret(ARGB32, permutedims(data, (2, 1)))
 end
 
 """
@@ -625,6 +627,7 @@ function.
 The default drawing is 256 by 256 units, and is composed of transparent black
 pixels until you draw something different.
 
+It's not previewed by `preview()`.
 ```
 m = @imagematrix begin
         sethue("red")
