@@ -87,6 +87,8 @@ function hilbert(t::Turtle, level, angle, lengthstep)
     Turn(t, angle)
 end
 
+@draw begin
+background("black")
 setline(2)
 setlinecap("round")
 
@@ -95,7 +97,7 @@ hilbert(Turtle(first(BoundingBox()) + (12, 12), true, 0, (1, 0, 0)),
         90, # turn angle, in degrees
         6   # steplength
         )
-finish() # hide
+end
 nothing # hide
 ```
 

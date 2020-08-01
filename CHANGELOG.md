@@ -1,5 +1,19 @@
 # Changelog
 
+## [v.2.3.0] - August 1 2020
+
+### Added
+
+### Changed
+
+- imagematrix functions return the permuted matrix now
+
+- pointlinedistance() now returns the correct results (thanks Paul!)
+
+### Removed
+
+### Deprecated
+
 ## [v.2.2.1] - patch 14 July 2020
 
 ### Added
