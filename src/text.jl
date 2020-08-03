@@ -116,6 +116,18 @@ Set the font size to `n` points. The default size is 10 points. (Toy API)
 """
 fontsize(n) = Cairo.set_font_size(get_current_cr(), n)
 
+
+"""
+    get_fontsize()
+
+Return the font size set by `fontsize` or more precisely the y-scale of the Cairo font matrix if `Cairo.set_font_matrix` is used directly. (Toy API)
+"""
+function get_fontsize()
+    m = get_font_matrix(get_current_cr())
+    font_size = sign(m.yy)*sqrt(m.yx^2+m.yy^2)
+    return font_size
+end
+
 """
     textextents(str)
 
