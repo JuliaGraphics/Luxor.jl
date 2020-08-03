@@ -18,6 +18,7 @@ function text_wrap_tests(fname)
         fsize = 12
         opacity = 1.0
         fontsize(fsize)
+        @test get_fontsize() == fsize
         @layer begin
             translate(pos)
             sethue("antiquewhite")

@@ -63,6 +63,7 @@ Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font siz
 ```@docs
 fontface
 fontsize
+get_fontsize
 ```
 
 ## Specifying the font ("Pro" API)
