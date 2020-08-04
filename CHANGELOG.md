@@ -1,5 +1,17 @@
 # Changelog
 
+## [v.2.4.0] - forthcoming in Sept 2020?
+
+### Added
+
+### Changed
+
+- background() preserves graphics state
+
+### Removed
+
+### Deprecated
+
 ## [v.2.3.0] - August 1 2020
 
 ### Added
