@@ -627,7 +627,7 @@ function.
 The default drawing is 256 by 256 units, and is composed of transparent black
 pixels until you draw something different.
 
-It's not previewed by `preview()`.
+You don't need `finish()`, and it's not previewed by `preview()`.
 ```
 m = @imagematrix begin
         sethue("red")
