@@ -6,6 +6,7 @@
 
 ### Changed
 
+- show() for new Drawing() eg in REPL
 - background() preserves graphics state
 
 ### Removed

@@ -44,4 +44,4 @@ end
 
 imagematrix()
 
-println("...finished test")
+println("...finished imagematrixtest")
