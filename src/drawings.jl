@@ -89,33 +89,41 @@ current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 # depending on the OS.
 
 function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
+    @debug "show MIME:text/plain"
     returnvalue = d.filename
     # IJulia and Juno call the `show` function twice: once for
     # the image MIME and a second time for the text/plain MIME.
     # We check if this is such a 'second call':
     if (get(io, :jupyter, false) || Juno.isactive()) && (d.surfacetype == :svg || d.surfacetype == :png)
-        return
+        return d.filename
     end
-    # otherwise, we open the image file
-    if Sys.isapple()
-        run(`open $(returnvalue)`)
-    elseif Sys.iswindows()
-        cmd = get(ENV, "COMSPEC", "cmd")
-        run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
-    elseif Sys.isunix()
-        run(`xdg-open $(returnvalue)`)
+    # perhaps drawing hasn't started yet, eg in the REPL
+    if !ispath(d.filename)
+        location = !isempty(d.filename) ? d.filename : "in memory"
+        println(" Luxor drawing: (type = :$(d.surfacetype), width = $(d.width), height = $(d.width), location = $(location))")
+    else
+        # open the image file
+        if Sys.isapple()
+            run(`open $(returnvalue)`)
+        elseif Sys.iswindows()
+            cmd = get(ENV, "COMSPEC", "cmd")
+            run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
+        elseif Sys.isunix()
+            run(`xdg-open $(returnvalue)`)
+        end
     end
 end
 
 """
-tidysvg(fname)
+    tidysvg(fname)
 
 Read the SVG image in `fname` and write it to a file
 `fname-tidy.svg` with modified glyph names.
 
 SVG images use named defs for text, which cause errors
 problem when used in a notebook.
-[See](https://github.com/jupyter/notebook/issues/333) for example.
+[See](https://github.com/jupyter/notebook/issues/333) for
+example.
 
 A kludgy workround is to rename the elements...
 """
