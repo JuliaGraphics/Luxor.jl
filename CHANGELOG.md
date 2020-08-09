@@ -1,6 +1,6 @@
 # Changelog
 
-## [v.2.4.0] - forthcoming in Sept 2020?
+## [v2.x.x] - forthcoming in Sept 2020?
 
 ### Added
 
@@ -8,12 +8,13 @@
 
 - show() for new Drawing() eg in REPL
 - background() preserves graphics state
+- imagematrix() bugs in alpha
 
 ### Removed
 
 ### Deprecated
 
-## [v.2.3.0] - August 1 2020
+## [v2.3.0] - August 1 2020
 
 ### Added
 
@@ -27,7 +28,7 @@
 
 ### Deprecated
 
-## [v.2.2.1] - patch 14 July 2020
+## [v2.2.1] - patch 14 July 2020
 
 ### Added
 
@@ -41,7 +42,7 @@
 
 ### Deprecated
 
-## [v.2.2.0] - 2 July 2020
+## [v2.2.0] - 2 July 2020
 
 ### Added
 
@@ -56,7 +57,7 @@
 
 ### Deprecated
 
-## [v.2.1.0] - 2020 June 18
+## [v2.1.0] - 2020 June 18
 
 ### Added
 

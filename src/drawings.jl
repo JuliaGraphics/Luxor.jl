@@ -614,8 +614,7 @@ function image_as_matrix()
     end
     w = Int(current_surface().width)
     h = Int(current_surface().height)
-    z = zeros(UInt32, h, w)
-    imagesurface = Cairo.CairoImageSurface(z, Cairo.FORMAT_ARGB32)
+    imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h)) 
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, current_surface(), 0, 0)
     Cairo.paint(cr)
@@ -632,8 +631,7 @@ This macro returns a matrix of pixels that represent the drawing
 produced by the vector graphics instructions. It uses the `image_as_matrix()`
 function.
 
-The default drawing is 256 by 256 units, and is composed of transparent black
-pixels until you draw something different.
+The default drawing is 256 by 256 points.
 
 You don't need `finish()`, and it's not previewed by `preview()`.
 ```
