@@ -324,7 +324,7 @@ finish()
 
 # in Images
 
-img = Gray.(permutedims(mat, (2, 1)))
+img = Gray.(mat)
 display(imresize(img, 150, 150))
 ```
 

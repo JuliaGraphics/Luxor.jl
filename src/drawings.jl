@@ -614,7 +614,7 @@ function image_as_matrix()
     end
     w = Int(current_surface().width)
     h = Int(current_surface().height)
-    imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h)) 
+    imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h))
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, current_surface(), 0, 0)
     Cairo.paint(cr)
@@ -633,7 +633,7 @@ function.
 
 The default drawing is 256 by 256 points.
 
-You don't need `finish()`, and it's not previewed by `preview()`.
+You don't need `finish()` (the macro calls it), and it's not previewed by `preview()`.
 ```
 m = @imagematrix begin
         sethue("red")
@@ -656,6 +656,27 @@ julia> getfield.(m[1220:1224], :color)
  0xffff0000
 ```
 
+If, for some strange reason you want to draw the matrix as another
+Luxor drawing again, use code such as this:
+
+```
+using Colors
+function drawimagematrix(m)
+    d = Drawing(500, 500, "/tmp/temp.png")
+    origin()
+    w, h = size(m)
+    t = Tiler(600, 600, w, h)
+    for (pos, n) in t
+        c = m[t.currentrow, t.currentcol]
+        setcolor(convert(RGBA, c))
+        box(pos, t.tilewidth, t.tileheight, :fill)
+    end
+    finish()
+    return d
+end
+
+drawimagematrix(m)
+```
 """
 macro imagematrix(body, width=256, height=256)
     quote
