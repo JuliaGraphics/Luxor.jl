@@ -60,6 +60,8 @@ export Drawing,
     Tiler, Partition,
     rescale,
 
+    currentdrawing,
+
     finish, preview,
     origin, rulers, background,
 
