@@ -134,7 +134,7 @@ end</code></pre><p>or (less nicely):</p><pre><code class="language-julia">@svg (
          setline(10)
          sethue(&quot;purple&quot;)
          circle(O, 20, :fill)
-      end 1200 1200</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.@imagematrix" href="#Luxor.@imagematrix"><code>Luxor.@imagematrix</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia">Create a drawing and return a matrix of the image.</code></pre><p>This macro returns a matrix of pixels that represent the drawing produced by the vector graphics instructions. It uses the <code>image_as_matrix()</code> function.</p><p>The default drawing is 256 by 256 points.</p><p>You don&#39;t need <code>finish()</code>, and it&#39;s not previewed by <code>preview()</code>.</p><pre><code class="language-none">m = @imagematrix begin
+      end 1200 1200</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.@imagematrix" href="#Luxor.@imagematrix"><code>Luxor.@imagematrix</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia">Create a drawing and return a matrix of the image.</code></pre><p>This macro returns a matrix of pixels that represent the drawing produced by the vector graphics instructions. It uses the <code>image_as_matrix()</code> function.</p><p>The default drawing is 256 by 256 points.</p><p>You don&#39;t need <code>finish()</code> (the macro calls it), and it&#39;s not previewed by <code>preview()</code>.</p><pre><code class="language-none">m = @imagematrix begin
         sethue(&quot;red&quot;)
         box(O, 20, 20, :fill)
     end 60 60
@@ -152,7 +152,22 @@ julia&gt; getfield.(m[1220:1224], :color)
  0xffff0000
  0xffff0000
  0xffff0000
- 0xffff0000</code></pre></div></section></article><p>If you don&#39;t specify a size, the defaults are 600 by 600. If you don&#39;t specify a file name, files created with the macros are placed in your current working directory as <code>luxor-drawing-</code> followed by a time stamp. You don&#39;t have to specify the suffix:</p><pre><code class="language-none">@svg juliacircles(150) 400 400 &quot;test&quot; # saves in &quot;test.svg&quot;</code></pre><p>If you want to create drawings with transparent backgrounds, or located other than in the center, use the longer form rather than the macros:</p><pre><code class="language-julia">Drawing()
+ 0xffff0000</code></pre><p>If, for some strange reason you want to draw the matrix as another Luxor drawing again, use code such as this:</p><pre><code class="language-none">using Colors
+function drawimagematrix(m)
+    d = Drawing(500, 500, &quot;/tmp/temp.png&quot;)
+    origin()
+    w, h = size(m)
+    t = Tiler(600, 600, w, h)
+    for (pos, n) in t
+        c = m[t.currentrow, t.currentcol]
+        setcolor(convert(RGBA, c))
+        box(pos, t.tilewidth, t.tileheight, :fill)
+    end
+    finish()
+    return d
+end
+
+drawimagematrix(m)</code></pre></div></section></article><p>If you don&#39;t specify a size, the defaults are 600 by 600. If you don&#39;t specify a file name, files created with the macros are placed in your current working directory as <code>luxor-drawing-</code> followed by a time stamp. You don&#39;t have to specify the suffix:</p><pre><code class="language-none">@svg juliacircles(150) 400 400 &quot;test&quot; # saves in &quot;test.svg&quot;</code></pre><p>If you want to create drawings with transparent backgrounds, or located other than in the center, use the longer form rather than the macros:</p><pre><code class="language-julia">Drawing()
 background(1, 1, 1, 0)
 origin()
 setline(30)
@@ -211,7 +226,7 @@ finish()
 
 # in Images
 
-img = Gray.(permutedims(mat, (2, 1)))
+img = Gray.(mat)
 display(imresize(img, 150, 150))</code></pre><h2 id="The-drawing-surface"><a class="docs-heading-anchor" href="#The-drawing-surface">The drawing surface</a><a id="The-drawing-surface-1"></a><a class="docs-heading-anchor-permalink" href="#The-drawing-surface" title="Permalink"></a></h2><p>The origin (0/0) starts off at the top left: the x axis runs left to right across the page, and the y axis runs top to bottom down the page.</p><p>The <code>origin()</code> function moves the 0/0 point to the center of the drawing. It&#39;s often convenient to do this at the beginning of a program.</p><p>You can use functions like <code>scale()</code>, <code>rotate()</code>, and <code>translate()</code> to change the coordinate system.</p><p><code>background()</code> fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, <code>background()</code> fills just that region. In the next example, the first <code>background()</code> fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the <code>Table</code> iterator:</p><pre><code class="language-julia">background(&quot;magenta&quot;)
 origin()
 table = Table(5, 5, 100, 50)
@@ -241,4 +256,4 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg begin
         rule(O, pi/2)
     end
     circle(O, 200, :stroke)
-end</code></pre><article class="docstring"><header><a class="docstring-binding" id="Luxor.gsave" href="#Luxor.gsave"><code>Luxor.gsave</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">gsave()</code></pre><p>Save the current color settings on the stack.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.grestore" href="#Luxor.grestore"><code>Luxor.grestore</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">grestore()</code></pre><p>Replace the current graphics state with the one on top of the stack.</p></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../tutorial/">« Tutorial</a><a class="docs-footer-nextpage" href="../simplegraphics/">Simple shapes »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 11 August 2020 07:59">Tuesday 11 August 2020</span>. Using Julia version 1.4.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><article class="docstring"><header><a class="docstring-binding" id="Luxor.gsave" href="#Luxor.gsave"><code>Luxor.gsave</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">gsave()</code></pre><p>Save the current color settings on the stack.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.grestore" href="#Luxor.grestore"><code>Luxor.grestore</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">grestore()</code></pre><p>Replace the current graphics state with the one on top of the stack.</p></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../tutorial/">« Tutorial</a><a class="docs-footer-nextpage" href="../simplegraphics/">Simple shapes »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 13 August 2020 13:03">Thursday 13 August 2020</span>. Using Julia version 1.4.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
