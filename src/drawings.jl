@@ -74,6 +74,21 @@ current_surface_type()    = getfield(CURRENTDRAWING[1], :surfacetype)
 current_buffer()          = getfield(CURRENTDRAWING[1], :buffer)
 current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 
+"""
+    currentdrawing()
+
+Return the current Luxor drawing, if there currently is one.
+"""
+function currentdrawing()
+    if isempty(CURRENTDRAWING) || current_surface_ptr() == C_NULL
+        # Already finished or not even started
+        @info "There is no current drawing"
+        return false
+    else
+        return CURRENTDRAWING[1]
+    end
+end
+
 # How Luxor output works. You start by creating a drawing
 # either aimed at a file (PDF, EPS, PNG, SVG) or aimed at an
 # in-memory buffer (:svg, :png, or :image); you could be

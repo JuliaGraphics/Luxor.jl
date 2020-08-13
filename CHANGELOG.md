@@ -6,6 +6,7 @@
 
 ### Changed
 
+- currentdrawing() function to return the current drawing if there is one
 - show() for new Drawing() eg in REPL
 - background() preserves graphics state
 - imagematrix() bugs in alpha
