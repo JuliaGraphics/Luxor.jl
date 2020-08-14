@@ -6,6 +6,7 @@ The Luxor package provides a set of vector drawing functions for creating graphi
     circle(Point(0, 0), 100, :stroke)
     text("Hello World")
 end
+```
 """
 module Luxor
 
