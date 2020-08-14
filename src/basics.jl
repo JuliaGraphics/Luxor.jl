@@ -74,11 +74,14 @@ Fill the canvas with a single color. Returns the (red, green, blue, alpha) value
 Examples:
 
     background("antiquewhite")
-    background("ivory")
+    background(1, 0.0, 1.0)
+    background(1, 0.0, 1.0, .5)
 
 If Colors.jl is installed:
 
-    background(RGB(0, 0, 0))
+    background(RGB(0, 1, 0))
+    background(RGBA(0, 1, 0))
+    background(RGBA(0, 1, 0, .5))
     background(Luv(20, -20, 30))
 
 If you don't specify a background color for a PNG drawing, the background will
@@ -92,34 +95,23 @@ or
 
     background(0, 0, 0, 0)
 
-Because this sets the current alpha level to 0.0, change it to something more
-visible before you start drawing.
-
-Returns the colors in a tuple.
+Returns a tuple `(r, g, b, a)` of the color that was used to paint the background.
 """
-function background(col::T) where T <: AbstractString
-   setcolor(col)
-   paint()
-   return (get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
-end
-
 function background(col::Colors.Colorant)
-    temp = convert(RGBA,  col)
-    setcolor(temp.r, temp.g, temp.b, temp.alpha)
+    gsave()
+    setcolor(col)
     paint()
-    return (get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
+    r, g, b, a = get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha()
+    grestore()
+    return (r, g, b, a)
 end
 
-function background(r, g, b)
-    sethue(r, g, b)
-    paint()
-    return (get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
+function background(col::T) where T <: AbstractString
+    return background(parse(Colorant, col))
 end
 
-function background(r, g, b, a)
-    setcolor(r, g, b, a)
-    paint()
-    return (get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha())
+function background(r, g, b, a = 1)
+    return background(RGBA(r, g, b, a))
 end
 
 """

@@ -74,6 +74,21 @@ current_surface_type()    = getfield(CURRENTDRAWING[1], :surfacetype)
 current_buffer()          = getfield(CURRENTDRAWING[1], :buffer)
 current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 
+"""
+    currentdrawing()
+
+Return the current Luxor drawing, if there currently is one.
+"""
+function currentdrawing()
+    if isempty(CURRENTDRAWING) || current_surface_ptr() == C_NULL
+        # Already finished or not even started
+        @info "There is no current drawing"
+        return false
+    else
+        return CURRENTDRAWING[1]
+    end
+end
+
 # How Luxor output works. You start by creating a drawing
 # either aimed at a file (PDF, EPS, PNG, SVG) or aimed at an
 # in-memory buffer (:svg, :png, or :image); you could be
@@ -89,33 +104,41 @@ current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
 # depending on the OS.
 
 function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
+    @debug "show MIME:text/plain"
     returnvalue = d.filename
     # IJulia and Juno call the `show` function twice: once for
     # the image MIME and a second time for the text/plain MIME.
     # We check if this is such a 'second call':
     if (get(io, :jupyter, false) || Juno.isactive()) && (d.surfacetype == :svg || d.surfacetype == :png)
-        return
+        return d.filename
     end
-    # otherwise, we open the image file
-    if Sys.isapple()
-        run(`open $(returnvalue)`)
-    elseif Sys.iswindows()
-        cmd = get(ENV, "COMSPEC", "cmd")
-        run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
-    elseif Sys.isunix()
-        run(`xdg-open $(returnvalue)`)
+    # perhaps drawing hasn't started yet, eg in the REPL
+    if !ispath(d.filename)
+        location = !isempty(d.filename) ? d.filename : "in memory"
+        println(" Luxor drawing: (type = :$(d.surfacetype), width = $(d.width), height = $(d.width), location = $(location))")
+    else
+        # open the image file
+        if Sys.isapple()
+            run(`open $(returnvalue)`)
+        elseif Sys.iswindows()
+            cmd = get(ENV, "COMSPEC", "cmd")
+            run(`$(ENV["COMSPEC"]) /c start $(returnvalue)`)
+        elseif Sys.isunix()
+            run(`xdg-open $(returnvalue)`)
+        end
     end
 end
 
 """
-tidysvg(fname)
+    tidysvg(fname)
 
 Read the SVG image in `fname` and write it to a file
 `fname-tidy.svg` with modified glyph names.
 
 SVG images use named defs for text, which cause errors
 problem when used in a notebook.
-[See](https://github.com/jupyter/notebook/issues/333) for example.
+[See](https://github.com/jupyter/notebook/issues/333) for
+example.
 
 A kludgy workround is to rename the elements...
 """
@@ -606,8 +629,7 @@ function image_as_matrix()
     end
     w = Int(current_surface().width)
     h = Int(current_surface().height)
-    z = zeros(UInt32, h, w)
-    imagesurface = Cairo.CairoImageSurface(z, Cairo.FORMAT_ARGB32)
+    imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h))
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, current_surface(), 0, 0)
     Cairo.paint(cr)
@@ -624,10 +646,9 @@ This macro returns a matrix of pixels that represent the drawing
 produced by the vector graphics instructions. It uses the `image_as_matrix()`
 function.
 
-The default drawing is 256 by 256 units, and is composed of transparent black
-pixels until you draw something different.
+The default drawing is 256 by 256 points.
 
-It's not previewed by `preview()`.
+You don't need `finish()` (the macro calls it), and it's not previewed by `preview()`.
 ```
 m = @imagematrix begin
         sethue("red")
@@ -650,6 +671,27 @@ julia> getfield.(m[1220:1224], :color)
  0xffff0000
 ```
 
+If, for some strange reason you want to draw the matrix as another
+Luxor drawing again, use code such as this:
+
+```
+using Colors
+function drawimagematrix(m)
+    d = Drawing(500, 500, "/tmp/temp.png")
+    origin()
+    w, h = size(m)
+    t = Tiler(600, 600, w, h)
+    for (pos, n) in t
+        c = m[t.currentrow, t.currentcol]
+        setcolor(convert(RGBA, c))
+        box(pos, t.tilewidth, t.tileheight, :fill)
+    end
+    finish()
+    return d
+end
+
+drawimagematrix(m)
+```
 """
 macro imagematrix(body, width=256, height=256)
     quote

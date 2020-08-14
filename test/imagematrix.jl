@@ -5,7 +5,7 @@ function imagematrix()
 
     # get image as matrix
     mat = image_as_matrix()
-    @test mat[1] == Colors.ARGB32(0.0,0.0,0.0,0.0)
+    @test mat[1] == Colors.ARGB32(1.0, 1.0, 1.0, 0.0)
     @test mat[1] == mat[2] == mat[3] == mat[4]
 
     # make it red, then get image as matrix again
@@ -44,4 +44,4 @@ end
 
 imagematrix()
 
-println("...finished test")
+println("...finished imagematrixtest")
