@@ -214,9 +214,7 @@ Drawing()
 background(1, 1, 1, 0)
 origin()
 setline(30)
-# current opacity is now 0.0, so use setcolor() rather than sethue()
-# or use setopacity()
-setcolor("green")
+sethue("green") # assumes current opacity
 box(BoundingBox() - 50, :stroke)
 finish()
 preview()
@@ -326,7 +324,7 @@ finish()
 
 # in Images
 
-img = Gray.(permutedims(mat, (2, 1)))
+img = Gray.(mat)
 display(imresize(img, 150, 150))
 ```
 

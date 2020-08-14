@@ -60,6 +60,8 @@ export Drawing,
     Tiler, Partition,
     rescale,
 
+    currentdrawing,
+
     finish, preview,
     origin, rulers, background,
 
@@ -78,14 +80,14 @@ export Drawing,
 
     move, rmove, line, rule, rline, arrow, arrowhead, dimension,
 
-    BoundingBox, boundingbox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
+    BoundingBox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
     boxtop, boxbottom, boxtopleft, boxtopcenter, boxtopright, boxmiddleleft,
     boxmiddlecenter, boxmiddleright, boxbottomleft, boxbottomcenter,
     boxbottomright,
 
     intersectboundingboxes, boundingboxesintersect, pointcrossesboundingbox,
 
-    Boxmaptile, boxmap,
+    BoxmapTile, boxmap,
 
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, isarcclockwise, arc2sagitta, carc2sagitta,
@@ -148,7 +150,7 @@ export Drawing,
     mesh, setmesh, mask,
 
     # animation
-    Sequence, Movie, Scene, animate,
+    Movie, Scene, animate,
 
     lineartween, easeinquad, easeoutquad, easeinoutquad, easeincubic, easeoutcubic,
     easeinoutcubic, easeinquart, easeoutquart, easeinoutquart, easeinquint, easeoutquint,

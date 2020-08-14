@@ -163,7 +163,7 @@ The Point type is an immutable composite type containing `x` and `y` fields that
 
 You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS Code IDEs, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
 
-## Working in Jupyter
+### Working in Jupyter
 
 ![Jupyter](assets/figures/jupyter-basic.png)
 
