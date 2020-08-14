@@ -18,9 +18,12 @@ function text_wrap_tests(fname)
         fsize = 12
         opacity = 1.0
         fontsize(fsize)
-        if @isdefined get_font_matrix
-            @test get_fontsize() == fsize
-        else
+        try
+            # does not work with Cairo < 1.0.5
+            recevied_fsize = get_fontsize()
+            @test recevied_fsize == fsize
+        catch
+            # should throw with Cairo < 1.0.5
             @test_throws MethodError get_fontsize()
         end
         @layer begin
