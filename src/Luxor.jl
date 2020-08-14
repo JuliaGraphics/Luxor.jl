@@ -123,7 +123,7 @@ export Drawing,
 
     fontface, fontsize, text, textpath, label,
     textextents, textoutlines, textcurve, textcentred, textcentered, textright,
-    textcurvecentred, textcurvecentered,
+    textcurvecentred, textcurvecentered, get_fontsize,
     textwrap, textlines, splittext, textbox, texttrack,
 
     setcolor, setopacity, sethue, setgrey, setgray,

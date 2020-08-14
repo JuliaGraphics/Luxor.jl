@@ -13,7 +13,7 @@
     text(str, pos, valign=:baseline, halign=:left)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
-string at the point. If you omit the point, it's placed at the current `0/0`. 
+string at the point. If you omit the point, it's placed at the current `0/0`.
 
 `angle` specifies the rotation of the text relative to the current x-axis.
 
@@ -115,6 +115,25 @@ fontface(f) =
 Set the font size to `n` points. The default size is 10 points. (Toy API)
 """
 fontsize(n) = Cairo.set_font_size(get_current_cr(), n)
+
+
+"""
+    get_fontsize()
+
+Return the font size set by `fontsize` or more precisely the y-scale of the Cairo font matrix
+if `Cairo.set_font_matrix` is used directly. (Toy API)
+
+> This only works if Cairo is at least at v1.0.5.
+"""
+function get_fontsize()
+    if @isdefined get_font_matrix
+        m = get_font_matrix(get_current_cr())
+        font_size = sign(m.yy)*sqrt(m.yx^2+m.yy^2)
+        return font_size
+    else
+        throw(MethodError(get_fontsize, "Please use Cairo v1.0.5 or later to use this feature."))
+    end
+end
 
 """
     textextents(str)
