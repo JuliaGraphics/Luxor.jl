@@ -410,3 +410,11 @@ end
 gsave
 grestore
 ```
+
+## Return the current drawing
+
+In some situations you'll want to explicitly return the current drawing to the calling function.
+
+```@docs
+currentdrawing
+```
