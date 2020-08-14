@@ -20,8 +20,8 @@ function text_wrap_tests(fname)
         fontsize(fsize)
         try
             # does not work with Cairo < 1.0.5
-            recevied_fsize = get_fontsize()
-            @test recevied_fsize == fsize
+            received_fsize = get_fontsize()
+            @test received_fsize == fsize
         catch
             # should throw with Cairo < 1.0.5
             @test_throws MethodError get_fontsize()

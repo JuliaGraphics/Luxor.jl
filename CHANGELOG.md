@@ -1,15 +1,17 @@
 # Changelog
 
-## [v2.x.x] - forthcoming in Sept 2020?
+## [v2.4.0] - August 13 2020
 
 ### Added
 
+- get_fontsize() - thanks Ole!
+- currentdrawing() function to return the current drawing if there is one
+
 ### Changed
 
-- currentdrawing() function to return the current drawing if there is one
-- show() for new Drawing() eg in REPL
+- show() fixed for new Drawing() eg in REPL
 - background() preserves graphics state
-- imagematrix() bugs in alpha
+- imagematrix() bugs in alpha fixed hopefully
 
 ### Removed
 
