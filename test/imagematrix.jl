@@ -80,10 +80,10 @@ function imagematrix()
     @test isapprox(m[1][4], 0.5, atol=0.01)
 
     # test each element is the same "color"
-    @test all(isequal(1), [el[1] for el in m])
-    @test all(isapprox(0.5, atol=0.01), [el[2] for el in m])
-    @test all(isapprox(0.5, atol=0.01), [el[3] for el in m])
-    @test all(isapprox(0.5, atol=0.01), [el[4] for el in m])
+    @test all(x -> isequal(x, 1), [el[1] for el in m])
+    @test all(x -> isapprox(x, 0.5, atol=0.01), [el[2] for el in m])
+    @test all(x -> isapprox(x, 0.5, atol=0.01), [el[3] for el in m])
+    @test all(x -> isapprox(x, 0.5, atol=0.01), [el[4] for el in m])
 
 end
 
