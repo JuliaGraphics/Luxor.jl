@@ -293,8 +293,8 @@ origin()
 tiles = Tiler(400, 400, size(mat)...)
 sethue("white")
 for (pos, n) in tiles
-    # matrix elements are 0xααrrggbb
-    if mat[tiles.currentrow, tiles.currentcol].color > 0xff000000
+    # is element lighter than black?
+    if sum(mat[tiles.currentrow, tiles.currentcol][1:3]/3) > 0.0
         randomhue()
         box(pos, tiles.tilewidth - 1, tiles.tileheight - 1, :fill)
     end

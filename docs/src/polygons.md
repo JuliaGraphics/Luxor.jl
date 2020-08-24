@@ -1,8 +1,3 @@
-```@meta
-DocTestSetup = quote
-    using Luxor, Colors, Random
-    end
-```
 # Polygons and paths
 
 For drawing shapes, Luxor provides polygons and paths.
@@ -13,77 +8,31 @@ A path is a sequence of one or more straight and curved (circular arc or Bézier
 
 Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
-```@setup polytable
-using Luxor, DelimitedFiles
-Drawing(800, 500, "assets/figures/polytable.png")
-background("white")
-origin()
-tabledata = readdlm(IOBuffer(
-"""
--             create                convert               draw               info              edit             
-polygon       ngon()                polysmooth()          poly()             isinside()        simplify()
--             ngonside()            -                     prettypoly()       polyperimeter()   polysplit()
--             star()                -                     polysmooth()       polyarea()        polyportion()
--             offsetpoly()          -                     -                  polycentroid()    polyremainder()
--             polyfit()             -                     -                  boundingbox()     polysortbyangle()
--             hyptrochoid()         -                     -                  -                 polysortbydistance()
--             epitrochoid()         -                     -                  -                 polyintersections()
--             -                     -                     -                  -                 polymove!()
--             -                     -                     -                  -                 polyscale!()
--             -                     -                     -                  -                 polyrotate!()
--             -                     -                     -                  -                 polyreflect!()
--             -                     -                     -                  -                 polysample()
--             -                     -                     -                  -                 polytriangulate()
--             -                     -                     -                  -                 insertvertices!()
-path          getpath()             pathtopoly()          -                  -                 -
--             getpathflat()         -                     -                  -                 -  
-bezierpath    makebezierpath()      pathtobezierpaths()   drawbezierpath()   -                 -
--             pathtobezierpaths()   bezierpathtopoly()    brush()            -                 -  
--             BezierPath()          -                     -                  -                 -
--             BezierPathSegment()   -                     -                  -                 -
-"""))
-
-# find the widths of the columns
-nrows, ncols = size(tabledata)
-fontsize(12)
-fontface("Menlo")
-widths = Float64[]
-margin=4
-for c in 1:ncols
-    temp = []
-    for r in 1:nrows
-        te = textextents(tabledata[r, c])[3]
-        push!(temp, te + 10)
-    end
-    push!(widths, maximum(temp))
-end
-
-# draw table using the widths
-t = Table(fill(20, nrows), widths)
-for r in 1:size(t)[1]
-   for c in 1:size(t)[2]
-        @layer begin
-        sethue("thistle")
-        if r >= 2 && c >= 2
-            if isodd(c)
-                setopacity(0.1)
-            else
-                setopacity(0.4)
-            end
-            box(t, r, c, :fill)
-        end
-        end
-        sethue("black")
-        if tabledata[r, c] != "-"
-            text(string(tabledata[r, c]), t[r, c] - (t.colwidths[c]/2 - margin, 0))
-        end
-    end
-end
-finish()
-nothing
-```
-
-![polygons etc](assets/figures/polytable.png)
+|create                 |convert              |draw             |info             |edit                 |
+|:---	                |:---	              |:---	            |:---	          |:---                 |
+| *polygons*            |                     |                 |                 |                     |
+|`ngon()`               |`polysmooth()`       |`poly()`         |`isinside()`       |`simplify()`           |
+|`ngonside()`           |                     |`prettypoly()`   |`polyperimeter()`  |`polysplit()`          |
+|`star()`               |                     |`polysmooth()`   |`polyarea()`       |`polyportion()`        |
+|`offsetpoly()`         |                     |                 |`polycentroid()`   |`polyremainder()`      |
+|`polyfit()`            |                     |                 |`boundingbox()`    |`polysortbyangle()`    |
+|`hyptrochoid()`        |                     |                 |                 |`polysortbydistance()` |
+|`epitrochoid()`        |                     |                 |                 |`polyintersections()`  |
+|                       |                     |                 |                 |polymove!`()`          |
+|                       |                     |                 |                 |polyscale!`()`         |
+|                       |                     |                 |                 |polyrotate!`()`        |
+|                       |                     |                 |                 |polyreflect!`()`       |
+|                       |                     |                 |                 |`polysample()`         |
+|                       |                     |                 |                 |`polytriangulate()`    |
+|                       |                     |                 |                 |`insertvertices!()`    |
+| *paths*               |                     |                 |                 |                     |
+|`getpath()`            |`pathtopoly()`         |                 |                 |                     |
+|`getpathflat()`        |                     |                 |                 |                     |
+| *Bezier paths*        |                     |                 |                 |                     |
+|`makebezierpath()`     |`pathtobezierpaths()`  |`drawbezierpath()` |                 |                     |
+|`pathtobezierpaths()`  |`bezierpathtopoly()`   |`brush()`          |                 |                     |
+|`BezierPath()`         |                     |                 |                 |                     |
+|`BezierPathSegment()`  |                     |                 |                 |                     |
 
 ## Regular polygons ("ngons")
 
