@@ -1,5 +1,24 @@
 # Changelog
 
+
+## [v3.0.0] - forthcoming - September 2020
+
+### Added
+
+- getworldposition()
+
+### Changed
+
+- return values of imagematrix have changed, now return [[1, 1, 1, 1], [1, 1, 1, 1], ...]
+- docs use JuliaMono :)
+
+### Removed
+
+- old deprecations finally gone
+
+### Deprecated
+
+
 ## [v2.4.0] - August 13 2020
 
 ### Added

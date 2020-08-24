@@ -177,7 +177,8 @@ You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS
 
 ## Images as matrices
 
-With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. Each element of the matrix is a colored pixel, encoded as `ARGB` (UInt32). This example plots the ampersand as if was a matrix of data points.
+With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. Each element of the matrix contains four numbers that define an RGBA pixel.
+This example plots the ampersand as if was a matrix of data points.
 
 ```
 using Luxor, Colors
@@ -186,16 +187,19 @@ m = @imagematrix begin
         background("black")
         sethue("white")
         fontface("Georgia")
-        fontsize(240)
+        fontsize(50)
         text("&", halign=:center, valign=:middle)
-    end
+end 60 60
 
-import SparseArrays
-import Plots
+#  m is a 60×60 Array{Array{Float64,1},2}:
+#  [0.0, 0.0, 0.0, 1.0] [0.0, 0.0, 0.0, 1.0] [0.996078, 0.996078, 0.996078, 1.0]  ...
+#  [0.603922, 0.603922, 0.603922, 1.0]  [0.0, 0.0, 0.0, 1.0] ...
+#  [0.815686, 0.815686, 0.815686, 1.0] ...
 
-sa = SparseArrays.sparse(convert.(Colors.Gray, m) .> convert(Colors.Gray, ARGB32(0.0, 0.0, 0.0, 1.0)))
+# convert to simple black/white array
+mg = map(k -> round.(float(Gray(RGBA(k...))), digits=0), m)  
 
-Plots.spy(sa, markersize=1.5)
+Plots.spy(mg, markersize=3)
 ```
 
 ![image matrix](assets/figures/ampersand-matrix.png)

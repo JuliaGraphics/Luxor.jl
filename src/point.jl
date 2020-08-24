@@ -584,3 +584,22 @@ with `currentpoint()`.
 function hascurrentpoint()
     return Cairo.has_current_point(get_current_cr())
 end
+
+"""
+    getworldposition(pt::Point = O;
+        centered=true)
+
+Return the world coordinates of `pt`. 
+
+The default coordinate system for Luxor/Cairo is that the top left corner is 0/0.  
+If you use `origin()`, everything moves to the center of the drawing, and this function
+with the default `centered` option being assumes an `origin()` function. If you choose
+`centered=false`, the returned coordinates will be relative to the top left corner of
+the drawing.
+
+"""
+function getworldposition(pt::Point=O;
+    centered=true)
+    x, y = cairotojuliamatrix(getmatrix()) * [pt.x, pt.y, 1]
+    return Point(x, y) - (centered ? (Luxor.current_width()/2.0, Luxor.current_height()/2.0) : (0 , 0))
+end

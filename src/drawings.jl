@@ -135,6 +135,8 @@ end
 Read the SVG image in `fname` and write it to a file
 `fname-tidy.svg` with modified glyph names.
 
+Return the name of the modified file.
+
 SVG images use named defs for text, which cause errors
 problem when used in a notebook.
 [See](https://github.com/jupyter/notebook/issues/333) for
@@ -145,18 +147,21 @@ A kludgy workround is to rename the elements...
 function tidysvg(fname)
     # I pinched this from Simon's RCall.jl
     path, ext = splitext(fname)
+    outfile = ""
     if ext == ".svg"
+        outfile = "$(path * "-tidy" * ext)"
         open(fname) do f
-        r = string(rand(100000:999999))
-        d = read(f, String)
-        d = replace(d, "id=\"glyph" => "id=\"glyph"*r)
-        d = replace(d, "href=\"#glyph" => "href=\"#glyph"*r)
-            open(path * "-tidy" * ext, "w") do out
+            r = string(rand(100000:999999))
+            d = read(f, String)
+            d = replace(d, "id=\"glyph" => "id=\"glyph"*r)
+            d = replace(d, "href=\"#glyph" => "href=\"#glyph"*r)
+            open(outfile, "w") do out
                 write(out, d)
             end
-        @info "modified SVG file copied to $(path * "-tidy" * ext)"
+            @info "modified SVG file copied to $(outfile)"
         end
     end
+    return outfile
 end
 
 # in memory:
@@ -597,11 +602,89 @@ macro draw(body, width=600, height=600)
     end
 end
 
+# function image_as_matrix()
+#     if length(CURRENTDRAWING) != 1
+#         error("no current drawing")
+#     end
+#     w = Int(current_surface().width)
+#     h = Int(current_surface().height)
+#     imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h))
+#     cr = Cairo.CairoContext(imagesurface)
+#     Cairo.set_source_surface(cr, current_surface(), 0, 0)
+#     Cairo.paint(cr)
+#     data = imagesurface.data
+#     Cairo.finish(imagesurface)
+#     Cairo.destroy(imagesurface)
+#     return reinterpret(ARGB32, permutedims(data, (2, 1)))
+# end
+
+"""
+    _argb32_to_rgba(i)
+
+Convert a 32bit ARGB Int to a four value array:
+
+```
+_argb32_to_rgba(0xFF800000)
+
+4-element Array{Float64,1}:
+ 1.0
+ 0.5019607843137255
+ 0.0
+ 0.0
+```
+
+"""
+function _argb32_to_rgba(k)
+    reverse(reinterpret(UInt8, [k]) ./ 0xFF)
+end
+
+"""
+    unpremultiplyalpha(a)
+
+Given an array of UInt32 values, divide each value by the
+alpha value. See alphadivide or reversing premultiplied
+alpha values.
+
+Returns an array of arrays, where each array has four
+Float64 values.
+
+In a premultiplied image array, a 50% transparent red pixel
+is stored as 0x80800000, rather than not 0x80ff0000. This
+function reverses the process,  dividing each RGB value by
+the alpha value.
+
+The highest two digits of each incoming element is
+interpreted as the alpha value.
+
+```
+unpremultiplyalpha([0x80800000])
+ 1-element Array{Array{Float64,1},1}:
+ [1.0, 0.0, 0.0, 0.5019607843137255]
+```
+
+Notice the arithmetic errors introduced as 0x80 gets
+converted to 0.5019.
+"""
+function unpremultiplyalpha(a)
+    af = _argb32_to_rgba.(a)
+    for i in eachindex(af)
+        af[i] = circshift(af[i], -1)
+        α = af[i][4]
+        if ! iszero(α) # don't ÷ by 0
+            af[i][1] /= α  # red
+            af[i][2] /= α  # green
+            af[i][3] /= α  # blue
+        end
+    end
+    return af
+end
+
 """
     image_as_matrix()
 
-If the current Luxor drawing is an `:image` type, return an `Array{ARGB32,2}`
-matrix of the current state of the picture, where each element is a colored pixel.
+If the current Luxor drawing is an `:image` type, return an
+Array of the current state of the picture, where each
+element is an array of the R, G, B, and A values.
 
 A matrix 50 wide and 30 high => a table 30 rows by 50 cols
 
@@ -618,8 +701,10 @@ text("42", halign=:center, valign=:middle)
 mat = image_as_matrix()
 finish()
 
-# working in Images:
-img = Gray.(mat)
+# working in Images
+
+# convert matrix to RGBA matrix
+img = map(k -> RGBA.(k...), mat)
 display(imresize(img, 150, 150))
 ```
 """
@@ -629,14 +714,26 @@ function image_as_matrix()
     end
     w = Int(current_surface().width)
     h = Int(current_surface().height)
-    imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h))
-    cr = Cairo.CairoContext(imagesurface)
-    Cairo.set_source_surface(cr, current_surface(), 0, 0)
-    Cairo.paint(cr)
+    z = zeros(UInt32, w, h)
+
+    # create a new image surface to receive the data from the current drawing
+    imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32)
+
+    # the destination - we're drawing on this
+    crdest = Cairo.CairoContext(imagesurface)
+
+    # set the source to be the current Luxor drawing
+    Cairo.set_source_surface(crdest, Luxor.current_surface(), 0, 0)
+
+    Cairo.set_operator(crdest, Cairo.OPERATOR_SOURCE)
+    Cairo.paint(crdest)
+
     data = imagesurface.data
+    r  = unpremultiplyalpha(data)
+
     Cairo.finish(imagesurface)
     Cairo.destroy(imagesurface)
-    return reinterpret(ARGB32, permutedims(data, (2, 1)))
+    return permutedims(r, (2, 1))
 end
 
 """
@@ -656,19 +753,12 @@ m = @imagematrix begin
     end 60 60
 
 julia>  m[1220:1224] |> show
-    ARGB32[ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)]
+    [[0.0, 0.0, 0.0, 0.0],
+     [1.0, 0.0, 0.0, 1.0],
+     [1.0, 0.0, 0.0, 1.0],
+     [1.0, 0.0, 0.0, 1.0],
+     [1.0, 0.0, 0.0, 1.0]]
 
-julia> getfield.(m[1220:1224], :color)
- 5-element Array{UInt32,1}:
- 0x00000000
- 0xffff0000
- 0xffff0000
- 0xffff0000
- 0xffff0000
 ```
 
 If, for some strange reason you want to draw the matrix as another
@@ -679,12 +769,13 @@ using Colors
 function drawimagematrix(m)
     d = Drawing(500, 500, "/tmp/temp.png")
     origin()
+    background("yellow")
     w, h = size(m)
-    t = Tiler(600, 600, w, h)
+    t = Tiler(500, 500, w, h)
     for (pos, n) in t
         c = m[t.currentrow, t.currentcol]
-        setcolor(convert(RGBA, c))
-        box(pos, t.tilewidth, t.tileheight, :fill)
+        setcolor(RGBA(c...))
+        box(pos, t.tilewidth -1, t.tileheight - 1, :fill)
     end
     finish()
     return d

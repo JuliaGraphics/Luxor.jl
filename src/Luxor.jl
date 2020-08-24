@@ -106,6 +106,7 @@ export Drawing,
     perpendicular, crossproduct, dotproduct, distance,
     prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit, currentpoint, hascurrentpoint,
+    getworldposition,
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
     polyarea, polysample, insertvertices!,
