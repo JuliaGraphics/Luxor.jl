@@ -257,32 +257,27 @@ end
 
 # Drawing as image matrix
 
-You can specify an `:image` type of picture when you create a drawing using
-`Drawing()` or with the `@imagematrix` macro. This stores the vector graphics on
-the drawing in memory, and at any time you can copy the data in the form of a
+While drawing, you can copy the data in the form of a
 matrix, using the `image_as_matrix()` function.
 
-`image_as_matrix()` returns an `Array{ARGB32, 2}:`, an array of numbers that
-encode the alpha, Red, Green, and Blue values of each pixel into a single
-number.
+`image_as_matrix()` returns an `Array{Array{Float64,1},2}`, an array of 4 element arrays that
+encode the alpha, Red, Green, and Blue, and Alpha values of each pixel.
 
-The following example draws a character as usual, then copies the data into a
-matrix called `mat`. The second drawing reads the values in from the matrix and
-draws them as square tiles if the color value is above (lighter than) black.
+The following example draws a white box, then copies the drawing into a matrix called `mat1`. Then it draws the number "42", and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
 
 ```@example
 using Luxor # hide
 
-Drawing(40, 40, :image)
+Drawing(40, 40, :png)
 origin()
 background("black")
 sethue("white")
 fontsize(38)
 fontface("Georgia")
+box(O, 10, 40, :fill)
+mat1 = image_as_matrix()
 text("42", halign=:center, valign=:middle)
-
-mat = image_as_matrix()
-
+mat2 = image_as_matrix()
 finish()
 
 # second drawing
@@ -290,13 +285,14 @@ finish()
 Drawing(400, 400, "assets/figures/image-drawings.svg")
 background("darkorange")
 origin()
-tiles = Tiler(400, 400, size(mat)...)
+t = Tiler(400, 400, size(mat1)...)
 sethue("white")
-for (pos, n) in tiles
-    # is element lighter than black?
-    if sum(mat[tiles.currentrow, tiles.currentcol][1:3]/3) > 0.0
+for (pos, n) in t
+    u = mat1[t.currentrow, t.currentcol][1:3]/3 +
+        mat2[t.currentrow, t.currentcol][1:3]/3
+    if sum(u) < 0.2
         randomhue()
-        box(pos, tiles.tilewidth - 1, tiles.tileheight - 1, :fill)
+        box(pos, t.tilewidth - 1, t.tileheight - 1, :fill)
     end
 end
 finish() # hide

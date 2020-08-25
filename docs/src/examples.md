@@ -177,7 +177,7 @@ You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS
 
 ## Images as matrices
 
-With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. Each element of the matrix contains four numbers that define an RGBA pixel.
+With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. Each element of the matrix contains four numbers that could define an RGBA pixel.
 This example plots the ampersand as if was a matrix of data points.
 
 ```
