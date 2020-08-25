@@ -260,39 +260,40 @@ end
 While drawing, you can copy the data in the form of a
 matrix, using the `image_as_matrix()` function.
 
-`image_as_matrix()` returns an `Array{Array{Float64,1},2}`, an array of 4 element arrays that
-encode the alpha, Red, Green, and Blue, and Alpha values of each pixel.
+`image_as_matrix()` returns a array of ARGB{32} values that  encode the Red, Green, and Blue, and Alpha values of each pixel.
 
-The following example draws a white box, then copies the drawing into a matrix called `mat1`. Then it draws the number "42", and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
+The following example draws a red box, then copies the drawing into a matrix called `mat1`. Then it draws a blue circle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
 
 ```@example
-using Luxor # hide
+using Luxor, Colors # hide
 
 Drawing(40, 40, :png)
 origin()
 background("black")
-sethue("white")
-fontsize(38)
-fontface("Georgia")
-box(O, 10, 40, :fill)
-mat1 = image_as_matrix()
-text("42", halign=:center, valign=:middle)
-mat2 = image_as_matrix()
+sethue("red")
+box(O, 40, 20, :fill)
+mat1 = image_as_matrix()'
+sethue("blue")
+setline(5)
+circle(O, 15, :stroke)
+mat2 = image_as_matrix()'
 finish()
 
 # second drawing
 
 Drawing(400, 400, "assets/figures/image-drawings.svg")
-background("darkorange")
+background("grey20")
 origin()
-t = Tiler(400, 400, size(mat1)...)
+t = Tiler(400, 400, size(mat1)..., margin=0)
 sethue("white")
 for (pos, n) in t
-    u = mat1[t.currentrow, t.currentcol][1:3]/3 +
-        mat2[t.currentrow, t.currentcol][1:3]/3
-    if sum(u) < 0.2
+
+    pixel1 = convert(Colors.RGBA, mat1[n])
+    pixel2 = convert(Colors.RGBA, mat2[n])
+
+    if red(pixel1) > .5 && blue(pixel2) > .5
         randomhue()
-        box(pos, t.tilewidth - 1, t.tileheight - 1, :fill)
+        box(pos, t.tilewidth - 1, t.tileheight - 1, :fillstroke)
     end
 end
 finish() # hide

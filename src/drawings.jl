@@ -602,22 +602,6 @@ macro draw(body, width=600, height=600)
     end
 end
 
-# function image_as_matrix()
-#     if length(CURRENTDRAWING) != 1
-#         error("no current drawing")
-#     end
-#     w = Int(current_surface().width)
-#     h = Int(current_surface().height)
-#     imagesurface = CairoImageSurface(fill(ARGB32(1, 1, 1, 0), w, h))
-#     cr = Cairo.CairoContext(imagesurface)
-#     Cairo.set_source_surface(cr, current_surface(), 0, 0)
-#     Cairo.paint(cr)
-#     data = imagesurface.data
-#     Cairo.finish(imagesurface)
-#     Cairo.destroy(imagesurface)
-#     return reinterpret(ARGB32, permutedims(data, (2, 1)))
-# end
-
 """
     _argb32_to_rgba(i)
 
@@ -682,16 +666,15 @@ end
 """
     image_as_matrix()
 
-If the current Luxor drawing is an `:image` type, return an
-Array of the current state of the picture, where each
-element is an array of the R, G, B, and A values.
+Return an Array of the current state of the picture as an
+array of ARGB32.
 
 A matrix 50 wide and 30 high => a table 30 rows by 50 cols
 
 ```
 using Luxor, Images
 
-Drawing(50, 50, :image)
+Drawing(50, 50, :png)
 origin()
 background(randomhue()...)
 sethue("white")
@@ -700,12 +683,6 @@ fontface("Georgia")
 text("42", halign=:center, valign=:middle)
 mat = image_as_matrix()
 finish()
-
-# working in Images
-
-# convert matrix to RGBA matrix
-img = map(k -> RGBA.(k...), mat)
-display(imresize(img, 150, 150))
 ```
 """
 function image_as_matrix()
@@ -715,26 +692,44 @@ function image_as_matrix()
     w = Int(current_surface().width)
     h = Int(current_surface().height)
     z = zeros(UInt32, w, h)
-
     # create a new image surface to receive the data from the current drawing
     imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32)
-
-    # the destination - we're drawing on this
-    crdest = Cairo.CairoContext(imagesurface)
-
-    # set the source to be the current Luxor drawing
-    Cairo.set_source_surface(crdest, Luxor.current_surface(), 0, 0)
-
-    Cairo.set_operator(crdest, Cairo.OPERATOR_SOURCE)
-    Cairo.paint(crdest)
-
+    cr = Cairo.CairoContext(imagesurface)
+    Cairo.set_source_surface(cr, current_surface(), 0, 0)
+    Cairo.paint(cr)
     data = imagesurface.data
-    r  = unpremultiplyalpha(data)
-
     Cairo.finish(imagesurface)
     Cairo.destroy(imagesurface)
-    return permutedims(r, (2, 1))
+    return reinterpret(ARGB32, permutedims(data, (2, 1)))
 end
+
+# function image_as_matrix()
+#     if length(CURRENTDRAWING) != 1
+#         error("no current drawing")
+#     end
+#     w = Int(current_surface().width)
+#     h = Int(current_surface().height)
+#     z = zeros(UInt32, w, h)
+#
+#     # create a new image surface to receive the data from the current drawing
+#     imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32)
+#
+#     # the destination - we're drawing on this
+#     crdest = Cairo.CairoContext(imagesurface)
+#
+#     # set the source to be the current Luxor drawing
+#     Cairo.set_source_surface(crdest, Luxor.current_surface(), 0, 0)
+#
+#     Cairo.set_operator(crdest, Cairo.OPERATOR_SOURCE)
+#     Cairo.paint(crdest)
+#
+#     data = imagesurface.data
+#     r  = unpremultiplyalpha(data)
+#
+#     Cairo.finish(imagesurface)
+#     Cairo.destroy(imagesurface)
+#     return permutedims(r, (2, 1))
+# end
 
 """
     Create a drawing and return a matrix of the image.
@@ -753,11 +748,11 @@ m = @imagematrix begin
     end 60 60
 
 julia>  m[1220:1224] |> show
-    [[0.0, 0.0, 0.0, 0.0],
-     [1.0, 0.0, 0.0, 1.0],
-     [1.0, 0.0, 0.0, 1.0],
-     [1.0, 0.0, 0.0, 1.0],
-     [1.0, 0.0, 0.0, 1.0]]
+    ARGB32[ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
+           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)]
 
 ```
 
@@ -765,16 +760,27 @@ If, for some strange reason you want to draw the matrix as another
 Luxor drawing again, use code such as this:
 
 ```
-using Colors
+m = @imagematrix begin
+        sethue("red")
+        box(O, 20, 20, :fill)
+        sethue("blue")
+        box(O, 10, 40, :fill)
+    end 60 60
+
+function convertmatrixtocolors(m)
+    return convert.(Colors.RGBA, m)
+end
+
 function drawimagematrix(m)
     d = Drawing(500, 500, "/tmp/temp.png")
     origin()
-    background("yellow")
     w, h = size(m)
     t = Tiler(500, 500, w, h)
+    mi = convertmatrixtocolors(m)
+    @show mi[30, 30]
     for (pos, n) in t
-        c = m[t.currentrow, t.currentcol]
-        setcolor(RGBA(c...))
+        c = mi[t.currentrow, t.currentcol]
+        setcolor(c)
         box(pos, t.tilewidth -1, t.tileheight - 1, :fill)
     end
     finish()

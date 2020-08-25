@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.0.0] - forthcoming - September 2020
+## [v2.5.0] - forthcoming - September 2020
 
 ### Added
 
@@ -9,7 +9,6 @@
 
 ### Changed
 
-- return values of imagematrix have changed, now return [[1, 1, 0, 1], [1, 0, 1, 1], ...]
 - docs use JuliaMono
 
 ### Removed

@@ -177,29 +177,26 @@ You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS
 
 ## Images as matrices
 
-With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. Each element of the matrix contains four numbers that could define an RGBA pixel.
-This example plots the ampersand as if was a matrix of data points.
+With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes the ampersand in Images.jl.
 
 ```
-using Luxor, Colors
+using Luxor, Colors, Images, ImageFiltering
 
 m = @imagematrix begin
         background("black")
         sethue("white")
         fontface("Georgia")
-        fontsize(50)
+        fontsize(180)
         text("&", halign=:center, valign=:middle)
-end 60 60
+end 200 200
 
-#  m is a 60×60 Array{Array{Float64,1},2}:
-#  [0.0, 0.0, 0.0, 1.0] [0.0, 0.0, 0.0, 1.0] [0.996078, 0.996078, 0.996078, 1.0]  ...
-#  [0.603922, 0.603922, 0.603922, 1.0]  [0.0, 0.0, 0.0, 1.0] ...
-#  [0.815686, 0.815686, 0.815686, 1.0] ...
+function convertmatrixtocolors(m)
+    return convert.(Colors.RGBA, m)
+end
 
-# convert to simple black/white array
-mg = map(k -> round.(float(Gray(RGBA(k...))), digits=0), m)  
+img = convertmatrixtocolors(m)
 
-Plots.spy(mg, markersize=3)
+imfilter(img, Kernel.gaussian(10))
 ```
 
 ![image matrix](assets/figures/ampersand-matrix.png)
