@@ -1,12 +1,18 @@
 using Luxor, Test, Colors
 
+function convertmatrixtocolors(m)
+    return @. convert(Colors.RGBA{Float64}, m)
+end
+
 function imagematrix()
     Drawing(2, 2, :png)
 
     # get image as matrix
-    mat = image_as_matrix()
 
-    @test mat[1] == [0.0, 0.0, 0.0, 0.0]
+    mat = convertmatrixtocolors(image_as_matrix())
+
+    @test mat[1] == RGBA{Float64}(0.0, 0.0, 0.0, 0.0)
+
     @test mat[1] == mat[2] == mat[3] == mat[4]
 
     # make it red, then get image as matrix again
@@ -15,7 +21,7 @@ function imagematrix()
     paint()
     mat = image_as_matrix()
 
-    @test mat[1] == [1.0, 0.0, 0.0, 1.0]
+    @test mat[1] == RGBA{Float64}(1.0, 0.0, 0.0, 1.0)
     @test mat[1] == mat[2] == mat[3] == mat[4]
 
 
@@ -24,18 +30,20 @@ function imagematrix()
     paint()
 
     mat = image_as_matrix()
-    @test mat[1] == [0.0, 1.0, 0.0, 1.0]
+    @test mat[1] == RGBA{Float64}(0.0, 1.0, 0.0, 1.0)
     @test mat[1] == mat[2] == mat[3] == mat[4]
 
+    finish()
 
     # test alpha
+    Drawing(2, 2, :png)
+
     setcolor(0, 0, 0, .5)
     paint()
     mat = image_as_matrix()
-    @test mat[1][1] == 0.0
-    @test round(mat[2][2], digits=1) ≈ 0.5
-    @test mat[3][3] == 0.0
-    @test mat[4][4] == 1.0
+
+    @test red(mat[1]) == 0.0
+    @test isapprox(alpha(mat[1]), 0.5, atol=0.1)
 
     @test finish() == true
 
@@ -49,42 +57,18 @@ function imagematrix()
     for (pos, n) in tiles
         isodd(n) && box(pos, 1, 1, :fill)
     end
-    mat = image_as_matrix()
+    mat = convertmatrixtocolors(image_as_matrix())
 
     # first square is blue
-    @test mat[1][1] == 0.0
-    @test mat[1][2] == 0.0
-    @test mat[1][3] == 1.0
-    @test mat[1][4] == 1.0
+    @test blue(mat[1]) == 1.0
 
     # second square is white
-    @test mat[2][1] == 1.0
-    @test mat[2][2] == 1.0
-    @test mat[2][3] == 1.0
-    @test mat[2][4] == 1.0
+    @test red(mat[2]) == blue(mat[2]) == green(mat[2])
 
     # third square is blue
-    @test mat[3][1] == 0.0
-    @test mat[3][2] == 0.0
-    @test mat[3][3] == 1.0
-    @test mat[3][4] == 1.0
+    @test blue(mat[2]) == 1.0
 
-    m = @imagematrix begin
-            background(1, 0.5, 0.5, 0.5)
-        end 5 5
-
-    # test that rounding errors for alpha aren't too bad
-    @test isapprox(m[1][1], 1.0, atol=0.01)
-    @test isapprox(m[1][2], 0.5, atol=0.01)
-    @test isapprox(m[1][3], 0.5, atol=0.01)
-    @test isapprox(m[1][4], 0.5, atol=0.01)
-
-    # test each element is the same "color"
-    @test all(x -> isequal(x, 1), [el[1] for el in m])
-    @test all(x -> isapprox(x, 0.5, atol=0.01), [el[2] for el in m])
-    @test all(x -> isapprox(x, 0.5, atol=0.01), [el[3] for el in m])
-    @test all(x -> isapprox(x, 0.5, atol=0.01), [el[4] for el in m])
-
+    @test finish() == true
 end
 
 imagematrix()
