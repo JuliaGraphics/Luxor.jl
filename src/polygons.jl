@@ -322,7 +322,6 @@ function prettypoly(pointlist::Array{Point, 1}, action=:none, vertexfunction = (
     end
 
     move(pointlist[1])
-
     @inbounds for p in pointlist[2:end]
         line(p)
     end
@@ -341,6 +340,14 @@ function prettypoly(pointlist::Array{Point, 1}, action=:none, vertexfunction = (
         grestore()
         pointnumber += 1
     end
+
+    if action == :fillpreserve || action == :strokepreserve
+        move(pointlist[1])
+        @inbounds for p in pointlist[2:end]
+            line(p)
+        end
+    end
+
     return pointlist
 end
 

@@ -98,7 +98,7 @@ export Drawing,
     circletangent2circles, pointinverse, pointcircletangent, circlecircleoutertangents,
     circlecircleinnertangents,
 
-    ngon, ngonside, star, pie,
+    ngon, ngonside, star, pie, polycross,
     do_action, paint, paint_with_alpha, fillstroke,
 
     Point, O, randompoint, randompointarray, midpoint, between, slope, intersectionlines,

@@ -11,26 +11,26 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |create                 |convert              |draw             |info             |edit                 |
 |:---	                |:---	              |:---	            |:---	          |:---                 |
 | *polygons*            |                     |                 |                 |                     |
-|`ngon()`               |`polysmooth()`       |`poly()`         |`isinside()`       |`simplify()`           |
-|`ngonside()`           |                     |`prettypoly()`   |`polyperimeter()`  |`polysplit()`          |
-|`star()`               |                     |`polysmooth()`   |`polyarea()`       |`polyportion()`        |
-|`offsetpoly()`         |                     |                 |`polycentroid()`   |`polyremainder()`      |
-|`polyfit()`            |                     |                 |`boundingbox()`    |`polysortbyangle()`    |
-|`hyptrochoid()`        |                     |                 |                 |`polysortbydistance()` |
-|`epitrochoid()`        |                     |                 |                 |`polyintersections()`  |
-|                       |                     |                 |                 |polymove!`()`          |
-|                       |                     |                 |                 |polyscale!`()`         |
-|                       |                     |                 |                 |polyrotate!`()`        |
-|                       |                     |                 |                 |polyreflect!`()`       |
+|`ngon()`               |`polysmooth()`       |`poly()`         |`isinside()`      |`simplify()`           |
+|`ngonside()`           |                     |`prettypoly()`   |`polyperimeter()` |`polysplit()`          |
+|`star()`               |                     |`polysmooth()`   |`polyarea()`      |`polyportion()`        |
+|`polycross()`          |                     |                 |`polycentroid()`  |`polyremainder()`      |
+|`offsetpoly()`         |                     |                 |`boundingbox()`   |`polysortbyangle()`    |
+|`hyptrochoid()`        |                     |                 |                  |`polysortbydistance()` |
+|`epitrochoid()`        |                     |                 |                  |`polyintersections()`  |
+|`polyrotate!()`        |                     |                 |                  |`polymove!()`          |
+|`polyfit()`            |                     |                 |                  |`polyscale!()`         |
+|                       |                     |                 |                 |                        |
+|                       |                     |                 |                 |`polyreflect!()`       |
 |                       |                     |                 |                 |`polysample()`         |
 |                       |                     |                 |                 |`polytriangulate()`    |
 |                       |                     |                 |                 |`insertvertices!()`    |
 | *paths*               |                     |                 |                 |                     |
-|`getpath()`            |`pathtopoly()`         |                 |                 |                     |
+|`getpath()`            |`pathtopoly()`       |                 |                 |                     |
 |`getpathflat()`        |                     |                 |                 |                     |
 | *Bezier paths*        |                     |                 |                 |                     |
-|`makebezierpath()`     |`pathtobezierpaths()`  |`drawbezierpath()` |                 |                     |
-|`pathtobezierpaths()`  |`bezierpathtopoly()`   |`brush()`          |                 |                     |
+|`makebezierpath()`     |`pathtobezierpaths()`  |`drawbezierpath()` |             |                     |
+|`pathtobezierpaths()`  |`bezierpathtopoly()`   |`brush()`          |             |                     |
 |`BezierPath()`         |                     |                 |                 |                     |
 |`BezierPathSegment()`  |                     |                 |                 |                     |
 
@@ -119,7 +119,7 @@ ngon
 ngonside
 ```
 
-## Stars
+## Stars and crosses
 
 Use `star()` to make a star. You can draw it immediately, or use the points it can create.
 
@@ -158,8 +158,33 @@ nothing # hide
 
 ![stars](assets/figures/star-ratios.png)
 
+Use `polycross()` to draw a cross-shaped polygon.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/polycross.png") # hide
+origin() # hide
+background("white") # hide
+sethue("black") # hide
+setline(2) # hide
+tiles = Tiler(600, 600, 4, 4, margin=10)
+for (pos, n) in tiles
+    randomhue()
+    polycross(pos, min(tiles.tileheight/3, tiles.tilewidth/3),
+        n + 2, # number of points
+        rescale(n, 1, length(tiles), 0.9, 0.1), # ratio
+        0, # orientation
+        :fill)
+end
+finish() # hide
+nothing # hide
+```
+
+![polycross](assets/figures/polycross.png)
+
 ```@docs
 star
+polycross
 ```
 
 ## Polygons
