@@ -260,12 +260,12 @@ end
 While drawing, you can copy the data in the form of a
 matrix, using the `image_as_matrix()` function.
 
-`image_as_matrix()` returns a array of ARGB{32} values that  encode the Red, Green, and Blue, and Alpha values of each pixel.
+`image_as_matrix()` returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.
 
 The following example draws a red box, then copies the drawing into a matrix called `mat1`. Then it draws a blue circle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
 
 ```@example
-using Luxor, Colors # hide
+using Luxor, Colors
 
 Drawing(40, 40, :png)
 origin()
@@ -302,6 +302,8 @@ nothing # hide
 
 ![image drawings](assets/figures/image-drawings.svg)
 
+(You can use `collect()` to gather the re-interpreted values together.)
+
 If you're working with Images.jl, you will probably want to transpose the array:
 
 ```
@@ -309,14 +311,14 @@ using Luxor, Images
 
 # in Luxor
 
-Drawing(50, 50, :image)
+Drawing(50, 50, :png)
 origin()
 background(randomhue()...)
 sethue("white")
 fontsize(40)
 fontface("Georgia")
 text("42", halign=:center, valign=:middle)
-mat = image_as_matrix()
+mat = image_as_matrix();
 finish()
 
 # in Images

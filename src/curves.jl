@@ -236,6 +236,7 @@ end
     sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)
 
 Draw an annular sector centered at `centerpoint`.
+
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
                 endangle::Real, action::Symbol=:none)
@@ -249,8 +250,8 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     line(innerradius * cos(endangle), innerradius * sin(endangle))
     carc(0, 0, innerradius, endangle, startangle, :none)
     closepath()
-    do_action(action)
     grestore()
+    do_action(action)
 end
 
 """

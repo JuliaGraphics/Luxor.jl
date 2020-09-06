@@ -703,34 +703,6 @@ function image_as_matrix()
     return reinterpret(ARGB32, permutedims(data, (2, 1)))
 end
 
-# function image_as_matrix()
-#     if length(CURRENTDRAWING) != 1
-#         error("no current drawing")
-#     end
-#     w = Int(current_surface().width)
-#     h = Int(current_surface().height)
-#     z = zeros(UInt32, w, h)
-#
-#     # create a new image surface to receive the data from the current drawing
-#     imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32)
-#
-#     # the destination - we're drawing on this
-#     crdest = Cairo.CairoContext(imagesurface)
-#
-#     # set the source to be the current Luxor drawing
-#     Cairo.set_source_surface(crdest, Luxor.current_surface(), 0, 0)
-#
-#     Cairo.set_operator(crdest, Cairo.OPERATOR_SOURCE)
-#     Cairo.paint(crdest)
-#
-#     data = imagesurface.data
-#     r  = unpremultiplyalpha(data)
-#
-#     Cairo.finish(imagesurface)
-#     Cairo.destroy(imagesurface)
-#     return permutedims(r, (2, 1))
-# end
-
 """
     Create a drawing and return a matrix of the image.
 
@@ -789,6 +761,46 @@ end
 
 drawimagematrix(m)
 ```
+
+Transparency
+
+The default value for the cells in an image matrix is
+transparent black. (Luxor's default color is opaque black.)
+
+```
+julia> @imagematrix begin
+       end 2 2
+2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
+ ARGB32(0.0,0.0,0.0,0.0)  ARGB32(0.0,0.0,0.0,0.0)
+ ARGB32(0.0,0.0,0.0,0.0)  ARGB32(0.0,0.0,0.0,0.0)
+```
+
+Setting the background to a partially or completely
+transparent value may give unexpected results:
+
+```
+julia> @imagematrix begin
+       background(1, 0.5, 0.0, 0.5) # semi-transparent orange
+       end 2 2
+2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
+ ARGB32(0.502,0.251,0.0,0.502)  ARGB32(0.502,0.251,0.0,0.502)
+ ARGB32(0.502,0.251,0.0,0.502)  ARGB32(0.502,0.251,0.0,0.502)
+```
+
+here the semi-transparent orange color has been partially
+applied to the transparent background.
+
+```
+julia> @imagematrix begin
+           sethue(1., 0.5, 0.0)
+       paint()
+       end 2 2
+2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
+ ARGB32(1.0,0.502,0.0,1.0)  ARGB32(1.0,0.502,0.0,1.0)
+ ARGB32(1.0,0.502,0.0,1.0)  ARGB32(1.0,0.502,0.0,1.0)
+```
+
+picks up the default alpha of 1.0.
 """
 macro imagematrix(body, width=256, height=256)
     quote
