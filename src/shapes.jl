@@ -145,8 +145,8 @@ function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:st
     line(p4end)
 
     closepath()
-    do_action(action)
     grestore()
+    do_action(action)
 end
 
 """
@@ -316,29 +316,32 @@ end
 
 """
     polycross(pt::Point, radius, npoints::Int, ratio=0.5, orientation=0.0, action=:none;
+        splay       = 0.5,
         vertices    = false,
         reversepath = false)
 
 Make a cross-shaped polygon with `npoints` arms to fit inside a circle of radius `radius` centered at `pt`.
 
-`ratio` specifies the ratio of the two sides of each arm.
+`ratio` specifies the ratio of the two sides of each arm. `splay` makes the arms ... splayed.
 
 Use `vertices=true` to return the vertices of the shape instead of drawing it.
 
-(Adapted from Compose.xgon()))
+(Adapted from Compose.jl.xgon()))
 """
 function polycross(pt::Point, radius, npoints::Int, ratio=0.5, orientation=0.0, action=:none;
+        splay       = .5,
         vertices    = false,
         reversepath = false)
     # adapted from:    Compose.jl, https://github.com/GiovineItalia/Compose.jl/src/form.jl
     # original author: mattriks
+
     ratio = clamp(ratio, 0.0, 1.0)
+
     θ₁ = range(π/2 + orientation + 0, stop = π/2 + orientation + 2π, length = npoints + 1)[1:end-1]
 
     width = 2radius * ratio * sin(π/npoints)
-    # radius = width/2(ratio * sin(π/npoints))
 
-    dₒ = asin(0.5 * width/radius)
+    dₒ = asin(clamp(splay * width/radius, -1.0, 1.0))
     dᵢ = asin(0.5 * width/(radius * ratio))
 
     r₂ = repeat([radius * ratio, radius, radius], outer = npoints)

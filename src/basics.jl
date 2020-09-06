@@ -230,6 +230,9 @@ end
 
 Establish a new clipping region by intersecting the current clipping region with the
 current path and then clearing the current path.
+
+An existing clipping region is enforced through and after a `gsave()`-`grestore()` block, but a clipping region set inside
+a `gsave()`-`grestore()` block is lost after `grestore()`. [?]
 """
 clip() = Cairo.clip(get_current_cr())
 
@@ -251,7 +254,7 @@ clipreset() = Cairo.reset_clip(get_current_cr())
 """
     setline(n)
 
-Set the line width.
+Set the line width, in points.
 """
 setline(n) = Cairo.set_line_width(get_current_cr(), n)
 

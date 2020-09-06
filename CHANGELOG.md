@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.5.0] - forthcoming - September 2020
+## [v2.5.0] - September 6 2020
 
 ### Added
 
@@ -10,13 +10,14 @@
 ### Changed
 
 - docs use JuliaMono
+- in a few functions (eg `sector`, `box`) a `:clip` action didn't work, because it was applied within a
+`gsave()`/`grestore()` block. `:clip` actions should now work, as they're applied after.
 
 ### Removed
 
-- old deprecations finally gone
+- some old deprecations finally gone
 
 ### Deprecated
-
 
 ## [v2.4.0] - August 13 2020
 
