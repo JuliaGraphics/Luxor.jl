@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.5.1] - September 8 2020
+
+### Added
+
+### Changed
+
+- image_as_matrix(): reverted accidental flip of xy coordinates introduced at 2.5.0 (sorry everyone!)
+
+### Removed
+
+### Deprecated
+
 ## [v2.5.0] - September 6 2020
 
 ### Added

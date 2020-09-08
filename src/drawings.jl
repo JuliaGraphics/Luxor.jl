@@ -115,7 +115,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     # perhaps drawing hasn't started yet, eg in the REPL
     if !ispath(d.filename)
         location = !isempty(d.filename) ? d.filename : "in memory"
-        println(" Luxor drawing: (type = :$(d.surfacetype), width = $(d.width), height = $(d.width), location = $(location))")
+        println(" Luxor drawing: (type = :$(d.surfacetype), width = $(d.width), height = $(d.height), location = $(location))")
     else
         # open the image file
         if Sys.isapple()
@@ -693,7 +693,8 @@ function image_as_matrix()
     h = Int(current_surface().height)
     z = zeros(UInt32, w, h)
     # create a new image surface to receive the data from the current drawing
-    imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32)
+    # flipxy: see issue https://github.com/Wikunia/Javis.jl/pull/149
+    imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32, flipxy=false)
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, current_surface(), 0, 0)
     Cairo.paint(cr)

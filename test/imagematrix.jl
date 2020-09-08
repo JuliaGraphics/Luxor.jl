@@ -5,6 +5,14 @@ function convertmatrixtocolors(m)
 end
 
 function imagematrix()
+
+    Drawing(10, 2, :png)
+    origin()
+    img = image_as_matrix()
+    finish()
+
+    @test size(img) == (2, 10)
+
     Drawing(2, 2, :png)
 
     # get image as matrix
