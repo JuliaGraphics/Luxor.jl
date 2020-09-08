@@ -262,7 +262,7 @@ matrix, using the `image_as_matrix()` function.
 
 `image_as_matrix()` returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.
 
-The following example draws a red box, then copies the drawing into a matrix called `mat1`. Then it draws a blue circle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
+The following example draws a red box, then copies the drawing into a matrix called `mat1`. Then it draws a blue triangle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
 
 ```@example
 using Luxor, Colors
@@ -271,12 +271,13 @@ Drawing(40, 40, :png)
 origin()
 background("black")
 sethue("red")
-box(O, 40, 20, :fill)
-mat1 = image_as_matrix()'
+box(O, 40, 15, :fill)
+mat1 = image_as_matrix()
 sethue("blue")
-setline(5)
-circle(O, 15, :stroke)
-mat2 = image_as_matrix()'
+setline(10)
+setopacity(0.6)
+ngon(O, 10, 3, 0, :stroke)
+mat2 = image_as_matrix()
 finish()
 
 # second drawing
@@ -284,16 +285,16 @@ finish()
 Drawing(400, 400, "assets/figures/image-drawings.svg")
 background("grey20")
 origin()
-t = Tiler(400, 400, size(mat1)..., margin=0)
+t = Table(mr, mc, 4, 4)
 sethue("white")
-for (pos, n) in t
-
-    pixel1 = convert(Colors.RGBA, mat1[n])
-    pixel2 = convert(Colors.RGBA, mat2[n])
-
+rc = CartesianIndices(mat1)
+for i in rc
+    r, c = Tuple(i)
+    pixel1 = convert(Colors.RGBA, mat1[r, c])
+    pixel2 = convert(Colors.RGBA, mat2[r, c])
     if red(pixel1) > .5 && blue(pixel2) > .5
         randomhue()
-        box(pos, t.tilewidth - 1, t.tileheight - 1, :fillstroke)
+        box(t, r, c, :fillstroke)
     end
 end
 finish() # hide
