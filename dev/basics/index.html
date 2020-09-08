@@ -205,18 +205,19 @@ preview()</code></pre><p><img src="../assets/figures/transparentbackground.png" 
     label(string(h, &quot;°&quot;), deg2rad(h), polar(120, deg2rad(h)))
         finish()
     d
-end</code></pre><p><img src="../assets/figures/interact.png" alt="interactive"/></p><h1 id="Drawing-as-image-matrix"><a class="docs-heading-anchor" href="#Drawing-as-image-matrix">Drawing as image matrix</a><a id="Drawing-as-image-matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Drawing-as-image-matrix" title="Permalink"></a></h1><p>While drawing, you can copy the data in the form of a matrix, using the <code>image_as_matrix()</code> function.</p><p><code>image_as_matrix()</code> returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.</p><p>The following example draws a red box, then copies the drawing into a matrix called <code>mat1</code>. Then it draws a blue circle, and copies the updated drawing into <code>mat2</code>. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.</p><pre><code class="language-julia">using Luxor, Colors
+end</code></pre><p><img src="../assets/figures/interact.png" alt="interactive"/></p><h1 id="Drawing-as-image-matrix"><a class="docs-heading-anchor" href="#Drawing-as-image-matrix">Drawing as image matrix</a><a id="Drawing-as-image-matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Drawing-as-image-matrix" title="Permalink"></a></h1><p>While drawing, you can copy the data in the form of a matrix, using the <code>image_as_matrix()</code> function.</p><p><code>image_as_matrix()</code> returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.</p><p>The following example draws a red box, then copies the drawing into a matrix called <code>mat1</code>. Then it draws a blue triangle, and copies the updated drawing into <code>mat2</code>. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.</p><pre><code class="language-">using Luxor, Colors
 
 Drawing(40, 40, :png)
 origin()
 background(&quot;black&quot;)
 sethue(&quot;red&quot;)
-box(O, 40, 20, :fill)
-mat1 = image_as_matrix()&#39;
+box(O, 40, 15, :fill)
+mat1 = image_as_matrix()
 sethue(&quot;blue&quot;)
-setline(5)
-circle(O, 15, :stroke)
-mat2 = image_as_matrix()&#39;
+setline(10)
+setopacity(0.6)
+ngon(O, 10, 3, 0, :stroke)
+mat2 = image_as_matrix()
 finish()
 
 # second drawing
@@ -224,18 +225,20 @@ finish()
 Drawing(400, 400, &quot;assets/figures/image-drawings.svg&quot;)
 background(&quot;grey20&quot;)
 origin()
-t = Tiler(400, 400, size(mat1)..., margin=0)
+t = Table(mr, mc, 4, 4)
 sethue(&quot;white&quot;)
-for (pos, n) in t
-
-    pixel1 = convert(Colors.RGBA, mat1[n])
-    pixel2 = convert(Colors.RGBA, mat2[n])
-
+rc = CartesianIndices(mat1)
+for i in rc
+    r, c = Tuple(i)
+    pixel1 = convert(Colors.RGBA, mat1[r, c])
+    pixel2 = convert(Colors.RGBA, mat2[r, c])
     if red(pixel1) &gt; .5 &amp;&amp; blue(pixel2) &gt; .5
         randomhue()
-        box(pos, t.tilewidth - 1, t.tileheight - 1, :fillstroke)
+        box(t, r, c, :fillstroke)
     end
-end</code></pre><p><img src="../assets/figures/image-drawings.svg" alt="image drawings"/></p><p>(You can use <code>collect()</code> to gather the re-interpreted values together.)</p><p>If you&#39;re working with Images.jl, you will probably want to transpose the array:</p><pre><code class="language-none">using Luxor, Images
+end
+finish() # hide
+nothing # hide</code></pre><p><img src="../assets/figures/image-drawings.svg" alt="image drawings"/></p><p>(You can use <code>collect()</code> to gather the re-interpreted values together.)</p><p>If you&#39;re working with Images.jl, you will probably want to transpose the array:</p><pre><code class="language-none">using Luxor, Images
 
 # in Luxor
 
@@ -281,4 +284,4 @@ end</code></pre><p>or</p><pre><code class="language-julia">@svg begin
         rule(O, pi/2)
     end
     circle(O, 200, :stroke)
-end</code></pre><article class="docstring"><header><a class="docstring-binding" id="Luxor.gsave" href="#Luxor.gsave"><code>Luxor.gsave</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">gsave()</code></pre><p>Save the current color settings on the stack.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.grestore" href="#Luxor.grestore"><code>Luxor.grestore</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">grestore()</code></pre><p>Replace the current graphics state with the one on top of the stack.</p></div></section></article><h2 id="Return-the-current-drawing"><a class="docs-heading-anchor" href="#Return-the-current-drawing">Return the current drawing</a><a id="Return-the-current-drawing-1"></a><a class="docs-heading-anchor-permalink" href="#Return-the-current-drawing" title="Permalink"></a></h2><p>In some situations you&#39;ll want to explicitly return the current drawing to the calling function.</p><article class="docstring"><header><a class="docstring-binding" id="Luxor.currentdrawing" href="#Luxor.currentdrawing"><code>Luxor.currentdrawing</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">currentdrawing()</code></pre><p>Return the current Luxor drawing, if there currently is one.</p></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../tutorial/">« Tutorial</a><a class="docs-footer-nextpage" href="../simplegraphics/">Simple shapes »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 6 September 2020 08:56">Sunday 6 September 2020</span>. Using Julia version 1.4.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><article class="docstring"><header><a class="docstring-binding" id="Luxor.gsave" href="#Luxor.gsave"><code>Luxor.gsave</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">gsave()</code></pre><p>Save the current color settings on the stack.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.grestore" href="#Luxor.grestore"><code>Luxor.grestore</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">grestore()</code></pre><p>Replace the current graphics state with the one on top of the stack.</p></div></section></article><h2 id="Return-the-current-drawing"><a class="docs-heading-anchor" href="#Return-the-current-drawing">Return the current drawing</a><a id="Return-the-current-drawing-1"></a><a class="docs-heading-anchor-permalink" href="#Return-the-current-drawing" title="Permalink"></a></h2><p>In some situations you&#39;ll want to explicitly return the current drawing to the calling function.</p><article class="docstring"><header><a class="docstring-binding" id="Luxor.currentdrawing" href="#Luxor.currentdrawing"><code>Luxor.currentdrawing</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">currentdrawing()</code></pre><p>Return the current Luxor drawing, if there currently is one.</p></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../tutorial/">« Tutorial</a><a class="docs-footer-nextpage" href="../simplegraphics/">Simple shapes »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 8 September 2020 11:21">Tuesday 8 September 2020</span>. Using Julia version 1.4.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
