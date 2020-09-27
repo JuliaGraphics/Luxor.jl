@@ -705,7 +705,9 @@ function image_as_matrix()
 end
 
 """
-    Create a drawing and return a matrix of the image.
+    @imagematrix(body, width=256, height=256)
+
+Create a drawing and return a matrix of the image.
 
 This macro returns a matrix of pixels that represent the drawing
 produced by the vector graphics instructions. It uses the `image_as_matrix()`
