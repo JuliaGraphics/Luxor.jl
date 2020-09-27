@@ -815,3 +815,66 @@ macro imagematrix(body, width=256, height=256)
         m
     end
 end
+
+
+
+
+"""
+    image_as_matrix!(buffer)
+
+Like `image_as_matrix()`, but use an existing UInt32 buffer.
+
+`buffer` is a buffer of UInt32.
+
+```
+w = 200
+h = 150
+buffer = zeros(UInt32, w, h)
+Drawing(w, h, :image)
+origin()
+juliacircles(50)
+m = image_as_matrix!(buffer)
+finish()
+# collect(m)) is Array{ARGB32,2}
+Images.RGB.(m)
+```
+"""
+function image_as_matrix!(buffer)
+    if length(Luxor.CURRENTDRAWING) != 1
+        error("no current drawing")
+    end
+    # create a new image surface to receive the data from the current drawing
+    # flipxy: see issue https://github.com/Wikunia/Javis.jl/pull/149
+    imagesurface = Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32, flipxy=false)
+    cr = Cairo.CairoContext(imagesurface)
+    Cairo.set_source_surface(cr, Luxor.current_surface(), 0, 0)
+    Cairo.paint(cr)
+    data = imagesurface.data
+    Cairo.finish(imagesurface)
+    Cairo.destroy(imagesurface)
+    return reinterpret(ARGB32, permutedims(data, (2, 1)))
+end
+
+"""
+    @imagematrix!(buffer, body, width=256, height=256)
+
+Like `@imagematrix`, but use an existing UInt32 buffer.
+
+```
+w = 200
+h  = 150
+buffer = zeros(UInt32, w, h)
+m = @imagematrix! buffer juliacircles(40) 200 150;
+Images.RGB.(m)
+```
+"""
+macro imagematrix!(buffer, body, width=256, height=256)
+    quote
+        Drawing($width, $height, :image)
+        origin()
+        $(esc(body))
+        m = image_as_matrix!($(esc(buffer)))
+        finish()
+        m
+    end
+end
