@@ -549,9 +549,34 @@ This method accepts a keyword argument that allows you to
 control the way the offsets are applied, using the easing
 functionality built in to Luxor (see [Animation helper functions](@ref)).
 
-By default the function is
-`lineartween()`, so the offset changes linearly between the
-`startoffset` and the `endoffset` values.
+By default the function is `lineartween()`, so the offset
+changes linearly between the `startoffset` and the
+`endoffset` values. With other easing functions, this change
+is modulated. For example, the `easeinoutquad` function
+moves between start and end values using a quadratic motion.
+
+```@example
+using Luxor # hide
+Drawing(800, 500, "assets/figures/polyoffset-easing.png") # hide
+origin() # hide
+background("white") # hide
+setline(2) # hide
+setlinejoin("round") # hide
+
+spine = between.(O - (200, 0), O + (200, 0), 0:0.025:1)
+
+sethue("red")
+prettypoly(spine, :stroke)
+
+sethue("black")
+pg = offsetpoly(spine, startoffset=0, endoffset=200, easingfunction=easeinoutquad)
+prettypoly(pg, :stroke, close=true)
+
+finish() # hide
+nothing # hide
+```
+
+![offset poly easing](assets/figures/polyoffset-easing.png)
 
 But in the next example, the function `f(t, b, c, d)` (the
 Luxor standard four-argument easing function) is defined to run
@@ -561,7 +586,7 @@ at that location are 'eased' to 2 × the offset value at that point.
 
 ```@example
 using Luxor # hide
-Drawing(800, 200, "assets/figures/polyoffset-easing.png") # hide
+Drawing(800, 200, "assets/figures/polyoffset-easing1.png") # hide
 origin() # hide
 background("white") # hide
 setline(2) # hide
@@ -582,7 +607,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly easing](assets/figures/polyoffset-easing.png)
+![offset poly easing 1](assets/figures/polyoffset-easing1.png)
 
 #### `n` vertices joined by `n` lines
 

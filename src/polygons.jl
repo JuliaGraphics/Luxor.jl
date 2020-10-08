@@ -628,7 +628,13 @@ function offsetpoly(plist;
         easingfunction = lineartween)
 
     l = length(plist)
-    l < 3 && throw(error("variableoffsetline: not enough points"))
+
+    # TODO: special case a plist with 2 points
+    l < 3 && throw(error("variableoffsetline: not enough points, need 3 or more"))
+    # can't do 3 points properly, just insert a few extras
+    if l == 3
+        plist = vcat(plist[1], midpoint(plist[1], plist[2]), plist[2], midpoint(plist[2], plist[3]), plist[3])
+    end
 
     # build the poly in two halves
     leftcurve  = Point[]
@@ -637,15 +643,18 @@ function offsetpoly(plist;
     pt1 = perpendicular(plist[1], plist[2], -startoffset)
     pt2 = perpendicular(plist[1], plist[2], startoffset)
 
+    # start the curves off
     push!(leftcurve, pt1)
     push!(rightcurve, pt2)
 
     for i in 1:l-2
-        k1 = easingfunction(rescale(i,     1, l - 2), 0.0, 1.0, 1.0)
-        k2 = easingfunction(rescale(i + 1, 1, l - 2), 0.0, 1.0, 1.0)
+        # allow for the easing function that rescales the offset
+        k1 = easingfunction(rescale(i,     0, l ), 0.0, 1.0, 1.0)
+        k2 = easingfunction(rescale(i + 1, 0, l ), 0.0, 1.0, 1.0)
 
-        d1 = rescale(k1 * l, 1, l, startoffset, endoffset)
-        d2 = rescale(k2 * l, 1, l, startoffset, endoffset)
+        # because easing functions are 0 to 1, use 0 here
+        d1 = rescale(k1 * l, 0, l, startoffset, endoffset)
+        d2 = rescale(k2 * l, 0, l, startoffset, endoffset)
 
         p1, mpt, p3 = offsetlinesegment(plist[i], plist[i + 1], plist[i + 2],  d1,  d2)
         push!(leftcurve, mpt)
@@ -654,14 +663,13 @@ function offsetpoly(plist;
     end
     # final point
     k = easingfunction(1, 0.0, 1.0, 1.0)
-    d = rescale(k * l, 1, l, startoffset, endoffset)
+    d = rescale(k * l, 0, l, startoffset, endoffset)
     pt1 = perpendicular(plist[end], plist[end - 1], -d)
     pt2 = perpendicular(plist[end], plist[end - 1],  d)
     push!(leftcurve, pt2)
     push!(rightcurve, pt1)
     return vcat(leftcurve, reverse(rightcurve))
 end
-
 
 """
     polyfit(plist::Array, npoints=30)
