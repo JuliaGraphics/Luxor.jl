@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.6.0] - forthcoming
+
+### Added
+
+- additional method for `offsetpoly()` for open plines
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v2.5.1] - September 8 2020
 
 ### Added

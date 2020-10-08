@@ -262,11 +262,11 @@ matrix, using the `image_as_matrix()` function.
 
 `image_as_matrix()` returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.
 
-The following example draws a red box, then copies the drawing into a matrix called `mat1`. Then it draws a blue triangle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
+The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
 
 ```@example
-using Luxor, Colors
-
+using Luxor, Colors, Random # hide
+Random.seed!(42) # hide
 Drawing(40, 40, :png)
 origin()
 background("black")
@@ -285,7 +285,7 @@ finish()
 Drawing(400, 400, "assets/figures/image-drawings.svg")
 background("grey20")
 origin()
-t = Table(mr, mc, 4, 4)
+t = Table(40, 40, 4, 4)
 sethue("white")
 rc = CartesianIndices(mat1)
 for i in rc
@@ -300,6 +300,8 @@ end
 finish() # hide
 nothing # hide
 ```
+
+![intermediate](assets/figures/image-drawing-intermediate.png)
 
 ![image drawings](assets/figures/image-drawings.svg)
 

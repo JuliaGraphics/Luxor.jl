@@ -487,9 +487,115 @@ nothing # hide
 polysmooth
 ```
 
-### Offsetting polygons
+## Offsetting polygons
 
-The experimental `offsetpoly()` function constructs an outline polygon outside or inside an existing polygon. In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use `poly()` to draw the result returned by `offsetpoly()`.
+There are two methods for `offsetpoly()`, a function which
+constructs a new polygon that's offset from an existing one.
+
+- `offsetpoly(plist, startoffset=d1, endoffset=d2)` treats
+  the `plist` of points as `n` vertices joined by `n-1`
+  lines, where the offset varies from `startoffset` to
+  `endoffset`.
+
+- `offsetpoly(plist, d)` treats the `plist` of points as `n`
+  vertices joined by `n` lines with offset `d` on both
+  sides.
+
+The first method is useful for building shapes around an open
+linear spine. The second is good for making closed shapes larger or
+smaller.
+
+#### `n` vertices joined by `n-1` lines
+
+The `offsetpoly(plist)` method constructs a polygon around a
+line joining the lines in `plist`. At the start of the line,
+the polygon will be `startoffset` units on each side; by the
+end of the line, the polygon will be `endoffset` units on
+each side. The last vertex isn't joined to the first, hence `n-1`.
+
+In the following example, the original spine is drawn in
+orange, on top of the black polygon that's constructed to be
+offset 2 units on each side at the start and 30 units on
+each side at the end.
+
+```@example
+using Luxor # hide
+Drawing(800, 500, "assets/figures/polyoffset-open.png") # hide
+origin() # hide
+background("purple") # hide
+setline(2) # hide
+
+spine = [Point(20 + 40x, 15sin(2x)) for x in 0:.1:4π]
+
+for θ in range(0, 2π, step=π/12)
+    @layer begin
+        sethue("black")
+        rotate(θ)
+        poly(offsetpoly(spine, startoffset=1, endoffset=30), :fill)
+        sethue("orange")
+        poly(spine, :stroke)
+    end
+end
+
+finish() # hide
+nothing # hide
+```
+
+![offset poly open](assets/figures/polyoffset-open.png)
+
+##### Using an offset-control function
+
+This method accepts a keyword argument that allows you to
+control the way the offsets are applied, using the easing
+functionality built in to Luxor (see [Animation helper functions](@ref)).
+
+By default the function is
+`lineartween()`, so the offset changes linearly between the
+`startoffset` and the `endoffset` values.
+
+But in the next example, the function `f(t, b, c, d)` (the
+Luxor standard four-argument easing function) is defined to run
+from 0 to 2 and back again as `t` goes from  0 to 1, so the initial and final offsets
+are 'eased' to 0, and at the middle of the polygon the offsets
+at that location are 'eased' to 2 × the offset value at that point.
+
+```@example
+using Luxor # hide
+Drawing(800, 200, "assets/figures/polyoffset-easing.png") # hide
+origin() # hide
+background("white") # hide
+setline(2) # hide
+setlinejoin("round") # hide
+
+spine = [Point(20x, 15sin(x)) for x in -4π:pi/24:4pi]
+
+f(t, b, c, d) = 2sin(t * π)
+
+pg = offsetpoly(spine, startoffset=1, endoffset=10, easingfunction=f)
+sethue("black")
+poly(pg, :fill)
+
+sethue("white")
+poly(spine, :stroke)
+
+finish() # hide
+nothing # hide
+```
+
+![offset poly easing](assets/figures/polyoffset-easing.png)
+
+#### `n` vertices joined by `n` lines
+
+The `offsetpoly(plist, d)` method constructs a closed
+polygon outside or inside an existing polygon, at distance `d`.  The last
+vertex in `plist` as assumed to be be connected to the
+first.
+
+In the following example, the dotted red polygon is the
+original, the black polygons have positive offsets and
+surround the original, the cyan polygons have negative
+offsets and run inside the original. Use `poly()` to draw
+the result.
 
 ```@example
 using Luxor, Random # hide
@@ -520,11 +626,17 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly](assets/figures/polyoffset-simple.png)
+![offset poly 2](assets/figures/polyoffset-simple.png)
 
-The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.
+The function is intended for simple cases, and it can go
+wrong if pushed too far. Sometimes the offset distances can
+be larger than the polygon segments, and things will start
+to go wrong. In this example, the offset goes so far
+negative that the polygon overshoots the origin, becomes
+inverted and starts getting larger again.
 
 ![offset poly problem](assets/figures/polygon-offset.gif)
+
 
 ```@docs
 offsetpoly
