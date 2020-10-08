@@ -475,11 +475,11 @@ function polysmooth(points::Array{Point, 1}, radius, action=:action; debug=false
 end
 
 """
-    offsetpoly(path::Array{Point, 1}, d)
+    offsetpoly(plist::Array{Point, 1}, d)
 
 Return a polygon that is offset from a polygon by `d` units.
 
-The incoming set of points `path` is treated as a polygon, and another set of
+The incoming set of points `plist` is treated as a polygon, and another set of
 points is created, which form a polygon lying `d` units away from the source
 poly.
 
@@ -497,16 +497,16 @@ polygon appear the wrong side of the original
 
 - duplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them
 """
-function offsetpoly(path::Array{Point, 1}, d)
+function offsetpoly(plist::Array{Point, 1}, d)
     # don't try to calculate offset of two identical points
-    l = length(path)
+    l = length(plist)
     resultpoly = Array{Point}(undef, l)
-    previouspoint = path[end]
+    previouspoint = plist[end]
     for i in 1:l
-        path[i] == previouspoint && continue
-        p1 = path[mod1(i, l)]
-        p2 = path[mod1(i + 1, l)]
-        p3 = path[mod1(i + 2, l)]
+        plist[i] == previouspoint && continue
+        p1 = plist[mod1(i, l)]
+        p2 = plist[mod1(i + 1, l)]
+        p3 = plist[mod1(i + 2, l)]
 
         p1 == p2 && continue
         p2 == p3 && continue
@@ -534,10 +534,134 @@ function offsetpoly(path::Array{Point, 1}, d)
         if intersectionpoint[1]
             resultpoly[i] = intersectionpoint[2]
         end
-        previouspoint = path[i]
+        previouspoint = plist[i]
     end
     return resultpoly
 end
+
+"""
+    offsetlinesegment(p1, p2, p3, d1, d2)
+
+Given three points, find another 3 points that are offset by
+d1 at the start and d2 at the end.
+
+Negative d values put the offset on the left.
+"""
+function offsetlinesegment(p1, p2, p3, d1, d2)
+    if p1 == p2 || p2 == p3 || p1 == p3
+        throw(error("offsetlinesegment: the three points must be different"))
+    end
+
+    pt1 = perpendicular(p1, p2, -d1)
+    pt2 = perpendicular(p3, p2, d2)
+
+    L12 = distance(p1, p2)
+    L23 = distance(p2, p3)
+
+    d = (d1 + d2) / 2
+    # the offset line of p1 - p2
+    x1p = p1.x + (d * (p2.y - p1.y))/ L12
+    y1p = p1.y + (d * (p1.x - p2.x))/ L12
+    x2p = p2.x + (d * (p2.y - p1.y))/ L12
+    y2p = p2.y + (d * (p1.x - p2.x))/ L12
+
+    # the offset line of p2 - p3
+    x3p = p2.x + (d * (p3.y - p2.y))/ L23
+    y3p = p2.y + (d * (p2.x - p3.x))/ L23
+    x4p = p3.x + (d * (p3.y - p2.y))/ L23
+    y4p = p3.y + (d * (p2.x - p3.x))/ L23
+
+    intersectionpoint = intersectionlines(
+        Point(x1p, y1p),
+        Point(x2p, y2p),
+        Point(x3p, y3p),
+        Point(x4p, y4p), crossingonly=false)
+
+    if first(intersectionpoint)
+        pt3 = intersectionpoint[2]
+    else
+        #  collinear probably
+        pt3 = midpoint(pt1, pt2)
+    end
+    return pt1, pt3, pt2
+end
+
+"""
+    offsetpoly(plist;
+        startoffset = 10,
+        endoffset   = 10,
+        easingfunction = lineartween)
+
+Return a closed polygon that is offset from and encloses an
+open polygon.
+
+The incoming set of points `plist` is treated as an open
+polygon, and another set of points is created, which form a
+polygon lying `...offset` units away from the source poly.
+
+This method for `offsetpoly()` treats the list of points as
+`n` vertices connected with `n - 1` lines. It allows you to
+vary the offset from the start of the line to the end.
+
+The other method `offsetpoly(plist, d)` treats the list of
+points as `n` vertices connected with `n` lines.
+
+# Extended help
+
+This function accepts a keyword argument that allows you to
+control the offset using a function, using the easing
+functionality built in to Luxor. By default the function is
+`lineartween()`, so the offset changes linearly between the
+`startoffset` and the `endoffset`. The function:
+
+```
+f(a, b, c, d) = 2sin((a * π))
+```
+
+runs from 0 to 2 and back as `a` runs from 0 to 1.
+The offsets are scaled by this amount.
+
+"""
+function offsetpoly(plist;
+        startoffset = 10,
+        endoffset   = 10,
+        easingfunction = lineartween)
+
+    l = length(plist)
+    l < 3 && throw(error("variableoffsetline: not enough points"))
+
+    # build the poly in two halves
+    leftcurve  = Point[]
+    rightcurve = Point[]
+
+    pt1 = perpendicular(plist[1], plist[2], -startoffset)
+    pt2 = perpendicular(plist[1], plist[2], startoffset)
+
+    push!(leftcurve, pt1)
+    push!(rightcurve, pt2)
+
+    for i in 1:l-2
+        k1 = easingfunction(rescale(i,     1, l - 2), 0.0, 1.0, 1.0)
+        k2 = easingfunction(rescale(i + 1, 1, l - 2), 0.0, 1.0, 1.0)
+
+        d1 = rescale(k1 * l, 1, l, startoffset, endoffset)
+        d2 = rescale(k2 * l, 1, l, startoffset, endoffset)
+
+        p1, mpt, p3 = offsetlinesegment(plist[i], plist[i + 1], plist[i + 2],  d1,  d2)
+        push!(leftcurve, mpt)
+        p1, mpt, p3 = offsetlinesegment(plist[i], plist[i + 1], plist[i + 2], -d1, -d2)
+        push!(rightcurve, mpt)
+    end
+    # final point
+    k = easingfunction(1, 0.0, 1.0, 1.0)
+    d = rescale(k * l, 1, l, startoffset, endoffset)
+    pt1 = perpendicular(plist[end], plist[end - 1], -d)
+    pt2 = perpendicular(plist[end], plist[end - 1],  d)
+    push!(leftcurve, pt2)
+    push!(rightcurve, pt1)
+    return vcat(leftcurve, reverse(rightcurve))
+end
+
 
 """
     polyfit(plist::Array, npoints=30)
