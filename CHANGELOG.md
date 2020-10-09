@@ -5,6 +5,7 @@
 ### Added
 
 - additional method for `offsetpoly()` for open plines
+- experimental image_as_matrix!()
 
 ### Changed
 
