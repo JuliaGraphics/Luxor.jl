@@ -198,7 +198,6 @@ The `@draw` macro creates an in-memory drawing. You should see it displayed if y
 @png
 @pdf
 @draw
-@imagematrix
 ```
 
 If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't have to specify the suffix:
@@ -254,81 +253,6 @@ end
 ```
 
 ![interactive](assets/figures/interact.png)
-
-# Drawing as image matrix
-
-While drawing, you can copy the data in the form of a
-matrix, using the `image_as_matrix()` function.
-
-`image_as_matrix()` returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.
-
-The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
-
-```@example
-using Luxor, Colors, Random # hide
-Random.seed!(42) # hide
-Drawing(40, 40, :png)
-origin()
-background("black")
-sethue("red")
-box(O, 40, 15, :fill)
-mat1 = image_as_matrix()
-sethue("blue")
-setline(10)
-setopacity(0.6)
-ngon(O, 10, 3, 0, :stroke)
-mat2 = image_as_matrix()
-finish()
-
-# second drawing
-
-Drawing(400, 400, "assets/figures/image-drawings.svg")
-background("grey20")
-origin()
-t = Table(40, 40, 4, 4)
-sethue("white")
-rc = CartesianIndices(mat1)
-for i in rc
-    r, c = Tuple(i)
-    pixel1 = convert(Colors.RGBA, mat1[r, c])
-    pixel2 = convert(Colors.RGBA, mat2[r, c])
-    if red(pixel1) > .5 && blue(pixel2) > .5
-        randomhue()
-        box(t, r, c, :fillstroke)
-    end
-end
-finish() # hide
-nothing # hide
-```
-
-![intermediate](assets/figures/image-drawing-intermediate.png)
-
-![image drawings](assets/figures/image-drawings.svg)
-
-(You can use `collect()` to gather the re-interpreted values together.)
-
-If you're working with Images.jl, you will probably want to transpose the array:
-
-```
-using Luxor, Images
-
-# in Luxor
-
-Drawing(50, 50, :png)
-origin()
-background(randomhue()...)
-sethue("white")
-fontsize(40)
-fontface("Georgia")
-text("42", halign=:center, valign=:middle)
-mat = image_as_matrix();
-finish()
-
-# in Images
-
-img = Gray.(mat)
-display(imresize(img, 150, 150))
-```
 
 ## The drawing surface
 
@@ -419,4 +343,86 @@ In some situations you'll want to explicitly return the current drawing to the c
 
 ```@docs
 currentdrawing
+```
+
+## Drawing as image matrix
+
+While drawing, you can copy the data in the form of a
+matrix, using the `image_as_matrix()` function.
+
+`image_as_matrix()` returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.
+
+The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
+
+```@example
+using Luxor, Colors, Random # hide
+Random.seed!(42) # hide
+Drawing(40, 40, :png)
+origin()
+background("black")
+sethue("red")
+box(O, 40, 15, :fill)
+mat1 = image_as_matrix()
+sethue("blue")
+setline(10)
+setopacity(0.6)
+ngon(O, 10, 3, 0, :stroke)
+mat2 = image_as_matrix()
+finish()
+
+# second drawing
+
+Drawing(400, 400, "assets/figures/image-drawings.svg")
+background("grey20")
+origin()
+t = Table(40, 40, 4, 4)
+sethue("white")
+rc = CartesianIndices(mat1)
+for i in rc
+    r, c = Tuple(i)
+    pixel1 = convert(Colors.RGBA, mat1[r, c])
+    pixel2 = convert(Colors.RGBA, mat2[r, c])
+    if red(pixel1) > .5 && blue(pixel2) > .5
+        randomhue()
+        box(t, r, c, :fillstroke)
+    end
+end
+finish() # hide
+nothing # hide
+```
+
+![intermediate](assets/figures/image-drawing-intermediate.png)
+
+![image drawings](assets/figures/image-drawings.svg)
+
+(You can use `collect()` to gather the re-interpreted values together.)
+
+If you're working with Images.jl, you will probably want to transpose the array:
+
+```
+using Luxor, Images
+
+# in Luxor
+
+Drawing(50, 50, :png)
+origin()
+background(randomhue()...)
+sethue("white")
+fontsize(40)
+fontface("Georgia")
+text("42", halign=:center, valign=:middle)
+mat = image_as_matrix();
+finish()
+
+# in Images
+
+img = Gray.(mat)
+display(imresize(img, 150, 150))
+```
+
+```@docs
+@imagematrix
+@imagematrix!
+image_as_matrix
+image_as_matrix!
 ```

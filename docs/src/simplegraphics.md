@@ -452,6 +452,8 @@ rmove
 newpath
 newsubpath
 closepath
+currentpoint
+hascurrentpoint
 ```
 
 ## Lines

@@ -489,23 +489,81 @@ polysmooth
 
 ## Offsetting polygons
 
-There are two methods for `offsetpoly()`, a function which
+There are three methods for `offsetpoly()`, a function which
 constructs a new polygon that's offset from an existing one.
+
+- `offsetpoly(plist, d)` treats the `plist` of points as `n`
+  vertices joined by `n` lines with offset `d` on both
+  sides.
 
 - `offsetpoly(plist, startoffset=d1, endoffset=d2)` treats
   the `plist` of points as `n` vertices joined by `n-1`
   lines, where the offset varies from `startoffset` to
   `endoffset`.
 
-- `offsetpoly(plist, d)` treats the `plist` of points as `n`
-  vertices joined by `n` lines with offset `d` on both
-  sides.
+- `offsetpoly(plist, f::function)` applies a function f
+   at each vertex to determine the width of the offset polygon
+   at that point.
 
-The first method is useful for building shapes around an open
-linear spine. The second is good for making closed shapes larger or
-smaller.
+The first method is good for making closed shapes larger or smaller.
+The other methods are useful for building shapes around an open
+linear spine.
 
-#### `n` vertices joined by `n-1` lines
+#### 1 `n` vertices joined by `n` lines
+
+The `offsetpoly(plist, d)` method constructs a closed
+polygon outside or inside an existing polygon, at distance `d`.  The last
+vertex in `plist` as assumed to be be connected to the
+first.
+
+In the following example, the dotted red polygon is the
+original, the black polygons have positive offsets and
+surround the original, the cyan polygons have negative
+offsets and run inside the original. Use `poly()` to draw
+the result.
+
+```@example
+using Luxor, Random # hide
+Drawing(600, 250, "assets/figures/polyoffset-simple.png") # hide
+origin() # hide
+background("white") # hide
+Random.seed!(42) # hide
+setline(1.5) # hide
+
+p = star(O, 45, 5, 0.5, 0, vertices=true)
+sethue("red")
+setdash("dot")
+poly(p, :stroke, close=true)
+setdash("solid")
+sethue("black")
+
+poly(offsetpoly(p, 20), :stroke, close=true)
+poly(offsetpoly(p, 25), :stroke, close=true)
+poly(offsetpoly(p, 30), :stroke, close=true)
+poly(offsetpoly(p, 35), :stroke, close=true)
+
+sethue("darkcyan")
+
+poly(offsetpoly(p, -10), :stroke, close=true)
+poly(offsetpoly(p, -15), :stroke, close=true)
+poly(offsetpoly(p, -20), :stroke, close=true)
+finish() # hide
+nothing # hide
+```
+
+![offset poly 2](assets/figures/polyoffset-simple.png)
+
+The function is intended for simple cases, and it can go
+wrong if pushed too far. Sometimes the offset distances can
+be larger than the polygon segments, and things will start
+to go wrong. In this example, the offset goes so far
+negative that the polygon overshoots the origin, becomes
+inverted and starts getting larger again.
+
+![offset poly problem](assets/figures/polygon-offset.gif)
+
+
+#### 2 `n` vertices joined by `n-1` lines
 
 The `offsetpoly(plist)` method constructs a polygon around a
 line joining the lines in `plist`. At the start of the line,
@@ -609,58 +667,29 @@ nothing # hide
 
 ![offset poly easing 1](assets/figures/polyoffset-easing1.png)
 
-#### `n` vertices joined by `n` lines
+#### 3 Applying a function
 
-The `offsetpoly(plist, d)` method constructs a closed
-polygon outside or inside an existing polygon, at distance `d`.  The last
-vertex in `plist` as assumed to be be connected to the
-first.
-
-In the following example, the dotted red polygon is the
-original, the black polygons have positive offsets and
-surround the original, the cyan polygons have negative
-offsets and run inside the original. Use `poly()` to draw
-the result.
+This method generates offset widths using the supplied function. The value of the supplied function `f` at `f(0)` determines the start offset on each side, and `f(1)` determines the finishing offset on each side. The width at the middle vertex will be `f(0.5)` (on each side).
 
 ```@example
-using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polyoffset-simple.png") # hide
+using Luxor # hide
+Drawing(800, 250, "assets/figures/polyoffset-function.png") # hide
 origin() # hide
 background("white") # hide
-Random.seed!(42) # hide
-setline(1.5) # hide
+setline(2) # hide
+setlinejoin("round") # hide
 
-p = star(O, 45, 5, 0.5, 0, vertices=true)
-sethue("red")
-setdash("dot")
-poly(p, :stroke, close=true)
-setdash("solid")
-sethue("black")
 
-poly(offsetpoly(p, 20), :stroke, close=true)
-poly(offsetpoly(p, 25), :stroke, close=true)
-poly(offsetpoly(p, 30), :stroke, close=true)
-poly(offsetpoly(p, 35), :stroke, close=true)
+spiralcurve = spiral(10, 0.3, log=true, period=3π)
+f(x) = 1 + 15sin(x * π)
+pgon = offsetpoly(spiralcurve, f)
+poly(pgon, :fill)
 
-sethue("darkcyan")
-
-poly(offsetpoly(p, -10), :stroke, close=true)
-poly(offsetpoly(p, -15), :stroke, close=true)
-poly(offsetpoly(p, -20), :stroke, close=true)
 finish() # hide
 nothing # hide
 ```
 
-![offset poly 2](assets/figures/polyoffset-simple.png)
-
-The function is intended for simple cases, and it can go
-wrong if pushed too far. Sometimes the offset distances can
-be larger than the polygon segments, and things will start
-to go wrong. In this example, the offset goes so far
-negative that the polygon overshoots the origin, becomes
-inverted and starts getting larger again.
-
-![offset poly problem](assets/figures/polygon-offset.gif)
+![offset poly fucntion](assets/figures/polyoffset-function.png)
 
 
 ```@docs
@@ -1257,6 +1286,7 @@ polyremainder
 polydistances
 nearestindex
 polyarea
+ispolyclockwise
 ```
 
 ## Other polygon operations
