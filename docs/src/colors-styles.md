@@ -57,6 +57,7 @@ setopacity
 randomhue
 randomcolor
 setblend
+setantialias
 ```
 
 ## Line styles

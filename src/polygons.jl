@@ -475,7 +475,7 @@ function polysmooth(points::Array{Point, 1}, radius, action=:action; debug=false
 end
 
 """
-    offsetpoly(plist::Array{Point, 1}, d)
+    offsetpoly(plist::Array{Point, 1}, d) where T<:Number
 
 Return a polygon that is offset from a polygon by `d` units.
 
@@ -497,7 +497,7 @@ polygon appear the wrong side of the original
 
 - duplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them
 """
-function offsetpoly(plist::Array{Point, 1}, d)
+function offsetpoly(plist::Array{Point, 1}, d::T) where T<:Number
     # don't try to calculate offset of two identical points
     l = length(plist)
     resultpoly = Array{Point}(undef, l)
@@ -664,6 +664,80 @@ function offsetpoly(plist;
     # final point
     k = easingfunction(1, 0.0, 1.0, 1.0)
     d = rescale(k * l, 0, l, startoffset, endoffset)
+    pt1 = perpendicular(plist[end], plist[end - 1], -d)
+    pt2 = perpendicular(plist[end], plist[end - 1],  d)
+    push!(leftcurve, pt2)
+    push!(rightcurve, pt1)
+    return vcat(leftcurve, reverse(rightcurve))
+end
+
+# third method
+
+"""
+    offsetpoly(plist, shape::Function)
+
+Return a closed polygon that is offset from and encloses an
+open polygon.
+
+The incoming set of points `plist` is treated as an open
+polygon, and another set of points is created, which form a
+polygon offset from the source poly.
+
+This method for `offsetpoly()` treats the list of points as
+`n` vertices connected with `n - 1` lines.
+
+The supplied function determines the width of the line.
+`f(0)` gives the width at the start, `f(1)` provides the
+width at the end, and `f(n)` is the width of point n/l.
+
+(The other method `offsetpoly(plist, d)` treats the list of
+points as `n` vertices connected with `n` lines.)
+
+This example draws a tilde, with the ends starting at 20 (10
++ 10) units wide, swelling to 50 (10 + 10 + 15 + 15) in the
+middle, as f(0.5) = 25.
+
+```
+sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
+f(x) =  10 + 15sin(x * π)
+pgon = offsetpoly(sinecurve, f)
+poly(pgon, :fill)
+```
+"""
+function offsetpoly(plist, shape::Function)
+
+    l = length(plist)
+
+    # TODO: special case a plist with 2 points
+    l < 3 && throw(error("variableoffsetline: not enough points, need 3 or more"))
+    # can't do 3 points properly, just insert a few extras
+    if l == 3
+        plist = vcat(plist[1], midpoint(plist[1], plist[2]), plist[2], midpoint(plist[2], plist[3]), plist[3])
+    end
+
+    # build the poly in two halves
+    leftcurve  = Point[]
+    rightcurve = Point[]
+
+    d = shape(0.0)
+    pt1 = perpendicular(plist[1], plist[2], -d)
+    pt2 = perpendicular(plist[1], plist[2], d)
+
+    # start the curves off
+    push!(leftcurve, pt1)
+    push!(rightcurve, pt2)
+
+    for i in 1:l-2
+        # allow for the easing function that rescales the offset
+        d = shape(rescale(i, 0, l-2))
+
+        p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i + 1], plist[i + 2],  d,  d)
+        push!(leftcurve, mpt)
+        p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i + 1], plist[i + 2], -d, -d)
+        push!(rightcurve, mpt)
+    end
+    # final point
+    d = shape(1)
     pt1 = perpendicular(plist[end], plist[end - 1], -d)
     pt2 = perpendicular(plist[end], plist[end - 1],  d)
     push!(leftcurve, pt2)
