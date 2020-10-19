@@ -674,33 +674,46 @@ end
 # third method
 
 """
-    offsetpoly(plist, shape::Function)
+offsetpoly(plist, shape::Function)
 
 Return a closed polygon that is offset from and encloses an
-open polygon.
+polyline.
 
-The incoming set of points `plist` is treated as an open
-polygon, and another set of points is created, which form a
-polygon offset from the source poly.
+The incoming set of points `plist` is treated as an
+polyline, and another set of points is created, which form a
+closed polygon offset from the source poly.
 
 This method for `offsetpoly()` treats the list of points as
-`n` vertices connected with `n - 1` lines.
+`n` vertices connected with `n - 1` lines. (The other method
+`offsetpoly(plist, d)` treats the list of points as `n`
+vertices connected with `n` lines.)
 
 The supplied function determines the width of the line.
-`f(0)` gives the width at the start, `f(1)` provides the
-width at the end, and `f(n)` is the width of point n/l.
+`f(0, θ)` gives the width at the start (the slope of
+the curve at that point is supplied in θ), `f(1, θ)` provides
+the width at the end, and `f(n, θ)` is the width of point
+`n/l`.
 
-(The other method `offsetpoly(plist, d)` treats the list of
-points as `n` vertices connected with `n` lines.)
+# Examples
 
 This example draws a tilde, with the ends starting at 20 (10
 + 10) units wide, swelling to 50 (10 + 10 + 15 + 15) in the
 middle, as f(0.5) = 25.
 
 ```
+f(x, θ) =  10 + 15sin(x * π)
 sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
-f(x) =  10 + 15sin(x * π)
 pgon = offsetpoly(sinecurve, f)
+poly(pgon, :fill)
+```
+
+This example enhances the vertical part of the curve, and
+thins the horizontal parts.
+
+```
+g(x, θ) = rescale(abs(sin(θ)), 0, 1, 0.1, 30)
+sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
+pgon = offsetpoly(sinecurve, g)
 poly(pgon, :fill)
 ```
 """
@@ -719,7 +732,8 @@ function offsetpoly(plist, shape::Function)
     leftcurve  = Point[]
     rightcurve = Point[]
 
-    d = shape(0.0)
+    θ = slope(plist[1], plist[2])
+    d = shape(0.0, θ)
     pt1 = perpendicular(plist[1], plist[2], -d)
     pt2 = perpendicular(plist[1], plist[2], d)
 
@@ -729,15 +743,16 @@ function offsetpoly(plist, shape::Function)
 
     for i in 1:l-2
         # allow for the easing function that rescales the offset
-        d = shape(rescale(i, 0, l-2))
-
+        θ = slope(plist[i], plist[i + 1])
+        d = shape(rescale(i, 0, l-2), θ)
         p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i + 1], plist[i + 2],  d,  d)
         push!(leftcurve, mpt)
         p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i + 1], plist[i + 2], -d, -d)
         push!(rightcurve, mpt)
     end
     # final point
-    d = shape(1)
+    θ = mod2pi(2π - slope(plist[end], plist[end - 1]))
+    d = shape(1, θ)
     pt1 = perpendicular(plist[end], plist[end - 1], -d)
     pt2 = perpendicular(plist[end], plist[end - 1],  d)
     push!(leftcurve, pt2)
@@ -876,6 +891,9 @@ Return a portion of a polygon, starting at a value between 0.0 (the beginning)
 and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first
 quarter, 0.75 the first three quarters, and so on.
 
+Use `closed=false` to exclude the line joining the
+final point to the first point from the calculations.
+
 If you already have a list of the distances between each point in the polygon
 (the "polydistances"), you can pass them in `pdist`, otherwise they'll be
 calculated afresh, using `polydistances(p, closed=closed)`.
@@ -912,6 +930,9 @@ end
 Return the rest of a polygon, starting at a value between 0.0 (the beginning)
 and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three
 quarters, 0.75 the last quarter, and so on.
+
+Use `closed=false` to exclude the line joining the
+final point to the first point from the calculations.
 
 If you already have a list of the distances between each point in the polygon
 (the "polydistances"), you can pass them in `pdist`, otherwise they'll be

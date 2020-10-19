@@ -492,24 +492,24 @@ polysmooth
 There are three methods for `offsetpoly()`, a function which
 constructs a new polygon that's offset from an existing one.
 
-- `offsetpoly(plist, d)` treats the `plist` of points as `n`
-  vertices joined by `n` lines with offset `d` on both
-  sides.
+- `offsetpoly(plist, d)` treats the `plist` of points as a polygon
+   with `n` vertices joined by `n` lines with offset `d` on both
+   sides.
 
 - `offsetpoly(plist, startoffset=d1, endoffset=d2)` treats
-  the `plist` of points as `n` vertices joined by `n-1`
-  lines, where the offset varies from `startoffset` to
-  `endoffset`.
+  the `plist` of points as a polyline with `n` vertices
+  joined by `n-1` lines, where the offset varies from
+  `startoffset` to `endoffset`.
 
-- `offsetpoly(plist, f::function)` applies a function f
-   at each vertex to determine the width of the offset polygon
-   at that point.
+- `offsetpoly(plist, f::function)` applies a function f at
+  each vertex of the polyline to determine the width of the
+  offset polygon at that point.
 
 The first method is good for making closed shapes larger or smaller.
 The other methods are useful for building shapes around an open
 linear spine.
 
-#### 1 `n` vertices joined by `n` lines
+#### 1: `n` vertices joined by `n` lines
 
 The `offsetpoly(plist, d)` method constructs a closed
 polygon outside or inside an existing polygon, at distance `d`.  The last
@@ -667,9 +667,9 @@ nothing # hide
 
 ![offset poly easing 1](assets/figures/polyoffset-easing1.png)
 
-#### 3 Applying a function
+#### 3: Applying a function
 
-This method generates offset widths using the supplied function. The value of the supplied function `f` at `f(0)` determines the start offset on each side, and `f(1)` determines the finishing offset on each side. The width at the middle vertex will be `f(0.5)` (on each side).
+This method generates offset widths using the supplied function. The value of the supplied function `f` at `f(0, θ)` determines the start offset on each side, and `f(1, θ)` determines the finishing offset on each side. The width at the middle vertex will be `f(0.5, θ)` (on each side). `θ` is provided as the current slope of the polyline at that point.
 
 ```@example
 using Luxor # hide
@@ -681,7 +681,7 @@ setlinejoin("round") # hide
 
 
 spiralcurve = spiral(10, 0.3, log=true, period=3π)
-f(x) = 1 + 15sin(x * π)
+f(x, θ) = 1 + 15sin(x * π)
 pgon = offsetpoly(spiralcurve, f)
 poly(pgon, :fill)
 
