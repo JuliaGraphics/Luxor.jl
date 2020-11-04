@@ -139,7 +139,7 @@ function findbeziercontrolpoints(previouspt::Point, point1::Point, point2::Point
 end
 
 """
-    makebezierpath(pgon::Array{Point, 1}; smoothing=1)
+    makebezierpath(pgon::Array{Point, 1}; smoothing=1.0)
 
 Return a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier
 path is an array of segments (tuples of 4 points); each segment contains the
