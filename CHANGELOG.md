@@ -6,6 +6,7 @@
 
 - additional methods for `offsetpoly()` for open polylines
 - experimental image_as_matrix!()
+- @play macro
 
 ### Changed
 
