@@ -12,7 +12,7 @@ ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 Juno = "e5e0dc1b-0480-54bc-9374-aad01c23163d"
 QuartzImageIO = "dca85d43-d64c-5e67-8c65-017450d5d020"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-MiniFB = "b93afbca-07d8-5443-9979-bb4221978155"
+MiniFB = "cc649173-1898-4bb8-8a16-ca5f88bd87d9"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
