@@ -10,7 +10,9 @@ end
 """
 module Luxor
 
-using Juno, Cairo, Colors, FileIO, Dates, MiniFB
+using Juno, Cairo, Colors, FileIO, Dates
+
+# , MiniFB
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface, CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
 CairoContext, arc, arc_negative, circle, clip, clip_preserve, close_path,
@@ -52,7 +54,7 @@ include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
 include("graphlayout.jl")
-include("play.jl")
+# include("play.jl")
 include("Style.jl")
 #include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
@@ -67,7 +69,9 @@ export Drawing,
     finish, preview,
     origin, rulers, background,
 
-    @png, @pdf, @svg, @eps, @draw, @play,
+    @png, @pdf, @svg, @eps, @draw,
+
+    # @play,
 
     newpath, closepath, newsubpath,
 
