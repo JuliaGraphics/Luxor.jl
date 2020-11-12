@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Tables and grids · Luxor</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.png" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit">Luxor</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Luxor</a></li><li><a class="tocitem" href="../examples/">A few examples</a></li><li><a class="tocitem" href="../tutorial/">Tutorial</a></li><li><a class="tocitem" href="../basics/">Basic concepts</a></li><li><a class="tocitem" href="../simplegraphics/">Simple shapes</a></li><li><a class="tocitem" href="../moregraphics/">More graphics</a></li><li><a class="tocitem" href="../geometrytools/">Geometry tools</a></li><li class="is-active"><a class="tocitem" href>Tables and grids</a><ul class="internal"><li><a class="tocitem" href="#Tiles-and-partitions"><span>Tiles and partitions</span></a></li><li><a class="tocitem" href="#Tables"><span>Tables</span></a></li><li><a class="tocitem" href="#Grids"><span>Grids</span></a></li></ul></li><li><a class="tocitem" href="../colors-styles/">Colors and styles</a></li><li><a class="tocitem" href="../polygons/">Polygons and paths</a></li><li><a class="tocitem" href="../text/">Text</a></li><li><a class="tocitem" href="../transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../clipping/">Clipping</a></li><li><a class="tocitem" href="../images/">Images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Animation</a></li><li><a class="tocitem" href="../livegraphics/">Live graphics</a></li><li><a class="tocitem" href="../moreexamples/">More examples</a></li><li><a class="tocitem" href="../functionindex/">Index</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Tables and grids</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Tables and grids</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/tables-grids.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tables-and-grids"><a class="docs-heading-anchor" href="#Tables-and-grids">Tables and grids</a><a id="Tables-and-grids-1"></a><a class="docs-heading-anchor-permalink" href="#Tables-and-grids" title="Permalink"></a></h1><p>You often want to position graphics at regular locations on the drawing. The positions can be provided by:</p><ul><li><code>Tiler</code>: a rectangular grid which you specify by enclosing area, and the number of rows and columns</li><li><code>Partition</code>: a rectangular grid which you specify by enclosing area, and the width and height of each cell</li><li><code>Grid</code> and <code>GridHex</code> a rectangular or hexagonal grid, on demand</li><li><code>Table</code>: a rectangular grid which you specify by providing row and column numbers, row heights and column widths</li></ul><p>These are types which act as iterators. Their job is to provide you with centerpoints; you&#39;ll probably want to use these in combination with the cell&#39;s widths and heights.</p><h2 id="Tiles-and-partitions"><a class="docs-heading-anchor" href="#Tiles-and-partitions">Tiles and partitions</a><a id="Tiles-and-partitions-1"></a><a class="docs-heading-anchor-permalink" href="#Tiles-and-partitions" title="Permalink"></a></h2><p>The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the <code>Tiler</code> and <code>Partition</code> iterators.</p><p>The <code>Tiler</code> iterator returns the center point and tile number of each tile in turn.</p><p>In this example, every third tile is divided up into subtiles and colored:</p><pre><code class="language-julia">tiles = Tiler(800, 500, 4, 5, margin=5)
+for (pos, n) in tiles
+    randomhue()
+    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+    if n % 3 == 0
+        gsave()
+        translate(pos)
+        subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
+        for (pos1, n1) in subtiles
+            randomhue()
+            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
+        end
+        grestore()
+    end
+    sethue(&quot;white&quot;)
+    textcentered(string(n), pos + Point(0, 5))
+end</code></pre><p><img src="../assets/figures/tiler.png" alt="tiler"/></p><p><code>Partition</code> is like <code>Tiler</code>, but you specify the width and height of the tiles, rather than how many rows and columns of tiles you want.</p><article class="docstring"><header><a class="docstring-binding" id="Luxor.Tiler" href="#Luxor.Tiler"><code>Luxor.Tiler</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia">tiles = Tiler(areawidth, areaheight, nrows, ncols, margin=20)</code></pre><p>A Tiler is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of each tile in a set of tiles that divide up a rectangular space such as a page into rows and columns (relative to current 0/0)</p></li><li><p>the number of the tile</p></li></ul><p><code>areawidth</code> and <code>areaheight</code> are the dimensions of the area to be tiled, <code>nrows</code>/<code>ncols</code> are the number of rows and columns required, and <code>margin</code> is applied to all four edges of the area before the function calculates the tile sizes required.</p><p>Tiler and Partition are similar:</p><ul><li><p>Partition lets you specify the width and height of a cell</p></li><li><p>Tiler lets you specify how many rows and columns of cells you want, and a margin:</p></li></ul><pre><code class="language-none">tiles = Tiler(1000, 800, 4, 5, margin=20)
+for (pos, n) in tiles
+    # the point pos is the center of the tile
+end</code></pre><p>You can access the calculated tile width and height like this:</p><pre><code class="language-none">tiles = Tiler(1000, 800, 4, 5, margin=20)
+for (pos, n) in tiles
+    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+end</code></pre><p>It&#39;s sometimes useful to know which row and column you&#39;re currently on. <code>tiles.currentrow</code> and <code>tiles.currentcol</code> should have that information for you.</p><p>To use a Tiler to make grid points:</p><pre><code class="language-none">first.(collect(Tiler(800, 800, 4, 4))</code></pre><p>which returns an array of points that are the center points of the grid.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.Partition" href="#Luxor.Partition"><code>Luxor.Partition</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia">p = Partition(areawidth, areaheight, tilewidth, tileheight)</code></pre><p>A Partition is an iterator that, for each iteration, returns a tuple of:</p><ul><li>the <code>x</code>/<code>y</code> point of the center of each tile in a set of tiles that divide up a</li></ul><p>rectangular space such as a page into rows and columns (relative to current 0/0)</p><ul><li>the number of the tile</li></ul><p><code>areawidth</code> and <code>areaheight</code> are the dimensions of the area to be tiled, <code>tilewidth</code>/<code>tileheight</code> are the dimensions of the tiles.</p><p>Tiler and Partition are similar:</p><ul><li><p>Partition lets you specify the width and height of a cell</p></li><li><p>Tiler lets you specify how many rows and columns of cells you want, and a margin</p></li></ul><pre><code class="language-none">tiles = Partition(1200, 1200, 30, 30)
+for (pos, n) in tiles
+    # the point pos is the center of the tile
+end</code></pre><p>You can access the calculated tile width and height like this:</p><pre><code class="language-none">tiles = Partition(1200, 1200, 30, 30)
+for (pos, n) in tiles
+    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+end</code></pre><p>It&#39;s sometimes useful to know which row and column you&#39;re currently on:</p><pre><code class="language-none">tiles.currentrow
+tiles.currentcol</code></pre><p>should have that information for you.</p><p>Unless the tilewidth and tileheight are exact multiples of the area width and height, you&#39;ll see a border at the right and bottom where the tiles won&#39;t fit.</p></div></section></article><p>You can obtain the centerpoints of all the tiles in one go with:</p><pre><code class="language-none">first.(collect(tiles))</code></pre><p>or obtain ranges with:</p><pre><code class="language-none">tiles[1:2:end]</code></pre><h2 id="Tables"><a class="docs-heading-anchor" href="#Tables">Tables</a><a id="Tables-1"></a><a class="docs-heading-anchor-permalink" href="#Tables" title="Permalink"></a></h2><p>The <code>Table</code> iterator can be used to define tables: rectangular grids with a specific number of rows and columns.</p><p>Unlike a Tiler, the Table iterator lets you have columns can have different widths, and rows with different heights.</p><p>(Luxor generally tries to keep to the Julia convention of &#39;width&#39; -&gt; &#39;height&#39;, &#39;row&#39; -&gt; &#39;column&#39;. This flavour of consistency can sometimes be confusing if you&#39;re expecting other kinds of consistency, such as &#39;x before y&#39;...)</p><p>Tables don&#39;t store data, of course, but are designed to help you draw tabular data.</p><p>To create a simple table with 3 rows and 4 columns, using the default width and height (100):</p><pre><code class="language-none">julia&gt; t = Table(3, 4);</code></pre><p>When you use this as an iterator, you can get the coordinates of the center of each cell, and its number:</p><pre><code class="language-none">julia&gt; for i in t
+           println(&quot;row: $(t.currentrow), column: $(t.currentcol), center: $(i[1])&quot;)
+       end
+row: 1, column: 1, center: Luxor.Point(-150.0, -100.0)
+row: 1, column: 2, center: Luxor.Point(-50.0, -100.0)
+row: 1, column: 3, center: Luxor.Point(50.0, -100.0)
+row: 1, column: 4, center: Luxor.Point(150.0, -100.0)
+row: 2, column: 1, center: Luxor.Point(-150.0, 0.0)
+row: 2, column: 2, center: Luxor.Point(-50.0, 0.0)
+row: 2, column: 3, center: Luxor.Point(50.0, 0.0)
+row: 2, column: 4, center: Luxor.Point(150.0, 0.0)
+row: 3, column: 1, center: Luxor.Point(-150.0, 100.0)
+row: 3, column: 2, center: Luxor.Point(-50.0, 100.0)
+row: 3, column: 3, center: Luxor.Point(50.0, 100.0)
+row: 3, column: 4, center: Luxor.Point(150.0, 100.0)</code></pre><p>You can also access row and column information:</p><pre><code class="language-none">julia&gt; for r in 1:size(t)[1]
+           for c in 1:size(t)[2]
+               @show t[r, c]
+           end
+       end
+t[r, c] = Luxor.Point(-150.0, -100.0)
+t[r, c] = Luxor.Point(-50.0, -100.0)
+t[r, c] = Luxor.Point(50.0, -100.0)
+t[r, c] = Luxor.Point(150.0, -100.0)
+t[r, c] = Luxor.Point(-150.0, 0.0)
+t[r, c] = Luxor.Point(-50.0, 0.0)
+t[r, c] = Luxor.Point(50.0, 0.0)
+t[r, c] = Luxor.Point(150.0, 0.0)
+t[r, c] = Luxor.Point(-150.0, 100.0)
+t[r, c] = Luxor.Point(-50.0, 100.0)
+t[r, c] = Luxor.Point(50.0, 100.0)
+t[r, c] = Luxor.Point(150.0, 100.0)</code></pre><p>The next example creates a table with 10 rows and 10 columns, where each cell is 50 units wide and 35 high.</p><pre><code class="language-julia">sethue(&quot;black&quot;)
+
+t = Table(10, 10, 50, 35) # 10 rows, 10 columns, 50 wide, 35 high
+
+hundred = 1:100
+
+for n in 1:length(t)
+   text(string(hundred[n]), t[n], halign=:center, valign=:middle)
+end
+
+setopacity(0.5)
+sethue(&quot;thistle&quot;)
+circle.(t[3, :], 20, :fill) # row 3, every column</code></pre><p><img src="../assets/figures/table2.png" alt="table 2"/></p><p>You can access rows or columns in the usual Julian way.</p><p>Notice that the table is drawn row by row, whereas 2D Julia arrays are usually accessed column by column.</p><h3 id="Varying-row-heights-and-column-widths"><a class="docs-heading-anchor" href="#Varying-row-heights-and-column-widths">Varying row heights and column widths</a><a id="Varying-row-heights-and-column-widths-1"></a><a class="docs-heading-anchor-permalink" href="#Varying-row-heights-and-column-widths" title="Permalink"></a></h3><p>To specify varying row heights and column widths, supply arrays or ranges to the <code>Table</code> constructor. The next example has logarithmically increasing row heights, and four columns of width 130 points:</p><pre><code class="language-julia">t = Table(10 .^ range(0.7, length=25, stop=1.5), fill(130, 4))
+
+for (pt, n) in t
+    setgray(rescale(n, 1, length(t), 0, 1))
+    box(pt, t.colwidths[t.currentcol], t.rowheights[t.currentrow], :fill)
+    sethue(&quot;white&quot;)
+    fontsize(t.rowheights[t.currentrow])
+    text(string(n), pt, halign=:center, valign=:middle)
+end</code></pre><p><img src="../assets/figures/table1.png" alt="table 1"/></p><p>To fill table cells, it&#39;s useful to be able to access the table&#39;s row and column specifications (using the <code>colwidths</code> and <code>rowheights</code> fields), and iteration can also provide information about the current row and column being processed (<code>currentrow</code> and <code>currentcol</code>).</p><p>To ensure that graphic elements don&#39;t stray outside the cell walls, you can use a clipping region.</p><h3 id="Drawing-arrays-and-dataframes"><a class="docs-heading-anchor" href="#Drawing-arrays-and-dataframes">Drawing arrays and dataframes</a><a id="Drawing-arrays-and-dataframes-1"></a><a class="docs-heading-anchor-permalink" href="#Drawing-arrays-and-dataframes" title="Permalink"></a></h3><p>With a little bit of extra work you can write code that draws objects like arrays and dataframes combining text with graphic features. For example, this code draws arrays visually and numerically.</p><pre><code class="language-julia">function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
+    setline(1.5)
+    cellwidth = t.colwidths[column] - 10
+    leftmargin = t[row, column] - (cellwidth/2, 0)
+    sethue(&quot;gray70&quot;)
+    box(leftmargin - (0, barheight/2), leftmargin + (cellwidth, barheight/2), :fill)
+    boxwidth = rescale(data[row, column], minvalue, maxvalue, 0, cellwidth)
+    sethue(&quot;red&quot;)
+    box(leftmargin - (0, barheight/2), leftmargin + (boxwidth, barheight/2), :fill)
+    sethue(&quot;black&quot;)
+    line(leftmargin + (boxwidth, -barheight/2),
+         leftmargin + (boxwidth, +barheight/2),
+         :stroke)
+    text(string(round(data[row, column], digits=3)), t[row, column] - (cellwidth/2, 10),
+         halign=:left)
+end
+
+A = rand(6, 6)
+l, h = extrema(A)
+rt, ct = size(A)
+t = Table(size(A), (80, 30))
+fontface(&quot;Georgia&quot;)
+fontsize(12)
+for r in 1:rt
+    for c in 1:ct
+        drawbar(t, A, r, c, l, h, 10)
+    end
+end</code></pre><p><img src="../assets/figures/arraytable.svg" alt="array table"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.Table" href="#Luxor.Table"><code>Luxor.Table</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia">t = Table(nrows, ncols)
+t = Table(nrows, ncols, colwidth, rowheight)
+t = Table(rowheights, columnwidths)</code></pre><p>Tables are centered at <code>O</code>, but you can supply a point after the specifications.</p><pre><code class="language-none">t = Table(nrows, ncols, centerpoint)
+t = Table(nrows, ncols, colwidth, rowheight, centerpoint)
+t = Table(rowheights, columnwidths, centerpoint)</code></pre><p>Examples</p><p>Simple tables</p><pre><code class="language-none">t = Table(4, 3) # 4 rows and 3 cols, default is 100w, 50 h
+t = Table(4, 3, 80, 30)   # 4 rows of 30pts high, 3 cols of 80pts wide
+t = Table(4, 3, (80, 30)) # same
+t = Table((4, 3), (80, 30)) # same</code></pre><p>Specify row heights and column widths instead of quantities:</p><pre><code class="language-none">t = Table([60, 40, 100], 50) # 3 different height rows, 1 column 50 wide
+t = Table([60, 40, 100], [100, 60, 40]) # 3 rows, 3 columns
+t = Table(fill(30, (10)), [50, 50, 50]) # 10 rows 30 high, 3 columns 10 wide
+t = Table(50, [60, 60, 60]) # just 1 row (50 high), 3 columns 60 wide
+t = Table([50], [50]) # just 1 row, 1 column, both 50 units wide
+t = Table(50, 50, 10, 5) # 50 rows, 50 columns, 10 units wide, 5 units high
+t = Table([6, 11, 16, 21, 26, 31, 36, 41, 46], [6, 11, 16, 21, 26, 31, 36, 41, 46])
+t = Table(15:5:55, vcat(5:2:15, 15:-2:5))
+ #  table has 108 cells, with:
+ #  row heights: 15 20 25 30 35 40 45 50 55
+ #  col widths:  5 7 9 11 13 15 15 13 11 9 7 5
+t = Table(vcat(5:10:60, 60:-10:5), vcat(5:10:60, 60:-10:5))
+t = Table(vcat(5:10:60, 60:-10:5), 50) # 1 column 50 units wide
+t = Table(vcat(5:10:60, 60:-10:5), 1:5:50)</code></pre><p>A Table is an iterator that, for each iteration, returns a tuple of:</p><ul><li><p>the <code>x</code>/<code>y</code> point of the center of cells arranged in rows and columns (relative to current 0/0)</p></li><li><p>the number of the cell (left to right, then top to bottom)</p></li></ul><p><code>nrows</code>/<code>ncols</code> are the number of rows and columns required.</p><p>It&#39;s sometimes useful to know which row and column you&#39;re currently on while iterating:</p><pre><code class="language-none">t.currentrow
+t.currentcol</code></pre><p>and row heights and column widths are available in:</p><pre><code class="language-none">t.rowheights
+t.colwidths</code></pre><p><code>box(t::Table, r, c)</code> can be used to fill table cells:</p><pre><code class="language-none">@svg begin
+    for (pt, n) in (t = Table(8, 3, 30, 15))
+        randomhue()
+        box(t, t.currentrow, t.currentcol, :fill)
+        sethue(&quot;white&quot;)
+        text(string(n), pt)
+    end
+end</code></pre><p>or without iteration, using cellnumber:</p><pre><code class="language-none">@svg begin
+    t = Table(8, 3, 30, 15)
+    for n in eachindex(t)
+        randomhue()
+        box(t, n, :fill)
+        sethue(&quot;white&quot;)
+        text(string(n), t[n])
+    end
+end</code></pre><p>To use a Table to make grid points:</p><pre><code class="language-none">julia&gt; first.(collect(Table(10, 6)))
+60-element Array{Luxor.Point,1}:
+ Luxor.Point(-10.0, -18.0)
+ Luxor.Point(-6.0, -18.0)
+ Luxor.Point(-2.0, -18.0)
+ ⋮
+ Luxor.Point(2.0, 18.0)
+ Luxor.Point(6.0, 18.0)
+ Luxor.Point(10.0, 18.0)</code></pre><p>which returns an array of points that are the center points of the cells in the table.</p></div></section></article><h2 id="Grids"><a class="docs-heading-anchor" href="#Grids">Grids</a><a id="Grids-1"></a><a class="docs-heading-anchor-permalink" href="#Grids" title="Permalink"></a></h2><p>You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they&#39;ll supply the next point on the grid when you ask for it.</p><p>Define a rectangular grid with <code>GridRect</code>, and a hexagonal grid with <code>GridHex</code>. Get the next grid point from a grid with <code>nextgridpoint(grid)</code>.</p><pre><code class="language-julia">grid = GridRect(O, 40, 80, (10 - 1) * 40)
+for i in 1:20
+    randomhue()
+    p = nextgridpoint(grid)
+    squircle(p, 20, 20, :fill)
+    sethue(&quot;white&quot;)
+    text(string(i), p, halign=:center)
+end</code></pre><p><img src="../assets/figures/grids.png" alt="grids"/></p><pre><code class="language-julia">Random.seed!(42)
+radius = 70
+grid = GridHex(O, radius, 600)
+
+for i in 1:15
+    randomhue()
+    p = nextgridpoint(grid)
+    ngon(p, radius-5, 6, π/2, :fillstroke)
+    sethue(&quot;white&quot;)
+    text(string(i), p, halign=:center)
+end</code></pre><p><img src="../assets/figures/grid-hex.png" alt="hex grid"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.GridRect" href="#Luxor.GridRect"><code>Luxor.GridRect</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia">GridRect(startpoint, xspacing, yspacing, width, height)</code></pre><p>Define a rectangular grid, to start at <code>startpoint</code> and proceed along the x-axis in steps of <code>xspacing</code>, then along the y-axis in steps of <code>yspacing</code>.</p><pre><code class="language-none">GridRect(startpoint, xspacing=100.0, yspacing=100.0, width=1200.0, height=1200.0)</code></pre><p>For a column, set the <code>xspacing</code> to 0:</p><pre><code class="language-none">grid = GridRect(O, 0, 40)</code></pre><p>To get points from the grid, use <code>nextgridpoint(g::Grid)</code>.</p><pre><code class="language-none">julia&gt; grid = GridRect(O, 0, 40);
+julia&gt; nextgridpoint(grid)
+Luxor.Point(0.0, 0.0)
+
+julia&gt; nextgridpoint(grid)
+Luxor.Point(0.0, 40.0)</code></pre><p>When you run out of grid points, you&#39;ll wrap round and start again.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.GridHex" href="#Luxor.GridHex"><code>Luxor.GridHex</code></a> — <span class="docstring-category">Type</span></header><section><div><pre><code class="language-julia">GridHex(startpoint, radius, width=1200.0, height=1200.0)</code></pre><p>Define a hexagonal grid, to start at <code>startpoint</code> and proceed along the x-axis and then along the y-axis, <code>radius</code> is the radius of a circle that encloses each hexagon. The distance in <code>x</code> between the centers of successive hexagons is:</p><p><span>$\frac{\sqrt{(3)} radius}{2}$</span></p><p>To get the next point from the grid, use <code>nextgridpoint(g::Grid)</code>.</p><p>When you run out of grid points, you&#39;ll wrap round and start again.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.nextgridpoint" href="#Luxor.nextgridpoint"><code>Luxor.nextgridpoint</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">nextgridpoint(g::GridRect)</code></pre><p>Returns the next available (or even the first) grid point of a grid.</p></div></section><section><div><pre><code class="language-none">nextgridpoint(g::GridHex)</code></pre><p>Returns the next available grid point of a hexagonal grid.</p></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../geometrytools/">« Geometry tools</a><a class="docs-footer-nextpage" href="../colors-styles/">Colors and styles »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 12 November 2020 11:50">Thursday 12 November 2020</span>. Using Julia version 1.4.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
