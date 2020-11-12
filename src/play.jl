@@ -1,6 +1,25 @@
+using MiniFB
+
+function onclick(window, button, mod, isPressed)::Cvoid
+    if Bool(isPressed)
+        println("mouse clicked")
+    end
+    mousex = mfb_get_mouse_x(window)
+    mousey = mfb_get_mouse_y(window)
+    println("x: $mousex y: $mousey")
+end
+
+function active_fn(win::Ptr{Cvoid}, is_active::Bool)
+    println("Window is now ",  is_active ? "" : "in", "active")
+end
+
 macro play(w, h, body)
     quote
-        window = mfb_open_ex("julia", $w, $h, MiniFB.WF_RESIZABLE)
+        window = mfb_open_ex("Luxor -> Julia", $w, $h, MiniFB.WF_RESIZABLE)
+
+        mfb_set_active_callback(window, active_fn)
+        mfb_set_mouse_button_callback(window, onclick)
+
         buffer = zeros(UInt32, $w, $h)
         while true
             Drawing($w, $h, :image)
@@ -17,7 +36,51 @@ macro play(w, h, body)
     end
 end
 
-#= bez path thingy
+#= Examples:
+
+1 clock
+
+using Luxor, Colors, Dates, ColorSchemes
+
+include(dirname(pathof(Luxor)) * "/play.jl")
+
+function clock(cscheme=ColorSchemes.leonardo)
+    @play 400 600 begin
+        fontface("JuliaMono-Regular")
+
+        sethue(get(cscheme, .0))
+        paint()
+        fontsize(30)
+
+        sethue(get(cscheme, .2))
+        h = Dates.hour(now())
+        sector(O, 180, 200, 3π/2, 3π/2 + rescale(h, 0, 24, 0, 2pi), :fill)
+
+        sethue(get(cscheme, .4))
+        m = Dates.minute(now())
+        sector(O, 160, 180, 3π/2, 3π/2 + rescale(m, 0, 60, 0, 2pi), :fill)
+
+        sethue(get(cscheme, .6))
+        s = Dates.second(now())
+        sector(O, 140, 160, 3π/2, 3π/2 + rescale(s, 0, 60, 0, 2pi), :fill)
+
+        sethue(get(cscheme, .8))
+        ms = Dates.value(Dates.Millisecond(Dates.now()))
+        sector(O, 137, 140, 3π/2, 3π/2 + rescale(ms, 0, 1000, 0, 2pi), :fill)
+
+        sethue(get(cscheme, 1.0))
+        text(Dates.format(Dates.now(), "HH:MM:SS"), halign=:center)
+    end
+end
+
+clock(ColorSchemes.botticelli)
+
+=#
+
+
+#=
+
+2: bezier path thingy
 
 using Luxor, Colors, Dates
 
@@ -66,7 +129,9 @@ bez()
 
 =#
 
-#= some balls
+#=
+
+3 some balls
 
 using Luxor, Colors, Dates
 
@@ -105,36 +170,4 @@ function f()
 end
 
 f()
-=#
-
-#= clock
-
-using Luxor, Colors, Dates
-
-function clock()
-    @play 400 600 begin
-        fontface("JuliaMono-Regular")
-        # outer
-        sethue("black")
-        paint()
-        sethue("white")
-        fontsize(30)
-        text(Dates.format(Dates.now(), "HH:MM:SS"), halign=:center)
-        sethue("cyan")
-        h = Dates.hour(now())
-        sector(O, 180, 200, 3π/2, 3π/2 + rescale(h, 0, 24, 0, 2pi), :fill)
-        sethue("magenta")
-        m = Dates.minute(now())
-        sector(O, 160, 180, 3π/2, 3π/2 + rescale(m, 0, 60, 0, 2pi), :fill)
-        sethue("red")
-        s = Dates.second(now())
-        sector(O, 140, 160, 3π/2, 3π/2 + rescale(s, 0, 60, 0, 2pi), :fill)
-        sethue("orange")
-        ms = Dates.value(Dates.Millisecond(Dates.now()))
-        sector(O, 137, 140, 3π/2, 3π/2 + rescale(ms, 0, 1000, 0, 2pi), :fill)
-    end
-end
-
-clock()
-
 =#

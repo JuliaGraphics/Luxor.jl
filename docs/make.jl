@@ -21,6 +21,7 @@ makedocs(
         "Images"                  => "images.md",
         "Turtle graphics"         => "turtle.md",
         "Animation"               => "animation.md",
+        "Live graphics"           => "livegraphics.md",
         "More examples"           => "moreexamples.md",
         "Index"                   => "functionindex.md"
         ]
