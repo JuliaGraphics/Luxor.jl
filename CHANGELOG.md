@@ -1,12 +1,11 @@
 # Changelog
 
-## [v2.6.0] - forthcoming
+## [v2.6.0] - 12 November 2020
 
 ### Added
 
 - additional methods for `offsetpoly()` for open polylines
-- experimental image_as_matrix!()
-- @play macro
+- image_as_matrix!() - reusable buffer
 
 ### Changed
 
