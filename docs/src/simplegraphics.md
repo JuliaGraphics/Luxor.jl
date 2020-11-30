@@ -18,9 +18,9 @@ background("white") # hide
 origin() # hide
 rulers()
 sethue("red")
-rect(O, 100, 100, :stroke)
+rect(Point(0, 0), 100, 100, :stroke)
 sethue("blue")
-box(O, 100, 100, :stroke)
+box(Point(0, 0), 100, 100, :stroke)
 finish() # hide
 nothing # hide
 ```
@@ -53,7 +53,7 @@ box
 `box()` also returns the coordinates of the corners.
 
 ```julia
-box(O, 100, 100, :none)
+box(Point(0, 0), 100, 100, :none)
 ```
 ```
 4-element Array{Point,1}:
@@ -521,9 +521,9 @@ background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
 setline(2) # hide
-arrow(O, Point(0, -65))
-arrow(O, Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
-arrow(O, 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
+arrow(Point(0, 0), Point(0, -65))
+arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
+arrow(Point(0, 0), 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)
 finish() # hide
 nothing # hide
 ```
@@ -537,7 +537,7 @@ Drawing(600, 400, "assets/figures/arrowbezier.png") # hide
 background("white") # hide
 origin() # hide
 setline(2) # hide
-pts = ngon(O, 100, 8, vertices=true)
+pts = ngon(Point(0, 0), 100, 8, vertices=true)
 sethue("mediumvioletred")
 arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
 sethue("cyan4")
@@ -560,7 +560,7 @@ The `arrow()` functions allow you to specify decoration - graphics at a point so
 function marker(r, t)
     @layer begin
         sethue("purple")
-        circle(O, r,  :fill)
+        circle(Point(0, 0), r,  :fill)
         sethue("white")
         fontsize(30)
         text(string(t), halign=:center, valign=:middle)
@@ -580,14 +580,14 @@ setline(2) # hide
 function marker(r, t) #hide
     @layer begin #hide
         sethue("purple") #hide
-        circle(O, r,  :fill) #hide
+        circle(Point(0, 0), r,  :fill) #hide
         sethue("white") #hide
         fontsize(25) #hide
         text(string(t), halign=:center, valign=:middle) #hide
     end #hide
 end #hide
 
-pts = ngon(O, 100, 5, vertices=true)
+pts = ngon(Point(0, 0), 100, 5, vertices=true)
 
 sethue("mediumvioletred")
 
@@ -597,7 +597,7 @@ arrow(pts[1:4]..., decorate = () -> marker(10, 3))
 sethue("olivedrab")
 
 # no arrow, just a graphic, at 0.75
-arrow(pts[1:4]..., decorate = () -> ngon(O, 20, 4, 0, :fill), decoration = 0.75, :none)
+arrow(pts[1:4]..., decorate = () -> ngon(Point(0, 0), 20, 4, 0, :fill), decoration = 0.75, :none)
 
 finish() # hide
 nothing # hide
@@ -638,14 +638,14 @@ label.(string.(["O", "control point 1", "control point 2", "control point 3"]),
 sethue("red")
 map(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
 
-line(O, pt1, :stroke)
+line(Point(0, 0), pt1, :stroke)
 line(pt2, pt3, :stroke)
 
 sethue("black")
 setline(3)
 
 # start a path
-move(O)
+move(Point(0, 0))
 curve(pt1, pt2, pt3) #  add to current path
 strokepath()
 

@@ -170,10 +170,10 @@ export Drawing,
     ispointinsidetriangle, ispolyclockwise, polyorientation,
 
     # misc
-    layoutgraph, image_as_matrix, @imagematrix, image_as_matrix!, @imagematrix!,
+    image_as_matrix, @imagematrix, image_as_matrix!, @imagematrix!,
 
     # experimental
-    Style, applystyle,
+    layoutgraph, Style, applystyle,
 
     tidysvg
 

@@ -157,7 +157,7 @@ preview
 The `@draw`, `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
 
 ```julia
-@svg circle(O, 20, :stroke) 50 50
+@svg circle(Point(0, 0), 20, :stroke) 50 50
 ```
 
 expands to
@@ -167,7 +167,7 @@ Drawing(50, 50, "luxor-drawing-(timestamp).svg")
 origin()
 background("white")
 sethue("black")
-circle(O, 20, :stroke)
+circle(Point(0, 0), 20, :stroke)
 finish()
 preview()
 ```
@@ -178,7 +178,7 @@ They're short-cuts - designed to save typing. You can omit the width and height 
 @svg begin
     setline(10)
     sethue("purple")
-    circle(O, 20, :fill)
+    circle(Point(0, 0), 20, :fill)
 end
 ```
 
@@ -187,7 +187,7 @@ or (less nicely):
 ```julia
 @svg (setline(10);
       sethue("purple");
-      circle(O, 20, :fill)
+      circle(Point(0, 0), 20, :fill)
      )
 ```
 
@@ -243,7 +243,7 @@ using Interact, Colors, Luxor
     d = Drawing(300, 300, :svg)
     sethue(Colors.HSB(h, s, b))
     origin()
-    circle(O, 100, :fill)  
+    circle(Point(0, 0), 100, :fill)  
     circle(polar(110, deg2rad(h)), 10, :fill)
     sethue("black")
     label(string(h, "°"), deg2rad(h), polar(120, deg2rad(h)))
@@ -312,9 +312,9 @@ The `@layer` macro is a synonym for a `gsave()`...`grestore()` pair.
 
 ```julia
 @svg begin
-    circle(O, 100, :stroke)
-    @layer (sethue("red"); rule(O); rule(O, π/2))
-    circle(O, 200, :stroke)
+    circle(Point(0, 0), 100, :stroke)
+    @layer (sethue("red"); rule(Point(0, 0)); rule(O, π/2))
+    circle(Point(0, 0), 200, :stroke)
 end
 ```
 
@@ -322,13 +322,13 @@ or
 
 ```julia
 @svg begin
-    circle(O, 100, :stroke)
+    circle(Point(0, 0), 100, :stroke)
     @layer begin
         sethue("red")
-        rule(O)
-        rule(O, pi/2)
+        rule(Point(0, 0))
+        rule(Point(0, 0), pi/2)
     end
-    circle(O, 200, :stroke)
+    circle(Point(0, 0), 200, :stroke)
 end
 ```
 
@@ -361,12 +361,12 @@ Drawing(40, 40, :png)
 origin()
 background("black")
 sethue("red")
-box(O, 40, 15, :fill)
+box(Point(0, 0), 40, 15, :fill)
 mat1 = image_as_matrix()
 sethue("blue")
 setline(10)
 setopacity(0.6)
-ngon(O, 10, 3, 0, :stroke)
+ngon(Point(0, 0), 10, 3, 0, :stroke)
 mat2 = image_as_matrix()
 finish()
 

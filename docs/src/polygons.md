@@ -56,7 +56,7 @@ for (pos, n) in tiles
     @layer begin
         translate(pos)
 
-        p = ngon(O, 80, n, vertices=true)
+        p = ngon(Point(0, 0), 80, n, vertices=true)
 
         sethue(cols[n])
 
@@ -64,7 +64,7 @@ for (pos, n) in tiles
         sethue("black")
         poly(p, :stroke, close=true)
 
-        circle(O, 4, :fill)
+        circle(Point(0, 0), 4, :fill)
 
         label.([string(i) for i in 1:n], slope.(O, p), p, offset=5)
     end
@@ -90,9 +90,9 @@ origin() # hide
 setline(2) # hide
 for i in 20:-1:3
     sethue(i/20, 0.5, 0.7)
-    ngonside(O, 75, i, 0, :fill)
+    ngonside(Point(0, 0), 75, i, 0, :fill)
     sethue("black")
-    ngonside(O, 75, i, 0, :stroke)
+    ngonside(Point(0, 0), 75, i, 0, :stroke)
 end
 
 finish() # hide
@@ -104,7 +104,7 @@ nothing # hide
 The functions return the vertices, or you can use the `vertices=true` option.
 
 ```julia
-ngon(O, 10, 5)
+ngon(Point(0, 0), 10, 5)
 ```
 ```5-element Array{Point,1}:
  Point(3.0901699437494745, 9.510565162951535)
