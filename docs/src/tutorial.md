@@ -180,7 +180,7 @@ Edit your previous code by adding instructions to draw some labels and circles:
     sethue("gray30")
     A, B = [Point(x, 0) for x in [-radius, radius]]
     line(A, B, :stroke)
-    circle(O, radius, :stroke)
+    circle(Point(0, 0), radius, :stroke)
 # >>>>
     label("A", :NW, A)
     label("O", :N,  O)
@@ -226,7 +226,7 @@ We're now ready to tackle the job of finding the coordinates of the two points w
     sethue("gray30")
     A, B = [Point(x, 0) for x in [-radius, radius]]
     line(A, B, :stroke)
-    circle(O, radius, :stroke)
+    circle(O, radius, :stroke) # use letter O for Point(0, 0)
 
     label("A", :NW, A)
     label("O", :N,  O)

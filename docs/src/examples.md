@@ -32,7 +32,7 @@ The macros `@png`, `@svg`, `@pdf`, `@draw`, and `@imagematrix` provide shortcuts
 
 @png begin
         fontsize(50)
-        circle(O, 150, :stroke) # note the capital O (not 0) as the first argument
+        circle(Point(0, 0), 150, :stroke)
         text("hello world", halign=:center, valign=:middle)
      end
 ```
@@ -67,7 +67,7 @@ displayed in the plot pane or the next cell.
             Luxor.julia_red,
             Luxor.julia_purple,
             Luxor.julia_blue][mod1(n, 4)])
-        sector(O, 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), :fill)
+        sector(Point(0, 0), 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), :fill)
     end
 end
 ```
@@ -144,8 +144,8 @@ function sierpinski(points, degree)
 end
 
 function draw(n)
-    circle(O, 75, :clip)
-    points = ngon(O, 150, 3, -π/2, vertices=true)
+    circle(Point(0, 0), 75, :clip)
+    points = ngon(Point(0, 0), 150, 3, -π/2, vertices=true)
     sierpinski(points, n)
 end
 
