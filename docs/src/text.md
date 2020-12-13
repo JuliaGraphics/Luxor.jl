@@ -349,17 +349,19 @@ fontface("Monaco")
 fontsize(10)
 namelist = map(x->string(x), names(Base)) # get list of function names in Base.
 
-x = -20
-y = -h
-while y < currentheight
-    sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
-    s = namelist[rand(1:end)]
-    text(s, x, y)
-    se = textextents(s)
-    x += se[5]                            # move to the right
-    if x > w
-       x = -20                            # next row
-       y += 10
+let
+    x = -20
+    y = -h
+    while y < currentheight
+        sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
+        s = namelist[rand(1:end)]
+        text(s, x, y)
+        se = textextents(s)
+        x += se[5]                            # move to the right
+        if x > w
+            x = -20                            # next row
+            y += 10
+        end
     end
 end
 

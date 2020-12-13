@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.6.1] - 13 December 2020
+
+### Added
+
+### Changed
+
+- fixed text rotation/alignment issue (#122)
+
+### Removed
+
+### Deprecated
+
 ## [v2.6.0] - 12 November 2020
 
 ### Added

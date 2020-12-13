@@ -46,6 +46,7 @@ function run_all_tests()
 
     @testset "text" begin
         include("text-alignment.jl")
+        include("text-rotations.jl")
         include("pro-text-test.jl")
         include("text-curve-centered.jl")
         include("text-path-clipping.jl")
