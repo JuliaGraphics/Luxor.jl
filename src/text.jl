@@ -62,11 +62,22 @@ function text(t, pt::Point;
 
     textpointy = pt.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
 
+    # need to adjust for any rotation now
+    # rotate finalpt around original point
+    finalpt = Point(textpointx, textpointy)
+    x1 = finalpt.x - pt.x
+    y1 = finalpt.y - pt.y
+    x2 = x1 * cos(angle) - y1 * sin(angle)
+    y2 = x1 * sin(angle) + y1 * cos(angle)
+    finalpt = Point(x2 + pt.x, y2 + pt.y)
+
     gsave()
-    Cairo.move_to(get_current_cr(), textpointx, textpointy)
-    Cairo.rotate(get_current_cr(), angle)
-    Cairo.show_text(get_current_cr(), t)
+        translate(finalpt)
+        rotate(angle)
+        newpath()
+        Cairo.show_text(get_current_cr(), t)
     grestore()
+
     return Point(textpointx, textpointy)
 end
 
