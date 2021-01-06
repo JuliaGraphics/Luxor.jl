@@ -1,8 +1,11 @@
 # Changelog
 
-## [v2.6.1] - 13 December 2020
+## [v2.7.0] - January 2021 probably.
 
 ### Added
+
+- triangle functions
+- perpendicular() bisector
 
 ### Changed
 

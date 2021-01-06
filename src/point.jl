@@ -184,6 +184,22 @@ function perpendicular(p1::Point, p2::Point, k)
 end
 
 """
+    perpendicular(p1, p2)
+
+Return two points `p3` and `p4` such that a line from `p3` to `p4` is perpendicular to a line
+from `p1` to `p2`, the same length, and the lines intersect at their midpoints.
+"""
+function perpendicular(p1::Point, p2::Point)
+    if isequal(p1, p2)
+        throw(error("perpendicular(); no line, the two points are the same"))
+    end
+    ip = p2 - p1
+    ep1 = Point(-ip.y, ip.x)/2 + (p1 + p2)/2
+    ep2 = Point(ip.y, -ip.x)/2 + (p1 + p2)/2
+    return (ep1, ep2)
+end
+
+"""
     perpendicular(p::Point)
 
 Returns point `Point(p.y, -p.x)`.
@@ -589,9 +605,9 @@ end
     getworldposition(pt::Point = O;
         centered=true)
 
-Return the world coordinates of `pt`. 
+Return the world coordinates of `pt`.
 
-The default coordinate system for Luxor/Cairo is that the top left corner is 0/0.  
+The default coordinate system for Luxor/Cairo is that the top left corner is 0/0.
 If you use `origin()`, everything moves to the center of the drawing, and this function
 with the default `centered` option being assumes an `origin()` function. If you choose
 `centered=false`, the returned coordinates will be relative to the top left corner of

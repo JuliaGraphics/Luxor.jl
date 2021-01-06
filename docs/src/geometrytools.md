@@ -63,22 +63,39 @@ between
 
 `center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
 
-`getnearestpointonline()` finds perpendiculars.
+`getnearestpointonline()` finds perpendiculars, as does `perpendicular()`.
 
 ```@example
 using Luxor # hide
-Drawing(700, 200, "assets/figures/perpendicular.png") # hide
+Drawing(600, 400, "assets/figures/perpendicular.svg") # hide
 origin() # hide
 background("white") # hide
-sethue("darkmagenta") # hide
-end1, end2, pt3 = ngon(O, 100, 3, vertices=true)
-circle.([end1, end2, pt3], 5, :fill)
-line(end1, end2, :stroke)
-arrow(pt3, getnearestpointonline(end1, end2, pt3))
+
+pt1, pt2 = Point(-150, 0), Point(150, 50)
+line(pt1, pt2, :stroke)
+
+pt3 = Point(-50, -80)
+circle.([pt1, pt2, pt3], 3, :fill)
+
+p = getnearestpointonline(pt1, pt2, pt3)
+sethue("red")
+arrow(pt3, p)
+circle(pt3, 4, :fill)
+
+pt4, pt5 = perpendicular(pt1, pt2)
+setline(3)
+
+sethue("black")
+label.(string.(["p", "pt1", "pt2", "pt3", "pt4", "pt5"]), :ne, (p, pt1, pt2, pt3, pt4, pt5))
+
+sethue("green")
+arrow(pt4, pt5)
+circle.([pt4, pt5], 4, :fill)
+
 finish() # hide
 nothing # hide
 ```
-![arc](assets/figures/perpendicular.png)
+![arc](assets/figures/perpendicular.svg)
 
 ## Points and arcs
 
@@ -124,6 +141,63 @@ polar
 ispointonline
 isarcclockwise
 pointinverse
+```
+
+## Triangle centers
+
+```@example
+using Luxor # hide
+
+Drawing(350, 350, "assets/figures/trianglecenters.svg") # hide
+origin() # hide
+background("white") # hide
+setline(0.4) # hide
+fontsize(11) # hide
+▲ = Point[Point(-100.0, 0.0), Point(110.0, 30.0), Point(65.0, 90.0)]
+
+@layer begin
+    sethue("red")
+    setline(2)
+    poly(▲,  :stroke, close=true)
+end
+
+# circumcenter
+circle(▲..., :stroke)
+cp = trianglecircumcenter(▲...)
+circle(cp, 2, :fill)
+label("circumcenter", :N, cp)
+
+# incenter
+cp = triangleincenter(▲...)
+circle(cp, 2, :fill)
+pt1 = getnearestpointonline(▲[1], ▲[2], cp)
+@layer begin
+    sethue("black")
+    circle(cp, distance(cp, pt1), :stroke)
+    label("incenter", :S, cp)
+end
+
+# center    
+cp = trianglecenter(▲...)
+circle(cp, 2, :fill)
+label("center", :w, cp)
+
+# orthocenter
+cp = triangleorthocenter(▲...)
+circle(cp, 2, :fill)
+label("orthocenter", :e, cp)
+
+finish() # hide
+nothing # hide
+```
+
+![triangle centers](assets/figures/trianglecenters.svg)
+
+```@docs
+trianglecircumcenter
+triangleincenter
+trianglecenter
+triangleorthocenter
 ```
 
 ## Intersections
