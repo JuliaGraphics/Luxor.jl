@@ -34,6 +34,7 @@ include("Turtle.jl")
 include("shapes.jl")
 include("BoundingBox.jl")
 include("polygons.jl")
+include("triangles.jl")
 include("curves.jl")
 include("tiles-grids.jl")
 include("arrows.jl")
@@ -168,6 +169,9 @@ export Drawing,
     # experimental polygon functions
     polyremovecollinearpoints, polytriangulate!, polytriangulate,
     ispointinsidetriangle, ispolyclockwise, polyorientation,
+
+    # triangles
+    trianglecircumcenter, triangleincenter, trianglecenter, triangleorthocenter,
 
     # misc
     image_as_matrix, @imagematrix, image_as_matrix!, @imagematrix!,

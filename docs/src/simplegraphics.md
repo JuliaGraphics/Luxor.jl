@@ -63,7 +63,7 @@ box(Point(0, 0), 100, 100, :none)
  Point(50.0, 50.0)
 ```
 
-For regular polygons, triangles, pentagons, and so on, see the next section on Polygons.
+For regular polygons, pentagons, and so on, see the next section on Polygons.
 
 ## Circles and ellipses
 

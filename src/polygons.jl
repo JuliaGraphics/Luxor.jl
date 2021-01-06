@@ -696,9 +696,9 @@ the width at the end, and `f(n, θ)` is the width of point
 
 # Examples
 
-This example draws a tilde, with the ends starting at 20 (10
-+ 10) units wide, swelling to 50 (10 + 10 + 15 + 15) in the
-middle, as f(0.5) = 25.
+This example draws a tilde, with the ends starting at 20
+(10 + 10) units wide, swelling to 50 (10 + 10 + 15 + 15) in
+the middle, as f(0.5) = 25.
 
 ```
 f(x, θ) =  10 + 15sin(x * π)
