@@ -380,7 +380,7 @@ Create and preview an SVG drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename` if supplied, or `luxor-drawing-(timestamp).svg`.
 
-Examples
+### Examples
 
 ```
 @svg circle(O, 20, :fill)
@@ -426,7 +426,7 @@ Create and preview an PNG drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename`, if supplied, or `luxor-drawing(timestamp).png`.
 
-Examples
+### Examples
 
 ```
 @png circle(O, 20, :fill)
@@ -473,7 +473,8 @@ Create and preview an PDF drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename` if supplied, or `luxor-drawing(timestamp).pdf`.
 
-Examples
+
+### Examples
 
 ```
 @pdf circle(O, 20, :fill)
@@ -521,7 +522,7 @@ default is 600 by 600). The file is saved in the current working directory as
 
 On some platforms, EPS files are converted automatically to PDF when previewed.
 
-Examples
+### Examples
 
 ```
 @eps circle(O, 20, :fill)
@@ -566,7 +567,7 @@ end
 Preview an PNG drawing, optionally specifying width and height (the
 default is 600 by 600). The drawing is stored in memory, not in a file on disk.
 
-Examples
+### Examples
 
 ```
 @draw circle(O, 20, :fill)
