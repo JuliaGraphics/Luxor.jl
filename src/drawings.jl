@@ -409,7 +409,7 @@ default is 600 by 600). The file is saved in the current working directory as
 macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
     quote
         local lfname = _add_ext($(esc(fname)), :svg)
-        Drawing($width, $height, lfname)
+        Drawing($(esc(width)), $(esc(height)), lfname)
         origin()
         background("white")
         sethue("black")
@@ -456,7 +456,7 @@ default is 600 by 600). The file is saved in the current working directory as
 macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
     quote
         local lfname = _add_ext($(esc(fname)), :png)
-        Drawing($width, $height, lfname)
+        Drawing($(esc(width)), $(esc(height)), lfname)
         origin()
         background("white")
         sethue("black")
@@ -503,7 +503,7 @@ default is 600 by 600). The file is saved in the current working directory as
 macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
      quote
         local lfname = _add_ext($(esc(fname)), :pdf)
-        Drawing($width, $height, lfname)
+        Drawing($(esc(width)), $(esc(height)), lfname)
         origin()
         background("white")
         sethue("black")
@@ -551,7 +551,7 @@ On some platforms, EPS files are converted automatically to PDF when previewed.
 macro eps(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).eps")
     quote
        local lfname = _add_ext($(esc(fname)), :eps)
-       Drawing($width, $height, lfname)
+        Drawing($(esc(width)), $(esc(height)), lfname)
         origin()
         background("white")
         sethue("black")
@@ -593,7 +593,7 @@ default is 600 by 600). The drawing is stored in memory, not in a file on disk.
 """
 macro draw(body, width=600, height=600)
     quote
-        Drawing($width, $height, :png)
+        Drawing($(esc(width)), $(esc(height)), :png)
         origin()
         background("white")
         sethue("black")
