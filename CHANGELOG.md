@@ -1,11 +1,12 @@
 # Changelog
 
-## [v2.7.0] - January 2021 probably.
+## [v2.7.0] - January 7 2021
 
 ### Added
 
 - triangle functions
 - perpendicular() bisector
+- macros allow variables (thanks Mason!)
 
 ### Changed
 

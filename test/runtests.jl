@@ -154,6 +154,7 @@ function run_all_tests()
         include("boxmaptest.jl")
         include("noise-test.jl")
         include("dashtests.jl")
+        include("triangles.jl")
     end
 end
 
