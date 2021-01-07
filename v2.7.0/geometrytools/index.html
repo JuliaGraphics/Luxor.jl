@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Geometry tools · Luxor</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.png" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit">Luxor</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Luxor</a></li><li><a class="tocitem" href="../examples/">A few examples</a></li><li><a class="tocitem" href="../tutorial/">Tutorial</a></li><li><a class="tocitem" href="../basics/">Basic concepts</a></li><li><a class="tocitem" href="../simplegraphics/">Simple shapes</a></li><li><a class="tocitem" href="../moregraphics/">More graphics</a></li><li class="is-active"><a class="tocitem" href>Geometry tools</a><ul class="internal"><li><a class="tocitem" href="#Lines-and-distances"><span>Lines and distances</span></a></li><li><a class="tocitem" href="#Points-and-arcs"><span>Points and arcs</span></a></li><li><a class="tocitem" href="#Triangle-centers"><span>Triangle centers</span></a></li><li><a class="tocitem" href="#Intersections"><span>Intersections</span></a></li><li><a class="tocitem" href="#Bounding-boxes"><span>Bounding boxes</span></a></li><li><a class="tocitem" href="#Noise"><span>Noise</span></a></li></ul></li><li><a class="tocitem" href="../tables-grids/">Tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Colors and styles</a></li><li><a class="tocitem" href="../polygons/">Polygons and paths</a></li><li><a class="tocitem" href="../text/">Text</a></li><li><a class="tocitem" href="../transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../clipping/">Clipping</a></li><li><a class="tocitem" href="../images/">Images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Animation</a></li><li><a class="tocitem" href="../livegraphics/">Live graphics</a></li><li><a class="tocitem" href="../moreexamples/">More examples</a></li><li><a class="tocitem" href="../functionindex/">Index</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Geometry tools</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Geometry tools</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/geometrytools.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Geometry-tools"><a class="docs-heading-anchor" href="#Geometry-tools">Geometry tools</a><a id="Geometry-tools-1"></a><a class="docs-heading-anchor-permalink" href="#Geometry-tools" title="Permalink"></a></h1><h2 id="Lines-and-distances"><a class="docs-heading-anchor" href="#Lines-and-distances">Lines and distances</a><a id="Lines-and-distances-1"></a><a class="docs-heading-anchor-permalink" href="#Lines-and-distances" title="Permalink"></a></h2><p>You can find the midpoint between two points using <code>midpoint()</code>.</p><p>The following code places a small pentagon (using <code>ngon()</code>) at the midpoint of each side of a larger pentagon:</p><pre><code class="language-julia">sethue(&quot;red&quot;)
+ngon(O, 100, 5, 0, :stroke)
+
+sethue(&quot;darkgreen&quot;)
+p5 = ngon(O, 100, 5, 0, vertices=true)
+
+for i in eachindex(p5)
+    pt1 = p5[mod1(i, 5)]
+    pt2 = p5[mod1(i + 1, 5)]
+    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)
+end</code></pre><p><img src="../assets/figures/midpoint.png" alt="arc"/></p><p>A more general function, <code>between()</code>, finds for a value <code>x</code> between 0 and 1 the corresponding point on a line defined by two points. So <code>midpoint(p1, p2)</code> and <code>between(p1, p2, 0.5)</code> should return the same point.</p><pre><code class="language-julia">sethue(&quot;red&quot;)
+p1 = Point(-150, 0)
+p2 = Point(150, 40)
+line(p1, p2)
+strokepath()
+for i in -0.5:0.1:1.5
+    randomhue()
+    circle(between(p1, p2, i), 5, :fill)
+end</code></pre><p><img src="../assets/figures/betweenpoint.png" alt="arc"/></p><p>Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.</p><article class="docstring"><header><a class="docstring-binding" id="Luxor.midpoint" href="#Luxor.midpoint"><code>Luxor.midpoint</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">midpoint(p1, p2)</code></pre><p>Find the midpoint between two points.</p></div></section><section><div><pre><code class="language-none">midpoint(a)</code></pre><p>Find midpoint between the first two elements of an array of points.</p></div></section><section><div><pre><code class="language-none">midpoint(bb::BoundingBox)</code></pre><p>Returns the point midway between the two points of the BoundingBox. This should also be the center, unless I&#39;ve been very stupid...</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.between" href="#Luxor.between"><code>Luxor.between</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">between(p1::Point, p2::Point, x)
+between((p1::Point, p2::Point), x)</code></pre><p>Find the point between point <code>p1</code> and point <code>p2</code> for <code>x</code>, where <code>x</code> is typically between 0 and 1. <code>between(p1, p2, 0.5)</code> is equivalent to <code>midpoint(p1, p2)</code>.</p></div></section><section><div><pre><code class="language-none">between(bb::BoundingBox, x)</code></pre><p>Find a point between the two corners of a BoundingBox corresponding to <code>x</code>, where <code>x</code> is typically between 0 and 1.</p></div></section></article><p><code>center3pts()</code> finds the radius and center point of a circle passing through three points which you can then use with functions such as <code>circle()</code> or <code>arc2r()</code>.</p><p><code>getnearestpointonline()</code> finds perpendiculars, as does <code>perpendicular()</code>.</p><pre><code class="language-julia">pt1, pt2 = Point(-150, 0), Point(150, 50)
+line(pt1, pt2, :stroke)
+
+pt3 = Point(-50, -80)
+circle.([pt1, pt2, pt3], 3, :fill)
+
+p = getnearestpointonline(pt1, pt2, pt3)
+sethue(&quot;red&quot;)
+arrow(pt3, p)
+circle(pt3, 4, :fill)
+
+pt4, pt5 = perpendicular(pt1, pt2)
+setline(3)
+
+sethue(&quot;black&quot;)
+label.(string.([&quot;p&quot;, &quot;pt1&quot;, &quot;pt2&quot;, &quot;pt3&quot;, &quot;pt4&quot;, &quot;pt5&quot;]), :ne, (p, pt1, pt2, pt3, pt4, pt5))
+
+sethue(&quot;green&quot;)
+arrow(pt4, pt5)
+circle.([pt4, pt5], 4, :fill)</code></pre><p><img src="../assets/figures/perpendicular.svg" alt="arc"/></p><h2 id="Points-and-arcs"><a class="docs-heading-anchor" href="#Points-and-arcs">Points and arcs</a><a id="Points-and-arcs-1"></a><a class="docs-heading-anchor-permalink" href="#Points-and-arcs" title="Permalink"></a></h2><p>Use <code>isarcclockwise(c, p1, p2)</code> to check whether an arc centered at <code>c</code> running from <code>p1</code> to <code>p2</code> is clockwise.</p><p>The <code>pointinverse()</code> function finds the inverse of a point relative to a reference circle (centerpoint and radius). In the image, each vertex on the star is linked by an arrow to its inverse.</p><pre><code class="language-julia">radius = 80
+starradius = 70
+sethue(&quot;black&quot;)
+points = star(O, starradius, 5, 0.5, π/5, vertices=true)
+antipoints = last.(pointinverse.(points, O, radius))
+
+@layer (sethue(&quot;grey90&quot;); poly(antipoints, :fill))
+@layer (sethue(&quot;grey75&quot;); poly(points, :fill))
+circle(O, radius, :stroke)
+
+prettypoly.((points, antipoints), :none,
+    vertexlabels = (n, l) -&gt; (label(string(n), :ne)))
+foreach(x -&gt; arrow(x[1] , x[2]), zip(points, antipoints))</code></pre><p><img src="../assets/figures/pointinverse.png" alt="arc"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.distance" href="#Luxor.distance"><code>Luxor.distance</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">distance(p1::Point, p2::Point)</code></pre><p>Find the distance between two points (two argument form).</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.getnearestpointonline" href="#Luxor.getnearestpointonline"><code>Luxor.getnearestpointonline</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)</code></pre><p>Given a line from <code>pt1</code> to <code>pt2</code>, and <code>startpt</code> is the start of a perpendicular heading to meet the line, at what point does it hit the line?</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.pointlinedistance" href="#Luxor.pointlinedistance"><code>Luxor.pointlinedistance</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">pointlinedistance(p::Point, a::Point, b::Point)</code></pre><p>Find the distance between a point <code>p</code> and a line between two points <code>a</code> and <code>b</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.slope" href="#Luxor.slope"><code>Luxor.slope</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">slope(pointA::Point, pointB::Point)</code></pre><p>Find angle of a line starting at <code>pointA</code> and ending at <code>pointB</code>.</p><p>Return a value between 0 and 2pi. Value will be relative to the current axes.</p><pre><code class="language-none">slope(O, Point(0, 100)) |&gt; rad2deg # y is positive down the page
+90.0
+
+slope(Point(0, 100), O) |&gt; rad2deg
+270.0</code></pre><p>The slope isn&#39;t the same as the gradient. A vertical line going up has a slope of 3π/2.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.perpendicular" href="#Luxor.perpendicular"><code>Luxor.perpendicular</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">perpendicular(p1, p2, k)</code></pre><p>Return a point <code>p3</code> that is <code>k</code> units away from <code>p1</code>, such that a line <code>p1 p3</code> is perpendicular to <code>p1 p2</code>.</p><p>Convention? to the right?</p></div></section><section><div><pre><code class="language-none">perpendicular(p1, p2)</code></pre><p>Return two points <code>p3</code> and <code>p4</code> such that a line from <code>p3</code> to <code>p4</code> is perpendicular to a line from <code>p1</code> to <code>p2</code>, the same length, and the lines intersect at their midpoints.</p></div></section><section><div><pre><code class="language-none">perpendicular(p::Point)</code></pre><p>Returns point <code>Point(p.y, -p.x)</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.dotproduct" href="#Luxor.dotproduct"><code>Luxor.dotproduct</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">dotproduct(a::Point, b::Point)</code></pre><p>Return the scalar dot product of the two points.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.@polar" href="#Luxor.@polar"><code>Luxor.@polar</code></a> — <span class="docstring-category">Macro</span></header><section><div><pre><code class="language-julia">@polar (p)</code></pre><p>Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.</p><pre><code class="language-none">@polar (10, pi/4)
+@polar [10, pi/4]</code></pre><p>produces</p><pre><code class="language-none">Luxor.Point(7.0710678118654755, 7.071067811865475)</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.polar" href="#Luxor.polar"><code>Luxor.polar</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">polar(r, theta)</code></pre><p>Convert point in polar form (radius and angle) to a Point.</p><pre><code class="language-none">polar(10, pi/4)</code></pre><p>produces</p><pre><code class="language-none">Luxor.Point(7.071067811865475, 7.0710678118654755)</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.ispointonline" href="#Luxor.ispointonline"><code>Luxor.ispointonline</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">ispointonline(pt::Point, pt1::Point, pt2::Point;
+    extended = false,
+    atol = 10E-5)</code></pre><p>Return <code>true</code> if the point <code>pt</code> lies on a straight line between <code>pt1</code> and <code>pt2</code>.</p><p>If <code>extended</code> is false (the default) the point must lie on the line segment between <code>pt1</code> and <code>pt2</code>. If <code>extended</code> is true, the point lies on the line if extended in either direction.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.isarcclockwise" href="#Luxor.isarcclockwise"><code>Luxor.isarcclockwise</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">isarcclockwise(c::Point, A::Point, B::Point)</code></pre><p>Return <code>true</code> if an arc centered at <code>c</code> going from <code>A</code> to <code>B</code> is clockwise.</p><p>If <code>c</code>, <code>A</code>, and <code>B</code> are collinear, then a hemispherical arc could be either clockwise or not.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.pointinverse" href="#Luxor.pointinverse"><code>Luxor.pointinverse</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">pointinverse(A::Point, centerpoint::Point, rad)</code></pre><p>Find <code>A′</code>, the inverse of a point A with respect to a circle <code>centerpoint</code>/<code>rad</code>, such that:</p><pre><code class="language-none">distance(centerpoint, A) * distance(centerpoint, A′) == rad^2</code></pre><p>Return (true, A′) or (false, A).</p></div></section></article><h2 id="Triangle-centers"><a class="docs-heading-anchor" href="#Triangle-centers">Triangle centers</a><a id="Triangle-centers-1"></a><a class="docs-heading-anchor-permalink" href="#Triangle-centers" title="Permalink"></a></h2><pre><code class="language-julia">▲ = Point[Point(-100.0, 0.0), Point(110.0, 30.0), Point(65.0, 90.0)]
+
+@layer begin
+    sethue(&quot;red&quot;)
+    setline(2)
+    poly(▲,  :stroke, close=true)
+end
+
+# circumcenter
+circle(▲..., :stroke)
+cp = trianglecircumcenter(▲...)
+circle(cp, 2, :fill)
+label(&quot;circumcenter&quot;, :N, cp)
+
+# incenter
+cp = triangleincenter(▲...)
+circle(cp, 2, :fill)
+pt1 = getnearestpointonline(▲[1], ▲[2], cp)
+@layer begin
+    sethue(&quot;black&quot;)
+    circle(cp, distance(cp, pt1), :stroke)
+    label(&quot;incenter&quot;, :S, cp)
+end
+
+# center
+cp = trianglecenter(▲...)
+circle(cp, 2, :fill)
+label(&quot;center&quot;, :w, cp)
+
+# orthocenter
+cp = triangleorthocenter(▲...)
+circle(cp, 2, :fill)
+label(&quot;orthocenter&quot;, :e, cp)</code></pre><p><img src="../assets/figures/trianglecenters.svg" alt="triangle centers"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.trianglecircumcenter" href="#Luxor.trianglecircumcenter"><code>Luxor.trianglecircumcenter</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">trianglecircumcenter(pt1::Point, pt2::Point, pt3::Point)</code></pre><p>Return the circumcenter of the triangle defined by <code>pt1</code>, <code>pt2</code>, and <code>pt3</code>. The circumcenter is the center of a circle that passes through the vertices of the triangle.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.triangleincenter" href="#Luxor.triangleincenter"><code>Luxor.triangleincenter</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">triangleincenter(pt1::Point, pt2::Point, pt3::Point)</code></pre><p>Return the incenter of the triangle defined by <code>pt1</code>, <code>pt2</code>, and <code>pt3</code>. The incenter is the center of a circle inscribed inside the triangle.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.trianglecenter" href="#Luxor.trianglecenter"><code>Luxor.trianglecenter</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">trianglecenter(pt1::Point, pt2::Point, pt3::Point)</code></pre><p>Return the centroid of the triangle defined by <code>pt1</code>, <code>pt2</code>, and <code>pt3</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.triangleorthocenter" href="#Luxor.triangleorthocenter"><code>Luxor.triangleorthocenter</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">triangleorthocenter(pt1::Point, pt2::Point, pt3::Point)</code></pre><p>Return the orthocenter of the triangle defined by <code>pt1</code>, <code>pt2</code>, and <code>pt3</code>.</p></div></section></article><h2 id="Intersections"><a class="docs-heading-anchor" href="#Intersections">Intersections</a><a id="Intersections-1"></a><a class="docs-heading-anchor-permalink" href="#Intersections" title="Permalink"></a></h2><p><code>intersectionlines()</code> finds the intersection of two lines.</p><pre><code class="language-julia">sethue(&quot;black&quot;)
+P1, P2, P3, P4 = ngon(O, 100, 5, vertices=true)
+label.([&quot;P1&quot;, &quot;P2&quot;, &quot;P3&quot;, &quot;P4&quot;], :N, [P1, P2, P3, P4])
+line(P1, P2, :stroke)
+line(P4, P3, :stroke)
+
+flag, ip =  intersectionlines(P1, P2, P4, P3)
+if flag
+    circle(ip, 5, :fill)
+end</code></pre><p><img src="../assets/figures/intersection.png" alt="arc"/></p><p><code>intersectionlinecircle()</code> finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.</p><pre><code class="language-julia">l1 = Point(-100.0, -75.0)
+l2 = Point(300.0, 100.0)
+rad = 100
+cpoint = Point(0, 0)
+line(l1, l2, :stroke)
+circle(cpoint, rad, :stroke)
+nints, ip1, ip2 =  intersectionlinecircle(l1, l2, cpoint, rad)
+sethue(&quot;black&quot;)
+if nints == 2
+    circle(ip1, 8, :stroke)
+    circle(ip2, 8, :stroke)
+end</code></pre><p><img src="../assets/figures/intersection_line_circle.png" alt="arc"/></p><p><code>intersection2circles()</code> finds the area of the intersection of two circles, and <code>intersectioncirclecircle()</code> finds the points where they cross.</p><p>This example shows the areas of two circles, and the area of their intersection.</p><pre><code class="language-julia">c1 = (O, 150)
+c2 = (O + (100, 0), 150)
+
+circle(c1... , :stroke)
+circle(c2... , :stroke)
+
+sethue(&quot;purple&quot;)
+circle(c1... , :clip)
+circle(c2... , :fill)
+clipreset()
+
+sethue(&quot;black&quot;)
+
+text(string(150^2 * π |&gt; round), c1[1] - (125, 0))
+text(string(150^2 * π |&gt; round), c2[1] + (100, 0))
+sethue(&quot;white&quot;)
+text(string(intersection2circles(c1..., c2...) |&gt; round),
+     midpoint(c1[1], c2[1]), halign=:center)
+
+sethue(&quot;red&quot;)
+flag, C, D = intersectioncirclecircle(c1..., c2...)
+if flag
+    circle.([C, D], 5, :fill)
+end</code></pre><p><img src="../assets/figures/intersection2circles.png" alt="intersection of two circles"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.intersectionlines" href="#Luxor.intersectionlines"><code>Luxor.intersectionlines</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">intersectionlines(p0, p1, p2, p3,
+    crossingonly=false)</code></pre><p>Find point where two lines intersect.</p><p>If <code>crossingonly == true</code> the point of intersection must lie on both lines.</p><p>If <code>crossingonly == false</code> the point of intersection can be where the lines meet if extended almost to &#39;infinity&#39;.</p><p>Accordng to this function, collinear, overlapping, and parallel lines never intersect. Ie, the line segments might be collinear but have no points in common, or the lines segments might be collinear and have many points in common, or the line segments might be collinear and one is entirely contained within the other.</p><p>If the lines are collinear and share a point in common, that is the intersection point.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.intersectionlinecircle" href="#Luxor.intersectionlinecircle"><code>Luxor.intersectionlinecircle</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r)</code></pre><p>Find the intersection points of a line (extended through points <code>p1</code> and <code>p2</code>) and a circle.</p><p>Return a tuple of <code>(n, pt1, pt2)</code></p><p>where</p><ul><li><code>n</code> is the number of intersections, <code>0</code>, <code>1</code>, or <code>2</code></li><li><code>pt1</code> is first intersection point, or <code>Point(0, 0)</code> if none</li><li><code>pt2</code> is the second intersection point, or <code>Point(0, 0)</code> if none</li></ul><p>The calculated intersection points won&#39;t necessarily lie on the line segment between <code>p1</code> and <code>p2</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.intersection2circles" href="#Luxor.intersection2circles"><code>Luxor.intersection2circles</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">intersection2circles(pt1, r1, pt2, r2)</code></pre><p>Find the area of intersection between two circles, the first centered at <code>pt1</code> with radius <code>r1</code>, the second centered at <code>pt2</code> with radius <code>r2</code>.</p><p>If one circle is entirely within another, that circle&#39;s area is returned.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.intersectioncirclecircle" href="#Luxor.intersectioncirclecircle"><code>Luxor.intersectioncirclecircle</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">intersectioncirclecircle(cp1, r1, cp2, r2)</code></pre><p>Find the two points where two circles intersect, if they do. The first circle is centered at <code>cp1</code> with radius <code>r1</code>, and the second is centered at <code>cp1</code> with radius <code>r1</code>.</p><p>Returns</p><pre><code class="language-none">(flag, ip1, ip2)</code></pre><p>where <code>flag</code> is a Boolean <code>true</code> if the circles intersect at the points <code>ip1</code> and <code>ip2</code>. If the circles don&#39;t intersect at all, or one is completely inside the other, <code>flag</code> is <code>false</code> and the points are both Point(0, 0).</p><p>Use <code>intersection2circles()</code> to find the area of two overlapping circles.</p><p>In the pure world of maths, it must be possible that two circles &#39;kissing&#39; only have a single intersection point. At present, this unromantic function reports that two kissing circles have no intersection points.</p></div></section></article><h2 id="Bounding-boxes"><a class="docs-heading-anchor" href="#Bounding-boxes">Bounding boxes</a><a id="Bounding-boxes-1"></a><a class="docs-heading-anchor-permalink" href="#Bounding-boxes" title="Permalink"></a></h2><p>The <code>BoundingBox</code> type allows you to use rectangular extents to organize and interact with the 2D drawing area. A <code>BoundingBox</code> holds two points, the opposite corners of a bounding box.</p><p>You can make a BoundingBox from the current drawing, two points, a text string, an existing polygon, or by modifying an existing one.</p><p><code>BoundingBox()</code> without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see <code>origin()</code>). Use <code>centered=false</code> if the drawing origin is still at the top left corner.</p><p>This example draws circles at three points: at two of the drawing&#39;s corners and the midway point between them:</p><pre><code class="language-julia">origin()
+
+bb = BoundingBox()
+setline(10)
+sethue(&quot;orange&quot;)
+
+circle(bb[1], 150, :stroke) # first corner
+
+circle(bb[2], 150, :stroke) # second corner
+
+circle(midpoint(bb...), 150, :stroke) # midpoint
+
+sethue(&quot;blue&quot;)
+circle.([bb[1], midpoint(bb[1:2]), bb[2]], 130, :fill)
+
+sethue(&quot;red&quot;)
+circle.([first(bb), midpoint(bb...), last(bb)], 100, :fill)</code></pre><p><img src="../assets/figures/bbox.png" alt="bounding box"/></p><p>You can make a bounding box from a polygon:</p><pre><code class="language-julia">p = star(O, 100, 5, 0.1, π/3.3, vertices=true)
+sethue(&quot;antiquewhite&quot;)
+box(BoundingBox(p), :fill)
+
+sethue(&quot;black&quot;)
+poly(p, :stroke, close=true)</code></pre><p><img src="../assets/figures/bboxpoly.png" alt="bounding box of polygon"/></p><p>The resulting bounding box objects can be passed to <code>box()</code> or <code>poly()</code> to be drawn.</p><p>Pass a bounding box to <code>midpoint()</code> to find its center point. The functions <code>boxbottom()</code>, <code>boxheight()</code>, <code>boxtop()</code>, <code>boxaspectratio()</code>, <code>boxdiagonal()</code>, and  <code>boxwidth()</code> return information about a bounding box.</p><p>To convert a bounding box <code>b</code> into a box, use <code>box(b, vertices=true)</code> or <code>convert(Vector{Point}, BoundingBox())</code>.</p><p>You can also do some arithmetic on bounding boxes. In the next example, the bounding box is created from the text &quot;good afternoon&quot;. The bounding box is filled with purple, then increased by 40 units on all sides (blue), also scaled by 1.3 (green), and also shifted by <code>(0, 100)</code> (orange).</p><pre><code class="language-julia">translate(-130,0)
+fontsize(40)
+str = &quot;good afternoon&quot;
+sethue(&quot;purple&quot;)
+box(BoundingBox(str), :fill)
+sethue(&quot;white&quot;)
+text(str)
+
+sethue(&quot;blue&quot;)
+modbox = BoundingBox(str) + 40 # add 40 units to all sides
+poly(modbox, :stroke, close=true)
+
+sethue(&quot;green&quot;)
+modbox = BoundingBox(str) * 1.3
+poly(modbox, :stroke, close=true)
+
+sethue(&quot;orange&quot;)
+modbox = BoundingBox(str) + (0, 100)
+poly(modbox, :fill, close=true)</code></pre><p><img src="../assets/figures/bbox2.png" alt="bounding boxes 2"/></p><p>You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created (you can pass a bounding box to <code>rand()</code> to get a random point inside the box) and drawn differently depending on whether they&#39;re inside the intersection or outside.</p><pre><code class="language-julia">origin()
+setopacity(0.75)
+setline(8)
+
+bbox1 = BoundingBox()/2 - (50, 30)
+sethue(&quot;yellow&quot;)
+box(bbox1, :fill)
+
+bbox2 = BoundingBox()/2  + (50, 30)
+sethue(&quot;pink&quot;)
+box(bbox2, :fill)
+
+sethue(&quot;black&quot;)
+box(bbox1 + bbox2, :stroke)
+
+sethue(&quot;red&quot;)
+bothboxes = intersectboundingboxes(bbox1, bbox2)
+box(bothboxes, :fill)
+
+for i in 1:500
+    pt = rand(bbox1 + bbox2)
+    if isinside(pt, bothboxes)
+        sethue(&quot;white&quot;)
+        circle(pt, 3, :fill)
+    else
+        sethue(&quot;black&quot;)
+        circle(pt, 2, :fill)
+    end
+end</code></pre><p><img src="../assets/figures/bbox3.png" alt="intersecting bounding boxes"/></p><p>To find out where a line starting at the center of a bounding box passing through a point crosses or would cross the edges of the box, use <code>pointcrossesboundingbox()</code>.</p><pre><code class="language-julia">bx = BoundingBox(box(O, 200, 200, :none))
+setline(1)
+box(bx, :stroke)
+for i in 1:10
+    pt = randompoint((1.5bx)...)
+    pt2 = pointcrossesboundingbox(pt, bx)
+
+    sethue(&quot;grey50&quot;)
+    arrow(O, pt)
+    sethue(&quot;red&quot;)
+    circle(pt2, 3, :stroke)
+end</code></pre><p><img src="../assets/figures/bbox4.png" alt="point crosses bounding box"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxaspectratio" href="#Luxor.boxaspectratio"><code>Luxor.boxaspectratio</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxaspectratio(bb::BoundingBox)</code></pre><p>Return the aspect ratio (the height divided by the width) of bounding box <code>bb</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxdiagonal" href="#Luxor.boxdiagonal"><code>Luxor.boxdiagonal</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxdiagonal(bb::BoundingBox)</code></pre><p>Return the length of the diagonal of bounding box <code>bb</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxwidth" href="#Luxor.boxwidth"><code>Luxor.boxwidth</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxwidth(bb::BoundingBox)</code></pre><p>Return the width of bounding box <code>bb</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxheight" href="#Luxor.boxheight"><code>Luxor.boxheight</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxheight(bb::BoundingBox)</code></pre><p>Return the height of bounding box <code>bb</code>.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.intersectboundingboxes" href="#Luxor.intersectboundingboxes"><code>Luxor.intersectboundingboxes</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">intersectboundingboxes(bb1::BoundingBox, bb2::BoundingBox)</code></pre><p>Return a BoundingBox that&#39;s an intersection of the two bounding boxes.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.pointcrossesboundingbox" href="#Luxor.pointcrossesboundingbox"><code>Luxor.pointcrossesboundingbox</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">pointcrossesboundingbox(pt, bbox::BoundingBox)</code></pre><p>Find and return the point where a line from the center of bounding box <code>bbox</code> to point <code>pt</code> would, if continued, cross the edges of the box.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxbottomleft" href="#Luxor.boxbottomleft"><code>Luxor.boxbottomleft</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxbottomleft(bb::BoundingBox)</code></pre><p>Return the point at the bottom left of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+■ ⋅ ⋅</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxbottomright" href="#Luxor.boxbottomright"><code>Luxor.boxbottomright</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxbottomright(bb::BoundingBox)</code></pre><p>Return the point at the bottom right of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ⋅ ⋅
+⋅ ⋅ ⋅
+⋅ ⋅ ■</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxmiddlecenter" href="#Luxor.boxmiddlecenter"><code>Luxor.boxmiddlecenter</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxmiddlecenter(bb::BoundingBox)</code></pre><p>Return the point at the center of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ⋅ ⋅
+⋅ ■ ⋅
+⋅ ⋅ ⋅</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxmiddleleft" href="#Luxor.boxmiddleleft"><code>Luxor.boxmiddleleft</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxmiddleleft(bb::BoundingBox)</code></pre><p>Return the point at the middle left of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ⋅ ⋅
+■ ⋅ ⋅
+⋅ ⋅ ⋅</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxmiddleright" href="#Luxor.boxmiddleright"><code>Luxor.boxmiddleright</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxmiddleright(bb::BoundingBox)</code></pre><p>Return the point at the midde right of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ⋅ ⋅
+⋅ ⋅ ■
+⋅ ⋅ ⋅</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxtopcenter" href="#Luxor.boxtopcenter"><code>Luxor.boxtopcenter</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxtopcenter(bb::BoundingBox)</code></pre><p>Return the point at the top center of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ■ ⋅
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxtopleft" href="#Luxor.boxtopleft"><code>Luxor.boxtopleft</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxtopleft(bb::BoundingBox)</code></pre><p>Return the point at the top left of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">■ ⋅ ⋅
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.boxtopright" href="#Luxor.boxtopright"><code>Luxor.boxtopright</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">boxtopright(bb::BoundingBox)</code></pre><p>Return the point at the top right of the BoundingBox <code>bb</code>.</p><pre><code class="language-none">⋅ ⋅ ■
+⋅ ⋅ ⋅
+⋅ ⋅ ⋅</code></pre></div></section></article><h2 id="Noise"><a class="docs-heading-anchor" href="#Noise">Noise</a><a id="Noise-1"></a><a class="docs-heading-anchor-permalink" href="#Noise" title="Permalink"></a></h2><p>For artistic graphics you might prefer noisy input values to purely random ones. Use the <code>noise()</code> function to obtain smoothly changing random values corresponding to input coordinates. The returned values wander slowly rather than jump about everywhere.</p><p>In this example, the gray value varies gradually as the <code>noise()</code> function returns values between 0 and 1 depending on the location of the two input values <code>pos.x</code> and <code>pos.y</code>.</p><p>The top two quadrants use a lower value for the <code>detail</code> keyword argument, an integer ()&gt;= 1) specifying how many &quot;octaves&quot; of noise you want.</p><p>The left two quadrants use a lower value for the <code>persistence</code> keyword argument, a floating point number specifying how the amplitude diminishes for each successive level of detail. There is more fine detail when the persistence is higher, particularly when the <code>detail</code> setting is also high.</p><pre><code class="language-julia">tiles = Tiler(800, 400, 200, 200)
+sethue(&quot;black&quot;)
+for (pos, n) in tiles
+    freq = 0.05
+    pos.y &lt; 0 ? d = 1      : d = 4
+    pos.x &lt; 0 ? pers = 0.3 : pers = 1.0
+    ns = noise(freq * pos.x, freq * pos.y,
+        detail=d,
+        persistence=pers)
+    setgray(ns)
+    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+end</code></pre><p><img src="../assets/figures/noise.png" alt="noise"/></p><article class="docstring"><header><a class="docstring-binding" id="Luxor.noise" href="#Luxor.noise"><code>Luxor.noise</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">noise(x)          ; detail = 1, persistence = 1.0) # 1D
+noise(x, y)       ; detail = 1, persistence = 1.0) # 2D
+noise(x, y, z)    ; detail = 1, persistence = 1.0) # 3D
+noise(x, y, z, w) ; detail = 1, persistence = 1.0) # 4D</code></pre><p>Generate a noise value between 0.0 and 1.0 corresponding to the <code>x</code>, <code>y</code>, <code>z</code>, and <code>w</code> values. An <code>x</code> value on its own produces 1D noise, <code>x</code> and <code>y</code> make 2D noise, and so on.</p><p>The <code>detail</code> value is an integer (&gt;= 1) specifying how many octaves of noise you want.</p><p>The <code>persistence</code> value, typically between 0.0 and 1.0, controls how quickly the amplitude diminishes for each successive octave for values of <code>detail</code> greater than 1.</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="Luxor.initnoise" href="#Luxor.initnoise"><code>Luxor.initnoise</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">initnoise(seed::Int)
+initnoise()</code></pre><p>Initialize the noise generation code.</p><pre><code class="language-none">julia&gt; initnoise(); noise(1)
+0.7453148982810598
+
+julia&gt; initnoise(); noise(1)
+0.7027617067916981</code></pre><p>If you provide an integer seed, it will be used to seed <code>Random.seed!()</code>` when the noise code is initialized:</p><pre><code class="language-none">julia&gt; initnoise(41); noise(1) # yesterday
+0.7134000046640385
+
+julia&gt; initnoise(41); noise(1) # today
+0.7134000046640385</code></pre></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../moregraphics/">« More graphics</a><a class="docs-footer-nextpage" href="../tables-grids/">Tables and grids »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 7 January 2021 12:31">Thursday 7 January 2021</span>. Using Julia version 1.4.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
