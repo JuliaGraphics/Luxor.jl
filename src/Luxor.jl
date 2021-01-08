@@ -10,7 +10,7 @@ end
 """
 module Luxor
 
-using Juno, Cairo, Colors, FileIO, Dates
+using Juno, Cairo, Colors, FileIO, Dates, Rsvg
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface, CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
 CairoContext, arc, arc_negative, circle, clip, clip_preserve, close_path,
@@ -147,7 +147,7 @@ export Drawing,
 
     Table, highlightcells,
 
-    readpng, placeimage,
+    readpng, readsvg, placeimage,
 
     julialogo, juliacircles,
 

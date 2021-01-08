@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.8.0] - forthcoming
+
+### Added
+
+- Rsvg support: readsvg()
+
+### Changed
+
+- placeimage() now accepts SVG
+
+### Removed
+
+### Deprecated
+
 ## [v2.7.0] - January 7 2021
 
 ### Added
