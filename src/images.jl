@@ -1,3 +1,7 @@
+# PNG and SVG import
+
+# PNG
+
 """
     readpng(pathname)
 
@@ -74,3 +78,60 @@ Use keyword `centered=true` to place the center of the image at the position.
 """
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha; kwargs...) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha; kwargs...)
+
+
+# SVG
+
+struct SVGimage
+    im::RsvgHandle
+    xpos::Float64
+    ypos::Float64
+    width::Float64
+    height::Float64
+end
+
+"""
+    readsvg(pathname)
+
+Read an SVG image.
+
+This returns an SVG image object suitable for placing on the current drawing with `placeimage()`.
+"""
+function readsvg(fname)
+    if Base.stat(fname).size == 0
+         throw(error("readsvg(): file $fname not found"))
+    end
+    r = Rsvg.handle_new_from_file(fname)
+
+    if r.ptr == C_NULL
+        throw(error("readsvg(): couldn't read this file"))
+    end
+
+    d = Rsvg.handle_get_dimensions(r)
+    if iszero(d.width) || iszero(d.height)
+        throw(error("readsvg(): can't get dimensions from this SVG image from $(pathname). Either it's not a valid SVG file, or the format is different from what I'm expecting."))
+    end
+
+    return Luxor.SVGimage(r, d.em, d.ex, d.width, d.height)
+    SVGimage(r, d.em, d.ex, d.width, d.height)
+end
+
+"""
+    placeimage(svgimg, pos; centered=false)
+
+Place a SVG image on the drawing at `pos`. Use `readsvg()` to read an SVG image.
+
+Use keyword `centered=true` to place the center of the image at the position.
+"""
+
+function placeimage(im::SVGimage, pos;
+        centered=false)
+    if centered == true
+        w, h = im.width, im.height
+        pos = pos - ((w/2), (h/2))
+    end
+    @layer begin
+        translate(pos)
+        Rsvg.handle_render_cairo(Luxor.get_current_cr(), im.im)
+    end
+end
