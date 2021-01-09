@@ -224,7 +224,10 @@ function julialogo(;
 end
 
 """
-    juliacircles(radius=100)
+    juliacircles(radius=100;
+        outercircleratio=0.75,
+        innercircleratio=0.65,
+        action=:fill)
 
 Draw the three Julia circles ("dots") in color centered at the origin.
 
@@ -236,14 +239,25 @@ Return the three centerpoints.
 
 The `innercircleratio` (default 0.65) no longer does anything useful (it used to draw the smaller circles) and will be deprecated.
 """
-function juliacircles(radius=100; outercircleratio=0.75, innercircleratio=0.65)
+function juliacircles(radius=100;
+        outercircleratio=0.75,
+        innercircleratio=0.65,
+        action=:fill)
     # clockwise, from bottom left
     color_sequence = [julia_red, julia_green, julia_purple]
     points = ngon(O, radius, 3, pi/6, vertices=true)
     @layer begin
         for (n, p) in enumerate(points)
             setcolor(color_sequence[n]...)
-            circle(p, outercircleratio * radius, :fill)
+            circle(p, outercircleratio * radius, :path)
+            if action != :fill
+                newsubpath()
+            else
+                do_action(action)
+            end
+        end
+        if action != :fill
+            do_action(action)
         end
     end
     return points
