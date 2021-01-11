@@ -123,7 +123,6 @@ Place a SVG image on the drawing at `pos`. Use `readsvg()` to read an SVG image.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-
 function placeimage(im::SVGimage, pos;
         centered=false)
     if centered == true

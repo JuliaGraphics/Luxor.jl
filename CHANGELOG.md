@@ -8,7 +8,7 @@
 
 ### Changed
 
-- placeimage() now accepts SVG
+- placeimage() also accepts SVG
 - minimum Julia version up to 1.3
 - juliacircles() has keyword options to allow stroke/clip
 

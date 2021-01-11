@@ -7,9 +7,14 @@ DocTestSetup = quote
 
 ## Placing images
 
-There is some limited support for placing PNG images on the drawing. First, load a PNG image using `readpng(filename)`. JPEGs aren't supported.
+Luxor lets you place PNG and SVG images on the drawing:
 
-Then use `placeimage()` to place it by its top left corner at point `x/y` or `pt`. Access the image's dimensions with `.width` and `.height`.
+- load a PNG image using `readpng(filename)`
+- load a PNG image using `readsvg(filename)`
+
+(JPEGs aren't supported.)
+
+Then use `placeimage()` to place the image by its top left corner at point `pt`. Access the image's dimensions with `.width` and `.height`.
 
 ```@example
 using Luxor # hide
@@ -22,7 +27,7 @@ h = img.height
 rulers()
 scale(0.3, 0.3)
 rotate(π/4)
-placeimage(img, -w/2, -h/2, .5)
+placeimage(img, Point(-w/2, -h/2), .5)
 sethue("red")
 circle(-w/2, -h/2, 15, :fill)
 finish() # hide
@@ -30,8 +35,11 @@ nothing # hide
 ```
 !["Images"](assets/figures/images.png)
 
+PNG images can be placed with varying transparency.
+
 ```@docs
 readpng
+readsvg
 placeimage
 ```
 

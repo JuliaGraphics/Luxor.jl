@@ -35,6 +35,52 @@ function image_testing(fname)
     @test finish() == true
 end
 
+function placetesting(fname)
+    # make svg file
+    Drawing(200, 200, "svgimage.svg")
+    origin()
+    setline(40)
+    sethue("rebeccapurple")
+    squircle(O, 80, 80, :strokepreserve)
+    sethue("white")
+    fillpath()
+    fontsize(40)
+    sethue("black")
+    text("SVG", halign=:center, valign=:middle)
+    finish()
+
+    # make png file
+    Drawing(200, 200, "pngimage.png")
+    origin()
+    setline(40)
+    sethue("red")
+    squircle(O, 80, 80, :strokepreserve)
+    sethue("white")
+    fillpath()
+    fontsize(40)
+    sethue("black")
+    text("PNG", halign=:center, valign=:middle)
+    finish()
+
+    Drawing(1200, 1200, fname)
+    origin()
+    svgimg = readsvg("svgimage.svg")
+    pngimg = readpng("pngimage.png")
+    for (pt, n) in Tiler(1200, 1200, 4, 4)
+        @layer begin
+            translate(pt)
+            isodd(n) && placeimage(svgimg, O, centered=true)
+            iseven(n) && placeimage(pngimg, O, centered=true)
+        end
+    end
+    finish()
+end
+
 fname = "test-image.png"
 image_testing(fname)
+
+fname = "test-image-place.png"
+placetesting(fname)
+
+
 println("...finished test: output in $(fname)")

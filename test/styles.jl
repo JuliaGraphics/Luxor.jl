@@ -21,6 +21,5 @@ function test_styles(fname)
     @test finish() == true
     println("...finished styles test, saved in $(fname)")
 end
-println("start test")
 fname = "styles-test.png"
 test_styles(fname)
