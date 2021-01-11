@@ -55,24 +55,21 @@ returns `(centerpoint, radius)` of a circle.
 
 If there's no such circle, the function returns `(Point(0, 0), 0)`.
 """
-function center3pts(a::Point, b::Point, c::Point)
-    midAB = midpoint(a, b)
-    perpAB = perpendicular(a - b)
-    midBC = midpoint(b, c)
-    perpBC = perpendicular(b - c)
-    # do the lines intersect?
-    crossp = crossproduct(perpAB, perpBC)
-    if isapprox(crossp, 0)
-        @debug "no circle passes through the points $a $b $c"
-        return Point(0, 0), 0
+function center3pts(p1::Point, p2::Point, p3::Point)
+    norm2(p::Point) = (p.x)^2+(p.y)^2
+
+    α1 = norm2(p3-p2)*(norm2(p2-p1)+norm2(p1-p3)-norm2(p3-p2))
+    α2 = norm2(p1-p3)*(norm2(p3-p2)+norm2(p2-p1)-norm2(p1-p3))
+    α3 = norm2(p2-p1)*(norm2(p1-p3)+norm2(p3-p2)-norm2(p2-p1))
+
+    if α1+α2+α3 ≠ 0.0
+        c = (α1*p1+α2*p2+α3*p3)/(α1+α2+α3)
+        r = √(norm2(p1-c))
+        return c, r
+    else
+        @warn "There are no circles which pass $p1, $p2 and $p3."
+        return (Point(0, 0), 0)
     end
-    centerX = ((midAB.y * perpAB.x * perpBC.x) +
-               (midBC.x * perpAB.x * perpBC.y) -
-               (midAB.x * perpAB.y * perpBC.x) -
-               (midBC.y * perpAB.x * perpBC.x)) / crossp
-    centerY = ((centerX - midAB.x) * perpAB.y / perpAB.x)  + midAB.y
-    radius = hypot(abs(centerX - a.x), abs(centerY - a.y))
-    return Point(centerX, centerY), radius
 end
 
 """
