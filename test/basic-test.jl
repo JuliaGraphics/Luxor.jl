@@ -21,4 +21,6 @@ rp = rand(bb)
 
 @test rp in bb
 
+@test center3pts(Point(1,1), Point(3,1), Point(2,0)) == (Point(2.0, 1.0), 1.0)
+
 println("...finished basic-test")
