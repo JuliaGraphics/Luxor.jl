@@ -114,6 +114,5 @@ function test_barchart(fname)
     @test finish() == true
     println("...finished barstest, saved in $(fname)")
 end
-println("start test")
 fname = "bars-test.png"
 test_barchart(fname)
