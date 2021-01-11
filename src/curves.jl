@@ -67,7 +67,7 @@ function center3pts(p1::Point, p2::Point, p3::Point)
         r = √(norm2(p1-c))
         return c, r
     else
-        @warn "There are no circles which pass $p1, $p2 and $p3."
+        @warn "There are no circles which pass through $p1, $p2 and $p3."
         return (Point(0, 0), 0)
     end
 end
