@@ -155,6 +155,7 @@ function run_all_tests()
         include("noise-test.jl")
         include("dashtests.jl")
         include("triangles.jl")
+        include("place-svg.jl")
     end
 end
 
