@@ -119,7 +119,7 @@ end
 """
     placeimage(svgimg, pos; centered=false)
 
-Place a SVG image on the drawing at `pos`. Use `readsvg()` to read an SVG image.
+Place an SVG image on the drawing at `pos`. Use `readsvg()` to read an SVG image.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
