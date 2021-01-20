@@ -142,9 +142,9 @@ Place an image matrix on the drawing at `pos`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(buffer, pt = O; centered=false)
-    b  = reinterpret(UInt32, buffer)
-    # should check something...
+function placeimage(buffer::Union{AbstractArray{ARGB32, 2}, AbstractArray{UInt32, 2}}, pt = O; centered=false)
+    b  = collect(reinterpret(UInt32, buffer))
+    # check
     @assert typeof(b) == Matrix{UInt32}
     if centered == true
         w, h = size(b)
