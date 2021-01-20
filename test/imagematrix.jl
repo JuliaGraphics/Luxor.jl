@@ -77,6 +77,19 @@ function imagematrix()
     @test blue(mat[2]) == 1.0
 
     @test finish() == true
+
+
+    # test placeimage
+    m1 = @imagematrix begin
+        juliacircles(20)
+    end 100 100
+
+    Drawing(100, 100, :png)
+    Luxor.origin()
+    rotate(π/2)
+    placeimage(m1, centered=true)
+    @test finish() == true
+
 end
 
 imagematrix()
