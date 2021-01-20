@@ -1,4 +1,4 @@
-# PNG and SVG import
+# PNG, SVG, matrix import
 
 # PNG
 
@@ -133,4 +133,23 @@ function placeimage(im::SVGimage, pos;
         translate(pos)
         Rsvg.handle_render_cairo(Luxor.get_current_cr(), im.im)
     end
+end
+
+"""
+    placeimage(matrix, pos; centered=false)
+
+Place an image matrix on the drawing at `pos`.
+
+Use keyword `centered=true` to place the center of the image at the position.
+"""
+function placeimage(buffer, pt = O; centered=false)
+    b  = reinterpret(UInt32, buffer)
+    # should check something...
+    @assert typeof(b) == Matrix{UInt32}
+    if centered == true
+        w, h = size(b)
+        pt = Point(pt.x - (w/2), pt.y - (h/2))
+    end
+    Cairo.set_source_surface(Luxor.get_current_cr(), Cairo.CairoImageSurface(b, Cairo.FORMAT_ARGB32), pt.x, pt.y)
+    Cairo.paint(Luxor.get_current_cr())
 end
