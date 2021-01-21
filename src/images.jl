@@ -142,14 +142,13 @@ Place an image matrix on the drawing at `pos`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(buffer::Union{AbstractArray{ARGB32, 2}, AbstractArray{UInt32, 2}}, pt = O; centered=false)
-    b  = collect(reinterpret(UInt32, buffer))
-    # check
-    @assert typeof(b) == Matrix{UInt32}
+function placeimage(buffer::AbstractMatrix{UInt32}, pt=O; centered=false)
     if centered == true
-        w, h = size(b)
+        w, h = size(buffer)
         pt = Point(pt.x - (w/2), pt.y - (h/2))
     end
-    Cairo.set_source_surface(Luxor.get_current_cr(), Cairo.CairoImageSurface(b, Cairo.FORMAT_ARGB32), pt.x, pt.y)
+    Cairo.set_source_surface(Luxor.get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
     Cairo.paint(Luxor.get_current_cr())
 end
+placeimage(buffer::AbstractMatrix{ARGB32}, args...; kargs...) = placeimage(collect(reinterpret(UInt32, buffer)), args...; kargs...)
+placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
