@@ -116,7 +116,7 @@ function readsvg(fname)
     SVGimage(r, d.em, d.ex, d.width, d.height)
 end
 
-function _readsvg_string(str)
+function readsvgstring(str)
     r = Rsvg.handle_new_from_data(str)
 
     if r.ptr == C_NULL
@@ -168,7 +168,7 @@ placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(c
 
 function placeimage(buffer::Drawing, args...; kargs...) 
     if buffer.surfacetype == :svg
-        placeimage(_readsvg_string(String(copy(buffer.bufferdata))), args...; kargs...)
+        placeimage(readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
     else
         throw(error("surfacetype `$(buffer.surfacetype)` is not supported. use `image` instead"))
     end

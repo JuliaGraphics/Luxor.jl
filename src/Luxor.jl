@@ -147,7 +147,7 @@ export Drawing,
 
     Table, highlightcells,
 
-    readpng, readsvg, placeimage,
+    readpng, readsvg, readsvgstring, placeimage,
 
     julialogo, juliacircles,
 
