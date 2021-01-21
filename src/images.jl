@@ -51,7 +51,7 @@ Place the top left corner of the PNG image on the drawing at `pos`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-placeimage(img::Cairo.CairoSurface, pt::Point; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
+placeimage(img::Cairo.CairoSurface, pt::Point=O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
 
 """
     placeimage(img, xpos, ypos, a; centered=false)
@@ -116,6 +116,20 @@ function readsvg(fname)
     SVGimage(r, d.em, d.ex, d.width, d.height)
 end
 
+function _readsvg_string(str)
+    r = Rsvg.handle_new_from_data(str)
+
+    if r.ptr == C_NULL
+        throw(error("readsvg_string(): some error message "))
+    end
+
+    d = Rsvg.handle_get_dimensions(r)
+    if iszero(d.width) || iszero(d.height)
+        throw(error("readsvg_string(): can't get dimensions from this SVG image. Either it's not a valid SVG file, or the format is different from what I'm expecting."))
+    end
+    return SVGimage(r, d.em, d.ex, d.width, d.height)
+end
+
 """
     placeimage(svgimg, pos; centered=false)
 
@@ -123,8 +137,7 @@ Place an SVG image on the drawing at `pos`. Use `readsvg()` to read an SVG image
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(im::SVGimage, pos;
-        centered=false)
+function placeimage(im::SVGimage, pos=O; centered=false)
     if centered == true
         w, h = im.width, im.height
         pos = pos - ((w/2), (h/2))
@@ -152,3 +165,11 @@ function placeimage(buffer::AbstractMatrix{UInt32}, pt=O; centered=false)
 end
 placeimage(buffer::AbstractMatrix{ARGB32}, args...; kargs...) = placeimage(collect(reinterpret(UInt32, buffer)), args...; kargs...)
 placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
+
+function placeimage(buffer::Drawing, args...; kargs...) 
+    if buffer.surfacetype == :svg
+        placeimage(_readsvg_string(String(copy(buffer.bufferdata))), args...; kargs...)
+    else
+        throw(error("surfacetype `$(buffer.surfacetype)` is not supported. use `image` instead"))
+    end
+end
