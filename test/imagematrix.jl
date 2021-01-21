@@ -88,6 +88,7 @@ function imagematrix()
     Luxor.origin()
     rotate(π/2)
     placeimage(m1, centered=true)
+    placeimage(Gray.(m1))
     @test finish() == true
 
     m1 = Drawing(40,40, :svg)
