@@ -7,14 +7,16 @@ DocTestSetup = quote
 
 ## Placing images
 
-Luxor lets you place PNG and SVG images on the drawing:
+Luxor lets you place PNG and SVG images on the drawing. First, load an image:
 
-- load a PNG image using `readpng(filename)`
-- load a PNG image using `readsvg(filename)`
+- for PNG images, use `readpng(filename)`
+- for SVG imagesm use `readsvg(filename)`
 
 (JPEGs aren't supported.)
 
 Then use `placeimage()` to place the image by its top left corner at point `pt`. Access the image's dimensions with `.width` and `.height`.
+
+You can also place image matrices on drawings.
 
 ```@example
 using Luxor # hide
@@ -42,6 +44,31 @@ readpng
 readsvg
 placeimage
 ```
+
+## Placing an image matrix
+
+You can also use `placeimage()` to put image matrices on a drawing.
+
+```
+using Luxor
+
+mat = @imagematrix begin    
+    juliacircles(6)
+end 40 40
+
+@draw begin
+    for i in 1:500
+        pos = rand(BoundingBox())
+        @layer begin
+            translate(pos)
+            rotate(rand() * 2π)
+            placeimage(mat, centered = rand(Bool))
+        end
+    end
+end
+```
+
+![place image matrix](assets/figures/place-image-matrix.png)
 
 ## Clipping images
 
