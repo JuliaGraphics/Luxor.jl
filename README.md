@@ -17,7 +17,7 @@ A short tutorial can be found in the documentation. There are some Luxor-related
 
 Luxor is designed primarily for drawing static 2D images. If you want to build animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl/issues).
 
-Luxor isn't interactive: for building interactivity, look at [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), [Makie](https://github.com/JuliaPlots/Makie.jl), and [Plutp.jl](https://github.com/fonsp/Pluto.jl).
+Luxor isn't interactive: for building interactivity, look at [Gtk.jl](https://github.com/JuliaGraphics/Gtk.jl), [GLVisualize](https://github.com/JuliaGL/GLVisualize.jl), [Makie](https://github.com/JuliaPlots/Makie.jl), and [Pluto.jl](https://github.com/fonsp/Pluto.jl).
 
 ## How can you contribute?
 
