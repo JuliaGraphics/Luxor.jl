@@ -233,7 +233,49 @@ lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new
 
 You can specify `:image` as the surface type. This allows you to copy the current drawing into a 2D matrix (using `image_as_matrix()`). See the Images chapter for more information.
 
-### Interactive graphics with IJulia and Interact
+## Interactive drawings
+
+### Using Pluto
+
+Pluto notebooks typically display the final result of a piece of code in a cell. So there are various ways you can organize your drawing code. For example:
+
+```
+using Luxor, PlutoUI, Colors
+
+@bind x Slider(0:0.1:12)
+
+@bind y Slider(1:12)
+
+@draw begin
+	setopacity(0.8)
+	for i in 0:0.1:1
+		sethue(HSB(360i, .8, .8))
+		squircle(O, 50, 50, :fill, rt = x * i)
+		rotate(2π/y)
+	end
+end 100 100
+```
+
+or
+
+```
+begin
+    d = Drawing(800, 800, :svg)
+    origin()
+	for (n, m) in enumerate(exp10.(range(0.0, 2, step=0.2)))
+		setmesh(mesh(convert(Vector{Point}, BoundingBox()/m),
+			["darkviolet","gold2", "firebrick2", "slateblue4"]))
+    	rotate(π/7)
+    	paint()
+	end
+    finish()
+	d
+end
+```
+
+![pluto examples](assets/figures/pluto-example.png)
+
+### Using Jupyter notebooks (IJulia and Interact)
 
 Currently, you should use an in-memory SVG drawing to display graphics if you're using Interact.jl. This example provides an HSB color widget.
 
@@ -347,12 +389,12 @@ currentdrawing
 
 ## Drawing as image matrix
 
-While drawing, you can copy the data in the form of a
-matrix, using the `image_as_matrix()` function.
+While drawing, you can copy the current graphics as a
+matrix of pixels, using the `image_as_matrix()` function.
 
-`image_as_matrix()` returns a array of ARGB32 values that encode the Red, Green, Blue, and Alpha values of each pixel.
+`image_as_matrix()` returns a array of ARGB32 values. Each ARGB value encodes the Red, Green, Blue, and Alpha values of a pixel.
 
-The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. Then, the second drawing reads the values in from the two matrices and draws some square tiles depending on the corresponding values in the two matrices ... a very primitive Boolean operation.
+The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. In the second drawing, values from the two matrices are tested, and table cells are randomly colored depending on the corresponding values ... this is a primitive Boolean operation.
 
 ```@example
 using Luxor, Colors, Random # hide
@@ -391,34 +433,41 @@ finish() # hide
 nothing # hide
 ```
 
+The first image (enlarged) shows the `mat1` matrix as red, `mat2` as blue.
+
 ![intermediate](assets/figures/image-drawing-intermediate.png)
+
+In the second drawing, a table with 1600 squares is colored according to the values in the matrices.
 
 ![image drawings](assets/figures/image-drawings.svg)
 
 (You can use `collect()` to gather the re-interpreted values together.)
 
-If you're working with Images.jl, you will probably want to transpose the array:
+You can display the matrix using, for example, Images.jl.
 
 ```
 using Luxor, Images
 
 # in Luxor
 
-Drawing(50, 50, :png)
+Drawing(250, 250, :png)
 origin()
 background(randomhue()...)
-sethue("white")
-fontsize(40)
+sethue("red")
+fontsize(200)
 fontface("Georgia")
 text("42", halign=:center, valign=:middle)
-mat = image_as_matrix();
+mat = image_as_matrix()
 finish()
 
 # in Images
 
 img = Gray.(mat)
-display(imresize(img, 150, 150))
+# img = RGB.(mat) # for color
+display(imresize(img, 250, 250))
 ```
+
+![42 image array](assets/figures/42.png)
 
 ```@docs
 @imagematrix

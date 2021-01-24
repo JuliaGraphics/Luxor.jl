@@ -54,9 +54,9 @@ Use keyword `centered=true` to place the center of the image at the position.
 placeimage(img::Cairo.CairoSurface, pt::Point; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
 
 """
-    placeimage(img, xpos, ypos, a; centered=false)
+    placeimage(img, xpos, ypos, alpha; centered=false)
 
-Place a PNG image on the drawing at (`xpos`/`ypos`) with transparency `a`.
+Place a PNG image on the drawing at `Point(xpos, ypos)` with transparency `alpha`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
@@ -70,9 +70,9 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered=false)
 end
 
 """
-    placeimage(img, pos, a; centered=false)
+    placeimage(img, pt::Point, alpha; centered=false)
 
-Place a PNG image on the drawing at `pos` with transparency `a`.
+Place a PNG image on the drawing at `pt` with transparency `alpha`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
