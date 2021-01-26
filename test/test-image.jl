@@ -65,6 +65,7 @@ function placetesting(fname)
     Drawing(1200, 1200, fname)
     origin()
     svgimg = readsvg("svgimage.svg")
+    svgimg = readsvg(read("svgimage.svg", String))
     pngimg = readpng("pngimage.png")
     for (pt, n) in Tiler(1200, 1200, 4, 4)
         @layer begin
