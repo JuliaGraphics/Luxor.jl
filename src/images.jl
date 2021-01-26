@@ -90,14 +90,7 @@ struct SVGimage
     height::Float64
 end
 
-"""
-    readsvg(pathname)
-
-Read an SVG image.
-
-This returns an SVG image object suitable for placing on the current drawing with `placeimage()`.
-"""
-function readsvg(fname)
+function _readsvgfile(fname)
     if Base.stat(fname).size == 0
          throw(error("readsvg(): file $fname not found"))
     end
@@ -116,7 +109,7 @@ function readsvg(fname)
     SVGimage(r, d.em, d.ex, d.width, d.height)
 end
 
-function readsvgstring(str)
+function _readsvgstring(str)
     r = Rsvg.handle_new_from_data(str)
 
     if r.ptr == C_NULL
@@ -129,6 +122,25 @@ function readsvgstring(str)
     end
     return SVGimage(r, d.em, d.ex, d.width, d.height)
 end
+
+"""
+    readsvg(str)
+
+Read an SVG image. `str` is either pathname or pure SVG code
+
+This returns an SVG image object suitable for placing on the current drawing with `placeimage()`.
+"""
+function readsvg(str) 
+    # str is either pathname or pure SVG code
+    # unfortunately ispath fails on Mac if the string is longer than 255 characters
+     if length(str) > 255 # don't check ispath, assume SVG string
+         _readsvgstring(str)
+     elseif ispath(str) # check is a file
+         _readsvgfile(str)
+     else
+         _readsvgstring(str)
+     end
+ end
 
 """
     placeimage(svgimg, pos; centered=false)
@@ -168,7 +180,7 @@ placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(c
 
 function placeimage(buffer::Drawing, args...; kargs...) 
     if buffer.surfacetype == :svg
-        placeimage(readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
+        placeimage(_readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
     else
         throw(error("surfacetype `$(buffer.surfacetype)` is not supported. use `image` instead"))
     end
