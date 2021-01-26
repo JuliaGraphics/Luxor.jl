@@ -88,6 +88,19 @@ function imagematrix()
     Luxor.origin()
     rotate(π/2)
     placeimage(m1, centered=true)
+    placeimage(Gray.(m1))
+    @test finish() == true
+
+    m1 = Drawing(40,40, :svg)
+    origin()
+    sethue("black")
+    background(0,1,1,0)
+    juliacircles(10) 
+    finish()
+
+    Drawing(100, 100, :svg)
+    Luxor.origin()
+    placeimage(m1, centered=true)
     @test finish() == true
 
 end
