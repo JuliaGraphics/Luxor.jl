@@ -123,7 +123,7 @@ fontface(f) =
 """
     fontsize(n)
 
-Set the font size to `n` points. The default size is 10 points. (Toy API)
+Set the font size to `n` units. The default size is 10 units. (Toy API)
 """
 fontsize(n) = Cairo.set_font_size(get_current_cr(), n)
 
@@ -131,7 +131,7 @@ fontsize(n) = Cairo.set_font_size(get_current_cr(), n)
 """
     get_fontsize()
 
-Return the font size set by `fontsize` or more precisely the y-scale of the Cairo font matrix
+Return the font size set by `fontsize` or. more precisely. the y-scale of the Cairo font matrix
 if `Cairo.set_font_matrix` is used directly. (Toy API)
 
 > This only works if Cairo is at least at v1.0.5.
@@ -364,7 +364,7 @@ textcurvecentred = textcurvecentered
 """
     setfont(family, fontsize)
 
-Select a font and specify the size in points.
+Select a font and specify the size.
 
 Example:
 

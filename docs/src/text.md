@@ -14,7 +14,7 @@ There are two ways to draw text in Luxor. You can use either the so-called 'toy'
 Use:
 - `text(string, [position])` to place text at a position, otherwise at `0/0`, and optionally specify the horizontal and vertical alignment
 - `fontface(fontname)` to specify the fontname
-- `fontsize(fontsize)` to specify the fontsize in points
+- `fontsize(fontsize)` to specify the fontsize
 
 ```@example
 using Luxor # hide
@@ -39,7 +39,7 @@ The `label()` function also uses the Toy API.
 
 Use:
 
-- `setfont(fontname, fontsize)` to specify the fontname and size in points
+- `setfont(fontname, fontsize)` to specify the fontname and size
 - `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any pseudo-Pango-flavored markup.
 
 ```@example
@@ -58,7 +58,7 @@ nothing # hide
 
 ## Specifying the font ("Toy" API)
 
-Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size in points.
+Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size.
 
 ```@docs
 fontface
@@ -169,13 +169,14 @@ fc-list | cut -f 2 -d ":"
 
 although typically this lists only those fonts in `/System/Library/Fonts` and `/Library/Fonts`, and not `~/Library/Fonts`.
 
-(There is a Julia interface to `fontconfig` at [Fontconfig.jl](https://github.com/JuliaGraphics/Fontconfig.jl).)
+(There is a Julia interface to `fontconfig` at [Fontconfig.jl](https://github.com/JuliaGraphics/Fontconfig.jl).
+See also [FreeTypeAbstraction.jl](https://github.com/JuliaGraphics/FreeTypeAbstraction.jl))
 
 In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).
 
 One difference between `settext()` and `text()` (on macOS) is that many more missing Unicode glyphs are automatically substituted by other fonts when you use the former.
 
-Cairo (and hence Luxor) doesn't support emoji currently. 😢
+Cairo.jl (and hence Luxor.jl) doesn't support emoji currently. 😢
 
 ## Text to paths
 
