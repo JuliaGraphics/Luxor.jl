@@ -7,16 +7,14 @@ DocTestSetup = quote
 
 ## Placing images
 
-Luxor lets you place PNG and SVG images on the drawing. First, load an image:
+Luxor lets you place PNG and SVG images on the drawing. First, load an image from a file:
 
 - for PNG images, use `readpng(filename)`
-- for SVG imagesm use `readsvg(filename)`
+- for SVG images, use `readsvg(filename)` or `readsvg(string)`
 
 (JPEGs aren't supported.)
 
 Then use `placeimage()` to place the image by its top left corner at point `pt`. Access the image's dimensions with `.width` and `.height`.
-
-You can also place image matrices on drawings.
 
 ```@example
 using Luxor # hide
@@ -37,7 +35,9 @@ nothing # hide
 ```
 !["Images"](assets/figures/images.png)
 
-PNG images can be placed with varying transparency.
+PNG images can be placed with varying opacity/transparency/alpha.
+
+`readsvg()` also lets you supply raw (or pure) SVG code in a string.
 
 ```@docs
 readpng

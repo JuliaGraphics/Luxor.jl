@@ -8,10 +8,10 @@
 
 ### Changed
 
-- placeimage() also accepts SVG
-- placeimage() also accepts a matrix of UInt32
-- minimum Julia version up to 1.3
-- juliacircles() has keyword options to allow stroke/clip
+- placeimage() now also accepts SVG files and SVG code
+- placeimage() now also accepts a matrix of UInt32
+- minimum Julia version has increased to 1.3
+- juliacircles() has keyword options to allow stroke/clip actions
 
 ### Removed
 

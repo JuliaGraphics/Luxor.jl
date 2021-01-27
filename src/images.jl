@@ -29,7 +29,7 @@ end
 """
     placeimage(img, xpos, ypos; centered=false)
 
-Place a PNG image on the drawing at (`xpos`/`ypos`). The image `img` has been previously
+Place the image on the drawing at (`xpos`/`ypos`). The image `img` has been previously
 loaded using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
@@ -47,7 +47,7 @@ end
 """
     placeimage(img, pos; centered=false)
 
-Place the top left corner of the PNG image on the drawing at `pos`.
+Place the top left corner of the image `img` on the drawing at `pos`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
@@ -56,7 +56,9 @@ placeimage(img::Cairo.CairoSurface, pt::Point=O; kwargs...) = placeimage(img, pt
 """
     placeimage(img, xpos, ypos, alpha; centered=false)
 
-Place a PNG image on the drawing at `Point(xpos, ypos)` with transparency `alpha`.
+Place a image `img` on the drawing at `Point(xpos, ypos)`
+with opacity/transparency `alpha`. The image `img` has been
+previously loaded using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
@@ -72,7 +74,9 @@ end
 """
     placeimage(img, pt::Point, alpha; centered=false)
 
-Place a PNG image on the drawing at `pt` with transparency `alpha`.
+Place the image `img` on the drawing at `pt` with
+opacity/transparency `alpha`. The image `img` has been previously
+loaded using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
@@ -92,17 +96,17 @@ end
 
 function _readsvgfile(fname)
     if Base.stat(fname).size == 0
-         throw(error("readsvg(): file $fname not found"))
+         throw(error("readsvg: file $fname not found"))
     end
     r = Rsvg.handle_new_from_file(fname)
 
     if r.ptr == C_NULL
-        throw(error("readsvg(): couldn't read this file"))
+        throw(error("readsvg: couldn't read the file $fname"))
     end
 
     d = Rsvg.handle_get_dimensions(r)
     if iszero(d.width) || iszero(d.height)
-        throw(error("readsvg(): can't get dimensions from this SVG image from $(pathname). Either it's not a valid SVG file, or the format is different from what I'm expecting."))
+        throw(error("readsvg(): can't get dimensions of this SVG image in $(pathname). Perhaps it's not a valid SVG file."))
     end
 
     return Luxor.SVGimage(r, d.em, d.ex, d.width, d.height)
@@ -113,12 +117,12 @@ function _readsvgstring(str)
     r = Rsvg.handle_new_from_data(str)
 
     if r.ptr == C_NULL
-        throw(error("readsvg_string(): some error message "))
+        throw(error("readsvg: can't read SVG from string starting $(str[1:20])."))
     end
 
     d = Rsvg.handle_get_dimensions(r)
     if iszero(d.width) || iszero(d.height)
-        throw(error("readsvg_string(): can't get dimensions from this SVG image. Either it's not a valid SVG file, or the format is different from what I'm expecting."))
+        throw(error("readsvg_string(): can't get dimensions of this SVG image. Perhaps it's not valid SVG."))
     end
     return SVGimage(r, d.em, d.ex, d.width, d.height)
 end
@@ -126,11 +130,39 @@ end
 """
     readsvg(str)
 
-Read an SVG image. `str` is either pathname or pure SVG code
+Read an SVG image. `str` is either pathname or pure SVG code.
 
 This returns an SVG image object suitable for placing on the current drawing with `placeimage()`.
+
+Placing an SVG file:
+
+```
+@draw begin
+    mycoollogo = readsvg("/tmp/mylogo.svg")
+    placeimage(mycoollogo)
+end
+```
+
+Placing SVG code:
+
+```
+# from https://github.com/edent/SuperTinyIcons
+julialogocode = \"\"\"<svg xmlns="http://www.w3.org/2000/svg"
+    aria-label="Julia" role="img"
+    viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="15%" fill="#fff"/>
+    <circle fill="#389826" cx="256" cy="137" r="83"/>
+    <circle fill="#cb3c33" cx="145" cy="329" r="83"/>
+    <circle fill="#9558b2" cx="367" cy="329" r="83"/>
+</svg>\"\"\"
+
+@draw begin
+    julia_logo = readsvg(julialogocode)
+    placeimage(julia_logo, centered=true)
+end
+```
 """
-function readsvg(str) 
+function readsvg(str)
     # str is either pathname or pure SVG code
     # unfortunately ispath fails on Mac if the string is longer than 255 characters
      if length(str) > 255 # don't check ispath, assume SVG string
@@ -143,11 +175,13 @@ function readsvg(str)
  end
 
 """
-    placeimage(svgimg, pos; centered=false)
+    placeimage(svgimg, pos=O; centered=false)
 
-Place an SVG image on the drawing at `pos`. Use `readsvg()` to read an SVG image.
+Place an SVG image stored in `svgimg` on the drawing at `pos`. Use `readsvg()`
+to read an SVG image from file, or from SVG code.
 
-Use keyword `centered=true` to place the center of the image at the position.
+Use keyword `centered=true` to place the center of the image
+at the position.
 """
 function placeimage(im::SVGimage, pos=O; centered=false)
     if centered == true
@@ -161,13 +195,16 @@ function placeimage(im::SVGimage, pos=O; centered=false)
 end
 
 """
-    placeimage(matrix, pos; centered=false)
+    placeimage(matrix::AbstractMatrix{UInt32}, pos=O;
+        centered=false)
 
 Place an image matrix on the drawing at `pos`.
 
-Use keyword `centered=true` to place the center of the image at the position.
+Use keyword `centered=true` to place the center of the image
+at the position.
 """
-function placeimage(buffer::AbstractMatrix{UInt32}, pt=O; centered=false)
+function placeimage(buffer::AbstractMatrix{UInt32}, pt=O;
+        centered=false)
     if centered == true
         w, h = size(buffer)
         pt = Point(pt.x - (w/2), pt.y - (h/2))
@@ -178,10 +215,11 @@ end
 placeimage(buffer::AbstractMatrix{ARGB32}, args...; kargs...) = placeimage(collect(reinterpret(UInt32, buffer)), args...; kargs...)
 placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
 
-function placeimage(buffer::Drawing, args...; kargs...) 
+function placeimage(buffer::Drawing, args...;
+        kargs...)
     if buffer.surfacetype == :svg
         placeimage(_readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
     else
-        throw(error("surfacetype `$(buffer.surfacetype)` is not supported. use `image` instead"))
+        throw(error("surfacetype `$(buffer.surfacetype)` is not supported. Use `image` instead."))
     end
 end
