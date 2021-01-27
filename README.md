@@ -3,7 +3,7 @@
 | **Documentation**                       | **Build Status**                          | **Code Coverage**               |
 |:---------------------------------------:|:-----------------------------------------:|:-------------------------------:|
 | [![][docs-stable-img]][docs-stable-url] | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
-| [![][docs-latest-img]][docs-latest-url] | [![Build Status][appvey-img]][appvey-url] |                                 |
+| [![][docs-development-img]][docs-development-url] | [![Build Status][appvey-img]][appvey-url] |                                 |
 
 ## Luxor
 
@@ -29,27 +29,16 @@ There can always be _more tests_, as the present tests are mainly visual, showin
 
 More _systematic error-handling_ particularly of geometry errors would be a good idea, rather than sprinkling `throw(error())`s around when things look wrong.
 
-[docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
-[docs-latest-url]: http://juliagraphics.github.io/Luxor.jl/latest/
+[docs-development-img]: https://img.shields.io/badge/docs-development-blue
+[docs-development-url]: http://juliagraphics.github.io/Luxor.jl/dev/
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
 [docs-stable-url]: http://juliagraphics.github.io/Luxor.jl/stable/
 
-[pkgeval-link]: http://pkg.julialang.org/?pkg=Luxor
-
-[pkg-0.5-img]: http://pkg.julialang.org/badges/Luxor_0.5.svg
-[pkg-0.5-url]: http://pkg.julialang.org/detail/Luxor.html
-
-[pkg-0.6-img]: http://pkg.julialang.org/badges/Luxor_0.6.svg
-[pkg-0.6-url]: http://pkg.julialang.org/detail/Luxor.html
-
-[pkg-0.7-img]: http://pkg.julialang.org/badges/Luxor_0.7.svg
-[pkg-0.7-url]: http://pkg.julialang.org/?pkg=Luxor&ver=0.7
-
 [travis-img]: https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master
 [travis-url]: https://travis-ci.org/JuliaGraphics/Luxor.jl
 
-[appvey-img]: https://ci.appveyor.com/api/projects/status/jfa9e54lv92rqd3m?svg=true
+[appvey-img]: https://ci.appveyor.com/api/projects/status/6pq9v30famcoe3dd?svg=true
 [appvey-url]: https://ci.appveyor.com/project/cormullion/luxor-jl/branch/master
 
 [codecov-img]: https://codecov.io/gh/JuliaGraphics/Luxor.jl/branch/master/graph/badge.svg
