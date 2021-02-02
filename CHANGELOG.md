@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.8.0] - forthcoming
+## [v2.8.0] - 2021-02-02
 
 ### Added
 
@@ -8,12 +8,15 @@
 
 ### Changed
 
-- placeimage() now also accepts SVG files and SVG code
+- placeimage() now also accepts SVG files and SVG code (thanks guo-yong-zhi, schneiderfelipe)
 - placeimage() now also accepts a matrix of UInt32
-- minimum Julia version has increased to 1.3
+- minimum Julia version is 1.3
 - juliacircles() has keyword options to allow stroke/clip actions
+- algorithm for cener3pts fixed (thanks hyrodium)
 
 ### Removed
+
+- support for Julia 1.0, 1.1, 1.2
 
 ### Deprecated
 
