@@ -100,7 +100,7 @@ export Drawing,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
     intersectlinepoly, polyintersect, polyintersections, circlepointtangent,
     circletangent2circles, pointinverse, pointcircletangent, circlecircleoutertangents,
-    circlecircleinnertangents,
+    circlecircleinnertangents, ellipseinquad,
 
     ngon, ngonside, star, pie, polycross,
     do_action, paint, paint_with_alpha, fillstroke,
@@ -110,7 +110,7 @@ export Drawing,
     perpendicular, crossproduct, dotproduct, distance,
     prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit, currentpoint, hascurrentpoint,
-    getworldposition,
+    getworldposition, anglethreepoints, 
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
     polyarea, polysample, insertvertices!,
@@ -168,7 +168,7 @@ export Drawing,
 
     # experimental polygon functions
     polyremovecollinearpoints, polytriangulate!, polytriangulate,
-    ispointinsidetriangle, ispolyclockwise, polyorientation,
+    ispointinsidetriangle, ispolyclockwise, polyorientation, ispolyconvex,
 
     # triangles
     trianglecircumcenter, triangleincenter, trianglecenter, triangleorthocenter,

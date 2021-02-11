@@ -27,10 +27,11 @@ function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
 end
 
 """
-    placeimage(img, xpos, ypos; centered=false)
+    placeimage(pngimg, pos=O; centered=false)
+    placeimage(pngimg, xpos, ypos; centered=false)
 
-Place the image on the drawing at (`xpos`/`ypos`). The image `img` has been previously
-loaded using `readpng()`.
+Place the PNG image on the drawing at `pos`, or (`xpos`/`ypos`). The image `img` has been previously
+read using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
@@ -44,20 +45,14 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered=false)
     Cairo.paint(get_current_cr())
 end
 
-"""
-    placeimage(img, pos; centered=false)
-
-Place the top left corner of the image `img` on the drawing at `pos`.
-
-Use keyword `centered=true` to place the center of the image at the position.
-"""
 placeimage(img::Cairo.CairoSurface, pt::Point=O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
 
 """
-    placeimage(img, xpos, ypos, alpha; centered=false)
+    placeimage(img, pt::Point=O, alpha; centered=false)
+    placeimage(pngimg, xpos, ypos, alpha; centered=false)
 
-Place a image `img` on the drawing at `Point(xpos, ypos)`
-with opacity/transparency `alpha`. The image `img` has been
+Place a PNG image `pngimg` on the drawing at `pt` or `Point(xpos, ypos)`
+with opacity/transparency `alpha`. The image has been
 previously loaded using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
@@ -71,18 +66,8 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered=false)
     paint_with_alpha(get_current_cr(), alpha)
 end
 
-"""
-    placeimage(img, pt::Point, alpha; centered=false)
-
-Place the image `img` on the drawing at `pt` with
-opacity/transparency `alpha`. The image `img` has been previously
-loaded using `readpng()`.
-
-Use keyword `centered=true` to place the center of the image at the position.
-"""
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha; kwargs...) =
   placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha; kwargs...)
-
 
 # SVG
 
@@ -110,7 +95,6 @@ function _readsvgfile(fname)
     end
 
     return Luxor.SVGimage(r, d.em, d.ex, d.width, d.height)
-    SVGimage(r, d.em, d.ex, d.width, d.height)
 end
 
 function _readsvgstring(str)
@@ -130,9 +114,9 @@ end
 """
     readsvg(str)
 
-Read an SVG image. `str` is either pathname or pure SVG code.
-
-This returns an SVG image object suitable for placing on the current drawing with `placeimage()`.
+Read an SVG image. `str` is either pathname or pure SVG
+code. This returns an SVG image object suitable for placing
+on the current drawing with `placeimage()`.
 
 Placing an SVG file:
 

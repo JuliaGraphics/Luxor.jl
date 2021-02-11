@@ -978,4 +978,89 @@ function circlecircleinnertangents(circle1center::Point, circle1radius, circle2c
         return tp1, tp4, tp2, tp3
     end
 end
+
+"""
+    ellipseinquad(qgon, action=:none)
+
+Calculate a Bézier-based ellipse that fits inside the
+quadrilateral `qgon`, an array of with at least four Points,
+then apply `action`.
+
+Returns `ellipsecenter, ellipsesemimajor, ellipsesemiminor,
+ellipseangle`:
+
+`ellipsecenter` the ellipse center
+
+`ellipsesemimajor` ellipse semimajor axis
+
+`ellipsesemiminor` ellipse semiminor axis
+
+`ellipseangle` ellipse rotation
+
+The function returns `O, 0, 0, 0` if a suitable ellipse
+can't be found. (The qgon is probably not a convex polygon.)
+
+### References
+
+http://faculty.mae.carleton.ca/John_Hayes/Papers/InscribingEllipse.pdf
+"""
+function ellipseinquad(qgon, action=:none)
+    p1, p2, p3, p4 = qgon
+    length(unique([p1, p2, p3, p4])) != 4 && throw(error("ellipseinquad() the 4 points must be different: $(qgon)"))
+    if !ispolyconvex(qgon)
+        return O, 0, 0, 0
+    end
+    r = [p1.x, p1.y, 1]
+    s = [p2.x, p2.y, 1]
+    t = [p3.x, p3.y, 1]
+    u = [p4.x, p4.y, 1]
+
+    # Create the 'projective collineation' matrix
+    # whatever that is
+    e1 = s[1] * t[1] * u[2] - r[1] * t[1] * u[2] - s[1] * t[2] * u[1] + r[1] * t[2] * u[1] - r[1] * s[2] * u[1] + r[2] * s[1] * u[1] + r[1] * s[2] * t[1] - r[2] * s[1] * t[1]
+    e2 = r[1] * t[1] * u[2] - r[1] * s[1] * u[2] - s[1] * t[2] * u[1] + s[2] * t[1] * u[1] - r[2] * t[1] * u[1] + r[2] * s[1] * u[1] + r[1] * s[1] * t[2] - r[1] * s[2] * t[1]
+    e3 = s[1] * t[1] * u[2] - r[1] * s[1] * u[2] - r[1] * t[2] * u[1] - s[2] * t[1] * u[1] + r[2] * t[1] * u[1] + r[1] * s[2] * u[1] + r[1] * s[1] * t[2] - r[2] * s[1] * t[1]
+    e4 = s[2] * t[1] * u[2] - r[2] * t[1] * u[2] - r[1] * s[2] * u[2] + r[2] * s[1] * u[2] - s[2] * t[2] * u[1] + r[2] * t[2] * u[1] + r[1] * s[2] * t[2] - r[2] * s[1] * t[2]
+    e5 = -s[1] * t[2] * u[2] + r[1] * t[2] * u[2] + s[2] * t[1] * u[2] - r[1] * s[2] * u[2] - r[2] * t[2] * u[1] + r[2] * s[2] * u[1] + r[2] * s[1] * t[2] - r[2] * s[2] * t[1]
+    e6 = s[1] * t[2] * u[2] - r[1] * t[2] * u[2] + r[2] * t[1] * u[2] - r[2] * s[1] * u[2] - s[2] * t[2] * u[1] + r[2] * s[2] * u[1] + r[1] * s[2] * t[2] - r[2] * s[2] * t[1]
+    e7 = s[1] * u[2] - r[1] * u[2] - s[2] * u[1] + r[2] * u[1] - s[1] * t[2] + r[1] * t[2] + s[2] * t[1] - r[2] * t[1]
+    e8 = t[1] * u[2] - s[1] * u[2] - t[2] * u[1] + s[2] * u[1] + r[1] * t[2] - r[2] * t[1] - r[1] * s[2] + r[2] * s[1]
+    e9 = t[1] * u[2] - r[1] * u[2] - t[2] * u[1] + r[2] * u[1] + s[1] * t[2] - s[2] * t[1] + r[1] * s[2] - r[2] * s[1]
+    mat = [e1 e2 e3 ; e4 e5 e6 ; e7 e8 e9]
+    matinv = inv(mat)
+    #  coefficients of the ellipse equation ax2 + 2bxy + cy2 + 2dx + 2fy + g = 0
+    a = matinv[1,1] * matinv[1,1] + matinv[2,1] * matinv[2,1] - matinv[3,1] * matinv[3,1]
+    b = matinv[1,1] * matinv[1,2] + matinv[2,1] * matinv[2,2] - matinv[3,1] * matinv[3,2]
+    c = matinv[1,2] * matinv[1,2] + matinv[2,2] * matinv[2,2] - matinv[3,2] * matinv[3,2]
+    d = matinv[1,1] * matinv[1,3] + matinv[2,1] * matinv[2,3] - matinv[3,1] * matinv[3,3]
+    f = matinv[1,2] * matinv[1,3] + matinv[2,2] * matinv[2,3] - matinv[3,2] * matinv[3,3]
+    g = matinv[1,3] * matinv[1,3] + matinv[2,3] * matinv[2,3] - matinv[3,3] * matinv[3,3]
+
+    #  ellipse centre
+    b2ac = b*b - a*c
+    ellipsecenter = Point((c*d - b*f) / b2ac, (a*f - b*d) / b2ac)
+
+    #  axes
+    k = 2(a*f*f + c*d*d + g*b*b - 2*b*d*f - a*c*g) / b2ac
+    ac24b2 = sqrt((a - c) * (a - c) + 4b*b)
+    ellipsesemimajor = sqrt(abs(k / abs( ac24b2 - a - c)))
+    ellipsesemiminor = sqrt(abs(k / abs(-ac24b2 - a - c)))
+
+    #  rotation angle
+    if b == 0
+        ellipseangle = (a < c) ? 0 : π/2
+    else
+        ellipseangle = (a < c) ? 0.5 * atan(2b / (a-c)) : π/2 + 0.5 * atan(2b / (a-c))
+    end
+
+    # finally
+    @layer begin
+        translate(ellipsecenter)
+        rotate(ellipseangle)
+        ellipse(O, 2ellipsesemimajor, 2ellipsesemiminor, action)
+    end
+    return ellipsecenter, ellipsesemimajor, ellipsesemiminor, ellipseangle
+end
+
+
 # eof

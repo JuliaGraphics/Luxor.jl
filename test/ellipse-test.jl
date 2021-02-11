@@ -37,9 +37,28 @@ function test_ellipse(fname)
         circle.((pos - (50, 0), pos + (50, 0), pos + (0, 2n)), 4, :fill)
         ellipse(pos - (50, 0), pos + (50, 0), pos + (0, 2n), :stroke)
     end
-    @test finish() == true
+
+
+    # test ellipseinquad
+    pg = ngon(O, 250, 6, π/6, vertices=true)
+
+    top = vcat(O, pg[[3, 4, 5]])
+    left = vcat(O, pg[[1, 2, 3]])
+    right = vcat(O, pg[[5, 6, 1]])
+
+    for (n, side) in enumerate((top, left, right))
+        sethue([Luxor.julia_green, Luxor.julia_red, Luxor.julia_purple, Luxor.julia_blue][n])
+        poly(side, :path, reversepath=true, close=true)
+        results = ellipseinquad(polyscale!(side, 0.5, center = polycentroid(side)), :fill)
+        @test results[1] != O
+        @test !iszero(results[2])
+        @test !iszero(results[3])
+        @test !iszero(results[4])
     end
 
-fname = "ellipse-test1.pdf"
+    @test finish() == true
+end
+
+fname = "ellipse-test1.png"
 test_ellipse(fname)
 println("...finished test: output in $(fname)")

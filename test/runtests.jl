@@ -42,6 +42,7 @@ function run_all_tests()
         include("morepolytests.jl")
         include("polytriangulate.jl")
         include("pointcircletangent-test.jl")
+        include("convexandclockwise.jl")
     end
 
     @testset "text" begin

@@ -213,8 +213,42 @@ nothing # hide
 
 ![even more ellipses](assets/figures/ellipses_2.png)
 
+The `ellipseinquad()` function constructs an ellipse that fits in a four-sided quadrilateral.
+
+```@example
+using Luxor # hide
+Drawing(600, 600, "assets/figures/ellipseinquad.png") # hide
+origin() # hide
+background("white") # hide
+sethue("gray30") # hide
+setline(1) # hide
+
+pg = ngon(O, 250, 6, π/6, vertices=true)
+
+top = vcat(O, pg[[3, 4, 5]])
+left = vcat(O, pg[[1, 2, 3]])
+right = vcat(O, pg[[5, 6, 1]])
+sethue("red")
+poly(top, :fill, close=true)
+
+sethue("green")
+poly(left, :fill, close=true)
+
+sethue("blue")
+poly(right, :fill, close=true)
+
+sethue("orange")
+ellipseinquad.((top, left, right), :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![ellipse in quadrilateral](assets/figures/ellipseinquad.png)
+
 ```@docs
 ellipse
+ellipseinquad
 ```
 
 `circlepath()` constructs a circular path from Bézier curves, which allows you to use circles as paths.
