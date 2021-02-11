@@ -129,6 +129,36 @@ nothing # hide
 ```
 ![arc](assets/figures/pointinverse.png)
 
+Use `anglethreepoints()` to find the angle formed by a line through three points:
+
+```@example
+using Luxor # hide
+Drawing(600, 500, "assets/figures/anglethreepoints.png") # hide
+origin() # hide
+background("white") # hide
+setline(1) # hide
+
+fontsize(14)
+
+pts = [Point(100 + 150cos(x), 150sin(x)) for x in range(π, 3π/2, length=3)]
+prettypoly(pts, :stroke)
+label.(["1", "2", "3"], :nw, pts, offset=20, leader=true, leaderoffsets=[.3, .8])
+text(string(round(rad2deg(anglethreepoints(pts))), "°"), pts[2] + (10, 10))
+
+translate(100, 0)
+
+pts = star(O, 200, 6, vertices=true)[2:4]
+prettypoly(pts, :stroke)
+label.(["1", "2", "3"], :nw, pts, offset=20, leader=true, leaderoffsets=[.3, .8])
+text(string(round(rad2deg(anglethreepoints(pts))), "°"), pts[2] + (10, -30))
+
+
+finish() # hide
+nothing # hide
+```
+
+![angle three points](assets/figures/anglethreepoints.png)
+
 ```@docs
 distance
 getnearestpointonline
@@ -141,6 +171,7 @@ polar
 ispointonline
 isarcclockwise
 pointinverse
+anglethreepoints
 ```
 
 ## Triangle centers

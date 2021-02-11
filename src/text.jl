@@ -414,7 +414,8 @@ settext(text; kwargs...) = settext(text, O; kwargs...)
 """
     label(txt::AbstractString, alignment::Symbol=:N, pos::Point=O;
         offset=5,
-        leader=false)
+        leader=false,
+        leaderoffsets=[0.0, 1.0])
 
 Add a text label at a point, positioned relative to that point, for example, `:N` signifies
 North and places the text directly above that point.
@@ -430,6 +431,10 @@ relative to that point.
 The default offset is 5 units.
 
 If `leader` is true, draw a line as well.
+
+`leaderoffsts` uses normalized fractions (see `between()`)
+to specify the gap between the designated points and the
+start and end of the lines.
 
 TODO: Negative offsets don't give good results.
 """

@@ -1,5 +1,20 @@
 # Changelog
 
+
+## [v2.x.x] - forthcoming
+
+### Added
+
+- ellipseinquad()
+- anglethreepoints()
+- ispolyconvex()
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v2.8.0] - 2021-02-02
 
 ### Added

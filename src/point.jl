@@ -554,3 +554,56 @@ function getworldposition(pt::Point=O;
     x, y = cairotojuliamatrix(getmatrix()) * [pt.x, pt.y, 1]
     return Point(x, y) - (centered ? (Luxor.current_width()/2.0, Luxor.current_height()/2.0) : (0 , 0))
 end
+
+"""
+    anglethreepoints(p1::Point, p2::Point, p3::Point)
+
+Find angle between two lines formed by three points:
+
+p1 +
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |  angle
+   |
+   +------------------------+
+p2                            p3
+
+The angle will be between 0 and π.
+
+You can use `ispolyconvex()` to distinguish between the two possible interprations of an angle.
+"""
+function anglethreepoints(p1::Point, p2::Point, p3::Point)
+    v1 = p2 - p1 # line from p1 to p2
+    v2 = p2 - p3
+    d1 = sqrt(v1.x^2 + v1.y^2) # length v1
+    d2 = sqrt(v2.x^2 + v2.y^2)
+    if iszero(d1) || iszero(d2)
+        return 0
+    end
+    result = dotproduct(v1, v2) / (d1 * d2)
+    if -1 <= result <= 1
+        return acos(result)
+    else
+        return 0
+    end
+end
+
+anglethreepoints(pgon) = anglethreepoints(pgon[1], pgon[2], pgon[3])
+
+"""
+    ispolyconvex(pts)
+
+Return true if polygon is convex.
+"""
+function ispolyconvex(pts)
+    a = 0
+    for n in eachindex(pts)
+        a += π - anglethreepoints(pts[n], pts[mod1(n + 1, end)], pts[mod1(n + 2, end)])
+    end
+    return a <= 2π
+end

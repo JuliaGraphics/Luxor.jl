@@ -609,3 +609,29 @@ function brush(pt1, pt2, width=10;
         end
     end
 end
+
+"""
+    beziersegmentangles(pt1, pt2;
+            out = angle1,
+            in  = angle2)
+
+Return a BezierPathSegment joining `pt1` and `pt2` making the angles `out`
+at the start and `in` at the end. Similar to a tikZ
+`(a)  to  [out=135,in=45]  (b)` drawing instruction.
+"""
+function beziersegmentangles(pt1, pt2;
+        out = angle1,
+        in  = angle2)
+    # find intersection of the tangents
+
+    tangent1 = (pt1, polar(1500, -out))
+    tangent2 = (pt2, polar(1500, -in))
+    flag, ip = intersectionlines(tangent1..., tangent2...)
+
+    if flag
+        bp = BezierPathSegment(pt1, ip, ip, pt2)
+    else
+        throw(error("beziersegmentangles(): oops"))
+    end
+    return bp
+end
