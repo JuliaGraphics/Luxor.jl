@@ -75,7 +75,7 @@ export Drawing,
     newpath, closepath, newsubpath,
 
     BezierPath, BezierPathSegment, bezier, bezier′, bezier′′, makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
-    bezierfrompoints, beziercurvature, bezierstroke, setbezierhandles, shiftbezierhandles, brush,
+    bezierfrompoints, beziercurvature, bezierstroke, setbezierhandles, beziersegmentangles, shiftbezierhandles, brush,
 
     strokepath, fillpath,
 
@@ -110,7 +110,7 @@ export Drawing,
     perpendicular, crossproduct, dotproduct, distance,
     prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
     polysortbyangle, polysortbydistance, offsetpoly, polyfit, currentpoint, hascurrentpoint,
-    getworldposition, anglethreepoints, 
+    getworldposition, anglethreepoints,
 
     polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
     polyarea, polysample, insertvertices!,

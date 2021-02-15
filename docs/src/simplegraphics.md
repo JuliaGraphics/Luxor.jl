@@ -5,7 +5,7 @@ DocTestSetup = quote
 ```
 # Simple graphics
 
-In Luxor, there are different ways of working with graphical items. You can either draw them immediately (ie place them on the drawing, and they're then fixed). Or you can construct geometric objects as lists of points for further processing. Watch out for a `vertices=true` option, which returns coordinate data rather than draws a shape.
+In Luxor, there are different ways of working with graphical items. You can either draw them immediately (ie place them on the drawing, and they're then fixed). Or you can construct geometric objects as lists of points for further processing. Watch out for a `vertices=true` option, which returns coordinate data rather than drawing a shape.
 
 ## Rectangles and boxes
 
@@ -63,7 +63,7 @@ box(Point(0, 0), 100, 100, :none)
  Point(50.0, 50.0)
 ```
 
-For regular polygons, pentagons, and so on, see the next section on Polygons.
+For regular polygons, pentagons, and so on, see the later section on Polygons.
 
 ## Circles and ellipses
 
@@ -281,7 +281,7 @@ circlepath
 
 Functions to find tangents to circles include:
 
-- `pointcircletangent()` finds a point on a line joining a point and tangent to a circle
+- `pointcircletangent()` finds a point on a circle that lies on line through another point
 - `circlecircleoutertangents()` finds the points that lie on outer tangents to two circles
 - `circlecircleinnertangents()` finds the points that lie on inner tangents to two circles
 - `circletangent2circles()` makes circles of a particular radius tangential to two circles
@@ -303,6 +303,7 @@ circleradius = 80
 circle.((point, circlecenter), 5, :fill)
 circle(circlecenter, circleradius, :stroke)
 pt1, pt2 = pointcircletangent(point, circlecenter, circleradius)
+circle.((pt1, pt2), 5, :fill)
 
 sethue("grey65")
 rule(point, slope(point, pt1))
