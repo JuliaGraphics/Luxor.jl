@@ -1,15 +1,21 @@
 # Changelog
 
-
-## [v2.x.x] - forthcoming
+## [v2.9.x] - forthcoming
 
 ### Added
 
-- ellipseinquad()
-- anglethreepoints()
-- ispolyconvex()
+- ellipseinquad() ellipse bounded by quadrilateral
+- anglethreepoints() find angle formed by three points
+- ispolyconvex() test if polygon is convex
+- beziersegmentangles() construct Bézier using in out angled handles
 
 ### Changed
+
+- bug in randompointarray() fixed
+- `text()` :center-ed alignments are now more carefully
+  calculated, allowing for various xadvance values. So there
+  may be a few instances where text is positioned a few
+  pixels further left compared with earlier Luxor versions.
 
 ### Removed
 

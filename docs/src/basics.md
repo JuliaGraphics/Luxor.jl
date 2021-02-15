@@ -462,12 +462,19 @@ finish()
 
 # in Images
 
-img = Gray.(mat)
-# img = RGB.(mat) # for color
-display(imresize(img, 250, 250))
+img = RGB.(mat)
+# img = Gray.(mat) # for greyscale
+
+imfilter(img, Kernel.gaussian(10))
 ```
 
+In Luxor:
+
 ![42 image array](assets/figures/42.png)
+
+In Images:
+
+![42 image array](assets/figures/42gaussian.png)
 
 ```@docs
 @imagematrix

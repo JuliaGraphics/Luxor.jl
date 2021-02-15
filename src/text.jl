@@ -23,6 +23,9 @@ Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
 
 The default alignment is `:left`, `:baseline`.
 
+This uses `textextents()` to query the dimensions of the text. This returns
+values of the built in to the font. You can't find
+
 This uses Cairo's Toy text API.
 """
 function text(t, pt::Point;
@@ -51,7 +54,8 @@ function text(t, pt::Point;
         halignment = 2
     end
 
-    textpointx = pt.x - [0, textwidth/2, textwidth][halignment]
+    # was textpointx = pt.x - [0, textwidth/2, textwidth][halignment]
+    textpointx = pt.x - [0, xadvance/2, textwidth + xbearing][halignment]
 
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
 
@@ -84,29 +88,10 @@ end
 text(t; kwargs...) = text(t, O; kwargs...)
 text(t, xpos, ypos; kwargs...) = text(t, Point(xpos, ypos); kwargs...)
 
-"""
-    textcentered(str)
-    textcentered(str, x, y)
-    textcentered(str, pt)
-
-Draw text in the string `str` centered at `x`/`y` or `pt`. If you omit the point, it's
-placed at 0/0.
-
-textcentred (UK spelling) is a synonym.
-"""
+# deprecated probably
 textcentered(t, x=0, y=0) = text(t, x, y, halign=:center)
 textcentered(t, pt::Point) = textcentered(t, pt.x, pt.y)
 textcentred = textcentered
-
-"""
-    textright(str)
-    textright(str, x, y)
-    textright(str, pt)
-
-Draw text in the string `str` right-aligned at `x`/`y` or `pt`.
-If you omit the point, it's placed at 0/0.
-
-"""
 textright(t, x=0, y=0) = text(t, x, y, halign=:right)
 textright(t, pt::Point) = textright(t, pt.x, pt.y)
 
@@ -301,7 +286,7 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
         else
             rotate(-pi/2 + refangle)
         end
-        textcentered(glyph, 0, 0) # TODO this is deprecated?
+        text(glyph, O, halign=:center)
         grestore()
         current_radius < 10 && break
     end

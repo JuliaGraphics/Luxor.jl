@@ -8,31 +8,32 @@ A path is a sequence of one or more straight and curved (circular arc or Bézier
 
 Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
-|create                 |convert              |draw             |info               |edit                     |
-|:---	                |:---	              |:---	            |:---	            |:---                     |
-| *polygons*            |                     |                 |                   |                         |
-|`ngon()`               |`polysmooth()`       |`poly()`         |`isinside()`       |`simplify()`             |
-|`ngonside()`           |                     |`prettypoly()`   |`polyperimeter()`  |`polysplit()`            |
-|`star()`               |                     |`polysmooth()`   |`polyarea()`       |`polyportion()`          |
-|`polycross()`          |                     |                 |`polycentroid()`   |`polyremainder()`        |
-|`offsetpoly()`         |                     |                 |`boundingbox()`    |`polysortbyangle()`      |
-|`hyptrochoid()`        |                     |                 |`ispolyclockwise()`  |`polysortbydistance()` |
-|`epitrochoid()`        |                     |                 |`ispolyconvex()`   |`polyintersections()`    |
-|`polyrotate!()`        |                     |                 |                   |`polymove!()`            |
-|`polyfit()`            |                     |                 |                   |`polyscale!()`           |
-|                       |                     |                 |                   |                         |
-|                       |                     |                 |                   |`polyreflect!()`         |
-|                       |                     |                 |                   |`polysample()`           |
-|                       |                     |                 |                   |`polytriangulate()`      |
-|                       |                     |                 |                   |`insertvertices!()`      |
-| *paths*               |                     |                 |                   |                         |
-|`getpath()`            |`pathtopoly()`       |                 |                   |                         |
-|`getpathflat()`        |                     |                 |                   |                         |
-| *Bezier paths*        |                     |                 |                   |                         |
-|`makebezierpath()`     |`pathtobezierpaths()`  |`drawbezierpath()` |               |                         |
-|`pathtobezierpaths()`  |`bezierpathtopoly()`   |`brush()`          |               |                         |
-|`BezierPath()`         |                     |                 |                   |                         |
-|`BezierPathSegment()`  |                     |                 |                   |                         |
+|create                   |convert              |draw             |info               |edit                     |
+|:---	                  |:---	              |:---	            |:---	            |:---                     |
+| *polygons*              |                     |                 |                   |                         |
+|`ngon()`                 |`polysmooth()`       |`poly()`         |`isinside()`       |`simplify()`             |
+|`ngonside()`             |                     |`prettypoly()`   |`polyperimeter()`  |`polysplit()`            |
+|`star()`                 |                     |`polysmooth()`   |`polyarea()`       |`polyportion()`          |
+|`polycross()`            |                     |                 |`polycentroid()`   |`polyremainder()`        |
+|`offsetpoly()`           |                     |                 |`boundingbox()`    |`polysortbyangle()`      |
+|`hyptrochoid()`          |                     |                 |`ispolyclockwise()`  |`polysortbydistance()` |
+|`epitrochoid()`          |                     |                 |`ispolyconvex()`   |`polyintersections()`    |
+|`polyrotate!()`          |                     |                 |                   |`polymove!()`            |
+|`polyfit()`              |                     |                 |                   |`polyscale!()`           |
+|                         |                     |                 |                   |                         |
+|                         |                     |                 |                   |`polyreflect!()`         |
+|                         |                     |                 |                   |`polysample()`           |
+|                         |                     |                 |                   |`polytriangulate()`      |
+|                         |                     |                 |                   |`insertvertices!()`      |
+| *paths*                 |                     |                 |                   |                         |
+|`getpath()`              |`pathtopoly()`       |                 |                   |                         |
+|`getpathflat()`          |                     |                 |                   |                         |
+| *Bezier paths*          |                     |                 |                   |                         |
+|`makebezierpath()`       |`pathtobezierpaths()`  |`drawbezierpath()` |               |                         |
+|`pathtobezierpaths()`    |`bezierpathtopoly()`   |`brush()`          |               |                         |
+|`BezierPath()`           |                     |                 |                   |                         |
+|`BezierPathSegment()`    |                     |                 |                   |                         |
+|`beziersegmentangles()`  |                     |                 |                   |                         |
 
 ## Regular polygons ("ngons")
 
@@ -856,10 +857,10 @@ Random.seed!(3) # hide
 pgon = star(O, 250, 5, 0.6, 0, vertices=true)
 
 @layer begin
- setgrey(0.5)
- setdash("dot")
- poly(pgon, :stroke, close=true)
- setline(5)
+    setgrey(0.5)
+    setdash("dot")
+    poly(pgon, :stroke, close=true)
+    setline(5)
 end
 
 setline(4)
@@ -919,6 +920,48 @@ nothing # hide
 ```
 
 ![path to polygon](assets/figures/pathtobezierpaths.png)
+
+`beziersegmentangles()` lets you define a Bézier path segment by specifying the angles the control handles make with the base line.
+
+```@example
+using Luxor # hide
+Drawing(600, 400, "assets/figures/beziersegmentangles.svg") # hide
+background("ivory") # hide
+origin() # hide
+
+setline(.5)
+
+@layer begin
+    rule.(O, (0, (π/2)))
+end
+
+P = O
+Q = O + (200, 0)
+sethue("black")
+
+pts = beziersegmentangles(P, Q,
+    out = deg2rad(60),
+    in  = 2π - deg2rad(45))
+
+@layer begin
+    setline(2)
+    sethue("purple")
+    drawbezierpath(pts, :stroke)
+end
+
+sethue("grey50")
+line(O, pts[2], :stroke)
+line(Q, pts[3], :stroke)
+fontsize(15)
+circle.((P, pts[2], pts[3], Q), 5, :fill)
+label.(("P", "Q"), :ne, (P, Q))
+text("60°", P + (40, 20))
+text("135°", Q + (10, 20))
+finish() # hide
+nothing # hide
+```
+
+![bezier segment angles](assets/figures/beziersegmentangles.svg)
 
 ## Brush strokes
 
@@ -1002,6 +1045,7 @@ setbezierhandles
 shiftbezierhandles
 Luxor.findbeziercontrolpoints
 brush
+beziersegmentangles
 ```
 
 ## Polygon information

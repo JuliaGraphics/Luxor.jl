@@ -218,7 +218,10 @@ function crossproduct(p1::Point, p2::Point)
 end
 
 function randomordinate(low, high)
-    low + rand() * abs(high - low)
+    if low > high
+      low, high = high, low
+    end
+    return low + rand() * abs(high - low)
 end
 
 """
@@ -544,10 +547,16 @@ Return the world coordinates of `pt`.
 
 The default coordinate system for Luxor/Cairo is that the top left corner is 0/0.
 If you use `origin()`, everything moves to the center of the drawing, and this function
-with the default `centered` option being assumes an `origin()` function. If you choose
+with the default `centered` option assumes an `origin()` function. If you choose
 `centered=false`, the returned coordinates will be relative to the top left corner of
 the drawing.
 
+```
+origin()
+translate(120, 120)
+@show currentpoint()      # => Point(0.0, 0.0)
+@show getworldposition()  # => Point(120.0, 120.0)
+```
 """
 function getworldposition(pt::Point=O;
     centered=true)
@@ -558,24 +567,11 @@ end
 """
     anglethreepoints(p1::Point, p2::Point, p3::Point)
 
-Find angle between two lines formed by three points:
+Find the angle between two lines formed by three points (eg
+∠ or ⟨). The angle will be between 0 and π.
 
-p1 +
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |  angle
-   |
-   +------------------------+
-p2                            p3
-
-The angle will be between 0 and π.
-
-You can use `ispolyconvex()` to distinguish between the two possible interprations of an angle.
+You can use `ispolyconvex()` to distinguish between the two
+possible interprations of an angle.
 """
 function anglethreepoints(p1::Point, p2::Point, p3::Point)
     v1 = p2 - p1 # line from p1 to p2

@@ -180,3 +180,34 @@ and `juliatocairomatrix()`.
 cairotojuliamatrix
 juliatocairomatrix
 ```
+
+## World position
+
+If you use `translate()` to move the origin to different places on a drawing, you can use `getworldposition()` to find the "true" world coordinates of points. In the following example, we temporarily translate to a random point, and "drop a pin" that remembers the new origin in terms of the drawing's world coordinates. After the temporary translation is over, we have a record of where it was.
+
+```@example
+using Luxor, Random # hide
+Drawing(600, 400, "assets/figures/getworldposition.png") # hide
+background("white") # hide
+Random.seed!(3) # hide
+setline(1) # hide
+origin()
+
+@layer begin
+    translate(0.7rand(BoundingBox()))
+    pin = getworldposition()
+end
+
+label("you went ... ", :n, O, offset = 10)
+label("... here", :n, pin, offset = 20)
+arrow(O, pin)
+
+finish() # hide
+nothing # hide
+```
+
+![translate](assets/figures/getworldposition.png)
+
+```@docs
+getworldposition
+```

@@ -612,20 +612,37 @@ end
 
 """
     beziersegmentangles(pt1, pt2;
-            out = angle1,
-            in  = angle2)
+        out = deg2rad(45),
+        in  = deg2rad(135))
+    )
 
-Return a BezierPathSegment joining `pt1` and `pt2` making the angles `out`
-at the start and `in` at the end. Similar to a tikZ
-`(a)  to  [out=135,in=45]  (b)` drawing instruction.
+Return a BezierPathSegment joining `pt1` and `pt2` making
+the angles `out` at the start and `in` at the end.
+
+It's similar to the tikZ `(a) to [out=135, in=45] (b)`
+drawing instruction (but in radians obviously).
+
+`out` is the angle between a line from `pt1` to the outgoing
+Bézier handle makes with the horizontal. `in` is the angle
+that a line joining `pt2` from the preceding Bézier handle
+makes with the horizontal. So:
+
+```
+drawbezierpath(beziersegmentangles(O, O + (100, 0),
+    out = deg2rad(45),
+    in  = 2π - deg2rad(45)),
+    :stroke)
+```
+
+draws a shape resembling a piece of string
+fixed at each end and hanging down in the middle.
 """
 function beziersegmentangles(pt1, pt2;
-        out = angle1,
-        in  = angle2)
+        out = deg2rad(45),
+        in  = deg2rad(135))
     # find intersection of the tangents
-
-    tangent1 = (pt1, polar(1500, -out))
-    tangent2 = (pt2, polar(1500, -in))
+    tangent1 = (pt1, polar(1500, out)) # arbitrary length "ray" :(
+    tangent2 = (pt2, polar(1500, in))
     flag, ip = intersectionlines(tangent1..., tangent2...)
 
     if flag

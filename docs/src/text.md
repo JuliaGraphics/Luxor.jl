@@ -93,7 +93,7 @@ text("1",  pt1, halign=:left,   valign = :bottom)
 text("2",  pt2, halign=:center, valign = :bottom)
 text("3",  pt3, halign=:right,  valign = :bottom)
 text("4",  pt1, halign=:left,   valign = :top)
-text("5 ", pt2, halign=:center, valign = :top)
+text("5", pt2, halign=:center, valign = :top)
 text("6",  pt3, halign=:right,  valign = :top)
 sethue("red")
 map(p -> circle(p, 4, :fill), [pt1, pt2, pt3])
@@ -261,23 +261,25 @@ Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
 ```@example
 using Luxor # hide
-Drawing(1800, 1800, "assets/figures/text-spiral.png") # hide
+Drawing(800, 800, "assets/figures/text-spiral.png") # hide
+
 origin() # hide
 background("ivory") # hide
-fontsize(16) # hide
-fontface("Menlo") # hide
 sethue("royalblue4") # hide
+fontsize(7)
+fontface("Menlo")
 textstring = join(names(Base), " ")
 textcurve("this spiral contains every word in julia names(Base): " * textstring,
     -π/2,
-    800, 0, 0,
-    spiral_in_out_shift = -18.0,
+    350, 0, 0,
+    spiral_in_out_shift = -8.0,
     letter_spacing = 0,
     spiral_ring_step = 0)
 fontsize(35)
 fontface("Avenir-Black")
 textcentered("julia names(Base)", 0, 0)
 finish() # hide
+
 nothing # hide
 ```
 
@@ -492,9 +494,9 @@ splittext
 
 ## Text tracking
 
-Use `texttrack()` to letter-space text. The units are 1/1000 em, so the amount of tracking is relative to the current font size.
+Use `texttrack()` to track or letter-space text, i.e. vary the spacing between every letter. ("Kerning" is when you do this for just a pair of letters.) The units are 1/1000 em, so the actual distance of "50 units of tracking" varies depending on the current font size.
 
-But really, don’t.
+But really, don’t track text unless you have to.
 
 ```@example
 using Luxor # hide
@@ -503,7 +505,7 @@ origin() # hide
 background("white") # hide
 sethue("black") # hide
 
-function text_tracking()
+function text_tracking_example()
     fonts = [
         "Verdana",
         "TrebuchetMS",
@@ -523,10 +525,11 @@ function text_tracking()
         texttrack("This is some text in $(f): it’s been tracked by -$(tracking)",
             nextgridpoint(grid), -tracking, fsize)
     end
+
     finish() # hide
 end
 
-text_tracking()
+text_tracking_example()
 nothing # hide
 ```
 
