@@ -10,7 +10,7 @@ end
 """
 module Luxor
 
-using Juno, Cairo, Colors, FileIO, Dates, Rsvg
+using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface, CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
 CairoContext, arc, arc_negative, circle, clip, clip_preserve, close_path,
