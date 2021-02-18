@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.9.x] - forthcoming
+## [v2.9.0] - 2021-02-18
 
 ### Added
 
@@ -16,6 +16,7 @@
   calculated, allowing for various xadvance values. So there
   may be a few instances where text is positioned a few
   pixels further left compared with earlier Luxor versions.
+- BASE64 added (thanks @fonsp!)
 
 ### Removed
 

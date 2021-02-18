@@ -23,9 +23,9 @@ finish()
 preview()
 ```
 
-`Drawing(1000, 1000, "hello-world.png")` defines the width, height, location, and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name as well as by numeric value: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 point and left-justified if you don't specify otherwise. `finish()` completes the drawing and saves the PNG image in the file. `preview()` tries to open the saved file using some other application (eg Preview on macOS).
+`Drawing(1000, 1000, "hello-world.png")` defines the width, height, location, and type of the finished image. `origin()` moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name as well as by numeric value: `background("black")` defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 point and left-justified if you don't specify otherwise. `finish()` completes the drawing and saves the PNG image in the file. `preview()` tries to display the saved file, perhaps using another application (eg Preview on macOS).
 
-The macros `@png`, `@svg`, `@pdf`, `@draw`, and `@imagematrix` provide shortcuts for making and previewing graphics without having to provide the usual set-up and finish instructions:
+The macros `@png`, `@svg`, `@pdf`, `@draw`, and `@imagematrix` provide shortcuts for making and previewing graphics without you having to provide the usual set-up and finish instructions:
 
 ```julia
 # using Luxor
@@ -53,9 +53,9 @@ end
 
 The `@draw` macro is useful if you work in Juno/VS Code IDEs
 or a notebook environment such as Jupyter or Pluto and
-don't need to save work in files. It creates a PNG format
+don't need to always save your work in files. It creates a PNG format
 drawing in memory, rather than saved in a file. It's
-displayed in the plot pane or the next cell.
+displayed in the plot pane or in the next cell.
 
 ```julia
 @draw begin
@@ -82,13 +82,13 @@ using Luxor
 Drawing(600, 400, "assets/figures/julia-logos.png")
 origin()
 background("white")
+
 for θ in range(0, step=π/8, length=16)
     gsave()
-    scale(0.25)
+    scale(0.2)
     rotate(θ)
-    translate(250, 0)
-    randomhue()
-    julialogo(action=:fill, color=false)
+    translate(350, 0)
+    julialogo(action=:fill, bodycolor=randomhue())
     grestore()
 end
 
@@ -97,19 +97,20 @@ scale(0.3)
 juliacircles()
 grestore()
 
-translate(200, -150)
+translate(150, -150)
 scale(0.3)
 julialogo()
 finish()
+
 # preview()
 nothing # hide
 ```
 
 ![background](assets/figures/julia-logos.png)
 
-The `gsave()` function saves the current drawing parameters, and any subsequent changes such as the `scale()` and `rotate()` operations are discarded by the next `grestore()` function.
+The `gsave()` function saves the current drawing environment temporarily, and any subsequent changes such as the `scale()` and `rotate()` operations are discarded when you call the next `grestore()` function.
 
-Use the extension to specify the format: for example change `julia-logos.png` to `julia-logos.svg` or `julia-logos.pdf` or `julia-logos.eps` to produce SVG, PDF, or EPS format output.
+Use the extension to specify the format: for example, change `julia-logos.png` to `julia-logos.svg` or `julia-logos.pdf` or `julia-logos.eps` to produce SVG, PDF, or EPS format output.
 
 ## Something a bit more complicated: a Sierpinski triangle
 
@@ -177,7 +178,7 @@ You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS
 
 ## Images as matrices
 
-With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes the ampersand in Images.jl.
+With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes an ampersand in Images.jl.
 
 ```
 using Luxor, Colors, Images, ImageFiltering
