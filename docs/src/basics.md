@@ -6,11 +6,11 @@ DocTestSetup = quote
 
 # The basics
 
-The underlying drawing model is that you make shapes, and add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, and opacity. You can modify the current graphics state by transforming/rotating/scaling it, and setting style parameters, and so on. Subsequent graphics use the new state, but the graphics you've already drawn are unchanged.
+The underlying drawing model is that you make shapes, and add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, scale, orientation, opacity, and so on. You can modify the current graphics state by transforming/rotating/scaling it, and setting style parameters, and so on. Subsequent graphics use the new state, but the graphics you've already drawn are unchanged. The `gsave()` and `grestore()` functions (or the `@layer .... ` macro) let you create new temporary graphics states,
 
 You can specify points on the drawing surface using `Point(x, y)`. The default origin is at the top left of the drawing area, but you can reposition it at any time. Many of the drawing functions have an *action* argument. This can be `:none`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:none`.
 
-Y coordinates increase downwards, so `Point(0, 100)` is below `Point(0, 0)`. This is the preferred coordinate system for computer graphics software, but mathematicians and scientists may well be used to the y-axis increasing upwards...
+Y coordinates increase downwards, so `Point(0, 100)` is below `Point(0, 0)`. This is the preferred coordinate system for most computer graphics software, but mathematicians and scientists may well be used to the other convention, where the y-axis increasing up the page...
 
 The main types you'll encounter in Luxor are:
 
@@ -56,7 +56,7 @@ julia> P + Q
 Luxor.Point(16.0, 18.0)
 ```
 
-You can add or multiply Points and scalars:
+You can add and multiply Points and scalars:
 
 ```julia
 julia> 10P
@@ -106,7 +106,7 @@ nothing # hide
 
 ![point example](assets/figures/point-ex.png)
 
-Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas, so 'clockwise'). (The main exception is for turtle graphics, which conventionally let you supply angles in degrees.)
+Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas). So rotations are ‘clockwise’. (The main exception is for turtle graphics, which conventionally let you supply angles in degrees.)
 
 Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
 
@@ -172,7 +172,7 @@ finish()
 preview()
 ```
 
-They're short-cuts - designed to save typing. You can omit the width and height (defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
+They're short-cuts - designed to save a bit of typing. You can omit the width and height (defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -191,7 +191,7 @@ or (less nicely):
      )
 ```
 
-The `@draw` macro creates an in-memory drawing. You should see it displayed if you're working in a capable environment (Juno, VSCode, Jupyter, Pluto).
+The `@draw` macro creates a drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto).
 
 ```@docs
 @svg
@@ -206,7 +206,7 @@ If you don't specify a size, the defaults are 600 by 600. If you don't specify a
 @svg juliacircles(150) 400 400 "test" # saves in "test.svg"
 ```
 
-If you want to create drawings with transparent backgrounds, or located other than in the center, use the longer form rather than the macros:
+If you want to create drawings with transparent backgrounds, or use variables to specify filenames, use the longer form, rather than the macros:
 
 ```julia
 Drawing()
@@ -348,7 +348,7 @@ origin
 
 ## Save and restore
 
-`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs.
+`gsave()` saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next `grestore()` is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used `gsave()`. `gsave()` and `grestore()` should always be balanced in pairs, enclosing the functions.
 
 The `@layer` macro is a synonym for a `gsave()`...`grestore()` pair.
 
@@ -389,10 +389,9 @@ currentdrawing
 
 ## Drawing as image matrix
 
-While drawing, you can copy the current graphics as a
-matrix of pixels, using the `image_as_matrix()` function.
+While drawing, you can copy the current graphics in a drawing as a matrix of pixels, using the `image_as_matrix()` function.
 
-`image_as_matrix()` returns a array of ARGB32 values. Each ARGB value encodes the Red, Green, Blue, and Alpha values of a pixel.
+`image_as_matrix()` returns a array of ARGB32 values. Each ARGB value encodes the Red, Green, Blue, and Alpha values of a pixel into a single 32 bit integer.
 
 The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. In the second drawing, values from the two matrices are tested, and table cells are randomly colored depending on the corresponding values ... this is a primitive Boolean operation.
 

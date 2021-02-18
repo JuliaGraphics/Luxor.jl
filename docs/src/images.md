@@ -7,14 +7,14 @@ DocTestSetup = quote
 
 ## Placing images
 
-Luxor lets you place PNG and SVG images on the drawing. First, load an image from a file:
+Luxor lets you place PNG and SVG images on the drawing. First, load an image:
 
 - for PNG images, use `readpng(filename)`
 - for SVG images, use `readsvg(filename)` or `readsvg(string)`
 
 (JPEGs aren't supported.)
 
-Then use `placeimage()` to place the image by its top left corner at point `pt`. Access the image's dimensions with `.width` and `.height`.
+Then use `placeimage()` to place the image by its top left corner at point `pt`, or use the `centered=true` keyword to place the image's center point there. Access the image's dimensions with `.width` and `.height`. You can use the `centered=true` keyword.
 
 ```@example
 using Luxor # hide
@@ -114,7 +114,7 @@ finish()
 
 ## Transforming images
 
-You can transform images by setting the current matrix, either with `scale()` and `rotate()` and similar, or by modifying it directly. This code skews an image made in an earlier chapter of this document and scales and rotates it in a circle:
+You can transform images by setting the current matrix, either with `scale()` and `rotate()` and similar, or by modifying it directly. This code scales and rotates an image made in an earlier chapter of this document around in a circle:
 
 ```@example
 using Luxor # hide
@@ -194,7 +194,7 @@ nothing # hide
 ### Adding text to transformed images
 
 The above approach works well, but suppose you want to locate the working origin
-at the lower left of the image, ie you want all coordinates to be relative to the
+at the lower left of the image, i.e. you want all coordinates to be relative to the
 bottom left corner of the image?
 
 To do this, use `translate()` and `transform()` to modify the drawing space:

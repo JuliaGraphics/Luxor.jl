@@ -15,9 +15,9 @@ For color definitions and conversions, you can use [Colors.jl](https://github.co
 
 `setmesh()` will apply a color mesh to new graphics.
 
-The difference between the `setcolor()` and `sethue()` functions is that `sethue()` is independent of alpha opacity, so you can change the hue without changing the current opacity value.
+The difference between the `setcolor()` and `sethue()` functions is that `sethue()` doesn't change alpha opacity (transparency), so you can change the hue without changing the current alpha opacity (transparency) value.
 
-Named colors, such as "gold", or "lavender", can be found in Colors.color_names.
+Named colors, such as "gold", or "lavender", can be found in `Colors.color_names` dictionary.
 
 ```@example
 using Luxor, Colors # hide
@@ -62,7 +62,7 @@ setantialias
 
 ## Line styles
 
-There are `set-` functions for controlling subsequent lines' width, end shapes, join behavior, and dash patterns:
+There are `set-` functions for controlling subsequent lines' width, end shape, join behavior, and dash pattern:
 
 ```@example
 using Luxor # hide
@@ -115,7 +115,7 @@ nothing # hide
 
 ![dashes](assets/figures/dashes.png)
 
-To define more complicated dash patterns in Luxor, supply a vector to `setdash()`.
+To define more complicated dash patterns in Luxor, pass a vector to `setdash()`.
 
 ```julia
 dashes = [50.0,  # ink
@@ -349,7 +349,7 @@ blendadjust
 
 ## Blending (compositing) operators
 
-Graphics software provides ways to modify how the virtual "ink" is applied to existing graphic elements. In PhotoShop and other software products the compositing process is done using [blend modes](https://en.wikipedia.org/wiki/Blend_modes).
+Graphics software provides ways to modify how the virtual "ink" is applied to previously-drawn graphic elements. In PhotoShop and other software, the compositing process is done using [blend modes](https://en.wikipedia.org/wiki/Blend_modes).
 
 Use `setmode()` to set the blending mode of subsequent graphics.
 
@@ -401,7 +401,7 @@ nothing # hide
 
 Notice in this example that clipping was used to restrict the area affected by the blending process.
 
-In Cairo these blend modes are called *operators*. A source for a more detailed explanation can be found [here](https://www.cairographics.org/operators/).
+In Cairo, these blend modes are called *operators*. For a more detailed explanation, refer to [the Cairo documentation](https://www.cairographics.org/operators/).
 
 You can access the list of modes with the unexported symbol `Luxor.blendingmodes`.
 
