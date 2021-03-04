@@ -9,7 +9,7 @@ Base.size(bps::BezierPathSegment) = (4, )
 Base.length(bps::BezierPathSegment) = 4
 Base.eltype(::Type{BezierPathSegment}) = Luxor.Point
 Base.getindex(bps::BezierPathSegment, i::T) where T <: Integer = [bps.p1, bps.cp1, bps.cp2, bps.p2][i]
-Base.setindex!(bp::BezierPathSegment, v, i::T) where T <: Integer = [bps.p1, bps.cp1, bps.cp2, bps.p2][i] = v
+Base.setindex!(bps::BezierPathSegment, v, i::T) where T <: Integer = [bps.p1, bps.cp1, bps.cp2, bps.p2][i] = v
 Base.IndexStyle(::Type{<:BezierPathSegment}) = IndexLinear()
 
 # state is integer referring to one of the four points

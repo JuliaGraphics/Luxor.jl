@@ -706,7 +706,7 @@ function image_as_matrix()
 end
 
 """
-    @imagematrix(body, width=256, height=256)
+    @imagematrix drawing-instructions [width=256] [height=256]
 
 Create a drawing and return a matrix of the image.
 
@@ -808,7 +808,7 @@ picks up the default alpha of 1.0.
 """
 macro imagematrix(body, width=256, height=256)
     quote
-        Drawing($width, $height, :image)
+        Drawing($(esc(width)), $(esc(height)), :image)
         origin()
         $(esc(body))
         m = image_as_matrix()
@@ -816,9 +816,6 @@ macro imagematrix(body, width=256, height=256)
         m
     end
 end
-
-
-
 
 """
     image_as_matrix!(buffer)
@@ -857,7 +854,7 @@ function image_as_matrix!(buffer)
 end
 
 """
-    @imagematrix!(buffer, body, width=256, height=256)
+    @imagematrix! buffer drawing-instructions [width=256] [height=256]
 
 Like `@imagematrix`, but use an existing UInt32 buffer.
 
@@ -871,7 +868,7 @@ Images.RGB.(m)
 """
 macro imagematrix!(buffer, body, width=256, height=256)
     quote
-        Drawing($width, $height, :image)
+        Drawing($(esc(width)), $(esc(height)), :image)
         origin()
         $(esc(body))
         m = image_as_matrix!($(esc(buffer)))
