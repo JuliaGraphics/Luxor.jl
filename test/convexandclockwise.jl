@@ -9,16 +9,15 @@ function polyconvextest()
     for i in 3:16
         @test ispolyconvex(ngon(O, 100, i, vertices=true)) == true
     end
-    # stars aren't
-    for i in 3:16
+
+    # 4+ pointed stars aren't convex
+    # 3 pointed star is effectively a triangle
+    for i in 4:16
         @test ispolyconvex(star(O, 100, i, 0.5, 0, vertices=true)) == false
     end
 
     pts = [Point(x, 0) for x in 0:100]
     @test ispolyconvex(pts) == true
-
-    pts = [Point(10cos(x), 10sin(x)) for x in 0:100]
-    @test ispolyconvex(pts) == false
 
     @test finish() == true
 end

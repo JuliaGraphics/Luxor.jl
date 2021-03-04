@@ -567,15 +567,11 @@ end
 """
     anglethreepoints(p1::Point, p2::Point, p3::Point)
 
-Find the angle between two lines formed by three points (eg
-∠ or ⟨). The angle will be between 0 and π.
-
-You can use `ispolyconvex()` to distinguish between the two
-possible interprations of an angle.
+Find the angle formed by two lines defined by three points.
 """
-function anglethreepoints(p1::Point, p2::Point, p3::Point)
-    v1 = p2 - p1 # line from p1 to p2
-    v2 = p2 - p3
+function anglethreepoints(A::Point, B::Point, C::Point)
+    v1 = B - A # line from A to B
+    v2 = B - C
     d1 = sqrt(v1.x^2 + v1.y^2) # length v1
     d2 = sqrt(v2.x^2 + v2.y^2)
     if iszero(d1) || iszero(d2)
@@ -583,7 +579,14 @@ function anglethreepoints(p1::Point, p2::Point, p3::Point)
     end
     result = dotproduct(v1, v2) / (d1 * d2)
     if -1 <= result <= 1
-        return acos(result)
+        # AB̂C is convex if (B − A)₉₀ · (C − B) < 0
+        # v₉₀ is a vector rotated by 90° anti-clockwise
+        convexity = dotproduct(-perpendicular(B - A), C - B)
+        if convexity >= 0
+            return acos(result)
+        else
+            return 2π - acos(result)
+        end
     else
         return 0
     end
@@ -594,12 +597,15 @@ anglethreepoints(pgon) = anglethreepoints(pgon[1], pgon[2], pgon[3])
 """
     ispolyconvex(pts)
 
-Return true if polygon is convex.
+Return true if polygon is convex. This tests that every interior
+angle is less than or equal to 180°.
 """
 function ispolyconvex(pts)
-    a = 0
     for n in eachindex(pts)
-        a += π - anglethreepoints(pts[n], pts[mod1(n + 1, end)], pts[mod1(n + 2, end)])
+        angle = anglethreepoints(pts[n], pts[mod1(n + 1, end)], pts[mod1(n + 2, end)])
+        if angle > π # angle > 180°
+            return false
+        end
     end
-    return a <= 2π
+    return true
 end

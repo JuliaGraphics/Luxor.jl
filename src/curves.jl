@@ -1007,6 +1007,9 @@ http://faculty.mae.carleton.ca/John_Hayes/Papers/InscribingEllipse.pdf
 function ellipseinquad(qgon, action=:none)
     p1, p2, p3, p4 = qgon
     length(unique([p1, p2, p3, p4])) != 4 && throw(error("ellipseinquad() the 4 points must be different: $(qgon)"))
+    if !ispolyclockwise(qgon)
+        reverse!(qgon)
+    end
     if !ispolyconvex(qgon)
         return O, 0, 0, 0
     end

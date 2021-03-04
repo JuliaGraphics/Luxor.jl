@@ -206,7 +206,7 @@ function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     elseif halignment == 4
         halignment = 2
     end
-    textpointx = pos.x - [0, textwidth/2, textwidth][halignment]
+    textpointx = pos.x - [0, xadvance/2, textwidth + xbearing][halignment]
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
     if valignment == nothing
         valignment = 3

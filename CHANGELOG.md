@@ -1,5 +1,20 @@
 # Changelog
 
+## [v2.10.0] - 2021-0....
+
+### Added
+
+### Changed
+
+- ispolyconvex() test changed to work properly
+- anglethreepoints() changed to work up to 360° properly
+- `textoutlines()` :center-ed alignments brought into line with 2.9.0 text() fix
+- more macros allow variables (thanks Mateusz!)
+
+### Removed
+
+### Deprecated
+
 ## [v2.9.0] - 2021-02-18
 
 ### Added

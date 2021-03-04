@@ -80,9 +80,10 @@ function imagematrix()
 
 
     # test placeimage
+    K = 100
     m1 = @imagematrix begin
         juliacircles(20)
-    end 100 100
+    end K 100
 
     Drawing(100, 100, :png)
     Luxor.origin()
@@ -95,7 +96,7 @@ function imagematrix()
     origin()
     sethue("black")
     background(0,1,1,0)
-    juliacircles(10) 
+    juliacircles(10)
     finish()
 
     Drawing(100, 100, :svg)

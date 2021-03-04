@@ -129,31 +129,42 @@ nothing # hide
 ```
 ![arc](assets/figures/pointinverse.png)
 
-Use `anglethreepoints()` to find the angle formed by a line through three points:
+Use `anglethreepoints()` to find the angle formed by two lines connecting three points:
 
 ```@example
 using Luxor # hide
-Drawing(600, 500, "assets/figures/anglethreepoints.png") # hide
+Drawing(800, 800, "assets/figures/anglethreepoints.png") # hide
 origin() # hide
-background("white") # hide
-setline(1) # hide
 
-fontsize(14)
+function showangle(pt1, pt2, pt3)
+    θ = anglethreepoints(pt1, pt2, pt3)
+    label(string(round(rad2deg(θ), digits=2), "°"), :w, pt2)
+    newpath()
+    carc(pt2, 50, 0, -θ, 0)
+    strokepath()
+end
 
-pts = [Point(100 + 150cos(x), 150sin(x)) for x in range(π, 3π/2, length=3)]
-prettypoly(pts, :stroke)
-label.(["1", "2", "3"], :nw, pts, offset=20, leader=true, leaderoffsets=[.3, .8])
-text(string(round(rad2deg(anglethreepoints(pts))), "°"), pts[2] + (10, 10))
+let
+    background("grey20")
+    sethue("white")
+    fontsize(12)
+    tiles = Tiler(800, 800, 4, 4)
+    for (pos, n) in tiles
+        @layer begin
+            translate(pos)
+            pg = [polar(50, 0), O, polar(50, n * -2π/16)]
+            poly(pg, :stroke)
+            for n in 1:3
+                pt1 = pg[1]
+                pt2 = pg[2]
+                pt3 = pg[3]
+                showangle(pt1, pt2, pt3)
+            end
+        end
+    end
+    finish() # hide
+end
 
-translate(100, 0)
-
-pts = star(O, 200, 6, vertices=true)[2:4]
-prettypoly(pts, :stroke)
-label.(["1", "2", "3"], :nw, pts, offset=20, leader=true, leaderoffsets=[.3, .8])
-text(string(round(rad2deg(anglethreepoints(pts))), "°"), pts[2] + (10, -30))
-
-
-finish() # hide
 nothing # hide
 ```
 
