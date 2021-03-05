@@ -13,7 +13,7 @@ Luxor is a Julia package for drawing simple 2D vector graphics. Think of it as a
 
 Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
 
-A short tutorial can be found in the documentation, which you find by clicking on the badges:
+A short tutorial can be found in the documentation, which you find by clicking on the badges above:
 
 ![where is the documentation?](docs/src/assets/figures/where-is-the-documentation.png)
 
