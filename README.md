@@ -1,4 +1,4 @@
-![luxor splash image](docs/src/assets/figures/social-media-preview.png)
+![luxor splash image](docs/src/assets/figures/luxor-social-media-preview.png)
 
 | **Documentation**                       | **Build Status**                          | **Code Coverage**               |
 |:---------------------------------------:|:-----------------------------------------:|:-------------------------------:|
