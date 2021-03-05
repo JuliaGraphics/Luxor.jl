@@ -151,6 +151,8 @@ settext
 
 ## Notes on fonts
 
+Fonts are loaded when you first start using Luxor/Cairo in a Julia session. This partly explains why starting a Luxor/Cairo session can take a few seconds.
+
 On macOS, the fontname required by the Toy API's `fontface()` should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.
 
 On macOS, a list of currently activated fonts can be found (after a while) with the shell command:
@@ -210,24 +212,26 @@ textoutlines
 textpath
 ```
 
-## Font dimensions ("Toy" API only)
+## Text and font dimensions ("Toy" API only)
 
-The `textextents(str)` function gets an array of dimensions of the string `str`, given the current font.
+The `textextents(str)` function returns the dimensions of the string `str`, given the current font. There has to be a current drawing before this function is called.
+
+`width` and `height` are stored in elements 3 and 4. The first two elements are the offsets ("bearings") from the reference point (green) to the bounding box. The last two elements determine where the next ("advance") character should start (blue).
 
 ![textextents](assets/figures/textextents.png)
-
-The green dot is the text placement point and reference point for the font, the yellow circle shows the text block's x and y bearings, and the blue dot shows the advance point where the next character should be placed.
 
 ```@docs
 textextents
 ```
 
-There is currently no equivalent for the "Pro" API.
+!!! note
+
+    There is currently no equivalent of this function for the "Pro" API.
 
 ## Labels
 
 The `label()` function places text relative to a specific point, and you can use compass
-points to indicate where it should be. So `:N` (for North) places a text label directly above the point.
+points or angles to indicate where it should be. So `:N` (for North) places a text label directly above the point, as does `3π/2`.
 
 ```@example
 using Luxor # hide

@@ -1,4 +1,4 @@
-![splash image](docs/src/assets/figures/luxor-big-logo.png)
+![luxor splash image](docs/src/assets/figures/social-media-preview.png)
 
 | **Documentation**                       | **Build Status**                          | **Code Coverage**               |
 |:---------------------------------------:|:-----------------------------------------:|:-------------------------------:|
@@ -13,11 +13,17 @@ Luxor is a Julia package for drawing simple 2D vector graphics. Think of it as a
 
 Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
 
-A short tutorial can be found in the documentation. There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg), and some Luxor-related blog posts at [cormullion.github.io/](https://cormullion.github.io/).
+A short tutorial can be found in the documentation, which you find by clicking on the badges:
+
+![where is the documentation?](docs/src/assets/figures/where-is-the-documentation.png)
+
+"stable" describes the current release; "development" contains changes that are still in the master branch and may change before the next release.
+
+There are some Luxor-related videos on [YouTube](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg), and some Luxor-related blog posts at [cormullion.github.io/](https://cormullion.github.io/).
 
 Luxor is designed primarily for drawing static pictures. If you want to build animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl/issues).
 
-Luxor isn't interactive: for building interactivity, look at [Pluto.jl](https://github.com/fonsp/Pluto.jl) and [Makie](https://github.com/JuliaPlots/Makie.jl), and [Pluto.jl](https://github.com/fonsp/Pluto.jl).
+Luxor isn't interactive: for building interactivity, look at [Pluto.jl](https://github.com/fonsp/Pluto.jl) and [Makie](https://github.com/JuliaPlots/Makie.jl).
 
 ## How can you contribute?
 

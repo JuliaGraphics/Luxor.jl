@@ -124,6 +124,8 @@ rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 
 ## Drawings
 
+You usually work with a current drawing, so the first thing to do is to create one. Some functions won't work if there isn't a current drawing, and others won't do anything useful, since they'll be overridden when a drawing is subsequently created.
+
 ### Drawings and files
 
 To create a drawing, and optionally specify the filename, type, and dimensions, use the `Drawing` constructor function.
@@ -135,11 +137,9 @@ paper_sizes
 
 To finish a drawing and close the file, use `finish()`, and, to launch an external application to view it, use `preview()`.
 
-If you're using a notebook environment, such as Jupyter (IJulia) or Pluto, `preview()` tries to display PNG and SVG files in the next notebook cell.
-
 ![jupyter](assets/figures/jupyter.png)
 
-If you're using Juno or VS Code, then PNG and SVG files should appear in the Plots pane.
+If you're using Juno or VS Code, then PNG and SVG files should appear in the Plots pane. In a Pluto notebook, output appears above the cell. In a notebook environment, output appears in the next notebook cell.
 
 ![juno](assets/figures/juno.png)
 
@@ -172,7 +172,7 @@ finish()
 preview()
 ```
 
-They're short-cuts - designed to save a bit of typing. You can omit the width and height (defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
+They're just short-cuts - designed to save a bit of typing. You can omit the width and height (thus defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -200,13 +200,13 @@ The `@draw` macro creates a drawing in-memory (not saved in a file). You should 
 @draw
 ```
 
-If you don't specify a size, the defaults are 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't have to specify the suffix:
+If you don't specify a size, the defaults are usually 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't even have to specify the suffix:
 
 ```
 @svg juliacircles(150) 400 400 "test" # saves in "test.svg"
 ```
 
-If you want to create drawings with transparent backgrounds, or use variables to specify filenames, use the longer form, rather than the macros:
+If you want to create drawings with transparent backgrounds, or use variables to specify filenames, you have to use the longer form, rather than the macros:
 
 ```julia
 Drawing()
