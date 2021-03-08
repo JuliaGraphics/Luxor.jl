@@ -29,6 +29,8 @@ function poly(pointlist::Array{Point, 1}, action::Symbol = :none;
     return pointlist
 end
 
+poly(pts::NTuple{N, Point} where N, action::Symbol=:none; kwargs...) = poly(collect(pts), action; kwargs...)
+
 """
 Find the centroid of simple polygon.
 
