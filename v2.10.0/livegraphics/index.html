@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Live graphics · Luxor</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.png" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit">Luxor</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Luxor</a></li><li><a class="tocitem" href="../examples/">A few examples</a></li><li><a class="tocitem" href="../tutorial/">Tutorial</a></li><li><a class="tocitem" href="../basics/">Basic concepts</a></li><li><a class="tocitem" href="../simplegraphics/">Simple shapes</a></li><li><a class="tocitem" href="../moregraphics/">More graphics</a></li><li><a class="tocitem" href="../geometrytools/">Geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Colors and styles</a></li><li><a class="tocitem" href="../polygons/">Polygons and paths</a></li><li><a class="tocitem" href="../text/">Text</a></li><li><a class="tocitem" href="../transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../clipping/">Clipping</a></li><li><a class="tocitem" href="../images/">Images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Animation</a></li><li class="is-active"><a class="tocitem" href>Live graphics</a><ul class="internal"><li><a class="tocitem" href="#Clock"><span>Clock</span></a></li></ul></li><li><a class="tocitem" href="../moreexamples/">More examples</a></li><li><a class="tocitem" href="../functionindex/">Index</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Live graphics</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Live graphics</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/livegraphics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Live-graphics"><a class="docs-heading-anchor" href="#Live-graphics">Live graphics</a><a id="Live-graphics-1"></a><a class="docs-heading-anchor-permalink" href="#Live-graphics" title="Permalink"></a></h1><p>With the help of an external appication to manage windows, it&#39;s possible to use Luxor to create continuously changing graphics in a window.</p><p>This example uses the <a href="https://github.com/aviks/MiniFB.jl">MiniFB</a> package, which you can add using <code>] add MiniFB</code>.</p><p>The file <code>play.jl</code> defines a simple macro, <code>@play</code>, which continuously evaluates and draws the graphics in a window. For example, this code:</p><pre><code class="language-none">using Luxor
+
+include(dirname(pathof(Luxor)) * &quot;/play.jl&quot;)
+
+let θ = 0
+    @play 400 400 begin
+    #
+        background(&quot;black&quot;)
+        sethue(&quot;white&quot;)
+        rotate(θ)
+        hypotrochoid(200, 110, 37, :stroke)
+        θ += π/120
+        sleep(0.01)
+    #
+    end
+end</code></pre><p>draws a continuously rotating hypotrochoid.</p><h2 id="Clock"><a class="docs-heading-anchor" href="#Clock">Clock</a><a id="Clock-1"></a><a class="docs-heading-anchor-permalink" href="#Clock" title="Permalink"></a></h2><p>This code also imports the <code>@play</code> macro.</p><p>The call to <code>sleep()</code> reduces the CPU time, and allows other processes to run, but the millisecond animation will be less smooth as a result.</p><p><img src="../assets/figures/clock.gif" alt="clock"/></p><pre><code class="language-none">using Luxor, Colors, Dates, ColorSchemes
+
+include(dirname(pathof(Luxor)) * &quot;/play.jl&quot;)
+
+function clock(cscheme=ColorSchemes.leonardo)
+    @play 400 600 begin
+
+        # background
+        sethue(get(cscheme, .0))
+        paint()
+
+        # 24hour sector
+        fontsize(30)
+        sethue(get(cscheme, .2))
+        h = Dates.hour(now())
+        sector(O, 180, 200, π/2, π/2 + rescale(h, 0, 24, 0, 2pi), :fill)
+
+        @layer begin
+            fontsize(12)
+            sethue(&quot;white&quot;)
+            @. text([&quot;0&quot;, &quot;6&quot;, &quot;12&quot;, &quot;18&quot;], polar(190, [i * π/2 for i in 1:4]),
+                halign=:center,
+                valign=:middle)
+        end
+
+        # minute sector
+        sethue(get(cscheme, .4))
+        m = Dates.minute(now())
+        sector(O, 160, 180, 3π/2, 3π/2 + rescale(m, 0, 60, 0, 2pi), :fill)
+
+        # second sector
+        sethue(get(cscheme, .6))
+        s = Dates.second(now())
+        sector(O, 140, 160, 3π/2, 3π/2 + rescale(s, 0, 60, 0, 2pi), :fill)
+
+        # millisecond indicator
+        @layer begin
+            setopacity(0.5)
+            sethue(get(cscheme, .8))
+            ms = Dates.value(Dates.Millisecond(Dates.now()))
+            circle(polar(120, 3π/2 + rescale(ms, 0, 1000, 0, 2pi)), 20, :fill)
+        end
+
+        # central text
+        fontface(&quot;JuliaMono-Black&quot;)
+        sethue(get(cscheme, 1.0))
+        text(Dates.format(Dates.now(), &quot;HH:MM:SS&quot;), halign=:center)
+
+        sleep(0.05)
+    end
+end
+
+clock(ColorSchemes.klimt)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../animation/">« Animation</a><a class="docs-footer-nextpage" href="../moreexamples/">More examples »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Monday 8 March 2021 13:59">Monday 8 March 2021</span>. Using Julia version 1.5.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
