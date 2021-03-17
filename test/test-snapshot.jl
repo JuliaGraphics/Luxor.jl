@@ -15,7 +15,7 @@ end
 
 function draw_and_snapshot(fname)
     drawcentered(0.5 * tryparse(Float64, filter(isnumeric, fname)))
-    @test typeof(snapshot(;fname)) == Drawing
+    @test typeof(snapshot(;fname = fname)) == Drawing
     println("...finished test: output in $(fname)")
 end
 
