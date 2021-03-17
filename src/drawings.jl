@@ -24,6 +24,23 @@ mutable struct Drawing
             the_surface     = Cairo.CairoEPSSurface(iobuf, w, h)
         elseif stype == :svg
             the_surface     = Cairo.CairoSVGSurface(iobuf, w, h)
+        elseif stype == :rec
+            if isnan(w) || isnan(h)
+                the_surface     = Cairo.CairoRecordingSurface()
+            else
+                extents = Cairo.CairoRectangle(0.0, 0.0, w, h)
+                bckg = Cairo.CONTENT_COLOR_ALPHA
+                the_surface     = Cairo.CairoRecordingSurface(bckg, extents)
+                # Both the CairoSurface and the Drawing stores w and h in mutable structures.
+                # Cairo.RecordingSurface does not set the w and h properties,
+                # probably because that could be misinterpreted (width and height 
+                # does not tell everything).
+                # However, the image_as_matrix() function uses Cairo's values instead of Luxor's.
+                # Setting these values here is the less clean, less impact solution. NOTE: Switch back 
+                # if revising image_as_matrix to use Drawing: width, height.
+                the_surface.width = w
+                the_surface.height = h
+            end
         elseif stype == :image
             the_surface     = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
@@ -275,6 +292,10 @@ one using `background()`.
 creates the drawing in an image buffer in memory. You can obtain the data as a matrix with
 `image_as_matrix()`.
 
+Drawing(width, height, :rec)
+
+creates the drawing in a recording surface in memory. `snapshot(fname, ...)` to any file format and bounding box,
+or render as pixels with `image_as_matrix()`.
 """
 function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
     (path, ext)         = splitext(f)
@@ -322,6 +343,43 @@ function finish()
 
     return true
 end
+
+"""
+    snapshot(fname)
+
+Take a snapshot and save to 'fname' name and suffix. 
+One could continue drawing, or do the other things.
+
+Internally, this stores the recording surface, then restores it.
+"""
+function snapshot(;fname = :svg, w = missing, h = missing) # TODO centered, BoundingBox etc.
+    drec = currentdrawing()
+    @assert !isnothing(drec)
+    @assert current_surface_type() == :rec
+    if isnan(drec.width) || isnan(drec.height)
+        @assert !ismissing(w) || !ismissing(h) "Please provide w and h. Cairo.inkExtents not yet implemented."
+    end
+    Cairo.flush(current_surface())
+    recmat = getmatrix()
+    d = if ismissing(w) || ismissing(h)
+        # Note, revisit this logic if Cairo.jl implements more of the RecordingSurface API.
+        Drawing(drec.width, drec.height, fname)
+    else
+        Drawing(w, h, fname)
+    end
+    d.redvalue = drec.redvalue
+    d.greenvalue = drec.greenvalue
+    d.bluevalue = drec.bluevalue
+    d.alpha = drec.alpha
+    setmatrix(recmat)
+    # Revisit this to cover all cases.
+    set_source(d.cr, drec.surface, -drec.width / 2, -drec.height / 2)
+    paint()
+    finish()
+    CURRENTDRAWING[1] = drec
+    d
+end
+
 
 """
     preview()

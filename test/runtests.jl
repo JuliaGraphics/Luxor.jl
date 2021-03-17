@@ -87,6 +87,7 @@ function run_all_tests()
         include("images-with-alpha.jl")
         include("test-image.jl")
 #        include("tiling-images.jl")
+        include("test-snapshot.jl")
     end
 
     @testset "imagematrix" begin
