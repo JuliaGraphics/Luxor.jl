@@ -6,6 +6,8 @@ using Luxor, Test, Random
 Drawing()
 [Drawing() for x in 1:10]
 [Drawing(x, x) for x in 1:10]
+Drawing(NaN, NaN, :rec)
+[Drawing(x, x, :rec) for x in 1:10]
 [Drawing(x, x, :image) for x in 1:10]
 
 
