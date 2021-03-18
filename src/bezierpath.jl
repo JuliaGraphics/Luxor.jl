@@ -641,8 +641,8 @@ function beziersegmentangles(pt1, pt2;
         out = deg2rad(45),
         in  = deg2rad(135))
     # find intersection of the tangents
-    tangent1 = (pt1, polar(1500, out)) # arbitrary length "ray" :(
-    tangent2 = (pt2, polar(1500, in))
+    tangent1 = (pt1, pt1 + polar(1500, out)) # arbitrary length "ray" :(
+    tangent2 = (pt2, pt2 + polar(1500, in))
     flag, ip = intersectionlines(tangent1..., tangent2...)
 
     if flag

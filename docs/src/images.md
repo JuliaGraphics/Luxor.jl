@@ -14,7 +14,7 @@ Luxor lets you place PNG and SVG images on the drawing. First, load an image:
 
 (JPEGs aren't supported.)
 
-Then use `placeimage()` to place the image by its top left corner at point `pt`, or use the `centered=true` keyword to place the image's center point there. Access the image's dimensions with `.width` and `.height`. You can use the `centered=true` keyword.
+Then use `placeimage()` to place the image by its top left corner at point `pt`, or use the `centered=true` keyword to place the image's center point there. Access the image's dimensions with `.width` and `.height`.
 
 ```@example
 using Luxor # hide

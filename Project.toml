@@ -1,7 +1,7 @@
 name = "Luxor"
 uuid = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
 authors = ["cormullion <cormullion@mac.com>"]
-version = "2.10.0"
+version = "2.11.0"
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"

@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.11.0] - 2021-
+
+### Added
+
+### Changed
+
+- CI now ci.yml rather than travis
+- texttrack() switch to textoutlines()
+- beziersegmentangles() bug fixed
+
+### Removed
+
+### Deprecated
+
 ## [v2.10.0] - 2021-03-08
 
 ### Added
