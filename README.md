@@ -2,7 +2,7 @@
 
 | **Documentation**                       | **Build Status**                          | **Code Coverage**               |
 |:---------------------------------------:|:-----------------------------------------:|:-------------------------------:|
-| [![][docs-stable-img]][docs-stable-url] | [![Build Status][travis-img]][travis-url] | [![][codecov-img]][codecov-url] |
+| [![][docs-stable-img]][docs-stable-url] | [![Build Status][ci-img]][ci-url]         | [![][codecov-img]][codecov-url] |
 | [![][docs-development-img]][docs-development-url] | [![Build Status][appvey-img]][appvey-url] |                                 |
 
 ## Luxor
@@ -49,3 +49,6 @@ More _systematic error-handling_ particularly of geometry errors would be a good
 
 [codecov-img]: https://codecov.io/gh/JuliaGraphics/Luxor.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/JuliaGraphics/Luxor.jl
+
+[ci-img]: https://github.com/cormullion/Luxor.jl/workflows/CI/badge.svg
+[ci-url]: https://github.com/cormullion/Luxor.jl/actions?query=workflow%3ACI

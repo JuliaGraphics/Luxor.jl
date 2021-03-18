@@ -655,8 +655,8 @@ textwrap(the_text, 300, boxtopleft(BoundingBox()) + 20,
     end)
 ```
 
-puts a count of the number of punctuation characters in each line at the end
-of the line.
+puts a count of the number of punctuation characters in each
+line at the end of the line.
 
 Returns the position of what would have been the next line.
 """
@@ -673,21 +673,35 @@ textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =
              kwargs...)
 
 """
-    texttrack(txt, pos, tracking, fontsize=12)
+    texttrack(txt, pos, tracking, fontsize=12;
+        action=:fill,
+        halign=:left,
+        valign=:baseline,
+        startnewpath=true)
 
-Place the text in `txt` at `pos`, left-justified, and letter space ('track') the text using the value in `tracking`.
+Place the text in `txt` at `pos`, left-justified, and letter
+space ('track') the text using the value in `tracking`.
 
-The tracking units depend on the current font size! 1 is 1/1000 em. In a 6‑point font, 1 em equals 6 points;
-in a 10‑point font, 1 em equals 10 points.
+The tracking units depend on the current font size! 1 is
+1/1000 em. In a 6‑point font, 1 em equals 6 points; in a
+10‑point font, 1 em equals 10 points.
 
-A value of -50 would tighten the letter spacing noticeably. A value of 50 would make the text more open.
+A value of -50 would tighten the letter spacing noticeably.
+A value of 50 would make the text more open.
+
+The text drawing action applied to each character defaults
+to `textoutlines(... :fill)`.
 """
-function texttrack(txt, pos, tracking, fontsize=12)
+function texttrack(txt, pos, tracking, fontsize=12;
+            action=:fill,
+            halign=:left,
+            valign=:baseline,
+            startnewpath=true)
     te = textextents(txt)
     for i in txt
         glyph = string(i)
         glyph_x_bearing, glyph_y_bearing, glyph_width, glyph_height, glyph_x_advance, glyph_y_advance = textextents(glyph)
-        text(glyph, pos)
+        textoutlines(glyph, pos, action, halign=halign, valign=valign, startnewpath=startnewpath)
         x = glyph_x_advance + (tracking/1000) * fontsize
         pos += (x, 0)
     end
