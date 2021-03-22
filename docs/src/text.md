@@ -124,7 +124,7 @@ text
 
 ## Placing text ("Pro" API)
 
-Use `settext()` to place text. You can include some pseudo-HTML markup.
+Use `settext()` to place text. You can include some pseudo-HTML markup with the keyword argument `markup=true`.
 
 ```@example
 using Luxor # hide
