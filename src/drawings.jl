@@ -371,8 +371,6 @@ pngdrawing = snapshot(fname = "temp.png", cb = cb, scalefactor = 10)
 The last example would return and also write a png drawing with 1024 x 960 pixels to storage.
 """
 function snapshot(;fname = :png, cb = missing, scalefactor = 1.0)
-    @show scalefactor
-    @show cb
     rd = currentdrawing()
     isbits(rd) && return false  # currentdrawing provided 'info'
     if ismissing(cb)
