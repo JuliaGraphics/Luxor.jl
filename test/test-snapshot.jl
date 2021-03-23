@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using Luxor, Test, Random
+using Luxor, Test
 
 function drawcircles(Δα)
     @layer begin
