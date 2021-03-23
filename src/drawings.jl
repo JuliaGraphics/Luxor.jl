@@ -108,7 +108,7 @@ end
 
 # How Luxor output works. You start by creating a drawing
 # either aimed at a file (PDF, EPS, PNG, SVG) or aimed at an
-# in-memory buffer (:svg, :png, , :rec or :image); you could be
+# in-memory buffer (:svg, :png, :rec, or :image); you could be
 # working in Jupyter or Pluto or Atom, or a terminal, and on
 # either Mac, Linux, or Windows.  (The @svg/@png/@pdf macros
 # are shortcuts to file-based drawings.) When a drawing is
@@ -244,55 +244,75 @@ file-based or in-memory, and dimensions.
 
 # Extended help
 
-    Drawing()
+```
+Drawing()
+```
 
 creates a drawing, defaulting to PNG format, default filename "luxor-drawing.png",
 default size 800 pixels square.
 
 You can specify dimensions, and assume the default output filename:
 
-    Drawing(400, 300)
+```
+Drawing(400, 300)
+```
 
 creates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default
 filename "luxor-drawing.png".
 
-    Drawing(400, 300, "my-drawing.pdf")
+```
+Drawing(400, 300, "my-drawing.pdf")
+```
 
 creates a PDF drawing in the file "my-drawing.pdf", 400 by 300 pixels.
 
-    Drawing(1200, 800, "my-drawing.svg")
+```
+Drawing(1200, 800, "my-drawing.svg")
+```
 
 creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
-    Drawing(width, height, surfacetype | filename)
+```
+Drawing(width, height, surfacetype | filename)
+```
 
 creates a new drawing of the given surface type (e.g. :svg, :png), storing the picture
 only in memory if no filename is provided.
 
-    Drawing(1200, 1200/Base.Mathconstants.golden, "my-drawing.eps")
+```
+Drawing(1200, 1200/Base.Mathconstants.golden, "my-drawing.eps")
+```
 
 creates an EPS drawing in the file "my-drawing.eps", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ)
 high. Only for PNG files must the dimensions be integers.
 
-    Drawing("A4", "my-drawing.pdf")
+```
+Drawing("A4", "my-drawing.pdf")
+```
 
 creates a drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf".
 Other sizes available are: "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal",
 "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
-    Drawing("A4landscape")
+```
+Drawing("A4landscape")
+```
 
 creates the drawing A4 landscape size.
 
 PDF files default to a white background, but PNG defaults to transparent, unless you specify
 one using `background()`.
 
-    Drawing(width, height, :image)
+```
+Drawing(width, height, :image)
+```
 
 creates the drawing in an image buffer in memory. You can obtain the data as a matrix with
 `image_as_matrix()`.
 
+```
 Drawing(width, height, :rec)
+```
 
 creates the drawing in a recording surface in memory. `snapshot(fname, ...)` to any file format and bounding box,
 or render as pixels with `image_as_matrix()`.
@@ -345,7 +365,11 @@ function finish()
 end
 
 """
-    snapshot(;fname = :png, cb = missing, scalefactor = 1.0)
+    snapshot(;
+        fname = :png,
+        cb = missing,
+        scalefactor = 1.0)
+
     snapshot(fname, cb, scalefactor)
     -> finished snapshot drawing, for display
 
@@ -353,9 +377,13 @@ Take a snapshot and save to 'fname' name and suffix. This requires
 that the current drawing is a recording surface. You can continue drawing
 on the same recording surface.
 
-fname         file name or symbol, see `Drawing`
-cb            crop box::BoundingBox - what's inside is copied to snapshot
-scalefactor   snapshot width / crop box width. Same for height.
+### Arguments
+
+`fname` the file name or symbol, see [`Drawing`](@ref)
+
+`cb` crop box::BoundingBox - what's inside is copied to snapshot
+
+`scalefactor` snapshot width/crop box width. Same for height.
 
 ### Examples
 
@@ -370,7 +398,10 @@ pngdrawing = snapshot(fname = "temp.png", cb = cb, scalefactor = 10)
 
 The last example would return and also write a png drawing with 1024 x 960 pixels to storage.
 """
-function snapshot(;fname = :png, cb = missing, scalefactor = 1.0)
+function snapshot(;
+        fname = :png,
+        cb = missing,
+        scalefactor = 1.0)
     rd = currentdrawing()
     isbits(rd) && return false  # currentdrawing provided 'info'
     if ismissing(cb)

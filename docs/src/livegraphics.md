@@ -1,6 +1,10 @@
-# Live graphics
+# Live graphics and snapshots
+
+## Live graphics
 
 With the help of an external appication to manage windows, it's possible to use Luxor to create continuously changing graphics in a window.
+
+### The `@play` macro
 
 This example uses the [MiniFB](https://github.com/aviks/MiniFB.jl) package, which you can add using `] add MiniFB`.
 
@@ -27,7 +31,7 @@ end
 
 draws a continuously rotating hypotrochoid.
 
-## Clock
+### Clock
 
 This code also imports the `@play` macro.
 
@@ -90,4 +94,16 @@ function clock(cscheme=ColorSchemes.leonardo)
 end
 
 clock(ColorSchemes.klimt)
+```
+
+## Snapshots
+
+A _snapshot_ is a view of the current Luxor drawing in its current state, before it's been closed via `finish()`. You can take a snapshot, then continue drawing on the current drawing.
+
+!!! note
+
+    You can take a snapshot only for drawings created using the `:rec` (recording) format.
+
+```@docs
+snapshot
 ```
