@@ -1,8 +1,10 @@
 # Changelog
 
-## [v2.11.0] - 2021-
+## [v2.11.0] - forthcoming 2021-03...
 
 ### Added
+
+- recording (`:rec` and `snapshot()`) (thanks @hustf!)
 
 ### Changed
 
