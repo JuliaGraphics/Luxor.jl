@@ -33,10 +33,10 @@ mutable struct Drawing
                 the_surface     = Cairo.CairoRecordingSurface(bckg, extents)
                 # Both the CairoSurface and the Drawing stores w and h in mutable structures.
                 # Cairo.RecordingSurface does not set the w and h properties,
-                # probably because that could be misinterpreted (width and height 
+                # probably because that could be misinterpreted (width and height
                 # does not tell everything).
                 # However, the image_as_matrix() function uses Cairo's values instead of Luxor's.
-                # Setting these values here is the less clean, less impact solution. NOTE: Switch back 
+                # Setting these values here is the less clean, less impact solution. NOTE: Switch back
                 # if revising image_as_matrix to use Drawing: width, height.
                 the_surface.width = w
                 the_surface.height = h
@@ -108,7 +108,7 @@ end
 
 # How Luxor output works. You start by creating a drawing
 # either aimed at a file (PDF, EPS, PNG, SVG) or aimed at an
-# in-memory buffer (:svg, :png, or :image); you could be
+# in-memory buffer (:svg, :png, , :rec or :image); you could be
 # working in Jupyter or Pluto or Atom, or a terminal, and on
 # either Mac, Linux, or Windows.  (The @svg/@png/@pdf macros
 # are shortcuts to file-based drawings.) When a drawing is
@@ -345,39 +345,117 @@ function finish()
 end
 
 """
-    snapshot(fname)
+    snapshot(;fname = :png, cb = missing, scalefactor = 1.0)
+    snapshot(fname, cb, scalefactor)
+    -> finished snapshot drawing, for display
 
-Take a snapshot and save to 'fname' name and suffix. 
-One could continue drawing, or do the other things.
+Take a snapshot and save to 'fname' name and suffix. This requires
+that the current drawing is a recording surface. You can continue drawing
+on the same recording surface.
 
-Internally, this stores the recording surface, then restores it.
+fname         file name or symbol, see `Drawing`
+cb            crop box::BoundingBox - what's inside is copied to snapshot
+scalefactor   snapshot width / crop box width. Same for height.
+
+### Examples
+
+```
+snapshot()
+snapshot(fname = "temp.png")
+snaphot(fname = :svg)
+cb = BoundingBox(Point(0, 0), Point(102.4, 96))
+snapshot(cb = cb)
+pngdrawing = snapshot(fname = "temp.png", cb = cb, scalefactor = 10)
+```
+
+The last example would return and also write a png drawing with 1024 x 960 pixels to storage.
 """
-function snapshot(;fname = :svg, w = missing, h = missing) # TODO centered, BoundingBox etc.
-    drec = currentdrawing()
-    @assert !isnothing(drec)
-    @assert current_surface_type() == :rec
-    if isnan(drec.width) || isnan(drec.height)
-        @assert !ismissing(w) || !ismissing(h) "Please provide w and h. Cairo.inkExtents not yet implemented."
-    end
-    Cairo.flush(current_surface())
-    recmat = getmatrix()
-    d = if ismissing(w) || ismissing(h)
-        # Note, revisit this logic if Cairo.jl implements more of the RecordingSurface API.
-        Drawing(drec.width, drec.height, fname)
+function snapshot(;fname = :png, cb = missing, scalefactor = 1.0)
+    @show scalefactor
+    @show cb
+    rd = currentdrawing()
+    isbits(rd) && return false  # currentdrawing provided 'info'
+    if ismissing(cb)
+        if isnan(rd.width) || isnan(rd.height)
+             @info "The current recording surface has no bounds. Define a crop box for snapshot."
+             return false
+        end
+        # When no cropping box is given, we take the intention
+        # to be a snapshot of the entire rectangular surface,
+        # regardless of recording surface current scaling and rotation.
+        gsave()
+        origin()
+        sn = snapshot(fname, BoundingBox(), scalefactor)
+        grestore()
     else
-        Drawing(w, h, fname)
+        @assert cb isa BoundingBox
+        sn = snapshot(fname, cb, scalefactor)
     end
-    d.redvalue = drec.redvalue
-    d.greenvalue = drec.greenvalue
-    d.bluevalue = drec.bluevalue
-    d.alpha = drec.alpha
-    setmatrix(recmat)
-    # Revisit this to cover all cases.
-    set_source(d.cr, drec.surface, -drec.width / 2, -drec.height / 2)
+    sn
+end
+function snapshot(fname, cb, scalefactor)
+    # Prefix r: recording
+    # Prefix n: new snapshot
+    # Device coordinates, device space: (x_d, y_d), origin at top left for Luxor implemented types
+    # ctm: current transformation matrix - since it's symmetric, Cairo simplifies to a vector.
+    # User coordinates, user space: (x_u,y_u ) = ctm⁻¹ * (x_d, y_d)
+    rd = currentdrawing()
+    isbits(rd) && return false  # currentdrawing provided 'info'
+    rs = current_surface()
+    @assert rd isa Drawing
+    @assert current_surface_type() == :rec
+    # The check for an 'alive' drawing should be performed by currentdrawing()
+    # Working on a dead drawing causes ugly crashes.
+    # Empty the working buffer to the recording surface:
+    Cairo.flush(rs)
+
+    # Recording surface device origin is assumed to be the
+    # upper left corner of extents (which is true given how Luxor currently makes these,
+    # but Cairo now has more options)
+
+    # Recording surface current transformation matrix (ctm)
+    rma = getmatrix()
+
+    # Recording surface inverse ctm - for device to user coordinates
+    rmai = juliatocairomatrix(cairotojuliamatrix(rma)^-1)
+
+    # Recording surface user coordinates of crop box top left
+    rtlxu, rtlyu = boxtopleft(cb)
+
+    # Recording surface device coordinates of crop box top left
+    rtlxd, rtlyd, _ = cairotojuliamatrix(rma) * [rtlxu, rtlyu, 1]
+
+    # Position of recording surface device origin, in new drawing user space.
+    x, y = -rtlxd, -rtlyd
+
+    # New drawing dimensions
+    nw = Float64(round(scalefactor * boxwidth(cb)))
+    nh = Float64(round(scalefactor * boxheight(cb)))
+
+    # New drawing ctm - user space origin and device space origin at top left
+    nm = scalefactor.* [rmai[1], rmai[2], rmai[3], rmai[4], 0.0, 0.0]
+
+    # Create new drawing, to which we'll project a snapshot
+    nd = Drawing(round(nw), round(nh), fname)
+    setmatrix(nm)
+
+    # Define where to play the recording
+    # The proper Cairo.jl name would be set_source_surface,
+    # which is actually called by this Cairo.jl method.
+    # Cairo docs phrases this as "Desination user space coordinates at which the
+    # recording surface origin should appear". This seems to mean DEVICE origin.
+    set_source(nd.cr, rs, x, y)
+
+    # Draw the recording here
     paint()
+
+    # Even in-memory drawings are finished, since such drawings are displayed.
     finish()
-    CURRENTDRAWING[1] = drec
-    d
+
+    # Switch back to continue recording
+    CURRENTDRAWING[1] = rd
+    # Return the snapshot in case it should be displayed
+    nd
 end
 
 
