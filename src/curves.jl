@@ -224,8 +224,8 @@ If `c`, `A`, and `B` are collinear, then a hemispherical arc could be
 either clockwise or not.
 """
 function isarcclockwise(c::Point, A::Point, B::Point)
-    a = A - O
-    b = B - O
+    a = A - c
+    b = B - c
     return crossproduct(a, b) > 0
 end
 
