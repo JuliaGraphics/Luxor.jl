@@ -104,7 +104,7 @@ A _snapshot_ is a view of the current Luxor drawing in its current state, before
 
     You can take a snapshot only for drawings created using the `:rec` (recording) format.
 
-The following composite image shows a Julia set at different resolutions. The `snapshot()` call saves the current drawing for a few different values of the `stepby` parameter.
+The following code exports a series of snapshots made with `snapshot()`, showing the state of the computation for different values of the `stepby` parameter. (This image is a composite of all the snapshots.)
 
 ![juliaset](assets/figures/julia-set-set.png)
 
