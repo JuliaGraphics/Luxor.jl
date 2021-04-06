@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.11.0] - forthcoming 2021-03...
+## [v2.11.0] - 2021-04-06
 
 ### Added
 
@@ -11,6 +11,7 @@
 - CI now ci.yml rather than travis
 - texttrack() switch to textoutlines()
 - beziersegmentangles() bug fixed
+- bug in isarcclockwise() fixed (thanks @johannes-fischer!)
 
 ### Removed
 

@@ -54,6 +54,8 @@ Find the radius and center point for three points lying on a circle.
 returns `(centerpoint, radius)` of a circle.
 
 If there's no such circle, the function returns `(Point(0, 0), 0)`.
+
+If two of the points are the same, use `circle(pt1, pt2)` instead.
 """
 function center3pts(p1::Point, p2::Point, p3::Point)
     norm2(p::Point) = (p.x)^2+(p.y)^2
