@@ -158,7 +158,8 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         framerate=30,
         pathname="",
         tempdirectory="",
-        usenewffmpeg=true)
+        usenewffmpeg=true,
+        debug=false)
 
     if isdir(pathname)
         suggestedpathname = joinpath(pathname, "myanimation.gif")
@@ -200,15 +201,24 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
     if creategif == false
         return true # we're done
     end
-    # these two commands create a palette and then create animated GIF from the resulting images
+    # the FFMPEG commands create a palette and then create an animated GIF from the resulting images
     if !usenewffmpeg
         # old version of ffmpeg up to 2.1.3
         # these two commands create a palette and then an animated GIF from the resulting images using the palette
-        run(`ffmpeg -loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
-        run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
+        FFMPEG.ffmpeg_exe(`-loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
+        FFMPEG.ffmpeg_exe(`-loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
     else
-        # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters
-        run(`ffmpeg -loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+        @debug "we're running bundled FFMPEG", FFMPEG.exe("-version")
+        # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters ¯\\\_(ツ)_/¯
+        if debug
+            @info "$(framerate)"
+            @info "$(tempdirectory)"
+            @info "$(tempdirectory)/$(movie.movietitle).gif"
+            FFMPEG.ffmpeg_exe(`-framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+        else
+            # reduce verbosity ! 
+            FFMPEG.ffmpeg_exe(`-loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+        end
     end
 
     if ! isempty(pathname)
