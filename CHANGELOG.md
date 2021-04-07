@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.12.0] - current master - forthcoming release
+
+### Added
+
+- add dependency on FFMPEG.jl
+
+### Changed
+
+- FFMPEG code changed to run bundled version
+
+### Removed
+
+### Deprecated
+
 ## [v2.11.0] - 2021-04-06
 
 ### Added
