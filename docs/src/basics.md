@@ -233,6 +233,12 @@ lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new
 
 You can specify `:image` as the surface type. This allows you to copy the current drawing into a 2D matrix (using `image_as_matrix()`). See the Images chapter for more information.
 
+Use `svgstring()` to obtain the SVG source for a finished SVG drawing. If you're using a notebook environment such as Pluto...
+
+```@docs
+svgstring
+```
+
 ## Interactive drawings
 
 ### Using Pluto

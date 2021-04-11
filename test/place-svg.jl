@@ -4,6 +4,20 @@ using Luxor
 
 using Test
 
+function svgstring_test()
+    @testset "svg string test" begin
+        Drawing(400, 800, :svg)
+        origin()
+        juliacircles()
+        @test finish() == true
+        svgsource = svgstring()
+        matches = collect(eachmatch(r"<.*?>", svgsource))
+        @test first(matches).match == """<?xml version="1.0" encoding="UTF-8"?>"""
+        @test last(matches).match == "</svg>"
+    end
+    println("...finished svgstring_test")
+end
+
 function place_svgtest(fnamein, fnameout)
     svgin = readsvg(fnamein)
     @testset "readsvg" begin
@@ -27,4 +41,5 @@ function place_svgtest(fnamein, fnameout)
     println("...finished test: output in $(fnameout)")
 end
 
+svgstring_test()
 place_svgtest("polysample.svg", "place-svg.svg")

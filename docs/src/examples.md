@@ -202,6 +202,34 @@ imfilter(img, Kernel.gaussian(10))
 
 ![image matrix](assets/figures/ampersand-matrix.png)
 
+## SVG images
+
+Luxor can create new SVG images, either in a file or in
+memory, and can also place existing SVG images on a drawing.
+See [Placing images](@ref) for more. It's also possible to
+obtain the source of an SVG drawing as a string. For example,
+this code draws the Julia logo using SVG code:
+
+```
+Drawing(500, 500, :svg)
+origin()
+julialogo()
+finish()
+s = svgstring()
+```
+
+You can examine the SVG programmatically:
+
+```
+eachmatch(r"rgb\(.*?\)", s) |> collect
+5-element Vector{RegexMatch}:
+ RegexMatch("rgb(0%,0%,0%)")
+ RegexMatch("rgb(79.6%,23.5%,20%)")
+ RegexMatch("rgb(25.1%,38.8%,84.7%)")
+ RegexMatch("rgb(58.4%,34.5%,69.8%)")
+ RegexMatch("rgb(22%,59.6%,14.9%)")
+```
+
 ## Feature gallery
 
 Here's a quick visual overview of some of the features in Luxor.jl:

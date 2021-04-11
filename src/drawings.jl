@@ -1041,3 +1041,42 @@ macro imagematrix!(buffer, body, width=256, height=256)
         m
     end
 end
+
+"""
+    svgstring()
+
+Return the current and recently completed SVG drawing as a string of SVG commands.
+
+Returns `""` if there is no SVG information available.
+
+To display the SVG string as a graphic, try the `HTML()` function in Base.
+
+## Example
+
+```
+Drawing(500, 500, :svg)
+origin()
+julialogo()
+finish()
+s = svgstring()
+
+eachmatch(r"rgb\\(.*?\\)", s) |> collect
+# black plus four Julia colors:
+5-element Vector{RegexMatch}:
+ RegexMatch("rgb(0%,0%,0%)")
+ RegexMatch("rgb(79.6%,23.5%,20%)")
+ RegexMatch("rgb(25.1%,38.8%,84.7%)")
+ RegexMatch("rgb(58.4%,34.5%,69.8%)")
+ RegexMatch("rgb(22%,59.6%,14.9%)")
+```
+
+"""
+function svgstring()
+    if Luxor.current_surface_type() == :svg
+        svgsource = String(Luxor.current_bufferdata())
+        return svgsource
+    else
+        @warn "Drawing is not SVG"
+        return ""
+    end
+end
