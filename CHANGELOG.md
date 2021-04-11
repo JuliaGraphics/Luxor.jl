@@ -5,10 +5,11 @@
 ### Added
 
 - add dependency on FFMPEG.jl
+- add `svgstring()` to obtain the SVG source of a finished drawing as a string
 
 ### Changed
 
-- FFMPEG code changed to run bundled version
+- FFMPEG code changed to run bundled version from FFMPEG.jl
 
 ### Removed
 

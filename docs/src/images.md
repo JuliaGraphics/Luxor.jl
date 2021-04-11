@@ -43,7 +43,37 @@ PNG images can be placed with varying opacity/transparency/alpha.
 readpng
 readsvg
 placeimage
+svgstring
 ```
+
+## SVG images
+
+To create an SVG image, using the `Drawing(... :svg)` or specify an SVG filename.
+To obtain the SVG source of a completed drawing, use `svgstring()`.
+
+For example, draw the Julia logo:
+
+```
+Drawing(500, 500, :svg)
+origin()
+julialogo()
+finish()
+s = svgstring()
+```
+
+The SVG source code is now stored in `s`. You can examine or process it further:
+
+```
+eachmatch(r"rgb\\(.*?\\)", s) |> collect
+5-element Vector{RegexMatch}:
+ RegexMatch("rgb(0%,0%,0%)")
+ RegexMatch("rgb(79.6%,23.5%,20%)")
+ RegexMatch("rgb(25.1%,38.8%,84.7%)")
+ RegexMatch("rgb(58.4%,34.5%,69.8%)")
+ RegexMatch("rgb(22%,59.6%,14.9%)")
+```
+
+To display the image in a Jupyter or Pluto notebook, use the `HTML()` function, or you can use the `readsvg()` and `placeimage()` functions in combination.
 
 ## Placing an image matrix
 
