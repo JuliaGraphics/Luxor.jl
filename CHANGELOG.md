@@ -5,6 +5,7 @@
 ### Added
 
 - add dependency on FFMPEG.jl
+- @drawsvg @savesvg
 - add `svgstring()` to obtain the SVG source of a finished drawing as a string
 
 ### Changed
