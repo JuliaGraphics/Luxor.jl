@@ -68,7 +68,7 @@ export Drawing,
     finish, preview, snapshot,
     origin, rulers, background,
 
-    @png, @pdf, @svg, @eps, @draw,
+    @png, @pdf, @svg, @eps, @draw, @drawsvg, @savesvg,
 
     # @play,
 

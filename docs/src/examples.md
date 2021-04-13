@@ -51,11 +51,12 @@ end
 ```
 ![background](assets/figures/circle-dots.png)
 
-The `@draw` macro is useful if you work in Juno/VS Code IDEs
-or a notebook environment such as Jupyter or Pluto and
-don't need to always save your work in files. It creates a PNG format
-drawing in memory, rather than saved in a file. It's
-displayed in the plot pane or in the next cell.
+The `@draw` and `drawsvg` macros are useful if you work in
+Juno/VS Code IDEs or a notebook environment such as Jupyter
+or Pluto and don't need to always save your work in files.
+They create a PNG or SVG format drawing in memory, rather
+than saved in a file. It's displayed in the plot pane or in
+an adjacent cell.
 
 ```julia
 @draw begin
@@ -72,6 +73,8 @@ displayed in the plot pane or in the next cell.
 end
 ```
 ![background](assets/figures/drawmacro.png)
+
+![pluto logo](assets/figures/plutodrawsvgmacro.png)
 
 ## The Julia logos
 

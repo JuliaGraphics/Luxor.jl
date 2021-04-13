@@ -43,7 +43,6 @@ PNG images can be placed with varying opacity/transparency/alpha.
 readpng
 readsvg
 placeimage
-svgstring
 ```
 
 ## SVG images

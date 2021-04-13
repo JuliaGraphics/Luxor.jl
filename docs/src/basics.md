@@ -191,13 +191,14 @@ or (less nicely):
      )
 ```
 
-The `@draw` macro creates a drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto).
+The `@draw` macro creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto). There's also a `@drawsvg` macro.
 
 ```@docs
 @svg
 @png
 @pdf
 @draw
+@drawsvg
 ```
 
 If you don't specify a size, the defaults are usually 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't even have to specify the suffix:
@@ -220,6 +221,12 @@ preview()
 ```
 
 ![transparent background](assets/figures/transparentbackground.png)
+
+You can obtain the raw SVG code of a drawing using `@savesvg`.
+
+```@docs
+@savesvg
+```
 
 ### Drawings in memory
 

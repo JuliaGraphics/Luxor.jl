@@ -1051,7 +1051,24 @@ Returns `""` if there is no SVG information available.
 
 To display the SVG string as a graphic, try the `HTML()` function in Base.
 
+```
+...
+HTML(svgstring())
+```
+
+In a Pluto notebook, you can also display the SVG using:
+
+```
+# using PlutoUI
+...
+PlutoUI.Show(MIME"image/svg+xml"(), svgstring())
+```
+
+(This lets you right-click to save the SVG.)
+
 ## Example
+
+This example manipulates the raw SVG code representing the Julia logo:
 
 ```
 Drawing(500, 500, :svg)
@@ -1059,7 +1076,6 @@ origin()
 julialogo()
 finish()
 s = svgstring()
-
 eachmatch(r"rgb\\(.*?\\)", s) |> collect
 # black plus four Julia colors:
 5-element Vector{RegexMatch}:
@@ -1069,7 +1085,6 @@ eachmatch(r"rgb\\(.*?\\)", s) |> collect
  RegexMatch("rgb(58.4%,34.5%,69.8%)")
  RegexMatch("rgb(22%,59.6%,14.9%)")
 ```
-
 """
 function svgstring()
     if Luxor.current_surface_type() == :svg
@@ -1078,5 +1093,44 @@ function svgstring()
     else
         @warn "Drawing is not SVG"
         return ""
+    end
+end
+
+"""
+    @drawsvg begin
+        body
+    end w h
+
+Create and preview an SVG drawing. Like `@draw` but using SVG format.
+"""
+macro drawsvg(body, width=600, height=600)
+    quote
+        Drawing($(esc(width)), $(esc(height)), :svg)
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        preview()
+    end
+end
+"""
+
+    @savesvg begin
+        body
+    end w h
+
+Like `@drawsvg` but returns the raw SVG code of the drawing in a
+string. Uses `@svgstring`.
+"""
+macro savesvg(body, width=600, height=600)
+    quote
+        Drawing($(esc(width)), $(esc(height)), :svg)
+        origin()
+        background("white")
+        sethue("black")
+        $(esc(body))
+        finish()
+        svgstring()
     end
 end
