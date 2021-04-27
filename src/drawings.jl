@@ -1076,14 +1076,14 @@ origin()
 julialogo()
 finish()
 s = svgstring()
-eachmatch(r"rgb\\(.*?\\)", s) |> collect
-# black plus four Julia colors:
-5-element Vector{RegexMatch}:
- RegexMatch("rgb(0%,0%,0%)")
- RegexMatch("rgb(79.6%,23.5%,20%)")
- RegexMatch("rgb(25.1%,38.8%,84.7%)")
- RegexMatch("rgb(58.4%,34.5%,69.8%)")
- RegexMatch("rgb(22%,59.6%,14.9%)")
+eachmatch(r"rgb.*?;", s) |> collect
+    6-element Vector{RegexMatch}:
+    RegexMatch("rgb(100%,100%,100%);")
+    RegexMatch("rgb(0%,0%,0%);")
+    RegexMatch("rgb(79.6%,23.5%,20%);")
+    RegexMatch("rgb(25.1%,38.8%,84.7%);")
+    RegexMatch("rgb(58.4%,34.5%,69.8%);")
+    RegexMatch("rgb(22%,59.6%,14.9%);")
 ```
 """
 function svgstring()
@@ -1102,12 +1102,14 @@ end
     end w h
 
 Create and preview an SVG drawing. Like `@draw` but using SVG format.
+
+Unlike `@draw` (PNG), there is no background, by default.
 """
 macro drawsvg(body, width=600, height=600)
     quote
         Drawing($(esc(width)), $(esc(height)), :svg)
         origin()
-        background("white")
+        # background("white")
         sethue("black")
         $(esc(body))
         finish()
@@ -1122,12 +1124,14 @@ end
 
 Like `@drawsvg` but returns the raw SVG code of the drawing in a
 string. Uses `@svgstring`.
+
+Unlike `@draw` (PNG), there is no background, by default.
 """
 macro savesvg(body, width=600, height=600)
     quote
         Drawing($(esc(width)), $(esc(height)), :svg)
         origin()
-        background("white")
+        # background("white")
         sethue("black")
         $(esc(body))
         finish()

@@ -262,13 +262,12 @@ end
 """
     cropmarks(center, width, height)
 
-Draw cropmarks (also known as trim marks).
+Draw cropmarks (also known as trim marks). Use current color.
 """
 function cropmarks(center, width, height)
     gap = 5
     crop = 15
     gsave()
-    setcolor("black")
     setline(0.5)
     setdash("solid")
     # horizontal top left
