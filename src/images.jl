@@ -179,16 +179,16 @@ function placeimage(im::SVGimage, pos=O; centered=false)
 end
 
 """
-    placeimage(matrix::AbstractMatrix{UInt32}, pos=O; alpha=1
-        centered=false)
+    placeimage(matrix::AbstractMatrix{UInt32}, pos=O;
+        alpha=1, centered=false)
 
 Place an image matrix on the drawing at `pos` with opacity/transparency `alpha`.
 
 Use keyword `centered=true` to place the center of the image
 at the position.
 """
-function placeimage(buffer::AbstractMatrix{UInt32}, pt=O, alpha=1;
-        centered=false)
+function placeimage(buffer::AbstractMatrix{UInt32}, pt=O; 
+        alpha=1, centered=false)
     if centered == true
         w, h = size(buffer)
         pt = Point(pt.x - (w/2), pt.y - (h/2))
