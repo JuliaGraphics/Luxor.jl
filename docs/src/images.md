@@ -99,6 +99,9 @@ end
 
 ![place image matrix](assets/figures/place-image-matrix.png)
 
+`placeimage()` can also take in an optional argument `alpha` to change the opacity of the image matrix.
+![place image matrix](assets/figures/place-image-matrix-alpha.png)
+
 ## Clipping images
 
 You can clip images. The following script repeatedly places the image using a circle to define a clipping path:
