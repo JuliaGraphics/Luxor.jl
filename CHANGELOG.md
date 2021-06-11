@@ -1,16 +1,18 @@
 # Changelog
 
-## [v2.12.0] - current master - forthcoming release
+## [v2.12.0] - 2021-06-12
 
 ### Added
 
+- Allow alpha settings for image matrix (thanks @Sov-trotter!)
 - add dependency on FFMPEG.jl
-- @drawsvg @savesvg
-- add `svgstring()` to obtain the SVG source of a finished drawing as a string
+- add @drawsvg @savesvg
+- add `svgstring()` to obtain the SVG source of a finished SVG drawing as a string
 
 ### Changed
 
 - FFMPEG code changed to run bundled version from FFMPEG.jl
+- changed a test that used random numbers and failed on v1.7
 
 ### Removed
 
