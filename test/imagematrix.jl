@@ -103,7 +103,16 @@ function imagematrix()
     Luxor.origin()
     placeimage(m1, centered=true)
     @test finish() == true
+    
+    K = 100
+    m2 = @imagematrix begin
+        juliacircles(20)
+    end K 100
 
+    Drawing(100, 100, :image)
+    Luxor.origin()
+    placeimage(m2, alpha=1, centered=true)
+    @test finish() == true
 end
 
 imagematrix()
