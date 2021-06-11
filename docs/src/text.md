@@ -180,6 +180,15 @@ One difference between `settext()` and `text()` (on macOS) is that many more mis
 
 Cairo.jl (and hence Luxor.jl) doesn't support emoji currently. 😢
 
+Text is rasterized (converted from outlines to pixels)
+only when you output to the PNG format. For SVG formats, text
+is converted to outlines (curves and lines). For PDF and EPS formats, the fonts
+you use are stored inside the output file ("embedded"), and the
+text is displayed using that font only when the file is
+viewed.
+
+For PNG files, the appearance of fonts when output is controlled to some extent by the operating system. For example, on Windows, if ClearType is active, differently-colored pixels are used to display fonts, because of the use of subpixel rendering. These colored pixels will be visible in the PNG output.
+
 ## Text to paths
 
 `textoutlines(string, position, action)` converts the text into graphic path(s), places them starting at `position`, and applies the `action`.
