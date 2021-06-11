@@ -1,11 +1,6 @@
-#!/usr/bin/env julia
-
-using Luxor, Test, Random
+using Luxor, Test
 
 function test_polytriangulate(fname)
-
-    Random.seed!(42)
-
     width, height = 800, 800
     Drawing(width, height, fname)
     origin()
@@ -13,18 +8,16 @@ function test_polytriangulate(fname)
 
     rawpts = ngon(O, 300, 8, vertices = true)
 
-    for i in 1:12
-        push!(rawpts, rand(BoundingBox(rawpts) * 0.6))
-    end
-
-    @test length(rawpts) == 20
+    push!(rawpts, midpoint(rawpts[1], rawpts[4]))
+    push!(rawpts, midpoint(rawpts[2], rawpts[5]))
+    push!(rawpts, midpoint(rawpts[3], rawpts[6]))
 
     ptriangles = polytriangulate(rawpts)
 
-    @test length(ptriangles) == 30
+    @test length(ptriangles) == 12
 
     fontsize(16)
-    # visual inspection...
+    # visual inspection... :(
     setline(3)
     for (n, p) in enumerate(ptriangles)
         sethue([Luxor.julia_purple, Luxor.julia_blue,  Luxor.julia_red,  Luxor.julia_green][mod1(n, end)])
@@ -34,16 +27,8 @@ function test_polytriangulate(fname)
         strokepath()
         text(string(n), polycentroid(pgon), halign=:middle)
     end
-
     sethue("white")
     circle.(rawpts, 5, :fill)
-
-    # can't think of how to test the triangulation, ideas welcome
-    @test isempty(polyintersect(ptriangles[1], ptriangles[2])) == false
-    @test isempty(polyintersect(ptriangles[1], ptriangles[6])) == true
-    @test isempty(polyintersect(ptriangles[1], ptriangles[10])) == true
-    @test isempty(polyintersect(ptriangles[1], ptriangles[20])) == true
-
     @test finish() == true
 end
 
