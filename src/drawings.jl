@@ -1085,6 +1085,20 @@ eachmatch(r"rgb.*?;", s) |> collect
     RegexMatch("rgb(58.4%,34.5%,69.8%);")
     RegexMatch("rgb(22%,59.6%,14.9%);")
 ```
+
+```
+@drawsvg begin
+    background("midnightblue")
+    fontface("JuliaMono-Regular")
+    fontsize(20)
+    sethue("gold")
+    text("JuliaMono: a monospaced font ", halign=:center)
+    text("with reasonable Unicode support", O + (0, 22), halign=:center)
+end 500 150
+write("/tmp/txt.svg", svgstring())
+# minimize SVG
+run(`svgo /tmp/txt.svg -o /tmp/txt-min.svg`)
+```
 """
 function svgstring()
     if Luxor.current_surface_type() == :svg
@@ -1123,7 +1137,7 @@ end
     end w h
 
 Like `@drawsvg` but returns the raw SVG code of the drawing in a
-string. Uses `@svgstring`.
+string. Uses `svgstring`.
 
 Unlike `@draw` (PNG), there is no background, by default.
 """
