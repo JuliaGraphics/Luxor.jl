@@ -100,7 +100,7 @@ export Drawing,
     intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
     intersectlinepoly, polyintersect, polyintersections, circlepointtangent,
     circletangent2circles, pointinverse, pointcircletangent, circlecircleoutertangents,
-    circlecircleinnertangents, ellipseinquad,
+    circlecircleinnertangents, ellipseinquad, crescent, 
 
     ngon, ngonside, star, pie, polycross,
     do_action, paint, paint_with_alpha, fillstroke,
