@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.13.0] - forthcoming
+
+### Added
+
+- crescent()
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v2.12.0] - 2021-06-12
 
 ### Added

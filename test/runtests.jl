@@ -75,6 +75,7 @@ function run_all_tests()
         include("arc-sagitta-test.jl")
         include("circlecircletangent-test.jl")
         include("pointcircletangent-test.jl")
+        include("crescent-test.jl")
     end
 
     @testset "color" begin

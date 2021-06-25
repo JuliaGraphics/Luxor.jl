@@ -1067,5 +1067,85 @@ function ellipseinquad(qgon, action=:none)
     return ellipsecenter, ellipsesemimajor, ellipsesemiminor, ellipseangle
 end
 
+"""
+    crescent(pos, innerradius, outeradius, action=nothing;
+        vertices=false,
+        reversepath=false,
+        steps = 30)
 
+Create a crescent-shaped polygon, aligned with the current x-axis.
+If the inner radius is 0, you'll get a semicircle.
+
+## Examples
+
+Create a filled crescent shape with outer radius of 200, inner radius of 130.
+```
+crescent(O, 130, 200, :fill)
+```
+
+Create a stroked crescent shape; the inner radius of 0 produces a semicircle.
+
+```
+crescent(O, 0, 200, :stroke)
+```
+"""
+function crescent(pos::Point, innerradius::Real, outerradius::Real, action=nothing;
+        vertices=false,
+        reversepath=false,
+        steps = 30)
+    Δ = π/steps
+    ptlist = Point[]
+    move(pos + Point(innerradius * sin(0), outerradius * cos(0)))
+    push!(ptlist, currentpoint())
+    for i in 1:steps
+        pt = pos + Point(innerradius * sin(Δ * i), outerradius * cos(Δ * i))
+        push!(ptlist, pt)
+    end
+    for i in 1:steps
+        pt = pos + Point(outerradius * sin(π - (Δ * i)), outerradius * cos(π - (Δ * i)))
+        push!(ptlist, pt)
+    end
+    if !vertices
+        poly(ptlist, action, close=true, reversepath=reversepath)
+    end
+    return ptlist
+end
+
+"""
+crescent(cp1, r1, cp2, r2, action=nothing;
+            vertices=false,
+            reversepath=false,
+            steps = 30)
+
+Create a crescent-shaped polygon, aligned with the current
+x-axis, by finding the intersection of two circles.
+The two center positions should be different.
+
+See also ```crescent(point, innerradius, outeradius...)```.
+
+## Examples
+
+Create a filled crescent shape from two circles.
+
+```
+crescent(O, 100, O + (60, 0), 150, :fill)
+```
+"""
+function crescent(cp1::Point, r1::Real, cp2::Point, r2::Real, action=nothing;
+        vertices=false,
+        reversepath=false)
+    flag, ip1, ip2 = intersectioncirclecircle(cp1, r1, cp2, r2)
+    if flag
+        move(ip2)
+        carc(cp2, r2, slope(cp2, ip2), slope(cp2, ip1), :path)
+        arc(cp1, r1, slope(cp1, ip1), slope(cp1, ip2), :path)
+        ptlist = pathtopoly()[1]
+        if !vertices
+            poly(ptlist, action, close=true, reversepath=reversepath)
+        end
+        return ptlist
+    else
+        @info "crescent(): the two arcs won't intersect "
+    end
+end
 # eof

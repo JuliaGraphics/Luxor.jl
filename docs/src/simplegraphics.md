@@ -473,6 +473,38 @@ circlecircleinnertangents
 circlecircleoutertangents
 ```
 
+## Crescents
+
+Use `crescent()` to construct crescent shapes. There are two methods.
+The first method allows the two arcs to have the same radius.
+The second method allows the two arcs to share the same centers.
+
+```@example
+using Luxor # hide
+Drawing(700, 500, "assets/figures/crescents.png") # hide
+background("antiquewhite") # hide
+origin() # hide
+
+# method 1: same radii
+
+sethue("purple")
+crescent(Point(-200, 0), 200, Point(-150, 0), 200, :fill)
+
+# method 2: same centers
+
+sethue("orange")
+crescent(O, 100, 200, :fill)
+
+finish() # hide
+nothing # hide
+```
+
+![crescents](assets/figures/crescents.png)
+
+```@docs
+crescent
+```
+
 ## Paths and positions
 
 A path is a sequence of lines and curves. You can add lines and curves to the current path, then use `closepath()` to join the last point to the first.
