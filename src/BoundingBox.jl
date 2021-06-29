@@ -23,11 +23,14 @@ function Base.show(io::IO, bbox::BoundingBox)
 end
 
 function BoundingBox(;centered=true)
-    if centered
+    if currentdrawing() == false
+        # return a default bounding box of 600×600
+        r = BoundingBox(Point(-300, -300), Point(300, 300))
+    elseif centered
         # ignore current matrix
         r = BoundingBox(
-        Point(-current_width()/2, -current_height()/2),
-        Point(current_width()/2, current_height()/2))
+            Point(-current_width()/2, -current_height()/2),
+            Point(current_width()/2, current_height()/2))
     else
         b = getmatrix()
         setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
