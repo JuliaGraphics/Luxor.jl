@@ -889,24 +889,32 @@ end
 """
     polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
 
-Return a portion of a polygon, starting at a value between 0.0 (the beginning)
-and 1.0 (the end). 0.5 returns the first half of the polygon, 0.25 the first
-quarter, 0.75 the first three quarters, and so on.
+Return a portion of a polygon, starting at a value between
+0.0 (the beginning) and 1.0 (the end). 0.5 returns the first
+half of the polygon, 0.25 the first quarter, 0.75 the first
+three quarters, and so on.
 
-Use `closed=false` to exclude the line joining the
-final point to the first point from the calculations.
+Use `closed=false` to exclude the line joining the final
+point to the first point from the calculations.
 
-If you already have a list of the distances between each point in the polygon
-(the "polydistances"), you can pass them in `pdist`, otherwise they'll be
-calculated afresh, using `polydistances(p, closed=closed)`.
+If you already have a list of the distances between each
+point in the polygon (the "polydistances"), you can pass
+them in `pdist`, otherwise they'll be calculated afresh,
+using `polydistances(p, closed=closed)`.
 
-Use the complementary `polyremainder()` function to return the other part.
+Use the complementary `polyremainder()` function to return
+the other part.
 """
 function polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed=closed)
     end
+
+    if length(p) < 2
+        throw(error("polyportion(): need at least two points in a polygon"))
+    end
+
     portion = clamp(portion, 0.0, 1.0)
     # don't bother to do 0.0
     isapprox(portion, 0.0, atol=0.00001) && return p[1:1]
@@ -946,6 +954,9 @@ function polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed=closed)
+    end
+    if length(p) < 2
+        throw(error("polyremainder(): need at least two points in a polygon"))
     end
     portion = clamp(portion, 0.0, 1.0)
 

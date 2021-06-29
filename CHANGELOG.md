@@ -8,6 +8,9 @@
 
 ### Changed
 
+- polyportion() now throws error for single-point polys (duh)
+- BoundingBox() no longer fails if there's no drawing (returns a default value)
+
 ### Removed
 
 ### Deprecated
