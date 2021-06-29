@@ -485,12 +485,12 @@ Drawing(700, 500, "assets/figures/crescents.png") # hide
 background("antiquewhite") # hide
 origin() # hide
 
-# method 1: same radii
+# method 1: same radii, different centers
 
 sethue("purple")
 crescent(Point(-200, 0), 200, Point(-150, 0), 200, :fill)
 
-# method 2: same centers
+# method 2: same centers, different radii
 
 sethue("orange")
 crescent(O, 100, 200, :fill)
