@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Draw simple shapes · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/basictutorial/">A first tutorial</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox" checked/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../createdrawings/">Create drawings</a></li><li class="is-active"><a class="tocitem" href>Draw simple shapes</a><ul class="internal"><li><a class="tocitem" href="#Rectangles-and-boxes"><span>Rectangles and boxes</span></a></li><li><a class="tocitem" href="#Circles-and-ellipses"><span>Circles and ellipses</span></a></li><li><a class="tocitem" href="#Circles-and-tangents"><span>Circles and tangents</span></a></li><li><a class="tocitem" href="#Crescents"><span>Crescents</span></a></li><li><a class="tocitem" href="#Paths-and-positions"><span>Paths and positions</span></a></li><li><a class="tocitem" href="#Lines"><span>Lines</span></a></li><li><a class="tocitem" href="#Arrows"><span>Arrows</span></a></li><li><a class="tocitem" href="#Arcs-and-curves"><span>Arcs and curves</span></a></li><li><a class="tocitem" href="#More-curved-shapes:-sectors,-spirals,-and-squircles"><span>More curved shapes: sectors, spirals, and squircles</span></a></li><li><a class="tocitem" href="#Stars-and-crosses"><span>Stars and crosses</span></a></li><li><a class="tocitem" href="#Julia-logos"><span>Julia logos</span></a></li><li><a class="tocitem" href="#Hypotrochoids"><span>Hypotrochoids</span></a></li><li><a class="tocitem" href="#Cropmarks"><span>Cropmarks</span></a></li><li><a class="tocitem" href="#Dimensioning"><span>Dimensioning</span></a></li><li><a class="tocitem" href="#Barcharts"><span>Barcharts</span></a></li><li><a class="tocitem" href="#Box-maps"><span>Box maps</span></a></li></ul></li><li><a class="tocitem" href="../geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../polygons/">Work with polygons</a></li><li><a class="tocitem" href="../text/">Add text</a></li><li><a class="tocitem" href="../clipping/">Clip graphics</a></li><li><a class="tocitem" href="../images/">Images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Make animations</a></li><li><a class="tocitem" href="../livegraphics/">Live graphics and snapshots</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../explanation/basics/">Basic concepts</a></li><li><a class="tocitem" href="../../explanation/imagematrix/">Image matrix</a></li><li><a class="tocitem" href="../../explanation/transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../../explanation/contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">How to guides</a></li><li class="is-active"><a href>Draw simple shapes</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Draw simple shapes</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/howto/simplegraphics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Simple-graphics"><a class="docs-heading-anchor" href="#Simple-graphics">Simple graphics</a><a id="Simple-graphics-1"></a><a class="docs-heading-anchor-permalink" href="#Simple-graphics" title="Permalink"></a></h1><p>In Luxor, there are different ways of working with graphical items. You can either draw them immediately (ie place them on the drawing, and they&#39;re then fixed). Or you can construct geometric objects as lists of points for further processing. Watch out for a <code>vertices=true</code> option, which returns coordinate data rather than drawing a shape.</p><h2 id="Rectangles-and-boxes"><a class="docs-heading-anchor" href="#Rectangles-and-boxes">Rectangles and boxes</a><a id="Rectangles-and-boxes-1"></a><a class="docs-heading-anchor-permalink" href="#Rectangles-and-boxes" title="Permalink"></a></h2><p>The simple rectangle and box shapes can be made in different ways.</p><pre><code class="language-julia">rulers()
+sethue(&quot;red&quot;)
+rect(Point(0, 0), 100, 100, :stroke)
+sethue(&quot;blue&quot;)
+box(Point(0, 0), 100, 100, :stroke)</code></pre><p><img src="../../assets/figures/basicrects.png" alt="rect vs box"/></p><p><a href="../../reference/api/#Luxor.rect"><code>rect</code></a> rectangles are positioned by a corner, but a box made with <a href="../../reference/api/#Luxor.box"><code>box</code></a> can either be defined by its center and dimensions, or by two opposite corners.</p><p><img src="../../assets/figures/rects.png" alt="rects"/></p><p>If you want the coordinates of the corners of a box, rather than draw one immediately, use:</p><pre><code class="language-julia">box(centerpoint, width, height, vertices=true)</code></pre><p>or</p><pre><code class="language-julia">box(corner1,  corner2, vertices=true)</code></pre><p><code>box</code> is also able to draw some of the other Luxor objects, such as BoundingBoxes and Table cells.</p><p><a href="../../reference/api/#Luxor.box"><code>box</code></a> also returns the coordinates of the corners.</p><pre><code class="language-julia">box(Point(0, 0), 100, 100, :none)</code></pre><pre><code class="nohighlight">4-element Array{Point,1}:
+ Point(-50.0, 50.0)
+ Point(-50.0, -50.0)
+ Point(50.0, -50.0)
+ Point(50.0, 50.0)</code></pre><p>For regular polygons, pentagons, and so on, see the later section on Polygons.</p><h2 id="Circles-and-ellipses"><a class="docs-heading-anchor" href="#Circles-and-ellipses">Circles and ellipses</a><a id="Circles-and-ellipses-1"></a><a class="docs-heading-anchor-permalink" href="#Circles-and-ellipses" title="Permalink"></a></h2><p>There are various ways to make circles, including by center and radius, or passing through two or three points:</p><pre><code class="language-julia">sethue(&quot;black&quot;)
+p1 = Point(0, -50)
+p2 = Point(100, 0)
+p3 = Point(0, 65)
+map(p -&gt; circle(p, 4, :fill), [p1, p2, p3])
+sethue(&quot;orange&quot;)
+circle(center3pts(p1, p2, p3)..., :stroke)
+
+sethue(&quot;red&quot;)
+p1 = Point(0, 30)
+p2 = Point(20, -40)
+p3 = Point(50, 5)
+circle.((p1, p2, p3), 3, :stroke)
+circle(p1, p2, p3, :stroke)</code></pre><p><img src="../../assets/figures/circles.png" alt="circles"/></p><p>The <a href="../../reference/api/#Luxor.center3pts-Tuple{Point, Point, Point}"><code>center3pts</code></a> function returns the center position and radius of a circle passing through three points:</p><pre><code class="language-julia">sethue(&quot;black&quot;)
+p1 = Point(0, -50)
+p2 = Point(100, 0)
+p3 = Point(0, 65)
+map(p -&gt; circle(p, 4, :fill), [p1, p2, p3])
+sethue(&quot;orange&quot;)
+circle(center3pts(p1, p2, p3)..., :stroke)</code></pre><p><img src="../../assets/figures/center3.png" alt="center and radius of 3 points"/></p><p>With <a href="../../reference/api/#Luxor.ellipse"><code>ellipse</code></a> you can place ellipses and circles by defining the center point and the width and height.</p><pre><code class="language-julia">tiles = Tiler(500, 300, 5, 5)
+width = 20
+height = 25
+for (pos, n) in tiles
+    global width, height
+    randomhue()
+    ellipse(pos, width, height, :fill)
+    sethue(&quot;black&quot;)
+    label = string(round(width/height, digits=2))
+    textcentered(label, pos.x, pos.y + 25)
+    width += 2
+end</code></pre><p><img src="../../assets/figures/ellipses.png" alt="ellipses"/></p><p><a href="../../reference/api/#Luxor.ellipse"><code>ellipse</code></a> can also construct polygons that are approximations to ellipses. You supply two focal points and a length which is the sum of the distances of a point on the perimeter to the two focii.</p><pre><code class="language-julia">fontface(&quot;Menlo&quot;)
+
+f1 = Point(-100, 0)
+f2 = Point(100, 0)
+
+circle.([f1, f2], 3, :fill)
+
+epoly = ellipse(f1, f2, 250, vertices=true)
+poly(epoly, :stroke,  close=true)
+
+pt = epoly[rand(1:end)]
+
+poly([f1, pt, f2], :stroke)
+
+label(&quot;f1&quot;, :W, f1, offset=10)
+label(&quot;f2&quot;, :E, f2, offset=10)
+
+label(string(round(distance(f1, pt), digits=1)), :SE, midpoint(f1, pt))
+label(string(round(distance(pt, f2), digits=1)), :SW, midpoint(pt, f2))
+
+label(&quot;ellipse(f1, f2, 250)&quot;, :S, Point(0, 75))</code></pre><p><img src="../../assets/figures/ellipses_1.png" alt="more ellipses"/></p><p>The advantage of this method is that there&#39;s a <code>vertices=true</code> option, allowing further scope for polygon manipulation.</p><pre><code class="language-julia">f1 = Point(-100, 0)
+f2 = Point(100, 0)
+ellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)
+[ begin
+    setgray(rescale(c, 150, 1, 0, 1))
+    poly(offsetpoly(ellipsepoly, c), close=true, :fill);
+    rotate(π/20)
+  end
+     for c in 150:-10:1 ]</code></pre><p><img src="../../assets/figures/ellipses_2.png" alt="even more ellipses"/></p><p>The <a href="../../reference/api/#Luxor.ellipseinquad"><code>ellipseinquad</code></a> function constructs an ellipse that fits in a four-sided quadrilateral.</p><pre><code class="language-julia">pg = ngon(O, 250, 6, π/6, vertices=true)
+
+top = vcat(O, pg[[3, 4, 5]])
+left = vcat(O, pg[[1, 2, 3]])
+right = vcat(O, pg[[5, 6, 1]])
+sethue(&quot;red&quot;)
+poly(top, :fill, close=true)
+
+sethue(&quot;green&quot;)
+poly(left, :fill, close=true)
+
+sethue(&quot;blue&quot;)
+poly(right, :fill, close=true)
+
+sethue(&quot;orange&quot;)
+ellipseinquad.((top, left, right), :fill)</code></pre><p><img src="../../assets/figures/ellipseinquad.png" alt="ellipse in quadrilateral"/></p><p><a href="../../reference/api/#Luxor.circlepath"><code>circlepath</code></a> constructs a circular path from Bézier curves, which allows you to use circles as paths.</p><pre><code class="language-julia">setline(4)
+tiles = Tiler(600, 250, 1, 5)
+for (pos, n) in tiles
+    randomhue()
+    circlepath(pos, tiles.tilewidth/2, :path)
+    newsubpath()
+    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
+end</code></pre><p><img src="../../assets/figures/circle-path.png" alt="circles as paths"/></p><h2 id="Circles-and-tangents"><a class="docs-heading-anchor" href="#Circles-and-tangents">Circles and tangents</a><a id="Circles-and-tangents-1"></a><a class="docs-heading-anchor-permalink" href="#Circles-and-tangents" title="Permalink"></a></h2><p>Functions to find tangents to circles include:</p><ul><li><a href="../../reference/api/#Luxor.pointcircletangent-Tuple{Point, Point, Any}"><code>pointcircletangent</code></a> finds a point on a circle that lies on line through another point</li><li><a href="../../reference/api/#Luxor.circlecircleoutertangents-Tuple{Point, Any, Point, Any}"><code>circlecircleoutertangents</code></a> finds the points that lie on outer tangents to two circles</li><li><a href="../../reference/api/#Luxor.circlecircleinnertangents-Tuple{Point, Any, Point, Any}"><code>circlecircleinnertangents</code></a> finds the points that lie on inner tangents to two circles</li><li><a href="../../reference/api/#Luxor.circletangent2circles-Tuple{Any, Point, Any, Point, Any}"><code>circletangent2circles</code></a> makes circles of a particular radius tangential to two circles</li><li><a href="../../reference/api/#Luxor.circlepointtangent-Tuple{Point, Any, Point, Any}"><code>circlepointtangent</code></a> makes circles of a particular radius passing through a point and tangential to another circle</li></ul><pre><code class="language-julia">point = Point(-150, 0)
+circlecenter = Point(150, 0)
+circleradius = 80
+
+circle.((point, circlecenter), 5, :fill)
+circle(circlecenter, circleradius, :stroke)
+pt1, pt2 = pointcircletangent(point, circlecenter, circleradius)
+circle.((pt1, pt2), 5, :fill)
+
+sethue(&quot;grey65&quot;)
+rule(point, slope(point, pt1))
+rule(point, slope(point, pt2))</code></pre><p><img src="../../assets/figures/point-circle-tangents.png" alt="point circle tangents"/></p><pre><code class="language-julia">circle1center = Point(-150, 0)
+circle1radius = 60
+circle2center = Point(150, 0)
+circle2radius = 80
+
+circle.((circle1center, circle2center), 5, :fill)
+circle(circle1center, circle1radius, :stroke)
+circle(circle2center, circle2radius, :stroke)
+
+p1, p2, p3, p4 = circlecircleoutertangents(
+    circle1center, circle1radius,
+    circle2center, circle2radius)
+
+sethue(&quot;orange&quot;)
+rule(p1, slope(p1, p2))
+rule(p3, slope(p3, p4))</code></pre><p><img src="../../assets/figures/circle-circle-outer-tangents.png" alt="circle circle outer tangents"/></p><p>Finding the inner tangents requires a separate function.</p><pre><code class="language-julia">circle1center = Point(-150, 0)
+circle1radius = 60
+circle2center = Point(150, 0)
+circle2radius = 80
+
+circle.((circle1center, circle2center), 5, :fill)
+circle(circle1center, circle1radius, :stroke)
+circle(circle2center, circle2radius, :stroke)
+
+p1, p2, p3, p4 = circlecircleinnertangents(
+    circle1center, circle1radius,
+    circle2center, circle2radius)
+
+label.((&quot;p1&quot;, &quot;p2&quot;, &quot;p3&quot;, &quot;p4&quot;), :n, (p1, p2, p3, p4))
+sethue(&quot;orange&quot;)
+rule(p1, slope(p1, p2))
+rule(p3, slope(p3, p4))
+
+sethue(&quot;purple&quot;)
+circle.((p1, p2, p3, p4), 3, :fill)</code></pre><p><img src="../../assets/figures/circle-circle-inner-tangents.png" alt="circle circle inner tangents"/></p><p><a href="../../reference/api/#Luxor.circletangent2circles-Tuple{Any, Point, Any, Point, Any}"><code>circletangent2circles</code></a> takes the required radius and two existing circles:</p><pre><code class="language-julia">circle1 = (Point(-100, 0), 90)
+circle(circle1..., :stroke)
+circle2 = (Point(100, 0), 90)
+circle(circle2..., :stroke)
+
+requiredradius = 25
+ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
+
+if ncandidates==2
+    sethue(&quot;orange&quot;)
+    circle(p1, requiredradius, :fill)
+    sethue(&quot;green&quot;)
+    circle(p2, requiredradius, :fill)
+    sethue(&quot;purple&quot;)
+    circle(p1, requiredradius, :stroke)
+    circle(p2, requiredradius, :stroke)
+end
+
+# the circles are 10 apart, so there should be just one circle
+# that fits there
+
+requiredradius = 10
+ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
+
+if ncandidates==1
+    sethue(&quot;blue&quot;)
+    circle(p1, requiredradius, :fill)
+    sethue(&quot;cyan&quot;)
+    circle(p1, requiredradius, :stroke)
+end</code></pre><p><img src="../../assets/figures/circle-tangents.png" alt="circle tangents"/></p><p><a href="../../reference/api/#Luxor.circlepointtangent-Tuple{Point, Any, Point, Any}"><code>circlepointtangent</code></a> looks for circles of a specified radius that pass through a point and are tangential to a circle. There are usually two candidates.</p><pre><code class="language-julia">circle1 = (Point(-100, 0), 90)
+circle(circle1..., :stroke)
+
+requiredradius = 50
+requiredpassthrough = O + (80, 0)
+ncandidates, p1, p2 = circlepointtangent(requiredpassthrough, requiredradius, circle1...)
+
+if ncandidates==2
+    sethue(&quot;orange&quot;)
+    circle(p1, requiredradius, :stroke)
+    sethue(&quot;green&quot;)
+    circle(p2, requiredradius, :stroke)
+end
+
+sethue(&quot;black&quot;)
+circle(requiredpassthrough, 4, :fill)</code></pre><p><img src="../../assets/figures/circle-point-tangent.png" alt="circle tangents 2"/></p><p>These last two functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).</p><h2 id="Crescents"><a class="docs-heading-anchor" href="#Crescents">Crescents</a><a id="Crescents-1"></a><a class="docs-heading-anchor-permalink" href="#Crescents" title="Permalink"></a></h2><p>Use <a href="../../reference/api/#Luxor.crescent"><code>crescent</code></a> to construct crescent shapes. There are two methods. The first method allows the two arcs to have the same radius. The second method allows the two arcs to share the same centers.</p><pre><code class="language-julia"># method 1: same radii, different centers
+
+sethue(&quot;purple&quot;)
+crescent(Point(-200, 0), 200, Point(-150, 0), 200, :fill)
+
+# method 2: same centers, different radii
+
+sethue(&quot;orange&quot;)
+crescent(O, 100, 200, :fill)</code></pre><p><img src="../../assets/figures/crescents.png" alt="crescents"/></p><h2 id="Paths-and-positions"><a class="docs-heading-anchor" href="#Paths-and-positions">Paths and positions</a><a id="Paths-and-positions-1"></a><a class="docs-heading-anchor-permalink" href="#Paths-and-positions" title="Permalink"></a></h2><p>A path is a sequence of lines and curves. You can add lines and curves to the current path, then use <a href="../../reference/api/#Luxor.closepath-Tuple{}"><code>closepath</code></a> to join the last point to the first.</p><p>A path can have subpaths, created with<a href="../../reference/api/#Luxor.newsubpath-Tuple{}"><code>newsubpath</code></a>, which can form holes.</p><p>There is a &#39;current position&#39; which you can set with <a href="../../reference/api/#Luxor.move-Tuple{Any, Any}"><code>move</code></a>, and can use implicitly in functions like <a href="../../reference/api/#Luxor.line"><code>line</code></a>, <a href="../../reference/api/#Luxor.rline-Tuple{Any, Any}"><code>rline</code></a>, <a href="../../reference/api/#Luxor.rmove-Tuple{Any, Any}"><code>rmove</code></a>, <a href="../../reference/api/#Luxor.text-Tuple{Any, Point}"><code>text</code></a>, <a href="../../reference/api/#Luxor.newpath-Tuple{}"><code>newpath</code></a>, <a href="../../reference/api/#Luxor.closepath-Tuple{}"><code>closepath</code></a>, <a href="../../reference/api/#Luxor.arc"><code>arc</code></a>, and <a href="../../reference/api/#Luxor.curve-NTuple{6, Any}"><code>curve</code></a>.</p><p>There is a current point. Use <a href="../../reference/api/#Luxor.currentpoint-Tuple{}"><code>currentpoint</code></a> and <a href="../../reference/api/#Luxor.hascurrentpoint-Tuple{}"><code>hascurrentpoint</code></a>.</p><h2 id="Lines"><a class="docs-heading-anchor" href="#Lines">Lines</a><a id="Lines-1"></a><a class="docs-heading-anchor-permalink" href="#Lines" title="Permalink"></a></h2><p>Use <a href="../../reference/api/#Luxor.line"><code>line</code></a> and <a href="../../reference/api/#Luxor.rline-Tuple{Any, Any}"><code>rline</code></a> to draw straight lines. <code>line(pt1, pt2, action)</code> draws a line between two points. <code>line(pt)</code> adds a line to the current path going from the current position to the point. <code>rline(pt)</code> adds a line relative to the current position.</p><p>You can use <a href="../../reference/api/#Luxor.rule"><code>rule</code></a> to draw a line through a point, optionally at an angle to the current x-axis.</p><pre><code class="language-julia">y = 10
+for x in 10 .^ range(0, length=100, stop=3)
+    global y
+    circle(Point(x, y), 2, :fill)
+    rule(Point(x, y), -π/2, boundingbox=BoundingBox(centered=false))
+    y += 2
+end</code></pre><p><img src="../../assets/figures/rule.png" alt="arc"/></p><p>Use the <code>boundingbox</code> keyword argument to crop the ruled lines with a BoundingBox.</p><pre><code class="language-julia">origin()
+box(BoundingBox() * 0.9, :stroke)
+for x in 10 .^ range(0, length=100, stop=3)
+    rule(Point(x, 0), π/2,  boundingbox=BoundingBox() * 0.9)
+    rule(Point(-x, 0), π/2, boundingbox=BoundingBox() * 0.9)
+end</code></pre><pre class="documenter-example-output">true</pre><p><img src="../../assets/figures/rulebbox.png" alt="arc"/></p><h2 id="Arrows"><a class="docs-heading-anchor" href="#Arrows">Arrows</a><a id="Arrows-1"></a><a class="docs-heading-anchor-permalink" href="#Arrows" title="Permalink"></a></h2><p>You can draw lines, arcs, and curves with arrows at the end with <a href="../../reference/api/#Luxor.arrow"><code>arrow</code></a>. For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the <code>arrowheadlength</code> and <code>arrowheadangle</code> of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to <code>setline(1)</code>), but you can specify another.</p><pre><code class="language-julia">arrow(Point(0, 0), Point(0, -65))
+arrow(Point(0, 0), Point(100, -65), arrowheadlength=20, arrowheadangle=pi/4, linewidth=.3)
+arrow(Point(0, 0), 100, π, π/2, arrowheadlength=25,   arrowheadangle=pi/12, linewidth=1.25)</code></pre><p><img src="../../assets/figures/arrow.png" alt="arrows"/></p><p>If you provide four points, you can draw a Bézier curve with optional arrowheads at each end. Use the various options to control their presence and appearance.</p><pre><code class="language-julia">pts = ngon(Point(0, 0), 100, 8, vertices=true)
+sethue(&quot;mediumvioletred&quot;)
+arrow(pts[2:5]..., :stroke, startarrow=false, finisharrow=true)
+sethue(&quot;cyan4&quot;)
+arrow(pts[3:6]..., startarrow=true, finisharrow=true)
+sethue(&quot;midnightblue&quot;)
+arrow(pts[[4, 2, 6, 8]]..., :stroke,
+    startarrow=true,
+    finisharrow=true,
+    arrowheadangle = π/6,
+    arrowheadlength = 35,
+    linewidth  = 1.5)</code></pre><p><img src="../../assets/figures/arrowbezier.png" alt="arrows"/></p><p>The <a href="../../reference/api/#Luxor.arrow"><code>arrow</code></a> functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function that draws text <code>t</code> in a circle of radius <code>r</code> :</p><pre><code class="nohighlight">function marker(r, t)
+    @layer begin
+        sethue(&quot;purple&quot;)
+        circle(Point(0, 0), r,  :fill)
+        sethue(&quot;white&quot;)
+        fontsize(30)
+        text(string(t), halign=:center, valign=:middle)
+    end
+end</code></pre><p>and then pass it to the <code>decorate</code> keyword. By default, the graphics origin when the function is called is placed at the midpoint (0.5) of the arrow&#39;s shaft.</p><pre><code class="language-julia">pts = ngon(Point(0, 0), 100, 5, vertices=true)
+
+sethue(&quot;mediumvioletred&quot;)
+
+# using an anonymous function
+arrow(pts[1:4]..., decorate = () -&gt; marker(10, 3))
+
+sethue(&quot;olivedrab&quot;)
+
+# no arrow, just a graphic, at 0.75
+arrow(pts[1:4]..., decorate = () -&gt; ngon(Point(0, 0), 20, 4, 0, :fill), decoration = 0.75, :none)</code></pre><p><img src="../../assets/figures/arrowbezierdecoration.png" alt="arrows with decoration"/></p><p>Use the <code>decoration</code> keyword to specify a location other than the default 0.5.</p><p>The graphics environment provided by the <code>decorate</code> function is centered at the decoration point, and rotated to the slope of the curve at that point.</p><h2 id="Arcs-and-curves"><a class="docs-heading-anchor" href="#Arcs-and-curves">Arcs and curves</a><a id="Arcs-and-curves-1"></a><a class="docs-heading-anchor-permalink" href="#Arcs-and-curves" title="Permalink"></a></h2><p>There are a few standard arc-drawing commands, such as <a href="../../reference/api/#Luxor.curve-NTuple{6, Any}"><code>curve</code></a>, <a href="../../reference/api/#Luxor.arc"><code>arc</code></a>, <a href="../../reference/api/#Luxor.carc"><code>carc</code></a>, and <a href="../../reference/api/#Luxor.arc2r"><code>arc2r</code></a>. Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the <code>:path</code> action, followed by a final <code>:stroke</code> or similar.</p><p><a href="../../reference/api/#Luxor.curve-NTuple{6, Any}"><code>curve</code></a> constructs Bézier curves from control points:</p><pre><code class="language-julia">setline(.5)
+pt1 = Point(0, -125)
+pt2 = Point(200, 125)
+pt3 = Point(200, -125)
+
+label.(string.([&quot;O&quot;, &quot;control point 1&quot;, &quot;control point 2&quot;, &quot;control point 3&quot;]),
+    :e,
+    [O, pt1, pt2, pt3])
+
+sethue(&quot;red&quot;)
+map(p -&gt; circle(p, 4, :fill), [O, pt1, pt2, pt3])
+
+line(Point(0, 0), pt1, :stroke)
+line(pt2, pt3, :stroke)
+
+sethue(&quot;black&quot;)
+setline(3)
+
+# start a path
+move(Point(0, 0))
+curve(pt1, pt2, pt3) #  add to current path
+strokepath()</code></pre><p><img src="../../assets/figures/curve.png" alt="curve"/></p><p><a href="../../reference/api/#Luxor.arc2r"><code>arc2r</code></a> draws a circular arc centered at a point that passes through two other points:</p><pre><code class="language-julia">tiles = Tiler(700, 200, 1, 6)
+for (pos, n) in tiles
+    c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
+    sethue(&quot;black&quot;)
+    map(pt -&gt; circle(pt, 4, :fill), [c1, pt3])
+    sethue(&quot;red&quot;)
+    circle(pt2, 4, :fill)
+    randomhue()
+    arc2r(c1, pt2, pt3, :stroke)
+end</code></pre><p><img src="../../assets/figures/arc2r.png" alt="arc"/></p><p><a href="../../reference/api/#Luxor.arc2sagitta"><code>arc2sagitta</code></a> and <a href="../../reference/api/#Luxor.carc2sagitta"><code>carc2sagitta</code></a> make circular arcs based on two points and the sagitta (the maximum height from the chord).</p><pre><code class="language-julia">pt1 = Point(-100, 0)
+pt2 = Point(100, 0)
+for n in reverse(range(1, length=7, stop=120))
+    sethue(&quot;red&quot;)
+    rule(Point(0, -n))
+    sethue(LCHab(70, 80, rescale(n, 120, 1, 0, 359)))
+    pt, r = arc2sagitta(pt1, pt2, n, :fillpreserve)
+    sethue(&quot;black&quot;)
+    strokepath()
+    text(string(round(n)), O + (120, -n))
+end
+circle.((pt1, pt2), 5, :fill)</code></pre><p><img src="../../assets/figures/arc2sagitta.svg" alt="arc"/></p><h2 id="More-curved-shapes:-sectors,-spirals,-and-squircles"><a class="docs-heading-anchor" href="#More-curved-shapes:-sectors,-spirals,-and-squircles">More curved shapes: sectors, spirals, and squircles</a><a id="More-curved-shapes:-sectors,-spirals,-and-squircles-1"></a><a class="docs-heading-anchor-permalink" href="#More-curved-shapes:-sectors,-spirals,-and-squircles" title="Permalink"></a></h2><p>A sector (technically an &quot;annular sector&quot;) has an inner and outer radius, as well as start and end angles.</p><pre><code class="language-julia">sethue(&quot;tomato&quot;)
+sector(50, 90, π/2, 0, :fill)
+sethue(&quot;olive&quot;)
+sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, :fill)</code></pre><p><img src="../../assets/figures/sector.png" alt="sector"/></p><p>You can also supply a value for a corner radius. The same sector is drawn but with rounded corners.</p><pre><code class="language-julia">sethue(&quot;tomato&quot;)
+sector(50, 90, π/2, 0, 15, :fill)
+sethue(&quot;olive&quot;)
+sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, 15, :fill)</code></pre><p><img src="../../assets/figures/sectorrounded.png" alt="sector"/></p><p>A pie (or wedge) has start and end angles.</p><pre><code class="language-julia">pie(0, 0, 100, π/2, π, :fill)</code></pre><p><img src="../../assets/figures/pie.png" alt="pie"/></p><p>To construct spirals, use the <a href="../../reference/api/#Luxor.spiral"><code>spiral</code></a> function. These can be drawn directly, or used as polygons. The default is to draw Archimedean (non-logarithmic) spirals.</p><pre><code class="language-julia">spiraldata = [
+  (-2, &quot;Lituus&quot;,      50),
+  (-1, &quot;Hyperbolic&quot;, 100),
+  ( 1, &quot;Archimedes&quot;,   1),
+  ( 2, &quot;Fermat&quot;,       5)]
+
+grid = GridRect(O - (200, 0), 130, 50)
+
+for aspiral in spiraldata
+    @layer begin
+        translate(nextgridpoint(grid))
+        spiral(last(aspiral), first(aspiral), period=20π, :stroke)
+        label(aspiral[2], :S, offset=100)
+    end
+end</code></pre><p><img src="../../assets/figures/spiral.png" alt="spiral"/></p><p>Use the <code>log=true</code> option to draw logarithmic (Bernoulli or Fibonacci) spirals.</p><pre><code class="language-julia">spiraldata = [
+    (10,  0.05),
+    (4,   0.10),
+    (0.5, 0.17)]
+
+grid = GridRect(O - (200, 0), 175, 50)
+for aspiral in spiraldata
+    @layer begin
+        translate(nextgridpoint(grid))
+        spiral(first(aspiral), last(aspiral), log=true, period=10π, :stroke)
+        label(string(aspiral), :S, offset=100)
+    end
+end</code></pre><p>Modify the <code>stepby</code> and <code>period</code> parameters to taste, or collect the vertices for further processing.</p><p><img src="../../assets/figures/spiral-log.png" alt="spiral log"/></p><p>A <em>squircle</em> is a cross between a square and a circle. You can adjust the squariness and circularity of it to taste by supplying a value for the root (keyword <code>rt</code>):</p><pre><code class="language-julia">setline(2)
+tiles = Tiler(600, 250, 1, 3)
+for (pos, n) in tiles
+    sethue(&quot;lavender&quot;)
+    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)
+    sethue(&quot;grey20&quot;)
+    strokepath()
+    textcentered(&quot;rt = $([0.3, 0.5, 0.7][n])&quot;, pos)
+end</code></pre><p><img src="../../assets/figures/squircle.png" alt="squircles"/></p><p>To draw a simple rounded rectangle, supply a corner radius:</p><pre><code class="language-julia">setline(4)
+box(O, 200, 150, 10, :stroke)</code></pre><p><img src="../../assets/figures/round-rect-1.png" alt="rounded rect 1"/></p><p>Or you could smooth the corners of a box, like so:</p><pre><code class="language-julia">setline(4)
+polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)</code></pre><p><img src="../../assets/figures/round-rect.png" alt="rounded rect"/></p><h2 id="Stars-and-crosses"><a class="docs-heading-anchor" href="#Stars-and-crosses">Stars and crosses</a><a id="Stars-and-crosses-1"></a><a class="docs-heading-anchor-permalink" href="#Stars-and-crosses" title="Permalink"></a></h2><p>Use <a href="../../reference/api/#Luxor.star"><code>star</code></a> to make a star. You can draw it immediately, or use the points it can create.</p><pre><code class="language-julia">tiles = Tiler(400, 300, 4, 6, margin=5)
+for (pos, n) in tiles
+    randomhue()
+    star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
+end</code></pre><p><img src="../../assets/figures/stars.png" alt="stars"/></p><p>The <code>ratio</code> determines the length of the inner radius compared with the outer.</p><pre><code class="language-julia">tiles = Tiler(500, 250, 1, 6, margin=10)
+for (pos, n) in tiles
+    star(pos, tiles.tilewidth/2, 5, rescale(n, 1, 6, 1, 0), 0, :stroke)
+end</code></pre><p><img src="../../assets/figures/star-ratios.png" alt="stars"/></p><p>Use <a href="../../reference/api/#Luxor.polycross"><code>polycross</code></a> to draw a cross-shaped polygon.</p><pre><code class="language-julia">tiles = Tiler(600, 600, 4, 4, margin=10)
+for (pos, n) in tiles
+    randomhue()
+    polycross(pos, min(tiles.tileheight/3, tiles.tilewidth/3),
+        n + 2, # number of points
+        rescale(n, 1, length(tiles), 0.9, 0.1), # ratio
+        0, # orientation
+        :fill)
+end</code></pre><p><img src="../../assets/figures/polycross.png" alt="polycross"/></p><h2 id="Julia-logos"><a class="docs-heading-anchor" href="#Julia-logos">Julia logos</a><a id="Julia-logos-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-logos" title="Permalink"></a></h2><p>A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:</p><pre><code class="language-julia">cells = Table([300], [350, 350])
+
+@layer begin
+    translate(cells[1])
+    translate(-165, -114)
+    rulers()
+    julialogo()
+end
+
+@layer begin
+    translate(cells[2])
+    translate(-165, -114)
+    rulers()
+    julialogo(action=:clip)
+    for i in 1:500
+        @layer begin
+            translate(rand(0:400), rand(0:250))
+            juliacircles(10)
+        end
+    end
+    clipreset()
+    end</code></pre><p><img src="../../assets/figures/julia-logo.png" alt="get path"/></p><h2 id="Hypotrochoids"><a class="docs-heading-anchor" href="#Hypotrochoids">Hypotrochoids</a><a id="Hypotrochoids-1"></a><a class="docs-heading-anchor-permalink" href="#Hypotrochoids" title="Permalink"></a></h2><p><a href="../../reference/api/#Luxor.hypotrochoid"><code>hypotrochoid</code></a> makes hypotrochoids. The result is a polygon. You can either draw it directly, or pass it on for further polygon fun, as here, which uses <a href="../../reference/api/#Luxor.offsetpoly-Tuple{Any, Function}"><code>offsetpoly</code></a> to trace round it a few times.</p><pre><code class="language-julia">origin()
+background(&quot;grey15&quot;)
+sethue(&quot;antiquewhite&quot;)
+setline(1)
+p = hypotrochoid(100, 25, 55, :stroke, stepby=0.01, vertices=true)
+for i in 0:3:15
+    poly(offsetpoly(p, i), :stroke, close=true)
+end</code></pre><p><img src="../../assets/figures/hypotrochoid.png" alt="hypotrochoid"/></p><p>There&#39;s a matching <a href="../../reference/api/#Luxor.epitrochoid"><code>epitrochoid</code></a> function.</p><h2 id="Cropmarks"><a class="docs-heading-anchor" href="#Cropmarks">Cropmarks</a><a id="Cropmarks-1"></a><a class="docs-heading-anchor-permalink" href="#Cropmarks" title="Permalink"></a></h2><p>If you want cropmarks (aka trim marks), use the <a href="../../reference/api/#Luxor.cropmarks-Tuple{Any, Any, Any}"><code>cropmarks</code></a> function, supplying the centerpoint, followed by the width and height:</p><pre><code class="nohighlight">cropmarks(O, 1200, 1600)
+cropmarks(O, paper_sizes[&quot;A0&quot;]...)</code></pre><pre><code class="language-julia">sethue(&quot;red&quot;)
+box(O, 150, 150, :stroke)
+cropmarks(O, 150, 150)</code></pre><p><img src="../../assets/figures/cropmarks.png" alt="cropmarks"/></p><h2 id="Dimensioning"><a class="docs-heading-anchor" href="#Dimensioning">Dimensioning</a><a id="Dimensioning-1"></a><a class="docs-heading-anchor-permalink" href="#Dimensioning" title="Permalink"></a></h2><p>Simple dimensioning graphics can be generated with <a href="../../reference/api/#Luxor.dimension-Tuple{Point, Point}"><code>dimension</code></a>. To convert from the default unit (PostScript points), or to modify the dimensioning text, supply a function to the <code>format</code> keyword argument.</p><p><img src="../../assets/figures/dimensioning.svg" alt="dimensioning"/></p><pre><code class="language-julia">setline(0.75)
+sethue(&quot;purple&quot;)
+pentagon = ngonside(O, 120, 5, vertices=true)
+poly(pentagon, :stroke, close=true)
+circle.(pentagon, 2, :fill)
+fontsize(6)
+label.(split(&quot;12345&quot;, &quot;&quot;), :NE, pentagon)
+fontface(&quot;Menlo&quot;)
+fontsize(10)
+sethue(&quot;grey30&quot;)
+
+dimension(O, pentagon[4],
+    fromextension = [0, 0])
+
+dimension(pentagon[1], pentagon[2],
+    offset        = -60,
+    fromextension = [20, 50],
+    toextension   = [20, 50],
+    textrotation  = 2π/5,
+    textgap       = 20,
+    format        = (d) -&gt; string(round(d, digits=4), &quot;pts&quot;))
+
+dimension(pentagon[2], pentagon[3],
+     offset        = -40,
+     format        =  string)
+
+dimension(pentagon[5], Point(pentagon[5].x, pentagon[4].y),
+    offset        = 60,
+    format        = (d) -&gt; string(&quot;approximately &quot;,round(d, digits=4)),
+    fromextension = [5, 5],
+    toextension   = [80, 5])
+
+dimension(pentagon[1], midpoint(pentagon[1], pentagon[5]),
+    offset               = 70,
+    fromextension        = [65, -5],
+    toextension          = [65, -5],
+    texthorizontaloffset = -5,
+    arrowheadlength      = 5,
+    format               = (d) -&gt;
+        begin
+            if isapprox(d, 60.0)
+                string(&quot;exactly &quot;, round(d, digits=4), &quot;pts&quot;)
+            else
+                string(&quot;≈ &quot;, round(d, digits=4), &quot;pts&quot;)
+            end
+        end)
+
+dimension(pentagon[1], pentagon[5],
+    offset               = 120,
+    fromextension        = [5, 5],
+    toextension          = [115, 5],
+    textverticaloffset   = 0.5,
+    texthorizontaloffset = 0,
+    textgap              = 5)</code></pre><h2 id="Barcharts"><a class="docs-heading-anchor" href="#Barcharts">Barcharts</a><a id="Barcharts-1"></a><a class="docs-heading-anchor-permalink" href="#Barcharts" title="Permalink"></a></h2><p>For simple barcharts, use the <a href="../../reference/api/#Luxor.barchart-Tuple{Any}"><code>barchart</code></a> function, supplying an array of numbers:</p><pre><code class="language-julia">fontsize(7)
+sethue(&quot;black&quot;)
+v = rand(-100:100, 25)
+barchart(v, labels=true)</code></pre><p><img src="../../assets/figures/bars.png" alt="bars"/></p><p>To change the way the bars and labels are drawn, define some functions and pass them as keyword arguments:</p><pre><code class="language-julia">function mybarfunction(values, i, low, high, barwidth, scaledvalue)
+    @layer begin
+        extremes = extrema(values)
+        sethue(Colors.HSB(rescale(values[i], extremes[1], extremes[2], 0, 360), 1.0, 0.5))
+        csize = rescale(values[i], extremes[1], extremes[2], 5, 15)
+        circle(high, csize, :fill)
+        setline(1)
+        sethue(&quot;blue&quot;)
+        line(low, high, :stroke)
+        sethue(&quot;white&quot;)
+        text(string(values[i]), high, halign=:center, valign=:middle)
+    end
+end
+
+function mylabelfunction(values, i, low, high, barwidth, scaledvalue)
+    @layer begin
+        translate(low)
+        text(string(values[i]), O + (0, 10), halign=:center, valign=:middle)
+    end
+end
+
+v = rand(1:100, 15)
+
+bbox = BoundingBox() * 0.8
+box(bbox, :clip)
+p = barchart(v, boundingbox=bbox, barfunction=mybarfunction, labelfunction=mylabelfunction)
+
+rule(p[1])</code></pre><p><img src="../../assets/figures/bars1.png" alt="bars 1"/></p><h2 id="Box-maps"><a class="docs-heading-anchor" href="#Box-maps">Box maps</a><a id="Box-maps-1"></a><a class="docs-heading-anchor-permalink" href="#Box-maps" title="Permalink"></a></h2><p>The <a href="../../reference/api/#Luxor.boxmap-Tuple{Array, Point, Any, Any}"><code>boxmap</code></a> function divides a rectangular area into a sorted arrangement of smaller boxes or tiles based on the values of elements in an array.</p><p>This example uses the Fibonacci sequence to determine the area of the boxes. Notice that the values are sorted in reverse, and are scaled to fit in the available area.</p><pre><code class="language-julia">fib = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+
+# make a boxmap and store the tiles
+tiles = boxmap(fib, BoundingBox()[1], 800, 450)
+
+for (n, t) in enumerate(tiles)
+    randomhue()
+    bb = BoundingBox(t)
+    sethue(&quot;black&quot;)
+    box(bb - 5, :stroke)
+
+    randomhue()
+    box(bb - 8, :fill)
+
+    # text labels
+    sethue(&quot;white&quot;)
+
+    # rescale text to fit better
+    fontsize(boxwidth(bb) &gt; boxheight(bb) ? boxheight(bb)/4 : boxwidth(bb)/4)
+    text(string(sort(fib, rev=true)[n]),
+        midpoint(bb[1], bb[2]),
+        halign=:center,
+            valign=:middle)
+end</code></pre><p><img src="../../assets/figures/boxmap.png" alt="boxmap"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../createdrawings/">« Create drawings</a><a class="docs-footer-nextpage" href="../geometrytools/">Use geometry tools »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.3 on <span class="colophon-date" title="Thursday 1 July 2021 09:44">Thursday 1 July 2021</span>. Using Julia version 1.6.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
