@@ -14,14 +14,14 @@ Luxor lets you place PNG and SVG images on the drawing. First, load an image:
 
 (JPEGs aren't supported.)
 
-Then use `placeimage()` to place the image by its top left corner at point `pt`, or use the `centered=true` keyword to place the image's center point there. Access the image's dimensions with `.width` and `.height`.
+Then use [`placeimage`](@ref) to place the image by its top left corner at point `pt`, or use the `centered=true` keyword to place the image's center point there. Access the image's dimensions with `.width` and `.height`.
 
 ```@example
 using Luxor # hide
-Drawing(600, 350, "assets/figures/images.png") # hide
+Drawing(600, 350, "../assets/figures/images.png") # hide
 origin() # hide
 background("grey40") # hide
-img = readpng("assets/figures/julia-logo-mask.png")
+img = readpng("../assets/figures/julia-logo-mask.png")
 w = img.width
 h = img.height
 rulers()
@@ -33,22 +33,16 @@ circle(-w/2, -h/2, 15, :fill)
 finish() # hide
 nothing # hide
 ```
-!["Images"](assets/figures/images.png)
+!["Images"](../assets/figures/images.png)
 
 PNG images can be placed with varying opacity/transparency/alpha.
 
-`readsvg()` also lets you supply raw (or pure) SVG code in a string.
-
-```@docs
-readpng
-readsvg
-placeimage
-```
+[`readsvg`](@ref) also lets you supply raw (or pure) SVG code in a string.
 
 ## SVG images
 
 To create an SVG image, using the `Drawing(... :svg)` or specify an SVG filename.
-To obtain the SVG source of a completed drawing, use `svgstring()`.
+To obtain the SVG source of a completed drawing, use [`svgstring`](@ref).
 
 For example, draw the Julia logo:
 
@@ -72,11 +66,11 @@ eachmatch(r"rgb\\(.*?\\)", s) |> collect
  RegexMatch("rgb(22%,59.6%,14.9%)")
 ```
 
-To display the image in a Jupyter or Pluto notebook, use the `HTML()` function, or you can use the `readsvg()` and `placeimage()` functions in combination.
+To display the image in a Jupyter or Pluto notebook, use the `HTML` function, or you can use the [`readsvg`](@ref) and [`placeimage`](@ref) functions in combination.
 
 ## Placing an image matrix
 
-You can also use `placeimage()` to put image matrices on a drawing.
+You can also use [`placeimage`](@ref) to put image matrices on a drawing.
 
 ```
 using Luxor
@@ -97,16 +91,17 @@ end 40 40
 end
 ```
 
-![place image matrix](assets/figures/place-image-matrix.png)
+![place image matrix](../assets/figures/place-image-matrix.png)
 
-`placeimage()` can also take in an optional argument `alpha` to change the opacity of the image matrix.
-![place image matrix](assets/figures/place-image-matrix-alpha.png)
+[`placeimage`](@ref) can also take in an optional argument `alpha` to change the opacity of the image matrix.
+
+![place image matrix alpha](../assets/figures/place-image-matrix-alpha.png)
 
 ## Clipping images
 
 You can clip images. The following script repeatedly places the image using a circle to define a clipping path:
 
-!["Images"](assets/figures/test-image.png)
+!["Images"](../assets/figures/test-image.png)
 
 ```julia
 using Luxor
@@ -122,7 +117,7 @@ background("grey25")
 setline(5)
 sethue("green")
 
-image = readpng(dirname(@__FILE__) * "assets/figures/julia-logo-mask.png")
+image = readpng(dirname(@__FILE__) * "../assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
@@ -146,11 +141,11 @@ finish()
 
 ## Transforming images
 
-You can transform images by setting the current matrix, either with `scale()` and `rotate()` and similar, or by modifying it directly. This code scales and rotates an image made in an earlier chapter of this document around in a circle:
+You can transform images by setting the current matrix, either with [`scale`](@ref) and [`rotate`](@ref) and similar, or by modifying it directly. This code scales and rotates an image made in an earlier chapter of this document around in a circle:
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/transform-images.png") # hide
+Drawing(600, 400, "../assets/figures/transform-images.png") # hide
 origin() # hide
 img = readpng(dirname(dirname(pathof(Luxor))) * "/docs/src/assets/figures/textoutlines.png")
 w = img.width
@@ -166,7 +161,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![transforming images](assets/figures/transform-images.png)
+![transforming images](../assets/figures/transform-images.png)
 
 ## Drawing on images
 
@@ -177,14 +172,14 @@ In these examples, we'll annotate a PNG file.
 ```@example
 using Luxor # hide
 
-image = readpng("assets/figures/julia-logo-mask.png")
+image = readpng("../assets/figures/julia-logo-mask.png")
 
 w = image.width
 h = image.height
 
 # create a drawing surface of the same size
 
-fname = "assets/figures/drawing_on_images.png"
+fname = "../assets/figures/drawing_on_images.png"
 Drawing(w, h, fname)
 
 # place the image on the Drawing - it's positioned by its top/left corner
@@ -221,7 +216,7 @@ finish() # hide
 nothing # hide
 ```
 
-![drawing on images](assets/figures/drawing_on_images.png)
+![drawing on images](../assets/figures/drawing_on_images.png)
 
 ### Adding text to transformed images
 
@@ -229,15 +224,15 @@ The above approach works well, but suppose you want to locate the working origin
 at the lower left of the image, i.e. you want all coordinates to be relative to the
 bottom left corner of the image?
 
-To do this, use `translate()` and `transform()` to modify the drawing space:
+To do this, use [`translate`](@ref) and [`transform`](@ref) to modify the drawing space:
 
 ```@example
 using Luxor # hide
 
-image = readpng("assets/figures/julia-logo-mask.png")
+image = readpng("../assets/figures/julia-logo-mask.png")
 w = image.width
 h = image.height
-fname = "assets/figures/drawing_on_images_2.png"
+fname = "../assets/figures/drawing_on_images_2.png"
 Drawing(w, h, fname)
 placeimage(image, 0, 0)
 
@@ -281,17 +276,17 @@ finish() # hide
 nothing # hide
 ```
 
-![drawing on transformed images](assets/figures/drawing_on_images_2.png)
+![drawing on transformed images](../assets/figures/drawing_on_images_2.png)
 
 ## Image compositing
 
-You should be using [Images.jl](https://github.com/JuliaImages) for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by `setmode()`.
+You should be using [Images.jl](https://github.com/JuliaImages) for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by [`setmode`](@ref).
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/image-compositing.png") # hide
+Drawing(600, 400, "../assets/figures/image-compositing.png") # hide
 origin() # hide
-img = readpng("assets/figures/textoutlines.png")
+img = readpng("../assets/figures/textoutlines.png")
 w = img.width
 h = img.height
 
@@ -304,4 +299,4 @@ finish() # hide
 nothing # hide
 ```
 
-![transforming images](assets/figures/image-compositing.png)
+![transforming images](../assets/figures/image-compositing.png)

@@ -10,6 +10,7 @@
 
 - `polyportion()`/`polyremainder()` now throw error for single-point polys (duh)
 - BoundingBox() no longer fails if there's no drawing (returns a default value)
+- documentation restructed along divio ("grand unified theory of documentation" lines
 
 ### Removed
 

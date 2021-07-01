@@ -9,19 +9,19 @@ DocTestSetup = quote
 
 For color definitions and conversions, you can use [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).
 
-`setcolor()` and `sethue()` will apply a single solid or transparent color to new graphics.
+[`setcolor`](@ref) and [`sethue`](@ref) will apply a single solid or transparent color to new graphics.
 
-`setblend()` will apply a smooth transition between two or more colors to new graphics.
+[`setblend`](@ref) will apply a smooth transition between two or more colors to new graphics.
 
-`setmesh()` will apply a color mesh to new graphics.
+[`setmesh`](@ref) will apply a color mesh to new graphics.
 
-The difference between the `setcolor()` and `sethue()` functions is that `sethue()` doesn't change alpha opacity (transparency), so you can change the hue without changing the current alpha opacity (transparency) value.
+The difference between the [`setcolor`](@ref) and [`sethue`](@ref) functions is that [`sethue`](@ref) doesn't change alpha opacity (transparency), so you can change the hue without changing the current alpha opacity (transparency) value.
 
 Named colors, such as "gold", or "lavender", can be found in `Colors.color_names` dictionary.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(800, 800, "assets/figures/colors.svg") # hide
+Drawing(800, 800, "../assets/figures/colors.svg") # hide
 
 origin() # hide
 background("white") # hide
@@ -45,20 +45,9 @@ finish() # hide
 nothing #hide
 ```
 
-![line endings](assets/figures/colors.svg)
+![line endings](../assets/figures/colors.svg)
 
 (To make the label stand out against the background, the luminance is calculated, then used to choose the label's color.)
-
-```@docs
-sethue
-setcolor
-setgray
-setopacity
-randomhue
-randomcolor
-setblend
-setantialias
-```
 
 ## Line styles
 
@@ -66,7 +55,7 @@ There are `set-` functions for controlling subsequent lines' width, end shape, j
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "assets/figures/line-ends.png") # hide
+Drawing(400, 250, "../assets/figures/line-ends.png") # hide
 background("white") # hide
 origin() # hide
 translate(-100, -60) # hide
@@ -87,11 +76,11 @@ finish() # hide
 nothing # hide
 ```
 
-![line endings](assets/figures/line-ends.png)
+![line endings](../assets/figures/line-ends.png)
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/dashes.png") # hide
+Drawing(600, 250, "../assets/figures/dashes.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(14) # hide
@@ -113,9 +102,9 @@ finish() # hide
 nothing # hide
 ```
 
-![dashes](assets/figures/dashes.png)
+![dashes](../assets/figures/dashes.png)
 
-To define more complicated dash patterns in Luxor, pass a vector to `setdash()`.
+To define more complicated dash patterns in Luxor, pass a vector to [`setdash`](@ref).
 
 ```julia
 dashes = [50.0,  # ink
@@ -128,7 +117,7 @@ setdash(dashes)
 
 ```@example
 using Luxor # hide
-Drawing(600, 180, "assets/figures/moredashes.svg") # hide
+Drawing(600, 180, "../assets/figures/moredashes.svg") # hide
 background("white") # hide
 origin() # hide
 function dashing()
@@ -154,35 +143,21 @@ finish() # hide
 nothing # hide
 ```
 
-![more dashes](assets/figures/moredashes.svg)
+![more dashes](../assets/figures/moredashes.svg)
 
 Notice that odd-numbered patterns flip the ink and skip numbers each time through.
 
-```@docs
-setline
-setlinecap
-setlinejoin
-setdash
-fillstroke
-strokepath
-fillpath
-strokepreserve
-fillpreserve
-paint
-do_action
-```
-
 ## Blends
 
-A blend is a color gradient. Use `setblend()` to select a blend in the same way that you'd use `setcolor()` and `sethue()` to select a solid color.
+A blend is a color gradient. Use [`setblend`](@ref) to select a blend in the same way that you'd use [`setcolor`](@ref) and [`sethue`](@ref) to select a solid color.
 
-You can make linear or radial blends. Use `blend()` in either case.
+You can make linear or radial blends. Use [`blend`](@ref) in either case.
 
-To create a simple linear blend between two colors, supply two points and two colors to `blend()`:
+To create a simple linear blend between two colors, supply two points and two colors to [`blend`](@ref):
 
 ```@example
 using Luxor # hide
-Drawing(600, 200, "assets/figures/color-blends-basic.png") # hide
+Drawing(600, 200, "../assets/figures/color-blends-basic.png") # hide
 origin() # hide
 background("white") # hide
 orangeblue = blend(Point(-200, 0), Point(200, 0), "orange", "blue")
@@ -193,13 +168,13 @@ finish() # hide
 nothing # hide
 ```
 
-![linear blend](assets/figures/color-blends-basic.png)
+![linear blend](../assets/figures/color-blends-basic.png)
 
 And for a radial blend, provide two point/radius pairs, and two colors:
 
 ```@example
 using Luxor # hide
-Drawing(600, 200, "assets/figures/color-blends-radial.png") # hide
+Drawing(600, 200, "../assets/figures/color-blends-radial.png") # hide
 origin() # hide
 background("white") # hide
 greenmagenta = blend(Point(0, 0), 5, Point(0, 0), 150, "green", "magenta")
@@ -209,13 +184,13 @@ rulers()
 finish() # hide
 nothing # hide
 ```
-![radial blends](assets/figures/color-blends-radial.png)
+![radial blends](../assets/figures/color-blends-radial.png)
 
-You can also use `blend()` to create an empty blend. Then you use `addstop()` to define the locations of specific colors along the blend, where `0` is the start, and `1` is the end.
+You can also use [`blend`](@ref) to create an empty blend. Then you use [`addstop`](@ref) to define the locations of specific colors along the blend, where `0` is the start, and `1` is the end.
 
 ```@example
 using Luxor # hide
-Drawing(600, 200, "assets/figures/color-blends-scratch.png") # hide
+Drawing(600, 200, "../assets/figures/color-blends-scratch.png") # hide
 origin() # hide
 background("white") # hide
 goldblend = blend(Point(-200, 0), Point(200, 0))
@@ -231,13 +206,13 @@ finish() # hide
 nothing # hide
 ```
 
-![blends from scratch](assets/figures/color-blends-scratch.png)
+![blends from scratch](../assets/figures/color-blends-scratch.png)
 
-When you define blends, the location of the axes (eg the current workspace as defined by `translate()`, etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with `translate(pos)`. The blend 'samples' the original location of the blend's definition.
+When you define blends, the location of the axes (eg the current workspace as defined by [`translate`](@ref), etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with `translate(pos)`. The blend 'samples' the original location of the blend's definition.
 
 ```@example
 using Luxor # hide
-Drawing(600, 200, "assets/figures/color-blends-translate-1.png") # hide
+Drawing(600, 200, "../assets/figures/color-blends-translate-1.png") # hide
 origin() # hide
 background("white") # hide
 goldblend = blend(Point(0, 0), Point(200, 0))
@@ -259,13 +234,13 @@ finish() # hide
 nothing # hide
 ```
 
-![blends 1](assets/figures/color-blends-translate-1.png)
+![blends 1](../assets/figures/color-blends-translate-1.png)
 
 Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go (there are Cairo options to change this). But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
 
 ```@example
 using Luxor # hide
-Drawing(600, 200, "assets/figures/color-blends-translate-2.png") # hide
+Drawing(600, 200, "../assets/figures/color-blends-translate-2.png") # hide
 origin() # hide
 background("white") # hide
 goldblend = blend(Point(0, 0), Point(200, 0))
@@ -286,20 +261,15 @@ end
 finish() # hide
 nothing # hide
 ```
-![blends 2](assets/figures/color-blends-translate-2.png)
+![blends 2](../assets/figures/color-blends-translate-2.png)
 
-```@docs
-blend
-addstop
-```
+### Using [`blendadjust`](@ref)
 
-### Using `blendadjust()`
-
-You can use `blendadjust()` to modify the blend so that objects scaled and positioned after the blend was defined are rendered correctly.
+You can use [`blendadjust`](@ref) to modify the blend so that objects scaled and positioned after the blend was defined are rendered correctly.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/blend-adjust.png") # hide
+Drawing(600, 250, "../assets/figures/blend-adjust.png") # hide
 origin() # hide
 background("white") # hide
 setline(20)
@@ -333,29 +303,25 @@ finish() # hide
 nothing # hide
 ```
 
-![blends adjust](assets/figures/blend-adjust.png)
+![blends adjust](../assets/figures/blend-adjust.png)
 
 The blend is defined to span 200 units, horizontally centered at 0/0. The top line is also 200 units long and centered horizontally at 0/0, so the blend is rendered exactly as you'd hope.
 
-The second line is only half as long, at 100 units, centered at 50/0, so `blendadjust()` is used to relocate the blend's center to the point 50/0 and scale it by 0.5 (`100/200`).
+The second line is only half as long, at 100 units, centered at 50/0, so [`blendadjust`](@ref) is used to relocate the blend's center to the point 50/0 and scale it by 0.5 (`100/200`).
 
-The third line is also 100 units long, centered at -50/0, so again `blendadjust()` is used to relocate the blend's center and scale it.
+The third line is also 100 units long, centered at -50/0, so again [`blendadjust`](@ref) is used to relocate the blend's center and scale it.
 
-The fourth line shows that you can translate and scale the axes instead of adjusting the blend, if you use `setblend()` again in the new scene.
-
-```@docs
-blendadjust
-```
+The fourth line shows that you can translate and scale the axes instead of adjusting the blend, if you use [`setblend`](@ref) again in the new scene.
 
 ## Blending (compositing) operators
 
 Graphics software provides ways to modify how the virtual "ink" is applied to previously-drawn graphic elements. In PhotoShop and other software, the compositing process is done using [blend modes](https://en.wikipedia.org/wiki/Blend_modes).
 
-Use `setmode()` to set the blending mode of subsequent graphics.
+Use [`setmode`](@ref) to set the blending mode of subsequent graphics.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "assets/figures/blendmodes.png") # hide
+Drawing(600, 600, "../assets/figures/blendmodes.png") # hide
 origin()
 # transparent, no background
 fontsize(15)
@@ -397,7 +363,7 @@ finish() # hide
 nothing # hide
 ```
 
-![blend modes](assets/figures/blendmodes.png)
+![blend modes](../assets/figures/blendmodes.png)
 
 Notice in this example that clipping was used to restrict the area affected by the blending process.
 
@@ -405,24 +371,19 @@ In Cairo, these blend modes are called *operators*. For a more detailed explanat
 
 You can access the list of modes with the unexported symbol `Luxor.blendingmodes`.
 
-```@docs
-setmode
-getmode
-```
-
 ## Meshes
 
 A mesh provides smooth shading between three or four colors across a region defined by lines or curves.
 
-To create a mesh, use the `mesh()` function and save the result as a mesh object. To use a mesh, supply the mesh object to the `setmesh()` function.
+To create a mesh, use the [`mesh`](@ref) function and save the result as a mesh object. To use a mesh, supply the mesh object to the [`setmesh`](@ref) function.
 
-The `mesh()` function accepts either an array of Bézier paths or a polygon.
+The [`mesh`](@ref) function accepts either an array of Bézier paths or a polygon.
 
-This basic example obtains a polygon from the drawing area using `box(BoundingBox()...` and uses the four corners of the mesh and the four colors in the array to build the mesh. The `paint()` function fills the drawing.
+This basic example obtains a polygon from the drawing area using `box(BoundingBox()...` and uses the four corners of the mesh and the four colors in the array to build the mesh. The [`paint`](@ref) function fills the drawing.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(600, 600, "assets/figures/mesh-basic.png") # hide
+Drawing(600, 600, "../assets/figures/mesh-basic.png") # hide
 origin() # hide
 
 garishmesh = mesh(
@@ -440,13 +401,13 @@ finish() # hide
 nothing # hide
 ```
 
-![mesh 1](assets/figures/mesh-basic.png)
+![mesh 1](../assets/figures/mesh-basic.png)
 
 The next example uses a Bézier path conversion of a square as the outline of the mesh. Because the box to be filled is larger than the mesh's outlines, not all the box is filled.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(600, 600, "assets/figures/mesh1.png") # hide
+Drawing(600, 600, "../assets/figures/mesh1.png") # hide
 origin() # hide
 background("white") # hide
 setcolor("grey50")
@@ -472,13 +433,13 @@ finish() # hide
 nothing # hide
 ```
 
-![mesh 1](assets/figures/mesh1.png)
+![mesh 1](../assets/figures/mesh1.png)
 
-The second example uses a polygon defined by `ngon()` as the outline of the mesh. The mesh is drawn when the path is stroked.
+The second example uses a polygon defined by [`ngon`](@ref) as the outline of the mesh. The mesh is drawn when the path is stroked.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "assets/figures/mesh2.png") # hide
+Drawing(600, 600, "../assets/figures/mesh2.png") # hide
 origin() # hide
 background("white") # hide
 pl = ngon(O, 250, 3, π/6, vertices=true)
@@ -497,22 +458,17 @@ finish() # hide
 nothing # hide
 ```
 
-![mesh 2](assets/figures/mesh2.png)
-
-```@docs
-mesh
-setmesh
-```
+![mesh 2](../assets/figures/mesh2.png)
 
 ## Masks
 
-A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. `mask()` takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.
+A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. [`mask`](@ref) takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.
 
 In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bw/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
 
 ```@example
 using Luxor # hide
-Drawing(610, 610, "assets/figures/mask.png") # hide
+Drawing(610, 610, "../assets/figures/mask.png") # hide
 origin() # hide
 println("generating mask.png now...")
 tiles = Tiler(600, 600, 15, 15, margin=0)
@@ -528,13 +484,13 @@ finish() # hide
 nothing # hide
 ```
 
-![mask](assets/figures/mask.png)
+![mask](../assets/figures/mask.png)
 
 The second example uses the distance of each tile relative to the rectangle `O, bw, bw` to determine the gray color.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "assets/figures/mask1.png") # hide
+Drawing(600, 600, "../assets/figures/mask1.png") # hide
 origin() # hide
 
 tiles = Tiler(600, 600, 30, 30)
@@ -551,8 +507,4 @@ finish() # hide
 nothing # hide
 ```
 
-![mask1](assets/figures/mask1.png)
-
-```@docs
-mask
-```
+![mask1](../assets/figures/mask1.png)

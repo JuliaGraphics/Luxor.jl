@@ -8,7 +8,7 @@ end
 
 One place to look for examples is the `Luxor/test` directory.
 
-!["tiled images"](assets/figures/tiled-images.png)
+!["tiled images"](../assets/figures/tiled-images.png)
 
 ## Illustrating this document
 
@@ -19,7 +19,7 @@ The Markdown markup looks like this:
 `````
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polysmooth-pathological.png") # hide
+Drawing(600, 250, "../assets/figures/polysmooth-pathological.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -35,14 +35,14 @@ polysmooth(p, 40, :fill, debug=true)
 finish() # hide
 ```
 
-![polysmooth](assets/figures/polysmooth-pathological.png)
+![polysmooth](../assets/figures/polysmooth-pathological.png)
 `````
 
 and after you run Documenter's build process the HTML output looks like this:
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polysmoothy.png") # hide
+Drawing(600, 250, "../assets/figures/polysmoothy.png") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -59,13 +59,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](assets/figures/polysmoothy.png)
+![polysmooth](../assets/figures/polysmoothy.png)
 
 ## Why turtles?
 
 An interesting application for turtle-style graphics is for drawing Lindenmayer systems (l-systems). Here's an example of how a complex pattern can emerge from a simple set of rules, taken from [Lindenmayer.jl](https://github.com/cormullion/Lindenmayer.jl):
 
-![penrose](assets/figures/penrose.png)
+![penrose](../assets/figures/penrose.png)
 
 The definition of this figure is:
 
@@ -89,7 +89,7 @@ It's usually better to draw fractals and similar images using pixels and image p
 using Luxor, Colors
 function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
-    Drawing(w, w, "assets/figures/strange-vector.png")
+    Drawing(w, w, "../assets/figures/strange-vector.png")
     origin()
     background("white")
     xinc = w/(xmax - xmin)
@@ -122,11 +122,11 @@ strange(.3, 800)
 nothing # hide
 ```
 
-![strange attractor in vectors](assets/figures/strange-vector.png)
+![strange attractor in vectors](../assets/figures/strange-vector.png)
 
 ## More animations
 
-[![strange attractor in vectors](assets/figures/animation-screengrab.jpg)](https://youtu.be/1FA2FgJU6dM)
+[![strange attractor in vectors](../assets/figures/animation-screengrab.jpg)](https://youtu.be/1FA2FgJU6dM)
 
 Most of the animations on [this YouTube channel](https://www.youtube.com/channel/UCfd52kTA5JpzOEItSqXLQxg) are made with Luxor.
 
@@ -202,7 +202,7 @@ function scarab(pos)
 end
 
 function draw()
-    Drawing(500, 500, "assets/figures/luxor-logo.png")
+    Drawing(500, 500, "../assets/figures/luxor-logo.png")
     origin()
     background(1, 1, 1, 0)
     setopacity(1.0)
@@ -252,7 +252,7 @@ draw()
 nothing #hide
 ```
 
-![Luxor logo](assets/figures/luxor-logo.png)
+![Luxor logo](../assets/figures/luxor-logo.png)
 
 ## A Japanese-style Temple scene
 
@@ -260,7 +260,7 @@ This code was created by **kfung**, a student that participated in [Google Code-
 
 ```@example
 using Luxor
-Drawing(1280, 720, "assets/figures/temple.png")
+Drawing(1280, 720, "../assets/figures/temple.png")
 origin()
 setblend(blend(Point(0, -200), Point(0, 300), "#F38070", "#F3C3BC"))
 box(O, 1280, 720, :fill)
@@ -372,4 +372,4 @@ finish()
 nothing # hide
 ```
 
-![temple](assets/figures/temple.png)
+![temple](../assets/figures/temple.png)

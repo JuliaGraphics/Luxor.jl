@@ -35,10 +35,10 @@ draws a continuously rotating hypotrochoid.
 
 This code also imports the `@play` macro.
 
-The call to `sleep()` reduces the CPU time, and allows other processes to run, but the millisecond
+The call to `sleep` reduces the CPU time, and allows other processes to run, but the millisecond
 animation will be less smooth as a result.
 
-![clock](assets/figures/clock.gif)
+![clock](../assets/figures/clock.gif)
 
 ```
 using Luxor, Colors, Dates, ColorSchemes
@@ -98,15 +98,15 @@ clock(ColorSchemes.klimt)
 
 ## Snapshots
 
-A _snapshot_ is a view of the current Luxor drawing in its current state, before it's been closed via `finish()`. You can take a snapshot, then continue drawing on the current drawing.
+A _snapshot_ is a view of the current Luxor drawing in its current state, before it's been closed via [`finish`](@ref). You can take a snapshot, then continue drawing on the current drawing.
 
 !!! note
 
     You can take a snapshot only for drawings created using the `:rec` (recording) format.
 
-The following code exports a series of snapshots made with `snapshot()`, showing the state of the computation for different values of the `stepby` parameter. (This image is a composite of all the snapshots.)
+The following code exports a series of snapshots made with [`snapshot`](@ref), showing the state of the computation for different values of the `stepby` parameter. (This image is a composite of all the snapshots.)
 
-![juliaset](assets/figures/julia-set-set.png)
+![juliaset](../assets/figures/julia-set-set.png)
 
 ```
 using Luxor, ColorSchemes, Colors
@@ -168,8 +168,4 @@ function main()
 end
 
 main()
-```
-
-```@docs
-snapshot
 ```

@@ -24,7 +24,7 @@ In this example, every third tile is divided up into subtiles and colored:
 
 ```@example
 using Luxor, Random # hide
-Drawing(800, 500, "assets/figures/tiler.png") # hide
+Drawing(800, 500, "../assets/figures/tiler.png") # hide
 background("white") # hide
 origin() # hide
 Random.seed!(1) # hide
@@ -50,15 +50,10 @@ finish() # hide
 nothing # hide
 ```
 
-![tiler](assets/figures/tiler.png)
+![tiler](../assets/figures/tiler.png)
 
 `Partition` is like `Tiler`, but you specify the width and height of the tiles, rather than
 how many rows and columns of tiles you want.
-
-```@docs
-Tiler
-Partition
-```
 
 You can obtain the centerpoints of all the tiles in one go with:
 
@@ -134,7 +129,7 @@ The next example creates a table with 10 rows and 10 columns, where each cell is
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 400, "assets/figures/table2.png") # hide
+Drawing(600, 400, "../assets/figures/table2.png") # hide
 background("white") # hide
 origin() # hide
 Random.seed!(42) # hide
@@ -158,7 +153,7 @@ finish() # hide
 nothing # hide
 ```
 
-![table 2](assets/figures/table2.png)
+![table 2](../assets/figures/table2.png)
 
 You can access rows or columns in the usual Julian way.
 
@@ -170,7 +165,7 @@ To specify varying row heights and column widths, supply arrays or ranges to the
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/table1.png") # hide
+Drawing(600, 400, "../assets/figures/table1.png") # hide
 background("white") # hide
 origin() # hide
 
@@ -188,7 +183,7 @@ finish() # hide
 nothing # hide
 ```
 
-![table 1](assets/figures/table1.png)
+![table 1](../assets/figures/table1.png)
 
 To fill table cells, it's useful to be able to access the table's row and column specifications (using the `colwidths` and `rowheights` fields), and iteration can also provide information about the current row and column being processed (`currentrow` and `currentcol`).
 
@@ -217,7 +212,7 @@ function drawbar(t::Table, data, row, column, minvalue, maxvalue, barheight)
          halign=:left)
 end
 
-Drawing(700, 250, "assets/figures/arraytable.svg")  # hide
+Drawing(700, 250, "../assets/figures/arraytable.svg")  # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -236,11 +231,8 @@ finish() # hide
 nothing # hide
 ```
 
-![array table](assets/figures/arraytable.svg)
+![array table](../assets/figures/arraytable.svg)
 
-```@docs
-Table
-```
 ## Grids
 
 You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
@@ -249,7 +241,7 @@ Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`. 
 
 ```@example
 using Luxor, Random # hide
-Drawing(700, 250, "assets/figures/grids.png")  # hide
+Drawing(700, 250, "../assets/figures/grids.png")  # hide
 background("white") # hide
 fontsize(14) # hide
 translate(50, 50) # hide
@@ -266,11 +258,11 @@ finish() # hide
 nothing # hide
 ```
 
-![grids](assets/figures/grids.png)
+![grids](../assets/figures/grids.png)
 
 ```@example
 using Luxor, Random # hide
-Drawing(700, 400, "assets/figures/grid-hex.png")  # hide
+Drawing(700, 400, "../assets/figures/grid-hex.png")  # hide
 background("white") # hide
 fontsize(22) # hide
 Random.seed!(42)
@@ -289,10 +281,4 @@ finish() # hide
 nothing # hide
 ```
 
-![hex grid](assets/figures/grid-hex.png)
-
-```@docs
-GridRect
-GridHex
-nextgridpoint
-```
+![hex grid](../assets/figures/grid-hex.png)

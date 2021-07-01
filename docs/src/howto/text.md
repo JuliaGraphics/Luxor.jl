@@ -18,7 +18,7 @@ Use:
 
 ```@example
 using Luxor # hide
-Drawing(600, 100, "assets/figures/toy-text-example.png") # hide
+Drawing(600, 100, "../assets/figures/toy-text-example.png") # hide
 origin() # hide
 background("azure") # hide
 sethue("black") # hide
@@ -29,11 +29,11 @@ finish() # hide
 nothing # hide
 ```
 
-![text placement](assets/figures/toy-text-example.png)
+![text placement](../assets/figures/toy-text-example.png)
 
 (If the specified font is unavailable on the current system configuration, the default, usually Times/Helvetica or DejaVu, is used.)
 
-The `label()` function also uses the Toy API.
+The [`label`](@ref) function also uses the Toy API.
 
 #### The Pro API
 
@@ -44,7 +44,7 @@ Use:
 
 ```@example
 using Luxor # hide
-Drawing(600, 100, "assets/figures/pro-text-example.png") # hide
+Drawing(600, 100, "../assets/figures/pro-text-example.png") # hide
 origin() # hide
 background("azure") # hide
 sethue("black") # hide
@@ -54,33 +54,23 @@ finish() # hide
 nothing # hide
 ```
 
-![text placement](assets/figures/pro-text-example.png)
+![text placement](../assets/figures/pro-text-example.png)
 
 ## Specifying the font ("Toy" API)
 
-Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size.
-
-```@docs
-fontface
-fontsize
-get_fontsize
-```
+Use `fontface(fontname)` to choose a font, and `fontsize(n)` to set the font size. [`get_fontsize`](@ref) finds the current font size.
 
 ## Specifying the font ("Pro" API)
 
-To select a font in the Pro text API, use `setfont()` and supply both the font name and a size.
-
-```@docs
-setfont
-```
+To select a font in the Pro text API, use [`setfont`](@ref) and supply both the font name and a size.
 
 ## Placing text ("Toy" API)
 
-Use `text()` to place text.
+Use [`text`](@ref) to place text.
 
 ```@example
 using Luxor # hide
-Drawing(400, 150, "assets/figures/text-placement.png") # hide
+Drawing(400, 150, "../assets/figures/text-placement.png") # hide
 origin() # hide
 background("white") # hide
 fontsize(80) # hide
@@ -101,11 +91,11 @@ finish() # hide
 nothing # hide
 ```
 
-![text placement](assets/figures/text-placement.png)
+![text placement](../assets/figures/text-placement.png)
 
 ```@example
 using Luxor # hide
-Drawing(400, 300, "assets/figures/text-rotation.png") # hide
+Drawing(400, 300, "../assets/figures/text-rotation.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
@@ -116,19 +106,15 @@ finish() # hide
 nothing # hide
 ```
 
-![text rotation](assets/figures/text-rotation.png)
-
-```@docs
-text
-```
+![text rotation](../assets/figures/text-rotation.png)
 
 ## Placing text ("Pro" API)
 
-Use `settext()` to place text. You can include some pseudo-HTML markup with the keyword argument `markup=true`.
+Use [`settext`](@ref) to place text. You can include some pseudo-HTML markup with the keyword argument `markup=true`.
 
 ```@example
 using Luxor # hide
-Drawing(400, 150, "assets/figures/pro-text-placement.png") # hide
+Drawing(400, 150, "../assets/figures/pro-text-placement.png") # hide
 origin() # hide
 background("white") # hide
 rulers()
@@ -143,17 +129,13 @@ finish() # hide
 nothing # hide
 ```
 
-![pro text placement](assets/figures/pro-text-placement.png)
-
-```@docs
-settext
-```
+![pro text placement](../assets/figures/pro-text-placement.png)
 
 ## Notes on fonts
 
 Fonts are loaded when you first start using Luxor/Cairo in a Julia session. This partly explains why starting a Luxor/Cairo session can take a few seconds.
 
-On macOS, the fontname required by the Toy API's `fontface()` should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.
+On macOS, the fontname required by the Toy API's [`fontface`](@ref) should be the PostScript name of a currently activated font. You can find this out using, for example, the FontBook application.
 
 On macOS, a list of currently activated fonts can be found (after a while) with the shell command:
 
@@ -163,7 +145,7 @@ system_profiler SPFontsDataType
 
 Fonts currently activated by a Font Manager can be found and used by the Toy API but not by the Pro API (at least on my macOS computer currently).
 
-On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with `setfont()`) using the shell command:
+On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with [`setfont`](@ref)) using the shell command:
 
 ```
 fc-list | cut -f 2 -d ":"
@@ -176,7 +158,7 @@ See also [FreeTypeAbstraction.jl](https://github.com/JuliaGraphics/FreeTypeAbstr
 
 In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the default font is Helvetica (on macOS).
 
-One difference between `settext()` and `text()` (on macOS) is that many more missing Unicode glyphs are automatically substituted by other fonts when you use the former.
+One difference between [`settext`](@ref) and [`text`](@ref) (on macOS) is that many more missing Unicode glyphs are automatically substituted by other fonts when you use the former.
 
 Cairo.jl (and hence Luxor.jl) doesn't support emoji currently. 😢
 
@@ -195,7 +177,7 @@ For PNG files, the appearance of fonts when output is controlled to some extent 
 
 ```@example
 using Luxor # hide
-Drawing(400, 400, "assets/figures/textoutlines.png") # hide
+Drawing(400, 400, "../assets/figures/textoutlines.png") # hide
 origin() # hide
 fontface("Times-Roman")
 fontsize(500)
@@ -209,17 +191,9 @@ finish() # hide
 nothing # hide
 ```
 
-![text outlines](assets/figures/textoutlines.png)
+![text outlines](../assets/figures/textoutlines.png)
 
-```@docs
-textoutlines
-```
-
-`textpath()` converts the text into graphic paths suitable for further manipulation.
-
-```@docs
-textpath
-```
+[`textpath`](@ref) converts the text into graphic paths suitable for further manipulation.
 
 ## Text and font dimensions ("Toy" API only)
 
@@ -227,11 +201,7 @@ The `textextents(str)` function returns the dimensions of the string `str`, give
 
 `width` and `height` are stored in elements 3 and 4. The first two elements are the offsets ("bearings") from the reference point (green) to the bounding box. The last two elements determine where the next ("advance") character should start (blue).
 
-![textextents](assets/figures/textextents.png)
-
-```@docs
-textextents
-```
+![textextents](../assets/figures/textextents.png)
 
 !!! note
 
@@ -239,12 +209,12 @@ textextents
 
 ## Labels
 
-The `label()` function places text relative to a specific point, and you can use compass
+The [`label`](@ref) function places text relative to a specific point, and you can use compass
 points or angles to indicate where it should be. So `:N` (for North) places a text label directly above the point, as does `3π/2`.
 
 ```@example
 using Luxor # hide
-Drawing(400, 350, "assets/figures/labels.png") # hide
+Drawing(400, 350, "../assets/figures/labels.png") # hide
 origin() # hide
 background("white") # hide
 sethue("black")
@@ -262,11 +232,7 @@ finish() # hide
 nothing # hide
 ```
 
-![labels](assets/figures/labels.png)
-
-```@docs
-label
-```
+![labels](../assets/figures/labels.png)
 
 ## Text on a curve
 
@@ -274,7 +240,7 @@ Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
 ```@example
 using Luxor # hide
-Drawing(800, 800, "assets/figures/text-spiral.png") # hide
+Drawing(800, 800, "../assets/figures/text-spiral.png") # hide
 
 origin() # hide
 background("ivory") # hide
@@ -296,13 +262,13 @@ finish() # hide
 nothing # hide
 ```
 
-![text on a curve or spiral](assets/figures/text-spiral.png)
+![text on a curve or spiral](../assets/figures/text-spiral.png)
 
-For shorter strings, `textcurvecentered()` tries to place the text on a circular arc by its center point.
+For shorter strings, [`textcurvecentered`](@ref) tries to place the text on a circular arc by its center point.
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "assets/figures/text-centered.png") # hide
+Drawing(400, 250, "../assets/figures/text-centered.png") # hide
 origin() # hide
 background("white") # hide
 fontface("Arial-Black")
@@ -325,18 +291,13 @@ finish() # hide
 nothing # hide
 ```
 
-![text centered on curve](assets/figures/text-centered.png)
-
-```@docs
-textcurve
-textcurvecentered
-```
+![text centered on curve](../assets/figures/text-centered.png)
 
 ## Text clipping
 
 You can use newly-created text paths as a clipping region - here the text paths are filled with names of randomly chosen Julia functions:
 
-![text clipping](assets/figures/text-path-clipping.png)
+![text clipping](../assets/figures/text-path-clipping.png)
 
 ```julia
 using Luxor
@@ -387,12 +348,12 @@ preview()
 
 ## Text blocks, boxes, and wrapping
 
-Longer lines of text can be made to wrap inside an imaginary rectangle with `textwrap()`. Specify the required width of the rectangle, and the location of the top left corner.
+Longer lines of text can be made to wrap inside an imaginary rectangle with [`textwrap`](@ref). Specify the required width of the rectangle, and the location of the top left corner.
 
 ```@example
 
 using Luxor # hide
-Drawing(500, 400, "assets/figures/text-wrapping.png") # hide
+Drawing(500, 400, "../assets/figures/text-wrapping.png") # hide
 origin() # hide
 background("white") # hide
 fontface("Georgia")
@@ -417,13 +378,13 @@ finish() # hide
 nothing # hide
 ```
 
-![text wrapping](assets/figures/text-wrapping.png)
+![text wrapping](../assets/figures/text-wrapping.png)
 
-`textwrap()` accepts a function that allows you to insert code that responds to the next line's linenumber, contents, position, and height.
+[`textwrap`](@ref) accepts a function that allows you to insert code that responds to the next line's linenumber, contents, position, and height.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(500, 400, "assets/figures/text-wrapping-1.png") # hide
+Drawing(500, 400, "../assets/figures/text-wrapping-1.png") # hide
 origin() # hide
 background("white") # hide
 fontface("Georgia")
@@ -450,15 +411,15 @@ finish() # hide
 nothing # hide
 ```
 
-![text wrapped](assets/figures/text-wrapping-1.png)
+![text wrapped](../assets/figures/text-wrapping-1.png)
 
-The `textbox()` function also draws text inside a box, but doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The `leading` argument specifies the distance between the lines, so should be set relative to the current font size (as set with `fontsize()`).
+The [`textbox`](@ref) function also draws text inside a box, but doesn't alter the lines, and doesn't force the text to a specific width. Supply an array of strings and the top left position. The `leading` argument specifies the distance between the lines, so should be set relative to the current font size (as set with [`fontsize`](@ref)).
 
 This example counts the number of characters drawn, using a simple closure. The function returns the position of the start of what would have been the next line.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(600, 300, "assets/figures/textbox.png") # hide
+Drawing(600, 300, "../assets/figures/textbox.png") # hide
 origin() # hide
 background("ivory") # hide
 sethue("black") # hide
@@ -497,23 +458,17 @@ finish() # hide
 nothing # hide
 ```
 
-![textbox](assets/figures/textbox.png)
-
-```@docs
-textwrap
-textbox
-splittext
-```
+![textbox](../assets/figures/textbox.png)
 
 ## Text tracking
 
-Use `texttrack()` to track or letter-space text, i.e. vary the spacing between every letter. ("Kerning" is when you do this for just a pair of letters.) The units are 1/1000 em, so the actual distance of "50 units of tracking" varies depending on the current font size.
+Use [`texttrack`](@ref) to track or letter-space text, i.e. vary the spacing between every letter. ("Kerning" is when you do this for just a pair of letters.) The units are 1/1000 em, so the actual distance of "50 units of tracking" varies depending on the current font size.
 
 But really, don’t track text unless you have to.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "assets/figures/texttrack.svg") # hide
+Drawing(600, 600, "../assets/figures/texttrack.svg") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide
@@ -546,8 +501,4 @@ text_tracking_example()
 nothing # hide
 ```
 
-![textbox](assets/figures/texttrack.svg)
-
-```@docs
-texttrack
-```
+![textbox](../assets/figures/texttrack.svg)
