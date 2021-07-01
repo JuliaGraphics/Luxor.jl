@@ -9,7 +9,7 @@ Some simple "turtle graphics" functions are included. Functions to control the t
 
 ```@example
 using Luxor, Colors
-Drawing(600, 400, "assets/figures/turtles.png")  
+Drawing(600, 400, "../assets/figures/turtles.png")  
 origin()  
 background("midnightblue")  
 
@@ -30,13 +30,13 @@ finish()
 nothing # hide
 ```
 
-![turtles](assets/figures/turtles.png)
+![turtles](../assets/figures/turtles.png)
 
 The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!), and you can have any number of turtles active at a time.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(800, 800, "assets/figures/manyturtles.svg") # hide
+Drawing(800, 800, "../assets/figures/manyturtles.svg") # hide
 origin() # hide
 background("white") # hide
 quantity = 9
@@ -55,13 +55,13 @@ finish() # hide
 nothing # hide
 ```
 
-![many turtles](assets/figures/manyturtles.svg)
+![many turtles](../assets/figures/manyturtles.svg)
 
 A turtle graphics approach lends itself well to recursive programming. This short recursive function draws a Hilbert curve.
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 400, "assets/figures/hilbertturtle.svg") # hide
+Drawing(400, 400, "../assets/figures/hilbertturtle.svg") # hide
 origin() # hide
 background("black") # hide
 
@@ -101,26 +101,26 @@ end
 nothing # hide
 ```
 
-![hilbert turtle](assets/figures/hilbertturtle.svg)
+![hilbert turtle](../assets/figures/hilbertturtle.svg)
 
-```@docs
-Turtle
-Forward
-Turn
-Circle
-HueShift
-Message
-Orientation
-Towards
-Randomize_saturation
-Rectangle
-Pen_opacity_random
-Pendown
-Penup
-Pencolor
-Penwidth
-Point
-Pop
-Push
-Reposition
-```
+|List of words the turtle knows|
+|:---|
+|Turtle|
+|Forward|
+|Turn|
+|Circle|
+|HueShift|
+|Message|
+|Orientation|
+|Towards|
+|Randomize_saturation|
+|Rectangle|
+|Pen_opacity_random|
+|Pendown|
+|Penup|
+|Pencolor|
+|Penwidth|
+|Point|
+|Pop|
+|Push|
+|Reposition|

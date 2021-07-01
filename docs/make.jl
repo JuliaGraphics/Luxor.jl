@@ -3,27 +3,44 @@ using Documenter, Luxor
 makedocs(
     modules = [Luxor],
     sitename = "Luxor",
-    format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
-    pages    = Any[
-        "Introduction to Luxor"        =>  "index.md",
-        "A few examples"               =>  "examples.md",
-        "Tutorial"                     =>  "tutorial.md",
-        "Basic concepts"               =>  "basics.md",
-        "Simple shapes"                =>  "simplegraphics.md",
-        "More graphics"                =>  "moregraphics.md",
-        "Geometry tools"               =>  "geometrytools.md",
-        "Tables and grids"             =>  "tables-grids.md",
-        "Colors and styles"            =>  "colors-styles.md",
-        "Polygons and paths"           =>  "polygons.md",
-        "Text"                         =>  "text.md",
-        "Transforms and matrices"      =>  "transforms.md",
-        "Clipping"                     =>  "clipping.md",
-        "Images"                       =>  "images.md",
-        "Turtle graphics"              =>  "turtle.md",
-        "Animation"                    =>  "animation.md",
-        "Live graphics and snapshots"  =>  "livegraphics.md",
-        "More examples"                =>  "moreexamples.md",
-        "Index"                        =>  "functionindex.md"
+    format = Documenter.HTML(
+        prettyurls = get(ENV, "CI", nothing) == "true",
+        assets = ["assets/luxor-docs.css"],
+        collapselevel=1,
+        ),
+    pages    = [
+        "Introduction to Luxor"            =>  "index.md",
+        "Tutorials" => [
+            "A first tutorial"             =>  "tutorial/basictutorial.md",
+            ],
+        "Examples" => [
+            "Simple examples"              =>  "example/examples.md",
+            "More examples"                =>  "example/moreexamples.md",
+            ],
+        "How to guides" => [
+            "Create drawings"              =>  "howto/createdrawings.md",
+            "Draw simple shapes"           =>  "howto/simplegraphics.md",
+            "Use geometry tools"           =>  "howto/geometrytools.md",
+            "Work with tables and grids"   =>  "howto/tables-grids.md",
+            "Use colors and styles"        =>  "howto/colors-styles.md",
+            "Work with polygons"           =>  "howto/polygons.md",
+            "Add text"                     =>  "howto/text.md",
+            "Clip graphics"                =>  "howto/clipping.md",
+            "Images"                       =>  "howto/images.md",
+            "Turtle graphics"              =>  "howto/turtle.md",
+            "Make animations"              =>  "howto/animation.md",
+            "Live graphics and snapshots"  =>  "howto/livegraphics.md",
+            ],
+        "Explanations" => [
+            "Basic concepts"               =>  "explanation/basics.md",
+            "Image matrix"                 =>  "explanation/imagematrix.md",
+            "Transforms and matrices"      =>  "explanation/transforms.md",
+            "Contributing"                 =>  "explanation/contributing.md",
+            ],
+        "Reference" => [
+            "Alphabetical function list"   =>  "reference/functionindex.md"
+            "Function reference"           =>  "reference/api.md"
+            ],
         ]
     )
 

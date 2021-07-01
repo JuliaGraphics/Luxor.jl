@@ -48,19 +48,13 @@ animate(demo, [
     creategif=true)
 ```
 
-![animation example](assets/figures/animation.gif)
+![animation example](../assets/figures/animation.gif)
 
-In this example, the movie uses two scenes, each specifying a function to draw frames from 0 to 359. For each frame numbered 0 to 359, the graphics are drawn by both the `backdrop()` and `frame()` functions, in that order. A drawing is automatically created (in PNG format) and centered (`origin()`) so you can start drawing immediately. The `finish()` function is automatically called when all the drawing functions in the scenes have completed, and the process starts afresh for the next frame. The second scene, calling the `frame()` function, shows how you can pass optional information to the function.
-
-```@docs
-Movie
-Scene
-animate
-```
+In this example, the movie uses two scenes, each specifying a function to draw frames from 0 to 359. For each frame numbered 0 to 359, the graphics are drawn by both the `backdrop` and `frame` functions, in that order. A drawing is automatically created (in PNG format) and centered ([`origin`](@ref)) so you can start drawing immediately. The [`finish`](@ref) function is automatically called when all the drawing functions in the scenes have completed, and the process starts afresh for the next frame. The second scene, calling the `frame` function, shows how you can pass optional information to the function.
 
 ## Making the animation
 
-For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's already installed. Inside `animate()`, the first pass creates a GIF color palette, the second builds the file:
+For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's already installed. Inside [`animate`](@ref), the first pass creates a GIF color palette, the second builds the file:
 
 ```julia
 run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen
@@ -82,7 +76,7 @@ As an example, consider a simple example showing the sun for each hour of a 24 h
 sun24demo = Movie(400, 400, "sun24", 0:23)
 ```
 
-The `backgroundfunction()` draws a background that's used for all frames (animated GIFs like constant backgrounds):
+The `backgroundfunction` draws a background that's used for all frames (animated GIFs like constant backgrounds):
 
 ```
 function backgroundfunction(scene::Scene, framenumber)
@@ -90,7 +84,7 @@ function backgroundfunction(scene::Scene, framenumber)
 end
 ```
 
-A `nightskyfunction()` draws the night sky:
+A `nightskyfunction` draws the night sky:
 
 ```
 function nightskyfunction(scene::Scene, framenumber)
@@ -99,7 +93,7 @@ function nightskyfunction(scene::Scene, framenumber)
 end
 ```
 
-A `dayskyfunction()` draws the daytime sky:
+A `dayskyfunction` draws the daytime sky:
 
 ```
 function dayskyfunction(scene::Scene, framenumber)
@@ -108,7 +102,7 @@ function dayskyfunction(scene::Scene, framenumber)
 end
 ```
 
-The `sunfunction()` draws a sun at 24 positions during the day:
+The `sunfunction` draws a sun at 24 positions during the day:
 
 ```
 function sunfunction(scene::Scene, framenumber)
@@ -120,7 +114,7 @@ function sunfunction(scene::Scene, framenumber)
 end
 ```
 
-Finally a `groundfunction()` draws the ground:
+Finally a `groundfunction` draws the ground:
 
 ```
 function groundfunction(scene::Scene, framenumber)
@@ -153,7 +147,7 @@ animate(sun24demo, [
    creategif=true)
 ```
 
-![sun24 animation](assets/figures/sun24.gif)
+![sun24 animation](../assets/figures/sun24.gif)
 
 Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called. Also notice that the order of scenes and the use of backgrounds is important.
 
@@ -207,7 +201,7 @@ Most easing functions have names constructed like this:
 ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
 ```
 
-and there's an `easingflat()` linear transition.
+and there's an [`easingflat`](@ref) linear transition.
 
 ```@example
 using Luxor # hide
@@ -226,7 +220,7 @@ function draweasingfunction(f, pos, w, h)
     end
 end
 
-Drawing(650, 650, "assets/figures/easingfunctions.png") # hide
+Drawing(650, 650, "../assets/figures/easingfunctions.png") # hide
 background("white") # hide
 origin() # hide
 t = Tiler(650, 650, 5, 5)
@@ -245,7 +239,7 @@ nothing # hide
 
 In these graphs, the horizontal axis is time (between 0 and 1), and the vertical axis is the parameter value (between 0 and 1).
 
-![easing function summary](assets/figures/easingfunctions.png)
+![easing function summary](../assets/figures/easingfunctions.png)
 
 One way to use an easing function in a frame-making function is like this:
 
@@ -261,7 +255,7 @@ This takes the current frame number, compares it with the end frame number of th
 
 In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.
 
-![animation easing example](assets/figures/animation-easing.gif)
+![animation easing example](../assets/figures/animation-easing.gif)
 
 ```julia
 fastandfurious = Movie(400, 100, "easingtests")
@@ -309,36 +303,34 @@ Here:
 
 - `d` is the total length of the transition
 
-The `easeinoutbezier()` function accepts two additional arguments, two normalized control points of a normalized Bezier curve from Point(0, 0) to Point(1, 1). You can use these to define the shape of a custom easing transition. The Bezier curve's `y` coordinate determines the acceleration. [?]
+The [`easeinoutbezier`](@ref) function accepts two additional arguments, two normalized control points of a normalized Bezier curve from Point(0, 0) to Point(1, 1). You can use these to define the shape of a custom easing transition. The Bezier curve's `y` coordinate determines the acceleration. [?]
 
-![animation of bezier easing](assets/figures/animation-bezier-easing.gif)
+![animation of bezier easing](../assets/figures/animation-bezier-easing.gif)
 
-
-
-```@docs
-easingflat
-lineartween
-easeinquad
-easeoutquad
-easeinoutquad
-easeincubic
-easeoutcubic
-easeinoutcubic
-easeinquart
-easeoutquart
-easeinoutquart
-easeinquint
-easeoutquint
-easeinoutquint
-easeinsine
-easeoutsine
-easeinoutsine
-easeinexpo
-easeoutexpo
-easeinoutexpo
-easeincirc
-easeoutcirc
-easeinoutcirc
-easeinoutinversequad
-easeinoutbezier
-```
+|List of easing functions|
+|:---	                 |
+|easingflat|
+|lineartween|
+|easeinquad|
+|easeoutquad|
+|easeinoutquad|
+|easeincubic|
+|easeoutcubic|
+|easeinoutcubic|
+|easeinquart|
+|easeoutquart|
+|easeinoutquart|
+|easeinquint|
+|easeoutquint|
+|easeinoutquint|
+|easeinsine|
+|easeoutsine|
+|easeinoutsine|
+|easeinexpo|
+|easeoutexpo|
+|easeinoutexpo|
+|easeincirc|
+|easeoutcirc|
+|easeinoutcirc|
+|easeinoutinversequad|
+|easeinoutbezier|

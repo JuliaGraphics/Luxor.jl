@@ -8,13 +8,13 @@ DocTestSetup = quote
 
 ## Lines and distances
 
-You can find the midpoint between two points using `midpoint()`.
+You can find the midpoint between two points using [`midpoint`](@ref).
 
-The following code places a small pentagon (using `ngon()`) at the midpoint of each side of a larger pentagon:
+The following code places a small pentagon (using [`ngon`](@ref)) at the midpoint of each side of a larger pentagon:
 
 ```@example
 using Luxor # hide
-Drawing(700, 220, "assets/figures/midpoint.png") # hide
+Drawing(700, 220, "../assets/figures/midpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
@@ -31,13 +31,13 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](assets/figures/midpoint.png)
+![arc](../assets/figures/midpoint.png)
 
-A more general function, `between()`, finds for a value `x` between 0 and 1 the corresponding point on a line defined by two points. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
+A more general function, [`between`](@ref), finds for a value `x` between 0 and 1 the corresponding point on a line defined by two points. So `midpoint(p1, p2)` and `between(p1, p2, 0.5)` should return the same point.
 
 ```@example
 using Luxor # hide
-Drawing(700, 150, "assets/figures/betweenpoint.png") # hide
+Drawing(700, 150, "../assets/figures/betweenpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
@@ -52,22 +52,17 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](assets/figures/betweenpoint.png)
+![arc](../assets/figures/betweenpoint.png)
 
 Values less than 0.0 and greater than 1.0 appear to work well too, placing the point on the line if extended.
 
-```@docs
-midpoint
-between
-```
+[`center3pts`](@ref) finds the radius and center point of a circle passing through three points which you can then use with functions such as [`circle`](@ref) or [`arc2r`](@ref).
 
-`center3pts()` finds the radius and center point of a circle passing through three points which you can then use with functions such as `circle()` or `arc2r()`.
-
-`getnearestpointonline()` finds perpendiculars, as does `perpendicular()`.
+[`getnearestpointonline`](@ref) finds perpendiculars, as does [`perpendicular`](@ref).
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/perpendicular.svg") # hide
+Drawing(600, 400, "../assets/figures/perpendicular.svg") # hide
 origin() # hide
 background("white") # hide
 
@@ -95,17 +90,17 @@ circle.([pt4, pt5], 4, :fill)
 finish() # hide
 nothing # hide
 ```
-![arc](assets/figures/perpendicular.svg)
+![arc](../assets/figures/perpendicular.svg)
 
 ## Points and arcs
 
 Use `isarcclockwise(c, p1, p2)` to check whether an arc centered at `c` running from `p1` to `p2` is clockwise.
 
-The `pointinverse()` function finds the inverse of a point relative to a reference circle (centerpoint and radius). In the image, each vertex on the star is linked by an arrow to its inverse.
+The [`pointinverse`](@ref) function finds the inverse of a point relative to a reference circle (centerpoint and radius). In the image, each vertex on the star is linked by an arrow to its inverse.
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/pointinverse.png") # hide
+Drawing(600, 400, "../assets/figures/pointinverse.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
@@ -127,13 +122,13 @@ foreach(x -> arrow(x[1] , x[2]), zip(points, antipoints))
 finish() # hide
 nothing # hide
 ```
-![arc](assets/figures/pointinverse.png)
+![arc](../assets/figures/pointinverse.png)
 
-Use `anglethreepoints()` to find the angle formed by two lines connecting three points:
+Use [`anglethreepoints`](@ref) to find the angle formed by two lines connecting three points:
 
 ```@example
 using Luxor # hide
-Drawing(800, 800, "assets/figures/anglethreepoints.png") # hide
+Drawing(800, 800, "../assets/figures/anglethreepoints.png") # hide
 origin() # hide
 
 function showangle(pt1, pt2, pt3)
@@ -168,29 +163,18 @@ end
 nothing # hide
 ```
 
-![angle three points](assets/figures/anglethreepoints.png)
+![angle three points](../assets/figures/anglethreepoints.png)
 
-```@docs
-distance
-getnearestpointonline
-pointlinedistance
-slope
-perpendicular
-dotproduct
-@polar
-polar
-ispointonline
-isarcclockwise
-pointinverse
-anglethreepoints
-```
+Functions that help with geometry include [`distance`](@ref), [`getnearestpointonline`](@ref), [`pointlinedistance`](@ref), [`slope`](@ref), [`perpendicular`](@ref), [`dotproduct`](@ref), [`@polar`](@ref), [`polar`](@ref), [`ispointonline`](@ref), [`isarcclockwise`](@ref), [`pointinverse`](@ref), [`anglethreepoints`](@ref).
 
 ## Triangle centers
+
+To find the center  of a triangle, use one of [`trianglecircumcenter`](@ref), [`triangleincenter`](@ref), [`trianglecenter`](@ref), [`triangleorthocenter`](@ref).
 
 ```@example
 using Luxor # hide
 
-Drawing(350, 350, "assets/figures/trianglecenters.svg") # hide
+Drawing(350, 350, "../assets/figures/trianglecenters.svg") # hide
 origin() # hide
 background("white") # hide
 setline(0.4) # hide
@@ -233,22 +217,15 @@ finish() # hide
 nothing # hide
 ```
 
-![triangle centers](assets/figures/trianglecenters.svg)
-
-```@docs
-trianglecircumcenter
-triangleincenter
-trianglecenter
-triangleorthocenter
-```
+![triangle centers](../assets/figures/trianglecenters.svg)
 
 ## Intersections
 
-`intersectionlines()` finds the intersection of two lines.
+[`intersectionlines`](@ref) finds the intersection of two lines.
 
 ```@example
 using Luxor # hide
-Drawing(700, 220, "assets/figures/intersection.png") # hide
+Drawing(700, 220, "../assets/figures/intersection.png") # hide
 background("white") # hide
 origin() # hide
 
@@ -267,13 +244,13 @@ finish() # hide
 nothing # hide
 ```
 
-![arc](assets/figures/intersection.png)
+![arc](../assets/figures/intersection.png)
 
-`intersectionlinecircle()` finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
+[`intersectionlinecircle`](@ref) finds the intersection of a line and a circle. There can be 0, 1, or 2 intersection points.
 
 ```@example
 using Luxor # hide
-Drawing(700, 220, "assets/figures/intersection_line_circle.png") # hide
+Drawing(700, 220, "../assets/figures/intersection_line_circle.png") # hide
 origin() # hide
 background("white") # hide
 sethue("chocolate2") # hide
@@ -293,15 +270,15 @@ end
 finish() # hide
 nothing # hide
 ```
-![arc](assets/figures/intersection_line_circle.png)
+![arc](../assets/figures/intersection_line_circle.png)
 
-`intersection2circles()` finds the area of the intersection of two circles, and `intersectioncirclecircle()` finds the points where they cross.
+[`intersection2circles`](@ref) finds the area of the intersection of two circles, and [`intersectioncirclecircle`](@ref) finds the points where they cross.
 
 This example shows the areas of two circles, and the area of their intersection.
 
 ```@example
 using Luxor # hide
-Drawing(700, 310, "assets/figures/intersection2circles.png") # hide
+Drawing(700, 310, "../assets/figures/intersection2circles.png") # hide
 origin() # hide
 background("white") # hide
 fontsize(14) # hide
@@ -334,14 +311,7 @@ end
 finish() # hide
 nothing # hide
 ```
-![intersection of two circles](assets/figures/intersection2circles.png)
-
-```@docs
-intersectionlines
-intersectionlinecircle
-intersection2circles
-intersectioncirclecircle
-```
+![intersection of two circles](../assets/figures/intersection2circles.png)
 
 ## Bounding boxes
 
@@ -349,13 +319,13 @@ The `BoundingBox` type allows you to use rectangular extents to organize and int
 
 You can make a BoundingBox from the current drawing, two points, a text string, an existing polygon, or by modifying an existing one.
 
-`BoundingBox()` without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see `origin()`). Use `centered=false` if the drawing origin is still at the top left corner.
+`BoundingBox` without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see [`origin`](@ref)). Use `centered=false` if the drawing origin is still at the top left corner.
 
 This example draws circles at three points: at two of the drawing's corners and the midway point between them:
 
 ```@example
 using Luxor # hide
-Drawing(700, 400, "assets/figures/bbox.png") # hide
+Drawing(700, 400, "../assets/figures/bbox.png") # hide
 background("white") # hide
 
 origin()
@@ -380,13 +350,13 @@ finish() # hide
 nothing # hide
 ```
 
-![bounding box](assets/figures/bbox.png)
+![bounding box](../assets/figures/bbox.png)
 
 You can make a bounding box from a polygon:
 
 ```@example
 using Luxor # hide
-Drawing(400, 200, "assets/figures/bboxpoly.png") # hide
+Drawing(400, 200, "../assets/figures/bboxpoly.png") # hide
 background("white") # hide
 origin() # hide
 
@@ -401,11 +371,9 @@ finish() # hide
 nothing # hide
 ```
 
-![bounding box of polygon](assets/figures/bboxpoly.png)
+![bounding box of polygon](../assets/figures/bboxpoly.png)
 
-The resulting bounding box objects can be passed to `box()` or `poly()` to be drawn.
-
-Pass a bounding box to `midpoint()` to find its center point. The functions `boxbottom()`, `boxheight()`, `boxtop()`, `boxaspectratio()`, `boxdiagonal()`, and  `boxwidth()` return information about a bounding box.
+The resulting bounding box objects can be passed to [`box`](@ref) or [`poly`](@ref) to be drawn.
 
 To convert a bounding box `b` into a box, use `box(b, vertices=true)` or `convert(Vector{Point}, BoundingBox())`.
 
@@ -413,7 +381,7 @@ You can also do some arithmetic on bounding boxes. In the next example, the boun
 
 ```@example
 using Luxor # hide
-Drawing(500, 300, "assets/figures/bbox2.png") # hide
+Drawing(500, 300, "../assets/figures/bbox2.png") # hide
 background("white") # hide
 origin() # hide
 
@@ -441,13 +409,13 @@ finish() # hide
 nothing # hide
 ```
 
-![bounding boxes 2](assets/figures/bbox2.png)
+![bounding boxes 2](../assets/figures/bbox2.png)
 
-You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created (you can pass a bounding box to `rand()` to get a random point inside the box) and drawn differently depending on whether they're inside the intersection or outside.
+You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created (you can pass a bounding box to[`rand` to get a random point inside the box) and drawn differently depending on whether they're inside the intersection or outside.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 400, "assets/figures/bbox3.png") # hide
+Drawing(600, 400, "../assets/figures/bbox3.png") # hide
 background("white") # hide
 Random.seed!(42) # hide
 
@@ -485,13 +453,13 @@ finish() # hide
 nothing # hide
 ```
 
-![intersecting bounding boxes](assets/figures/bbox3.png)
+![intersecting bounding boxes](../assets/figures/bbox3.png)
 
-To find out where a line starting at the center of a bounding box passing through a point crosses or would cross the edges of the box, use `pointcrossesboundingbox()`.
+To find out where a line starting at the center of a bounding box passing through a point crosses or would cross the edges of the box, use [`pointcrossesboundingbox`](@ref).
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 400, "assets/figures/bbox4.png") # hide
+Drawing(600, 400, "../assets/figures/bbox4.png") # hide
 background("white") # hide
 Random.seed!(42) # hide
 origin() # hide
@@ -513,31 +481,13 @@ finish() # hide
 nothing # hide
 ```
 
-![point crosses bounding box](assets/figures/bbox4.png)
-
-
-```@docs
-boxaspectratio
-boxdiagonal
-boxwidth
-boxheight
-intersectboundingboxes
-pointcrossesboundingbox
-boxbottomleft
-boxbottomright
-boxmiddlecenter
-boxmiddleleft
-boxmiddleright
-boxtopcenter
-boxtopleft
-boxtopright
-```
+![point crosses bounding box](../assets/figures/bbox4.png)
 
 ## Noise
 
-For artistic graphics you might prefer noisy input values to purely random ones. Use the `noise()` function to obtain smoothly changing random values corresponding to input coordinates. The returned values wander slowly rather than jump about everywhere.
+For artistic graphics you might prefer noisy input values to purely random ones. Use the [`noise`](@ref) function to obtain smoothly changing random values corresponding to input coordinates. The returned values wander slowly rather than jump about everywhere.
 
-In this example, the gray value varies gradually as the `noise()` function returns values between 0 and 1 depending on the location of the two input values `pos.x` and `pos.y`.
+In this example, the gray value varies gradually as the [`noise`](@ref) function returns values between 0 and 1 depending on the location of the two input values `pos.x` and `pos.y`.
 
 The top two quadrants use a lower value for the `detail` keyword argument, an integer ()>= 1) specifying how many "octaves" of noise you want.
 
@@ -545,7 +495,7 @@ The left two quadrants use a lower value for the `persistence` keyword argument,
 
 ```@example
 using Luxor, Colors # hide
-Drawing(800, 400, "assets/figures/noise.png") # hide
+Drawing(800, 400, "../assets/figures/noise.png") # hide
 
 background("white") # hide
 origin() # hide
@@ -567,9 +517,6 @@ finish() # hide
 nothing # hide
 ```
 
-![noise](assets/figures/noise.png)
+![noise](../assets/figures/noise.png)
 
-```@docs
-noise
-initnoise
-```
+Use [`initnoise`](@ref) to initialize the noise behaviour.

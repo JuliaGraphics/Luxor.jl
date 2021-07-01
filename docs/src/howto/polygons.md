@@ -1,4 +1,4 @@
-# Polygons and paths
+    # Polygons and paths
 
 For drawing shapes, Luxor provides polygons and paths.
 
@@ -8,43 +8,43 @@ A path is a sequence of one or more straight and curved (circular arc or Bézier
 
 Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
-|create                   |convert              |draw             |info               |edit                     |
-|:---	                  |:---	              |:---	            |:---	            |:---                     |
-| *polygons*              |                     |                 |                   |                         |
-|`ngon()`                 |`polysmooth()`       |`poly()`         |`isinside()`       |`simplify()`             |
-|`ngonside()`             |                     |`prettypoly()`   |`polyperimeter()`  |`polysplit()`            |
-|`star()`                 |                     |`polysmooth()`   |`polyarea()`       |`polyportion()`          |
-|`polycross()`            |                     |                 |`polycentroid()`   |`polyremainder()`        |
-|`offsetpoly()`           |                     |                 |`boundingbox()`    |`polysortbyangle()`      |
-|`hyptrochoid()`          |                     |                 |`ispolyclockwise()`  |`polysortbydistance()` |
-|`epitrochoid()`          |                     |                 |`ispolyconvex()`   |`polyintersections()`    |
-|`polyrotate!()`          |                     |                 |                   |`polymove!()`            |
-|`polyfit()`              |                     |                 |                   |`polyscale!()`           |
-|                         |                     |                 |                   |                         |
-|                         |                     |                 |                   |`polyreflect!()`         |
-|                         |                     |                 |                   |`polysample()`           |
-|                         |                     |                 |                   |`polytriangulate()`      |
-|                         |                     |                 |                   |`insertvertices!()`      |
-| *paths*                 |                     |                 |                   |                         |
-|`getpath()`              |`pathtopoly()`       |                 |                   |                         |
-|`getpathflat()`          |                     |                 |                   |                         |
-| *Bezier paths*          |                     |                 |                   |                         |
-|`makebezierpath()`       |`pathtobezierpaths()`  |`drawbezierpath()` |               |                         |
-|`pathtobezierpaths()`    |`bezierpathtopoly()`   |`brush()`          |               |                         |
-|`BezierPath()`           |                     |                 |                   |                         |
-|`BezierPathSegment()`    |                     |                 |                   |                         |
-|`beziersegmentangles()`  |                     |                 |                   |                         |
+|create                         |convert              |draw             |info               |edit                     |
+|:---	                        |:---	              |:---	            |:---	            |:---                     |
+| *polygons*                    |                     |                 |                   |                         |
+|[`ngon`](@ref)                 |[`polysmooth`](@ref)       |[`poly`](@ref)         |[`isinside`](@ref)       |[`simplify`](@ref)             |
+|[`ngonside`](@ref)             |                     |[`prettypoly`](@ref)   |[`polyperimeter`](@ref)  |[`polysplit`](@ref)            |
+|[`star`](@ref)                 |                     |[`polysmooth`](@ref)   |[`polyarea`](@ref)       |[`polyportion`](@ref)          |
+|[`polycross`](@ref)            |                     |                 |[`polycentroid`](@ref)   |[`polyremainder`](@ref)        |
+|[`offsetpoly`](@ref)           |                     |                 |`boundingbox`    |[`polysortbyangle`](@ref)      |
+|[`hypotrochoid`](@ref)         |                     |                 |[`ispolyclockwise`](@ref)  |[`polysortbydistance`](@ref)   |
+|[`epitrochoid`](@ref)          |                     |                 |[`ispolyconvex`](@ref)   |[`polyintersections`](@ref)    |
+|[`polyrotate!`](@ref)          |                     |                 |                   |[`polymove!`](@ref)            |
+|[`polyfit`](@ref)              |                     |                 |                   |[`polyscale!`](@ref)           |
+|                               |                     |                 |                   |                         |
+|                               |                     |                 |                   |[`polyreflect!`](@ref)         |
+|                               |                     |                 |                   |[`polysample`](@ref)           |
+|                               |                     |                 |                   |[`polytriangulate`](@ref)      |
+|                               |                     |                 |                   |[`insertvertices!`](@ref)      |
+| *paths*                       |                     |                 |                   |                         |
+|[`getpath`](@ref)              |[`pathtopoly`](@ref)       |                 |                   |                               |
+|[`getpathflat`](@ref)          |                     |                 |                   |                         |
+| *Bezier paths*                |                     |                 |                   |                         |
+|[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)  |[`drawbezierpath`](@ref) |               |                               |
+|[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)   |[`brush`](@ref)          |               |                               |
+|`BezierPath`                   |                     |                 |                   |                         |
+|`BezierPathSegment`            |                     |                 |                   |                         |
+|[`beziersegmentangles`](@ref)  |                     |                 |                   |                         |
 
 ## Regular polygons ("ngons")
 
 A polygon is an array of points. The points can be joined with straight lines.
 
-You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with `ngon()`.
+You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with [`ngon`](@ref).
 
 
 ```@example
 using Luxor, Colors # hide
-Drawing(700, 600, "assets/figures/n-gon.png") # hide
+Drawing(700, 600, "../assets/figures/n-gon.png") # hide
 
 origin() # hide
 background("white") # hide
@@ -78,13 +78,13 @@ nothing # hide
 
 The initial orientation of the polygon defaults to 0.
 
-![n-gons](assets/figures/n-gon.png)
+![n-gons](../assets/figures/n-gon.png)
 
-If you want to specify the side length rather than the circumradius, use `ngonside()`.
+If you want to specify the side length rather than the circumradius, use [`ngonside`](@ref).
 
 ```@example
 using Luxor # hide
-Drawing(500, 600, "assets/figures/ngonside.png") # hide
+Drawing(500, 600, "../assets/figures/ngonside.png") # hide
 background("white") # hide
 origin() # hide
 
@@ -100,7 +100,7 @@ finish() # hide
 nothing # hide
 ```
 
-![stars](assets/figures/ngonside.png)
+![stars](../assets/figures/ngonside.png)
 
 The functions return the vertices, or you can use the `vertices=true` option.
 
@@ -115,18 +115,13 @@ ngon(Point(0, 0), 10, 5)
  Point(10.0, -2.4492935982947065e-15)
 ```
 
-```@docs
-ngon
-ngonside
-```
-
 ## Polygons
 
-Use `poly()` to draw lines connecting the points and/or just fill the area:
+Use [`poly`](@ref) to draw lines connecting the points and/or just fill the area:
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/simplepoly.png") # hide
+Drawing(600, 250, "../assets/figures/simplepoly.png") # hide
 background("white") # hide
 Random.seed!(42) # hide
 origin() # hide
@@ -150,17 +145,13 @@ finish() # hide
 nothing # hide
 ```
 
-![simple poly](assets/figures/simplepoly.png)
+![simple poly](../assets/figures/simplepoly.png)
 
-```@docs
-poly
-```
-
-A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses `ngon()` to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
+A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses [`ngon`](@ref) to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "assets/figures/holes.png") # hide
+Drawing(400, 250, "../assets/figures/holes.png") # hide
 background("white") # hide
 origin() # hide
 setline(5)
@@ -174,13 +165,13 @@ fillstroke()
 finish() # hide
 nothing # hide
 ```
-![holes](assets/figures/holes.png)
+![holes](../assets/figures/holes.png)
 
-The `prettypoly()` function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
+The [`prettypoly`](@ref) function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "assets/figures/prettypolybasic.png") # hide
+Drawing(400, 250, "../assets/figures/prettypolybasic.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -196,7 +187,7 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](assets/figures/prettypolybasic.png)
+![prettypoly](../assets/figures/prettypolybasic.png)
 
 An optional keyword argument `vertexlabels` lets you pass a function that can
 number each vertex. The function can use two arguments, the current vertex number, and the
@@ -204,7 +195,7 @@ total number of points in the polygon:
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "assets/figures/prettypolyvertex.png") # hide
+Drawing(400, 250, "../assets/figures/prettypolyvertex.png") # hide
 background("white") # hide
 origin() # hide
 sethue("steelblue4") # hide
@@ -218,18 +209,14 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](assets/figures/prettypolyvertex.png)
+![prettypoly](../assets/figures/prettypolyvertex.png)
 
-
-```@docs
-prettypoly
-```
 
 Recursive decoration is possible:
 
 ```@example
 using Luxor, Random # hide
-Drawing(400, 260, "assets/figures/prettypolyrecursive.png") # hide
+Drawing(400, 260, "../assets/figures/prettypolyrecursive.png") # hide
 background("white") # hide
 Random.seed!(42) # hide
 origin() # hide
@@ -250,13 +237,13 @@ finish() # hide
 nothing # hide
 ```
 
-![prettypoly](assets/figures/prettypolyrecursive.png)
+![prettypoly](../assets/figures/prettypolyrecursive.png)
 
-Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via `simplify()`.
+Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via [`simplify`](@ref).
 
 ```@example
 using Luxor # hide
-Drawing(600, 500, "assets/figures/simplify.png") # hide
+Drawing(600, 500, "../assets/figures/simplify.png") # hide
 background("white") # hide
 origin() # hide
 sethue("black") # hide
@@ -281,17 +268,13 @@ text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
 nothing # hide
 ```
-![simplify](assets/figures/simplify.png)
+![simplify](../assets/figures/simplify.png)
 
-```@docs
-simplify
-```
-
-The `isinside()` function returns true if a point is inside a polygon.
+The [`isinside`](@ref) function returns true if a point is inside a polygon.
 
 ```@example
 using Luxor # hide
-Drawing(500, 500, "assets/figures/isinside.png") # hide
+Drawing(500, 500, "../assets/figures/isinside.png") # hide
 background("white") # hide
 origin() # hide
 
@@ -304,17 +287,13 @@ end
 finish() # hide
 nothing # hide
 ```
-![isinside](assets/figures/isinside.png)
+![isinside](../assets/figures/isinside.png)
 
-```@docs
-isinside
-```
-
-You can use `randompoint()` and `randompointarray()` to create a random Point or list of Points.
+You can use [`randompoint`](@ref) and [`randompointarray`](@ref) to create a random Point or list of Points.
 
 ```@example
 using Luxor, Random # hide
-Drawing(400, 250, "assets/figures/randompoints.png") # hide
+Drawing(400, 250, "../assets/figures/randompoints.png") # hide
 background("white") # hide
 Random.seed!(42) # hide
 origin() # hide
@@ -336,20 +315,15 @@ finish() # hide
 nothing # hide
 ```
 
-![isinside](assets/figures/randompoints.png)
-
-```@docs
-randompoint
-randompointarray
-```
+![isinside](../assets/figures/randompoints.png)
 
 ### Quickly changing polygons
 
-If you want to quickly and permanently modify a polygon, there's `polymove!()`, `polyscale!()`, `polyreflect!()`, and `polyrotate!()`.
+If you want to quickly and permanently modify a polygon, there's [`polymove!`](@ref), [`polyscale!`](@ref), [`polyreflect!`](@ref), and [`polyrotate!`](@ref).
 
 ```@example
 using Luxor # hide
-Drawing(400, 350, "assets/figures/polychange.png") # hide
+Drawing(400, 350, "../assets/figures/polychange.png") # hide
 origin() # hide
 
 sethue("magenta") # hide
@@ -372,11 +346,11 @@ nothing # hide
 
 The polygon is continually modified (notice the `!` in the function names).
 
-![poly changing](assets/figures/polychange.png)
+![poly changing](../assets/figures/polychange.png)
 
 ```@example
 using Luxor, Random # hide
-Drawing(400, 350, "assets/figures/polyreflect.png") # hide
+Drawing(400, 350, "../assets/figures/polyreflect.png") # hide
 origin() # hide
 Random.seed!(34) # hide
 setopacity(0.7) # hide
@@ -392,22 +366,15 @@ finish() # hide
 nothing # hide
 ```
 
-![poly reflect](assets/figures/polyreflect.png)
-
-```@docs
-polyscale!
-polymove!
-polyreflect!
-polyrotate!
-```
+![poly reflect](../assets/figures/polyreflect.png)
 
 ### Other functions
 
-There are a number of experimental polygon functions. These won't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's `polysplit()`:
+There are a number of experimental polygon functions. These won't work well for polygons that aren't simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here's [`polysplit`](@ref):
 
 ```@example
 using Luxor, Random # hide
-Drawing(400, 150, "assets/figures/polysplit.png") # hide
+Drawing(400, 150, "../assets/figures/polysplit.png") # hide
 origin() # hide
 setopacity(0.7) # hide
 Random.seed!(42) # hide
@@ -424,23 +391,17 @@ poly(poly2, :fill)
 finish() # hide
 nothing # hide
 ```
-![polysplit](assets/figures/polysplit.png)
+![polysplit](../assets/figures/polysplit.png)
 
-```@docs
-polysplit
-polysortbydistance
-polysortbyangle
-polycentroid
-```
 ### Smoothing polygons
 
-Because polygons can have sharp corners, the experimental `polysmooth()` function attempts to insert arcs at the corners and draw the result.
+Because polygons can have sharp corners, the experimental [`polysmooth`](@ref) function attempts to insert arcs at the corners and draw the result.
 
 The original polygon is shown in red; the smoothed polygon is shown on top:
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polysmooth.svg") # hide
+Drawing(600, 250, "../assets/figures/polysmooth.svg") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.5) # hide
@@ -459,13 +420,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](assets/figures/polysmooth.svg)
+![polysmooth](../assets/figures/polysmooth.svg)
 
 The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The `debug=true` option draws the circles if you want to find out what's going wrong, or if you want to explore the effect in more detail.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polysmooth-pathological.svg") # hide
+Drawing(600, 250, "../assets/figures/polysmooth-pathological.svg") # hide
 origin() # hide
 background("white") # hide
 setopacity(0.75) # hide
@@ -482,15 +443,11 @@ finish() # hide
 nothing # hide
 ```
 
-![polysmooth](assets/figures/polysmooth-pathological.svg)
-
-```@docs
-polysmooth
-```
+![polysmooth](../assets/figures/polysmooth-pathological.svg)
 
 ## Offsetting polygons
 
-There are three methods for `offsetpoly()`, a function which
+There are three methods for [`offsetpoly`](@ref), a function which
 constructs a new polygon that's offset from an existing one.
 
 - `offsetpoly(plist, d)` treats the `plist` of points as a polygon
@@ -520,12 +477,12 @@ first.
 In the following example, the dotted red polygon is the
 original, the black polygons have positive offsets and
 surround the original, the cyan polygons have negative
-offsets and run inside the original. Use `poly()` to draw
+offsets and run inside the original. Use [`poly`](@ref) to draw
 the result.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polyoffset-simple.png") # hide
+Drawing(600, 250, "../assets/figures/polyoffset-simple.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -552,7 +509,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly 2](assets/figures/polyoffset-simple.png)
+![offset poly 2](../assets/figures/polyoffset-simple.png)
 
 The function is intended for simple cases, and it can go
 wrong if pushed too far. Sometimes the offset distances can
@@ -561,7 +518,7 @@ to go wrong. In this example, the offset goes so far
 negative that the polygon overshoots the origin, becomes
 inverted and starts getting larger again.
 
-![offset poly problem](assets/figures/polygon-offset.gif)
+![offset poly problem](../assets/figures/polygon-offset.gif)
 
 
 #### 2 `n` vertices joined by `n-1` lines
@@ -579,7 +536,7 @@ each side at the end.
 
 ```@example
 using Luxor # hide
-Drawing(800, 500, "assets/figures/polyoffset-open.png") # hide
+Drawing(800, 500, "../assets/figures/polyoffset-open.png") # hide
 origin() # hide
 background("purple") # hide
 setline(2) # hide
@@ -600,7 +557,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly open](assets/figures/polyoffset-open.png)
+![offset poly open](../assets/figures/polyoffset-open.png)
 
 ##### Using an offset-control function
 
@@ -608,7 +565,7 @@ This method accepts a keyword argument that allows you to
 control the way the offsets are applied, using the easing
 functionality built in to Luxor (see [Animation helper functions](@ref)).
 
-By default the function is `lineartween()`, so the offset
+By default the function is `lineartween`, so the offset
 changes linearly between the `startoffset` and the
 `endoffset` values. With other easing functions, this change
 is modulated. For example, the `easeinoutquad` function
@@ -616,7 +573,7 @@ moves between start and end values using a quadratic motion.
 
 ```@example
 using Luxor # hide
-Drawing(800, 500, "assets/figures/polyoffset-easing.png") # hide
+Drawing(800, 500, "../assets/figures/polyoffset-easing.png") # hide
 origin() # hide
 background("white") # hide
 setline(2) # hide
@@ -635,7 +592,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly easing](assets/figures/polyoffset-easing.png)
+![offset poly easing](../assets/figures/polyoffset-easing.png)
 
 But in the next example, the function `f(t, b, c, d)` (the
 Luxor standard four-argument easing function) is defined to run
@@ -645,7 +602,7 @@ at that location are 'eased' to 2 × the offset value at that point.
 
 ```@example
 using Luxor # hide
-Drawing(800, 200, "assets/figures/polyoffset-easing1.png") # hide
+Drawing(800, 200, "../assets/figures/polyoffset-easing1.png") # hide
 origin() # hide
 background("white") # hide
 setline(2) # hide
@@ -666,7 +623,7 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly easing 1](assets/figures/polyoffset-easing1.png)
+![offset poly easing 1](../assets/figures/polyoffset-easing1.png)
 
 #### 3: Applying a function
 
@@ -674,7 +631,7 @@ This method generates offset widths using the supplied function. The value of th
 
 ```@example
 using Luxor # hide
-Drawing(800, 250, "assets/figures/polyoffset-function.png") # hide
+Drawing(800, 250, "../assets/figures/polyoffset-function.png") # hide
 origin() # hide
 background("white") # hide
 setline(2) # hide
@@ -690,20 +647,15 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly fucntion](assets/figures/polyoffset-function.png)
-
-
-```@docs
-offsetpoly
-```
+![offset poly fucntion](../assets/figures/polyoffset-function.png)
 
 ### Fitting splines
 
-The experimental `polyfit()` function constructs a B-spline that follows the points approximately.
+The experimental [`polyfit`](@ref) function constructs a B-spline that follows the points approximately.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polyfit.png") # hide
+Drawing(600, 250, "../assets/figures/polyfit.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -719,21 +671,17 @@ finish() # hide
 nothing # hide
 ```
 
-![offset poly](assets/figures/polyfit.png)
-
-```@docs
-polyfit
-```
+![offset poly](../assets/figures/polyfit.png)
 
 ## Converting paths to polygons
 
-You can convert the current path to an array of polygons, using `pathtopoly()`.
+You can convert the current path to an array of polygons, using [`pathtopoly`](@ref).
 
 In the next example, the path consists of a number of paths, some of which are subpaths, which form the holes.
 
 ```@example
 using Luxor # hide
-Drawing(800, 300, "assets/figures/path-to-poly.png") # hide
+Drawing(800, 300, "../assets/figures/path-to-poly.png") # hide
 background("white") # hide
 origin() # hide
 fontsize(60) # hide
@@ -753,21 +701,15 @@ finish() # hide
 nothing # hide
 ```
 
-![path to polygon](assets/figures/path-to-poly.png)
+![path to polygon](../assets/figures/path-to-poly.png)
 
-The `pathtopoly()` function calls `getpathflat()` to convert the current path to an array of polygons, with each curved section flattened to line segments.
+The [`pathtopoly`](@ref) function calls [`getpathflat`](@ref) to convert the current path to an array of polygons, with each curved section flattened to line segments.
 
-The `getpath()` function gets the current path as an array of elements, lines, and unflattened curves.
-
-```@docs
-pathtopoly
-getpath
-getpathflat
-```
+The [`getpath`](@ref) function gets the current path as an array of elements, lines, and unflattened curves.
 
 ## Polygons to Bézier paths and back again
 
-Use the `makebezierpath()` and `drawbezierpath()` functions to make and draw Bézier paths, and `pathtobezierpaths()` to convert the current path to an array of Bézier paths.  
+Use the [`makebezierpath`](@ref) and [`drawbezierpath`](@ref) functions to make and draw Bézier paths, and [`pathtobezierpaths`](@ref) to convert the current path to an array of Bézier paths.  
 
 A BezierPath type contains a sequence of `BezierPathSegment`s; each curve segment is defined by four points: two end points and their control points.
 
@@ -790,11 +732,11 @@ A BezierPath type contains a sequence of `BezierPathSegment`s; each curve segmen
 
 Bézier paths are different from ordinary paths in that they don't usually contain straight line segments. However, by setting the two control points to be the same as their matching start/end points, you create straight line sections.
 
-`makebezierpath()` takes the points in a polygon and converts each line segment into one Bézier curve. `drawbezierpath()` draws the resulting sequence.
+[`makebezierpath`](@ref) takes the points in a polygon and converts each line segment into one Bézier curve. [`drawbezierpath`](@ref) draws the resulting sequence.
 
 ```@example
 using Luxor # hide
-Drawing(600, 320, "assets/figures/abezierpath.png") # hide
+Drawing(600, 320, "../assets/figures/abezierpath.png") # hide
 background("white") # hide
 origin() # hide
 setline(1.5) # hide
@@ -814,11 +756,11 @@ drawbezierpath(bezpath, :stroke, close=false)
 finish() # hide
 nothing # hide
 ```
-![path to polygon](assets/figures/abezierpath.png)
+![path to polygon](../assets/figures/abezierpath.png)
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 320, "assets/figures/bezierpaths.png") # hide
+Drawing(600, 320, "../assets/figures/bezierpaths.png") # hide
 background("white") # hide
 origin() # hide
 Random.seed!(3) # hide
@@ -841,15 +783,15 @@ end
 finish() # hide
 nothing # hide
 ```
-![path to polygon](assets/figures/bezierpaths.png)
+![path to polygon](../assets/figures/bezierpaths.png)
 
-You can convert a Bézier path to a polygon (an array of points), using the `bezierpathtopoly()` function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used to approximate each Bézier segment.
+You can convert a Bézier path to a polygon (an array of points), using the [`bezierpathtopoly`](@ref) function. This chops up the curves into a series of straight line segments. An optional `steps` keyword lets you specify how many line segments are used to approximate each Bézier segment.
 
 In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 600, "assets/figures/bezierpathtopoly.png") # hide
+Drawing(600, 600, "../assets/figures/bezierpathtopoly.png") # hide
 background("white") # hide
 origin() # hide
 Random.seed!(3) # hide
@@ -879,15 +821,15 @@ prettypoly(q1, :stroke, close=true)
 finish() # hide
 nothing # hide
 ```
-![path to polygon](assets/figures/bezierpathtopoly.png)
+![path to polygon](../assets/figures/bezierpathtopoly.png)
 
-You can convert the current path to an array of BezierPaths using the `pathtobezierpaths()` function.
+You can convert the current path to an array of BezierPaths using the [`pathtobezierpaths`](@ref) function.
 
-In the next example, the letter "a" is placed at the current position (set by `move()`) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then the control points of segment are drawn (in orange) showing how they affect the curvature.
+In the next example, the letter "a" is placed at the current position (set by [`move`](@ref)) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then the control points of segment are drawn (in orange) showing how they affect the curvature.
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/pathtobezierpaths.png") # hide
+Drawing(600, 400, "../assets/figures/pathtobezierpaths.png") # hide
 background("ivory") # hide
 origin() # hide
 st = "a"
@@ -919,13 +861,13 @@ finish() # hide
 nothing # hide
 ```
 
-![path to polygon](assets/figures/pathtobezierpaths.png)
+![path to polygon](../assets/figures/pathtobezierpaths.png)
 
-`beziersegmentangles()` lets you define a Bézier path segment by specifying the angles the control handles make with the base line.
+[`beziersegmentangles`](@ref) lets you define a Bézier path segment by specifying the angles the control handles make with the base line.
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "assets/figures/beziersegmentangles.svg") # hide
+Drawing(600, 400, "../assets/figures/beziersegmentangles.svg") # hide
 background("ivory") # hide
 origin() # hide
 
@@ -961,11 +903,11 @@ finish() # hide
 nothing # hide
 ```
 
-![bezier segment angles](assets/figures/beziersegmentangles.svg)
+![bezier segment angles](../assets/figures/beziersegmentangles.svg)
 
 ## Brush strokes
 
-The `brush()` function builds Bezier paths in a quasi-random fashion, that could look like brush strokes. The optional keyword arguments allow a range of different effects.
+The [`brush`](@ref) function builds Bezier paths in a quasi-random fashion, that could look like brush strokes. The optional keyword arguments allow a range of different effects.
 
 You can pass a function that can adjust various drawing settings before the shapes are drawn.
 
@@ -987,7 +929,7 @@ function numberit(pos, n)
     end    
 end
 
-Drawing(800, 700, "assets/figures/brush1.png") # hide
+Drawing(800, 700, "../assets/figures/brush1.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -1025,28 +967,9 @@ finish() # hide
 nothing # hide
 ```
 
-![brush 1](assets/figures/brush1.png)
+![brush 1](../assets/figures/brush1.png)
 
 For more information (and more than you probably wanted to know) about Luxor's Bézier paths, visit [https://cormullion.github.io/pages/2018-06-20-bezier/](https://cormullion.github.io/pages/2018-06-20-bezier/).
-
-```@docs
-bezier
-bezier′
-bezier′′
-beziercurvature
-bezierfrompoints
-bezierpathtopoly
-bezierstroke
-beziertopoly
-drawbezierpath
-makebezierpath
-pathtobezierpaths
-setbezierhandles
-shiftbezierhandles
-Luxor.findbeziercontrolpoints
-brush
-beziersegmentangles
-```
 
 ## Polygon information
 
@@ -1054,7 +977,7 @@ beziersegmentangles
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polyperimeter.png") # hide
+Drawing(600, 250, "../assets/figures/polyperimeter.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -1074,17 +997,17 @@ finish() # hide
 nothing # hide
 ```
 
-![polyperimeter](assets/figures/polyperimeter.png)
+![polyperimeter](../assets/figures/polyperimeter.png)
 
 ## Polygon selection and modification
 
 There are Luxor functions to return the first part or last part of a polygon. You can also ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the "lines" joining the vertices) or decrease them (which changes the shape of the polygon). It's also possible to insert vertices automatically.
 
-`polyportion()` and `polyremainder()` return part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns the first half of polygon `p`, `polyremainder(p, .75)` returns the last quarter of it.
+[`polyportion`](@ref) and [`polyremainder`](@ref) return part of a polygon depending on the fraction you supply. For example, `polyportion(p, 0.5)` returns the first half of polygon `p`, `polyremainder(p, .75)` returns the last quarter of it.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 250, "assets/figures/polyportion.png") # hide
+Drawing(600, 250, "../assets/figures/polyportion.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
@@ -1115,13 +1038,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polyportion](assets/figures/polyportion.png)
+![polyportion](../assets/figures/polyportion.png)
 
-You can insert vertices in the edges of a polygon with `insertvertices!()`. For example, this code inserts a new vertex into each side of a polygon five times. The polygon ends up with 128 vertices.
+You can insert vertices in the edges of a polygon with [`insertvertices!`](@ref). For example, this code inserts a new vertex into each side of a polygon five times. The polygon ends up with 128 vertices.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/insertvertices.png") # hide
+Drawing(600, 250, "../assets/figures/insertvertices.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
@@ -1142,13 +1065,13 @@ finish() # hide
 nothing # hide
 ```
 
-![poly insert vertices](assets/figures/insertvertices.png)
+![poly insert vertices](../assets/figures/insertvertices.png)
 
-To resample a polygon, use `polysample()`. In this example, the same four-sided polygon is resampled at multiples of 4, with different circle radii at each multiple. This adds more points to the new copy of the original polygon.
+To resample a polygon, use [`polysample`](@ref). In this example, the same four-sided polygon is resampled at multiples of 4, with different circle radii at each multiple. This adds more points to the new copy of the original polygon.
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/polysample.png") # hide
+Drawing(600, 250, "../assets/figures/polysample.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
@@ -1167,13 +1090,13 @@ finish() # hide
 nothing # hide
 ```
 
-![polysampling](assets/figures/polysample.png)
+![polysampling](../assets/figures/polysample.png)
 
 There is a `closed` option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is drawn in black, then sampled as a closed polygon (in blue), then as a non-closed one (magenta).
 
 ```@example
 using Luxor # hide
-Drawing(600, 250, "assets/figures/polysample2.png") # hide
+Drawing(600, 250, "../assets/figures/polysample2.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
@@ -1219,12 +1142,7 @@ finish() # hide
 nothing # hide
 ```
 
-![polysampling 2](assets/figures/polysample2.png)
-
-```@docs
-polysample
-insertvertices!
-```
+![polysampling 2](../assets/figures/polysample2.png)
 
 ### Polygon side lengths
 
@@ -1242,15 +1160,15 @@ insertvertices!
      520.66
      607.437
 
-It's used by `polyportion()` and `polyremainder()`, and you can pre-calculate and pass them to these functions via keyword arguments for performance. By default the result includes the final closing segment (`closed=true`).
+It's used by [`polyportion`](@ref) and [`polyremainder`](@ref), and you can pre-calculate and pass them to these functions via keyword arguments for performance. By default the result includes the final closing segment (`closed=true`).
 
-These functions also make use of the `nearestindex()`, which returns a tuple of: the index of the nearest value in an array of distances to a given value; and the excess value.
+These functions also make use of the [`nearestindex`](@ref), which returns a tuple of: the index of the nearest value in an array of distances to a given value; and the excess value.
 
-In this example, we want to find a point halfway round the perimeter of a triangle. Use `nearestindex()` to find the index of the nearest vertex (`nidx`, 2), and the surplus length, (`over`, 100).
+In this example, we want to find a point halfway round the perimeter of a triangle. Use [`nearestindex`](@ref) to find the index of the nearest vertex (`nidx`, 2), and the surplus length, (`over`, 100).
 
 ```@example
 using Luxor # hide
-Drawing(650, 250, "assets/figures/nearestindex.png") # hide
+Drawing(650, 250, "../assets/figures/nearestindex.png") # hide
 origin() # hide
 background("white") # hide
 
@@ -1276,19 +1194,19 @@ finish() # hide
 nothing # hide
 ```
 
-![nearestindex](assets/figures/nearestindex.png)
+![nearestindex](../assets/figures/nearestindex.png)
 
 Of course, it's much easier to do `polyportion(p, 0.5)`.
 
 ### Area of polygon
 
-Use `polyarea()` to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.
+Use [`polyarea`](@ref) to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.
 
 This code draws some regular polygons and calculates their area, perimeter, and shows how near the ratio of perimeter over radius approaches 2π.
 
 ```@example
 using Luxor # hide
-Drawing(650, 500, "assets/figures/polyarea.png") # hide
+Drawing(650, 500, "../assets/figures/polyarea.png") # hide
 origin() # hide
 background("white") # hide
 fontsize(13) # hide
@@ -1321,18 +1239,7 @@ finish() # hide
 nothing # hide
 ```
 
-![poly area](assets/figures/polyarea.png)
-
-```@docs
-polyperimeter
-polyportion
-polyremainder
-polydistances
-nearestindex
-polyarea
-ispolyclockwise
-ispolyconvex
-```
+![poly area](../assets/figures/polyarea.png)
 
 ## Other polygon operations
 
@@ -1344,7 +1251,7 @@ These functions are still in development. Expect varying degrees of success when
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 550, "assets/figures/linepolyintersections.png") # hide
+Drawing(600, 550, "../assets/figures/linepolyintersections.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(5) # hide
@@ -1370,13 +1277,13 @@ finish() # hide
 nothing # hide
 ```
 
-![line/polygon intersections](assets/figures/linepolyintersections.png)
+![line/polygon intersections](../assets/figures/linepolyintersections.png)
 
 `polyintersect` calculates the intersection points of two polygons.
 
 ```@example
 using Luxor # hide
-Drawing(600, 550, "assets/figures/polyintersections.png") # hide
+Drawing(600, 550, "../assets/figures/polyintersections.png") # hide
 
 origin() # hide
 background("white") # hide
@@ -1395,22 +1302,17 @@ finish() # hide
 nothing # hide
 ```
 
-![polygon intersections](assets/figures/polyintersections.png)
+![polygon intersections](../assets/figures/polyintersections.png)
 
 The returned polygon contains the points where one polygon crosses another.
 
-```@docs
-intersectlinepoly
-polyintersect
-```
-
 ### Triangulation
 
-Use `polytriangulate()` to join the vertices of a polygon to form triangles. It returns an array of triangular polygons.
+Use [`polytriangulate`](@ref) to join the vertices of a polygon to form triangles. It returns an array of triangular polygons.
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 550, "assets/figures/polytriangulate.png") # hide
+Drawing(600, 550, "../assets/figures/polytriangulate.png") # hide
 
 origin() # hide
 background("white") # hide
@@ -1438,8 +1340,4 @@ finish() # hide
 nothing # hide
 ```
 
-![polygon triangulation](assets/figures/polytriangulate.png)
-
-```@docs
-polytriangulate
-```
+![polygon triangulation](../assets/figures/polytriangulate.png)
