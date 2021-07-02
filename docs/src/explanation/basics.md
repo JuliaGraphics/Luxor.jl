@@ -157,9 +157,7 @@ For example:
 rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 ```
 
-## Drawings
-
-## The drawing surface
+# The drawing surface
 
 The [`origin`](@ref) function moves the 0/0 point to the center of the drawing. It's often convenient to do this at the beginning of a program.
 
@@ -201,7 +199,7 @@ nothing # hide
 
 ![axes](../assets/figures/axes.png)
 
-## Save and restore: layers and state
+# Save and restore: layers and state
 
 [`gsave`](@ref) saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next [`grestore`](@ref) is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used [`gsave`](@ref). [`gsave`](@ref) and [`grestore`](@ref) should always be balanced in pairs, enclosing the functions.
 
@@ -232,3 +230,47 @@ end
 ## Return the current drawing
 
 In some situations you'll want to explicitly return the current drawing to the calling function. Use [`currentdrawing`](@ref).
+
+# Working in IDEs and notebooks
+
+You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS Code IDEs, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
+
+## Working in Jupyter
+
+![Jupyter](../assets/figures/jupyter-basic.png)
+
+## Working in VS Code
+
+![VS Code](../assets/figures/vscode.png)
+
+## Working in Pluto
+
+![Pluto](../assets/figures/pluto.png)
+
+# SVG images
+
+Luxor can create new SVG images, either in a file or in
+memory, and can also place existing SVG images on a drawing.
+See [Placing images](@ref) for more. It's also possible to
+obtain the source of an SVG drawing as a string. For example,
+this code draws the Julia logo using SVG code:
+
+```
+Drawing(500, 500, :svg)
+origin()
+julialogo()
+finish()
+s = svgstring()
+```
+
+You can examine the SVG programmatically:
+
+```
+eachmatch(r"rgb\(.*?\)", s) |> collect
+5-element Vector{RegexMatch}:
+ RegexMatch("rgb(0%,0%,0%)")
+ RegexMatch("rgb(79.6%,23.5%,20%)")
+ RegexMatch("rgb(25.1%,38.8%,84.7%)")
+ RegexMatch("rgb(58.4%,34.5%,69.8%)")
+ RegexMatch("rgb(22%,59.6%,14.9%)")
+```

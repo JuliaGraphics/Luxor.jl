@@ -12,6 +12,8 @@ makedocs(
         "Introduction to Luxor"            =>  "index.md",
         "Tutorials" => [
             "A first tutorial"             =>  "tutorial/basictutorial.md",
+            "Design a logo"                =>  "tutorial/design-a-logo.md",
+            "Simple animations"            =>  "tutorial/simple-animation.md",
             ],
         "Examples" => [
             "Simple examples"              =>  "example/examples.md",
@@ -26,7 +28,7 @@ makedocs(
             "Work with polygons"           =>  "howto/polygons.md",
             "Add text"                     =>  "howto/text.md",
             "Clip graphics"                =>  "howto/clipping.md",
-            "Images"                       =>  "howto/images.md",
+            "Placing images"                       =>  "howto/images.md",
             "Turtle graphics"              =>  "howto/turtle.md",
             "Make animations"              =>  "howto/animation.md",
             "Live graphics and snapshots"  =>  "howto/livegraphics.md",
