@@ -1,10 +1,36 @@
 # Drawing as image matrix
 
+# Images as matrices
+
 While drawing, you can copy the current graphics in a drawing as a matrix of pixels, using the [`image_as_matrix`](@ref) function.
+
+With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes an ampersand in Images.jl.
+
+```
+using Luxor, Colors, Images, ImageFiltering
+
+m = @imagematrix begin
+        background("black")
+        sethue("white")
+        fontface("Georgia")
+        fontsize(180)
+        text("&", halign=:center, valign=:middle)
+end 200 200
+
+function convertmatrixtocolors(m)
+    return convert.(Colors.RGBA, m)
+end
+
+img = convertmatrixtocolors(m)
+
+imfilter(img, Kernel.gaussian(10))
+```
+
+![image matrix](../assets/figures/ampersand-matrix.png)
 
 [`image_as_matrix`](@ref) returns a array of ARGB32 values. Each ARGB value encodes the Red, Green, Blue, and Alpha values of a pixel into a single 32 bit integer.
 
-The following example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. In the second drawing, values from the two matrices are tested, and table cells are randomly colored depending on the corresponding values ... this is a primitive Boolean operation.
+The next example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. In the second drawing, values from the two matrices are tested, and table cells are randomly colored depending on the corresponding values ... this is a primitive Boolean operation.
 
 ```@example
 using Luxor, Colors, Random # hide

@@ -3,9 +3,9 @@ DocTestSetup = quote
     using Luxor, Colors
     end
 ```
-# Images
+# Placing images
 
-## Placing images
+## Loading and placing PNG and SVG images
 
 Luxor lets you place PNG and SVG images on the drawing. First, load an image:
 
