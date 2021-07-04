@@ -1,3 +1,8 @@
 pre, code {
     font-feature-settings: "calt" 0;
 }
+
+p > a:after {
+    content: "→";
+    font-size: 50%;
+}

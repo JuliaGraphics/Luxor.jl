@@ -67,7 +67,9 @@ or (less nicely):
      )
 ```
 
-The `@draw` macro creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto). There's also a `@drawsvg` macro.
+The `@draw` macro creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto).
+
+The SVG equivalent of `@draw` is `@drawsvg`.
 
 If you don't specify a size, the defaults are usually 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't even have to specify the suffix:
 
@@ -104,7 +106,7 @@ lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new
 
 You can specify `:image` as the surface type. This allows you to copy the current drawing into a 2D matrix (using [`image_as_matrix`](@ref)). See the Images chapter for more information.
 
-Use [`svgstring`](@ref) to obtain the SVG source for a finished SVG drawing. If you're using a notebook environment such as Pluto...
+Use [`svgstring`](@ref) to obtain the SVG source for a finished SVG drawing.
 
 ## Interactive drawings
 

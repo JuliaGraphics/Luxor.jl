@@ -58,7 +58,9 @@ box(Point(0, 0), 100, 100, :none)
  Point(50.0, 50.0)
 ```
 
-For regular polygons, pentagons, and so on, see the later section on Polygons.
+## Triangles, pentagons, and regular polygons
+
+For regular polygons, pentagons, and so on, see the section on [Polygons and paths](@ref).
 
 ## Circles and ellipses
 
@@ -531,7 +533,16 @@ finish() # hide
 
 ## Arrows
 
-You can draw lines, arcs, and curves with arrows at the end with [`arrow`](@ref). For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
+You can draw lines, arcs, and curves with arrows at the end with [`arrow`](@ref).
+
+|type                            |function call                     |
+|:---                            |:---                              |
+| straight between two points    |arrow(pt, pt)                     |
+| curved: radius + two angles    |arrow(pt, rad, θ1, θ2)            |
+| Bezier 4 points                |arrow(pt1, pt2, pt3, pt4, action) |
+| Bezier start finish + box      |arrow(pt1, pt2, [ht1, ht2])       |
+
+For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
 
 ```@example
 using Luxor # hide
@@ -573,7 +584,9 @@ nothing # hide
 ```
 ![arrows](../assets/figures/arrowbezier.png)
 
-The [`arrow`](@ref) functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, define a function that draws text `t` in a circle of radius `r` :
+### Decoration
+
+The [`arrow`](@ref) functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, you can define a function that draws text `t` in a circle of radius `r` :
 
 ```
 function marker(r, t)
@@ -587,7 +600,7 @@ function marker(r, t)
 end
 ```
 
-and then pass it to the `decorate` keyword. By default, the graphics origin when the function is called is placed at the midpoint (0.5) of the arrow's shaft.
+and then pass this to the `decorate` keyword argument of `arrrow`. By default, the graphics origin when the function is called is placed at the midpoint (0.5) of the arrow's shaft.
 
 ```@example
 using Luxor # hide
@@ -626,6 +639,39 @@ nothing # hide
 Use the `decoration` keyword to specify a location other than the default 0.5.
 
 The graphics environment provided by the `decorate` function is centered at the decoration point, and rotated to the slope of the curve at that point.
+
+### Custom arrowheads
+
+To make custom arrowheads, you can define a three-argument function that draws them to your own design. This function should accept three arguments: the point at the end of the arrow's shaft, the point where the tip of the arrowhead would be, and the angle of the shaft at the end. You can then use any code to draw the arrow. Pass this function to the `arrow` function's `arrowheadfunction` keyword.
+
+```@example
+using Luxor # hide
+
+function redbluearrow(shaftendpoint, endpoint, shaftangle)
+    @layer begin
+        sethue("red")
+        sidept1 = shaftendpoint  + polar(10, shaftangle + π/2 )
+        sidept2 = shaftendpoint  - polar(10, shaftangle + π/2)
+        poly([sidept1, endpoint, sidept2], :fill)
+        sethue("blue")
+        poly([sidept1, endpoint, sidept2], :stroke, close=false)
+    end
+end
+
+@drawsvg begin
+    background("white")
+    arrow(O, O + (120, 120),
+        linewidth=4,
+        arrowheadlength=40,
+        arrowheadangle=π/7,
+        arrowheadfunction = redbluearrow)
+
+    arrow(O, 100, 3π/2, π,
+        linewidth=4,
+        arrowheadlength=20,
+        clockwise=false,arrowheadfunction=redbluearrow)
+end 800 250
+```
 
 ## Arcs and curves
 

@@ -1,4 +1,4 @@
-    # Polygons and paths
+# Polygons and paths
 
 For drawing shapes, Luxor provides polygons and paths.
 
