@@ -168,6 +168,10 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     if isapprox(startangle, endangle, rtol = 0.01)
         return
     end
+    # circular arcs needs swapping to avoid Cairo crash
+    if isapprox(startangle - endangle, 2π, rtol = 0.01)
+        startangle, endangle = endangle, startangle
+    end
 
     gsave()
     setlinejoin("butt")
@@ -198,10 +202,10 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     newarclength = arclength * ratio
     if clockwise == true
         newendangle = startangle + (newarclength/radius)
-        arc(0, 0, radius, startangle, newendangle, :stroke)
+        arc(O, radius, startangle, newendangle, :stroke)
     else
         newendangle = startangle - (newarclength/radius)
-        carc(0, 0, radius, startangle, newendangle, :stroke)
+        carc(O, radius, startangle, newendangle, :stroke)
     end
     closepath()
 
