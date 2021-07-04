@@ -5,6 +5,8 @@
 ### Added
 
 - crescent()
+- anticlockwise arrows
+- custom arrowheads
 
 ### Changed
 
