@@ -208,7 +208,7 @@ arrow(pts[[4, 2, 6, 8]]..., :stroke,
     finisharrow=true,
     arrowheadangle = π/6,
     arrowheadlength = 35,
-    linewidth  = 1.5)</code></pre><p><img src="../../assets/figures/arrowbezier.png" alt="arrows"/></p><h3 id="Decoration"><a class="docs-heading-anchor" href="#Decoration">Decoration</a><a id="Decoration-1"></a><a class="docs-heading-anchor-permalink" href="#Decoration" title="Permalink"></a></h3><p>The <a href="../../reference/api/#Luxor.arrow"><code>arrow</code></a> functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, you can define a function that draws text <code>t</code> in a circle of radius <code>r</code> :</p><pre><code class="nohighlight">function marker(r, t)
+    linewidth  = 1.5)</code></pre><p><img src="../../assets/figures/arrowbezier.png" alt="arrows"/></p><h3 id="Decoration"><a class="docs-heading-anchor" href="#Decoration">Decoration</a><a id="Decoration-1"></a><a class="docs-heading-anchor-permalink" href="#Decoration" title="Permalink"></a></h3><p>The <a href="../../reference/api/#Luxor.arrow"><code>arrow</code></a> functions allow you to specify decorations - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, you can define a function that draws text <code>t</code> in a circle of radius <code>r</code> :</p><pre><code class="nohighlight">function marker(r, t)
     @layer begin
         sethue(&quot;purple&quot;)
         circle(Point(0, 0), r,  :fill)
@@ -226,7 +226,47 @@ arrow(pts[1:4]..., decorate = () -&gt; marker(10, 3))
 sethue(&quot;olivedrab&quot;)
 
 # no arrow, just a graphic, at 0.75
-arrow(pts[1:4]..., decorate = () -&gt; ngon(Point(0, 0), 20, 4, 0, :fill), decoration = 0.75, :none)</code></pre><p><img src="../../assets/figures/arrowbezierdecoration.png" alt="arrows with decoration"/></p><p>Use the <code>decoration</code> keyword to specify a location other than the default 0.5.</p><p>The graphics environment provided by the <code>decorate</code> function is centered at the decoration point, and rotated to the slope of the curve at that point.</p><h3 id="Custom-arrowheads"><a class="docs-heading-anchor" href="#Custom-arrowheads">Custom arrowheads</a><a id="Custom-arrowheads-1"></a><a class="docs-heading-anchor-permalink" href="#Custom-arrowheads" title="Permalink"></a></h3><p>To make custom arrowheads, you can define a three-argument function that draws them to your own design. This function should accept three arguments: the point at the end of the arrow&#39;s shaft, the point where the tip of the arrowhead would be, and the angle of the shaft at the end. You can then use any code to draw the arrow. Pass this function to the <code>arrow</code> function&#39;s <code>arrowheadfunction</code> keyword.</p><pre><code class="language-julia">function redbluearrow(shaftendpoint, endpoint, shaftangle)
+arrow(pts[1:4]..., decorate = () -&gt; ngon(Point(0, 0), 20, 4, 0, :fill), decoration = 0.75, :none)</code></pre><p><img src="../../assets/figures/arrowbezierdecoration.png" alt="arrows with decoration"/></p><p>Use the <code>decoration</code> keyword to specify one or more locations other than the default 0.5.</p><p>The graphics environment provided by the <code>decorate</code> function is centered at each decoration point, and rotated to the slope of the shaft at that point.</p><pre><code class="language-julia">using Luxor
+
+function fletcher()
+    line(O, polar(30, deg2rad(220)), :stroke)
+    line(O, polar(30, deg2rad(140)), :stroke)
+end
+
+function customarrowhead(shaftendpoint, endpoint, shaftangle)
+    @layer begin
+        sidept1 = shaftendpoint - polar(40, shaftangle + π/5)
+        sidept2 = shaftendpoint - polar(40, shaftangle - π/5)
+        sethue(&quot;red&quot;)
+        poly([sidept1, endpoint, sidept2], :fill)
+        sethue(&quot;black&quot;)
+        poly([sidept1, endpoint, sidept2], :stroke, close=true)
+    end
+end
+
+@drawsvg begin
+    background(&quot;antiquewhite&quot;)
+        arrow(O, 150, 0, π + π/3,
+            linewidth=5,
+            decorate=fletcher,
+            arrowheadfunction = customarrowhead,
+            decoration=range(0., .1, length=3))
+end</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="600pt" viewBox="0 0 600 600" version="1.1">
+<g id="surface1282">
+<rect x="0" y="0" width="600" height="600" style="fill:rgb(98.039216%25,92.156863%25,84.313725%25);fill-opacity:1;stroke:none;"/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 450 300 C 450 352.765625 422.277344 401.648438 376.992188 428.734375 C 331.707031 455.816406 275.523438 457.113281 229.035156 432.152344 C 182.546875 407.1875 152.597656 359.636719 150.160156 306.925781 C 147.722656 254.21875 173.160156 204.105469 217.144531 174.960938 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,0%25,0%25);fill-opacity:1;" d="M 177.183594 173.234375 L 225 170.097656 L 203.15625 212.433594 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 177.183594 173.234375 L 225 170.097656 L 203.15625 212.433594 Z M 177.183594 173.234375 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 450 300 L 469.285156 277.019531 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 450 300 L 430.714844 277.019531 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 446.816406 330.734375 L 470.402344 312.191406 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 446.816406 330.734375 L 432.652344 304.289062 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 437.40625 360.164062 L 464.289062 346.847656 "/>
+<path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 437.40625 360.164062 L 428.957031 331.378906 "/>
+</g>
+</svg>
+'/><h3 id="Custom-arrowheads"><a class="docs-heading-anchor" href="#Custom-arrowheads">Custom arrowheads</a><a id="Custom-arrowheads-1"></a><a class="docs-heading-anchor-permalink" href="#Custom-arrowheads" title="Permalink"></a></h3><p>To make custom arrowheads, you can define a three-argument function that draws them to your own design. This function should accept three arguments: the point at the end of the arrow&#39;s shaft, the point where the tip of the arrowhead would be, and the angle of the shaft at the end. You can then use any code to draw the arrow. Pass this function to the <code>arrow</code> function&#39;s <code>arrowheadfunction</code> keyword.</p><pre><code class="language-julia">function redbluearrow(shaftendpoint, endpoint, shaftangle)
     @layer begin
         sethue(&quot;red&quot;)
         sidept1 = shaftendpoint  + polar(10, shaftangle + π/2 )
@@ -251,7 +291,7 @@ end
         clockwise=false,arrowheadfunction=redbluearrow)
 end 800 250</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="250pt" viewBox="0 0 800 250" version="1.1">
-<g id="surface1277">
+<g id="surface1287">
 <rect x="0" y="0" width="800" height="250" style="fill:rgb(100%25,100%25,100%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 400 125 L 494.515625 219.515625 "/>
 <path style="fill-rule:nonzero;fill:rgb(100%25,0%25,0%25);fill-opacity:1;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,100%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 487.445312 226.585938 L 520 245 L 501.585938 212.445312 "/>
@@ -494,4 +534,4 @@ for (n, t) in enumerate(tiles)
         midpoint(bb[1], bb[2]),
         halign=:center,
             valign=:middle)
-end</code></pre><p><img src="../../assets/figures/boxmap.png" alt="boxmap"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../createdrawings/">« Create drawings</a><a class="docs-footer-nextpage" href="../geometrytools/">Use geometry tools »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.3 on <span class="colophon-date" title="Sunday 4 July 2021 10:36">Sunday 4 July 2021</span>. Using Julia version 1.6.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><p><img src="../../assets/figures/boxmap.png" alt="boxmap"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../createdrawings/">« Create drawings</a><a class="docs-footer-nextpage" href="../geometrytools/">Use geometry tools »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.3 on <span class="colophon-date" title="Monday 5 July 2021 14:20">Monday 5 July 2021</span>. Using Julia version 1.6.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
