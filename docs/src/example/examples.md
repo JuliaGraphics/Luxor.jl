@@ -162,3 +162,30 @@ draw(depth)
 ```
 
 The Point type is an immutable composite type containing `x` and `y` fields that specify a 2D point.
+
+## A simple numberline
+
+```@example
+using Luxor # hide
+
+@drawsvg begin
+    background("white")
+    fontsize(14)
+    setline(1)
+    ht = 10
+
+    map(f -> begin
+                pt = between(O - (200, 0), O + (200, 0), f)
+                if f * 100 % 50 == 0
+                    ht = 10
+                    text(string(f), pt + (0, 30), halign=:center)
+                else
+                    ht = 4
+                end
+                line(pt + polar(ht, π/2), pt + polar(ht, -π/2), :stroke)
+            end,
+    0:0.05:1.0)
+
+    arrow(O - (220, 0), O + (220, 0))
+end 800 200
+```

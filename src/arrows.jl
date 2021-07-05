@@ -30,7 +30,7 @@ end
         linewidth         = 1.0,
         arrowheadlength   = 10,
         arrowheadangle    = pi/8,
-        decoration        = 0.5,
+        decoration        = 0.5 or range(),
         decorate          = nothing,
         arrowheadfunction = nothing)
 
@@ -45,18 +45,52 @@ Arrows don't use the current linewidth setting
 another value. It doesn't need stroking/filling, the shaft
 is stroked and the head filled with the current color.
 
+### Decoration
+
 The `decorate` keyword argument accepts a function with zero
-arguments that can execute code at locations on the arrow's
-shaft. The inherited graphic environment is centered at each
-point on the curve between 0 and 1 given by scalar or vector
-`decoration`, and the x-axis is aligned with the direction
-of the curve at that point.
+arguments that can execute code at one or more locations on
+the arrow's shaft. The inherited graphic environment is
+centered at each point on the shaft between 0 and 1 given by
+scalar or vector `decoration`, and the x-axis is aligned
+with the direction of the curve at that point.
+
+### Arrowheads
 
 A triangular arrowhead is drawn by default. But you can pass
 a function to the `arrowheadfunction` keyword argument that
 accepts three arguments: the shaft end, the arrow head end,
 and the shaft angle. Thsi allows you to draw any shape
 arrowhead.
+
+### Example
+
+```
+function redbluearrow(shaftendpoint, endpoint, shaftangle)
+    @layer begin
+        sethue("red")
+        sidept1 = shaftendpoint  + polar(10, shaftangle + π/2 )
+        sidept2 = shaftendpoint  - polar(10, shaftangle + π/2)
+        poly([sidept1, endpoint, sidept2], :fill)
+        sethue("blue")
+        poly([sidept1, endpoint, sidept2], :stroke, close=false)
+    end
+end
+
+@drawsvg begin
+    background("white")
+    arrow(O, O + (120, 120),
+        linewidth=4,
+        arrowheadlength=40,
+        arrowheadangle=π/7,
+        arrowheadfunction = redbluearrow)
+
+    arrow(O, 100, 3π/2, π,
+        linewidth=4,
+        arrowheadlength=20,
+        clockwise=false,arrowheadfunction=redbluearrow)
+end 800 250
+```
+
 """
 function arrow(startpoint::Point, endpoint::Point;
         linewidth         = 1.0,
@@ -114,6 +148,7 @@ function arrow(startpoint::Point, endpoint::Point;
     else
         for decpos in decoration
             decpoint = between(startpoint, endpoint, decpos)
+            # slope at this point
             slp = slope(startpoint, endpoint)
             @layer begin
                 translate(decpoint)
@@ -144,16 +179,17 @@ Arrows don't use the current linewidth setting
 (`setline()`); you can specify the linewidth.
 
 The `decorate` keyword argument accepts a zero-argument
-function that can execute code at locations on the arrow's
-shaft. The inherited graphic environment is centered at
-points on the curve between 0 and 1 given by scalar or
-vector `decoration`, and the x-axis is aligned with the
-direction of the curve at that point.
+function that can execute code at one or more locations on
+the arrow's shaft. The inherited graphic environment is
+centered at points on the shaft between 0 and 1 given by
+scalar or vector `decoration`, and the x-axis is aligned
+with the direction of the curve at that point.
 
 A triangular arrowhead is drawn by default. But you can pass
 a function to the `arrowheadfunction` keyword argument that
 accepts three arguments: the shaft end, the arrow head end,
-and the shaft angle. Thsi allows you to draw any shape arrowhead.
+and the shaft angle. Thsi allows you to draw any shape
+arrowhead.
 """
 function arrow(centerpos::Point, radius, startangle, endangle;
         linewidth          = 1.0,
@@ -240,10 +276,10 @@ function arrow(centerpos::Point, radius, startangle, endangle;
         for decpos in decoration
             decorationangle = rescale(decpos, 0, 1, startangle, newendangle)
             decorationpoint = Point(radius * cos(decorationangle), radius * sin(decorationangle))
-            perp = perpendicular(decorationpoint)
+            ptangle = atan(decorationpoint.y, decorationpoint.x)
             @layer begin
                 translate(decorationpoint)
-                rotate(slope(decorationpoint, perp))
+                rotate(π/2 + ptangle)
                 decorate()
             end
         end
@@ -263,15 +299,17 @@ end
         decorate        = nothing
         arrowheadfunction = nothing)
 
-Draw a Bezier curved arrow, from `start` to `finish`, with control points `C1`
-and `C2`. Arrow heads can be added/hidden by changing `startarrow` and
-`finisharrow` options.
+Draw a Bezier curved arrow, from `start` to `finish`, with
+control points `C1` and `C2`. Arrow heads can be
+added/hidden by changing `startarrow` and `finisharrow`
+options.
 
-The `decorate` keyword argument accepts a function that can execute code at
-locations on the arrow's shaft. The inherited graphic environment is centered at
-each point on the curve given by scalar or vector `decoration`, and the x-axis
-is aligned with the direction of the curve at that point (TODO - more or less -
-is it actually correct?).
+The `decorate` keyword argument accepts a function that can
+execute code at one or more locations on the arrow's shaft.
+The inherited graphic environment is centered at each point
+on the shaft given by scalar or vector `decoration`, and the
+x-axis is aligned with the direction of the curve at that
+point.
 
 ### Example
 
@@ -354,9 +392,9 @@ function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke
         if decorate === nothing
         else
             for decpos in decoration
-                # decpoint = between(start, finish, decpos)
                 decpoint = bezier(decpos, start, C1, C2, finish)
-                slp = slope(start, finish)
+                bp = bezier′(decpos, start, C1, C2, finish)
+                slp = atan(bp.y, bp.x)
                 @layer begin
                     translate(decpoint)
                     rotate(slp)
