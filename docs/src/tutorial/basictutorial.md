@@ -13,7 +13,7 @@ If you've already downloaded Julia, and have added the Luxor package successfull
 
 ```@raw html
 <span style="font-feature-settings: 'ss20' on">
-<pre><code>
+<pre>
                    _
        _       _ _(_)_     |  Documentation: https://docs.julialang.org
       (_)     | (_) (_)    |
@@ -25,7 +25,7 @@ If you've already downloaded Julia, and have added the Luxor package successfull
 
 $ julia
 (v1.6) pkg> add Luxor
-</code></pre>
+</pre>
 </span>
 ```
 

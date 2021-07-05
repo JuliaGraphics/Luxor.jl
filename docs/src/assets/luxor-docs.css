@@ -1,5 +1,12 @@
+@font-face {
+	font-family: JuliaMono-Regular;
+	src:
+		url("https://github.com/cormullion/juliamono/raw/master/webfonts/JuliaMono-Regular.woff2");
+}
+
 pre, code {
-    font-feature-settings: "calt" 0;
+	font-family: JuliaMono-Regular !important;
+    font-feature-settings: "calt" 1;
 }
 
 p > a:after {

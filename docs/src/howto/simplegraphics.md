@@ -586,7 +586,11 @@ nothing # hide
 
 ### Decoration
 
-The [`arrow`](@ref) functions allow you to specify decoration - graphics at a point somewhere along the shaft. For example, say you want to draw a number and a circle at the midpoint of an arrow, you can define a function that draws text `t` in a circle of radius `r` :
+The [`arrow`](@ref) functions allow you to specify
+decorations - graphics at a point somewhere along the shaft.
+For example, say you want to draw a number and a circle at
+the midpoint of an arrow, you can define a function that
+draws text `t` in a circle of radius `r` :
 
 ```
 function marker(r, t)
@@ -600,7 +604,10 @@ function marker(r, t)
 end
 ```
 
-and then pass this to the `decorate` keyword argument of `arrrow`. By default, the graphics origin when the function is called is placed at the midpoint (0.5) of the arrow's shaft.
+and then pass this to the `decorate` keyword argument of
+`arrrow`. By default, the graphics origin when the function
+is called is placed at the midpoint (0.5) of the arrow's
+shaft.
 
 ```@example
 using Luxor # hide
@@ -636,9 +643,38 @@ nothing # hide
 ```
 ![arrows with decoration](../assets/figures/arrowbezierdecoration.png)
 
-Use the `decoration` keyword to specify a location other than the default 0.5.
+Use the `decoration` keyword to specify one or more locations other than the default 0.5.
 
-The graphics environment provided by the `decorate` function is centered at the decoration point, and rotated to the slope of the curve at that point.
+The graphics environment provided by the `decorate` function is centered at each decoration point, and rotated to the slope of the shaft at that point.
+
+```@example
+using Luxor
+
+function fletcher()
+    line(O, polar(30, deg2rad(220)), :stroke)
+    line(O, polar(30, deg2rad(140)), :stroke)
+end
+
+function customarrowhead(shaftendpoint, endpoint, shaftangle)
+    @layer begin
+        sidept1 = shaftendpoint - polar(40, shaftangle + π/5)
+        sidept2 = shaftendpoint - polar(40, shaftangle - π/5)
+        sethue("red")
+        poly([sidept1, endpoint, sidept2], :fill)
+        sethue("black")
+        poly([sidept1, endpoint, sidept2], :stroke, close=true)
+    end
+end
+
+@drawsvg begin
+    background("antiquewhite")
+        arrow(O, 150, 0, π + π/3,
+            linewidth=5,
+            decorate=fletcher,
+            arrowheadfunction = customarrowhead,
+            decoration=range(0., .1, length=3))
+end
+```
 
 ### Custom arrowheads
 
