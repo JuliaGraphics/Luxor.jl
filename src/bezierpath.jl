@@ -90,7 +90,7 @@ curve is:
 \\begin{equation}
 \\kappa = \\frac{\\mid \\dot{x}\\ddot{y}-\\dot{y}\\ddot{x}\\mid}
     {(\\dot{x}^2 + \\dot{y}^2)^{\\frac{3}{2}}}
-\end{equation}
+\\end{equation}
 ```
 
 The radius of curvature, or the radius of an osculating circle at a point, is
