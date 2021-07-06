@@ -8,9 +8,9 @@ Graphics are placed on the current workspace according to the *current transform
 
 # Transformation functions
 
-For basic transformations, use `translate(tx, ty)`, `scale(sx, sy)`, and `rotate(a)`.
+For basic transformations, use [`translate(tx, ty)`](@ref), [`scale(sx, sy)`](@ref), and [`rotate(a)`](@ref).
 
-`translate(pos)` (or `translate(x, y)`) shifts the current origin to `pos` (or by the specified amounts in x and y). It's relative and cumulative, rather than absolute:
+[`translate(pos)`](@ref) (or `translate(x, y)`) shifts the current origin to `pos` (or by the specified amounts in x and y). It's relative and cumulative, rather than absolute:
 
 ```@example
 using Luxor, Colors, Random # hide
@@ -117,7 +117,7 @@ julia> getmatrix()
    0.0
 ```
 
-`transform(a)` transforms the current workspace by 'multiplying' the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
+[`transform(a)`](@ref) transforms the current workspace by 'multiplying' the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
 
 ```@example
 using Luxor # hide
@@ -149,8 +149,8 @@ nothing # hide
 
 [`getmatrix`](@ref) gets the current matrix, `setmatrix(a)` sets the matrix to array `a`.
 
-Other functions include [`getmatrix`](@ref)
-[`setmatrix`](@ref) [`transform`](@ref) [`crossproduct`](@ref) [`blendmatrix`](@ref) [`rotationmatrix`](@ref) [`scalingmatrix`](@ref) [`translationmatrix`](@ref).
+Other functions include [`getmatrix`](@ref),
+[`setmatrix`](@ref), [`transform`](@ref), [`crossproduct`](@ref), [`blendmatrix`](@ref), [`rotationmatrix`](@ref), [`scalingmatrix`](@ref), and [`translationmatrix`](@ref).
 
 Use the [`getscale`](@ref), [`gettranslation`](@ref), and [`getrotation`](@ref) functions to find the current values of the current matrix. These can also find the values of arbitrary 3x3 matrices.
 

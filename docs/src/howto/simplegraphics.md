@@ -14,7 +14,7 @@ The simple rectangle and box shapes can be made in different ways.
 ```@example
 using Luxor # hide
 Drawing(400, 220, "../assets/figures/basicrects.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 rulers()
 sethue("red")
@@ -69,7 +69,7 @@ There are various ways to make circles, including by center and radius, or passi
 ```@example
 using Luxor # hide
 Drawing(400, 200, "../assets/figures/circles.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 
 origin() # hide
 setline(3) # hide
@@ -99,7 +99,7 @@ The [`center3pts`](@ref) function returns the center position and radius of a ci
 ```@example
 using Luxor, Random # hide
 Drawing(400, 200, "../assets/figures/center3.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 setline(3) # hide
 sethue("black")
@@ -120,7 +120,7 @@ With [`ellipse`](@ref) you can place ellipses and circles by defining the center
 ```@example
 using Luxor, Random # hide
 Drawing(500, 300, "../assets/figures/ellipses.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 fontsize(11) # hide
 Random.seed!(1) # hide
 origin() # hide
@@ -148,7 +148,7 @@ nothing # hide
 using Luxor, Random # hide
 Drawing(400, 220, "../assets/figures/ellipses_1.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 
 Random.seed!(42) # hide
 sethue("black") # hide
@@ -187,7 +187,7 @@ The advantage of this method is that there's a `vertices=true` option, allowing 
 using Luxor # hide
 Drawing(500, 450, "../assets/figures/ellipses_2.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("gray30") # hide
 setline(1) # hide
 f1 = Point(-100, 0)
@@ -211,7 +211,7 @@ The [`ellipseinquad`](@ref) function constructs an ellipse that fits in a four-s
 using Luxor # hide
 Drawing(600, 600, "../assets/figures/ellipseinquad.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("gray30") # hide
 setline(1) # hide
 
@@ -244,7 +244,7 @@ nothing # hide
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/circle-path.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(4)
 tiles = Tiler(600, 250, 1, 5)
@@ -274,7 +274,7 @@ Functions to find tangents to circles include:
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/point-circle-tangents.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setline(1) # hide
 sethue("black") # hide
 
@@ -302,7 +302,7 @@ nothing # hide
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/circle-circle-outer-tangents.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setline(1) # hide
 sethue("black") # hide
 
@@ -335,7 +335,7 @@ Finding the inner tangents requires a separate function.
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/circle-circle-inner-tangents.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setline(1) # hide
 sethue("black") # hide
 
@@ -372,7 +372,7 @@ nothing # hide
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/circle-tangents.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(1) # hide
 
@@ -419,7 +419,7 @@ nothing # hide
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/circle-point-tangent.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(1) # hide
 
@@ -495,7 +495,7 @@ You can use [`rule`](@ref) to draw a line through a point, optionally at an angl
 ```@example
 using Luxor # hide
 Drawing(700, 200, "../assets/figures/rule.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(0.5) # hide
 y = 10
@@ -518,7 +518,7 @@ Use the `boundingbox` keyword argument to crop the ruled lines with a BoundingBo
 using Luxor # hide
 Drawing(700, 200, "../assets/figures/rulebbox.png") # hide
 origin()
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(0.75) # hide
 box(BoundingBox() * 0.9, :stroke)
@@ -547,7 +547,7 @@ For straight arrows, supply the start and end points. For arrows as circular arc
 ```@example
 using Luxor # hide
 Drawing(400, 250, "../assets/figures/arrow.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 sethue("steelblue4") # hide
 setline(2) # hide
@@ -564,7 +564,7 @@ If you provide four points, you can draw a Bézier curve with optional arrowhead
 ```@example
 using Luxor # hide
 Drawing(600, 400, "../assets/figures/arrowbezier.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 setline(2) # hide
 pts = ngon(Point(0, 0), 100, 8, vertices=true)
@@ -611,8 +611,8 @@ shaft.
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "../assets/figures/arrowbezierdecoration.png") # hide
-background("white") # hide
+Drawing(800, 400, "../assets/figures/arrowbezierdecoration.png") # hide
+background("antiquewhite") # hide
 origin() # hide
 setline(2) # hide
 
@@ -636,7 +636,10 @@ arrow(pts[1:4]..., decorate = () -> marker(10, 3))
 sethue("olivedrab")
 
 # no arrow, just a graphic, at 0.75
-arrow(pts[1:4]..., decorate = () -> ngon(Point(0, 0), 20, 4, 0, :fill), decoration = 0.75, :none)
+arrow(pts[1:4]...,
+    decorate = () ->
+        ngon(Point(0, 0), 20, 4, 0, :fill),
+    decoration = 0.75, :none)
 
 finish() # hide
 nothing # hide
@@ -692,7 +695,7 @@ function redbluearrow(shaftendpoint, endpoint, shaftangle)
 end
 
 @drawsvg begin
-    background("white")
+    background("antiquewhite")
     arrow(O, O + (120, 120),
         linewidth=4,
         arrowheadlength=40,
@@ -716,7 +719,7 @@ There are a few standard arc-drawing commands, such as [`curve`](@ref), [`arc`](
 using Luxor # hide
 Drawing(600, 275, "../assets/figures/curve.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 
 sethue("black") # hide
 
@@ -756,7 +759,7 @@ using Luxor, Random # hide
 Drawing(700, 200, "../assets/figures/arc2r.png") # hide
 origin() # hide
 Random.seed!(42) # hide
-background("white") # hide
+background("antiquewhite") # hide
 tiles = Tiler(700, 200, 1, 6)
 for (pos, n) in tiles
     c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
@@ -779,7 +782,7 @@ nothing # hide
 using Luxor, Colors # hide
 Drawing(400, 250, "../assets/figures/arc2sagitta.svg") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setline(.5) # hide
 translate(0, 50) # hide
 pt1 = Point(-100, 0)
@@ -807,7 +810,7 @@ A sector (technically an "annular sector") has an inner and outer radius, as wel
 ```@example
 using Luxor # hide
 Drawing(600, 200, "../assets/figures/sector.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 sethue("tomato")
 sector(50, 90, π/2, 0, :fill)
@@ -824,7 +827,7 @@ You can also supply a value for a corner radius. The same sector is drawn but wi
 ```@example
 using Luxor # hide
 Drawing(600, 200, "../assets/figures/sectorrounded.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 sethue("tomato")
 sector(50, 90, π/2, 0, 15, :fill)
@@ -841,7 +844,7 @@ A pie (or wedge) has start and end angles.
 ```@example
 using Luxor # hide
 Drawing(400, 300, "../assets/figures/pie.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 sethue("magenta") # hide
 pie(0, 0, 100, π/2, π, :fill)
@@ -856,7 +859,7 @@ To construct spirals, use the [`spiral`](@ref) function. These can be drawn dire
 ```@example
 using Luxor # hide
 Drawing(600, 300, "../assets/figures/spiral.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 sethue("black") # hide
 setline(.5) # hide
@@ -890,7 +893,7 @@ Use the `log=true` option to draw logarithmic (Bernoulli or Fibonacci) spirals.
 ```@example
 using Luxor # hide
 Drawing(600, 400, "../assets/figures/spiral-log.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 setline(.5) # hide
 sethue("black") # hide
@@ -924,7 +927,7 @@ A *squircle* is a cross between a square and a circle. You can adjust the squari
 ```@example
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/squircle.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 fontsize(20) # hide
 setline(2)
@@ -948,7 +951,7 @@ To draw a simple rounded rectangle, supply a corner radius:
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/round-rect-1.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(4)
 box(O, 200, 150, 10, :stroke)
@@ -964,7 +967,7 @@ Or you could smooth the corners of a box, like so:
 using Luxor # hide
 Drawing(600, 250, "../assets/figures/round-rect.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(4)
 polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
@@ -980,7 +983,7 @@ Use [`star`](@ref) to make a star. You can draw it immediately, or use the point
 ```@example
 using Luxor # hide
 Drawing(500, 300, "../assets/figures/stars.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 origin() # hide
 tiles = Tiler(400, 300, 4, 6, margin=5)
 for (pos, n) in tiles
@@ -999,7 +1002,7 @@ The `ratio` determines the length of the inner radius compared with the outer.
 using Luxor # hide
 Drawing(500, 250, "../assets/figures/star-ratios.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(2) # hide
 tiles = Tiler(500, 250, 1, 6, margin=10)
@@ -1018,7 +1021,7 @@ Use [`polycross`](@ref) to draw a cross-shaped polygon.
 using Luxor # hide
 Drawing(600, 600, "../assets/figures/polycross.png") # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("black") # hide
 setline(2) # hide
 tiles = Tiler(600, 600, 4, 4, margin=10)
@@ -1045,7 +1048,7 @@ using Luxor, Random # hide
 Drawing(750, 300, "../assets/figures/julia-logo.png")  # hide
 Random.seed!(42) # hide
 origin()  # hide
-background("white") # hide
+background("antiquewhite") # hide
 
 cells = Table([300], [350, 350])
 
@@ -1110,7 +1113,7 @@ If you want cropmarks (aka trim marks), use the [`cropmarks`](@ref) function, su
 using Luxor # hide
 Drawing(700, 250, "../assets/figures/cropmarks.png")  # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 sethue("red")
 box(O, 150, 150, :stroke)
 cropmarks(O, 150, 150)
@@ -1130,7 +1133,7 @@ Simple dimensioning graphics can be generated with [`dimension`](@ref). To conve
 using Luxor # hide
 Drawing(700, 350, "../assets/figures/dimensioning.svg")  # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setline(0.75)
 sethue("purple")
 pentagon = ngonside(O, 120, 5, vertices=true)
@@ -1198,7 +1201,7 @@ For simple barcharts, use the [`barchart`](@ref) function, supplying an array of
 using Luxor # hide
 Drawing(800, 420, "../assets/figures/bars.png")  # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 fontsize(7)
 sethue("black")
 v = rand(-100:100, 25)
@@ -1217,7 +1220,7 @@ Drawing(800, 450, "../assets/figures/bars1.png")  # hide
 
 Random.seed!(2) # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setopacity(0.8) # hide
 fontsize(8) # hide
 fontface("Helvetica-Bold") # hide
@@ -1269,7 +1272,7 @@ using Luxor, Colors, Random # hide
 Drawing(800, 450, "../assets/figures/boxmap.png")  # hide
 Random.seed!(13) # hide
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 
 fib = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
 
