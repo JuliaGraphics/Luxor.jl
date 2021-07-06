@@ -3,9 +3,9 @@ DocTestSetup = quote
     using Luxor, Colors
     end
 ```
-# First tutorial
+# A tutorial
 
-Experienced Julia users and programmers fluent in other languages and graphics systems should have no problem using Luxor by referring to the rest of the documentation. For others, here is a short tutorial to help you get started.
+Experienced Julia users and programmers fluent in other languages and graphics systems should have no problem using Luxor by referring to the rest of the documentation. For others, here is a tutorial to help you get started.
 
 ## What you need
 

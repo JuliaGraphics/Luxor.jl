@@ -4,7 +4,7 @@
 
 While drawing, you can copy the current graphics in a drawing as a matrix of pixels, using the [`image_as_matrix`](@ref) function.
 
-With the `@imagematrix` macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes an ampersand in Images.jl.
+With the [`@imagematrix`](@ref) macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes an ampersand in Images.jl.
 
 ```
 using Luxor, Colors, Images, ImageFiltering

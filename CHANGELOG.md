@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.13.0] - forthcoming
+## [v2.13.0] - 2021-07-06
 
 ### Added
 

@@ -1,7 +1,8 @@
 @font-face {
 	font-family: JuliaMono-Regular;
 	src:
-		url("https://github.com/cormullion/juliamono/raw/master/webfonts/JuliaMono-Regular.woff2");
+		local('JuliaMono-Regular'),
+		url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
 }
 
 pre, code {

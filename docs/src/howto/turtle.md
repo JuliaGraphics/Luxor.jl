@@ -5,7 +5,7 @@ DocTestSetup = quote
 ```
 # Turtle graphics
 
-Some simple "turtle graphics" functions are included. Functions to control the turtle begin with a capital letter: Forward, Turn, Circle, Orientation, Towards, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees.
+Luxor provides some basic "turtle graphics" functions. Functions to control the turtle begin (somewhat unusually) with a capital letter: Forward, Turn, Circle, Orientation, Towards, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees rather than radians.
 
 ```@example
 using Luxor, Colors
@@ -31,6 +31,26 @@ nothing # hide
 ```
 
 ![turtles](../assets/figures/turtles.png)
+
+|List of words the turtle knows|Action     |
+|:---                          |:---       |
+|[`Forward`](@ref)             | More forward by d units  |
+|[`Turn`](@ref)                | Increase the turtle's rotation by n degrees |
+|[`Circle`](@ref)              | Draw filled circle centered at current pos |
+|[`HueShift`](@ref)            | Shift the Hue of the turtle's pen color by n |
+|[`Message`](@ref)             | Output text   |
+|[`Orientation`](@ref)         | Set the turtle's orientation to n degrees |
+|[`Pen_opacity_random`](@ref)  | Set opacity to random value  |
+|[`Pencolor`](@ref)            | Set the Red, Green, and Blue values |
+|[`Pendown`](@ref)             | Start drawing   |
+|[`Penup`](@ref)               | Stop drawing   |
+|[`Penwidth`](@ref)            | Set the width of the line to n  |
+|[`Pop `](@ref)                | Move turtle to the value stored on the stack |
+|[`Push`](@ref)                | Save the turtle's position on the stack |
+|[`Randomize_saturation`](@ref)| Randomize the saturation of the current color |
+|[`Rectangle`](@ref)           | Draw filled rectangle centered at current pos |
+|[`Reposition`](@ref)          | Place turtle at new position  |
+|[`Towards`](@ref)             | Rotate turtle to face towards a point |
 
 The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!), and you can have any number of turtles active at a time.
 
@@ -102,25 +122,3 @@ nothing # hide
 ```
 
 ![hilbert turtle](../assets/figures/hilbertturtle.svg)
-
-|List of words the turtle knows|
-|:---|
-|Turtle|
-|Forward|
-|Turn|
-|Circle|
-|HueShift|
-|Message|
-|Orientation|
-|Towards|
-|Randomize_saturation|
-|Rectangle|
-|Pen_opacity_random|
-|Pendown|
-|Penup|
-|Pencolor|
-|Penwidth|
-|Point|
-|Pop|
-|Push|
-|Reposition|

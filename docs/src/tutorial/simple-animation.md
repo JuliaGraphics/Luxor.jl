@@ -1,29 +1,28 @@
 # Make simple animations
 
 Luxor.jl can help you build simple animations, by assembling
-a series of PNG images. To make richer animations, you
-should use [Javis.jl](https://github.com/Wikunia/Javis.jl) instead.
+a series of PNG images into an animated GIF.
+
+!!! note
+
+    To make richer or more complex animations, you should use [Javis.jl](https://github.com/Wikunia/Javis.jl).
 
 ## A Julia spinner
 
-The first thing to do is to create a `Movie` object. This acts as a useful handle that we can pass from function to function.
+The first thing to do is to create a `Movie` object. This acts as a useful object that we can pass from function to function.
 
 ```julia
+using Luxor
 mymovie = Movie(400, 400, "mymovie")
 ```
 
-The resulting animation will be 400×400 pixels.
+The resulting animation will be 400 × 400 pixels.
 
-To make the graphics, use a function called `frame()` (it doesn't have to be called that, but it's a good name) which accepts two arguments, a Scene object, and a framenumber (integer).
+To make the graphics, define a function called `frame()` (it doesn't have to be called that, but it's a good name) which accepts two arguments, a Scene object, and a framenumber (integer).
 
-A movie consists of one or more scenes. A scene is an object which determines how many drawings should be made into a sequence. The framenumber lets you keep track of where you are in a scene.
+A movie consists of one or more scenes. A scene is an object which determines how many drawings should be made into a sequence and what function should be used to make them. The framenumber lets you keep track of where you are in a scene.
 
 Here's a simple `frame` function which creates a drawing.
-
-This function is responsible for drawing all the graphics for a single frame.
-The incoming frame number is converted (normalized) to lie between 0 and 1 - ie. between the first frame and the last frame of the scene. It's multiplied by 2π and used as input to `rotate`.
-
-A sequence of drawings will be made, and as the framenumber goes from 1 to `n`, each drawing will be rotated by an increasing angle. For example, for a scene with 60 frames, framenumber 30 will set a rotation value of about `2π * 0.5`.
 
 ```julia
 function frame(scene::Scene, framenumber::Int64)
@@ -36,6 +35,17 @@ function frame(scene::Scene, framenumber::Int64)
     juliacircles(100)
 end
 ```
+
+This function is responsible for drawing all the graphics
+for a single frame. The incoming frame number is converted
+(normalized) to lie between 0 and 1 - ie. between the first
+frame and the last frame of the scene. It's multiplied by 2π
+and used as input to `rotate`.
+
+So as the framenumber goes from 1 to `n`, each drawing will
+be rotated by an increasing angle from 0 to 2π. For example,
+for a scene with 60 frames, framenumber 30 will set a
+rotation value of about `2π * 0.5`.
 
 The Scene object has details about the number of frames for this scene, the number of times the `frame` function is called.
 
@@ -54,7 +64,7 @@ animate(mymovie,
 
 Obviously, if you increase the range from 1:60 to, say,
 1:300, you'll generate 300 drawings rather than 60, and the
-rotation of the drawing will take longer and will be much
+rotation will take longer and will be much
 smoother. Unless, of course, you change the framerate to be
 something other than the default `30`.
 

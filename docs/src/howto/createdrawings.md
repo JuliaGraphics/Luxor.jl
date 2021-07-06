@@ -6,7 +6,7 @@ To create a drawing, and optionally specify the filename, type, and dimensions, 
 
 To finish a drawing and close the file, use [`finish`](@ref), and, if the drawing doesn't appear in your notebook, you can launch an external application to view it using [`preview`](@ref).
 
-The `@draw`, `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions.
+The [`@draw`](@ref), [`@svg`](@ref), [`@png`](@ref), and [`@pdf`](@ref) macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions.
 
 !!! note
 
@@ -67,9 +67,9 @@ or (less nicely):
      )
 ```
 
-The `@draw` macro creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto).
+The [`@draw`](@ref) macro creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto).
 
-The SVG equivalent of `@draw` is `@drawsvg`.
+The SVG equivalent of `@draw` is [`@drawsvg`](@ref).
 
 If you don't specify a size, the defaults are usually 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't even have to specify the suffix:
 
@@ -102,7 +102,9 @@ You can choose to store the drawing in memory. The advantage is that in-memory d
 Drawing(width, height, surfacetype, [filename])
 ```
 
-lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied. The `@draw` macro creates PNG files in memory.
+lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
+
+The `@draw` and `@drawsvg` macros creates PNG/SVG files in memory.
 
 You can specify `:image` as the surface type. This allows you to copy the current drawing into a 2D matrix (using [`image_as_matrix`](@ref)). See the Images chapter for more information.
 

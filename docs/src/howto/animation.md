@@ -90,6 +90,35 @@ animate(demo, [
 
 Transitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some of the basic easing functions and they're listed in the (unexported) array `Luxor.easingfunctions`. Each scene can have one easing function.
 
+
+|List of easing functions|
+|:---	                 |
+|easingflat|
+|lineartween|
+|easeinquad|
+|easeoutquad|
+|easeinoutquad|
+|easeincubic|
+|easeoutcubic|
+|easeinoutcubic|
+|easeinquart|
+|easeoutquart|
+|easeinoutquart|
+|easeinquint|
+|easeoutquint|
+|easeinoutquint|
+|easeinsine|
+|easeoutsine|
+|easeinoutsine|
+|easeinexpo|
+|easeoutexpo|
+|easeinoutexpo|
+|easeincirc|
+|easeoutcirc|
+|easeinoutcirc|
+|easeinoutinversequad|
+|easeinoutbezier|
+
 Most easing functions have names constructed like this:
 
 ```
@@ -115,13 +144,13 @@ function draweasingfunction(f, pos, w, h)
     end
 end
 
-Drawing(650, 650, "../assets/figures/easingfunctions.png") # hide
+Drawing(800, 650, "../assets/figures/easingfunctions.png") # hide
 background("white") # hide
 origin() # hide
 t = Tiler(650, 650, 5, 5)
 margin=5
 fontsize(10)
-fontface("Menlo")
+fontface("JuliaMono-Regular")
 for (pos, n) in t
     n > length(Luxor.easingfunctions) && continue
     draweasingfunction(Luxor.easingfunctions[n], pos,
@@ -201,31 +230,3 @@ Here:
 The [`easeinoutbezier`](@ref) function accepts two additional arguments, two normalized control points of a normalized Bezier curve from Point(0, 0) to Point(1, 1). You can use these to define the shape of a custom easing transition. The Bezier curve's `y` coordinate determines the acceleration. [?]
 
 ![animation of bezier easing](../assets/figures/animation-bezier-easing.gif)
-
-|List of easing functions|
-|:---	                 |
-|easingflat|
-|lineartween|
-|easeinquad|
-|easeoutquad|
-|easeinoutquad|
-|easeincubic|
-|easeoutcubic|
-|easeinoutcubic|
-|easeinquart|
-|easeoutquart|
-|easeinoutquart|
-|easeinquint|
-|easeoutquint|
-|easeinoutquint|
-|easeinsine|
-|easeoutsine|
-|easeinoutsine|
-|easeinexpo|
-|easeoutexpo|
-|easeinoutexpo|
-|easeincirc|
-|easeoutcirc|
-|easeinoutcirc|
-|easeinoutinversequad|
-|easeinoutbezier|

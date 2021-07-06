@@ -3,7 +3,15 @@ DocTestSetup = quote
     using Luxor, Colors
     end
 ```
-# Tutorial: design a logo
+# Quick start: design a logo
+
+This section is a quick guide to getting started. Install the Luxor.jl package in the usual way:
+
+```
+julia> ] add Luxor
+```
+
+# A first drawing
 
 The new (and currently fictitious) organization JuliaFission
 has just asked you to design a new logo for them. They're
@@ -13,8 +21,6 @@ colored circles in some kind of spiral formation would look
 suitably "atomic".
 
 Let's try out some ideas.
-
-## A first drawing
 
 ```@setup example_1
 using Luxor
