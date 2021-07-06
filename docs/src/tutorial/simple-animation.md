@@ -1,6 +1,8 @@
 # Make simple animations
 
-Luxor.jl can help you build simple animations, by assembling a series of PNG images. To make richer animations, you should use [Javis.jl](https://github.com/Wikunia/Javis.jl).
+Luxor.jl can help you build simple animations, by assembling
+a series of PNG images. To make richer animations, you
+should use [Javis.jl](https://github.com/Wikunia/Javis.jl) instead.
 
 ## A Julia spinner
 
@@ -12,7 +14,16 @@ mymovie = Movie(400, 400, "mymovie")
 
 The resulting animation will be 400×400 pixels.
 
-The `frame()` function (it doesn't have to be called that, but it's a good name), should accept two arguments, a Scene object, and a framenumber (integer).
+To make the graphics, use a function called `frame()` (it doesn't have to be called that, but it's a good name) which accepts two arguments, a Scene object, and a framenumber (integer).
+
+A movie consists of one or more scenes. A scene is an object which determines how many drawings should be made into a sequence. The framenumber lets you keep track of where you are in a scene.
+
+Here's a simple `frame` function which creates a drawing.
+
+This function is responsible for drawing all the graphics for a single frame.
+The incoming frame number is converted (normalized) to lie between 0 and 1 - ie. between the first frame and the last frame of the scene. It's multiplied by 2π and used as input to `rotate`.
+
+A sequence of drawings will be made, and as the framenumber goes from 1 to `n`, each drawing will be rotated by an increasing angle. For example, for a scene with 60 frames, framenumber 30 will set a rotation value of about `2π * 0.5`.
 
 ```julia
 function frame(scene::Scene, framenumber::Int64)
@@ -26,19 +37,9 @@ function frame(scene::Scene, framenumber::Int64)
 end
 ```
 
-This function is responsible for drawing all the graphics for a single frame. The Scene object has details about the number of frames for this scene, and those are used to rescale (normalize) the framenumber to be a value between 0 and 1.
+The Scene object has details about the number of frames for this scene, the number of times the `frame` function is called.
 
-```julia
-julia> rescale(1, 1, 60)
-0.0
-
-julia> rescale(60, 1, 60)
-1.0
-```
-
-So for a scene with 60 frames, framenumber 30 will make a value of about 0.5.
-
-The [`animate`](@ref) function takes an array of scenes and builds a GIF.
+To actually build the animation, the [`animate`](@ref) function takes an array of one or more scenes and builds a GIF.
 
 ```julia
 animate(mymovie,
@@ -51,20 +52,29 @@ animate(mymovie,
 
 ![julia spinner](../assets/figures/juliaspinner.gif)
 
+Obviously, if you increase the range from 1:60 to, say,
+1:300, you'll generate 300 drawings rather than 60, and the
+rotation of the drawing will take longer and will be much
+smoother. Unless, of course, you change the framerate to be
+something other than the default `30`.
+
 ## Combining scenes
 
-In the next example, we'll construct an animation that organizes frames into different scenes.
-Consider this animation showing the sun for each hour of a 24 hour day.
+In the next example, we'll construct an animation that uses different scenes.
+
+Consider this animation, showing the sun's position for each hour of a 24 hour day. (It's only a model...)
 
 ![sun24 animation](../assets/figures/sun24.gif)
 
-Start by creating a movie. This acts as a useful handle that we can pass from function to function. The arguments are width, height, name, and a range that determines how many frames are used.
+Again, start by creating a movie, a useful handle that we can pass from function to function. We'll specify 24 frames for the entire animation.
 
 ```
 sun24demo = Movie(400, 400, "sun24", 0:23)
 ```
 
-We'll define a `backgroundfunction` function that draws a background used for all frames (animated GIFs like constant backgrounds):
+We'll define a simple `backgroundfunction` function that draws a
+background that will be used for all frames (since animated
+GIFs like constant backgrounds):
 
 ```
 function backgroundfunction(scene::Scene, framenumber)
@@ -72,7 +82,7 @@ function backgroundfunction(scene::Scene, framenumber)
 end
 ```
 
-A `nightskyfunction` draws the night sky:
+A `nightskyfunction` draws the night sky, covering the entire drawing:
 
 ```
 function nightskyfunction(scene::Scene, framenumber)
@@ -90,19 +100,19 @@ function dayskyfunction(scene::Scene, framenumber)
 end
 ```
 
-The `sunfunction` draws a sun at 24 positions during the day. The framenumber will be a number between 0 and 23, which can be easily converted to lie between 0 and 2π.
+The `sunfunction` draws a sun at 24 positions during the day. Since the framenumber will be a number between 0 and 23, this can be easily converted to lie between 0 and 2π.
 
 ```
 function sunfunction(scene::Scene, framenumber)
-    i = rescale(framenumber, 0, 23, 2pi, 0)
+    t = rescale(framenumber, 0, 23, 2pi, 0)
     gsave()
         sethue("yellow")
-        circle(polar(150, i), 20, :fill)
+        circle(polar(150, t), 20, :fill)
     grestore()
 end
 ```
 
-Here's a `groundfunction` that draws the ground:
+And finally, tere's a `groundfunction` that draws the ground, the lower half of the drawing:
 
 ```
 function groundfunction(scene::Scene, framenumber)
@@ -114,7 +124,9 @@ function groundfunction(scene::Scene, framenumber)
 end
 ```
 
-To combine these together, define a group of Scenes that make up the movie. The scenes specify which functions are to be used, and for which frames:
+To combine these together, we'll define a group of Scenes
+that make up the movie. The scenes specify which functions
+are to be used, and for which frames:
 
 ```
 backdrop  = Scene(sun24demo, backgroundfunction, 0:23)   # every frame
@@ -125,7 +137,9 @@ sun       = Scene(sun24demo, sunfunction, 6:18)          # 06:00 to 18:00
 ground    = Scene(sun24demo, groundfunction, 0:23)       # every frame
 ```
 
-Finally, the `animate` function scans the scenes in the scenelist for a movie, and calls the functions for each frame to build the animation:
+Finally, the `animate` function scans all the scenes in the
+scenelist for the  movie, and calls the specified functions for each
+frame to build the animation:
 
 ```
 animate(sun24demo, [
@@ -141,7 +155,11 @@ Notice that for some frames, such as frame 0, 1, or 23, three of the functions a
 
 ## An alternative
 
-An alternative approach is to use the incoming framenumber as the master parameter that determines the position and appearance of all the graphics.
+As this is a very simple example, there is of course an easier wayto make this particular animation.
+
+We can use the incoming framenumber, rescaled, as the master
+parameter that determines the position and appearance of all
+the graphics.
 
 ```
 function frame(scene, framenumber)

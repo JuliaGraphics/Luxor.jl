@@ -189,3 +189,70 @@ using Luxor # hide
     arrow(O - (220, 0), O + (220, 0))
 end 800 200
 ```
+
+Another way you could approach tasks like this is to use the [`arrow`](@ref) functions, which let you decorate lines. Here's how a curved number line could be made:
+
+```@example
+using Luxor # hide
+@drawsvg begin
+    background("antiquewhite")
+    _counter() = (a = -1; () -> a += 1)
+    counter = _counter() # closure
+    fontsize(15)
+    arrow(O +  (0, 100), 200, π, 2π,
+        arrowheadlength=0,
+        decoration=range(0, 1, length=61),
+        decorate = () -> begin
+                d = counter()
+                if d % 5 == 0
+                    text(string(d), O + (0, -20), halign=:center)
+                    setline(3)
+                end
+                line(O - (0, 5), O + (0, 5), :stroke)
+            end
+        )
+end 800 300
+```
+
+## Draw a matrix
+
+To draw a matrix, you can use a Table to generate the
+positions.
+
+It's sometimes useful to be able to highight particular
+cells. Here, numbers that have already been used once
+are drawn in orange.
+
+```@example
+using Luxor
+
+function drawmatrix(A::Matrix;
+        cellsize = (10, 10))
+    table = Table(size(A)..., cellsize...)
+    used = Set()
+    for i in CartesianIndices(A)
+        r, c = Tuple(i)
+        if A[r, c] ∈ used
+            sethue("orange")
+        else
+            sethue("purple")
+            push!(used, A[r, c])
+        end
+        text(string(A[r, c]), table[r, c],
+            halign=:center,
+            valign=:middle)
+        sethue("white")
+        box(table, r, c, :stroke)        
+    end
+end
+
+A = rand(1:99, 5, 8)
+
+@drawsvg begin
+    background("black")
+    fontsize(30)
+    setline(0.5)
+    sethue("white")
+    drawmatrix(A, cellsize = 10 .* size(A))
+end
+```

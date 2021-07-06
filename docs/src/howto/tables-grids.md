@@ -18,7 +18,7 @@ These are types which act as iterators. Their job is to provide you with centerp
 
 The drawing area (or any other area) can be divided into rectangular tiles (as rows and columns) using the `Tiler` and `Partition` iterators.
 
-The `Tiler` iterator returns the center point and tile number of each tile in turn.
+The [`Tiler`](@ref) iterator returns the center point and tile number of each tile in turn.
 
 In this example, every third tile is divided up into subtiles and colored:
 
@@ -52,7 +52,7 @@ nothing # hide
 
 ![tiler](../assets/figures/tiler.png)
 
-`Partition` is like `Tiler`, but you specify the width and height of the tiles, rather than
+[`Partition`])(@ref) is like `Tiler`, but you specify the width and height of the tiles, rather than
 how many rows and columns of tiles you want.
 
 You can obtain the centerpoints of all the tiles in one go with:
@@ -69,11 +69,17 @@ tiles[1:2:end]
 
 ## Tables
 
-The `Table` iterator can be used to define tables: rectangular grids with a specific number of rows and columns.
+The [`Table`](@ref) iterator can be used to define tables: rectangular grids with a specific number of rows and columns.
 
-Unlike a Tiler, the Table iterator lets you have columns can have different widths, and rows with different heights.
+Unlike a Tiler, the Table iterator lets you have columns with different widths, and rows with different heights.
 
-(Luxor generally tries to keep to the Julia convention of 'width' -> 'height', 'row' -> 'column'. This flavour of consistency can sometimes be confusing if you're expecting other kinds of consistency, such as 'x before y'...)
+!!! note
+
+    Luxor generally tries to keep to the Julia convention of
+    ‘width’ -> ‘height’, ‘row’ -> ‘column’. This flavour of
+    consistency can sometimes be confusing if you’re
+    expecting other kinds of consistency, such as ‘x before
+    y’ or ‘column major’...)
 
 Tables don't store data, of course, but are designed to help you draw tabular data.
 

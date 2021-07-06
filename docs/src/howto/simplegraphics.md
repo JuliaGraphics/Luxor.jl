@@ -587,10 +587,10 @@ nothing # hide
 ### Decoration
 
 The [`arrow`](@ref) functions allow you to specify
-decorations - graphics at a point somewhere along the shaft.
+decorations - graphics at one or more points somewhere along the shaft.
 For example, say you want to draw a number and a circle at
-the midpoint of an arrow, you can define a function that
-draws text `t` in a circle of radius `r` :
+the midpoint of an arrow's shaft, you can define a function that
+draws text `t` in a circle of radius `r` like this:
 
 ```
 function marker(r, t)
@@ -605,7 +605,7 @@ end
 ```
 
 and then pass this to the `decorate` keyword argument of
-`arrrow`. By default, the graphics origin when the function
+`arrow`. By default, the graphics origin when the function
 is called is placed at the midpoint (0.5) of the arrow's
 shaft.
 
@@ -645,7 +645,9 @@ nothing # hide
 
 Use the `decoration` keyword to specify one or more locations other than the default 0.5.
 
-The graphics environment provided by the `decorate` function is centered at each decoration point, and rotated to the slope of the shaft at that point.
+The graphics environment provided by the `decorate` function
+is centered at each decoration point in turn, and rotated to the
+slope of the shaft at that point.
 
 ```@example
 using Luxor
@@ -655,30 +657,25 @@ function fletcher()
     line(O, polar(30, deg2rad(140)), :stroke)
 end
 
-function customarrowhead(shaftendpoint, endpoint, shaftangle)
-    @layer begin
-        sidept1 = shaftendpoint - polar(40, shaftangle + π/5)
-        sidept2 = shaftendpoint - polar(40, shaftangle - π/5)
-        sethue("red")
-        poly([sidept1, endpoint, sidept2], :fill)
-        sethue("black")
-        poly([sidept1, endpoint, sidept2], :stroke, close=true)
-    end
-end
-
 @drawsvg begin
     background("antiquewhite")
         arrow(O, 150, 0, π + π/3,
             linewidth=5,
+            arrowheadlength=50,
             decorate=fletcher,
-            arrowheadfunction = customarrowhead,
             decoration=range(0., .1, length=3))
-end
+end 800 350
 ```
 
 ### Custom arrowheads
 
-To make custom arrowheads, you can define a three-argument function that draws them to your own design. This function should accept three arguments: the point at the end of the arrow's shaft, the point where the tip of the arrowhead would be, and the angle of the shaft at the end. You can then use any code to draw the arrow. Pass this function to the `arrow` function's `arrowheadfunction` keyword.
+To make custom arrowheads, you can define a three-argument
+function that draws them to your own design. This function
+takes: the point at the end of the
+arrow's shaft; the point where the tip of the arrowhead
+would be; and the angle of the shaft at the end. You can
+then use any code to draw the arrow. Pass this function to
+the [`arrow`](@ref) function's `arrowheadfunction` keyword.
 
 ```@example
 using Luxor # hide

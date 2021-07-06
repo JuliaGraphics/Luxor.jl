@@ -28,7 +28,7 @@ makedocs(
             "Work with polygons"           =>  "howto/polygons.md",
             "Add text"                     =>  "howto/text.md",
             "Clip graphics"                =>  "howto/clipping.md",
-            "Placing images"                       =>  "howto/images.md",
+            "Placing images"               =>  "howto/images.md",
             "Turtle graphics"              =>  "howto/turtle.md",
             "Make animations"              =>  "howto/animation.md",
             "Live graphics and snapshots"  =>  "howto/livegraphics.md",
@@ -36,6 +36,7 @@ makedocs(
         "Explanations" => [
             "Basic concepts"               =>  "explanation/basics.md",
             "Image matrix"                 =>  "explanation/imagematrix.md",
+            "Perfect pixels and antialising"  =>  "explanation/perfectpixels.md",
             "Transforms and matrices"      =>  "explanation/transforms.md",
             "Contributing"                 =>  "explanation/contributing.md",
             ],
