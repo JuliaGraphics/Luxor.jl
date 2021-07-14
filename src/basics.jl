@@ -156,10 +156,10 @@ closepath() = Cairo.close_path(get_current_cr())
 """
     strokepath()
 
-Stroke the current path with the current line width, line join, line cap, and
-dash settings. The current path is then cleared.
+Stroke the current path with the current line width, line join, line cap, dash,
+and stroke scaling settings. The current path is then cleared.
 """
-strokepath() = Cairo.stroke(get_current_cr())
+strokepath() = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
 
 """
     fillpath()
@@ -178,10 +178,10 @@ paint() = Cairo.paint(get_current_cr())
 """
     strokepreserve()
 
-Stroke the current path with current line width, line join, line cap, and dash
-settings, but then keep the path current.
+Stroke the current path with current line width, line join, line cap, dash, and
+stroke scaling settings, but then keep the path current.
 """
-strokepreserve()    = Cairo.stroke_preserve(get_current_cr())
+strokepreserve()    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
 
 """
     fillpreserve()
@@ -327,6 +327,23 @@ function setdash(dashes::Vector, offset=0.0)
     # no negative dashes
     Cairo.set_dash(get_current_cr(), abs.(Float64.(dashes)), offset)
 end
+
+
+"""
+    setstrokescale()
+
+Return the current stroke scaling setting.
+"""
+setstrokescale() = get_current_strokescale()
+
+
+"""
+    setstrokescale(state::Bool)
+
+Enable/disable stroke scaling for the current drawing.
+"""
+setstrokescale(state::Bool) = set_current_strokescale(state)
+
 
 """
     move(pt)

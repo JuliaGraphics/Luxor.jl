@@ -11,8 +11,9 @@ mutable struct Drawing
     alpha::Float64
     buffer::IOBuffer # Keeping both buffer and data because I think the buffer might get GC'ed otherwise
     bufferdata::Array{UInt8, 1} # Direct access to data
+    strokescale::Bool
 
-    function Drawing(w, h, stype::Symbol, f::AbstractString="")
+    function Drawing(w, h, stype::Symbol, f::AbstractString=""; strokescale=false)
         bufdata = UInt8[]
         iobuf = IOBuffer(bufdata, read=true, write=true)
         the_surfacetype = stype
@@ -48,7 +49,7 @@ mutable struct Drawing
         end
         the_cr  = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
-        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata)
+        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
         if isempty(CURRENTDRAWING)
             push!(CURRENTDRAWING, currentdrawing)
         else
@@ -90,6 +91,9 @@ current_surface_type()    = getfield(CURRENTDRAWING[1], :surfacetype)
 
 current_buffer()          = getfield(CURRENTDRAWING[1], :buffer)
 current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
+
+get_current_strokescale() = getfield(CURRENTDRAWING[1], :strokescale)
+set_current_strokescale(s)= setfield!(CURRENTDRAWING[1], :strokescale, s)
 
 """
     currentdrawing()
@@ -316,10 +320,17 @@ Drawing(width, height, :rec)
 
 creates the drawing in a recording surface in memory. `snapshot(fname, ...)` to any file format and bounding box,
 or render as pixels with `image_as_matrix()`.
+
+```
+Drawing(width, height, strokescale=true)
+```
+
+creates the drawing and enables stroke scaling (strokes will be scaled according to the current transformation).
+(Stroke scaling is disabled by default.)
 """
-function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
+function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png"; strokescale=false)
     (path, ext)         = splitext(f)
-    currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f)
+    currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f, strokescale=strokescale)
     if isempty(CURRENTDRAWING)
         push!(CURRENTDRAWING, currentdrawing)
     else
@@ -328,14 +339,14 @@ function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png")
     return currentdrawing
 end
 
-function Drawing(paper_size::AbstractString, f="luxor-drawing.png")
+function Drawing(paper_size::AbstractString, f="luxor-drawing.png"; strokescale=false)
   if occursin("landscape", paper_size)
     psize = replace(paper_size, "landscape" => "")
     h, w = paper_sizes[psize]
   else
     w, h = paper_sizes[paper_size]
   end
-  Drawing(w, h, f)
+  Drawing(w, h, f, strokescale=strokescale)
 end
 
 """
