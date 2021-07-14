@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.14.0] - 2021-07-15
+
+### Added
+
+- setstrokescale() - enable/disable stroke scaling
+
+### Changed
+
+- Drawing takes a boolean named argument `strokescale` to enable/disable stroke scaling
+
+### Removed
+
+### Deprecated
+
 ## [v2.13.0] - 2021-07-06
 
 ### Added
@@ -12,7 +26,7 @@
 
 - `polyportion()`/`polyremainder()` now throw error for single-point polys (duh)
 - BoundingBox() no longer fails if there's no drawing (returns a default value)
-- documentation restructed along divio ("grand unified theory of documentation" lines
+- documentation restructured along divio ("grand unified theory of documentation" lines
 
 ### Removed
 
