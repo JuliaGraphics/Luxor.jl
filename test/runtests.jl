@@ -159,6 +159,7 @@ function run_all_tests()
         include("dashtests.jl")
         include("triangles.jl")
         include("place-svg.jl")
+        include("strokescale-test.jl")
     end
 end
 

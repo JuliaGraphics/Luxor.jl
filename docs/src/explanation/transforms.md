@@ -84,14 +84,7 @@ To return home after many changes, you can use [`setmatrix([1, 0, 0, 1, 0, 0])` 
 
 ## Scaling of lines
 
-Line thicknesses are not scaled. For example, with a current line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that lines change thickness after calls to `scale(n)`, you could define your own `strokeraw` function that calls the `cairo_stroke` primitive directly:
-
-```
-import Cairo
-function strokeraw()
-    ccall((:cairo_stroke, Cairo._jl_libcairo), Nothing, (Ptr{Nothing},), Luxor.get_current_cr().ptr)
-end
-```
+Line thicknesses are not scaled by default. For example, with a current line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that lines change thickness after calls to `scale(n)`, you can call `setstrokescale(true)` to enable stroke scaling, and `setstrokescale(false}` to disable it. You can also enable stroke scaling when creating a new `Drawing` by passing the named argument `strokescale` during `Drawing` construction (i.e., `Drawing(400, 400, strokescale=true)`).
 
 # Matrices
 
