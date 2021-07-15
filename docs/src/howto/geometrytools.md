@@ -165,7 +165,7 @@ nothing # hide
 
 ![angle three points](../assets/figures/anglethreepoints.png)
 
-Functions that help with geometry include [`distance`](@ref), [`getnearestpointonline`](@ref), [`pointlinedistance`](@ref), [`slope`](@ref), [`perpendicular`](@ref), [`dotproduct`](@ref), [`@polar`](@ref), [`polar`](@ref), [`ispointonline`](@ref), [`isarcclockwise`](@ref), [`pointinverse`](@ref), [`anglethreepoints`](@ref).
+Functions that help with geometry include [`distance`](@ref), [`getnearestpointonline`](@ref), [`pointlinedistance`](@ref), [`slope`](@ref), [`perpendicular`](@ref), [`dotproduct`](@ref), [`@polar`](@ref), [`polar`](@ref), [`ispointonline`](@ref),[`ispointonpoly`](@ref), [`isarcclockwise`](@ref), [`pointinverse`](@ref), and [`anglethreepoints`](@ref).
 
 ## Triangle centers
 

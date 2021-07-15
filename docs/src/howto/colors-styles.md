@@ -149,9 +149,11 @@ Notice that odd-numbered patterns flip the ink and skip numbers each time throug
 
 ## Blends
 
-A blend is a color gradient. Use [`setblend`](@ref) to select a blend in the same way that you'd use [`setcolor`](@ref) and [`sethue`](@ref) to select a solid color.
+In Luxor, a blend is a color gradient. Use [`setblend`](@ref) to select a blend in the same way that you'd use [`setcolor`](@ref) and [`sethue`](@ref) to select a solid color.
 
 You can make linear or radial blends. Use [`blend`](@ref) in either case.
+
+You can apply a blend to both stroked and filled graphics.
 
 To create a simple linear blend between two colors, supply two points and two colors to [`blend`](@ref):
 
@@ -164,6 +166,10 @@ orangeblue = blend(Point(-200, 0), Point(200, 0), "orange", "blue")
 setblend(orangeblue)
 box(O, 400, 100, :fill)
 rulers()
+
+translate(0, -70)
+rule(O) # stroked line
+
 finish() # hide
 nothing # hide
 ```
