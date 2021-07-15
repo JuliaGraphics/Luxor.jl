@@ -81,7 +81,7 @@ export Drawing,
 
     rect, box, cropmarks,
 
-    setantialias, setline, setlinecap, setlinejoin, setdash,
+    setantialias, setline, setlinecap, setlinejoin, setdash, setstrokescale,
 
     move, rmove, line, rule, rline, arrow, arrowhead, dimension,
 
