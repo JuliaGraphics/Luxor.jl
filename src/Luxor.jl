@@ -55,7 +55,7 @@ include("deprecations.jl")
 include("graphlayout.jl")
 include("Style.jl")
 # include("play.jl") # will require MiniFB
-#include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
+# include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
 export Drawing,
     cm, inch, mm,
@@ -97,10 +97,10 @@ export Drawing,
     circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
     arc, carc, arc2r, carc2r, isarcclockwise, arc2sagitta, carc2sagitta,
     spiral, sector, intersection2circles,
-    intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline,
+    intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline, ispointonpoly,
     intersectlinepoly, polyintersect, polyintersections, circlepointtangent,
     circletangent2circles, pointinverse, pointcircletangent, circlecircleoutertangents,
-    circlecircleinnertangents, ellipseinquad, crescent, 
+    circlecircleinnertangents, ellipseinquad, crescent,
 
     ngon, ngonside, star, pie, polycross,
     do_action, paint, paint_with_alpha, fillstroke,

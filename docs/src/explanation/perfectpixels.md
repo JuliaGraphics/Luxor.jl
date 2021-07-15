@@ -106,7 +106,7 @@ which uses 12 rather than 16 colors.
 
 The anti-aliasing process can vary according to the OS and device you're using. The [Cairo documentation](https://www.cairographics.org/manual/cairo-cairo-t.html) stresses this more than once:
 
-> The value is a hint, and a particular backend may or may not support a particular value. [...] The values make no guarantee on how the backend will perform its rasterisation (if it even rasterises!) [...] The interpretation of CAIRO_ANTIALIAS_DEFAULT is left entirely up to the backend [...]
+> The value is a hint, and a particular backend may or may not support a particular value. [...] The values make no guarantee on how the backend will perform its rasterisation (if it even rasterises!) [...] The interpretation of `CAIRO_ANTIALIAS_DEFAULT` is left entirely up to the backend [...]
 
 ## Text
 
@@ -146,7 +146,7 @@ function draw()
 end
 ```
 
-The output varies depending on the computer, OS, and rendering settings:
+The output varies depending on the computer, OS, and rendering settings.
 
 MacOS standard rendering:
 
@@ -156,6 +156,9 @@ Linux Gnome standard anti-aliasing:
 
 ![linux gnome alias text](../assets/figures/textrendering-linux-gnome-greyscale-aaa .png)
 
+On Windows systems, and on some Linux desktops, text can be
+displayed a _subpixel_ rendering process, switching on the red, green, and blue components of pixels separately where they meet the edges of text in an attempt to provide a “smoother” appearance.
+
 Linux KDE RGB anti-aliasing:
 
 ![linux kde rgb alias text](../assets/figures/textrendering-linux-kde-rgb-subpixel-aa.png)
@@ -164,13 +167,8 @@ Windows Cleartype anti-aliasing:
 
 ![windows cleartype alias text](../assets/figures/textrendering-windows-cleartype.png)
 
-On Windows systems, and on some Linux desktops, text can be
-displayed a subpixel rendering process, so that variously
-colored pixels are drawn around the edges of text in an
-attempt to provide a “smoother” appearance.
-
 In addition, Windows and some Linux systems use
-font-hinting, a process in which the outlines of text glyphs
+_font hinting_, a process in which the outlines of text glyphs
 are shifted so as to align better on the rectangular grid of
 pixels.
 

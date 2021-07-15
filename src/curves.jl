@@ -1114,8 +1114,7 @@ end
 """
 crescent(cp1, r1, cp2, r2, action=nothing;
             vertices=false,
-            reversepath=false,
-            steps = 30)
+            reversepath=false)
 
 Create a crescent-shaped polygon, aligned with the current
 x-axis, by finding the intersection of two circles.

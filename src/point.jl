@@ -311,6 +311,23 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
 end
 
 """
+    ispointonpoly(pt::Point, pgon)
+
+Return `true` if `pt` lies on the polygon `pgon.`
+"""
+function ispointonpoly(pt::Point, pgon::Array{Point, 1};
+        atol=10E-5)
+    @inbounds for i in 1:length(pgon)
+        p1 = pgon[i]
+        p2 = pgon[mod1(i + 1, end)]
+        if ispointonline(pt, p1, p2, atol=atol)
+            return true
+        end
+    end
+    return false
+end
+
+"""
     slope(pointA::Point, pointB::Point)
 
 Find angle of a line starting at `pointA` and ending at `pointB`.

@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.14.0] - forthcoming
+
+### Added
+
+- ispointonpoly
+
+### Changed
+
+### Removed
+
+### Deprecated
+
 ## [v2.13.0] - 2021-07-06
 
 ### Added

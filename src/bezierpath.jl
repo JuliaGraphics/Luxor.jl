@@ -1,3 +1,11 @@
+"""
+BezierPathSegment is an array of four points:
+
+`p1`  - start point
+`cp1` - control point for start point
+`cp2` - control point for finishpoint
+`p2`  - finish point
+"""
 mutable struct BezierPathSegment <: AbstractArray{Luxor.Point, 1}
     p1::Point
     cp1::Point
@@ -29,6 +37,10 @@ end
 #     println(io, "cp2  $(bps.cp2)  p2 $(bps.p2)")
 # end
 
+"""
+BezierPath is an array of BezierPathSegments.
+`segments` is `Vector{BezierPathSegment}`.
+"""
 mutable struct BezierPath <: AbstractArray{BezierPathSegment, 1}
     segments::Vector{BezierPathSegment}
 end

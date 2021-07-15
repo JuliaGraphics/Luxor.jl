@@ -18,7 +18,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |[`offsetpoly`](@ref)           |                        		|                       	|[`BoundingBox`](@ref)     	|[`polysortbyangle`](@ref)      |
 |[`hypotrochoid`](@ref)         |                        		|                       	|[`ispolyclockwise`](@ref)  |[`polysortbydistance`](@ref)   |
 |[`epitrochoid`](@ref)          |                        		|                       	|[`ispolyconvex`](@ref)     |[`polyintersections`](@ref)    |
-|[`polyrotate!`](@ref)          |                        		|                       	|				   			|[`polymove!`](@ref)            |
+|[`polyrotate!`](@ref)          |                        		|                       	|[`ispointonpoly`](@ref)    |[`polymove!`](@ref)            |
 |[`polyfit`](@ref)              |                        		|                       	|				   			|[`polyscale!`](@ref)           |
 |                               |                        		|                       	|				   			|                               |
 |                               |                        		|                       	|				   			|[`polyreflect!`](@ref)         |
@@ -31,8 +31,8 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 | *Bezier paths*                |                        		|                       	|				   			|                               |
 |[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)  	|[`drawbezierpath`](@ref)   |                  			|                               |
 |[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)   	|[`brush`](@ref)            |                  			|                               |
-|[`BezierPath`](@ref)          |                        		|                           |                  			|                               |
-|[`BezierPathSegment`](@ref)    |                        		|                           |                  			|                               |
+|`BezierPath`                   |                        		|                           |                  			|                               |
+|`BezierPathSegment`            |                        		|                           |                  			|                               |
 |[`beziersegmentangles`](@ref)  |                        		|                           |                  			|                               |
 
 ## Regular polygons ("ngons")
