@@ -1104,35 +1104,49 @@ There's a matching [`epitrochoid`](@ref) function.
 
 ## Ticks
 
-The [`tickline`](@ref) function lets you divide a distance between two points into ticks: short lines positioned equidistant between the two end points.
+The [`tickline`](@ref) function lets you divide the space
+between two points by drawing ‘ticks’, short parallel lines
+positioned equidistant between the two points.
 
-In its simplest form it can used to draw basic number lines, complete with text labels.
+In its simplest form the function can used to draw basic
+number lines, complete with automatic text labels.
 
 ```@example
 using Luxor # hide
 @drawsvg begin
-    background("antiquewhite")
-    tickline(Point(-350, -100), Point(350, -100))
-    tickline(Point(-350, 0), Point(350, 0),
-        major=3,
-        startnumber=0, finishnumber=100)
-    tickline(Point(-350, 100), Point(350, 100), major=3, minor=4)
+background("antiquewhite")
+
+# major defaults to 1
+tickline(Point(-350, -100), Point(350, -100))
+
+# three major ticks inserted
+tickline(Point(-350, 0), Point(350, 0),
+    major=3,
+    startnumber=0, finishnumber=100)
+
+# four minor ticks inserted between each major
+tickline(Point(-350, 100), Point(350, 100), major=3, minor=4)
+
 end 800 350  # hide
 ```
 
-These spaced positions (linear or logarithmic) are useful even when you switch off the text display and just return points (using `vertices=true`).
-
 The function returns the positions of the generated ticks in two arrays of points - the locations of the major and minor ticks.
+
+The spaced positions (linear or logarithmic) are useful even when you switch off the display of text (using `vertices=true`) and just return points.
 
 ```@example
 using Luxor # hide
 @drawsvg begin # hide
 background("antiquewhite") # hide
 
+# no axis
 tickline(Point(-350, -100), Point(350, -100), minor=9, axis=false)
 
+# logarithmic
 majticks, minticks = tickline(Point(-350, 0), Point(350, 0),
     major=9,
+    startnumber=1,
+    finishnumber=10,
     log=true,
     vertices=false)
 
@@ -1179,22 +1193,24 @@ Sometimes you just want a sequence of spaced points.
 
 ```@example
 using Luxor, Colors # hide
-@drawsvg begin # hide
-background("black") # hide
-_, minticks = tickline(Point(-400, 0), Point(420, 0),
-        major=1, minor=25,
+
+_, minticks = tickline(Point(-400, 0), Point(260, 0),
+        major=0, minor=40,
         log=true,
         axis=false,
         vertices=true)
 
+@drawsvg begin # hide
+background("black")
 for (n, pt) in enumerate(minticks)
-    k = rescale(n, 0, length(minticks), 0, 1)
-    sethue(LCHab(40, 100, 360k))
-    setline(12k)
-    wave = [pt + Point(50k * sin(y), (360/2π) * y) for y in -2π:π/12:2π]
+    k = rescale(n, 1, length(minticks), 0, 1)
+    sethue(LCHab(60, 100, 360k))
+    setline(1/k)
+    wave = [pt + Point(120k * sin(y), 600/2π * y) for y in -π:π/20:π]
     poly(wave, :stroke)
 end
-end 800 700 # hide
+
+end 800 600  # hide
 ```
 
 ## Cropmarks

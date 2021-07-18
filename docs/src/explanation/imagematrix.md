@@ -2,9 +2,15 @@
 
 # Images as matrices
 
-While drawing, you can copy the current graphics in a drawing as a matrix of pixels, using the [`image_as_matrix`](@ref) function.
+While drawing, you can copy the current graphics in a
+drawing as a matrix of colored pixels, using the
+[`image_as_matrix`](@ref) function. And with the
+[`@imagematrix`](@ref) macro, you can create your drawing
+with vector graphics in the usual way, and then return the
+result as a matrix of colored pixels.
 
-With the [`@imagematrix`](@ref) macro, you can create your drawing with vector graphics in the usual way, but the result is returned as a matrix. This example processes an ampersand in Images.jl.
+The next example draws an ampersand and then processes the
+pixels further in Images.jl.
 
 ```
 using Luxor, Colors, Images, ImageFiltering
@@ -28,13 +34,59 @@ imfilter(img, Kernel.gaussian(10))
 
 ![image matrix](../assets/figures/ampersand-matrix.png)
 
-[`image_as_matrix`](@ref) returns a array of ARGB32 values. Each ARGB value encodes the Red, Green, Blue, and Alpha values of a pixel into a single 32 bit integer.
+[`image_as_matrix`](@ref) returns a array of ARGB32
+(AlphaRedGreenBlue) values. Each ARGB value encodes the Red,
+Green, Blue, and Alpha values of a pixel into a single 32
+bit integer.
 
-The next example draws a red rectangle, then copies the drawing into a matrix called `mat1`. Then it adds a blue triangle, and copies the updated drawing into `mat2`. In the second drawing, values from the two matrices are tested, and table cells are randomly colored depending on the corresponding values ... this is a primitive Boolean operation.
+You can display the matrix using, for example, Images.jl.
+
+```
+using Luxor, Images
+
+# in Luxor
+
+Drawing(250, 250, :png)
+origin()
+background(randomhue()...)
+sethue("red")
+fontsize(200)
+fontface("Georgia")
+text("42", halign=:center, valign=:middle)
+mat = image_as_matrix()
+finish()
+
+# in Images
+
+img = RGB.(mat)
+# img = Gray.(mat) # for greyscale
+
+imfilter(img, Kernel.gaussian(10))
+```
+
+In Luxor:
+
+![42 image array](../assets/figures/42.png)
+
+In Images:
+
+![42 image array](../assets/figures/42gaussian.png)
+
+The next example makes two drawings. The first draws a red rectangle, then copies the
+drawing in its current state into a matrix called `mat1`. Next it adds a blue
+triangle, and copies the updated drawing state into `mat2`.
+
+In the second drawing, values from these two matrices are
+tested, and table cells are randomly colored depending on
+the corresponding values ... this is a primitive Boolean
+operation.
 
 ```@example
 using Luxor, Colors, Random # hide
 Random.seed!(42) # hide
+
+# first drawing
+
 Drawing(40, 40, :png)
 origin()
 background("black")
@@ -78,36 +130,3 @@ In the second drawing, a table with 1600 squares is colored according to the val
 ![image drawings](../assets/figures/image-drawings.svg)
 
 (You can use `collect` to gather the re-interpreted values together.)
-
-You can display the matrix using, for example, Images.jl.
-
-```
-using Luxor, Images
-
-# in Luxor
-
-Drawing(250, 250, :png)
-origin()
-background(randomhue()...)
-sethue("red")
-fontsize(200)
-fontface("Georgia")
-text("42", halign=:center, valign=:middle)
-mat = image_as_matrix()
-finish()
-
-# in Images
-
-img = RGB.(mat)
-# img = Gray.(mat) # for greyscale
-
-imfilter(img, Kernel.gaussian(10))
-```
-
-In Luxor:
-
-![42 image array](../assets/figures/42.png)
-
-In Images:
-
-![42 image array](../assets/figures/42gaussian.png)
