@@ -127,7 +127,6 @@ function arrow(startpoint::Point, endpoint::Point;
     newpath()
     line(Point(fromx, fromy), Point(tox, toy), :stroke)
 
-    #  use a user-supplied arrowhead function?
     toppoint = Point(endpoint.x + cos(arrowheadtopsideangle) * arrowheadlength,
                      endpoint.y + sin(arrowheadtopsideangle) * arrowheadlength)
 
@@ -136,6 +135,7 @@ function arrow(startpoint::Point, endpoint::Point;
     bottompoint = Point(endpoint.x + cos(arrowheadbottomsideangle) * arrowheadlength,
                         endpoint.y + sin(arrowheadbottomsideangle) * arrowheadlength)
 
+    #  use a user-supplied arrowhead function?
     if arrowheadfunction === nothing
         poly([toppoint, endpoint, bottompoint], :fill)
     else
@@ -556,4 +556,206 @@ function dimension(p1::Point, p2::Point;
         end
     end
     return (d, t)
+end
+
+"""
+    tickline(startpos, finishpos;
+        startnumber         = 0,
+        finishnumber        = 1,
+        major               = 1,
+        minor               = 0,
+        major_tick_function = nothing,
+        minor_tick_function = nothing,
+        rounding            = 2,
+        axis                = true, # draw the line?
+        log                 = false,
+        vertices            = false # just return the points
+        )
+
+Draw a line with ticks. `major` is the number of ticks
+required between the start and finish point. So `1` divides
+the line in half. `minor` is the number of ticks between
+each major tick.
+
+## Examples
+
+```
+tickline(Point(0, 0), Point(100, 0))
+tickline(Point(0, 0), Point(100, 0), major = 4)
+majorticks, minorticks = tickline(Point(0, 0), Point(100, 0), axis=false)
+```
+
+## Custom ticks
+
+Supply functions to make custom ticks. Custom tick functions
+should have arguments as follows:
+
+```
+function mtick(n, pos;
+        startnumber         = 0,
+        finishnumber        = 1,
+        nticks = 1)
+        ...
+```
+and
+
+```
+function mntick(n, pos;
+        startnumber        = 0,
+        finishnumber       = 1,
+        nticks             = 1,
+        majorticklocations = [])
+        ...
+```
+
+For example:
+
+```
+tickline(O - (300, 0), Point(300, 0),
+    startnumber  = -10,
+    finishnumber = 10,
+    minor        = 0,
+    major        = 4,
+    axis         = false,
+    major_tick_function = (n, pos;
+        startnumber=30, finishnumber=40, nticks=10) -> begin
+        @layer begin
+            translate(pos)
+            ticklength = get_fontsize()
+            line(O, O + polar(ticklength, 3π/2), :stroke)
+            k = rescale(n, 0, nticks - 1, startnumber, finishnumber)
+            ticklength = get_fontsize() * 1.3
+            text("\$(round(k, digits=2))",
+                O + (0, ticklength),
+                halign=:center,
+                valign=:middle,
+                angle = -getrotation())
+        end
+    end)
+```
+"""
+function tickline(startpos, finishpos;
+        startnumber         = 0,
+        finishnumber        = 1,
+        major               = 1,
+        minor               = 0,
+        major_tick_function = nothing,
+        minor_tick_function = nothing,
+        rounding            = 2,
+        axis                = true,
+        log                 = false,
+        vertices            = false)
+
+    # this function is too long
+    # the default function to draw major ticks
+    function _maj_func(n, pos;
+        startnumber         = 0,
+        finishnumber        = 1,
+        nticks = 1)
+        @layer begin
+            translate(pos)
+            ticklength = get_fontsize() * 2
+            line(O, O + polar(ticklength, π/2), :stroke)
+            k = rescale(n, 0, nticks - 1, startnumber, finishnumber)
+            text("$(round(k, digits=rounding))",
+                O + (0, ticklength * 1.3),
+                halign=:center,
+                valign=:top,
+                angle = -getrotation())
+        end
+    end
+    # default to draw minor ticks
+    function _min_func(n, pos;
+        startnumber        = 0,
+        finishnumber       = 1,
+        nticks             = 1,
+        majorticklocations = Point[])
+        @layer begin
+            translate(pos)
+            ticklength = get_fontsize()
+            line(O, O + polar(ticklength, π/2), :stroke)
+            k = rescale(n, 0, nticks - 1, startnumber, finishnumber)
+
+            # if there's a major tick here, skip
+            if pos ∈ majorticklocations
+
+            else
+                text("$(round(k, digits=rounding))",
+                    O + (0, ticklength * 1.3),
+                    halign=:center,
+                    valign=:top,
+                    angle=-getrotation())
+            end
+        end
+    end
+
+    if startnumber == finishnumber
+        throw(error("tickline(): start and finish numbers should be different"))
+    end
+
+    @layer begin
+        translate(startpos)
+        rotate(slope(startpos, finishpos))
+        newfinishpos =  O + polar(distance(startpos, finishpos), 0)
+
+        # draw the axis
+        if axis == true && vertices == false
+            line(O, newfinishpos, :stroke)
+        end
+
+        # 1 major/minor division means 3 ticks (beginning, middle, end)
+
+        if log == true
+            majorticklocations = between.(O, newfinishpos, rescale.(exp10.(range(0, 1, length=(major+2))), 1, 10, 0, 1))
+            n_minorticks = ((major + 1) * (minor + 1)) + 1
+            minorticklocations = between.(O, newfinishpos, rescale.(exp10.(range(0, 1,  length=n_minorticks)), 1, 10, 0, 1))
+        else
+            majorticklocations = between.(O, newfinishpos, range(0, 1, length=(major+2)))
+            n_minorticks = ((major + 1) * (minor + 1)) + 1
+            minorticklocations = between.(O, newfinishpos, range(0, 1, length=n_minorticks))
+        end
+        if vertices == true
+        else
+            # draw the ticks using the supplied functions, or the default ones
+            if major > 0
+                for (n, majorticklocation) in enumerate(majorticklocations)
+                    if major_tick_function === nothing
+                        _maj_func(n - 1, majorticklocation,
+                            startnumber  = startnumber,
+                            finishnumber = finishnumber,
+                            nticks       = length(majorticklocations))
+                    else
+                        # start counting at 0, remember :)
+                        major_tick_function(n - 1, majorticklocation,
+                            startnumber  = startnumber,
+                            finishnumber = finishnumber,
+                            nticks       = length(majorticklocations))
+                    end
+                end
+            end
+
+            if minor >= 1
+                for (n, minorticklocation) in enumerate(minorticklocations)
+                    if minor_tick_function === nothing
+                        _min_func(n - 1, minorticklocation,
+                            startnumber  = startnumber,
+                            finishnumber = finishnumber,
+                            nticks = length(minorticklocations),
+                            majorticklocations = majorticklocations)
+                    else
+                        # start counting at 0!
+                        minor_tick_function(n - 1, minorticklocation,
+                            startnumber  = startnumber,
+                            finishnumber = finishnumber,
+                            nticks = length(minorticklocations),
+                            majorticklocations = majorticklocations)
+                    end
+                end
+            end # minor
+        end # vertices = true
+    end # layer
+    # calculate where the tick locations would be in reality
+    majpts = map(pt -> rotate_point_around_point(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), majorticklocations)
+    minpts = map(pt -> rotate_point_around_point(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), minorticklocations)
+    return (majpts, minpts)
 end

@@ -163,34 +163,24 @@ draw(depth)
 
 The Point type is an immutable composite type containing `x` and `y` fields that specify a 2D point.
 
-## A simple numberline
+## Simple numberlines
+
+[`tickline()`](@ref) is useful for generating spaced points along a line:
 
 ```@example
 using Luxor # hide
-
 @drawsvg begin
-    background("white")
-    fontsize(14)
-    setline(1)
-    ht = 10
-
-    map(f -> begin
-                pt = between(O - (200, 0), O + (200, 0), f)
-                if f * 100 % 50 == 0
-                    ht = 10
-                    text(string(f), pt + (0, 30), halign=:center)
-                else
-                    ht = 4
-                end
-                line(pt + polar(ht, π/2), pt + polar(ht, -π/2), :stroke)
-            end,
-    0:0.05:1.0)
-
-    arrow(O - (220, 0), O + (220, 0))
-end 800 200
+background("black")
+fontsize(12)
+sethue("white")
+tickline(Point(-350, 0), Point(350, 0),
+    finishnumber=100,
+    log=true,
+    major=7)
+end 800 150
 ```
 
-Another way you could approach tasks like this is to use the [`arrow`](@ref) functions, which let you decorate lines. Here's how a curved number line could be made:
+The [`arrow`](@ref) functions let you add decoration to the arrow shafts, so it's possible to use this function to create more complicated spacings. Here's how a curved number line could be made:
 
 ```@example
 using Luxor # hide
@@ -213,6 +203,8 @@ using Luxor # hide
         )
 end 800 300
 ```
+
+The `decorate` function here adds graphics and text at the origin, which is located at each point along the shaft.
 
 ## Draw a matrix
 

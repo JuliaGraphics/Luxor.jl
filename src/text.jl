@@ -67,13 +67,8 @@ function text(t, pt::Point;
     textpointy = pt.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
 
     # need to adjust for any rotation now
-    # rotate finalpt around original point
-    finalpt = Point(textpointx, textpointy)
-    x1 = finalpt.x - pt.x
-    y1 = finalpt.y - pt.y
-    x2 = x1 * cos(angle) - y1 * sin(angle)
-    y2 = x1 * sin(angle) + y1 * cos(angle)
-    finalpt = Point(x2 + pt.x, y2 + pt.y)
+    # rotate around original point
+    finalpt = rotate_point_around_point(Point(textpointx, textpointy), pt, angle)
 
     gsave()
         translate(finalpt)

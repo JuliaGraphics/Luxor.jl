@@ -1,15 +1,17 @@
 # Changelog
 
-## [v2.14.0]
+## [v2.14.0] - forthcoming
 
 ### Added
 
 - setstrokescale() - enable/disable stroke scaling
-- ispointonpoly()
+- ispointonpoly() - true if point lies on polygon (default atol=10e-5)
+- tickline() - spaced points
+- rotate_point_around_point()
 
 ### Changed
 
-- Drawing takes a boolean named argument `strokescale` to enable/disable stroke scaling
+- Drawing() takes a boolean named argument `strokescale` to enable/disable stroke scaling (thanks @JeffreyPalmer!)
 
 ### Removed
 
