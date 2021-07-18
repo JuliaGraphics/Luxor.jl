@@ -1106,9 +1106,9 @@ eachmatch(r"rgb.*?;", s) |> collect
     text("JuliaMono: a monospaced font ", halign=:center)
     text("with reasonable Unicode support", O + (0, 22), halign=:center)
 end 500 150
-write("/tmp/txt.svg", svgstring())
+write("txt.svg", svgstring())
 # minimize SVG
-run(`svgo /tmp/txt.svg -o /tmp/txt-min.svg`)
+run(`svgo txt.svg -o txt-min.svg`)
 ```
 """
 function svgstring()

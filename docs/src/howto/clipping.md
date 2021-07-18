@@ -43,7 +43,7 @@ end
 
 currentwidth = 500 # pts
 currentheight = 500 # pts
-Drawing(currentwidth, currentheight, "/tmp/clipping-tests.pdf")
+Drawing(currentwidth, currentheight, "clipping-tests.pdf")
 origin()
 background("white")
 setopacity(.4)

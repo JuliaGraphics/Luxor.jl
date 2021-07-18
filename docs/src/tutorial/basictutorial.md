@@ -592,7 +592,7 @@ Notice that this function doesn't define anything about what color it is, or whe
             strokepath()
         end
     end
-end 800 800 "/tmp/eggstravaganza.png"
+end 800 800 "eggstravaganza.png"
 ```
 
 ```@setup te7
@@ -766,7 +766,7 @@ For a final experiment with our `egg` function, here's Luxor's [`offsetpoly`](@r
         op = offsetpoly(pgon, i)
         poly(op, :stroke, close=true)
     end
-end 800 800 "/tmp/spike-egg.png"
+end 800 800 "spike-egg.png"
 ```
 
 ```@setup te9

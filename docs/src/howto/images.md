@@ -109,7 +109,7 @@ using Luxor
 width, height = 4000, 4000
 margin = 500
 
-fname = "/tmp/test-image.pdf"
+fname = "test-image.pdf"
 Drawing(width, height, fname)
 origin()
 background("grey25")

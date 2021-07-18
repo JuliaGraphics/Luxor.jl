@@ -52,4 +52,4 @@ preview()
 
 end
 
-point_inside_polygon("/tmp/point-inside-polygon.png")
+point_inside_polygon("point-inside-polygon.png")
