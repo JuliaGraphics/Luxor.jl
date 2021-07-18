@@ -133,7 +133,7 @@ using Luxor
         sethue("white")
         text(string(n), midpoint(bb[1], bb[2]), halign=:center)
     end
-end 400 400 "/tmp/boxmap.svg"
+end 400 400 "boxmap.svg"
 ```
 """
 function boxmap(A::Array, pt::Point, w, h)

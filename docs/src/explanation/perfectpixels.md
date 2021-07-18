@@ -143,7 +143,7 @@ function draw()
             setcolor(matrix[r, c])
             box(table, r, c, :fillstroke)
         end
-    end 400 400 "/tmp/alias-test.png"
+    end 400 400 "alias-test.png"
 end
 ```
 

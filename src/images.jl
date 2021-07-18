@@ -10,7 +10,7 @@ Read a PNG file.
 This returns a image object suitable for placing on the current drawing with `placeimage()`.
 You can access its `width` and `height` fields:
 
-    image = readpng("/tmp/test-image.png")
+    image = readpng("test-image.png")
     w = image.width
     h = image.height
 """
@@ -122,7 +122,7 @@ Placing an SVG file:
 
 ```
 @draw begin
-    mycoollogo = readsvg("/tmp/mylogo.svg")
+    mycoollogo = readsvg("mylogo.svg")
     placeimage(mycoollogo)
 end
 ```
@@ -187,7 +187,7 @@ Place an image matrix on the drawing at `pos` with opacity/transparency `alpha`.
 Use keyword `centered=true` to place the center of the image
 at the position.
 """
-function placeimage(buffer::AbstractMatrix{UInt32}, pt=O; 
+function placeimage(buffer::AbstractMatrix{UInt32}, pt=O;
         alpha=1, centered=false)
     if centered == true
         w, h = size(buffer)
