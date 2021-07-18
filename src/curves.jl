@@ -1076,6 +1076,8 @@ end
 Create a crescent-shaped polygon, aligned with the current x-axis.
 If the inner radius is 0, you'll get a semicircle.
 
+See also ```crescent(pos1, innerradius, pos2, outeradius...)```.
+
 ## Examples
 
 Create a filled crescent shape with outer radius of 200, inner radius of 130.

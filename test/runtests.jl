@@ -1,6 +1,4 @@
-using Test
-
-using Random
+using Test, Random
 Random.seed!(42)
 
 ENV["JULIA_DEBUG"] = Main
@@ -44,6 +42,7 @@ function run_all_tests()
         include("polytriangulate.jl")
         include("pointcircletangent-test.jl")
         include("convexandclockwise.jl")
+        include("various-points-tests.jl")
     end
 
     @testset "text" begin

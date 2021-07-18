@@ -355,7 +355,7 @@ main("my-drawing.svg")
 svgimage # hide
 ```
 
-So, did the JuliaFission organization like their logo? Who knows!? But if not, we can always recycle some of these ideas for future projects... 😃
+So, did the JuliaFission organization like their logo? Who knows - they may still be debataing how accurate a model it should be... But if not, we can always recycle some of these ideas for future projects... 😃
 
 ## Extra credit
 

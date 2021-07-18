@@ -311,7 +311,8 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
 end
 
 """
-    ispointonpoly(pt::Point, pgon)
+    ispointonpoly(pt::Point, pgon;
+        atol=10E-5)
 
 Return `true` if `pt` lies on the polygon `pgon.`
 """
@@ -625,4 +626,17 @@ function ispolyconvex(pts)
         end
     end
     return true
+end
+
+"""
+    rotate_point_around_point(targetpt, pt, angle)
+
+Rotate a point around another by an angle.
+"""
+function rotate_point_around_point(targetpt, pt, angle)
+    x1 = targetpt.x - pt.x
+    y1 = targetpt.y - pt.y
+    x2 = x1 * cos(angle) - y1 * sin(angle)
+    y2 = x1 * sin(angle) + y1 * cos(angle)
+    return Point(x2 + pt.x, y2 + pt.y)
 end

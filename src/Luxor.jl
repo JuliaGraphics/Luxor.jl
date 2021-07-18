@@ -74,46 +74,60 @@ export Drawing,
 
     newpath, closepath, newsubpath,
 
-    BezierPath, BezierPathSegment, bezier, bezier′, bezier′′, makebezierpath, drawbezierpath, bezierpathtopoly, beziertopoly, pathtobezierpaths,
-    bezierfrompoints, beziercurvature, bezierstroke, setbezierhandles, beziersegmentangles, shiftbezierhandles, brush,
+    BezierPath, BezierPathSegment, bezier, bezier′,
+    bezier′′, makebezierpath, drawbezierpath,
+    bezierpathtopoly, beziertopoly, pathtobezierpaths,
+    bezierfrompoints, beziercurvature, bezierstroke,
+    setbezierhandles, beziersegmentangles,
+    shiftbezierhandles, brush,
 
     strokepath, fillpath,
 
     rect, box, cropmarks,
 
-    setantialias, setline, setlinecap, setlinejoin, setdash, setstrokescale,
+    setantialias, setline, setlinecap, setlinejoin, setdash,
+    setstrokescale,
 
-    move, rmove, line, rule, rline, arrow, arrowhead, dimension,
+    move, rmove, line, rule, rline, arrow, arrowhead,
+    dimension, tickline,
 
-    BoundingBox, boxwidth, boxheight, boxdiagonal, boxaspectratio,
-    boxtop, boxbottom, boxtopleft, boxtopcenter, boxtopright, boxmiddleleft,
-    boxmiddlecenter, boxmiddleright, boxbottomleft, boxbottomcenter,
-    boxbottomright,
+    BoundingBox, boxwidth, boxheight, boxdiagonal,
+    boxaspectratio, boxtop, boxbottom, boxtopleft,
+    boxtopcenter, boxtopright, boxmiddleleft,
+    boxmiddlecenter, boxmiddleright, boxbottomleft,
+    boxbottomcenter, boxbottomright,
 
-    intersectboundingboxes, boundingboxesintersect, pointcrossesboundingbox,
+    intersectboundingboxes, boundingboxesintersect,
+    pointcrossesboundingbox,
 
     BoxmapTile, boxmap,
 
-    circle, circlepath, ellipse, hypotrochoid, epitrochoid, squircle, center3pts, curve,
-    arc, carc, arc2r, carc2r, isarcclockwise, arc2sagitta, carc2sagitta,
-    spiral, sector, intersection2circles,
-    intersection_line_circle, intersectionlinecircle, intersectioncirclecircle, ispointonline, ispointonpoly,
-    intersectlinepoly, polyintersect, polyintersections, circlepointtangent,
-    circletangent2circles, pointinverse, pointcircletangent, circlecircleoutertangents,
-    circlecircleinnertangents, ellipseinquad, crescent,
+    circle, circlepath, ellipse, hypotrochoid, epitrochoid,
+    squircle, center3pts, curve, arc, carc, arc2r, carc2r,
+    isarcclockwise, arc2sagitta, carc2sagitta, spiral,
+    sector, intersection2circles, intersection_line_circle,
+    intersectionlinecircle, intersectioncirclecircle,
+    ispointonline, ispointonpoly, intersectlinepoly,
+    polyintersect, polyintersections, circlepointtangent,
+    circletangent2circles, pointinverse, pointcircletangent,
+    circlecircleoutertangents, circlecircleinnertangents,
+    ellipseinquad, crescent,
 
     ngon, ngonside, star, pie, polycross,
     do_action, paint, paint_with_alpha, fillstroke,
 
-    Point, O, randompoint, randompointarray, midpoint, between, slope, intersectionlines,
-    pointlinedistance, getnearestpointonline, isinside,
-    perpendicular, crossproduct, dotproduct, distance,
-    prettypoly, polysmooth, polysplit, poly, simplify,  polycentroid,
-    polysortbyangle, polysortbydistance, offsetpoly, polyfit, currentpoint, hascurrentpoint,
-    getworldposition, anglethreepoints,
+    Point, O, randompoint, randompointarray, midpoint,
+    between, slope, intersectionlines, pointlinedistance,
+    getnearestpointonline, isinside,
+    rotate_point_around_point, perpendicular, crossproduct,
+    dotproduct, distance, prettypoly, polysmooth, polysplit,
+    poly, simplify,  polycentroid, polysortbyangle,
+    polysortbydistance, offsetpoly, polyfit, currentpoint,
+    hascurrentpoint, getworldposition, anglethreepoints,
 
-    polyperimeter, polydistances, polyportion, polyremainder, nearestindex,
-    polyarea, polysample, insertvertices!,
+    polyperimeter, polydistances, polyportion,
+    polyremainder, nearestindex, polyarea, polysample,
+    insertvertices!,
 
     polymove!, polyscale!, polyrotate!, polyreflect!,
 
@@ -126,10 +140,11 @@ export Drawing,
 
     getpath, getpathflat, pathtopoly,
 
-    fontface, fontsize, text, textpath, label,
-    textextents, textoutlines, textcurve, textcentred, textcentered, textright,
-    textcurvecentred, textcurvecentered, get_fontsize,
-    textwrap, textlines, splittext, textbox, texttrack,
+    fontface, fontsize, text, textpath, label, textextents,
+    textoutlines, textcurve, textcentred, textcentered,
+    textright, textcurvecentred, textcurvecentered,
+    get_fontsize, textwrap, textlines, splittext, textbox,
+    texttrack,
 
     setcolor, setopacity, sethue, setgrey, setgray,
     randomhue, randomcolor, @setcolor_str,
@@ -138,8 +153,10 @@ export Drawing,
     setfont, settext,
 
     Blend, setblend, blend, addstop, blendadjust,
-    blendmatrix, rotationmatrix, scalingmatrix, translationmatrix,
-    cairotojuliamatrix, juliatocairomatrix, getrotation, getscale, gettranslation,
+    blendmatrix, rotationmatrix, scalingmatrix,
+    translationmatrix, cairotojuliamatrix,
+    juliatocairomatrix, getrotation, getscale,
+    gettranslation,
 
     setmode, getmode,
 
@@ -158,17 +175,21 @@ export Drawing,
     # animation
     Movie, Scene, animate,
 
-    lineartween, easeinquad, easeoutquad, easeinoutquad, easeincubic, easeoutcubic,
-    easeinoutcubic, easeinquart, easeoutquart, easeinoutquart, easeinquint, easeoutquint,
-    easeinoutquint, easeinsine, easeoutsine, easeinoutsine, easeinexpo, easeoutexpo,
-    easeinoutexpo, easeincirc, easeoutcirc, easeinoutcirc, easingflat, easeinoutinversequad, easeinoutbezier,
+    lineartween, easeinquad, easeoutquad, easeinoutquad,
+    easeincubic, easeoutcubic, easeinoutcubic, easeinquart,
+    easeoutquart, easeinoutquart, easeinquint, easeoutquint,
+    easeinoutquint, easeinsine, easeoutsine, easeinoutsine,
+    easeinexpo, easeoutexpo, easeinoutexpo, easeincirc,
+    easeoutcirc, easeinoutcirc, easingflat,
+    easeinoutinversequad, easeinoutbezier,
 
     # noise
     noise, initnoise,
 
     # experimental polygon functions
-    polyremovecollinearpoints, polytriangulate!, polytriangulate,
-    ispointinsidetriangle, ispolyclockwise, polyorientation, ispolyconvex,
+    polyremovecollinearpoints, polytriangulate!,
+    polytriangulate, ispointinsidetriangle, ispolyclockwise,
+    polyorientation, ispolyconvex,
 
     # triangles
     trianglecircumcenter, triangleincenter, trianglecenter, triangleorthocenter,

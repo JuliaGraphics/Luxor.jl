@@ -45,6 +45,11 @@ function point_inside_polygon(fname)
 
     @test finish() == true
     println("...finished test: output in $(fname)")
+
+
+preview()
+
+
 end
 
-point_inside_polygon("point-inside-polygon.pdf")
+point_inside_polygon("/tmp/point-inside-polygon.png")
