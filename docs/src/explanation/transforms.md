@@ -41,7 +41,7 @@ nothing # hide
 
 ```@example
 using Luxor, Colors, Random # hide
-Drawing(800, 250, "../assets/figures/scale.png") # hide
+Drawing(800, 300, "../assets/figures/scale.png") # hide
 background("antiquewhite") # hide
 Random.seed!(1) # hide
 setline(1) # hide
@@ -172,7 +172,7 @@ julia> getmatrix()
    0.0
 ```
 
-[`transform(a)`](@ref) transforms the current workspace by 'multiplying' the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
+[`transform(a)`](@ref) transforms the current workspace by ‘multiplying’ the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
 
 ```@example
 using Luxor # hide
@@ -218,7 +218,7 @@ If you use [`translate`](@ref) to move the origin to different places on a drawi
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 400, "../assets/figures/getworldposition.png") # hide
+Drawing(800, 400, "../assets/figures/getworldposition.png") # hide
 background("antiquewhite") # hide
 Random.seed!(3) # hide
 setline(1) # hide
@@ -241,13 +241,13 @@ nothing # hide
 
 ## Coordinate conventions
 
-In Luxor, by default, the y axis points downwards, and the x axis points to the right.
+In Luxor, by convention, the y axis points downwards, and the x axis points to the right.
 
 There are basically two main conventions for computer graphics:
 
-- mathematical illustrations, such as graphs, figures, Plots.jl, plots, etc., use the "y upwards" convention
-
 - most computer graphics systems (HTML, SVG, Processing, Cairo, Luxor, image processing, most GUIs, etc) use "y downwards" convention
+
+- mathematical illustrations, such as graphs, figures, Plots.jl, plots, etc., which use the "y upwards" convention
 
 ```@setup conventions
 using Luxor
@@ -261,10 +261,13 @@ diagram = @drawsvg begin
         text("y", O  + (20, -200))
         arrow(O, O  + (200, 0))
         text("x", O  + (200, 20))
+
+        text("maths: y upwards", O  + (0, 100), halign=:center)
     end
 
     @layer begin
         translate(table[2])        
+        text("computing: y downwards", O  + (0, 100), halign=:center)
         rulers()
     end
 
@@ -272,10 +275,10 @@ end 800 450
 ```
 
 ```@example conventions
-diagram
+diagram # hide
 ```
 
-You could use a transformation matrix to reflect the Luxor drawing space in the x-axis.
+You could use a transformation matrix to reflect the Luxor drawing space in the x axis.
 
 ```@example
 using Luxor # hide
@@ -301,13 +304,17 @@ end 800 450 # hide
 
 !!! note
 
-    If you do this, all your text will be incorrectly drawn, so you'd need to use enclose text functions with antoher matrix transformation.
+    If you do this and try to place text, all your text will be incorrectly drawn upside down, so you'd need to enclose any text placement with more matrix transformations.
 
 ## Advanced transformations
 
-For more powerful transformations, consider using Julia packages which are designed specifically for the purpose.
+For more powerful transformations of graphic elements,
+consider using Julia packages which are designed
+specifically for the purpose.
 
-The following example sets up some transformations, which can then be composed in the correct order to transform points.
+The following example sets up some transformations which
+can then be composed in the correct order to transform
+points.
 
 ```
 rawpts = [
