@@ -1,0 +1,16 @@
+@font-face {
+	font-family: JuliaMono-Regular;
+	src:
+		local('JuliaMono'),
+		url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
+}
+
+pre, code {
+	font-family: JuliaMono-Regular !important;
+    font-feature-settings: "calt" 1;
+}
+
+p > a:after {
+    content: "→";
+    font-size: 50%;
+}
