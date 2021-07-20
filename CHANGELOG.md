@@ -1,6 +1,18 @@
 # Changelog
 
-## [v2.14.0] - forthcoming
+## [v2.15.0] - forthcoming
+
+### Added
+
+### Changed
+
+- small change in hyphenation 
+
+### Removed
+
+### Deprecated
+
+## [v2.14.0] - 2021-07-20
 
 ### Added
 
