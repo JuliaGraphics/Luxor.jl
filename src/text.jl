@@ -539,7 +539,11 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
     spaceleft = textwidth
     currentline = String[]
     for word in fields
-        word == "" && continue
+        # hyphenation can leave an empty string field
+        if word == ""
+            word = " "
+            push!(currentline, " ")
+        end
         wordextents =  textextents(word)
         widthofword = wordextents[3] + wordextents[6]
         isapprox(widthofword, 0.0, atol=0.1) && continue
@@ -658,7 +662,6 @@ Returns the position of what would have been the next line.
 function textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
         rightgutter=5,
         leading=0)
-    lines = textlines(s, width; rightgutter=rightgutter)
     lines = textlines(s, width; rightgutter=rightgutter)
     textbox(lines, pos, linefunc=linefunc, leading=leading)
 end
