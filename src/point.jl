@@ -217,57 +217,6 @@ function crossproduct(p1::Point, p2::Point)
     return dotproduct(p1, perpendicular(p2))
 end
 
-function randomordinate(low, high)
-    if low > high
-      low, high = high, low
-    end
-    return low + rand() * abs(high - low)
-end
-
-"""
-    randompoint(lowpt, highpt)
-
-Return a random point somewhere inside the rectangle defined by the two points.
-"""
-function randompoint(lowpt, highpt)
-  Point(randomordinate(lowpt.x, highpt.x), randomordinate(lowpt.y, highpt.y))
-end
-
-"""
-    randompoint(lowx, lowy, highx, highy)
-
-Return a random point somewhere inside a rectangle defined by the four values.
-"""
-function randompoint(lowx, lowy, highx, highy)
-    Point(randomordinate(lowx, highx), randomordinate(lowy, highy))
-end
-
-"""
-    randompointarray(lowpt, highpt, n)
-
-Return an array of `n` random points somewhere inside the rectangle defined by two points.
-"""
-function randompointarray(lowpt, highpt, n)
-  array = Point[]
-  for i in 1:n
-    push!(array, randompoint(lowpt, highpt))
-  end
-  array
-end
-
-"""
-    randompointarray(lowx, lowy, highx, highy, n)
-
-Return an array of `n` random points somewhere inside the rectangle defined by the four
-coordinates.
-"""
-function randompointarray(lowx, lowy, highx, highy, n)
-    array = Point[]
-    for i in 1:n
-        push!(array, randompoint(lowx, lowy, highx, highy))
-    end
-    array
-end
 """
     ispointonline(pt::Point, pt1::Point, pt2::Point;
         extended = false,
