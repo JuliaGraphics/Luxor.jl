@@ -28,6 +28,16 @@ function noisetest(fname)
             box(pos, tiles.tilewidth, tiles.tileheight, :fill)
         end
     end
+
+    # test a custom rng
+    rng = MersenneTwister(1234)
+    initnoise(rng)
+
+    @test 0.0 < noise(.5) <= 1.0
+    @test 0.0 < noise(0.1, 0.5) <= 1.0
+    @test 0.0 < noise(0.1, 0.1, -0.1) <= 1.0
+    @test 0.0 < noise(0.5, 2.0, -2.0, 0.1) <= 1.0
+
     @test finish() == true
 end
 

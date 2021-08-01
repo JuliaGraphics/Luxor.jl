@@ -40,9 +40,9 @@ function _octaves(coords::Array{T, 1} where T <: Real;
     frequency = 1.0
     amplitude = 1.0
     maxval    = 0.0
-    
+
     l = length(coords)
-    
+
     for i in 1:octaves
         if l == 1
             total += simplexnoise(coords[1] * frequency) * amplitude
@@ -53,12 +53,12 @@ function _octaves(coords::Array{T, 1} where T <: Real;
         elseif l == 4
             total += simplexnoise(coords[1] * frequency, coords[2] * frequency, coords[3] * frequency, coords[4] * frequency) * amplitude
         end
-            
+
         maxval += amplitude
         amplitude *= persistence
         frequency *= 2
     end
-    
+
     return total / maxval
 end
 
@@ -200,6 +200,14 @@ julia> initnoise(41); noise(1) # yesterday
 julia> initnoise(41); noise(1) # today
 0.7134000046640385
 ```
+
+If you need to control which type of random number generator is used, you can provide
+your own and it will be used instead of the default Julia implementation.
+
+```
+julia> rng = MersenneTwister(1234) # any AbstractRNG
+julia> initnoise(rng)
+```
 """
 function initnoise(seed)
     Random.seed!(seed)
@@ -213,6 +221,13 @@ function initnoise()
     for i in 1:256
         perm[i]            = rand(Int8)
         permGradIndex3D[i] = rand(Int8)
+    end
+end
+
+function initnoise(rng::AbstractRNG)
+    for i in 1:256
+        perm[i]            = rand(rng, Int8)
+        permGradIndex3D[i] = rand(rng, Int8)
     end
 end
 
