@@ -313,6 +313,53 @@ nothing # hide
 ```
 ![intersection of two circles](../assets/figures/intersection2circles.png)
 
+## Random points
+
+
+You can use [`randompoint`](@ref) and [`randompointarray`](@ref) to create a random Point or list of Points.
+
+The `randompointarray(width, height, distance)` method generates points `distance` units apart at random using a Poisson Disk Sampling method.
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin # hide
+background("black")
+translate(boxtopleft(BoundingBox()))
+for pt in randompointarray(800, 500, 5)
+    setgray(noise(pt.x * 0.009, pt.y * 0.009))
+    circle(pt, 2, :fill)
+end
+end 800 500 # hide
+```
+
+The `randompointarray(point1, point2, 100)` method generates 100 points in the area bounded by two points.
+
+```@example
+using Luxor, Random # hide
+Drawing(400, 250, "../assets/figures/randompoints.png") # hide
+background("white") # hide
+Random.seed!(42) # hide
+origin() # hide
+
+pt1 = Point(-100, -100)
+pt2 = Point(100, 100)
+
+sethue("gray80")
+map(pt -> circle(pt, 6, :fill), (pt1, pt2))
+box(pt1, pt2, :stroke)
+
+sethue("red")
+circle(randompoint(pt1, pt2), 7, :fill)
+
+sethue("blue")
+map(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))
+
+finish() # hide
+nothing # hide
+```
+
+![isinside](../assets/figures/randompoints.png)
+
 ## Bounding boxes
 
 The `BoundingBox` type allows you to use rectangular extents to organize and interact with the 2D drawing area. A `BoundingBox` holds two points, the opposite corners of a bounding box.

@@ -53,6 +53,7 @@ include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
 include("graphlayout.jl")
+include("randompoints.jl")
 include("Style.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl

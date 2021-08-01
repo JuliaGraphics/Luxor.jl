@@ -288,34 +288,6 @@ nothing # hide
 ```
 ![isinside](../assets/figures/isinside.png)
 
-You can use [`randompoint`](@ref) and [`randompointarray`](@ref) to create a random Point or list of Points.
-
-```@example
-using Luxor, Random # hide
-Drawing(400, 250, "../assets/figures/randompoints.png") # hide
-background("white") # hide
-Random.seed!(42) # hide
-origin() # hide
-
-pt1 = Point(-100, -100)
-pt2 = Point(100, 100)
-
-sethue("gray80")
-map(pt -> circle(pt, 6, :fill), (pt1, pt2))
-box(pt1, pt2, :stroke)
-
-sethue("red")
-circle(randompoint(pt1, pt2), 7, :fill)
-
-sethue("blue")
-map(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))
-
-finish() # hide
-nothing # hide
-```
-
-![isinside](../assets/figures/randompoints.png)
-
 ### Quickly changing polygons
 
 If you want to quickly and permanently modify a polygon, there's [`polymove!`](@ref), [`polyscale!`](@ref), [`polyreflect!`](@ref), and [`polyrotate!`](@ref).

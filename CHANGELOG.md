@@ -4,9 +4,12 @@
 
 ### Added
 
+- added method to randompointarray() to generate Poisson-disk sampled points
+- initnoise() can use other RNG
+
 ### Changed
 
-- small change in hyphenation 
+- small change in hyphenation code in textwrap()
 
 ### Removed
 
