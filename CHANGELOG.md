@@ -10,6 +10,7 @@
 ### Changed
 
 - small change in hyphenation code in textwrap()
+- box(pt, w, h, radii) - specify different radii for each corner
 
 ### Removed
 

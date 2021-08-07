@@ -32,7 +32,8 @@ function test_circles(fname)
 
     sethue("black") # hide
     setline(4)
-    box(O, 200, 150, 10, :stroke)
+    # round corners with different radii
+    box(O, 200, 150, collect(range(5, 20, step=4)), :stroke)
 
     for (pos, n) in t
         randomhue()
