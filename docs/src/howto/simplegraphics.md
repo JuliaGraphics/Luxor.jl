@@ -945,21 +945,26 @@ nothing # hide
 
 ![squircles](../assets/figures/squircle.png)
 
-To draw a simple rounded rectangle, supply a corner radius:
+To draw a simple rounded box/rectangle, supply a corner radius.
 
 ```@example
 using Luxor # hide
 Drawing(800, 250, "../assets/figures/round-rect-1.png") # hide
 origin() # hide
 background("antiquewhite") # hide
+setline(6)
 sethue("black") # hide
-setline(4)
 box(O, 200, 150, 10, :stroke)
+sethue("purple")
+box(O, 260, 220, [0, 15, 40, 80], :stroke)
 finish() # hide
 nothing # hide
 ```
 
 ![rounded rect 1](../assets/figures/round-rect-1.png)
+
+The purple box shows how you can specify the radius of each
+corner separately.
 
 Or you could smooth the corners of a box, like so:
 

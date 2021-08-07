@@ -105,43 +105,75 @@ box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:none) =
 
 Draw a box/rectangle centered at point `pt` with `width` and `height` and
 round each corner by `cornerradius`.
+
+The constructed path consists of arcs and straight lines.
 """
-function box(centerpoint::Point, width, height, cornerradius, action::Symbol=:stroke)
+box(centerpoint::Point, width, height, cornerradius::Real, action::Symbol=:stroke) =
+    box(centerpoint, width, height, fill(cornerradius, 4), action)
+
+"""
+    box(pt, width, height, cornerradii::Array, action=:none)
+
+Draw a box/rectangle centered at point `pt` with `width` and `height` and
+round each corner by the corresponding value in the array `cornerradii`.
+
+The constructed path consists of arcs and straight lines.
+
+The first corner is the one at the bottom left, the second at
+the top left, and so on.
+
+## Example
+
+```
+@draw begin
+    box(O, 120, 120, [0, 20, 40, 60], :fill)
+end
+```
+"""
+function box(centerpoint::Point, width, height, cornerradii::Array, action::Symbol=:stroke)
     gsave()
     translate(centerpoint)
-    # go clockwise around box
-    p1center = Point(O.x + width/2 - cornerradius, O.y + height/2 - cornerradius) # bottom right
-    p1start  = Point(O.x + width/2, O.y + height/2 - cornerradius)
-    p1end    = Point(O.x + width/2 - cornerradius, O.y + height/2)
 
-    p2center = Point(O.x - width/2 + cornerradius, O.y + height/2 - cornerradius) # bottom left
-    p2start  = Point(O.x - width/2 + cornerradius, O.y + height/2)
-    p2end    = Point(O.x - width/2, O.y + height/2 - cornerradius)
+    length(cornerradii) != 4 && throw(error("box() must have four values to specify rounded corners"))
 
-    p3center = Point(O.x - width/2 + cornerradius, O.y - height/2 + cornerradius) # top left
-    p3start  = Point(O.x - width/2, O.y - height/2 + cornerradius)
-    p3end    = Point(O.x - width/2 + cornerradius, O.y - height/2)
+    # bottom left
+    p1start  = Point(O.x - width/2 + cornerradii[1], O.y + height/2)
+    p1center = Point(O.x - width/2 + cornerradii[1], O.y + height/2 - cornerradii[1])
+    p1end    = Point(O.x - width/2, O.y + height/2 - cornerradii[1])
 
-    p4center = Point(O.x + width/2 - cornerradius, O.y - height/2 + cornerradius) # top right
-    p4start  = Point(O.x + width/2 - cornerradius, O.y - height/2)
-    p4end    = Point(O.x + width/2, O.y - height/2 + cornerradius)
+    # top left
+    p2start  = Point(O.x - width/2, O.y - height/2 + cornerradii[2])
+    p2center = Point(O.x - width/2 + cornerradii[2], O.y - height/2 + cornerradii[2])
+    p2end    = Point(O.x - width/2 + cornerradii[2], O.y - height/2)
 
+    # top right
+    p3start  = Point(O.x + width/2 - cornerradii[3], O.y - height/2)
+    p3center = Point(O.x + width/2 - cornerradii[3], O.y - height/2 + cornerradii[3])
+    p3end    = Point(O.x + width/2, O.y - height/2 + cornerradii[3])
+
+    # bottom right
+    p4start  = Point(O.x + width/2, O.y + height/2 - cornerradii[4])
+    p4center = Point(O.x + width/2 - cornerradii[4], O.y + height/2 - cornerradii[4])
+    p4end    = Point(O.x + width/2 - cornerradii[4], O.y + height/2)
+
+    #  start at bottom center then bottomleft→topleft→topright→bottomright
     newpath()
-    move(Point(O.x + width/2, O.y))
+    move(Point(O.x, O.y + height/2))
+
     line(p1start)
-    arc(p1center, cornerradius, 0, pi/2, :none)
+    arc(p1center, cornerradii[1], π/2, π, :none)
     line(p1end)
+
     line(p2start)
-
-    arc(p2center, cornerradius, pi/2, pi, :none)
+    arc(p2center, cornerradii[2], π, (3π)/2, :none)
     line(p2end)
+
     line(p3start)
-
-    arc(p3center, cornerradius, pi, (3pi)/2, :none)
+    arc(p3center, cornerradii[3], 3π/2, 0, :none)
     line(p3end)
-    line(p4start)
 
-    arc(p4center, cornerradius, (3pi)/2, 2pi, :none)
+    line(p4start)
+    arc(p4center, cornerradii[4], 0, π/2, :none)
     line(p4end)
 
     closepath()
