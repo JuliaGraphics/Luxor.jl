@@ -171,7 +171,7 @@ export Drawing,
 
     barchart,
 
-    mesh, setmesh, mask,
+    mesh, setmesh, add_mesh_patch, mask,
 
     # animation
     Movie, Scene, animate,
