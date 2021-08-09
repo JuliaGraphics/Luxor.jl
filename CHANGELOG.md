@@ -6,6 +6,7 @@
 
 - added method to randompointarray() to generate Poisson-disk sampled points
 - initnoise() can use other RNG
+- add_mesh_patch() to add more patches to mesh
 
 ### Changed
 

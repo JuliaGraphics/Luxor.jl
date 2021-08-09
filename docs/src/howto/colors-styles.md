@@ -466,6 +466,68 @@ nothing # hide
 
 ![mesh 2](../assets/figures/mesh2.png)
 
+So far these meshes have contained a single defined area - a
+single 'patch'. It's possible to construct meshes that
+consist of more than one patch. The following example
+creates a single mesh consisting of 100 smaller patches,
+which are placed next to each other but don't always define
+the same colors at identical control points.
+
+```@example
+using Luxor, Colors, Random # hide
+
+d = Drawing(500, 500, :png) # hide
+origin() # hide
+Random.seed!(1) # hide
+tiles = Tiler(500, 500, 10, 10, margin=0)
+
+the_mesh = mesh(rect(first(tiles[1]), 10, 10), ["red"])
+
+col1 = RGB(rand(), rand(), rand())
+col2 = RGB(rand(), rand(), rand())
+col3 = RGB(rand(), rand(), rand())
+col4 = RGB(rand(), rand(), rand())
+for (pos, n) in tiles
+	bx = box(
+		pos - (tiles.tilewidth/2, tiles.tileheight/2),
+		pos + (tiles.tilewidth/2, tiles.tileheight/2),
+		vertices = true)
+	add_mesh_patch(the_mesh, bx,
+	 	Random.shuffle!([col1, col2, col3, col4]))
+end
+setmesh(the_mesh)
+paint()
+finish() # hide
+d # hide
+```
+
+This conical example builds a mesh from many triangular
+patches, where each patch shows a different area of the HSB
+color space. The stroked hypotrochoid is drawn using the
+completed mesh.
+
+```@example
+using Luxor, Colors
+
+@drawsvg begin
+    radius = 300
+    L = 300
+    mesh1 = mesh([Point(0, 0), polar(radius, 0), polar(radius, 2π/100)], [RGBA(0, 0, 0, 0)])
+    sethue("red")
+    for θ in range(0, 2π, length=L)
+        t = [O, O + polar(radius, θ), O + polar(radius, θ + 2π/L)]
+        add_mesh_patch(mesh1, t,
+            [
+            HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
+            HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
+            HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
+            ])
+    end
+    setmesh(mesh1)
+    hypotrochoid(350, 155, 100, :stroke)
+end
+```
+
 ## Masks
 
 A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. [`mask`](@ref) takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.

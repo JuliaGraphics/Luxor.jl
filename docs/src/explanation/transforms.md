@@ -92,7 +92,11 @@ To return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` t
 
 ## Linear interpolation of scalars
 
-[`rescale`](@ref) is a convenient utility function for linear interpolation (also called “lerp”). An easy way to visualize it is by imagining two number lines:
+[`rescale`](@ref) is a convenient utility function for
+linear interpolation. An easy way to visualize it is by
+imagining two number lines. A value relative to low and high
+values is rescaled to have the equivalent value relative to
+another pair of low and high values.
 
 ```@setup lerp
 using Luxor
@@ -144,9 +148,20 @@ end 800 200
 diagram # hide
 ```
 
+This function is sometimes called “lerp” in other systems.
+For example, in Processing, the `lerp()` function takes the
+form `lerp(low, high, value)`, where the returned value
+lies between `low` and `high` corresponding to how `value`
+lies between 0 and 1.
+
+The equivalent to `lerp(10, 20, 0.5)` in Luxor is
+`rescale(0.5, 0, 1, 10, 20)`. Luxor requires a ‘from’ scale
+(here `[0, 1]`) although the ‘to’ scale is optional and
+defaults to `[0, 1]`.
+
 ## Scaling of line thickness
 
-Line thicknesses are not scaled by default. For example, with a current line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that a line thickness of 1 is scaled by `n` after calls to `scale(n)`, you can call `[setstrokescale(true)`](@ref) to enable stroke scaling, and `setstrokescale(false}` to disable it. You can also enable stroke scaling when creating a new `Drawing` by passing the named argument `strokescale` during `Drawing` construction (i.e., `Drawing(400, 400, strokescale=true)`).
+Line thicknesses are not scaled by default. For example, with a current line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that a line thickness of 1 is scaled by `n` after calls to `scale(n)`, you can call `[setstrokescale`](@ref) with `true` to enable stroke scaling, and `setstrokescale(false)` to disable it. You can also enable stroke scaling when creating a new `Drawing` by passing the named argument `strokescale` during `Drawing` construction (i.e., `Drawing(400, 400, strokescale=true)`).
 
 ## Matrices
 
@@ -245,9 +260,9 @@ In Luxor, by convention, the y axis points downwards, and the x axis points to t
 
 There are basically two main conventions for computer graphics:
 
-- most computer graphics systems (HTML, SVG, Processing, Cairo, Luxor, image processing, most GUIs, etc) use "y downwards" convention
+- most computer graphics systems (HTML, SVG, Processing, Cairo, Luxor, image processing, most GUIs, etc) use “y downwards” convention
 
-- mathematical illustrations, such as graphs, figures, Plots.jl, plots, etc., which use the "y upwards" convention
+- mathematical illustrations, such as graphs, figures, Plots.jl, plots, etc. use the “y upwards” convention
 
 ```@setup conventions
 using Luxor
