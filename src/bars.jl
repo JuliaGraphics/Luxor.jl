@@ -80,6 +80,9 @@ function barchart(values;
     barchartwidth  = boxwidth(boundingbox)  - 2bargap - 2margin
     barchartheight = boxheight(boundingbox) - 2margin
     barwidth = (barchartwidth - 2bargap)/length(values)
+    if barwidth < 0.1
+        throw(error("barchart() - bars are too small (< 0.1) at $(barwidth)"))
+    end
     # if all bars are equal height, this will force a range
     minbarrange = minvalue - abs(minvalue)
     maxbarrange = maxvalue + abs(maxvalue)
