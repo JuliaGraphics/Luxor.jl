@@ -4,48 +4,83 @@ const Mesh = Cairo.CairoPattern
 	add_mesh_patch(pattern::Mesh, bezierpath::BezierPath,
 		colors=Array{Colors.Colorant, 1})
 
-Add a patch to the mesh pattern in `pattern`.
+Add a new patch to the mesh pattern in `pattern`.
+
+The first three or four elements of the supplied `bezierpath`
+define the three or four sides of the mesh shape.
+
+The `colors` array define the color of each corner point. Colors are reused
+if necessary. At least one color should be supplied.
+
+Use `setmesh()` to select the mesh, which will be used to fill shapes.
 """
 function add_mesh_patch(pattern::Mesh, bezierpath::BezierPath, colors=Array{Colors.Colorant, 1})
 	Cairo.mesh_pattern_begin_patch(pattern)
+	# we must do 3 or 4 vertices, so need 2, 3, and possibly 4
+	if length(bezierpath) == 3
+		pts = bezierpath[2:3]
+		vcount = 3
+	elseif length(bezierpath) >= 4
+		pts = bezierpath[2:4]
+		vcount = 4
+	else
+		throw(error("_add_mesh_patch(): patch should provide 3 or 4 points, not $(length(bezierpath))"))
+	end
+	# use first point
 	Cairo.mesh_pattern_move_to(pattern, bezierpath[1][1].x, bezierpath[1][1].y)
-	vcount = 1
+	# then get next 2 or 3
 	for bp in bezierpath
 		Cairo.mesh_pattern_curve_to(pattern, bp[2].x, bp[2].y, bp[3].x, bp[3].y, bp[4].x, bp[4].y)
-		vcount >= 4 && break # 3, no more than 4, 5 is right out
-		vcount += 1
 	end
-	if length(colors) > 0
-		for n in 1:vcount
-			# always use RGBA, even if RGB supplied
-			col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
-			Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
-		end
+
+	for n in 1:vcount
+		# always use RGBA, even if RGB supplied
+		col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
+		Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
 	end
 	Cairo.mesh_pattern_end_patch(pattern)
 	return pattern
 end
 
+"""
+	add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Array{Colors.Colorant, 1})
+
+Add a new patch to the mesh pattern in `pattern`.
+
+The first three or four sides of the supplied `points` polygon
+define the three or four sides of the mesh shape.
+
+The `colors` array define the color of each corner point. Colors are reused
+if necessary. At least one color should be supplied.
+"""
 function add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Array{Colors.Colorant, 1})
 	Cairo.mesh_pattern_begin_patch(pattern)
-	Cairo.mesh_pattern_move_to(pattern, plist[1].x, plist[1].y)
-	# we must do 3 or 4 vertices
-	vcount = 1
-	for pt in plist[2:end]
-		Cairo.mesh_pattern_line_to(pattern, pt.x, pt.y)
-		vcount >= 5 && break
-		vcount += 1
+	# we must do 3 or 4 vertices, so need 2, 3, and possibly 4
+	if length(plist) == 3
+		pts = plist[2:3]
+		vcount = 3
+	elseif length(plist) >= 4
+		pts = plist[2:4]
+		vcount = 4
+	else
+		throw(error("_add_mesh_patch(): patch should provide 3 or 4 points, not $(length(plist))"))
 	end
-	if length(colors) > 0
-		for n in 1:vcount
-			# always use RGBA, even if RGB supplied
-			col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
-			Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
-		end
+	# use first point
+	Cairo.mesh_pattern_move_to(pattern, plist[1].x, plist[1].y)
+	# then get next 2 or 3
+	for pt in pts
+		Cairo.mesh_pattern_line_to(pattern, pt.x, pt.y)
+	end
+
+	for n in 1:vcount
+		# always use RGBA, even if RGB supplied
+		col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
+		Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
 	end
 	Cairo.mesh_pattern_end_patch(pattern)
 	return pattern
 end
+
 
 """
     mesh(bezierpath::BezierPath,
@@ -91,7 +126,7 @@ mesh(bezierpath::Array{NTuple{4, Point}}, colors=Array{Colors.Colorant, 1}) =
 
 Create a mesh.
 
-Create a mesh. The first three or four sides of the supplied `points` polygon
+The first three or four sides of the supplied `points` polygon
 define the three or four sides of the mesh shape.
 
 The `colors` array define the color of each corner point. Colors are reused
