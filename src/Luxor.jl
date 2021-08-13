@@ -12,20 +12,28 @@ module Luxor
 
 using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG
 
-#= from Cairo use: CairoARGBSurface, CairoEPSSurface, CairoMatrix, CairoPDFSurface, CairoPattern, CairoPatternMesh, CairoSurface, CairoSVGSurface,
-CairoContext, arc, arc_negative, circle, clip, clip_preserve, close_path,
-convert_cairo_path_data, copy_path, copy_path_flat, curve_to, destroy, fill,
-fill_preserve, finish, get_matrix, get_operator, height, image, line_to,
-mesh_pattern_begin_patch, mesh_pattern_curve_to, mesh_pattern_end_patch,
-mesh_pattern_line_to, mesh_pattern_move_to, mesh_pattern_set_corner_color_rgba,
-move_to, new_path, new_sub_path, paint, paint_with_alpha,
-pattern_add_color_stop_rgba, pattern_create_linear, pattern_create_radial,
-read_from_png, rectangle, rel_line_to, rel_move_to, reset_clip, restore, rotate,
-save, scale, select_font_face, set_antialias, set_font_face, set_font_size,
-set_line_cap, set_line_join, set_dash, set_line_type, set_line_width,
-set_matrix, set_operator, set_source, set_source_rgba, set_source_surface,
-show_text, status, stroke, stroke_preserve, text, text_extents, text_path,
-translate, width, write_to_png =#
+#= from Cairo use: CairoARGBSurface, CairoEPSSurface,
+#CairoMatrix, CairoPDFSurface, CairoPattern,
+#CairoPatternMesh, CairoSurface, CairoSVGSurface,
+#CairoContext, arc, arc_negative, circle, clip,
+#clip_preserve, close_path, convert_cairo_path_data,
+#copy_path, copy_path_flat, curve_to, destroy, fill,
+#fill_preserve, finish, get_matrix, get_operator, height,
+#image, line_to, mesh_pattern_begin_patch,
+#mesh_pattern_curve_to, mesh_pattern_end_patch,
+#mesh_pattern_line_to, mesh_pattern_move_to,
+#mesh_pattern_set_corner_color_rgba, move_to, new_path,
+#new_sub_path, paint, paint_with_alpha,
+#pattern_add_color_stop_rgba, pattern_create_linear,
+#pattern_create_radial, pattern_set_extend, read_from_png,
+#rectangle, rel_line_to, rel_move_to, reset_clip, restore,
+#rotate, save, scale, select_font_face, set_antialias,
+#set_font_face, set_font_size, set_line_cap, set_line_join,
+#set_dash, set_line_type, set_line_width, set_matrix,
+#set_operator, set_source, set_source_rgba,
+#set_source_surface, show_text, status, stroke,
+#stroke_preserve, text, text_extents, text_path, translate,
+#width, write_to_png =#
 
 include("drawings.jl")
 include("point.jl")
@@ -154,7 +162,7 @@ export Drawing,
     setfont, settext,
 
     Blend, setblend, blend, addstop, blendadjust,
-    blendmatrix, rotationmatrix, scalingmatrix,
+    blendmatrix, setblendextend, rotationmatrix, scalingmatrix,
     translationmatrix, cairotojuliamatrix,
     juliatocairomatrix, getrotation, getscale,
     gettranslation,

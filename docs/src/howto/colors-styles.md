@@ -7,17 +7,25 @@ DocTestSetup = quote
 
 ## Color and opacity
 
-For color definitions and conversions, you can use [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).
+For color definitions and conversions, you can use
+[Colors.jl](https://github.com/JuliaGraphics/Colors.jl).
 
-[`setcolor`](@ref) and [`sethue`](@ref) will apply a single solid or transparent color to new graphics.
+[`setcolor`](@ref) and [`sethue`](@ref) will apply a single
+solid or transparent color to new graphics.
 
-[`setblend`](@ref) will apply a smooth transition between two or more colors to new graphics.
+[`setblend`](@ref) will apply a smooth transition between
+two or more colors to new graphics.
 
 [`setmesh`](@ref) will apply a color mesh to new graphics.
 
-The difference between the [`setcolor`](@ref) and [`sethue`](@ref) functions is that [`sethue`](@ref) doesn't change alpha opacity (transparency), so you can change the hue without changing the current alpha opacity (transparency) value.
+The difference between the [`setcolor`](@ref) and
+[`sethue`](@ref) functions is that [`sethue`](@ref) doesn't
+change alpha opacity (transparency), so you can change the
+hue without changing the current alpha opacity
+(transparency) value.
 
-Named colors, such as "gold", or "lavender", can be found in `Colors.color_names` dictionary.
+Named colors, such as "gold", or "lavender", can be found in
+`Colors.color_names` dictionary.
 
 ```@example
 using Luxor, Colors # hide
@@ -242,7 +250,7 @@ nothing # hide
 
 ![blends 1](../assets/figures/color-blends-translate-1.png)
 
-Outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go (there are Cairo options to change this). But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
+By default, outside the range of the original blend's definition, the same color is used, no matter how far away from the origin you go. But in the next example, the blend is relocated to the current axes, which have just been moved to the center of the tile. The blend refers to `0/0` each time, which is at the center of shape.
 
 ```@example
 using Luxor # hide
@@ -311,23 +319,96 @@ nothing # hide
 
 ![blends adjust](../assets/figures/blend-adjust.png)
 
-The blend is defined to span 200 units, horizontally centered at 0/0. The top line is also 200 units long and centered horizontally at 0/0, so the blend is rendered exactly as you'd hope.
+The blend is defined to span 200 units, horizontally
+centered at 0/0. The top line is also 200 units long and
+centered horizontally at 0/0, so the blend is rendered
+exactly as you'd hope.
 
-The second line is only half as long, at 100 units, centered at 50/0, so [`blendadjust`](@ref) is used to relocate the blend's center to the point 50/0 and scale it by 0.5 (`100/200`).
+The second line is only half as long, at 100 units, centered
+at 50/0, so [`blendadjust`](@ref) is used to relocate the
+blend's center to the point 50/0 and scale it by 0.5
+(`100/200`).
 
-The third line is also 100 units long, centered at -50/0, so again [`blendadjust`](@ref) is used to relocate the blend's center and scale it.
+The third line is also 100 units long, centered at -50/0, so
+again [`blendadjust`](@ref) is used to relocate the blend's
+center and scale it.
 
-The fourth line shows that you can translate and scale the axes instead of adjusting the blend, if you use [`setblend`](@ref) again in the new scene.
+The fourth line shows that you can translate and scale the
+axes instead of adjusting the blend, if you use
+[`setblend`](@ref) again in the new scene.
 
-## Blending (compositing) operators
+### Blend extensions
 
-Graphics software provides ways to modify how the virtual "ink" is applied to previously-drawn graphic elements. In PhotoShop and other software, the compositing process is done using [blend modes](https://en.wikipedia.org/wiki/Blend_modes).
+Use `setblendextend()` to control what happens when the
+shape you're drawing occupies an area larger than the blend
+you're using. In this example, the four possible modes are
+used to draw the same 150 unit radius circle using a much
+smaller 30 unit radial blend that starts at orange, and
+passes through green, to blue. If the blend is smaller than
+the shape, then a mode of "none" won't draw the shape
+outside the boundary of the blend.
 
-Use [`setmode`](@ref) to set the blending mode of subsequent graphics.
+```@example
+using Luxor, Colors # hide
+
+function drawcircle_with_mode(extendmode)
+    setdash("dot")
+    circle(O, 150, :stroke)
+    a_blend = blend(O, 0,  O, 30, "orange", "midnightblue")
+    addstop(a_blend, 0.5, "green")
+    setblend(a_blend)
+    setblendextend(a_blend, extendmode)    
+    circle(O, 150, :fill)
+    sethue("black")
+    text(string(extendmode), Point(0, -tiles.tileheight/2), halign=:center)
+end
+
+d = Drawing(800, 800, :png) # hide
+origin() # hide
+background("grey40") # hide
+tiles = Tiler(750, 750, 2, 2) # hide
+fontsize(30) # hide
+
+@layer begin
+    translate(first(tiles[1]))
+    drawcircle_with_mode("none")
+end
+
+@layer begin
+    translate(first(tiles[2]))
+    drawcircle_with_mode("repeat")
+end
+
+@layer begin
+    translate(first(tiles[3]))
+    drawcircle_with_mode("reflect")
+end
+
+@layer begin
+    translate(first(tiles[4]))
+    drawcircle_with_mode("pad")
+end
+finish() # hide
+d # hide
+```
+
+## Compositing operators
+
+Graphics software provides ways to modify how the virtual
+"ink" is applied to previously-drawn graphic elements. In
+PhotoShop and other software, the compositing process is
+done using what they call [blend
+modes](https://en.wikipedia.org/wiki/Blend_modes).
+
+Use [`setmode`](@ref) to set the blending/compositing mode
+of subsequent graphics.
+
+The following examples place a blue circle with 0.7 opacity
+on top of a red circle.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "../assets/figures/blendmodes.png") # hide
+d = Drawing(600, 600, :png) # hide
 origin()
 # transparent, no background
 fontsize(15)
@@ -344,15 +425,15 @@ for (pos, n) in tiles
     # calculate points for circles
     diag = (Point(-tiles.tilewidth/2, -tiles.tileheight/2),
             Point(tiles.tilewidth/2,  tiles.tileheight/2))
-    upper = between(diag, 0.4)
-    lower = between(diag, 0.6)
+    upper = between(diag, 0.45)
+    lower = between(diag, 0.55)
 
     # first red shape uses default blend operator
-    setcolor(0.7, 0, 0, .8)
+    setcolor(0.7, 0, 0, .7)
     circle(upper, tiles.tilewidth/4, :fill)
 
     # second blue shape shows results of blend operator
-    setcolor(0, 0, 0.9, 0.4)
+    setcolor(0, 0, 0.9, 0.7)
     blendingmode = Luxor.blendingmodes[mod1(n, modes)]
     setmode(blendingmode)
     circle(lower, tiles.tilewidth/4, :fill)
@@ -362,30 +443,44 @@ for (pos, n) in tiles
 
     gsave()
     translate(pos)
-    text(Luxor.blendingmodes[mod1(n, modes)], O.x, O.y + tiles.tilewidth/2, halign=:center)
+    sethue("antiquewhite")
+    txt = Luxor.blendingmodes[mod1(n, modes)]
+    pos = O + (0, tiles.tilewidth/2)
+    box(pos, textextents(txt)[3] + 5, 25, :fill)
+    sethue("black")
+    text(txt, pos, halign=:center, valign=:middle)
     grestore()
 end
 finish() # hide
-nothing # hide
+d # hide
 ```
 
-![blend modes](../assets/figures/blendmodes.png)
+Notice in this example that clipping was used to restrict
+the area affected by the blending process.
 
-Notice in this example that clipping was used to restrict the area affected by the blending process.
+In Cairo, these blend modes are called *operators*. For a
+more detailed explanation, refer to [the Cairo
+documentation](https://www.cairographics.org/operators/).
 
-In Cairo, these blend modes are called *operators*. For a more detailed explanation, refer to [the Cairo documentation](https://www.cairographics.org/operators/).
-
-You can access the list of modes with the unexported symbol `Luxor.blendingmodes`.
+You can access the list of modes with the unexported symbol
+`Luxor.blendingmodes`.
 
 ## Meshes
 
-A mesh provides smooth shading between three or four colors across a region defined by lines or curves.
+A mesh provides smooth shading between three or four colors
+across a region defined by lines or curves.
 
-To create a mesh, use the [`mesh`](@ref) function and save the result as a mesh object. To use a mesh, supply the mesh object to the [`setmesh`](@ref) function.
+To create a mesh, use the [`mesh`](@ref) function and save
+the result as a mesh object. To use a mesh, supply the mesh
+object to the [`setmesh`](@ref) function.
 
-The [`mesh`](@ref) function accepts either an array of Bézier paths or a polygon.
+The [`mesh`](@ref) function accepts either an array of
+Bézier paths or a polygon.
 
-This basic example obtains a polygon from the drawing area using `box(BoundingBox()...` and uses the four corners of the mesh and the four colors in the array to build the mesh. The [`paint`](@ref) function fills the drawing.
+This basic example obtains a polygon from the drawing area
+using `box(BoundingBox()...` and uses the four corners of
+the mesh and the four colors in the array to build the mesh.
+The [`paint`](@ref) function fills the drawing.
 
 ```@example
 using Luxor, Colors # hide
@@ -468,10 +563,11 @@ nothing # hide
 
 So far these meshes have contained a single defined area - a
 single 'patch'. It's possible to construct meshes that
-consist of more than one patch. The following example
-creates a single mesh consisting of 100 smaller patches,
-which are placed next to each other but don't always define
-the same colors at identical control points.
+consist of more than one patch. The following example uses
+[`add_mesh_patch`](@ref) creates a single mesh consisting of
+100 smaller patches, which are placed next to each other but
+don't always define the same colors at identical control
+points.
 
 ```@example
 using Luxor, Colors, Random # hide
@@ -530,9 +626,18 @@ end
 
 ## Masks
 
-A simple mask function lets you use a circular or rectangular shape to control graphics that are drawn over it. [`mask`](@ref) takes a position and a shape, and returns a value between 0 and 1 for that position, depending on its position relative to the shape.
+A simple mask function lets you use a circular or
+rectangular shape to control graphics that are drawn over
+it. [`mask`](@ref) takes a position and a shape, and returns
+a value between 0 and 1 for that position, depending on its
+position relative to the shape.
 
-In the first example, the gray color of each tile is determined by its location relative to the center of the masking circle `(O, bw/2)`; the value is `1.0` at the center, and `0.0` at the circumference. The value could be used to control opacity, shape, or anything else that is relevant to graphics at a particular position.
+In the first example, the gray color of each tile is
+determined by its location relative to the center of the
+masking circle `(O, bw/2)`; the value is `1.0` at the
+center, and `0.0` at the circumference. The value could be
+used to control opacity, shape, or anything else that is
+relevant to graphics at a particular position.
 
 ```@example
 using Luxor # hide

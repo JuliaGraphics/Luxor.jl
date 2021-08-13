@@ -171,3 +171,29 @@ function blendmatrix(b::Blend, m)
     cm = Cairo.CairoMatrix(m[1], m[2], m[3], m[4], m[5], m[6])
     Cairo.set_matrix(b, cm)
 end
+
+"""
+    setblendextend(blend::Blend, mode)
+
+Specify how color blend patterns are repeated/extended. Supply the blend and one of the following strings:
+
+- "repeat":  the pattern is repeated
+
+- "reflect": the pattern is reflected (repeated in reverse)
+
+- "pad": outside the pattern, use the closest color
+
+- "none": outside of the pattern, use transparent pixels
+
+"""
+function setblendextend(blend::Blend, mode)
+    if mode == "repeat" || mode == :repeat
+        Cairo.pattern_set_extend(blend, Cairo.EXTEND_REPEAT)
+    elseif mode == "reflect" || mode == :reflect
+        Cairo.pattern_set_extend(blend, Cairo.EXTEND_REFLECT)
+    elseif mode == "pad" || mode == :pad
+        Cairo.pattern_set_extend(blend, Cairo.EXTEND_PAD)
+    else
+        Cairo.pattern_set_extend(blend, Cairo.EXTEND_NONE)
+    end
+end
