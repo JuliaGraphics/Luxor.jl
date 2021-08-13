@@ -23,9 +23,24 @@ finish()
 preview()
 ```
 
-`Drawing(1000, 1000, "hello-world.png")` defines the width, height, location, and type of the finished image. [`origin`](@ref) moves the 0/0 point to the centre of the drawing surface (by default it's at the top left corner). Thanks to `Colors.jl` we can specify colors by name as well as by numeric value: [`background("black")`](@ref) defines the color of the background of the drawing. `text("helloworld")` draws the text. It's placed at the current 0/0 point and left-justified if you don't specify otherwise. [`finish`](@ref) completes the drawing and saves the PNG image in the file. [`preview`](@ref) tries to display the saved file, perhaps using another application (eg Preview on macOS).
+`Drawing(1000, 1000, "hello-world.png")` defines the width,
+height, location, and type of the finished image.
+[`origin`](@ref) moves the 0/0 point to the centre of the
+drawing surface (by default it's at the top left corner).
+Thanks to `Colors.jl` we can specify colors by name as well
+as by numeric value: [`background("black")`](@ref) defines
+the color of the background of the drawing.
+`text("helloworld")` draws the text. It's placed at the
+current 0/0 point and left-justified if you don't specify
+otherwise. [`finish`](@ref) completes the drawing and saves
+the PNG image in the file. [`preview`](@ref) tries to
+display the saved file, perhaps using another application
+(eg Preview on macOS).
 
-The macros `@png`, `@svg`, `@pdf`, `@draw`, and `@imagematrix` provide shortcuts for making and previewing graphics without you having to provide the usual set-up and finish instructions:
+The macros `@png`, `@svg`, `@pdf`, `@draw`, and
+`@imagematrix` provide shortcuts for making and previewing
+graphics without you having to provide the usual set-up and
+finish instructions:
 
 ```julia
 # using Luxor
@@ -122,8 +137,6 @@ Here's a version of the Sierpinski recursive triangle, clipped to a circle.
 ![Sierpinski](../assets/figures/sierpinski.png)
 
 ```julia
-# Subsequent examples will omit these setup and finishing functions:
-#
 # using Luxor, Colors
 # Drawing()
 # background("white")

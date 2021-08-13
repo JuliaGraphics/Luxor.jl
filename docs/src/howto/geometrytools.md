@@ -315,17 +315,19 @@ nothing # hide
 
 ## Random points
 
+You can use [`randompoint`](@ref) and
+[`randompointarray`](@ref) to create a random Point or list
+of Points.
 
-You can use [`randompoint`](@ref) and [`randompointarray`](@ref) to create a random Point or list of Points.
-
-The `randompointarray(width, height, distance)` method generates points `distance` units apart at random using a Poisson Disk Sampling method.
+The `randompointarray(boundingbox, distance)` method fills
+the boundingbox with random points up to `distance` units apart
+using a Poisson Disk Sampling method.
 
 ```@example
 using Luxor, Colors # hide
 @drawsvg begin # hide
 background("black")
-translate(boxtopleft(BoundingBox()))
-for pt in randompointarray(800, 500, 5)
+for pt in randompointarray(BoundingBox(), 5)
     setgray(noise(pt.x * 0.009, pt.y * 0.009))
     circle(pt, 2, :fill)
 end

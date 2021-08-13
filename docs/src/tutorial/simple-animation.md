@@ -5,9 +5,9 @@ a series of PNG images into an animated GIF.
 
 !!! note
 
-    To make richer or more complex animations, you should use [Javis.jl](https://github.com/Wikunia/Javis.jl).
+    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl).
 
-## A Julia spinner
+## 1: A Julia spinner
 
 The first thing to do is to create a `Movie` object. This acts as a useful object that we can pass from function to function.
 
@@ -68,7 +68,7 @@ rotation will take longer and will be much
 smoother. Unless, of course, you change the framerate to be
 something other than the default `30`.
 
-## Combining scenes
+## 2: Combining scenes
 
 In the next example, we'll construct an animation that uses different scenes.
 
@@ -163,7 +163,7 @@ animate(sun24demo, [
 
 Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called.
 
-## An alternative
+### An alternative
 
 As this is a very simple example, there is of course an easier wayto make this particular animation.
 

@@ -63,22 +63,23 @@ function meshtest3(fname)
     Drawing(1200, 1200, fname)
     origin()
     background("ivory")
-    setcolor("black")
-    fontsize(60)
-    text("illuminati", halign=:center)
-    bp = makebezierpath(ngon(O, 250, 3, pi/6, vertices=true))
+    bp = makebezierpath(ngon(O, 600, 3, pi/6, vertices=true))
     mesh1 = mesh(bp, [
         "purple",
         Colors.RGBA(randomcolor()...),
         "yellow"
         ])
+    add_mesh_patch(mesh1, makebezierpath(ngon(O, 400, 4, vertices=true)), ["red", "blue", "green"])
     setmesh(mesh1)
-    setline(260)
+    setline(550)
     drawbezierpath(bp, :strokepreserve)
 
     setline(5)
     sethue("black")
     strokepath()
+    setcolor("black")
+    fontsize(60)
+    text("illuminati", halign=:center)
     @test finish() == true
 end
 

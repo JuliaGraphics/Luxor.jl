@@ -51,6 +51,30 @@ function tick_test(fname)
     # all minor ticks should be 5.0 apart
     @test all(pt -> isapprox(pt, Point(50.0, 0.0)), diff(minorticks))
 
+    translate(0, 100)
+
+    majorticks, minorticks = tickline(O - (150, 0), O + (150, 0), major=10, minor=4, vertices=true)
+    sethue("purple")
+    setline(0.5)
+    rule.(majorticks, π/2, boundingbox=BoundingBox(O - (200, 10), O + (200, 10)))
+    rule.(minorticks, π/2, boundingbox=BoundingBox(O - (200, 5), O + (200, 5)))
+
+    @test length(majorticks) == 12
+    @test length(minorticks) == 56
+
+
+    translate(0, 50)
+
+    majorticks, minorticks = tickline(O - (150, 0), O + (150, 0), log = true, major=10, minor=4, vertices=true)
+
+    sethue("black")
+    setline(0.5)
+    rule.(majorticks, -π/3, boundingbox=BoundingBox(O - (200, 10), O + (200, 10)))
+    rule.(minorticks, -π/3, boundingbox=BoundingBox(O - (200, 5), O + (200, 5)))
+
+    @test length(majorticks) == 12
+    @test length(minorticks) == 56
+
     @test finish() == true
     println("...finished test: output in $(fname)")
 end

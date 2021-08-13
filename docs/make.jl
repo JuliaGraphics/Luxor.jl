@@ -11,9 +11,9 @@ makedocs(
     pages    = [
         "Introduction to Luxor"            =>  "index.md",
         "Tutorials" => [
-            "A first tutorial"             =>  "tutorial/basictutorial.md",
-            "Quick start"                  =>  "tutorial/quickstart.md",
-            "Simple animations"            =>  "tutorial/simple-animation.md",
+            "Quick and short"              =>  "tutorial/quickstart.md",
+            "Longer"                       =>  "tutorial/basictutorial.md",
+            "Simple animation"             =>  "tutorial/simple-animation.md",
             ],
         "Examples" => [
             "Simple examples"              =>  "example/examples.md",
@@ -38,6 +38,7 @@ makedocs(
             "Image matrix"                 =>  "explanation/imagematrix.md",
             "Perfect pixels and antialising"  =>  "explanation/perfectpixels.md",
             "Transforms and matrices"      =>  "explanation/transforms.md",
+            "Luxor and Cairo"              =>  "explanation/luxorcairo.md",
             "Contributing"                 =>  "explanation/contributing.md",
             ],
         "Reference" => [
