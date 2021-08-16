@@ -57,7 +57,7 @@ function draw(antialias)
 end
 ```
 
-The [`setantialias`](@ref) function lets you set the anti-aliasing amount to a constant between 0 and 6. The Cairo documentation describes the different values as follows:
+The [`setantialias`](@ref) function lets you specify the anti-aliasing amount as an integer constant between 0 and 6. The Cairo documentation describes the different values as follows:
 
 | Value  | Name                      | Description     |
 |:-----  |:----                      |:----            |
@@ -69,7 +69,7 @@ The [`setantialias`](@ref) function lets you set the anti-aliasing amount to a c
 |5       |`CAIRO_ANTIALIAS_GOOD`     |The backend should balance quality against performance|
 |6       |`CAIRO_ANTIALIAS_BEST`     |Hint that the backend should render at the highest quality, sacrificing speed if necessary|
 
-To show the anti-aliasing in action, the following code draws a red circle:
+To show the anti-aliasing in action, the following code generates a red circle:
 
 ```
 Drawing(20, 20, :image)
@@ -81,7 +81,7 @@ mat = image_as_matrix()
 finish()
 ```
 
-This matrix can then be redrawn larger to show the effects of anti-aliasing better. Here's the default anti-aliasing value of 0:
+This matrix is now redrawn larger to show the effects of anti-aliasing better. Here's the default anti-aliasing value of 0:
 
 ```@example draw_matrix
 draw(0) # hide
@@ -89,7 +89,7 @@ draw(0) # hide
 
 and you can see that Luxor used 18 different colors to render this red circle.
 
-Here’s the result of the bilevel mask (value 1 or “none”) setting:
+Here’s the result of the bilevel mask, `setantialias(1)`, the “none” setting:
 
 ```@example draw_matrix
 draw(1) # hide
@@ -111,7 +111,7 @@ The anti-aliasing process can vary according to the OS and device you're using. 
 
 ## Text
 
-The anti-aliasing described above does not apply to text.
+Cairo's anti-aliasing described above does not apply to text.
 
 Text rendering is much more platform-dependent than graphics; Windows, MacOS, and Linux all have their own methods for rendering and rasterizing fonts, and currently Cairo.jl doesn't provide an interface to the underlying font rendering APIs.
 
@@ -147,20 +147,23 @@ function draw()
 end
 ```
 
-The output varies depending on the computer, OS, and rendering settings.
+The output varies depending on the computer, operating system, and rendering settings.
 
-MacOS standard rendering:
+Here’s the MacOS standard rendering:
 
 ![macos alias text](../assets/figures/textrendering-macos-alias-test.png)
 
-Linux Gnome standard anti-aliasing:
+Here’s Linux Gnome’s standard anti-aliasing:
 
 ![linux gnome alias text](../assets/figures/textrendering-linux-gnome-greyscale-aaa .png)
 
 On Windows systems, and on some Linux desktops, text can be
-displayed using a _subpixel_ rendering process, which switches the red, green, and blue components of pixels on or off where they meet the edges of text in an attempt to provide a “smoother” appearance.
+displayed using a _subpixel_ rendering process, which
+switches the red, green, and blue components of pixels on or
+off where they meet the edges of text in an attempt to
+provide a “smoother” appearance.
 
-Linux KDE RGB anti-aliasing:
+Here’s Linux KDE RGB anti-aliasing:
 
 ![linux kde rgb alias text](../assets/figures/textrendering-linux-kde-rgb-subpixel-aa.png)
 
@@ -176,4 +179,5 @@ pixels.
 If you want text to be rendered precisely (and in the
 specified color) it might be worth investigating Luxor’s
 [`textoutlines`](@ref) function, which converts text to
-vector-based outlines.
+vector-based outlines. These are then susceptible to the
+anti-aliasing settings described above.

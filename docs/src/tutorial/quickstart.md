@@ -110,7 +110,6 @@ end 500 500
 ```
 
 ```julia
-
 Drawing(500, 500, "my-drawing.svg")
 origin()
 
@@ -123,7 +122,6 @@ end
 
 finish()
 preview()
-
 ```
 
 ```@example example_3
@@ -177,12 +175,12 @@ svgimage # hide
 ## Taking particles seriously
 
 The flat circles are a bit dull, so let's write a function
-that takes circles seriously. The `drawcircle()` function
+that draws the circles as 'particles'. The `drawcircle()` function
 draws lots of circles, but each one is drawn with a slightly
 smaller radius and a slightly lighter shade of the incoming
 color. The [`rescale`](@ref) function in Luxor provides an
-easy way to map or adjust values from one range to another;
-here, numbers between 5 and 1 are mapped to numbers between
+easy way to map or adjust values from one range to another.
+Here, numbers between 5 and 1 are mapped to numbers between
 0.5 and 3. And the radius is scaled to run between `radius`
 and `radius/6`. Also, let's make them get larger as they
 spiral outwards, by adding `4i` to the radius when called by
@@ -270,7 +268,6 @@ end 500 500
 ```
 
 ```julia
-
 Drawing(500, 500, "my-drawing.svg")
 origin()
 
@@ -282,7 +279,6 @@ end
 
 finish()
 preview()
-
 ```
 
 ```@example example_6
@@ -298,7 +294,7 @@ The final script looks like this:
 ```@setup example_7
 using Luxor, Colors
 
-const colors = (Luxor.julia_green, Luxor.julia_red,Luxor.julia_purple, Luxor.julia_blue)
+const colors = (Luxor.julia_green, Luxor.julia_red, Luxor.julia_purple, Luxor.julia_blue)
 
 function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
@@ -355,7 +351,10 @@ main("my-drawing.svg")
 svgimage # hide
 ```
 
-So, did the JuliaFission organization like their logo? Who knows - they may still be debataing how accurate a model it should be... But if not, we can always recycle some of these ideas for future projects... 😃
+So, did the JuliaFission organization like their logo? Who
+knows? - they may still be debataing how accurate a
+representation of an atom it should be... But if not, we can
+always recycle some of these ideas for future projects. 😃
 
 ## Extra credit
 
