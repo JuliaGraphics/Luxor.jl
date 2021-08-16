@@ -50,7 +50,7 @@ function randompointarray(lowx, lowy, highx, highy, n)
     array
 end
 
-# internal function used by Poisson disk sampling  below
+# internal function used by Poisson disk sampling below
 """
 _empty_neighbourhood(sample, w, h, cellsize, d, points, grid)
 
@@ -59,7 +59,7 @@ point is more than `d` units away from any other point
 in `points`.
 
 The region we're analyzing lies between the origin and
-`Point(w, h).
+`Point(w, h)``.
 """
 function _empty_neighbourhood(sample::Point, w, h, cellsize, d, points::Array{Point, 1}, grid)
     if sample.x >= 0 &&
@@ -97,10 +97,19 @@ rectangle defined by the current origin (0/0) and the
 `width` and `height`. `d` determines the minimum
 distance between each point. Increase `attempts` if you want
 the function to try harder to fill empty spaces; decrease it
-it's taking too long to look for samples that work.
+if it's taking too long to look for samples that work.
 
 This uses Bridson's Poisson Disk Sampling algorithm:
 https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
+
+## Example
+
+```
+for pt in randompointarray(BoundingBox(), 20)
+    randomhue()
+    circle(pt, 10, :fill)
+end
+```
 """
 function randompointarray(w, h, d;
         attempts=20)
@@ -142,8 +151,7 @@ Return an array of randomly positioned points inside the
 bounding box `d` units apart.
 """
 function randompointarray(bbox::BoundingBox, d; kwargs...)
-    gsave()
-    translate(boxtopleft(bbox))
-    return randompointarray(boxwidth(bbox), boxheight(bbox), d; kwargs...)
-    grestore()
+    bw = boxwidth(bbox)
+    bh = boxheight(bbox)
+    return randompointarray(bw, bh, d; kwargs...) .- (Point(bw/2, bh/2))
 end

@@ -567,6 +567,7 @@ Get the current path and return a CairoPath object, which is an array of `elemen
 
 ```
 o = getpath()
+x, y = currentpoint()
 for e in o
       if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
           (x, y) = e.points

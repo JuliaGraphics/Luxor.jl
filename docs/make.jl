@@ -12,7 +12,7 @@ makedocs(
         "Introduction to Luxor"            =>  "index.md",
         "Tutorials" => [
             "Quick and short"              =>  "tutorial/quickstart.md",
-            "Longer"                       =>  "tutorial/basictutorial.md",
+            "A more in-depth tutorial"     =>  "tutorial/basictutorial.md",
             "Simple animation"             =>  "tutorial/simple-animation.md",
             ],
         "Examples" => [
