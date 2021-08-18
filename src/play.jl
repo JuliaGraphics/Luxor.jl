@@ -15,14 +15,14 @@ end
 
 macro play(w, h, body)
     quote
-        window = mfb_open_ex("Luxor -> Julia", $w, $h, MiniFB.WF_RESIZABLE)
+        window = mfb_open_ex("Luxor -> Julia", $(esc(w)), $(esc(h)), MiniFB.WF_RESIZABLE)
 
         mfb_set_active_callback(window, active_fn)
         mfb_set_mouse_button_callback(window, onclick)
 
-        buffer = zeros(UInt32, $w, $h)
+        buffer = zeros(UInt32, $(esc(w)), $(esc(h)))
         while true
-            Drawing($w, $h, :image)
+            Drawing($(esc(w)), $(esc(h)), :image)
             origin()
             $(esc(body))
             m = permutedims(image_as_matrix!(buffer), (2, 1))
