@@ -17,25 +17,43 @@ end
 
 """
     rect(cornerpoint, w, h, action;
+        reversepath=false,
         vertices=false)
 
 Create a rectangle with one corner at `cornerpoint` with width `w` and height
-`h` and do an action.
+`h` and do the action `action`.
 
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
+
+`reversepath` reverses the direction of the path (and
+returns points in the order: bottom left, bottom right, top
+right, top left).
+
+Returns the four corner vertices.
 """
 function rect(cornerpoint::Point, w, h, action::Symbol=:none;
+        reversepath=false,
         vertices=false)
-    if vertices == false && action != :none
-        rect(cornerpoint.x, cornerpoint.y, w, h, action)
-    end
-    return [
+
+    pts =  [
         Point(cornerpoint.x,     cornerpoint.y + h),
         Point(cornerpoint.x,     cornerpoint.y),
         Point(cornerpoint.x + w, cornerpoint.y),
         Point(cornerpoint.x + w, cornerpoint.y + h)
-    ]
+        ]
+    if reversepath == true
+        pts = pts[[1, 4, 3, 2]]
+    end
+    if vertices == false && action != :none
+        move(pts[1])
+        line(pts[2])
+        line(pts[3])
+        line(pts[4])
+        closepath()
+        do_action(action)
+    end
+    return pts
 end
 
 """
@@ -46,18 +64,40 @@ Create a box (rectangle) between two points and do an action.
 
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
+
+`reversepath` reverses the direction of the path (and
+returns points in the order: bottom left, bottom right, top
+right, top left).
 """
 function box(corner1::Point, corner2::Point, action::Symbol=:none;
+        reversepath=false,
         vertices=false)
-    if vertices == false && action != :none
-        rect(corner1.x, corner1.y, corner2.x - corner1.x, corner2.y - corner1.y, action)
+    # rearrange to get topleft -> bottom right
+    # I'm not sure whether this is worth doing just
+    # to get the order of vertices correct
+    xmin, xmax = extrema((corner1.x, corner2.x))
+    ymin, ymax = extrema((corner1.y, corner2.y))
+
+    c1 = Point(xmin, ymin)
+    c2 = Point(xmax, ymax)
+    pts = [
+        Point(c1.x, c2.y),
+        Point(c1.x, c1.y),
+        Point(c2.x, c1.y),
+        Point(c2.x, c2.y)
+        ]
+    if reversepath == true
+        pts = pts[[1, 4, 3, 2]]
     end
-    return [
-        Point(corner1.x, corner1.y),
-        Point(corner2.x, corner1.y),
-        Point(corner2.x, corner2.y),
-        Point(corner1.x, corner2.y)
-    ]
+    if vertices == false && action != :none
+        move(pts[1])
+        line(pts[2])
+        line(pts[3])
+        line(pts[4])
+        closepath()
+        do_action(action)
+    end
+    return pts
 end
 
 """
@@ -78,19 +118,32 @@ box(bbox::Array, action::Symbol=:none; kwargs...) =
 Create a box/rectangle centered at point `pt` with width and height. Use
 `vertices=true` to return an array of the four corner points rather than draw
 the box.
+
+`reversepath` reverses the direction of the path.
 """
 function box(pt::Point, width, height, action::Symbol=:none;
+        reversepath=false,
         vertices=false)
-    if vertices == false && action != :none
-        rect(pt.x - width/2, pt.y - height/2, width, height, action)
-    end
-    return [
+    pts = [
         Point(pt.x - width/2, pt.y + height/2),
         Point(pt.x - width/2, pt.y - height/2),
         Point(pt.x + width/2, pt.y - height/2),
         Point(pt.x + width/2, pt.y + height/2)
-    ]
+        ]
+    if reversepath == true
+        pts = pts[[1, 4, 3, 2]]
+    end
+    if vertices == false && action != :none
+        move(pts[1])
+        line(pts[2])
+        line(pts[3])
+        line(pts[4])
+        closepath()
+        do_action(action)
+    end
+    return pts
 end
+
 
 """
     box(x, y, width, height, action=:none)

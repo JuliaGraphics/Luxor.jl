@@ -5,14 +5,16 @@
 ### Added
 
 - added method to randompointarray() to generate Poisson-disk sampled points
-- initnoise() can use other RNG
+- initnoise() can use other RNG (thanks @JeffreyPalmer!)
 - add_mesh_patch() to add more patches to mesh
 - setblendextend() to set blend (pattern) extend modes
 
 ### Changed
 
-- small change in hyphenation code in textwrap()
-- box(pt, w, h, radii) - specify different radii for each corner
+- small change in hyphenation code in textwrap(), still not perfect though
+- box(pt, w, h, radii) - can specify different radii for each corner
+- rect() and box() have reversepath options
+- Base.getindex(p::Point, i) = (p.x, p.y)[i]
 
 ### Removed
 
