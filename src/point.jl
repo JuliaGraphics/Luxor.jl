@@ -42,7 +42,7 @@ Point((x, y)::Tuple{Real, Real}) = Point(x, y)
 
 # for broadcasting
 Base.size(::Point) = 2
-Base.getindex(p::Point, i) = [p.x, p.y][i]
+Base.getindex(p::Point, i) = (p.x, p.y)[i]
 
 Base.broadcastable(x::Point) = Ref(x)
 

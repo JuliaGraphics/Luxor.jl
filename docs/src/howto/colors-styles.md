@@ -155,13 +155,17 @@ nothing # hide
 
 Notice that odd-numbered patterns flip the ink and skip numbers each time through.
 
-## Blends
+## Gradient blends
 
-In Luxor, a blend is a color gradient. Use [`setblend`](@ref) to select a blend in the same way that you'd use [`setcolor`](@ref) and [`sethue`](@ref) to select a solid color.
+In Luxor, a blend is a smoothly changing color gradient.
+
+Use [`setblend`](@ref) to select a blend in the same way
+that you'd use [`setcolor`](@ref) and [`sethue`](@ref) to
+select a solid color.
 
 You can make linear or radial blends. Use [`blend`](@ref) in either case.
 
-You can apply a blend to both stroked and filled graphics.
+The current blend affects subsequent stroked and filled graphics.
 
 To create a simple linear blend between two colors, supply two points and two colors to [`blend`](@ref):
 
@@ -222,7 +226,7 @@ nothing # hide
 
 ![blends from scratch](../assets/figures/color-blends-scratch.png)
 
-When you define blends, the location of the axes (eg the current workspace as defined by [`translate`](@ref), etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with `translate(pos)`. The blend 'samples' the original location of the blend's definition.
+When you define blends, the location of the x/y axes (eg the current workspace as defined by [`translate`](@ref), etc.), is important. In the first of the two following examples, the blend is selected before the axes are moved with `translate(pos)`. The blend 'samples' the original location of the blend's definition.
 
 ```@example
 using Luxor # hide

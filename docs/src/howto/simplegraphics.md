@@ -562,6 +562,7 @@ for x in 10 .^ range(0, length=100, stop=3)
     rule(Point(-x, 0), π/2, boundingbox=BoundingBox() * 0.9)
 end
 finish() # hide
+nothing # hide
 ```
 
 ![arc](../assets/figures/rulebbox.png)
