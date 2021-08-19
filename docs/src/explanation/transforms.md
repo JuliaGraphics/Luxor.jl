@@ -4,7 +4,7 @@ DocTestSetup = quote
     end
 ```
 
-Graphics are placed on the current workspace according to the *current transformation matrix*. You can either modify this indirectly using functions, or set the matrix directly.
+Graphics are placed on the current drawing according to the *current transformation matrix*. You can either modify this indirectly, using functions, or set the matrix directly.
 
 # Transformation functions
 
@@ -88,13 +88,13 @@ nothing # hide
 
 Use the [`getscale`](@ref), [`gettranslation`](@ref), and [`getrotation`](@ref) functions to find the current values.
 
-To return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` to reset the matrix to the default.
+To quickly return home after many changes, you can use `setmatrix([1, 0, 0, 1, 0, 0])` to reset the matrix to the default.
 
-## Linear interpolation of scalars
+## Linear interpolation ("lerp")
 
 [`rescale`](@ref) is a convenient utility function for
 linear interpolation. An easy way to visualize it is by
-imagining two number lines. A value relative to low and high
+imagining two number lines. A value relative to a pair of low and high
 values is rescaled to have the equivalent value relative to
 another pair of low and high values.
 
@@ -156,8 +156,8 @@ lies between 0 and 1.
 
 The equivalent to `lerp(10, 20, 0.5)` in Luxor is
 `rescale(0.5, 0, 1, 10, 20)`. Luxor requires a ‘from’ scale
-(here `[0, 1]`) although the ‘to’ scale is optional and
-defaults to `[0, 1]`.
+(here `... 0, 1, ...`) although the ‘to’ scale is optional and
+defaults to `0, 1`.
 
 ## Scaling of line thickness
 
@@ -258,9 +258,9 @@ nothing # hide
 
 In Luxor, by convention, the y axis points downwards, and the x axis points to the right.
 
-There are basically two main conventions for computer graphics:
+There are basically two conventions for computer graphics:
 
-- most computer graphics systems (HTML, SVG, Processing, Cairo, Luxor, image processing, most GUIs, etc) use “y downwards” convention
+- most computer graphics systems (HTML, SVG, Processing, Cairo, Luxor, image processing, most GUIs, etc) use the “y downwards” convention
 
 - mathematical illustrations, such as graphs, figures, Plots.jl, plots, etc. use the “y upwards” convention
 
@@ -319,7 +319,7 @@ end 800 450 # hide
 
 !!! note
 
-    If you do this and try to place text, all your text will be incorrectly drawn upside down, so you'd need to enclose any text placement with more matrix transformations.
+    If you do this and try to place text, all your text will be incorrectly drawn upside down, so you'd need to enclose any text placement with another matrix transformation.
 
 ## Advanced transformations
 
@@ -327,19 +327,20 @@ For more powerful transformations of graphic elements,
 consider using Julia packages which are designed
 specifically for the purpose.
 
-The following example sets up some transformations which
-can then be composed in the correct order to transform
+The following example uses the Rotations and
+CoordinateTransformations packages. It sets up some transformations
+which can then be composed in the correct order to transform
 points.
 
 ```
+using CoordinateTransformations, Rotations, StaticArrays, LinearAlgebra
+
 rawpts = [
     [0.1, 0.1],
     [0.1, -0.1],
     [-0.1, -0.1],
     [-0.1, 0.1]
 ]
-
-using CoordinateTransformations, Rotations, StaticArrays, LinearAlgebra
 
 function transform_point(pt, transformation)
     x, y, _ = transformation(SVector(pt[1], pt[2], 1.0))

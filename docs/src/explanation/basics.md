@@ -6,15 +6,13 @@ DocTestSetup = quote
 
 # The drawing model
 
-The underlying drawing model is that you make shapes, and add points to paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, scale, orientation, opacity, and so on.
+The underlying drawing model is that you build paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, scale, orientation, opacity, and so on.
 
 You can modify the current graphics state by transforming/rotating/scaling it, setting color and style parameters, and so on.
 
-Many of the drawing functions have an *action* argument. This can be `:none`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:none`.
+Many of the drawing functions have an *action* argument. This can be `:none`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:none`, which is usually equivalent to `:path`, ie. add to the path.
 
-Subsequent graphics use the new state, but the graphics you've already drawn are unchanged. The [`gsave`](@ref) and [`grestore`](@ref) functions (or the `@layer .... ` macro) let you create new temporary graphics states,
-
-It's useful to be able to operate on graphic shapes before they're drawn: many shape-drawing functions accept a `vertices=true` option, which returns a list of coordinates rather than placing them directly on the drawing.
+Subsequent graphics use the new state, but the graphics you've already drawn are unchanged.
 
 The main Julia data types you'll encounter in Luxor are:
 
@@ -141,9 +139,9 @@ nothing # hide
 
 ![point example](../assets/figures/point-ex.png)
 
-Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas). So rotations are ‘clockwise’. (The main exception is for turtle graphics, which conventionally let you supply angles in degrees.)
+Angles are usually supplied in radians, measured starting at the positive x-axis turning towards the positive y-axis (which usually points 'down' the page or canvas). So rotations look ‘clockwise’. (The main exception is for turtle graphics, which conventionally let you supply angles in degrees.)
 
-Coordinates are interpreted as PostScript points, where a point is 1/72 of an inch.
+Coordinates are usually interpreted as PostScript points, where a point is 1/72 of an inch, or as pixels, at a DPI of 72ppi.
 
 Because Julia allows you to combine numbers and variables directly, you can supply units with dimensions and have them converted to points (assuming the current scale is 1:1):
 
@@ -229,11 +227,11 @@ end
 
 ## Return the current drawing
 
-In some situations you'll want to explicitly return the current drawing to the calling function. Use [`currentdrawing`](@ref).
+In some situations you'll want to explicitly return the current drawing to the calling function. Use [`currentdrawing`](@ref) or assign the result of `Drawing()` to a variable.
 
 # Working in IDEs and notebooks
 
-You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS Code IDEs, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions thereafter.)
+You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS Code IDEs, and load Luxor at the start of a session. The first drawing will take a few seconds, because the Cairo graphics engine needs to warm up. Subsequent drawings are then much quicker. (This is true of much graphics and plotting work. Julia compiles each function when it first encounters it, and then calls the compiled versions for the rest of the session.)
 
 ## Working in Jupyter
 
@@ -263,7 +261,7 @@ finish()
 s = svgstring()
 ```
 
-You can examine the SVG programmatically:
+You can now examine the SVG code in `s` programmatically:
 
 ```
 eachmatch(r"rgb\(.*?\)", s) |> collect

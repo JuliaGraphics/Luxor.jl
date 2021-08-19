@@ -1,21 +1,20 @@
 # Perfect pixels and anti-aliasing
 
-## Antialiasing
+## Anti-aliasing
 
 The process of converting precise graphic shapes to a grid of
-pixels is automatically performed by Luxor/Cairo when you
+pixels is automatically performed by Luxor when you
 save the drawing as a PNG file. If you make an SVG or PDF
-drawing, this process is carried out by the application you
+drawing, this process is carried out at a later stage, by the application you
 use to view or display the file.
 
-It's usually better to defer the conversion as long as
-possible. Eventually - unless you're using a pen plotter or
+It's usually better to defer this conversion as long as
+possible. Of course, eventually - unless you're using a pen plotter or
 laser cutter - your smooth outlines will have to be
 converted ("rasterized") to a grid of colored pixels for
 their final journey to the analogue world.
 
-The smoothing process includes "anti-aliasing". You can, to
-some extent, adjust the amount of anti-aliasing used when
+The conversion to PNG includes "anti-aliasing", which gradually changes the colors of pixels along a boundary so as to avoid the grid-like "staircase" effect. You can, to some extent, adjust the amount of anti-aliasing used when
 you make drawings in Luxor.
 
 ```@setup draw_matrix
@@ -57,7 +56,7 @@ function draw(antialias)
 end
 ```
 
-The [`setantialias`](@ref) function lets you specify the anti-aliasing amount as an integer constant between 0 and 6. The Cairo documentation describes the different values as follows:
+The [`setantialias`](@ref) function lets you specify the anti-aliasing amount as an integer constant between 0 and 6 to be used for rendering subsequent paths. The Cairo documentation describes the different values as follows:
 
 | Value  | Name                      | Description     |
 |:-----  |:----                      |:----            |
@@ -87,15 +86,16 @@ This matrix is now redrawn larger to show the effects of anti-aliasing better. H
 draw(0) # hide
 ```
 
-and you can see that Luxor used 18 different colors to render this red circle.
+and you can see that Luxor used 18 different shades of red
+to add some smoothness to this circle.
 
-Here’s the result of the bilevel mask, `setantialias(1)`, the “none” setting:
+Here’s the result of the bilevel mask or “none” setting (`setantialias(1)`):
 
 ```@example draw_matrix
 draw(1) # hide
 ```
 
-and Luxor used just two colors to draw the circle.
+Here Luxor used just two colors to draw the circle.
 
 The other values produce the same effects as the default (0), apart from 4 ("speed over quality"):
 
@@ -111,9 +111,9 @@ The anti-aliasing process can vary according to the OS and device you're using. 
 
 ## Text
 
-Cairo's anti-aliasing described above does not apply to text.
+The anti-aliasing described above does not apply to text.
 
-Text rendering is much more platform-dependent than graphics; Windows, MacOS, and Linux all have their own methods for rendering and rasterizing fonts, and currently Cairo.jl doesn't provide an interface to the underlying font rendering APIs.
+Text rendering is much more platform-dependent than graphics; Windows, MacOS, and Linux all have their own methods for rendering and rasterizing fonts, and currently there is no interface to the underlying font rendering APIs in Luxor.
 
 Consider the following code, which makes an image of the letter "a" and redraws it larger:
 
@@ -176,8 +176,8 @@ _font hinting_, a process in which the outlines of text glyphs
 are shifted so as to align better on the rectangular grid of
 pixels.
 
-If you want text to be rendered precisely (and in the
+If you want text to be rendered precisely (and in a
 specified color) it might be worth investigating Luxor’s
 [`textoutlines`](@ref) function, which converts text to
-vector-based outlines. These are then susceptible to the
-anti-aliasing settings described above.
+vector-based outlines. These are then rendered with the
+anti-aliasing settings described above for graphics.

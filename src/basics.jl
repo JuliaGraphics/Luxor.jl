@@ -127,22 +127,23 @@ Set the current antialiasing to a value between 0 and 6:
     antialias_good     = 5, balance quality against performance
     antialias_best     = 6, render at the highest quality, sacrificing speed if necessary
 
-This affects graphics, but not text, and it doesn't apply to all types of output file.
+This affects subsequent graphics, but not text, and it
+doesn't apply to all types of output file.
 """
 setantialias(n) = Cairo.set_antialias(get_current_cr(), n)
 
 """
     newpath()
 
-Create a new path. This is Cairo's `new_path()` function.
+Create a new path, after clearing the current path. After
+this there's no path and no current point.
 """
 newpath() = Cairo.new_path(get_current_cr())
 
 """
     newsubpath()
 
-Add a new subpath to the current path. This is Cairo's `new_sub_path()`
-function. It can be used for example to make holes in shapes.
+Start a new subpath, keeping the current path. After this there's no current point.
 """
 newsubpath() = Cairo.new_sub_path(get_current_cr())
 

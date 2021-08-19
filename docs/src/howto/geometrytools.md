@@ -8,9 +8,12 @@ DocTestSetup = quote
 
 ## Lines and distances
 
-You can find the midpoint between two points using [`midpoint`](@ref).
+You can find the midpoint between two points using
+[`midpoint`](@ref).
 
-The following code places a small pentagon (using [`ngon`](@ref)) at the midpoint of each side of a larger pentagon:
+The following code places a small pentagon (using
+[`ngon`](@ref)) at the midpoint of each side of a larger
+pentagon:
 
 ```@example
 using Luxor # hide
@@ -96,33 +99,31 @@ nothing # hide
 
 Use `isarcclockwise(c, p1, p2)` to check whether an arc centered at `c` running from `p1` to `p2` is clockwise.
 
-The [`pointinverse`](@ref) function finds the inverse of a point relative to a reference circle (centerpoint and radius). In the image, each vertex on the star is linked by an arrow to its inverse.
+The [`pointinverse`](@ref) function finds the inverse of a point relative to a reference circle (centerpoint and radius). In the following example, each vertex on the shape inside the circle is linked by an arrow to its inverse outside the circle.
 
 ```@example
-using Luxor # hide
-Drawing(600, 400, "../assets/figures/pointinverse.png") # hide
+using Luxor, Colors # hide
+d = @drawsvg begin
 origin() # hide
-background("white") # hide
+background("antiquewhite") # hide
 setline(1) # hide
+radius = 60
+circle(O, radius + 20, :stroke)
 
-radius = 80
-starradius = 70
-sethue("black")
-points = star(O, starradius, 5, 0.5, π/5, vertices=true)
-antipoints = last.(pointinverse.(points, O, radius))
+points = polycross(O, radius, 7, vertices=true)
+poly(points, :stroke, close=true)
 
-@layer (sethue("grey90"); poly(antipoints, :fill))
-@layer (sethue("grey75"); poly(points, :fill))
-circle(O, radius, :stroke)
+antipoints = last.(pointinverse.(points, O, radius+20))
 
-prettypoly.((points, antipoints), :none,
-    vertexlabels = (n, l) -> (label(string(n), :ne)))
-foreach(x -> arrow(x[1] , x[2]), zip(points, antipoints))
-
-finish() # hide
-nothing # hide
+for (n, pt) in enumerate(zip(points, antipoints))
+    sethue(HSB(length(points) * n, 0.8, 0.8))
+    @. circle(pt, distance(O, pt)/6, :fill)
+    sethue("black")
+    arrow(pt...)
+end
+end 800 500
+d # hide
 ```
-![arc](../assets/figures/pointinverse.png)
 
 Use [`anglethreepoints`](@ref) to find the angle formed by two lines connecting three points:
 

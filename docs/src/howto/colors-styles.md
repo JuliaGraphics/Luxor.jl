@@ -55,11 +55,14 @@ nothing #hide
 
 ![line endings](../assets/figures/colors.svg)
 
-(To make the label stand out against the background, the luminance is calculated, then used to choose the label's color.)
+(To make the label stand out against the background, the
+luminance is calculated, then used to choose the label's
+color.)
 
 ## Line styles
 
-There are `set-` functions for controlling subsequent lines' width, end shape, join behavior, and dash pattern:
+There are `set-` functions for controlling subsequent lines'
+width, end shape, join behavior, and dash pattern:
 
 ```@example
 using Luxor # hide
@@ -112,7 +115,7 @@ nothing # hide
 
 ![dashes](../assets/figures/dashes.png)
 
-To define more complicated dash patterns in Luxor, pass a vector to [`setdash`](@ref).
+To define more complicated dash patterns, pass a vector to [`setdash`](@ref).
 
 ```julia
 dashes = [50.0,  # ink
@@ -188,7 +191,7 @@ nothing # hide
 
 ![linear blend](../assets/figures/color-blends-basic.png)
 
-And for a radial blend, provide two point/radius pairs, and two colors:
+And for a radial blend, provide two point/radius pairs and two colors:
 
 ```@example
 using Luxor # hide
@@ -349,8 +352,8 @@ you're using. In this example, the four possible modes are
 used to draw the same 150 unit radius circle using a much
 smaller 30 unit radial blend that starts at orange, and
 passes through green, to blue. If the blend is smaller than
-the shape, then a mode of "none" won't draw the shape
-outside the boundary of the blend.
+the shape, then a mode of "none" won't fill the entire
+shape, just the area inside the boundary of the blend.
 
 ```@example
 using Luxor, Colors # hide
@@ -401,7 +404,7 @@ d # hide
 Graphics software provides ways to modify how the virtual
 "ink" is applied to previously-drawn graphic elements. In
 PhotoShop and other software, the compositing process is
-done using what they call [blend
+done using what are called [blend
 modes](https://en.wikipedia.org/wiki/Blend_modes).
 
 Use [`setmode`](@ref) to set the blending/compositing mode
@@ -474,9 +477,9 @@ You can access the list of modes with the unexported symbol
 A mesh provides smooth shading between three or four colors
 across a region defined by lines or curves.
 
-To create a mesh, use the [`mesh`](@ref) function and save
-the result as a mesh object. To use a mesh, supply the mesh
-object to the [`setmesh`](@ref) function.
+To create a mesh, use the [`mesh`](@ref) function and assign
+the resulting mesh object to a variable. To use a mesh, pass
+the mesh object variable to the [`setmesh`](@ref) function.
 
 The [`mesh`](@ref) function accepts either an array of
 Bézier paths or a polygon.
@@ -508,7 +511,9 @@ nothing # hide
 
 ![mesh 1](../assets/figures/mesh-basic.png)
 
-The next example uses a Bézier path conversion of a square as the outline of the mesh. Because the box to be filled is larger than the mesh's outlines, not all the box is filled.
+The next example uses a Bézier path conversion of a square
+as the outline of the mesh. Because the box to be filled is
+larger than the mesh's outlines, not all the box is filled.
 
 ```@example
 using Luxor, Colors # hide
@@ -540,7 +545,9 @@ nothing # hide
 
 ![mesh 1](../assets/figures/mesh1.png)
 
-The second example uses a polygon defined by [`ngon`](@ref) as the outline of the mesh. The mesh is drawn when the path is stroked.
+The second example uses a polygon defined by [`ngon`](@ref)
+as the outline of the mesh. The mesh is drawn when the path
+is stroked.
 
 ```@example
 using Luxor # hide
@@ -566,9 +573,9 @@ nothing # hide
 ![mesh 2](../assets/figures/mesh2.png)
 
 So far these meshes have contained a single defined area - a
-single 'patch'. It's possible to construct meshes that
-consist of more than one patch. The following example uses
-[`add_mesh_patch`](@ref) creates a single mesh consisting of
+single 'patch'. It's possible to construct a mesh that
+consists of more than one patch. The following example uses
+[`add_mesh_patch`](@ref) to build a single mesh consisting of
 100 smaller patches, which are placed next to each other but
 don't always define the same colors at identical control
 points.
@@ -601,10 +608,10 @@ finish() # hide
 d # hide
 ```
 
-This conical example builds a mesh from many triangular
-patches, where each patch shows a different area of the HSB
-color space. The stroked hypotrochoid is drawn using the
-completed mesh.
+The next example constructs a conical mesh from many
+triangular patches, where each patch shows a different area
+of the HSB color space. The hypotrochoid uses the completed
+mesh when it is drawn.
 
 ```@example
 using Luxor, Colors

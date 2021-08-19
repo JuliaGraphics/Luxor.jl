@@ -352,7 +352,7 @@ svgimage # hide
 ```
 
 So, did the JuliaFission organization like their logo? Who
-knows? - they may still be debataing how accurate a
+knows? - they may still be debating how accurate the
 representation of an atom it should be... But if not, we can
 always recycle some of these ideas for future projects. 😃
 
