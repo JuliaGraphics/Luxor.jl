@@ -36,7 +36,7 @@ imfilter(img, Kernel.gaussian(10))
 
 [`image_as_matrix`](@ref) returns a array of ARGB32
 (AlphaRedGreenBlue) values. Each ARGB value encodes the Red,
-Green, Blue, and Alpha values of a pixel into a single 32
+Green, Blue, and Alpha 8-bit values of a pixel into a single 32
 bit integer.
 
 You can display the matrix using, for example, Images.jl.

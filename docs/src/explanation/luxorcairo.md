@@ -6,7 +6,7 @@ The aim of Luxor is to provide an easy to use
 !!! note
 
     Luxor.jl doesn't implement every function provided in
-    Cairo.jl, and Cairo.jl doesn't implement every function
+    Cairo.jl. Cairo.jl doesn't implement every function
     provided by the Cairo API.
 
 As an example of the difference between Luxor and Cairo,
@@ -20,12 +20,12 @@ They both produce this image:
 
 ![sample arc](../assets/figures/sample_arc.png)
 
-For convenience and to provide a simpler interface, Luxor
+For convenience, and to provide a simpler interface, Luxor
 introduces `Point`s and dispenses with `Context`s.
 
-Both Cairo and Luxor use the same coordinate system, although the
-Luxor `@-` macros position the origin at the center of the
-canvas. So although Cairo has to calculate the midpoint of
+Both Cairo and Luxor use the same coordinate system (although the
+Luxor `@-` macros position the `0/0` origin at the center of the
+canvas). So although Cairo has to calculate the midpoint of
 the drawing in line 13, Luxor has to calculate the position
 of the top left corner in line 28.
 

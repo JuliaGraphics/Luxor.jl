@@ -7,16 +7,14 @@ When drawing in Luxor you'll usually be creating _paths_ and _polygons_. It can 
 In Luxor, a path is something that you manipulate by calling
 functions that control Cairo's path-drawing engine. There
 isn't a Luxor struct or datatype that contains or maintains
-a path (although see below). Luxor/Cairo keeps track of the
+a path (although see below). Cairo keeps track of the
 current path, the current point, and the current graphics
 state, in response to the functions you call.
 
-A path contains one or more sequences of straight lines
-and Bézier curves.
+A path can contain one or more sequences of straight lines
+and Bézier curves. There's always a single active path. It starts off being empty.
 
-There's always a single active path. It starts off being empty.
-
-In the following figure, the following function creates a
+The following figure was drawn using this function, which creates a
 single path consisting of three separate shapes - a line, a
 rectangular box, and a circle:
 
@@ -27,26 +25,26 @@ function make_path()
     line(Point(-120, 50))
     move(Point(0, 0))
     box(O, 100, 100, :path)
-    move(Point(180, 0) + polar(40, 0))
+    move(Point(180, 0) + polar(40, 0)) # pt on circumference
     circle(Point(180, 0), 40, :path)
 end
 ```
 
-The `move()` function as used here is essentially a "pick up
+The [`move()`](@ref) function as used here is essentially a "pick up
 the pen and move it elsewhere" instruction.
 
-The top path, in purple, is drawn when `strokepath()`
+The top path, in purple, is drawn when [`strokepath()`](@ref)
 is applied to this path. Each of the three shapes is
 stroked with the same current settings (color, line
 thickness, dash pattern, and so on).
 
 The middle row shows a duplicate of this path, and
-`fillpath()` has been applied to fill each of the three
+[`fillpath()`](@ref) has been applied to fill each of the three
 shapes in the path with orange.
 
 The duplicate path at the bottom has been followed by the
-`clip()` function and then by `rule()` to draw green ruled
-lines, which clipped by the outlines of the shapes in the path.
+[`clip()`](@ref) function and then by [`rule()`](@ref) to draw green ruled
+lines, which are clipped by the outlines of the shapes in the path.
 
 ```@setup pathexample
 using Luxor
@@ -86,21 +84,10 @@ d = @drawsvg begin
 d # hide
 ```
 
-You can construct paths using functions like `move()`,
-`line()`, `arc()`, and `curve()`, plus any Luxor function
-that lets you specify the `:path` ("add to path") action -
-these are the ones that have an `action` available as a
+You can construct paths using functions like [`move()`](@ref),
+[`line()`](@ref), [`arc()`](@ref), and [`curve()`](@ref), plus any Luxor function
+that lets you specify the `:path` ("add to path") action as a
 keyword argument or parameter.
-
-After the path is stroked or filled, it's emptied out, ready
-for you to start over again. But you can use one of the
-'-preserve' varsions, `fillpreserve()`/`:fillpreserve` or
-`strokepreserve()`/`:strokepreserve` to continue working
-with the current defined path.
-
-You might want to continue to add more shapes to the current
-path (`:path`), or convert the whole path to a clipping path
-(`:clip`/`clip()`).
 
 Many functions in Luxor have an `action` keyword argument or
 parameter. If you want to add that shape to the current
@@ -108,12 +95,20 @@ path, use `:path`. If you want to both add the shape _and_
 finish and draw the current path, use one of `stroke`,
 `fill`, etc.  
 
-A single path can contain multiple separate graphic shapes,
-and these can be used to form holes. If you want a path to
-contain holes, you add shapes to the path and reverse their
-direction. For example, to put a square hole in a circle,
-first create a circular path, then draw a square path
-inside, making sure that the square path runs in the
+After the path is stroked or filled, it's emptied out, ready
+for you to start over again. But you can also use one of the
+'-preserve' varsions, [`fillpreserve()`](@ref)/`:fillpreserve` or
+[`strokepreserve()`](@ref)/`:strokepreserve` to continue working
+with the current defined path after drawing it. You can
+convert the path to a clipping path using
+`:clip`/[`clip()`](@ref).
+
+A single path can contain multiple separate graphic shapes.
+These can make holes. If you want a path to contain holes,
+you add the hole shapes to the path after reversing their
+direction. For example, to put a square hole inside a
+circle, first create a circular path, then draw a square
+path inside, making sure that the square path runs in the
 opposite direction to the circle.
 
 ```@example
@@ -128,9 +123,9 @@ end 800 500 # hide
 d # hide
 ```
 
-If you're constructing the path from primitives this is
-easy, and some functions provide a `reversepath` keyword
-argument to help you. If not, you can do things like
+If you're constructing the path from simple path commands,
+this is easy, and the functions that provide a `reversepath`
+keyword argument can help. If not, you can do things like
 this:
 
 ```
@@ -139,25 +134,24 @@ poly(reverse(box(O, 50, 50)), :path)  # create polygon, add to current path afte
 fillpath()                            # finally fill the two-part path
 ```
 
-Many Luxor functions, such as `rect()` and `box()`, can
-construct paths, but can often also return information in
-the form of a list of points - a polygon.  Methods might
-offer a `vertices` keyword argument. With these you can
-specify `vertices=true` to return a list of points _instead
-of_ constructing a path.
-
-Functions such as `ngon()` and `star()` construct polygons,
-and can then convert them to paths and optionally draw them.
+Many methods, including [`box()`](@ref), [`crescent()`](@ref),
+[`ellipse()`](@ref), [`epitrochoid()`](@ref),
+[`hypotrochoid()`](@ref), [`ngon()`](@ref),
+[`polycross()`](@ref), [`rect()`](@ref),
+[`squircle()`](@ref), and [`star()`](@ref), offer a
+`vertices` keyword argument. With these you can specify
+`vertices=true` to return a list of points _instead of_
+constructing a path.
 
 Note that methods to functions might vary in how they
 operate: whereas `box(Point(0, 0), 50, 50)` returns a
-polygon (a list of points),  `box(Point(0, 0), 50, 50,
+polygon (a list of points), `box(Point(0, 0), 50, 50,
 :path)` adds a rectangle to the current path _and_ returns a
 polygon. However, `box(Point(0, 0), 50, 50, 5 ... )`
 constructs a path with Bézier-curved corners, so this
 method doesn't return any vertex information - you'll have
-to flatten the Béziers via `getpathflat()` or obtain the
-path with intact Béziers via `getpath()`.
+to flatten the Béziers via [`getpathflat()`](@ref) or obtain the
+path with intact Béziers via [`getpath()`](@ref).
 
 The Luxor function [`getpath()`](@ref) retrieves the current
 Cairo path and returns a _Cairo path object_, which you
@@ -201,25 +195,26 @@ But the current Cairo path isn't otherwise accessible in Luxor.
 ### Polygons
 
 A polygon isn't an existing Luxor struct or datatype either.
-It always appears as a plain vector (Array) of `Point`s.
-There are no lines or curves, just 2D coordinates. When a
-polygon is eventually drawn, it's first converted into a path, as
-is every graphical shape, and the points are usually connected with
-short straight lines.
+It always appears as a plain Vector (Array) of `Point`s.
+There are no lines or curves, just 2D coordinates in the
+form of `Point`s. When a polygon is eventually drawn, it's
+converted into a path, and the points are usually connected
+with short straight lines.
 
-The `pathtopoly()` function extracts the current path that
-Cairo is in the process of constructing and returns an array
-of Vectors of points - a set of one or more polygons (remember that a
-single path can contain multiple shapes. This function uses
-`getpathflat()`, which is similar to `getpath()` but it
-returns a Cairo path object in which all Bézier curve
-segments have been reduced to a sequence of straight lines.
+The [`pathtopoly()`](@ref) function extracts the current
+path that Cairo is in the process of constructing and
+returns an array of Vectors of points - a set of one or more
+polygons (remember that a single path can contain multiple
+shapes). Internally this function uses
+[`getpathflat()`](@ref), which is similar to
+[`getpath()`](@ref) but it returns a Cairo path object in
+which all Bézier curve segments have been reduced to
+sequences of short straight lines.
 
 So:
 
 ```
 circle(O, 100, :path)
-getpathflat()
 p = pathtopoly()
 poly(first(p), :stroke)
 ```

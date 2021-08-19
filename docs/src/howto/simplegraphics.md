@@ -5,7 +5,12 @@ DocTestSetup = quote
 ```
 # Simple graphics
 
-In Luxor, there are different ways of working with graphical items. You can either draw them immediately (ie place them on the drawing, and they're then fixed). Or you can construct geometric objects as lists of points for further processing. Watch out for a `vertices=true` option, which returns coordinate data rather than drawing a shape.
+In Luxor, there are different ways of working with graphical
+items. You can either draw them immediately, ie place them
+on the drawing, and they're then fixed. Or you can construct
+geometric objects containing lists of points for further
+processing. Watch out for a `vertices=true` option, which
+returns coordinate data rather than drawing a shape.
 
 ## Rectangles and boxes
 
@@ -48,7 +53,7 @@ box(corner1,  corner2, vertices=true)
 [`box`](@ref) also returns the coordinates of the corners.
 
 ```julia
-box(Point(0, 0), 100, 100, :none)
+box(Point(0, 0), 100, 100)
 ```
 ```
 4-element Array{Point,1}:
@@ -623,10 +628,11 @@ nothing # hide
 ### Decoration
 
 The [`arrow`](@ref) functions allow you to specify
-decorations - graphics at one or more points somewhere along the shaft.
-For example, say you want to draw a number and a circle at
-the midpoint of an arrow's shaft, you can define a function that
-draws text `t` in a circle of radius `r` like this:
+decorations - graphics at one or more points somewhere along
+the shaft. For example, say you want to draw a number and a
+circle at the midpoint of an arrow's shaft, you can define a
+function that draws text `t` in a circle of radius `r` like
+this:
 
 ```
 function marker(r, t)
@@ -682,11 +688,12 @@ nothing # hide
 ```
 ![arrows with decoration](../assets/figures/arrowbezierdecoration.png)
 
-Use the `decoration` keyword to specify one or more locations other than the default 0.5.
+Use the `decoration` keyword to specify one or more
+locations other than the default 0.5.
 
 The graphics environment provided by the `decorate` function
-is centered at each decoration point in turn, and rotated to the
-slope of the shaft at that point.
+is centered at each decoration point in turn, and rotated to
+the slope of the shaft at that point.
 
 ```@example
 using Luxor
@@ -710,11 +717,17 @@ end 800 350
 
 To make custom arrowheads, you can define a three-argument
 function that draws them to your own design. This function
-takes: the point at the end of the
-arrow's shaft; the point where the tip of the arrowhead
-would be; and the angle of the shaft at the end. You can
-then use any code to draw the arrow. Pass this function to
-the [`arrow`](@ref) function's `arrowheadfunction` keyword.
+takes:
+
+- the point at the end of the arrow's shaft
+
+- the point where the tip of the arrowhead would be
+
+- the angle of the shaft at the end
+
+You can then use any code to draw the arrow. Pass this
+function to the [`arrow`](@ref) function's
+`arrowheadfunction` keyword.
 
 ```@example
 using Luxor # hide
@@ -747,7 +760,12 @@ end 800 250
 
 ## Arcs and curves
 
-There are a few standard arc-drawing commands, such as [`curve`](@ref), [`arc`](@ref), [`carc`](@ref), and [`arc2r`](@ref). Because these are often used when building complex paths, they usually add arc sections to the current path. To construct a sequence of lines and arcs, use the `:path` action, followed by a final `:stroke` or similar.
+There are a few standard arc-drawing commands, such as
+[`curve`](@ref), [`arc`](@ref), [`carc`](@ref), and
+[`arc2r`](@ref). Because these are often used when building
+complex paths, they usually add arc sections to the current
+path. To construct a sequence of lines and arcs, use the
+`:path` action, followed by a final `:stroke` or similar.
 
 [`curve`](@ref) constructs Bézier curves from control points:
 
@@ -788,7 +806,8 @@ nothing # hide
 
 ![curve](../assets/figures/curve.png)
 
-[`arc2r`](@ref) draws a circular arc centered at a point that passes through two other points:
+[`arc2r`](@ref) draws a circular arc centered at a point
+that passes through two other points:
 
 ```@example
 using Luxor, Random # hide
@@ -812,7 +831,9 @@ nothing # hide
 
 ![arc](../assets/figures/arc2r.png)
 
-[`arc2sagitta`](@ref) and [`carc2sagitta`](@ref) make circular arcs based on two points and the sagitta (the maximum height from the chord).
+[`arc2sagitta`](@ref) and [`carc2sagitta`](@ref) make
+circular arcs based on two points and the
+[sagitta](https://en.wikipedia.org/wiki/Sagitta_(geometry)).
 
 ```@example
 using Luxor, Colors # hide
