@@ -224,3 +224,7 @@ is more or less equivalent to:
 ```
 ngon(O, 100, 129, 0, :stroke)    # a 129agon with radius 100
 ```
+
+Luxor draws as many short straight lines as necessary (here
+about 149) so as to render the curve smooth at reasonable
+magnifications. 

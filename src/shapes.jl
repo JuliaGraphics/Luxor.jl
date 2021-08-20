@@ -306,7 +306,9 @@ end
 Make a star. `ratio` specifies the height of the smaller radius of the star relative to the
 larger.
 
-Use `vertices=true` to return the vertices of a star instead of drawing it.
+Returns the vertices of the star.
+
+Use `vertices=true` to only return the vertices of a star instead of drawing it.
 """
 function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
     orientation=0, action=:none;

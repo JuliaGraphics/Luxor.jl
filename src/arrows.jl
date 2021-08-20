@@ -192,13 +192,13 @@ and the shaft angle. Thsi allows you to draw any shape
 arrowhead.
 """
 function arrow(centerpos::Point, radius, startangle, endangle;
-        linewidth          = 1.0,
-        arrowheadlength    = 10,
-        arrowheadangle     = π/8,
-        decoration         = 0.5,
-        decorate           = nothing,
-        arrowheadfunction  = nothing,
-        clockwise          = true)
+    linewidth          = 1.0,
+    arrowheadlength    = 10,
+    arrowheadangle     = π/8,
+    decoration         = 0.5,
+    decorate           = nothing,
+    arrowheadfunction  = nothing,
+    clockwise          = true)
 
     # don't bother with them if theyre too small
     if isapprox(startangle, endangle, rtol = 0.01)
@@ -246,21 +246,14 @@ function arrow(centerpos::Point, radius, startangle, endangle;
     closepath()
 
     # draw the arrowhead
-    # rotation of head should be based on end of shaft, not end of arrow
     newendpoint = Point(radius * cos(newendangle), radius * sin(newendangle))
-    if clockwise == true
-        shaftangle = mod2pi(-π/2 + atan(0 - newendpoint.y, 0 - newendpoint.x))
-    else
-        shaftangle = mod2pi(-3π/2 + atan(0 - newendpoint.y, 0 - newendpoint.x))
-    end
-
+    shaftangle = slope(newendpoint, endpoint)
     #  use a user-supplied arrowhead function?
     if arrowheadfunction === nothing
         arrowheadoutersideangle = shaftangle + pi - arrowheadangle
         arrowheadinnersideangle = shaftangle + pi + arrowheadangle
-        toppoint =    Point(endpoint.x + cos(arrowheadinnersideangle) * arrowheadlength,
+        toppoint    = Point(endpoint.x + cos(arrowheadinnersideangle) * arrowheadlength,
                             endpoint.y + sin(arrowheadinnersideangle) * arrowheadlength)
-
         bottompoint = Point(endpoint.x + cos(arrowheadoutersideangle) * arrowheadlength,
                             endpoint.y + sin(arrowheadoutersideangle) * arrowheadlength)
         poly([toppoint, endpoint, bottompoint], :fill)

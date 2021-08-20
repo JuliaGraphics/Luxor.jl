@@ -14,7 +14,7 @@ returns coordinate data rather than drawing a shape.
 
 ## Rectangles and boxes
 
-The simple rectangle and box shapes can be made in different ways.
+Simple rectangle and box shapes can be made in different ways.
 
 ```@example
 using Luxor # hide
@@ -22,7 +22,7 @@ Drawing(800, 220, "../assets/figures/basicrects.png") # hide
 background("antiquewhite") # hide
 origin() # hide
 rulers()
-sethue("red")
+sethue("grey40")
 rect(Point(0, 0), 100, 100, :stroke)
 sethue("blue")
 box(Point(0, 0), 100, 100, :stroke)
@@ -32,9 +32,64 @@ nothing # hide
 
 ![rect vs box](../assets/figures/basicrects.png)
 
-[`rect`](@ref) rectangles are positioned by a corner, but a box made with [`box`](@ref) can either be defined by its center and dimensions, or by two opposite corners.
+[`rect`](@ref) rectangles are positioned by a corner, a box made with [`box`](@ref) can be defined either by its center and dimensions, or by two opposite corners.
 
-![rects](../assets/figures/rects.png)
+```@setup boxrect
+using Luxor
+d = @drawsvg begin
+    background("antiquewhite")
+    panes = Table(fill(100, 1), fill(200, 4))
+
+    fontsize(14)
+    fontface("JuliaMono-Bold")
+    @layer begin
+        translate(panes[1])
+        p1 = Point(-70, -70)
+        p2 = Point(70, 70)
+        box(p1, p2, :stroke)
+        text("box(p1, p2", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
+        sethue("purple")
+        circle.((p1, p2), 8, :fill)
+        label.(["p1", "p2"], [:N, :S], [p1, p2], offset=20)
+    end
+    @layer begin
+        translate(panes[2])
+        p = Point(0, 0)
+        box(p, 140, 140, :stroke)
+        text("box(p, w, h", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
+        sethue("purple")
+        circle(p, 8, :fill)
+        label("p", :S, p, offset=20)
+        corners = box(BoundingBox(box(p, 140, 140))...)
+        arrow(corners[2] + (0, -15), corners[3] + (0, -15), decorate = () -> text("w", O + (0, -10)))
+        arrow(corners[2] + (-15, 0), corners[1] + (-15, 0), decorate = () -> text("h", O + (0, 10), angle=-π/2))                
+    end
+    @layer begin
+        translate(panes[3])
+        pt = Point(-70, -70)
+        rect(pt, 140, 140, :stroke)
+        text("rect(pt, w, h", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
+        sethue("purple")
+        circle(pt, 8, :fill)
+        label("pt", :SE, pt, offset=20)
+        corners = box(BoundingBox(box(O, 140, 140))...)
+        arrow(corners[2] + (0, -15), corners[3] + (0, -15), decorate = () -> text("w", O + (0, -10)))
+        arrow(corners[2] + (-15, 0), corners[1] + (-15, 0), decorate = () -> text("h", O + (0, 10), angle=-π/2))
+    end
+    @layer begin
+        translate(panes[4])
+        sethue("purple")
+        s = star(O, 70, 5, 0.5, 0, :stroke)
+        sethue("black")
+        box(BoundingBox(s), :stroke)
+        text("BoundingBox(poly...)", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
+    end
+end 800 250
+```
+
+```@example boxrect
+d # hide
+```
 
 If you want the coordinates of the corners of a box, rather than draw one immediately, use:
 
@@ -48,13 +103,12 @@ or
 box(corner1,  corner2, vertices=true)
 ```    
 
-`box` is also able to draw some of the other Luxor objects, such as BoundingBoxes and Table cells.
-
-[`box`](@ref) also returns the coordinates of the corners.
+[`box`](@ref) is also able to draw some of the other Luxor objects, such as BoundingBoxes and Table cells, and usually also returns the coordinates of the corners.
 
 ```julia
 box(Point(0, 0), 100, 100)
 ```
+
 ```
 4-element Array{Point,1}:
  Point(-50.0, 50.0)
@@ -62,7 +116,9 @@ box(Point(0, 0), 100, 100)
  Point(50.0, -50.0)
  Point(50.0, 50.0)
 ```
-To draw a simple rounded box/rectangle, supply a corner radius.
+
+To draw a box/rectangle with rounded corners, supply one or
+four values for corner radius.
 
 ```@example
 using Luxor # hide
@@ -71,17 +127,14 @@ origin() # hide
 background("antiquewhite") # hide
 setline(6)
 sethue("black") # hide
-box(O, 200, 150, 10, :stroke)
+box(O, 200, 150, 10, :stroke) # 1 value for all corners
 sethue("purple")
-box(O, 260, 220, [0, 15, 40, 80], :stroke)
+box(O, 260, 220, [0, 15, 40, 80], :stroke) # different for each
 finish() # hide
 nothing # hide
 ```
 
 ![rounded rect 1](../assets/figures/round-rect-1.png)
-
-The purple box shows how you can specify the radius of each
-corner separately.
 
 Or you could smooth the sharp corners of a box, like so:
 
@@ -96,7 +149,10 @@ polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
 finish() # hide
 nothing # hide
 ```
+
 ![rounded rect](../assets/figures/round-rect.png)
+
+The [`squircle`](@ref) function makes nicer shapes.
 
 ## Triangles, pentagons, and regular polygons
 
@@ -500,12 +556,12 @@ Drawing(800, 500, "../assets/figures/crescents.png") # hide
 background("antiquewhite") # hide
 origin() # hide
 
-# method 1: same radii, different centers
+# method 1: same radius, different centers
 
 sethue("purple")
 crescent(Point(-200, 0), 200, Point(-150, 0), 200, :fill)
 
-# method 2: same centers, different radii
+# method 2: same center, different radii
 
 sethue("orange")
 crescent(O, 100, 200, :fill)
@@ -530,7 +586,7 @@ There is a current point. Use [`currentpoint`](@ref) and [`hascurrentpoint`](@re
 
 Use [`line`](@ref) and [`rline`](@ref) to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` adds a line to the current path going from the current position to the point. `rline(pt)` adds a line relative to the current position.
 
-You can use [`rule`](@ref) to draw a line through a point, optionally at an angle to the current x-axis.
+You can use [`rule`](@ref) to draw a horizontal line through a point. Supply an angle for lines at an angle to the current x-axis.
 
 ```@example
 using Luxor # hide
@@ -1026,20 +1082,19 @@ The `ratio` determines the length of the inner radius compared with the outer.
 
 ```@example
 using Luxor # hide
-Drawing(800, 250, "../assets/figures/star-ratios.png") # hide
-origin() # hide
+@drawsvg begin # hide
 background("antiquewhite") # hide
+fontsize(10) # hide
+tiles = Tiler(800, 250, 1, 6, margin=10)
 sethue("black") # hide
-setline(2) # hide
-tiles = Tiler(500, 250, 1, 6, margin=10)
 for (pos, n) in tiles
-    star(pos, tiles.tilewidth/2, 5, rescale(n, 1, 6, 1, 0), 0, :stroke)
+    s = star(pos, tiles.tilewidth/2, 5, 1/n, 0, :stroke)
+    l2 = distance(pos, s[1])
+    l1 = distance(pos, s[2])
+    text(string(round(l1/l2, digits=2)), pos, halign=:center)
 end
-finish() # hide
-nothing # hide
+end 800 200 # hide
 ```
-
-![stars](../assets/figures/star-ratios.png)
 
 Use [`polycross`](@ref) to draw a cross-shaped polygon.
 

@@ -378,6 +378,8 @@ The resulting bounding box objects can be passed to [`box`](@ref) or [`poly`](@r
 
 To convert a bounding box `b` into a box, use `box(b, vertices=true)` or `convert(Vector{Point}, BoundingBox())`.
 
+To obtain the coordinates of the corners or key points on the bounding box, use the functions with names combining `box` and `top|middle|bottom` and `left|center|right`. So `boxtopleft(bbox)` finds the top left corner of the bounding box `bbox`.
+
 You can also do some arithmetic on bounding boxes. In the next example, the bounding box is created from the text "good afternoon". The bounding box is filled with purple, then increased by 40 units on all sides (blue), also scaled by 1.3 (green), and also shifted by `(0, 100)` (orange).
 
 ```@example
@@ -412,7 +414,7 @@ nothing # hide
 
 ![bounding boxes 2](../assets/figures/bbox2.png)
 
-You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created (you can pass a bounding box to[`rand` to get a random point inside the box) and drawn differently depending on whether they're inside the intersection or outside.
+You can find the union and intersection of BoundingBoxes, and also find whether a point lies inside one. The following code creates, shrinks, and shifts two bounding boxes (colored yellow and pink), and then draws: their union (a bounding box that includes both), in black outline; and their intersection (a bounding box of their common areas), in red. Then some random points are created (you can pass a bounding box to `rand()` to get a random point inside the box) and drawn differently depending on whether they're inside the intersection or outside.
 
 ```@example
 using Luxor, Random # hide
@@ -461,7 +463,7 @@ To find out where a line starting at the center of a bounding box passing throug
 ```@example
 using Luxor, Random # hide
 Drawing(600, 400, "../assets/figures/bbox4.png") # hide
-background("white") # hide
+background("antiquewhite") # hide
 Random.seed!(42) # hide
 origin() # hide
 bx = BoundingBox(box(O, 200, 200, :none))
@@ -490,7 +492,7 @@ You can use [`randompointarray`](@ref) to create an array of randomly placed poi
 
 The `randompointarray(boundingbox, distance)` method fills
 the boundingbox with random points up to `distance` units apart
-using a Poisson Disk Sampling method.
+using a Poisson Disk sampling method.
 
 ```@example
 using Luxor, Colors # hide
@@ -515,35 +517,31 @@ end
 end 800 500 # hide
 ```
 
-The `randompointarray(point1, point2, 100)` method generates 100 points in the area bounded by two points.
+The `randompointarray(point1, point2, n)` method generates
+`n` random points in the area bounded by two points, using Julia's
+random number generator.
 
 ```@example
 using Luxor, Random # hide
-Drawing(800, 250, "../assets/figures/randompoints.png") # hide
+@drawsvg begin # hide
 background("white") # hide
 Random.seed!(42) # hide
 origin() # hide
 
-pt1 = Point(-100, -100)
-pt2 = Point(100, 100)
+pt1 = Point(-300, -150)
+pt2 = Point(300, 150)
 
-sethue("gray80")
+sethue("purple")
 map(pt -> circle(pt, 6, :fill), (pt1, pt2))
 box(pt1, pt2, :stroke)
 
-sethue("red")
-circle(randompoint(pt1, pt2), 7, :fill)
-
 sethue("blue")
-map(pt -> circle(pt, 2, :fill), randompointarray(pt1, pt2, 100))
+map(pt -> circle(pt, 4, :fill), randompointarray(pt1, pt2, 200))
 
-finish() # hide
-nothing # hide
+end 800 400 # hide
 ```
 
-![isinside](../assets/figures/randompoints.png)
-
-Use `rand(BoundingBox())` to return a single point somewhere on the drawing.
+Use `rand(BoundingBox())` to return a single point somewhere inside a bounding box.
 
 ## Noise
 
