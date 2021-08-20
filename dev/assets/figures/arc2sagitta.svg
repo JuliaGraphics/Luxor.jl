@@ -28,7 +28,7 @@
 </symbol>
 </g>
 </defs>
-<g id="surface1407">
+<g id="surface1402">
 <rect x="0" y="0" width="800" height="250" style="fill:rgb(98.039216%,92.156863%,84.313725%);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 800 55 L 0 55 "/>
 <path style="fill-rule:nonzero;fill:rgb(100%,36.270215%,68.337368%);fill-opacity:1;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 300 175 C 294.558594 145.320312 302.582031 114.761719 321.898438 91.582031 C 341.214844 68.402344 369.828125 55 400 55 C 430.171875 55 458.785156 68.402344 478.101562 91.582031 C 497.417969 114.761719 505.441406 145.320312 500 175 "/>
