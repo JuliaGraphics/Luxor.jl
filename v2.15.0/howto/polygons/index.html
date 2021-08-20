@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Work with polygons · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/quickstart/">Quick and short</a></li><li><a class="tocitem" href="../../tutorial/basictutorial/">A more in-depth tutorial</a></li><li><a class="tocitem" href="../../tutorial/simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox" checked/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Use colors and styles</a></li><li class="is-active"><a class="tocitem" href>Work with polygons</a><ul class="internal"><li><a class="tocitem" href="#Regular-polygons-(&quot;ngons&quot;)"><span>Regular polygons (&quot;ngons&quot;)</span></a></li><li><a class="tocitem" href="#Polygons"><span>Polygons</span></a></li><li><a class="tocitem" href="#Offsetting-polygons"><span>Offsetting polygons</span></a></li><li><a class="tocitem" href="#Converting-paths-to-polygons"><span>Converting paths to polygons</span></a></li><li><a class="tocitem" href="#Polygons-to-Bézier-paths-and-back-again"><span>Polygons to Bézier paths and back again</span></a></li><li><a class="tocitem" href="#Brush-strokes"><span>Brush strokes</span></a></li><li><a class="tocitem" href="#Polygon-information"><span>Polygon information</span></a></li><li><a class="tocitem" href="#Polygon-selection-and-modification"><span>Polygon selection and modification</span></a></li><li><a class="tocitem" href="#Other-polygon-operations"><span>Other polygon operations</span></a></li></ul></li><li><a class="tocitem" href="../text/">Add text</a></li><li><a class="tocitem" href="../clipping/">Clip graphics</a></li><li><a class="tocitem" href="../images/">Placing images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Make animations</a></li><li><a class="tocitem" href="../livegraphics/">Live graphics and snapshots</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../explanation/basics/">Basic concepts</a></li><li><a class="tocitem" href="../../explanation/pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../../explanation/perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../../explanation/transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../../explanation/imagematrix/">Image matrix</a></li><li><a class="tocitem" href="../../explanation/luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../../explanation/contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">How to guides</a></li><li class="is-active"><a href>Work with polygons</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Work with polygons</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/howto/polygons.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Polygons-and-paths"><a class="docs-heading-anchor" href="#Polygons-and-paths">Polygons and paths</a><a id="Polygons-and-paths-1"></a><a class="docs-heading-anchor-permalink" href="#Polygons-and-paths" title="Permalink"></a></h1><p>For drawing shapes, Luxor provides polygons and paths.</p><p>A polygon is an ordered collection of Points stored in an array.</p><p>A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a &#39;current path&#39;, to which you can add lines and curves until you finish with a stroke or fill instruction.</p><p>Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.</p><table><tr><th style="text-align: left">create</th><th style="text-align: left">convert</th><th style="text-align: left">draw</th><th style="text-align: left">info</th><th style="text-align: left">edit</th></tr><tr><td style="text-align: left"><em>polygons</em></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.ngon"><code>ngon</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polysmooth"><code>polysmooth</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.poly"><code>poly</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.isinside-Tuple{Point, BoundingBox}"><code>isinside</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.simplify"><code>simplify</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.ngonside"><code>ngonside</code></a></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.prettypoly"><code>prettypoly</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyperimeter-Tuple{Vector{Point}}"><code>polyperimeter</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polysplit-Tuple{Vector{Point}, Point, Point}"><code>polysplit</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.star"><code>star</code></a></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polysmooth"><code>polysmooth</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyarea-Tuple{Vector{Point}}"><code>polyarea</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyportion"><code>polyportion</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.polycross"><code>polycross</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polycentroid-Tuple{Vector{Point}}"><code>polycentroid</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyremainder"><code>polyremainder</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.offsetpoly-Tuple{Any, Function}"><code>offsetpoly</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.BoundingBox"><code>BoundingBox</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polysortbyangle"><code>polysortbyangle</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.hypotrochoid"><code>hypotrochoid</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.ispolyclockwise-Tuple{Vector{Point}}"><code>ispolyclockwise</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polysortbydistance-Tuple{Vector{Point}, Point}"><code>polysortbydistance</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.epitrochoid"><code>epitrochoid</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.ispolyconvex-Tuple{Any}"><code>ispolyconvex</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyintersections-Tuple{Vector{Point}, Vector{Point}}"><code>polyintersections</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.polyrotate!-Tuple{Any, Any}"><code>polyrotate!</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.ispointonpoly-Tuple{Point, Vector{Point}}"><code>ispointonpoly</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polymove!-Tuple{Any, Point, Point}"><code>polymove!</code></a></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.polyfit"><code>polyfit</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyscale!-Tuple{Any, Any, Any}"><code>polyscale!</code></a></td></tr><tr><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polyreflect!"><code>polyreflect!</code></a></td></tr><tr><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polysample-Tuple{Vector{Point}, Integer}"><code>polysample</code></a></td></tr><tr><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.polytriangulate-Tuple{Vector{Point}}"><code>polytriangulate</code></a></td></tr><tr><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"><a href="../../reference/api/#Luxor.insertvertices!-Tuple{Any}"><code>insertvertices!</code></a></td></tr><tr><td style="text-align: left"><em>paths</em></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.getpath-Tuple{}"><code>getpath</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.pathtopoly-Tuple{}"><code>pathtopoly</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.getpathflat-Tuple{}"><code>getpathflat</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><em>Bezier paths</em></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.makebezierpath-Tuple{Vector{Point}}"><code>makebezierpath</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.pathtobezierpaths-Tuple{}"><code>pathtobezierpaths</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.drawbezierpath"><code>drawbezierpath</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.pathtobezierpaths-Tuple{}"><code>pathtobezierpaths</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.bezierpathtopoly-Tuple{BezierPath}"><code>bezierpathtopoly</code></a></td><td style="text-align: left"><a href="../../reference/api/#Luxor.brush"><code>brush</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><code>BezierPath</code></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><code>BezierPathSegment</code></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr><tr><td style="text-align: left"><a href="../../reference/api/#Luxor.beziersegmentangles-Tuple{Any, Any}"><code>beziersegmentangles</code></a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr></table><h2 id="Regular-polygons-(&quot;ngons&quot;)"><a class="docs-heading-anchor" href="#Regular-polygons-(&quot;ngons&quot;)">Regular polygons (&quot;ngons&quot;)</a><a id="Regular-polygons-(&quot;ngons&quot;)-1"></a><a class="docs-heading-anchor-permalink" href="#Regular-polygons-(&quot;ngons&quot;)" title="Permalink"></a></h2><p>A polygon is an array of points. The points can be joined with straight lines.</p><p>You can make regular polygons — from triangles, pentagons, hexagons, septagons, heptagons, octagons, nonagons, decagons, and on-and-on-agons — with <a href="../../reference/api/#Luxor.ngon"><code>ngon</code></a>.</p><pre><code class="language-julia hljs">cols = distinguishable_colors(10)
+setline(2)
+fontsize(12)
+tiles = Tiler(700, 600, 3, 3)
+
+for (pos, n) in tiles
+    @layer begin
+        translate(pos)
+
+        p = ngon(Point(0, 0), 80, n, vertices=true)
+
+        sethue(cols[n])
+
+        poly(p, :fill, close=true)
+        sethue(&quot;black&quot;)
+        poly(p, :stroke, close=true)
+
+        circle(Point(0, 0), 4, :fill)
+
+        label.([string(i) for i in 1:n], slope.(O, p), p, offset=5)
+    end
+end</code></pre><p>The initial orientation of the polygon defaults to 0.</p><p><img src="../../assets/figures/n-gon.png" alt="n-gons"/></p><p>If you want to specify the side length rather than the circumradius, use <a href="../../reference/api/#Luxor.ngonside"><code>ngonside</code></a>.</p><pre><code class="language-julia hljs">for i in 20:-1:3
+    sethue(i/20, 0.5, 0.7)
+    ngonside(Point(0, 0), 75, i, 0, :fill)
+    sethue(&quot;black&quot;)
+    ngonside(Point(0, 0), 75, i, 0, :stroke)
+end</code></pre><p><img src="../../assets/figures/ngonside.png" alt="stars"/></p><p>The functions return the vertices, or you can use the <code>vertices=true</code> option.</p><pre><code class="language-julia hljs">ngon(Point(0, 0), 10, 5)</code></pre><pre><code class="language-5-element hljs"> Point(3.0901699437494745, 9.510565162951535)
+ Point(-8.090169943749473, 5.877852522924733)
+ Point(-8.090169943749475, -5.87785252292473)
+ Point(3.0901699437494723, -9.510565162951536)
+ Point(10.0, -2.4492935982947065e-15)</code></pre><h2 id="Polygons"><a class="docs-heading-anchor" href="#Polygons">Polygons</a><a id="Polygons-1"></a><a class="docs-heading-anchor-permalink" href="#Polygons" title="Permalink"></a></h2><p>Use <a href="../../reference/api/#Luxor.poly"><code>poly</code></a> to draw lines connecting the points and/or just fill the area:</p><pre><code class="language-julia hljs">tiles = Tiler(600, 250, 1, 2, margin=20)
+tile1, tile2 = collect(tiles)
+
+randompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]
+
+gsave()
+translate(tile1[1])
+poly(randompoints, :stroke)
+grestore()
+
+gsave()
+translate(tile2[1])
+poly(randompoints, :fill)
+grestore()</code></pre><p><img src="../../assets/figures/simplepoly.png" alt="simple poly"/></p><p>A polygon can contain holes. The <code>reversepath</code> keyword changes the direction of the polygon. The following piece of code uses <a href="../../reference/api/#Luxor.ngon"><code>ngon</code></a> to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:</p><pre><code class="language-julia hljs">setline(5)
+sethue(&quot;gold&quot;)
+line(Point(-200, 0), Point(200, 0), :stroke)
+sethue(&quot;orchid4&quot;)
+ngon(0, 0, 60, 6, 0, :path)
+newsubpath()
+ngon(0, 0, 40, 6, 0, :path, reversepath=true)
+fillstroke()</code></pre><p><img src="../../assets/figures/holes.png" alt="holes"/></p><p>The <a href="../../reference/api/#Luxor.prettypoly"><code>prettypoly</code></a> function can place graphics at each vertex of a polygon. After the polygon action, the supplied <code>vertexfunction</code> function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:</p><pre><code class="language-julia hljs">apoly = star(O, 70, 7, 0.6, 0, vertices=true)
+prettypoly(apoly, :fill, () -&gt;
+        begin
+            randomhue()
+            circle(O, 10, :fill)
+        end,
+    close=true)</code></pre><p><img src="../../assets/figures/prettypolybasic.png" alt="prettypoly"/></p><p>An optional keyword argument <code>vertexlabels</code> lets you pass a function that can number each vertex. The function can use two arguments, the current vertex number, and the total number of points in the polygon:</p><pre><code class="language-julia hljs">apoly = star(O, 80, 5, 0.6, 0, vertices=true)
+prettypoly(apoly,
+    :stroke,
+    vertexlabels = (n, l) -&gt; (text(string(n, &quot; of &quot;, l), halign=:center)),
+    close=true)</code></pre><p><img src="../../assets/figures/prettypolyvertex.png" alt="prettypoly"/></p><p>Recursive decoration is possible:</p><pre><code class="language-julia hljs">decorate(pos, p, level) = begin
+    if level &lt; 4
+        randomhue()
+        scale(0.25, 0.25)
+        prettypoly(p, :fill, () -&gt; decorate(pos, p, level+1), close=true)
+    end
+end
+
+apoly = star(O, 100, 7, 0.6, 0, vertices=true)
+prettypoly(apoly, :fill, () -&gt; decorate(O, apoly, 1), close=true)</code></pre><p><img src="../../assets/figures/prettypolyrecursive.png" alt="prettypoly"/></p><p>Polygons can be simplified using the Douglas-Peucker algorithm (non-recursive version), via <a href="../../reference/api/#Luxor.simplify"><code>simplify</code></a>.</p><pre><code class="language-julia hljs">sincurve = [Point(6x, 80sin(x)) for x in -5π:π/20:5π]
+prettypoly(collect(sincurve), :stroke,
+    () -&gt; begin
+            sethue(&quot;red&quot;)
+            circle(O, 3, :fill)
+          end)
+text(string(&quot;number of points: &quot;, length(collect(sincurve))), 0, 100)
+translate(0, 200)
+simplercurve = simplify(collect(sincurve), 0.5)
+prettypoly(simplercurve, :stroke,
+    () -&gt; begin
+            sethue(&quot;red&quot;)
+            circle(O, 3, :fill)
+          end)
+text(string(&quot;number of points: &quot;, length(simplercurve)), 0, 100)</code></pre><p><img src="../../assets/figures/simplify.png" alt="simplify"/></p><p>The <a href="../../reference/api/#Luxor.isinside-Tuple{Point, BoundingBox}"><code>isinside</code></a> function returns true if a point is inside a polygon.</p><pre><code class="language-julia hljs">apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
+for pt in collect(first.(Table(30, 30, 15, 15)))
+    sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))
+    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, :fill) : circle(pt, 3, :fill)
+end</code></pre><p><img src="../../assets/figures/isinside.png" alt="isinside"/></p><h3 id="Quickly-changing-polygons"><a class="docs-heading-anchor" href="#Quickly-changing-polygons">Quickly changing polygons</a><a id="Quickly-changing-polygons-1"></a><a class="docs-heading-anchor-permalink" href="#Quickly-changing-polygons" title="Permalink"></a></h3><p>If you want to quickly and permanently modify a polygon, there&#39;s <a href="../../reference/api/#Luxor.polymove!-Tuple{Any, Point, Point}"><code>polymove!</code></a>, <a href="../../reference/api/#Luxor.polyscale!-Tuple{Any, Any, Any}"><code>polyscale!</code></a>, <a href="../../reference/api/#Luxor.polyreflect!"><code>polyreflect!</code></a>, and <a href="../../reference/api/#Luxor.polyrotate!-Tuple{Any, Any}"><code>polyrotate!</code></a>.</p><pre><code class="language-julia hljs">shape = star(O, 10, 5, 0.5, 0, vertices=true)
+
+circle(O, 3, :stroke)
+
+polymove!(shape, O, O + (0, 50))
+
+poly(shape, :stroke, close=true)
+
+for i in 1:20
+    poly(polyrotate!(shape, π/5), :fill, close=true)
+    polyscale!(shape, 19//18)
+end</code></pre><p>The polygon is continually modified (notice the <code>!</code> in the function names).</p><p><img src="../../assets/figures/polychange.png" alt="poly changing"/></p><pre><code class="language-julia hljs">pgon = randompointarray(BoundingBox()/2 ..., 10)
+polymove!(pgon, O, Point(-80, 0))
+poly(pgon, :fill, close=true)
+# reflect in y axis:
+polyreflect!(pgon, Point(0, 0), Point(0, 100))
+sethue(&quot;blue&quot;)
+poly(pgon, :fill, close=true)</code></pre><p><img src="../../assets/figures/polyreflect.png" alt="poly reflect"/></p><h3 id="Other-functions"><a class="docs-heading-anchor" href="#Other-functions">Other functions</a><a id="Other-functions-1"></a><a class="docs-heading-anchor-permalink" href="#Other-functions" title="Permalink"></a></h3><p>There are a number of experimental polygon functions. These won&#39;t work well for polygons that aren&#39;t simple or where the sides intersect each other, but they sometimes do a reasonable job. For example, here&#39;s <a href="../../reference/api/#Luxor.polysplit-Tuple{Vector{Point}, Point, Point}"><code>polysplit</code></a>:</p><pre><code class="language-julia hljs">s = squircle(O, 60, 60, vertices=true)
+pt1 = Point(0, -120)
+pt2 = Point(0, 120)
+line(pt1, pt2, :stroke)
+poly1, poly2 = polysplit(s, pt1, pt2)
+randomhue()
+poly(poly1, :fill)
+randomhue()
+poly(poly2, :fill)</code></pre><p><img src="../../assets/figures/polysplit.png" alt="polysplit"/></p><h3 id="Smoothing-polygons"><a class="docs-heading-anchor" href="#Smoothing-polygons">Smoothing polygons</a><a id="Smoothing-polygons-1"></a><a class="docs-heading-anchor-permalink" href="#Smoothing-polygons" title="Permalink"></a></h3><p>Because polygons can have sharp corners, the experimental <a href="../../reference/api/#Luxor.polysmooth"><code>polysmooth</code></a> function attempts to insert arcs at the corners and draw the result.</p><p>The original polygon is shown in red; the smoothed polygon is shown on top:</p><pre><code class="language-julia hljs">tiles = Tiler(600, 250, 1, 5, margin=10)
+for (pos, n) in tiles
+    p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)
+    sethue(&quot;red&quot;)
+    poly(p, close=true, :stroke)
+    sethue(&quot;black&quot;)
+    polysmooth(p, n * 2, :fill)
+end</code></pre><p><img src="../../assets/figures/polysmooth.svg" alt="polysmooth"/></p><p>The final polygon shows that you can get unexpected results if you attempt to smooth corners by more than the possible amount. The <code>debug=true</code> option draws the circles if you want to find out what&#39;s going wrong, or if you want to explore the effect in more detail.</p><pre><code class="language-julia hljs">p = star(O, 60, 5, 0.35, 0, vertices=true)
+setdash(&quot;dot&quot;)
+sethue(&quot;red&quot;)
+prettypoly(p, close=true, :stroke)
+setdash(&quot;solid&quot;)
+sethue(&quot;black&quot;)
+polysmooth(p, 40, :fill, debug=true)</code></pre><p><img src="../../assets/figures/polysmooth-pathological.svg" alt="polysmooth"/></p><h2 id="Offsetting-polygons"><a class="docs-heading-anchor" href="#Offsetting-polygons">Offsetting polygons</a><a id="Offsetting-polygons-1"></a><a class="docs-heading-anchor-permalink" href="#Offsetting-polygons" title="Permalink"></a></h2><p>There are three methods for <a href="../../reference/api/#Luxor.offsetpoly-Tuple{Any, Function}"><code>offsetpoly</code></a>, a function which constructs a new polygon that&#39;s offset from an existing one.</p><ul><li><p><code>offsetpoly(plist, d)</code> treats the <code>plist</code> of points as a polygon  with <code>n</code> vertices joined by <code>n</code> lines with offset <code>d</code> on both  sides.</p></li><li><p><code>offsetpoly(plist, startoffset=d1, endoffset=d2)</code> treats the <code>plist</code> of points as a polyline with <code>n</code> vertices joined by <code>n-1</code> lines, where the offset varies from <code>startoffset</code> to <code>endoffset</code>.</p></li><li><p><code>offsetpoly(plist, f::function)</code> applies a function f at each vertex of the polyline to determine the width of the offset polygon at that point.</p></li></ul><p>The first method is good for making closed shapes larger or smaller. The other methods are useful for building shapes around an open linear spine.</p><h4 id=":-n-vertices-joined-by-n-lines"><a class="docs-heading-anchor" href="#:-n-vertices-joined-by-n-lines">1: <code>n</code> vertices joined by <code>n</code> lines</a><a id=":-n-vertices-joined-by-n-lines-1"></a><a class="docs-heading-anchor-permalink" href="#:-n-vertices-joined-by-n-lines" title="Permalink"></a></h4><p>The <code>offsetpoly(plist, d)</code> method constructs a closed polygon outside or inside an existing polygon, at distance <code>d</code>.  The last vertex in <code>plist</code> as assumed to be be connected to the first.</p><p>In the following example, the dotted red polygon is the original, the black polygons have positive offsets and surround the original, the cyan polygons have negative offsets and run inside the original. Use <a href="../../reference/api/#Luxor.poly"><code>poly</code></a> to draw the result.</p><pre><code class="language-julia hljs">p = star(O, 45, 5, 0.5, 0, vertices=true)
+sethue(&quot;red&quot;)
+setdash(&quot;dot&quot;)
+poly(p, :stroke, close=true)
+setdash(&quot;solid&quot;)
+sethue(&quot;black&quot;)
+
+poly(offsetpoly(p, 20), :stroke, close=true)
+poly(offsetpoly(p, 25), :stroke, close=true)
+poly(offsetpoly(p, 30), :stroke, close=true)
+poly(offsetpoly(p, 35), :stroke, close=true)
+
+sethue(&quot;darkcyan&quot;)
+
+poly(offsetpoly(p, -10), :stroke, close=true)
+poly(offsetpoly(p, -15), :stroke, close=true)
+poly(offsetpoly(p, -20), :stroke, close=true)</code></pre><p><img src="../../assets/figures/polyoffset-simple.png" alt="offset poly 2"/></p><p>The function is intended for simple cases, and it can go wrong if pushed too far. Sometimes the offset distances can be larger than the polygon segments, and things will start to go wrong. In this example, the offset goes so far negative that the polygon overshoots the origin, becomes inverted and starts getting larger again.</p><p><img src="../../assets/figures/polygon-offset.gif" alt="offset poly problem"/></p><h4 id="n-vertices-joined-by-n-1-lines"><a class="docs-heading-anchor" href="#n-vertices-joined-by-n-1-lines">2 <code>n</code> vertices joined by <code>n-1</code> lines</a><a id="n-vertices-joined-by-n-1-lines-1"></a><a class="docs-heading-anchor-permalink" href="#n-vertices-joined-by-n-1-lines" title="Permalink"></a></h4><p>The <code>offsetpoly(plist)</code> method constructs a polygon around a line joining the lines in <code>plist</code>. At the start of the line, the polygon will be <code>startoffset</code> units on each side; by the end of the line, the polygon will be <code>endoffset</code> units on each side. The last vertex isn&#39;t joined to the first, hence <code>n-1</code>.</p><p>In the following example, the original spine is drawn in orange, on top of the black polygon that&#39;s constructed to be offset 2 units on each side at the start and 30 units on each side at the end.</p><pre><code class="language-julia hljs">spine = [Point(20 + 40x, 15sin(2x)) for x in 0:.1:4π]
+
+for θ in range(0, 2π, step=π/12)
+    @layer begin
+        sethue(&quot;black&quot;)
+        rotate(θ)
+        poly(offsetpoly(spine, startoffset=1, endoffset=30), :fill)
+        sethue(&quot;orange&quot;)
+        poly(spine, :stroke)
+    end
+end</code></pre><p><img src="../../assets/figures/polyoffset-open.png" alt="offset poly open"/></p><h5 id="Using-an-offset-control-function"><a class="docs-heading-anchor" href="#Using-an-offset-control-function">Using an offset-control function</a><a id="Using-an-offset-control-function-1"></a><a class="docs-heading-anchor-permalink" href="#Using-an-offset-control-function" title="Permalink"></a></h5><p>This method accepts a keyword argument that allows you to control the way the offsets are applied, using the easing functionality built in to Luxor (see <a href="../animation/#Animation-helper-functions">Animation helper functions</a>).</p><p>By default the function is <code>lineartween</code>, so the offset changes linearly between the <code>startoffset</code> and the <code>endoffset</code> values. With other easing functions, this change is modulated. For example, the <code>easeinoutquad</code> function moves between start and end values using a quadratic motion.</p><pre><code class="language-julia hljs">spine = between.(O - (200, 0), O + (200, 0), 0:0.025:1)
+
+sethue(&quot;red&quot;)
+prettypoly(spine, :stroke)
+
+sethue(&quot;black&quot;)
+pg = offsetpoly(spine, startoffset=0, endoffset=200, easingfunction=easeinoutquad)
+prettypoly(pg, :stroke, close=true)</code></pre><p><img src="../../assets/figures/polyoffset-easing.png" alt="offset poly easing"/></p><p>But in the next example, the function <code>f(t, b, c, d)</code> (the Luxor standard four-argument easing function) is defined to run from 0 to 2 and back again as <code>t</code> goes from  0 to 1, so the initial and final offsets are &#39;eased&#39; to 0, and at the middle of the polygon the offsets at that location are &#39;eased&#39; to 2 × the offset value at that point.</p><pre><code class="language-julia hljs">spine = [Point(20x, 15sin(x)) for x in -4π:pi/24:4pi]
+
+f(t, b, c, d) = 2sin(t * π)
+
+pg = offsetpoly(spine, startoffset=1, endoffset=10, easingfunction=f)
+sethue(&quot;black&quot;)
+poly(pg, :fill)
+
+sethue(&quot;white&quot;)
+poly(spine, :stroke)</code></pre><p><img src="../../assets/figures/polyoffset-easing1.png" alt="offset poly easing 1"/></p><h4 id=":-Applying-a-function"><a class="docs-heading-anchor" href="#:-Applying-a-function">3: Applying a function</a><a id=":-Applying-a-function-1"></a><a class="docs-heading-anchor-permalink" href="#:-Applying-a-function" title="Permalink"></a></h4><p>This method generates offset widths using the supplied function. The value of the supplied function <code>f</code> at <code>f(0, θ)</code> determines the start offset on each side, and <code>f(1, θ)</code> determines the finishing offset on each side. The width at the middle vertex will be <code>f(0.5, θ)</code> (on each side). <code>θ</code> is provided as the current slope of the polyline at that point.</p><pre><code class="language-julia hljs">spiralcurve = spiral(10, 0.3, log=true, period=3π)
+f(x, θ) = 1 + 15sin(x * π)
+pgon = offsetpoly(spiralcurve, f)
+poly(pgon, :fill)</code></pre><p><img src="../../assets/figures/polyoffset-function.png" alt="offset poly fucntion"/></p><h3 id="Fitting-splines"><a class="docs-heading-anchor" href="#Fitting-splines">Fitting splines</a><a id="Fitting-splines-1"></a><a class="docs-heading-anchor-permalink" href="#Fitting-splines" title="Permalink"></a></h3><p>The experimental <a href="../../reference/api/#Luxor.polyfit"><code>polyfit</code></a> function constructs a B-spline that follows the points approximately.</p><pre><code class="language-julia hljs">pts = [Point(x, rand(-100:100)) for x in -280:30:280]
+setopacity(0.7)
+sethue(&quot;red&quot;)
+prettypoly(pts, :none, () -&gt; circle(O, 5, :fill))
+sethue(&quot;darkmagenta&quot;)
+poly(polyfit(pts, 200), :stroke)</code></pre><p><img src="../../assets/figures/polyfit.png" alt="offset poly"/></p><h2 id="Converting-paths-to-polygons"><a class="docs-heading-anchor" href="#Converting-paths-to-polygons">Converting paths to polygons</a><a id="Converting-paths-to-polygons-1"></a><a class="docs-heading-anchor-permalink" href="#Converting-paths-to-polygons" title="Permalink"></a></h2><p>You can convert the current path to an array of polygons, using <a href="../../reference/api/#Luxor.pathtopoly-Tuple{}"><code>pathtopoly</code></a>.</p><p>In the next example, the path consists of a number of paths, some of which are subpaths, which form the holes.</p><pre><code class="language-julia hljs">textpath(&quot;get polygons from paths&quot;)
+plist = pathtopoly()
+for (n, pgon) in enumerate(plist)
+    randomhue()
+    prettypoly(pgon, :stroke, close=true)
+    gsave()
+    translate(0, 100)
+    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)
+    grestore()
+end</code></pre><p><img src="../../assets/figures/path-to-poly.png" alt="path to polygon"/></p><p>The <a href="../../reference/api/#Luxor.pathtopoly-Tuple{}"><code>pathtopoly</code></a> function calls <a href="../../reference/api/#Luxor.getpathflat-Tuple{}"><code>getpathflat</code></a> to convert the current path to an array of polygons, with each curved section flattened to line segments.</p><p>The <a href="../../reference/api/#Luxor.getpath-Tuple{}"><code>getpath</code></a> function gets the current path as an array of elements, lines, and unflattened curves.</p><h2 id="Polygons-to-Bézier-paths-and-back-again"><a class="docs-heading-anchor" href="#Polygons-to-Bézier-paths-and-back-again">Polygons to Bézier paths and back again</a><a id="Polygons-to-Bézier-paths-and-back-again-1"></a><a class="docs-heading-anchor-permalink" href="#Polygons-to-Bézier-paths-and-back-again" title="Permalink"></a></h2><p>Use the <a href="../../reference/api/#Luxor.makebezierpath-Tuple{Vector{Point}}"><code>makebezierpath</code></a> and <a href="../../reference/api/#Luxor.drawbezierpath"><code>drawbezierpath</code></a> functions to make and draw Bézier paths, and <a href="../../reference/api/#Luxor.pathtobezierpaths-Tuple{}"><code>pathtobezierpaths</code></a> to convert the current path to an array of Bézier paths.  </p><p>A BezierPath type contains a sequence of <code>BezierPathSegment</code>s; each curve segment is defined by four points: two end points and their control points.</p><pre><code class="nohighlight hljs">    (Point(-129.904, 75.0),        # start point
+     Point(-162.38, 18.75),        # ^ control point
+     Point(-64.9519, -150.0),      # v control point
+     Point(-2.75546e-14, -150.0)), # end point
+    (Point(-2.75546e-14, -150.0),
+     Point(64.9519, -150.0),
+     Point(162.38, 18.75),
+     Point(129.904, 75.0)),
+    (Point(129.904, 75.0),
+     Point(97.4279, 131.25),
+     Point(-97.4279, 131.25),
+     Point(-129.904, 75.0)
+     ),
+     ...</code></pre><p>Bézier paths are different from ordinary paths in that they don&#39;t usually contain straight line segments. However, by setting the two control points to be the same as their matching start/end points, you create straight line sections.</p><p><a href="../../reference/api/#Luxor.makebezierpath-Tuple{Vector{Point}}"><code>makebezierpath</code></a> takes the points in a polygon and converts each line segment into one Bézier curve. <a href="../../reference/api/#Luxor.drawbezierpath"><code>drawbezierpath</code></a> draws the resulting sequence.</p><pre><code class="language-julia hljs">pts = ngon(O, 150, 3, pi/6, vertices=true)
+bezpath = makebezierpath(pts)
+poly(pts, :stroke)
+for (p1, c1, c2, p2) in bezpath[1:end-1]
+    circle.([p1, p2], 4, :stroke)
+    circle.([c1, c2], 2, :fill)
+    line(p1, c1, :stroke)
+    line(p2, c2, :stroke)
+end
+sethue(&quot;black&quot;)
+setline(3)
+drawbezierpath(bezpath, :stroke, close=false)</code></pre><p><img src="../../assets/figures/abezierpath.png" alt="path to polygon"/></p><pre><code class="language-julia hljs">tiles = Tiler(600, 300, 1, 4, margin=20)
+for (pos, n) in tiles
+    @layer begin
+        translate(pos)
+        pts = polysortbyangle(
+                randompointarray(
+                    Point(-tiles.tilewidth/2, -tiles.tilewidth/2),
+                    Point(tiles.tilewidth/2, tiles.tilewidth/2),
+                    4))
+        setopacity(0.7)
+        sethue(&quot;black&quot;)
+        prettypoly(pts, :stroke, close=true)
+        randomhue()
+        drawbezierpath(makebezierpath(pts), :fill)
+    end
+end</code></pre><p><img src="../../assets/figures/bezierpaths.png" alt="path to polygon"/></p><p>You can convert a Bézier path to a polygon (an array of points), using the <a href="../../reference/api/#Luxor.bezierpathtopoly-Tuple{BezierPath}"><code>bezierpathtopoly</code></a> function. This chops up the curves into a series of straight line segments. An optional <code>steps</code> keyword lets you specify how many line segments are used to approximate each Bézier segment.</p><p>In this example, the original star is drawn in a dotted gray line, then converted to a Bézier path (drawn in orange), then the Bézier path is converted (with low resolution) to a polygon but offset by 20 units before being drawn (in blue).</p><pre><code class="language-julia hljs">pgon = star(O, 250, 5, 0.6, 0, vertices=true)
+
+@layer begin
+    setgrey(0.5)
+    setdash(&quot;dot&quot;)
+    poly(pgon, :stroke, close=true)
+    setline(5)
+end
+
+setline(4)
+
+sethue(&quot;orangered&quot;)
+
+np = makebezierpath(pgon)
+drawbezierpath(np, :stroke)
+
+sethue(&quot;steelblue&quot;)
+p = bezierpathtopoly(np, steps=3)
+
+q1 = offsetpoly(p, 20)
+prettypoly(q1, :stroke, close=true)</code></pre><p><img src="../../assets/figures/bezierpathtopoly.png" alt="path to polygon"/></p><p>You can convert the current path to an array of BezierPaths using the <a href="../../reference/api/#Luxor.pathtobezierpaths-Tuple{}"><code>pathtobezierpaths</code></a> function.</p><p>In the next example, the letter &quot;a&quot; is placed at the current position (set by <a href="../../reference/api/#Luxor.move-Tuple{Any, Any}"><code>move</code></a>) and then converted to an array of Bézier paths. Each Bézier path is drawn first of all in gray, then the control points of segment are drawn (in orange) showing how they affect the curvature.</p><pre><code class="language-julia hljs">st = &quot;a&quot;
+thefontsize = 500
+fontsize(thefontsize)
+sethue(&quot;red&quot;)
+tex = textextents(st)
+move(-tex[3]/2, tex[4]/2)
+textpath(st)
+nbps = pathtobezierpaths()
+setline(1.5)
+for nbp in nbps
+    sethue(&quot;grey80&quot;)
+    drawbezierpath(nbp, :stroke)
+    for p in nbp
+        sethue(&quot;darkorange&quot;)
+        circle(p[2], 2.0, :fill)
+        circle(p[3], 2.0, :fill)
+        line(p[2], p[1], :stroke)
+        line(p[3], p[4], :stroke)
+        if p[1] != p[4]
+            sethue(&quot;black&quot;)
+            circle(p[1], 2.0, :fill)
+            circle(p[4], 2.0, :fill)
+        end
+    end
+end</code></pre><p><img src="../../assets/figures/pathtobezierpaths.png" alt="path to polygon"/></p><p><a href="../../reference/api/#Luxor.beziersegmentangles-Tuple{Any, Any}"><code>beziersegmentangles</code></a> lets you define a Bézier path segment by specifying the angles the control handles make with the base line.</p><pre><code class="language-julia hljs">setline(.5)
+
+@layer begin
+    rule.(O, (0, (π/2)))
+end
+
+P = O
+Q = O + (200, 0)
+sethue(&quot;black&quot;)
+
+pts = beziersegmentangles(P, Q,
+    out = deg2rad(60),
+    in  = 2π - deg2rad(45))
+
+@layer begin
+    setline(2)
+    sethue(&quot;purple&quot;)
+    drawbezierpath(pts, :stroke)
+end
+
+sethue(&quot;grey50&quot;)
+line(O, pts[2], :stroke)
+line(Q, pts[3], :stroke)
+fontsize(15)
+circle.((P, pts[2], pts[3], Q), 5, :fill)
+label.((&quot;P&quot;, &quot;Q&quot;), :ne, (P, Q))
+text(&quot;60°&quot;, P + (40, 20))
+text(&quot;135°&quot;, Q + (10, 20))</code></pre><p><img src="../../assets/figures/beziersegmentangles.svg" alt="bezier segment angles"/></p><h2 id="Brush-strokes"><a class="docs-heading-anchor" href="#Brush-strokes">Brush strokes</a><a id="Brush-strokes-1"></a><a class="docs-heading-anchor-permalink" href="#Brush-strokes" title="Permalink"></a></h2><p>The <a href="../../reference/api/#Luxor.brush"><code>brush</code></a> function builds Bezier paths in a quasi-random fashion, that could look like brush strokes. The optional keyword arguments allow a range of different effects.</p><p>You can pass a function that can adjust various drawing settings before the shapes are drawn.</p><pre><code class="language-julia hljs">brushα(nbpb) = begin
+    setline(1)
+    setopacity(0.3)
+    drawbezierpath(nbpb, :stroke)
+    sethue(0.2, 0.3, rand(0.3:0.01:0.65))
+    return nbpb
+end
+
+function numberit(pos, n)
+    @layer begin
+        sethue(&quot;black&quot;)
+        text(string(n), pos)
+    end
+end
+
+t  = Tiler(800, 700, 5, 1)
+sethue(&quot;orange3&quot;)
+fontsize(20)
+for (pos, n) in t
+    start, finish = pos - (200, 0), pos + (200, 0)
+    if n == 1
+        # five brush strokes
+        brush(start, finish, 1)
+        numberit(pos, n)
+    elseif n == 2
+        # minwidth and maxwidth control the, er, width
+         brush(start, finish, 5, minwidth = -5, maxwidth = 2)
+         numberit(pos, n)
+    elseif n == 3
+        # dont have to have transparent strokes
+         brush(start, finish, 20, minwidth = .2, randomopacity = false)
+         numberit(pos, n)
+    elseif n == 4
+        # twist and adjust handles to taste
+         brush(start, finish, minwidth = -.1, maxwidth = .2,
+             twist = 2, highhandle = 2, tidystart=false)
+         numberit(pos, n)
+    elseif n == 5
+        # call a function to modify each stroke
+        brush(start, finish, 1, minwidth = -2.2, maxwidth = .8,
+            lowhandle = -.4, highhandle = 1.5, twist = .5,
+            strokefunction = brushα)
+        numberit(pos, n)
+    end
+end</code></pre><p><img src="../../assets/figures/brush1.png" alt="brush 1"/></p><p>For more information (and more than you probably wanted to know) about Luxor&#39;s Bézier paths, visit <a href="https://cormullion.github.io/pages/2018-06-20-bezier/">https://cormullion.github.io/pages/2018-06-20-bezier/</a>.</p><h2 id="Polygon-information"><a class="docs-heading-anchor" href="#Polygon-information">Polygon information</a><a id="Polygon-information-1"></a><a class="docs-heading-anchor-permalink" href="#Polygon-information" title="Permalink"></a></h2><p><code>polyperimeter</code> calculates the length of a polygon&#39;s perimeter.</p><pre><code class="language-julia hljs">p = box(O, 50, 50, vertices=true)
+poly(p, :stroke)
+text(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)
+
+translate(200, 0)
+
+poly(p, :stroke, close=true)
+text(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)</code></pre><p><img src="../../assets/figures/polyperimeter.png" alt="polyperimeter"/></p><h2 id="Polygon-selection-and-modification"><a class="docs-heading-anchor" href="#Polygon-selection-and-modification">Polygon selection and modification</a><a id="Polygon-selection-and-modification-1"></a><a class="docs-heading-anchor-permalink" href="#Polygon-selection-and-modification" title="Permalink"></a></h2><p>There are Luxor functions to return the first part or last part of a polygon. You can also ask for a resampling of a polygon, choosing either to increase the number of points (which places new points to the &quot;lines&quot; joining the vertices) or decrease them (which changes the shape of the polygon). It&#39;s also possible to insert vertices automatically.</p><p><a href="../../reference/api/#Luxor.polyportion"><code>polyportion</code></a> and <a href="../../reference/api/#Luxor.polyremainder"><code>polyremainder</code></a> return part of a polygon depending on the fraction you supply. For example, <code>polyportion(p, 0.5)</code> returns the first half of polygon <code>p</code>, <code>polyremainder(p, .75)</code> returns the last quarter of it.</p><pre><code class="language-julia hljs">p = ngon(O, 100, 7, 0, vertices=true)
+poly(p, :stroke, close=true)
+setopacity(0.75)
+
+setline(20)
+sethue(&quot;red&quot;)
+poly(polyportion(p, 0.25), :stroke)
+
+setline(10)
+sethue(&quot;green&quot;)
+poly(polyportion(p, 0.5), :stroke)
+
+setline(5)
+sethue(&quot;blue&quot;)
+poly(polyportion(p, 0.75), :stroke)
+
+setline(1)
+circle(polyremainder(p, 0.75)[1], 5, :stroke) # first point</code></pre><p><img src="../../assets/figures/polyportion.png" alt="polyportion"/></p><p>You can insert vertices in the edges of a polygon with <a href="../../reference/api/#Luxor.insertvertices!-Tuple{Any}"><code>insertvertices!</code></a>. For example, this code inserts a new vertex into each side of a polygon five times. The polygon ends up with 128 vertices.</p><pre><code class="language-julia hljs">pts = box(O, 500, 200, vertices=true)
+prettypoly(pts, :stroke, close=true)
+
+for i in 1:5
+    insertvertices!(pts)
+    prettypoly(pts, :stroke, close=true)
+    fontsize(16)
+    label(string(length(pts)), :ne, pts[1], offset=10)
+    scale(0.8)
+end</code></pre><p><img src="../../assets/figures/insertvertices.png" alt="poly insert vertices"/></p><p>To resample a polygon, use <a href="../../reference/api/#Luxor.polysample-Tuple{Vector{Point}, Integer}"><code>polysample</code></a>. In this example, the same four-sided polygon is resampled at multiples of 4, with different circle radii at each multiple. This adds more points to the new copy of the original polygon.</p><pre><code class="language-julia hljs">pts = ngon(O, 100, 4, vertices=true)
+for (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))
+    prettypoly(polysample(pts, npoints),
+        :stroke, close=true,
+        () -&gt; begin
+                circle(O, 2n, :stroke)
+              end)
+end</code></pre><p><img src="../../assets/figures/polysample.png" alt="polysampling"/></p><p>There is a <code>closed</code> option, which determines whether or not the final edge (the one that would join the final vertex to the first), is included in the sampling. In the following example, the original polygon is drawn in black, then sampled as a closed polygon (in blue), then as a non-closed one (magenta).</p><pre><code class="language-julia hljs"># original polygon
+
+numbervertices(l, n) = label(string(l), :N, O)
+drawvertices() = ngon(O, 3, 4, 0, :fill)
+
+pts = [Point(30x, 20sin(x)) for x in -2π:π/6:2π]
+
+# 1: drawn as defined
+
+prettypoly(pts, &quot;stroke&quot;, drawvertices, vertexlabels = numbervertices)
+
+translate(0, 50)
+
+
+# 2: resampled as closed
+
+npoints = 40
+
+sethue(&quot;cornflowerblue&quot;)
+prettypoly(polysample(pts, npoints, closed=true), :stroke, drawvertices,
+    vertexlabels = numbervertices)
+
+translate(0, 50)
+
+# 3: resampled as open
+
+sethue(&quot;magenta&quot;)
+prettypoly(polysample(pts, npoints, closed=false), :stroke, drawvertices,
+    vertexlabels = numbervertices)</code></pre><p><img src="../../assets/figures/polysample2.png" alt="polysampling 2"/></p><h3 id="Polygon-side-lengths"><a class="docs-heading-anchor" href="#Polygon-side-lengths">Polygon side lengths</a><a id="Polygon-side-lengths-1"></a><a class="docs-heading-anchor-permalink" href="#Polygon-side-lengths" title="Permalink"></a></h3><p><code>polydistances</code> returns an array of the accumulated side lengths of a polygon.</p><pre><code class="nohighlight hljs">julia&gt; p = ngon(O, 100, 7, 0, vertices=true);
+julia&gt; polydistances(p)
+8-element Array{Real,1}:
+   0.0000
+  86.7767
+ 173.553
+ 260.33
+ 347.107
+ 433.884
+ 520.66
+ 607.437</code></pre><p>It&#39;s used by <a href="../../reference/api/#Luxor.polyportion"><code>polyportion</code></a> and <a href="../../reference/api/#Luxor.polyremainder"><code>polyremainder</code></a>, and you can pre-calculate and pass them to these functions via keyword arguments for performance. By default the result includes the final closing segment (<code>closed=true</code>).</p><p>These functions also make use of the <a href="../../reference/api/#Luxor.nearestindex-Tuple{Vector{T} where T&lt;:Real, Any}"><code>nearestindex</code></a>, which returns a tuple of: the index of the nearest value in an array of distances to a given value; and the excess value.</p><p>In this example, we want to find a point halfway round the perimeter of a triangle. Use <a href="../../reference/api/#Luxor.nearestindex-Tuple{Vector{T} where T&lt;:Real, Any}"><code>nearestindex</code></a> to find the index of the nearest vertex (<code>nidx</code>, 2), and the surplus length, (<code>over</code>, 100).</p><pre><code class="language-julia hljs">p = ngonside(O, 200, 3, vertices=true)
+prettypoly(p, :stroke, close=true, vertexlabels = (n, l) -&gt; label(string(n), :NW, offset=10))
+
+# distances array
+da = polydistances(p)
+
+nidx, over = nearestindex(da, polyperimeter(p)/2)
+
+sethue(&quot;red&quot;)
+circle(p[nidx], 5, :stroke)
+
+arrow(p[nidx],
+      between(p[nidx], p[nidx+1], over/distance(p[nidx], p[nidx+1])),
+      linewidth=2)</code></pre><p><img src="../../assets/figures/nearestindex.png" alt="nearestindex"/></p><p>Of course, it&#39;s much easier to do <code>polyportion(p, 0.5)</code>.</p><h3 id="Area-of-polygon"><a class="docs-heading-anchor" href="#Area-of-polygon">Area of polygon</a><a id="Area-of-polygon-1"></a><a class="docs-heading-anchor-permalink" href="#Area-of-polygon" title="Permalink"></a></h3><p>Use <a href="../../reference/api/#Luxor.polyarea-Tuple{Vector{Point}}"><code>polyarea</code></a> to find the area of a polygon. Of course, this only works for simple polygons; polygons that intersect themselves or have holes are not correctly processed.</p><p>This code draws some regular polygons and calculates their area, perimeter, and shows how near the ratio of perimeter over radius approaches 2π.</p><pre><code class="language-julia hljs">fontface(&quot;Georgia&quot;)
+sethue(&quot;black&quot;)
+setline(0.25)
+outerframe = Table([500], [400, 200])
+total = 30
+properties = Table(fill(15, total), [20, 85, 85], outerframe[1, 2])
+radius = 55
+sethue(&quot;grey20&quot;)
+for i in 3:total
+    global radius
+    text(string(i), properties[i, 1], halign=:right)
+    p = ngon(outerframe[1], radius, i, 0, vertices=true)
+    prettypoly(p, :stroke, close=true, () -&gt; (sethue(&quot;red&quot;); circle(O, 2, :fill)))
+    pa = polyarea(p)
+    pp = polyperimeter(p)
+    ppoverradius = pp/radius
+    text(string(Int(round(pa, digits=0))), properties[i, 2], halign=:left)
+    text(string(round(ppoverradius, digits=6)), properties[i, 3], halign=:left)
+    radius += 5
+end
+
+fontsize(10)
+[text([&quot;Sides&quot;, &quot;Area&quot;, &quot;Perimeter/Radius&quot;][n], pt, halign=:center)
+    for (pt, n) in Table([20], [20, 85, 85], outerframe[2] - (0, 220))]</code></pre><p><img src="../../assets/figures/polyarea.png" alt="poly area"/></p><h2 id="Other-polygon-operations"><a class="docs-heading-anchor" href="#Other-polygon-operations">Other polygon operations</a><a id="Other-polygon-operations-1"></a><a class="docs-heading-anchor-permalink" href="#Other-polygon-operations" title="Permalink"></a></h2><p>These functions are still in development. Expect varying degrees of success when using them.</p><h3 id="Intersections"><a class="docs-heading-anchor" href="#Intersections">Intersections</a><a id="Intersections-1"></a><a class="docs-heading-anchor-permalink" href="#Intersections" title="Permalink"></a></h3><p><code>intersectlinepoly(pt1, pt2, polygon)</code> returns an array containing the points where a line from <code>pt1</code> to <code>pt2</code> crosses the perimeter of the <code>polygon</code>.</p><pre><code class="language-julia hljs">setline(0.3)
+sethue(&quot;thistle&quot;)
+c = star(O, 120, 7, 0.2, vertices=true)
+poly(c, :fillstroke, close=true)
+for n in 1:15
+    pt1 = Point(rand(-250:250, 2)...)
+    pt2 = Point(rand(-250:250, 2)...)
+    ips = intersectlinepoly(pt1, pt2, c)
+    if !isempty(ips)
+            sethue(&quot;grey20&quot;)
+            line(pt1, pt2, :stroke)
+            randomhue()
+            circle.(ips, 2, :fill)
+    else
+        sethue(&quot;grey80&quot;)
+        line(pt1, pt2, :stroke)
+    end
+end</code></pre><p><img src="../../assets/figures/linepolyintersections.png" alt="line/polygon intersections"/></p><p><code>polyintersect</code> calculates the intersection points of two polygons.</p><pre><code class="language-julia hljs">pentagon = ngon(O, 250, 5, vertices=true)
+square = box(O + (80, 20), 280, 400, vertices=true)
+
+poly(pentagon, :stroke, close=true)
+poly(square, :stroke, close=true)
+
+sethue(&quot;orange&quot;)
+circle.(polyintersect(pentagon, square), 8, :fill)</code></pre><p><img src="../../assets/figures/polyintersections.png" alt="polygon intersections"/></p><p>The returned polygon contains the points where one polygon crosses another.</p><h3 id="Triangulation"><a class="docs-heading-anchor" href="#Triangulation">Triangulation</a><a id="Triangulation-1"></a><a class="docs-heading-anchor-permalink" href="#Triangulation" title="Permalink"></a></h3><p>Use <a href="../../reference/api/#Luxor.polytriangulate-Tuple{Vector{Point}}"><code>polytriangulate</code></a> to join the vertices of a polygon to form triangles. It returns an array of triangular polygons.</p><pre><code class="language-julia hljs">pts = ngon(O, 200, 7, vertices=true)
+triangles = polytriangulate(pts)
+
+for (n, tri) in enumerate(triangles)
+    sethue([Luxor.julia_purple,
+            Luxor.julia_blue,
+            Luxor.julia_red,
+            Luxor.julia_green
+            ][mod1(n, end)])
+    poly(offsetpoly(tri, -2), :fill, close = true)
+    sethue(&quot;white&quot;)
+    text(string(n), polycentroid(tri), halign=:center)
+end
+
+sethue(&quot;red&quot;)
+setline(3)
+poly(pts, :stroke, close=true)</code></pre><p><img src="../../assets/figures/polytriangulate.png" alt="polygon triangulation"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../colors-styles/">« Use colors and styles</a><a class="docs-footer-nextpage" href="../text/">Add text »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.5 on <span class="colophon-date" title="Friday 20 August 2021 15:05">Friday 20 August 2021</span>. Using Julia version 1.6.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
