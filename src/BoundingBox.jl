@@ -166,32 +166,32 @@ function +(bb1::BoundingBox, bb2::BoundingBox)
 end
 
 """
-    boxwidth(bb::BoundingBox)
+    boxwidth(bb::BoundingBox=BoundingBox())
 
 Return the width of bounding box `bb`.
 """
-boxwidth(bb::BoundingBox)       = abs(bb.corner1.x - bb.corner2.x)
+boxwidth(bb::BoundingBox=BoundingBox())       = abs(bb.corner1.x - bb.corner2.x)
 
 """
-    boxheight(bb::BoundingBox)
+    boxheight(bb::BoundingBox=BoundingBox())
 
 Return the height of bounding box `bb`.
 """
-boxheight(bb::BoundingBox)      = abs(bb.corner1.y - bb.corner2.y)
+boxheight(bb::BoundingBox=BoundingBox())      = abs(bb.corner1.y - bb.corner2.y)
 
 """
-    boxdiagonal(bb::BoundingBox)
+    boxdiagonal(bb::BoundingBox=BoundingBox())
 
 Return the length of the diagonal of bounding box `bb`.
 """
-boxdiagonal(bb::BoundingBox)    = hypot(boxwidth(bb), boxheight(bb))
+boxdiagonal(bb::BoundingBox=BoundingBox())    = hypot(boxwidth(bb), boxheight(bb))
 
 """
-    boxaspectratio(bb::BoundingBox)
+    boxaspectratio(bb::BoundingBox=BoundingBox())
 
 Return the aspect ratio (the height divided by the width) of bounding box `bb`.
 """
-boxaspectratio(bb::BoundingBox) = boxheight(bb)/boxwidth(bb)
+boxaspectratio(bb::BoundingBox=BoundingBox()) = boxheight(bb)/boxwidth(bb)
 
 """
     convert(Point, bbox::BoundingBox)
@@ -297,12 +297,12 @@ isinside(p::Point, bb::BoundingBox) = (bb.corner1.x <= p.x <= bb.corner2.x) &&
     (bb.corner1.y <= p.y <= bb.corner2.y)
 
 """
-    midpoint(bb::BoundingBox)
+    midpoint(bb::BoundingBox=BoundingBox())
 
 Returns the point midway between the two points of the BoundingBox. This should
 also be the center, unless I've been very stupid...
 """
-midpoint(bb::BoundingBox) = midpoint(bb...)
+midpoint(bb::BoundingBox=BoundingBox()) = midpoint(bb...)
 
 """
     between(bb::BoundingBox, x)
@@ -313,9 +313,9 @@ where `x` is typically between 0 and 1.
 between(bb::BoundingBox, k=0.5) = between(bb[1], bb[2], k)
 
 """
-    boxtopleft(bb::BoundingBox)
+    boxtopleft(bb::BoundingBox=BoundingBox())
 
-Return the point at the top left of the BoundingBox `bb`.
+Return the point at the top left of the BoundingBox `bb`, defaulting to the drawing extent.
 
 ```
 ■ ⋅ ⋅
@@ -324,12 +324,12 @@ Return the point at the top left of the BoundingBox `bb`.
 ```
 
 """
-boxtopleft(bb::BoundingBox)        = bb[1]
+boxtopleft(bb::BoundingBox=BoundingBox())        = bb[1]
 
 """
-    boxtopcenter(bb::BoundingBox)
+    boxtopcenter(bb::BoundingBox=BoundingBox())
 
-Return the point at the top center of the BoundingBox `bb`.
+Return the point at the top center of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ■ ⋅
 ⋅ ⋅ ⋅
@@ -337,12 +337,12 @@ Return the point at the top center of the BoundingBox `bb`.
 ```
 
 """
-boxtopcenter(bb::BoundingBox) = midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb)/2)
+boxtopcenter(bb::BoundingBox=BoundingBox()) = midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb)/2)
 
 """
-    boxtopright(bb::BoundingBox)
+    boxtopright(bb::BoundingBox=BoundingBox())
 
-Return the point at the top right of the BoundingBox `bb`.
+Return the point at the top right of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ■
 ⋅ ⋅ ⋅
@@ -350,12 +350,12 @@ Return the point at the top right of the BoundingBox `bb`.
 ```
 
 """
-boxtopright(bb::BoundingBox)       = Point(bb[2].x, bb[1].y)
+boxtopright(bb::BoundingBox=BoundingBox())       = Point(bb[2].x, bb[1].y)
 
 """
-    boxmiddleleft(bb::BoundingBox)
+    boxmiddleleft(bb::BoundingBox=BoundingBox())
 
-Return the point at the middle left of the BoundingBox `bb`.
+Return the point at the middle left of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ⋅
 ■ ⋅ ⋅
@@ -363,67 +363,67 @@ Return the point at the middle left of the BoundingBox `bb`.
 ```
 
 """
-boxmiddleleft(bb::BoundingBox)     = Point(bb[1].x, midpoint(bb[1], bb[2]).y)
+boxmiddleleft(bb::BoundingBox=BoundingBox())     = Point(bb[1].x, midpoint(bb[1], bb[2]).y)
 
 """
-    boxmiddlecenter(bb::BoundingBox)
+    boxmiddlecenter(bb::BoundingBox=BoundingBox())
 
-Return the point at the center of the BoundingBox `bb`.
+Return the point at the center of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ⋅
 ⋅ ■ ⋅
 ⋅ ⋅ ⋅
 ```
 """
-boxmiddlecenter(bb::BoundingBox)   = midpoint(bb[1], bb[2])
+boxmiddlecenter(bb::BoundingBox=BoundingBox())   = midpoint(bb[1], bb[2])
 
 """
-    boxmiddleright(bb::BoundingBox)
+    boxmiddleright(bb::BoundingBox=BoundingBox())
 
-Return the point at the midde right of the BoundingBox `bb`.
+Return the point at the midde right of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ■
 ⋅ ⋅ ⋅
 ```
 """
-boxmiddleright(bb::BoundingBox)    = Point(bb[2].x, midpoint(bb[1], bb[2]).y)
+boxmiddleright(bb::BoundingBox=BoundingBox())    = Point(bb[2].x, midpoint(bb[1], bb[2]).y)
 
 """
-    boxbottomleft(bb::BoundingBox)
+    boxbottomleft(bb::BoundingBox=BoundingBox())
 
-Return the point at the bottom left of the BoundingBox `bb`.
+Return the point at the bottom left of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
 ■ ⋅ ⋅
 ```
 """
-boxbottomleft(bb::BoundingBox)     = Point(bb[1].x, bb[2].y)
+boxbottomleft(bb::BoundingBox=BoundingBox())     = Point(bb[1].x, bb[2].y)
 
 """
-    boxbottomcenter(bb::BoundingBox)
+    boxbottomcenter(bb::BoundingBox=BoundingBox())
 
-Return the point at the bottom center of the BoundingBox `bb`.
+Return the point at the bottom center of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
 ⋅ ■ ⋅
 ```
 """
-boxbottomcenter(bb::BoundingBox)   = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
+boxbottomcenter(bb::BoundingBox=BoundingBox())   = midpoint(bb.corner1, bb.corner2) + (0, boxheight(bb)/2)
 
 """
-    boxbottomright(bb::BoundingBox)
+    boxbottomright(bb::BoundingBox=BoundingBox())
 
-Return the point at the bottom right of the BoundingBox `bb`.
+Return the point at the bottom right of the BoundingBox `bb`, defaulting to the drawing extent.
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
 ⋅ ⋅ ■
 ```
 """
-boxbottomright(bb::BoundingBox)    = bb[2]
+boxbottomright(bb::BoundingBox=BoundingBox())    = bb[2]
 
 # legacy defs will be deprecated
 boxtop(bb::BoundingBox) = boxtopcenter(bb)

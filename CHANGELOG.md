@@ -1,13 +1,13 @@
 # Changelog
 
-## [v2.15.0] - forthcoming
+## [v2.15.0] - 2021-08-20
 
 ### Added
 
-- added method to randompointarray() to generate Poisson-disk sampled points
+- added method to randompointarray() to generate Poisson-disk-sampled points
 - initnoise() can use other RNG (thanks @JeffreyPalmer!)
-- add_mesh_patch() to add more patches to mesh
-- setblendextend() to set blend (pattern) extend modes
+- add_mesh_patch() to add more patches to a mesh
+- setblendextend() to allow set blend (pattern) extend modes
 
 ### Changed
 
@@ -15,6 +15,8 @@
 - box(pt, w, h, radii) - can specify different radii for each corner
 - rect() and box() have reversepath options
 - Base.getindex(p::Point, i) = (p.x, p.y)[i]
+- arrow(pt, radius...) - heads are hopefully better aligned to the shaft
+- box-[top|middle|bottom]-[left|center|right]() functions default to using the drawing's bbox.
 
 ### Removed
 
