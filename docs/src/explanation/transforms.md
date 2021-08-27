@@ -161,7 +161,7 @@ defaults to `0, 1`.
 
 ## Scaling of line thickness
 
-Line thicknesses are not scaled by default. For example, with a current line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that a line thickness of 1 is scaled by `n` after calls to `scale(n)`, you can call `[setstrokescale`](@ref) with `true` to enable stroke scaling, and `setstrokescale(false)` to disable it. You can also enable stroke scaling when creating a new `Drawing` by passing the named argument `strokescale` during `Drawing` construction (i.e., `Drawing(400, 400, strokescale=true)`).
+Line thicknesses are not scaled by default. For example, with a current line thickness set by `setline(1)`, lines drawn before and after `scale(2)` will be the same thickness. If you want line thicknesses to respond to the current scale, so that a line thickness of 1 is scaled by `n` after calls to `scale(n)`, you can call [`setstrokescale`](@ref) with `true` to enable stroke scaling, and `setstrokescale(false)` to disable it. You can also enable stroke scaling when creating a new `Drawing` by passing the named argument `strokescale` during `Drawing` construction (i.e., `Drawing(400, 400, strokescale=true)`).
 
 ## Matrices
 
