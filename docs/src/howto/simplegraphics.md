@@ -639,7 +639,7 @@ You can draw lines, arcs, and curves with arrows at the end with [`arrow`](@ref)
 | Bezier 4 points                |arrow(pt1, pt2, pt3, pt4, action) |
 | Bezier start finish + box      |arrow(pt1, pt2, [ht1, ht2])       |
 
-For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`), but you can specify another.
+For straight arrows, supply the start and end points. For arrows as circular arcs, you provide center, radius, and start and finish angles. You can optionally provide dimensions for the `arrowheadlength` and `arrowheadangle` of the tip of the arrow (angle in radians between side and center). The default line weight is 1.0, equivalent to `setline(1)`, but you can specify another.
 
 ```@example
 using Luxor # hide
