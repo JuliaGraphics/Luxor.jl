@@ -79,7 +79,7 @@ This example illustrates a few things about Luxor drawings:
 
 - The text was placed at the origin point (0/0), and by default it's left aligned.
 
-- The circle wasn't filled, but [`stroked`. We passed the `:stroke` symbol as an action to the [`circle`](@ref) function. Many drawing functions expect some action, such as `:fill` or `:stroke`, and sometimes `:clip` or `:fillstroke`.
+- The circle wasn't filled, but `stroked`. We passed the `:stroke` symbol as an action to the [`circle`](@ref) function. Many drawing functions expect some action, such as `:fill` or `:stroke`, and sometimes `:clip` or `:fillstroke`.
 
 - Did the first drawing takes a few seconds to appear? The Cairo drawing engine takes a little time to warm up. Once it's running, drawings appear much faster.
 
