@@ -548,10 +548,20 @@ Given three points, find another 3 points that are offset by
 d1 at the start and d2 at the end.
 
 Negative d values put the offset on the left.
+
+Used by `offsetpoly()`.
 """
 function offsetlinesegment(p1, p2, p3, d1, d2)
-    if p1 == p2 || p2 == p3 || p1 == p3
-        throw(error("offsetlinesegment: the three points must be different"))
+    # TODO: check this, it's not right
+    if p1 == p2
+        tp = perpendicular(p1, p3, d1)
+        return p1, tp, p2
+    elseif p1 == p3
+        tp = perpendicular(p1, p2, d1)
+        return p1, p2, tp
+    elseif p2 == p3
+        tp = perpendicular(p1, p3, d2)
+        return p1, tp, p3
     end
 
     pt1 = perpendicular(p1, p2, -d1)
@@ -685,6 +695,8 @@ The incoming set of points `plist` is treated as an
 polyline, and another set of points is created, which form a
 closed polygon offset from the source poly.
 
+There must be at least 4 points in the polyline.
+
 This method for `offsetpoly()` treats the list of points as
 `n` vertices connected with `n - 1` lines. (The other method
 `offsetpoly(plist, d)` treats the list of points as `n`
@@ -718,19 +730,23 @@ sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
 pgon = offsetpoly(sinecurve, g)
 poly(pgon, :fill)
 ```
+
+TODO - rewrite it!
 """
 function offsetpoly(plist, shape::Function)
+    # TODO - the code of this function really sucks, I wish
+    # I could make it suck less. :) Probably the best thing
+    # to do is to abandon all these amateur attempts at
+    # polygon-offsetting and use the Clipper library, or
+    # something that works.
 
     l = length(plist)
+    l < 4 && throw(error("offsetpoly(): not enough points, need at least 5; try polysample()"))
 
-    # TODO: special case a plist with 2 points
-    l < 3 && throw(error("variableoffsetline: not enough points, need 3 or more"))
-    # can't do 3 points properly, just insert a few extras
-    if l == 3
-        plist = vcat(plist[1], midpoint(plist[1], plist[2]), plist[2], midpoint(plist[2], plist[3]), plist[3])
-    end
+    # build the poly in four parts and stitch them together
+    # first half, two sides
+    L = l÷2
 
-    # build the poly in two halves
     leftcurve  = Point[]
     rightcurve = Point[]
 
@@ -738,27 +754,50 @@ function offsetpoly(plist, shape::Function)
     d = shape(0.0, θ)
     pt1 = perpendicular(plist[1], plist[2], -d)
     pt2 = perpendicular(plist[1], plist[2], d)
-
-    # start the curves off
     push!(leftcurve, pt1)
     push!(rightcurve, pt2)
 
-    for i in 1:l-2
+    for i in 1:L-1
         # allow for the easing function that rescales the offset
         θ = slope(plist[i], plist[i + 1])
-        d = shape(rescale(i, 0, l-2), θ)
+        d = shape(rescale(i, 0, l), θ)
+
         p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i + 1], plist[i + 2],  d,  d)
         push!(leftcurve, mpt)
+
         p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i + 1], plist[i + 2], -d, -d)
         push!(rightcurve, mpt)
     end
-    # final point
-    θ = mod2pi(2π - slope(plist[end], plist[end - 1]))
-    d = shape(1, θ)
-    pt1 = perpendicular(plist[end], plist[end - 1], -d)
-    pt2 = perpendicular(plist[end], plist[end - 1],  d)
-    push!(leftcurve, pt2)
-    push!(rightcurve, pt1)
+
+    # second half, both sides, going backwards
+
+    θ = slope(plist[end], plist[end-1])
+    d = shape(1.0, θ)
+    pt1 = perpendicular(plist[end], plist[end-1], -d)
+    pt2 = perpendicular(plist[end], plist[end-1], d)
+
+    # start the second half curves off
+    leftcurve_2  = Point[]
+    rightcurve_2 = Point[]
+
+    push!(leftcurve_2, pt1)
+    push!(rightcurve_2, pt2)
+
+    # work backwards from the end
+    for i in l-1:-1:L+1
+        θ = slope(plist[i-1], plist[i])
+        d = shape(rescale(i, 0, l), θ)
+
+        p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i - 1], plist[i - 2],  d,  d)
+        push!(leftcurve_2, p1)
+
+        p1, mpt, p3 = Luxor.offsetlinesegment(plist[i], plist[i - 1], plist[i - 2], -d, -d)
+        push!(rightcurve_2, p1)
+    end
+
+    append!(leftcurve, reverse(rightcurve_2))
+    append!(rightcurve, reverse(leftcurve_2))
+
     return vcat(leftcurve, reverse(rightcurve))
 end
 
@@ -981,27 +1020,39 @@ end
     polysample(p::Array{Point, 1}, npoints::T where T <: Integer;
             closed=true)
 
-Sample the polygon `p`, returning a polygon with `npoints` to represent it. The
-first sampled point is:
+Sample the polygon `p`, returning a polygon with `npoints`
+to represent it. The first sampled point is:
 
-     1/`npoints` * `perimeter of p`
+``` 1/`npoints` * `perimeter of p` ```
 
 away from the original first point of `p`.
 
-If `npoints` is the same as `length(p)` the returned polygon is the same as the
-original, but the first point finishes up at the end (so `new=circshift(old,
-1)`).
+If `npoints` is the same as `length(p)` the returned polygon
+is the same as the original, but the first point finishes up
+at the end (so `new=circshift(old, 1)`).
 
-If `closed` is true, the entire polygon (including the edge joining the last
-point to the first point) is sampled.
+If `closed` is true, the entire polygon (including the edge
+joining the last point to the first point) is sampled.
+
+If `include_first` is true, the first point of `plist` is
+included in the result.
+
+If the resulting polygon's first and end points are the
+same, the end point is discarded.
 """
 function polysample(p::Array{Point, 1}, npoints::T where T <: Integer;
-        closed=true)
+        include_first = false,
+        closed        = true)
     l = length(p)
     l < 2 && error("polysample(): not enough points in polygon to take samples")
     npoints < 2  && return p[[1, end]]
     distances = polydistances(p, closed=closed)
-    result = Point[] ; sizehint!(result, l)
+    if include_first
+        result = Point[p[1]]
+    else
+        result = Point[]
+    end
+    sizehint!(result, l)
     for i in 1:npoints
         ind, surplus = nearestindex(distances, (i/npoints) * distances[end])
         if surplus > 0.0
@@ -1012,7 +1063,11 @@ function polysample(p::Array{Point, 1}, npoints::T where T <: Integer;
             push!(result, p[i])
         end
     end
-    return result
+    if result[1] == result[end]
+        return result[1:end-1]
+    else
+        return result
+    end
 end
 
 """

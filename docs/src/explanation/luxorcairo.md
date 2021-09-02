@@ -57,3 +57,28 @@ end 256 256 "/tmp/sample_arc_luxor_2.png"
 If you want to know more about how drawing in Cairo (and
 by extension, Luxor) works, refer to the [Cairo
 documentation](https://cairographics.org/documentation/).
+
+## Adding Cairo functions
+
+If a Cairo function isn't yet supported in Cairo.jl or Luxor.jl, a temporary workround is to add a direct call to the Cairo library in your Luxor script.
+
+For example, the Cairo function to return the current line width ([cairo_get_line_width](https://cairographics.org/manual/cairo-cairo-t.html#cairo-get-line-width)) isn't yet available in Julia, but you can easily add it with code like this (or better):
+
+```
+using Luxor
+
+import Cairo
+
+function getline()
+    ccall((:cairo_get_line_width, Cairo.libcairo),
+        Float64, (Ptr{Nothing},), Luxor.get_current_cr().ptr)
+end
+
+@draw begin
+
+setline(π / MathConstants.e)
+
+text(string(getline())) # draws current line width  (≈ 1.155)
+
+end
+```
