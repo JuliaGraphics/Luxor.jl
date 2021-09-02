@@ -1,5 +1,18 @@
 # Changelog
 
+## [v2.16.0] - forthcoming 2021-09-??
+
+### Added
+
+### Changed
+
+- offsetpoly(... function) algorithm altered (it still sucks, though :))
+- `include_first` kwarg added to `polysample()`
+
+### Removed
+
+### Deprecated
+
 ## [v2.15.0] - 2021-08-20
 
 ### Added

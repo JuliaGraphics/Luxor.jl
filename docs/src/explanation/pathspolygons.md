@@ -30,22 +30,6 @@ function make_path()
 end
 ```
 
-The [`move()`](@ref) function as used here is essentially a "pick up
-the pen and move it elsewhere" instruction.
-
-The top path, in purple, is drawn when [`strokepath()`](@ref)
-is applied to this path. Each of the three shapes is
-stroked with the same current settings (color, line
-thickness, dash pattern, and so on).
-
-The middle row shows a duplicate of this path, and
-[`fillpath()`](@ref) has been applied to fill each of the three
-shapes in the path with orange.
-
-The duplicate path at the bottom has been followed by the
-[`clip()`](@ref) function and then by [`rule()`](@ref) to draw green ruled
-lines, which are clipped by the outlines of the shapes in the path.
-
 ```@setup pathexample
 using Luxor
 
@@ -84,6 +68,23 @@ d = @drawsvg begin
 d # hide
 ```
 
+The [`move()`](@ref) function as used here is essentially a "pick up
+the pen and move it elsewhere" instruction.
+
+The top path, in purple, is drawn when
+[`strokepath()`](@ref) is applied to this path. Each of the
+three shapes is stroked with the same current settings
+(color, line thickness, dash pattern, and so on).
+
+The middle row shows a duplicate of this path, and
+[`fillpath()`](@ref) has been applied to fill each of
+the three shapes in the path with orange.
+
+The duplicate path at the bottom has been followed by
+the [`clip()`](@ref) function and then by
+[`rule()`](@ref) to draw green ruled lines, which are
+clipped by the outlines of the shapes in the path.
+
 You can construct paths using functions like [`move()`](@ref),
 [`line()`](@ref), [`arc()`](@ref), and [`curve()`](@ref), plus any Luxor function
 that lets you specify the `:path` ("add to path") action as a
@@ -105,11 +106,12 @@ convert the path to a clipping path using
 
 A single path can contain multiple separate graphic shapes.
 These can make holes. If you want a path to contain holes,
-you add the hole shapes to the path after reversing their
-direction. For example, to put a square hole inside a
-circle, first create a circular path, then draw a square
-path inside, making sure that the square path runs in the
-opposite direction to the circle.
+you add the hole shapes to the current path after reversing
+their direction. For example, to put a square hole inside a
+circle, first create a circular shape, then draw a square
+shape inside, making sure that the square runs in the
+opposite direction to the circle. When you finally draw the
+path, the interior shape forms a hole.
 
 ```@example
 using Luxor # hide
@@ -226,5 +228,5 @@ ngon(O, 100, 129, 0, :stroke)    # a 129agon with radius 100
 ```
 
 Luxor draws as many short straight lines as necessary (here
-about 149) so as to render the curve smooth at reasonable
-magnifications. 
+about 129) so as to render the curve smooth at reasonable
+magnifications.

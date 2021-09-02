@@ -600,25 +600,30 @@ nothing # hide
 
 This method generates offset widths using the supplied function. The value of the supplied function `f` at `f(0, θ)` determines the start offset on each side, and `f(1, θ)` determines the finishing offset on each side. The width at the middle vertex will be `f(0.5, θ)` (on each side). `θ` is provided as the current slope of the polyline at that point.
 
+This example uses a simple sine curve in `f()` to vary the width of the spiral from beginning to end.
+
 ```@example
-using Luxor # hide
-Drawing(800, 250, "../assets/figures/polyoffset-function.png") # hide
-origin() # hide
-background("white") # hide
-setline(2) # hide
-setlinejoin("round") # hide
+using Luxor, Colors
 
+f(x, θ) =  10 + 40sin(x * π)
 
-spiralcurve = spiral(10, 0.3, log=true, period=3π)
-f(x, θ) = 1 + 15sin(x * π)
-pgon = offsetpoly(spiralcurve, f)
+@drawsvg begin
+
+spine = spiral(30, 1.3, vertices=true)
+ps = polysample(spine, 250, include_first=true, closed=false)
+pgon = offsetpoly(ps, f)
+poly(pgon, :stroke)
+
+setmesh(mesh(box(BoundingBox(pgon)),
+    [
+    RGB(Luxor.julia_red...),
+    RGB(Luxor.julia_blue...),
+    RGB(Luxor.julia_green...),
+    RGB(Luxor.julia_purple...),
+    ]))
 poly(pgon, :fill)
-
-finish() # hide
-nothing # hide
+end
 ```
-
-![offset poly fucntion](../assets/figures/polyoffset-function.png)
 
 ### Fitting splines
 
