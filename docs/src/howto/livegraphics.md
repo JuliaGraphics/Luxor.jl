@@ -10,7 +10,7 @@ This example uses the [MiniFB](https://github.com/aviks/MiniFB.jl) package, whic
 
 The file `play.jl` defines a simple macro, `@play`, which continuously evaluates and draws the graphics in a window. For example, this code:
 
-```
+```julia
 using Luxor
 
 include(dirname(pathof(Luxor)) * "/play.jl")
@@ -40,7 +40,7 @@ animation will be less smooth as a result.
 
 ![clock](../assets/figures/clock.gif)
 
-```
+```julia
 using Luxor, Colors, Dates, ColorSchemes
 
 include(dirname(pathof(Luxor)) * "/play.jl")
@@ -108,7 +108,7 @@ The following code exports a series of snapshots made with [`snapshot`](@ref), s
 
 ![juliaset](../assets/figures/julia-set-set.png)
 
-```
+```julia
 using Luxor, ColorSchemes, Colors
 
 function julia(z, c, maxiter::Int64)

@@ -78,7 +78,7 @@ Consider this animation, showing the sun's position for each hour of a 24 hour d
 
 Again, start by creating a movie, a useful handle that we can pass from function to function. We'll specify 24 frames for the entire animation.
 
-```
+```julia
 sun24demo = Movie(400, 400, "sun24", 0:23)
 ```
 
@@ -86,7 +86,7 @@ We'll define a simple `backgroundfunction` function that draws a
 background that will be used for all frames (since animated
 GIFs like constant backgrounds):
 
-```
+```julia
 function backgroundfunction(scene::Scene, framenumber)
     background("black")
 end
@@ -94,7 +94,7 @@ end
 
 A `nightskyfunction` draws the night sky, covering the entire drawing:
 
-```
+```julia
 function nightskyfunction(scene::Scene, framenumber)
     sethue("midnightblue")
     box(O, 400, 400, :fill)
@@ -103,7 +103,7 @@ end
 
 A `dayskyfunction` draws the daytime sky:
 
-```
+```julia
 function dayskyfunction(scene::Scene, framenumber)
     sethue("skyblue")
     box(O, 400, 400, :fill)
@@ -112,7 +112,7 @@ end
 
 The `sunfunction` draws a sun at 24 positions during the day. Since the framenumber will be a number between 0 and 23, this can be easily converted to lie between 0 and 2π.
 
-```
+```julia
 function sunfunction(scene::Scene, framenumber)
     t = rescale(framenumber, 0, 23, 2pi, 0)
     gsave()
@@ -124,7 +124,7 @@ end
 
 And finally, tere's a `groundfunction` that draws the ground, the lower half of the drawing:
 
-```
+```julia
 function groundfunction(scene::Scene, framenumber)
     gsave()
     sethue("brown")
@@ -138,7 +138,7 @@ To combine these together, we'll define a group of Scenes
 that make up the movie. The scenes specify which functions
 are to be used, and for which frames:
 
-```
+```julia
 backdrop  = Scene(sun24demo, backgroundfunction, 0:23)   # every frame
 nightsky  = Scene(sun24demo, nightskyfunction, 0:6)      # midnight to 06:00
 nightsky1 = Scene(sun24demo, nightskyfunction, 17:23)    # 17:00 to 23:00
@@ -151,7 +151,7 @@ Finally, the `animate` function scans all the scenes in the
 scenelist for the  movie, and calls the specified functions for each
 frame to build the animation:
 
-```
+```julia
 animate(sun24demo, [
    backdrop, nightsky, nightsky1, daysky, sun, ground
    ],
@@ -171,7 +171,7 @@ We can use the incoming framenumber, rescaled, as the master
 parameter that determines the position and appearance of all
 the graphics.
 
-```
+```julia
 function frame(scene, framenumber)
     background("black")
     n   = rescale(framenumber, scene.framerange.start, scene.framerange.stop, 0, 1)

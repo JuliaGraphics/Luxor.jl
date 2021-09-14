@@ -176,7 +176,7 @@ In Luxor, there's always a *current matrix* that determines how coordinates are 
 
 which is usually handled in Julia/Cairo/Luxor as a simple vector (array):
 
-```
+```julia
 julia> getmatrix()
 6-element Array{Float64,1}:
    1.0
@@ -332,7 +332,7 @@ CoordinateTransformations packages. It sets up some transformations
 which can then be composed in the correct order to transform
 points.
 
-```
+```julia
 using CoordinateTransformations, Rotations, StaticArrays, LinearAlgebra
 
 rawpts = [

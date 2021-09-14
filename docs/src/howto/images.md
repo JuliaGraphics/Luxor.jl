@@ -49,7 +49,7 @@ To obtain the SVG source of a completed drawing, use [`svgstring`](@ref).
 
 For example, draw the Julia logo:
 
-```
+```julia
 Drawing(500, 500, :svg)
 origin()
 julialogo()
@@ -59,7 +59,7 @@ s = svgstring()
 
 The SVG source code is now stored in `s`. You can examine or process it further:
 
-```
+```julia
 eachmatch(r"rgb\\(.*?\\)", s) |> collect
 5-element Vector{RegexMatch}:
  RegexMatch("rgb(0%,0%,0%)")
@@ -75,7 +75,7 @@ To display the image in a Jupyter or Pluto notebook, use the `HTML` function, or
 
 You can also use [`placeimage`](@ref) to put image matrices on a drawing.
 
-```
+```julia
 using Luxor
 
 mat = @imagematrix begin    

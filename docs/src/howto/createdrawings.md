@@ -73,7 +73,7 @@ The SVG equivalent of `@draw` is [`@drawsvg`](@ref).
 
 If you don't specify a size, the defaults are usually 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't even have to specify the suffix:
 
-```
+```julia
 @svg juliacircles(150) 400 400 "test" # saves in "test.svg"
 ```
 
@@ -98,7 +98,7 @@ You can obtain the raw SVG code of a drawing using `@savesvg`.
 
 You can choose to store the drawing in memory. The advantage is that in-memory drawings are quicker, and can be passed as Julia data. It's useful in some environments to not have to worry about writing files. This syntax for the [`Drawing`](@ref) function:
 
-```
+```julia
 Drawing(width, height, surfacetype, [filename])
 ```
 
@@ -116,7 +116,7 @@ Use [`svgstring`](@ref) to obtain the SVG source for a finished SVG drawing.
 
 Pluto notebooks typically display the final result of a piece of code in a cell. So there are various ways you can organize your drawing code. For example:
 
-```
+```julia
 using Luxor, PlutoUI, Colors
 
 @bind x Slider(0:0.1:12)
@@ -135,7 +135,7 @@ end 100 100
 
 or
 
-```
+```julia
 begin
     d = Drawing(800, 800, :svg)
     origin()

@@ -69,7 +69,7 @@ An interesting application for turtle-style graphics is for drawing Lindenmayer 
 
 The definition of this figure is:
 
-```
+```julia
 penrose = LSystem(Dict("X"  =>  "PM++QM----YM[-PM----XM]++t",
                        "Y"  => "+PM--QM[---XM--YM]+t",
                        "P"  => "-XM++YM[+++PM++QM]-t",
@@ -135,124 +135,87 @@ Most of the animations on [this YouTube channel](https://www.youtube.com/channel
 ```@example
 using Luxor, Colors
 
-function multistrokepath(lightness, chroma, hue)
-    # takes the current path and multistrokes it
-    @layer begin
-        for n in 1:2:15
-            sethue(LCHab(5n, chroma, hue))
-            setline(rescale(n, 1, 15, 15, 1))
-            strokepreserve()
-        end
-    end
+function set_gold_blend()
+    gblend = blend(O, 0, O, 250, "gold2", "gold3")
+    setblend(gblend)
 end
 
-function multifillpath(lightness, chroma, hue)
-    # takes the current path and multifills it
+function draw_scarab_legs(pos)
+    translate(pos)
+    # legs
     @layer begin
-        p = pathtopoly()[1]
-        for n in 0:2:40
-            sethue(LCHab(3n, chroma + n/2, hue))
-            setopacity(rescale(n, 1, 40, 1, 0.1))
-            poly(offsetpoly(p, -n), :fill, close=true)
-        end
-    end
-end
-
-function scarab(pos)
-    @layer begin
-        translate(pos)
-        setline(15)
-        setlinecap("round")
-        setlinejoin("round")
-        #legs
-        @layer begin
-            for i in 1:2
-                # right front leg
-                move(O)
-                rline.((polar(80, -π/6),
-                polar(60, -π/2),
+        for i in 1:2
+            move(O)
+            rline.((polar(80, -π/6),
+                polar(70, -π/2),
                 polar(12, -5π/6),
                 polar(60, -π/4)))
-                #middle leg
-                move(0, 35)
-                rline.((
-                polar(100, -π/6),
+
+            #middle leg
+            move(0, 40)
+            rline.((
+                polar(120, -π/6),
                 polar(40, π/2)))
-                #back leg
-                move(0, 100)
-                rline.((polar(120, -π/6),
-                polar(100, π/2)))
-                multistrokepath(50, 20, 240)
-                # other side
-                transform([-1 0 0 1 0 0])
-            end
-            # body
-            @layer begin
-                squircle(Point(0, -25), 26, 75, :fillpreserve)
-                multifillpath(60, 20, 260)            
 
-                squircle(Point(0, 0), 50, 70, :fillpreserve)
-                multifillpath(60, 20, 260)
+            #back leg
+            move(0, 100)
+            rline.((
+                polar(130, -π/6),
+                polar(110, π/2)))
 
-                squircle(Point(0, 40), 65, 90, :fillpreserve)
-                multifillpath(60, 20, 260)                
-            end
+            # flip for other leg
+            transform([-1 0 0 1 0 0])
         end
+    end
+end
+
+function draw_scarab_body()
+    @layer begin
+        squircle(Point(0, -25), 26, 75, :path)
+        squircle(Point(0, 0), 50, 70, :path)
+        squircle(Point(0, 40), 65, 90, :path)
     end
 end
 
 function draw()
     Drawing(500, 500, "../assets/figures/luxor-logo.png")
     origin()
-    background(1, 1, 1, 0)
     setopacity(1.0)
+    setline(20)
+    setlinecap("butt")
+    setlinejoin("round")
     width = 180
     height= 240
-    # cartouche
-    @layer begin
-        setcolor("goldenrod")
-        squircle(O, width, height, rt=0.4, :fill)
-    end
 
-    sethue("gold3")
-    setline(14)
-    squircle(O, width, height, rt=0.4, :stroke)
+    sethue("black")
+    squircle(O, width, height-5, rt=0.4, :fill)
 
-    # interior shadow
-    @layer begin
-        sethue("grey20")
-        setline(2)
-        for n in 10:30
-            setopacity(rescale(n, 10, 30, 0.5, 0.0))
-            squircle(O, width-n, height-n, rt=0.4, :stroke)
-        end
-    end
-
-    # draw scarab
-    scale(0.9)
+    set_gold_blend()
+    squircle(O, width, height-5, rt=0.4, :path)
     translate(0, 50)
-    scarab(O)
+    draw_scarab_legs(O)
+    strokepath()
+    draw_scarab_body()
+    fillpath()
 
-    # julia/sun
+    # julia dots === Ra
     @layer begin
         translate(0, -190)
-        sethue("grey20")
-        circle(O, 52, :fill)
-        sethue("gold")
         circle(O, 51, :fill)
-        sethue(LCHab(20, 55, 15))
         circle(O, 48, :fill)
         juliacircles(20)
     end
 
     clipreset()
     finish()
+    preview()
 end
+
 draw()
-nothing #hide
+nothing # hide
 ```
 
-![Luxor logo](../assets/figures/luxor-logo.png)
+![Luxor logo](../assets/figures/logo.svg)
 
 ## A Japanese-style Temple scene
 

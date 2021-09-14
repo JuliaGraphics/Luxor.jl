@@ -110,7 +110,8 @@ Luxor.Point(2.0, 2.5)
 ```
 
 You can also create points from tuples:
-```
+
+```julia
 julia> Point((1.0, 14))
 Point(1.0, 14.0)
 
@@ -151,7 +152,7 @@ Because Julia allows you to combine numbers and variables directly, you can supp
 
 For example:
 
-```
+```julia
 rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
 ```
 
@@ -253,7 +254,7 @@ See [Placing images](@ref) for more. It's also possible to
 obtain the source of an SVG drawing as a string. For example,
 this code draws the Julia logo using SVG code:
 
-```
+```julia
 Drawing(500, 500, :svg)
 origin()
 julialogo()
@@ -263,7 +264,7 @@ s = svgstring()
 
 You can now examine the SVG code in `s` programmatically:
 
-```
+```julia
 eachmatch(r"rgb\(.*?\)", s) |> collect
 5-element Vector{RegexMatch}:
  RegexMatch("rgb(0%,0%,0%)")

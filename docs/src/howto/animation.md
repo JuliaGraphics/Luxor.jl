@@ -70,7 +70,7 @@ Many movie editing programs, such as Final Cut Pro, will also let you import seq
 
 If you want to pass information to the frame function, such as an array of values, try these:
 
-```
+```julia
 function frame(scene, framenumber, datapoints)
 ...
 end
@@ -121,7 +121,7 @@ Transitions for animations often use non-constant and non-linear motions, and th
 
 Most easing functions have names constructed like this:
 
-```
+```julia
 ease[in|out|inout][expo|circ|quad|cubic|quart|quint]
 ```
 
@@ -210,7 +210,7 @@ animate(fastandfurious, [
 
 Here's the definition of one of the easing functions:
 
-```
+```julia
 function easeoutquad(t, b, c, d)
     t /= d
     return -c * t * (t - 2) + b

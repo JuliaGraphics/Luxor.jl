@@ -398,7 +398,7 @@ on the same recording surface.
 
 ### Examples
 
-```
+```julia
 snapshot()
 snapshot(fname = "temp.png")
 snaphot(fname = :svg)
@@ -558,7 +558,7 @@ default is 600 by 600). The file is saved in the current working directory as
 
 ### Examples
 
-```
+```julia
 @svg circle(O, 20, :fill)
 
 @svg circle(O, 20, :fill) 400
@@ -604,7 +604,7 @@ default is 600 by 600). The file is saved in the current working directory as
 
 ### Examples
 
-```
+```julia
 @png circle(O, 20, :fill)
 
 @png circle(O, 20, :fill) 400
@@ -652,7 +652,7 @@ default is 600 by 600). The file is saved in the current working directory as
 
 ### Examples
 
-```
+```julia
 @pdf circle(O, 20, :fill)
 
 @pdf circle(O, 20, :fill) 400
@@ -700,7 +700,7 @@ On some platforms, EPS files are converted automatically to PDF when previewed.
 
 ### Examples
 
-```
+```julia
 @eps circle(O, 20, :fill)
 
 @eps circle(O, 20, :fill) 400
@@ -745,7 +745,7 @@ default is 600 by 600). The drawing is stored in memory, not in a file on disk.
 
 ### Examples
 
-```
+```julia
 @draw circle(O, 20, :fill)
 
 @draw circle(O, 20, :fill) 400

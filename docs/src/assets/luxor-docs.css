@@ -14,3 +14,28 @@ p > a:after {
     content: "→";
     font-size: 50%;
 }
+
+.schemename {
+    font-family: "JuliaMono";
+}
+
+.swatch {
+
+}
+
+.category {
+    font-size: 0.8em;
+}
+
+html.theme--documenter-dark p > code {
+	  	color: #eff !important;
+}
+
+html.theme--documenter-dark li > code {
+	  	color: #eff !important;
+}
+
+
+html.theme--documenter-dark a > code {
+	  	color: #eff !important;
+}

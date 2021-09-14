@@ -24,7 +24,7 @@ Please submit issues and pull requests on [GitHub](https://github.com/JuliaGraph
 
 Install the package using the package manager:
 
-```
+```julia
 ] add Luxor
 ```
 
@@ -32,19 +32,19 @@ Cairo.jl and Colors.jl will be installed if necessary.
 
 To use Luxor, type:
 
-```
+```julia
 using Luxor
 ```
 
 To test:
 
-```
+```julia
 julia> @svg juliacircles()
 ```
 
 or
 
-```
+```julia
 julia> @png juliacircles()
 ```
 
