@@ -70,7 +70,7 @@ The [`setantialias`](@ref) function lets you specify the anti-aliasing amount as
 
 To show the anti-aliasing in action, the following code generates a red circle:
 
-```
+```julia
 Drawing(20, 20, :image)
 setantialias(0)
 origin()

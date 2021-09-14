@@ -689,7 +689,7 @@ Use the [`makebezierpath`](@ref) and [`drawbezierpath`](@ref) functions to make 
 
 A BezierPath type contains a sequence of `BezierPathSegment`s; each curve segment is defined by four points: two end points and their control points.
 
-```
+```julia
     (Point(-129.904, 75.0),        # start point
      Point(-162.38, 18.75),        # ^ control point
      Point(-64.9519, -150.0),      # v control point

@@ -139,7 +139,7 @@ On macOS, the fontname required by the Toy API's [`fontface`](@ref) should be th
 
 On macOS, a list of currently activated fonts can be found (after a while) with the shell command:
 
-```
+```julia
 system_profiler SPFontsDataType
 ```
 
@@ -147,7 +147,7 @@ Fonts currently activated by a Font Manager can be found and used by the Toy API
 
 On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with [`setfont`](@ref)) using the shell command:
 
-```
+```julia
 fc-list | cut -f 2 -d ":"
 ```
 

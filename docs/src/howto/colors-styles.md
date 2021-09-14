@@ -610,8 +610,7 @@ d # hide
 
 The next example constructs a conical mesh from many
 triangular patches, where each patch shows a different area
-of the HSB color space. The hypotrochoid uses the completed
-mesh when it is drawn.
+of the HSB color space. Any graphic drawn after `setmesh()`, such as the hypotrochoid, is drawn using the mesh.
 
 ```@example
 using Luxor, Colors

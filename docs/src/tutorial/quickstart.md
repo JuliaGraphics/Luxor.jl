@@ -7,7 +7,7 @@ DocTestSetup = quote
 
 This section is a quick guide to getting started. Install the Luxor.jl package in the usual way:
 
-```
+```julia
 julia> ] add Luxor
 ```
 
