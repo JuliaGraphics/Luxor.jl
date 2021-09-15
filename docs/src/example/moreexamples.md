@@ -178,8 +178,7 @@ function draw_scarab_body()
 end
 
 function draw()
-    Drawing(500, 500, "../assets/figures/luxor-logo.png")
-    origin()
+    @drawsvg begin
     setopacity(1.0)
     setline(20)
     setlinecap("butt")
@@ -201,21 +200,16 @@ function draw()
     # julia dots === Ra
     @layer begin
         translate(0, -190)
-        circle(O, 51, :fill)
         circle(O, 48, :fill)
         juliacircles(20)
     end
 
     clipreset()
-    finish()
-    preview()
+    end
 end
 
 draw()
-nothing # hide
 ```
-
-![Luxor logo](../assets/figures/logo.svg)
 
 ## A Japanese-style Temple scene
 
