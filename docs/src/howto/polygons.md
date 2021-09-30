@@ -157,9 +157,9 @@ setline(5)
 sethue("gold")
 line(Point(-200, 0), Point(200, 0), :stroke)
 sethue("orchid4")
-ngon(0, 0, 60, 6, 0, :path)
+ngon(O, 60, 6, 0, action=:path)
 newsubpath()
-ngon(0, 0, 40, 6, 0, :path, reversepath=true)
+ngon(O, 40, 6, 0, :path, reversepath=true)
 fillstroke()
 finish() # hide
 nothing # hide

@@ -8,6 +8,7 @@
 
 - offsetpoly(... function) algorithm altered (it still sucks, though :))
 - `include_first` kwarg added to `polysample()`
+- functions now can accept `action=` keyword arguments
 
 ### Removed
 

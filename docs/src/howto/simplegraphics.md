@@ -1112,7 +1112,7 @@ for (pos, n) in tiles
         n + 2, # number of points
         rescale(n, 1, length(tiles), 0.9, 0.1), # ratio
         0, # orientation
-        :fill)
+        action=:fill)
 end
 finish() # hide
 nothing # hide

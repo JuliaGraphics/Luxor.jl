@@ -13,7 +13,7 @@ function draweasingfunction(f, pos, w, h)
         setline(0.5)
         box(O, w, h, :stroke)
         for i in 0:0.005:1.0
-            circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)
+            circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1)
         end
         text(string(f), Point(w/2 - 20, h/2 - 20), halign=:right)
     end

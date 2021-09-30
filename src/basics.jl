@@ -371,15 +371,19 @@ line(x, y)      = Cairo.line_to(get_current_cr(), x, y)
 line(pt)        = line(pt.x, pt.y)
 
 """
+    line(pt1::Point, pt2::Point; action=:none)
     line(pt1::Point, pt2::Point, action=:none)
 
 Make a line between two points, `pt1` and `pt2` and do an action.
 """
-function line(pt1::Point, pt2::Point, action=:none)
+function line(pt1::Point, pt2::Point;
+        action=:none)
     move(pt1)
     line(pt2)
     do_action(action)
 end
+
+line(pt1::Point, pt2::Point, action::Symbol) = line(pt1, pt2, action=action)
 
 """
     rline(pt)

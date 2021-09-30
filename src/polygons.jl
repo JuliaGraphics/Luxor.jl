@@ -10,8 +10,10 @@ Draw a polygon.
 A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
 to allow for clipping.
 """
-function poly(pointlist::Array{Point, 1}, action::Symbol = :none;
-        close::Bool=false, reversepath::Bool=false)
+function poly(pointlist::Array{Point, 1};
+        action = :none,
+        close  = false,
+        reversepath =false)
     if action != :path
         newpath()
     end
@@ -29,7 +31,11 @@ function poly(pointlist::Array{Point, 1}, action::Symbol = :none;
     return pointlist
 end
 
-poly(pts::NTuple{N, Point} where N, action::Symbol=:none; kwargs...) = poly(collect(pts), action; kwargs...)
+poly(pts::NTuple{N, Point} where N; kwargs...) = poly(collect(pts); kwargs...)
+
+poly(pointlist::Array{Point, 1}, action::Symbol;
+        close = false,
+        reversepath = false) =  poly(pointlist, action = action, close=close, reversepath=reversepath)
 
 """
 Find the centroid of simple polygon.
