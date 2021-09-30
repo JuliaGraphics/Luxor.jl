@@ -580,7 +580,8 @@ end
 """
     rotate_point_around_point(targetpt, pt, angle)
 
-Rotate a point around another by an angle.
+Rotate a target point around another point by an angle specified in radians.
+Returns the new point.
 """
 function rotate_point_around_point(targetpt, pt, angle)
     x1 = targetpt.x - pt.x
