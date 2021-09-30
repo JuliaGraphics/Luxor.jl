@@ -1,5 +1,6 @@
 """
-    rect(xmin, ymin, w, h, action)
+    rect(xmin, ymin, w, h;
+        action=:none)
 
 Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and then
 do an action.
@@ -7,7 +8,8 @@ do an action.
 See `box()` for more ways to do similar things, such as supplying two opposite corners,
 placing by centerpoint and dimensions.
 """
-function rect(xmin, ymin, w, h, action::Symbol=:none)
+function rect(xmin::Real, ymin::Real, w::Real, h::Real;
+        action = :none)
     if action != :path
         newpath()
     end
@@ -15,8 +17,11 @@ function rect(xmin, ymin, w, h, action::Symbol=:none)
     do_action(action)
 end
 
+rect(xmin::Real, ymin::Real, w::Real, h::Real, action::Symbol) = rect(xmin, ymin, w, h, action = action)
+
 """
-    rect(cornerpoint, w, h, action;
+    rect(cornerpoint, w, h;
+        action = none
         reversepath=false,
         vertices=false)
 
@@ -32,9 +37,10 @@ right, top left).
 
 Returns the four corner vertices.
 """
-function rect(cornerpoint::Point, w, h, action::Symbol=:none;
-        reversepath=false,
-        vertices=false)
+function rect(cornerpoint::Point, w::Real, h::Real;
+        action = :none,
+        reversepath = false,
+        vertices = false)
 
     pts =  [
         Point(cornerpoint.x,     cornerpoint.y + h),
@@ -56,8 +62,16 @@ function rect(cornerpoint::Point, w, h, action::Symbol=:none;
     return pts
 end
 
+rect(cornerpoint::Point, w::Real, h::Real, action::Symbol;
+        reversepath = false,
+        vertices = false) = rect(cornerpoint, w, h;
+                action = action,
+                reversepath = reversepath,
+                vertices = vertices)
+
 """
-    box(cornerpoint1, cornerpoint2, action=:none;
+    box(cornerpoint1, cornerpoint2;
+        action=:none,
         vertices=false)
 
 Create a box (rectangle) between two points and do an action.
@@ -69,7 +83,8 @@ top left, top right, bottom right.
 returns points in the order: bottom left, bottom right, top
 right, top left).
 """
-function box(corner1::Point, corner2::Point, action::Symbol=:none;
+function box(corner1::Point, corner2::Point;
+        action::Symbol=:none,
         reversepath=false,
         vertices=false)
     # rearrange to get topleft -> bottom right
@@ -100,8 +115,16 @@ function box(corner1::Point, corner2::Point, action::Symbol=:none;
     return pts
 end
 
+box(corner1::Point, corner2::Point, action::Symbol;
+        reversepath=false,
+        vertices=false) = box(corner1, corner2;
+                action=action,
+                reversepath=reversepath,
+                vertices=vertices)
+
 """
-    box(points::Array, action=:none)
+    box(points::Array;
+        action=:none)
 
 Create a box/rectangle using the first two points of an array of Points to
 defined opposite corners.
@@ -109,11 +132,16 @@ defined opposite corners.
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-box(bbox::Array, action::Symbol=:none; kwargs...) =
+box(bbox::Array, action::Symbol; kwargs...) =
     box(bbox[1], bbox[2], action; kwargs...)
 
+box(bbox::Array; kwargs...) =
+    box(bbox[1], bbox[2]; kwargs...)
+
 """
-    box(pt::Point, width, height, action=:none; vertices=false)
+    box(pt::Point, width, height;
+        action=:none,
+        vertices=false)
 
 Create a box/rectangle centered at point `pt` with width and height. Use
 `vertices=true` to return an array of the four corner points rather than draw
@@ -121,9 +149,10 @@ the box.
 
 `reversepath` reverses the direction of the path.
 """
-function box(pt::Point, width, height, action::Symbol=:none;
-        reversepath=false,
-        vertices=false)
+function box(pt::Point, width, height;
+        action = :none,
+        reversepath = false,
+        vertices = false)
     pts = [
         Point(pt.x - width/2, pt.y + height/2),
         Point(pt.x - width/2, pt.y - height/2),
@@ -144,6 +173,12 @@ function box(pt::Point, width, height, action::Symbol=:none;
     return pts
 end
 
+box(pt::Point, width, height, action::Symbol;
+        reversepath = false,
+        vertices = false) = box(pt, width, height;
+                action = action,
+                reversepath = reversepath,
+                vertices = vertices)
 
 """
     box(x, y, width, height, action=:none)
@@ -235,26 +270,37 @@ function box(centerpoint::Point, width, height, cornerradii::Array, action::Symb
 end
 
 """
-    ngon(x, y, radius, sides=5, orientation=0, action=:none;
-        vertices=false, reversepath=false)
+    ngon(x, y, radius, sides=5, orientation=0;
+        action=:none,
+        vertices=false,
+        reversepath=false)
 
 Draw a regular polygon centered at point `centerpos`.
 """
-function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0, action=:none;
-              vertices=false,
-              reversepath=false)
+function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0;
+            action=:none,
+            vertices=false,
+            reversepath=false)
     ptlist = [Point(x+cos(orientation + n * 2pi/sides) * radius,
                     y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
     if !vertices
-        poly(ptlist, action, close=true, reversepath=reversepath)
+        poly(ptlist, action=action, close=true, reversepath=reversepath)
     end
     return ptlist
 end
 
+ngon(x::Real, y::Real, radius::Real, sides::Int, action::Symbol) =
+    ngon(x, y, radius, sides, action=action, vertices=false, reversepath=false)
+
+ngon(x::Real, y::Real, radius::Real, sides::Int, orientation::Real, action::Symbol) =
+    ngon(x, y, radius, sides, orientation, action=action, vertices=false, reversepath=false)
+
+# Point version
 """
-    ngon(centerpos, radius, sides=5, orientation=0, action=:none;
-        vertices=false,
-        reversepath=false)
+ngon(centerpos, radius, sides=5, orientation=0;
+action=:none,
+vertices=false,
+reversepath=false)
 
 Draw a regular polygon centered at point `centerpos`.
 
@@ -270,11 +316,11 @@ returns the array of points. Compare:
 ```julia
 ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
 
-    4-element Array{Luxor.Point, 1}:
-    Luxor.Point(2.4492935982947064e-16, 4.0)
-    Luxor.Point(-4.0, 4.898587196589413e-16)
-    Luxor.Point(-7.347880794884119e-16, -4.0)
-    Luxor.Point(4.0, -9.797174393178826e-16)
+4-element Array{Luxor.Point, 1}:
+Luxor.Point(2.4492935982947064e-16, 4.0)
+Luxor.Point(-4.0, 4.898587196589413e-16)
+Luxor.Point(-7.347880794884119e-16, -4.0)
+Luxor.Point(4.0, -9.797174393178826e-16)
 ```
 
 whereas
@@ -283,20 +329,42 @@ whereas
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
-ngon(centerpoint::Point, radius, sides::Int=5, orientation=0.0, action=:none; kwargs...) =
-    ngon(centerpoint.x, centerpoint.y, radius, sides, orientation, action; kwargs...)
+ngon(centerpoint::Point, radius, sides::Int=5, orientation=0.0;
+        action=:none, vertices=false, reversepath=false) = ngon(centerpoint.x, centerpoint.y, radius, sides, orientation,
+        action=action, vertices=vertices, reversepath=reversepath)
+
+# action as argument
+
+# this is a bit untidy?
+ngon(centerpoint::Point, radius::Real, sides::Int, orientation::Real, a::Symbol;
+        action=:none, vertices=false, reversepath=false) = ngon(centerpoint, radius, sides, orientation,
+        action=a, vertices=vertices, reversepath=reversepath)
 
 """
-    ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
-        action=:none; kwargs...)
+    ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0;
+            action=:none,
+            vertices=false,
+            reversepath=false)
 
 Draw a regular polygon centered at `centerpoint` with `sides` sides of length `sidelength`.
 """
-function ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0,
-    action=:none; kwargs...)
+function ngonside(centerpoint::Point, sidelength::Real, sides::Int=5, orientation=0;
+        action=:none,
+        vertices=false,
+        reversepath=false)
     radius = 0.5 * sidelength * csc(pi/sides)
-    ngon(centerpoint, radius, sides, orientation, action; kwargs...)
+    ngon(centerpoint, radius, sides, orientation, action=action,
+        vertices=vertices,
+        reversepath=reversepath)
 end
+
+ngonside(centerpoint::Point, sidelength::Real, sides::Int, orientation::Real, action::Symbol) =
+    ngonside(centerpoint, sidelength, sides, orientation, action=action)
+
+ngonside(centerpoint::Point, sidelength::Real, sides::Int, action::Symbol) =
+    ngonside(centerpoint, sidelength, sides, action=action)
+
+# ngonside(::Point, ::Int64, ::Int64, ::Int64, ::Symbol)
 
 """
     star(xcenter, ycenter, radius, npoints=5, ratio=0.5, orientation=0, action=:none;
@@ -310,10 +378,10 @@ Returns the vertices of the star.
 
 Use `vertices=true` to only return the vertices of a star instead of drawing it.
 """
-function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
-    orientation=0, action=:none;
-    vertices = false,
-    reversepath=false)
+function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0;
+        action=:none,
+        vertices = false,
+        reversepath=false)
     outerpoints = [Point(x+cos(orientation + n * 2pi/npoints) * radius,
                          y+sin(orientation + n * 2pi/npoints) * radius) for n in 1:npoints]
     innerpoints = [Point(x+cos(orientation + (n + 1/2) * 2pi/npoints) * (radius * ratio),
@@ -327,7 +395,7 @@ function star(x::Real, y::Real, radius::Real, npoints::Int=5, ratio::Real=0.5,
         result = reverse(result)
     end
     if !vertices
-        poly(result, action, close=true)
+        poly(result, action=action, close=true)
     end
     return result
 end
@@ -338,13 +406,27 @@ end
 
 Draw a star centered at a position:
 """
-function star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0,
-              action=:none;
+function star(centerpoint::Point, radius::Real, npoints::Int=5, ratio::Real=0.5, orientation=0;
+              action=:none,
               vertices=false,
               reversepath=false)
-    star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action;
+    star(centerpoint.x, centerpoint.y, radius, npoints, ratio, orientation, action=action,
          vertices = vertices, reversepath=reversepath)
 end
+
+# MethodError: no method matching star(::Point, ::Int64, ::Int64, ::Float64, ::Float64, ::Symbol)
+# star(::Float64, ::Float64, ::Float64, ::Int64, ::Float64, ::Float64, ::Symbol; action=:path, vertices=false, reversepath=false)
+star(x::Real, y::Real, radius::Real, npoints::Int, ratio::Real, orientation, a::Symbol;
+    action=:none,
+    vertices = false,
+    reversepath=false) = star(Point(x, y), radius, npoints, ratio, orientation,
+    action=a, vertices = vertices, reversepath=reversepath)
+
+star(pt::Point, radius::Real, npoints::Int, ratio::Real, orientation, a::Symbol;
+    action=:none,
+    vertices = false,
+    reversepath=false) = star(pt, radius, npoints, ratio, orientation,
+    action=a, vertices = vertices, reversepath=reversepath)
 
 """
     cropmarks(center, width, height)
@@ -401,7 +483,8 @@ function cropmarks(center, width, height)
 end
 
 """
-    polycross(pt::Point, radius, npoints::Int, ratio=0.5, orientation=0.0, action=:none;
+    polycross(pt::Point, radius, npoints::Int, ratio=0.5, orientation=0.0;
+        action      = :none,
         splay       = 0.5,
         vertices    = false,
         reversepath = false)
@@ -414,7 +497,8 @@ Use `vertices=true` to return the vertices of the shape instead of drawing it.
 
 (Adapted from Compose.jl.xgon()))
 """
-function polycross(pt::Point, radius, npoints::Int, ratio=0.5, orientation=0.0, action=:none;
+function polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5, orientation=0.0;
+        action      = :none,
         splay       = .5,
         vertices    = false,
         reversepath = false)
@@ -438,7 +522,7 @@ function polycross(pt::Point, radius, npoints::Int, ratio=0.5, orientation=0.0, 
         reverse!(pts)
     end
     if !vertices
-        poly(pts, action, close=true)
+        poly(pts, action=action, close=true)
     end
     return pts
 end

@@ -136,7 +136,7 @@ function showangle(pt1, pt2, pt3)
     θ = anglethreepoints(pt1, pt2, pt3)
     label(string(round(rad2deg(θ), digits=2), "°"), :w, pt2)
     newpath()
-    carc(pt2, 50, 0, -θ, 0)
+    carc(pt2, 50, 0, -θ)
     strokepath()
 end
 

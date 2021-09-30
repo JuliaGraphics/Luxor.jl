@@ -1,14 +1,16 @@
 # arcs, circles, ellipses, curves, pie, sector, bezier
 
 """
-    circle(x, y, r, action=:none)
+    circle(x, y, r;
+        action=:none)
 
 Make a circle of radius `r` centered at `x`/`y`.
 
 `action` is one of the actions applied by `do_action`, defaulting to `:none`. You can
 also use `ellipse()` to draw circles and place them by their centerpoint.
 """
-function circle(x, y, r, action=:none)
+function circle(x::Real, y::Real, r::Real;
+     action=:none)
     if action != :path
         newpath()
     end
@@ -17,34 +19,48 @@ function circle(x, y, r, action=:none)
 end
 
 """
-    circle(pt, r, action=:none)
+    circle(pt, r;
+        action=:none)
 
 Make a circle centered at `pt`.
 """
-circle(centerpoint::Point, r, action=:none) =
-    circle(centerpoint.x, centerpoint.y, r, action)
+circle(centerpoint::Point, r::Real;
+        action=:none) =
+    circle(centerpoint.x, centerpoint.y, r, action=action)
+
+circle(pt::Point, r::Real, action::Symbol) = circle(pt, r, action = action::Symbol)
+circle(x::Real, y::Real, r::Real, action::Symbol) = circle(Point(x, y), r, action = action::Symbol)
 
 """
-    circle(pt1::Point, pt2::Point, action=:none)
+    circle(pt1::Point, pt2::Point;
+        action=:none)
 
 Make a circle that passes through two points that define the diameter:
 """
-function circle(pt1::Point, pt2::Point, action=:none)
+function circle(pt1::Point, pt2::Point;
+        action=:none)
     center = midpoint(pt1, pt2)
     radius = distance(pt1, pt2)/2
-    circle(center, radius, action)
+    circle(center, radius, action=action)
 end
 
+circle(pt1::Point, pt2::Point, action::Symbol) = circle(pt1, pt2, action=action)
+
 """
-    circle(pt1::Point, pt2::Point, pt3::Point, action=:none)
+    circle(pt1::Point, pt2::Point, pt3::Point;
+        action=:none)
 
 Make a circle that passes through three points.
 """
-function circle(pt1::Point, pt2::Point, pt3::Point, action=:none)
+function circle(pt1::Point, pt2::Point, pt3::Point;
+        action=:none)
     center = midpoint(pt1, pt2)
     radius = distance(pt1, pt2)/2
-    circle(center3pts(pt1, pt2, pt3)..., action)
+    circle(center3pts(pt1, pt2, pt3)..., action=action)
 end
+
+circle(pt1::Point, pt2::Point, pt3::Point, action::Symbol) =
+    circle(pt1, pt2, pt3; action=action)
 
 """
     center3pts(a::Point, b::Point, c::Point)
@@ -75,11 +91,13 @@ function center3pts(p1::Point, p2::Point, p3::Point)
 end
 
 """
-    ellipse(xc, yc, w, h, action=:none)
+    ellipse(xc, yc, w, h;
+        action=:none)
 
 Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `h`.
 """
-function ellipse(xc, yc, w, h, action=:none)
+function ellipse(xc::Real, yc::Real, w::Real, h::Real;
+        action=:none)
     x  = xc - w/2
     y  = yc - h/2
     # kappa = 4.0 * (sqrt(2.0) - 1.0) / 3.0
@@ -98,15 +116,23 @@ function ellipse(xc, yc, w, h, action=:none)
     do_action(action)
 end
 
+ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
+    ellipse(xc, yc, w, h, action=action)
+
 """
-    ellipse(cpt, w, h, action=:none)
+    ellipse(cpt, w, h;
+        action=:none)
 
 Make an ellipse, centered at point `c`, with width `w`, and height `h`.
 """
-ellipse(c::Point, w, h, action=:none) = ellipse(c.x, c.y, w, h, action)
+ellipse(c::Point, w::Real, h::Real; action=:none) = ellipse(c.x, c.y, w, h, action=action)
+
+ellipse(c::Point, w::Real, h::Real, action::Symbol) =
+    ellipse(c, w, h, action=action)
 
 """
-    squircle(center::Point, hradius, vradius, action=:none;
+    squircle(center::Point, hradius, vradius;
+        action=:none,
         rt = 0.5, stepby = pi/40, vertices=false)
 
 Make a squircle or superellipse (basically a rectangle with rounded corners).
@@ -117,11 +143,12 @@ The root (`rt`) option defaults to 0.5, and gives an intermediate shape. Values
 less than 0.5 make the shape more rectangular. Values above make the shape more
 round. The horizontal and vertical radii can be different.
 """
-function squircle(center::Point, hradius, vradius, action=:none;
-                  rt = 0.5,
-                  vertices=false,
-                  stepby = pi/40,
-                  reversepath=false)
+function squircle(center::Point, hradius::Real, vradius::Real;
+        action=:none,
+        rt = 0.5,
+        vertices=false,
+        stepby = pi/40,
+        reversepath=false)
     points = Point[]
     for theta in 0:stepby:2pi
         xpos = center.x + ^(abs(cos(theta)), rt) * hradius * sign(cos(theta))
@@ -135,52 +162,80 @@ function squircle(center::Point, hradius, vradius, action=:none;
     return result
 end
 
+squircle(center::Point, hradius::Real, vradius::Real, action::Symbol;
+        rt = 0.5,
+        vertices=false,
+        stepby = pi/40,
+        reversepath=false) =
+    squircle(center, hradius, vradius;
+        action=action,
+        rt = 0.5,
+        vertices=false,
+        stepby = pi/40,
+        reversepath=false)
+
 """
-    arc(xc, yc, radius, angle1, angle2, action=:none)
+    arc(xc, yc, radius, angle1, angle2;
+        action=:none)
 
 Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
 at xc, yc.
 
 Angles are defined relative to the x-axis, positive clockwise.
 """
-function arc(xc, yc, radius, angle1, angle2, action=:none)
+function arc(xc, yc, radius, angle1, angle2;
+        action=:none)
     Cairo.arc(get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
 """
-    arc(centerpoint::Point, radius, angle1, angle2, action=:none)
+    arc(centerpoint::Point, radius, angle1, angle2;
+        action=:none)
 
 Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
 at `centerpoint`.
 """
-arc(centerpoint::Point, radius, angle1, angle2, action=:none) =
-    arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
+arc(centerpoint::Point, radius, angle1, angle2; action=:none) =
+    arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
+
+arc(centerpoint::Point, radius, angle1, angle2, action::Symbol) =
+    arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
 
 """
-    carc(xc, yc, radius, angle1, angle2, action=:none)
+    carc(xc, yc, radius, angle1, angle2;
+        action=:none)
 
 Add an arc to the current path from `angle1` to `angle2` going counterclockwise,
 centered at `xc`/`yc`.
 
 Angles are defined relative to the x-axis, positive clockwise.
 """
-function carc(xc, yc, radius, angle1, angle2, action=:none)
+function carc(xc, yc, radius, angle1, angle2;
+        action=:none)
     Cairo.arc_negative(get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
 """
-    carc(centerpoint::Point, radius, angle1, angle2, action=:none)
+    carc(centerpoint::Point, radius, angle1, angle2;
+        action=:none)
 
 Add an arc centered at `centerpoint` to the current path from `angle1` to
 `angle2`, going counterclockwise.
 """
-carc(centerpoint::Point, radius, angle1, angle2, action=:none) =
-    carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action)
+carc(centerpoint::Point, radius, angle1, angle2; action=:none) =
+    carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
+
+carc(centerpoint::Point, radius, angle1, angle2, action::Symbol) =
+    carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
+
+carc(x::Real, y::Real, radius, angle1, angle2, action::Symbol=:none) =
+    carc(x, y, radius, angle1, angle2, action=action)
 
 """
-      arc2r(c1::Point, p2::Point, p3::Point, action=:none)
+      arc2r(c1::Point, p2::Point, p3::Point;
+        action=:none)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise,
 to the current path.
@@ -188,18 +243,22 @@ to the current path.
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular path,
  it will be used only as an indication of the arc's length, rather than its position.
 """
-function arc2r(c1::Point, p2::Point, p3::Point, action=:none)
+function arc2r(c1::Point, p2::Point, p3::Point;
+        action=:none)
     r = distance(c1, p2)
     startangle = atan(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan(p3.y - c1.y, p3.x - c1.x)
     if endangle < startangle
         endangle = mod2pi(endangle + 2pi)
     end
-    arc(c1, r, startangle, endangle, action)
+    arc(c1, r, startangle, endangle, action=action)
 end
 
+arc2r(c1::Point, p2::Point, p3::Point, action::Symbol) = arc2r(c1, p2, p3, action = action)
+
 """
-    carc2r(c1::Point, p2::Point, p3::Point, action=:none)
+    carc2r(c1::Point, p2::Point, p3::Point;
+        action=:none)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`,
 going counterclockwise, to the current path.
@@ -207,15 +266,18 @@ going counterclockwise, to the current path.
 `c1`-`p2` really determines the radius. If `p3` doesn't lie on the circular
 path, it will be used only as an indication of the arc's length, rather than its position.
 """
-function carc2r(c1::Point, p2::Point, p3::Point, action=:none)
+function carc2r(c1::Point, p2::Point, p3::Point;
+        action=:none)
     r = distance(c1, p2)
     startangle = atan(p2.y - c1.y, p2.x - c1.x)
     endangle   = atan(p3.y - c1.y, p3.x - c1.x)
     if startangle < endangle
         startangle = mod2pi(startangle + 2pi)
     end
-    carc(c1, r, startangle, endangle, action)
+    carc(c1, r, startangle, endangle, action=action)
 end
+
+carc2r(c1::Point, p2::Point, p3::Point, action::Symbol) = carc2r(c1, p2, p3, action = action)
 
 """
     isarcclockwise(c::Point, A::Point, B::Point)
@@ -232,40 +294,50 @@ function isarcclockwise(c::Point, A::Point, B::Point)
 end
 
 """
-    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle, action:none)
+    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle;
+        action=:none)
 
 Draw an annular sector centered at `centerpoint`.
 
 """
-function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
-                endangle::Real, action::Symbol=:none)
+function sector(centerpoint::Point, innerradius::Real, outerradius::Real,
+                startangle::Real, endangle::Real;
+                    action=:none)
     (innerradius > outerradius) && throw(DomainError(outerradius, "outer radius must be larger than inner radius $(innerradius)"))
     gsave()
     translate(centerpoint)
     newpath()
     move(innerradius * cos(startangle), innerradius * sin(startangle))
     line(outerradius * cos(startangle), outerradius * sin(startangle))
-    arc(0, 0, outerradius, startangle, endangle, :none)
+    arc(0, 0, outerradius, startangle, endangle, action=:none)
     line(innerradius * cos(endangle), innerradius * sin(endangle))
-    carc(0, 0, innerradius, endangle, startangle, :none)
+    carc(0, 0, innerradius, endangle, startangle, action=:none)
     closepath()
     grestore()
     do_action(action)
 end
 
+sector(centerpoint::Point, innerradius::Real, outerradius::Real,
+    startangle::Real, endangle::Real, action::Symbol) =
+    sector(centerpoint, innerradius, outerradius, startangle, endangle, action=action)
+
 """
-    sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
-       action::Symbol=:none)
+    sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real;
+       action=:none)
 
 Draw an annular sector centered at the origin.
 """
-sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
-       action::Symbol=:none) =
-    sector(O, innerradius, outerradius, startangle, endangle, action)
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real;
+        action=:none) =
+    sector(O, innerradius, outerradius, startangle, endangle, action=action)
+
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, action::Symbol) =
+    sector(innerradius, outerradius, startangle, endangle, action=action)
 
 """
-    sector(centerpoint::Point, innerradius, outerradius, startangle, endangle,
-        cornerradius, action:none)
+    sector(centerpoint::Point, innerradius, outerradius,
+            startangle, endangle, cornerradius;
+           action:none)
 
 Draw an annular sector with rounded corners, basically a bent sausage shape,
 centered at `centerpoint`.
@@ -276,7 +348,8 @@ discontinuities where the curves join.
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real,
-                endangle::Real, cornerradius::Real, action::Symbol=:none)
+                endangle::Real, cornerradius::Real;
+                    action=:none)
     (innerradius > outerradius) && throw(DomainError(outerradius, "outer radius must be larger than inner radius $(innerradius)"))
     gsave()
     translate(centerpoint)
@@ -318,75 +391,98 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     newpath()
     # inner corner
     arc(@polar(p1p2center), cornerradius, slope(@polar(p1p2center), @polar(p1)),
-        slope(@polar(p1p2center), @polar(p2)), :none)
+        slope(@polar(p1p2center), @polar(p2)), action=:none)
     line(@polar(p3))
     # outer corner
     arc(@polar(p3p4center), cornerradius, slope(@polar(p3p4center), @polar(p3)),
-        slope(@polar(p3p4center), @polar(p4)), :none)
+        slope(@polar(p3p4center), @polar(p4)), action=:none)
     # outside arc
-    arc(O, outerradius, slope(O, @polar(p4)), slope(O, @polar(p5)), :none)
+    arc(O, outerradius, slope(O, @polar(p4)), slope(O, @polar(p5)), action=:none)
     # last outside corner
     arc(@polar(p5p6center), cornerradius, slope(@polar(p5p6center), @polar(p5)),
-        slope(@polar(p5p6center), @polar(p6)), :none)
+        slope(@polar(p5p6center), @polar(p6)), action=:none)
     line(@polar(p7))
     # last inner corner
     arc(@polar(p7p8center), cornerradius, slope(@polar(p7p8center), @polar(p7)),
-        slope(@polar(p7p8center), @polar(p8)), :none)
+        slope(@polar(p7p8center), @polar(p8)), action=:none)
     s1, s2 = slope(O, @polar(p8)), slope(O, @polar(p1))
     if s1 < s2
         s2 = mod2pi(s2 + 2pi)
     end
-    carc(O, innerradius, s1, s2, :none)
+    carc(O, innerradius, s1, s2, action=:none)
     closepath()
     do_action(action)
     grestore()
 end
 
+sector(centerpoint::Point, innerradius::Real,
+    outerradius::Real, startangle::Real, endangle::Real,
+    cornerradius::Real, action::Symbol) = sector(centerpoint,
+    innerradius, outerradius, startangle, endangle,
+    cornerradius, action=action)
+
 """
     sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
-       cornerradius::Real, action::Symbol=:none)
+       cornerradius::Real, action)
 
 Draw an annular sector with rounded corners, centered at the current origin.
 """
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
-       cornerradius::Real, action::Symbol=:none) =
-    sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action)
+       cornerradius::Real, action::Symbol) =
+    sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action=action)
 
 """
-    pie(x, y, radius, startangle, endangle, action=:none)
+    pie(x, y, radius, startangle, endangle;
+        action=:none)
 
 Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
 are measured clockwise.
 """
-function pie(x, y, radius, startangle, endangle, action=:none)
+function pie(x::Real, y::Real, radius::Real, startangle::Real, endangle::Real;
+        action=:none)
     gsave()
     translate(x, y)
     newpath()
     move(0, 0)
     line(radius * cos(startangle), radius * sin(startangle))
-    arc(0, 0, radius, startangle, endangle, :none)
+    arc(0, 0, radius, startangle, endangle, action=:none)
     closepath()
     grestore()
     do_action(action)
 end
 
+pie(x::Real, y::Real, radius::Real, startangle::Real, endangle::Real, action::Symbol) =
+    pie(x, y, radius, startangle, endangle, action=action)
+
+pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real; action=:none) =
+    pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action=action)
+
+pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real, action::Symbol) =
+    pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action=action)
+
+
 """
-    pie(centerpoint, radius, startangle, endangle, action=:none)
+    pie(centerpoint, radius, startangle, endangle;
+        action=:none)
 
 Draw a pie shape centered at `centerpoint`.
 
 Angles start at the positive x-axis and are measured clockwise.
 """
-pie(centerpoint::Point, radius, startangle, endangle, action) =
-    pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action)
+pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real, action::Symbol) =
+    pie(centerpoint, radius, startangle, endangle, action=action)
 
 """
-    pie(radius, startangle, endangle, action=:none)
+    pie(radius, startangle, endangle;
+        action=:none)
 
 Draw a pie shape centered at the origin
-
 """
-pie(radius, startangle, endangle, action=:none) = pie(O, radius, startangle, endangle, action)
+pie(radius::Real, startangle::Real, endangle::Real; action=:none) =
+    pie(O, radius, startangle, endangle, action=action)
+
+pie(radius::Real, startangle::Real, endangle::Real, action::Symbol) =
+    pie(O, radius, startangle, endangle, action=action)
 
 """
     curve(x1, y1, x2, y2, x3, y3)
@@ -401,7 +497,8 @@ curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(get_current_cr(), x1, y1, x2, y2,
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 """
-    circlepath(center::Point, radius, action=:none;
+    circlepath(center::Point, radius;
+        action=:none,
         reversepath=false,
         kappa = 0.5522847498307936)
 
@@ -409,9 +506,10 @@ Draw a circle using Bézier curves.
 
 The magic value, `kappa`, is `4.0 * (sqrt(2.0) - 1.0) / 3.0`.
 """
-function circlepath(center::Point, radius, action=:none;
-    reversepath=false,
-    kappa = 0.5522847498307936)
+function circlepath(center::Point, radius;
+        action=:none,
+        reversepath=false,
+        kappa = 0.5522847498307936)
     function northtoeast(center::Point, radius, kappa)
         curve(center.x + (radius * kappa), center.y + radius, center.x + radius,
         center.y + (radius * kappa), center.x + radius, center.y )
@@ -467,8 +565,14 @@ function circlepath(center::Point, radius, action=:none;
     do_action(action)
 end
 
+circlepath(center::Point, radius, action::Symbol; reversepath=false, kappa = 0.5522847498307936) = circlepath(center, radius;
+                action=action,
+                reversepath=reversepath,
+                kappa = kappa)
+
 """
-    ellipse(focus1::Point, focus2::Point, k, action=:none;
+    ellipse(focus1::Point, focus2::Point, k;
+            action=:none,
             stepvalue=pi/100,
             vertices=false,
             reversepath=false)
@@ -477,10 +581,11 @@ Build a polygon approximation to an ellipse, given two points and a distance, `k
 the sum of the distances to the focii of any points on the ellipse (or the shortest length
 of string required to go from one focus to the perimeter and on to the other focus).
 """
-function ellipse(focus1::Point, focus2::Point, k, action=:none;
-                 stepvalue=pi/100,
-                 vertices=false,
-                 reversepath=false)
+function ellipse(focus1::Point, focus2::Point, k;
+            action=:none,
+            stepvalue=pi/100,
+            vertices=false,
+            reversepath=false)
     a = k/2  # a = ellipse's major axis, the widest part
     cpoint = midpoint(focus1, focus2)
     dc = distance(focus1, cpoint)
@@ -496,29 +601,54 @@ function ellipse(focus1::Point, focus2::Point, k, action=:none;
     vertices ? points : poly(points, action, close=true, reversepath=reversepath)
 end
 
+ellipse(f1::Point, f2::Point, k::Int64, action::Symbol;
+        stepvalue=pi/100,
+        vertices=false,
+        reversepath=false) =
+    ellipse(f1, f2, k,
+        action=action,
+        stepvalue=stepvalue,
+        vertices=vertices,
+        reversepath=reversepath)
+
+ellipse(f1::Point, f2::Point, k::Int64, action::Symbol) =
+    ellipse(f1, f2, k, action=action)
+
 """
-    ellipse(focus1::Point, focus2::Point, pt::Point, action=:none;
-            stepvalue=pi/100,
-            vertices=false,
-            reversepath=false)
+    ellipse(focus1::Point, focus2::Point, pt::Point;
+        action=:none,
+        stepvalue=pi/100,
+        vertices=false,
+        reversepath=false)
 
 Build a polygon approximation to an ellipse, given two points and a point somewhere on the
 ellipse.
 """
-function ellipse(focus1::Point, focus2::Point, pt::Point, action=:none;
-                 stepvalue=pi/100,
-                 vertices=false,
-                 reversepath=false)
+function ellipse(focus1::Point, focus2::Point, pt::Point;
+            action=:none,
+            stepvalue=pi/100,
+            vertices=false,
+            reversepath=false)
     k = distance(focus1, pt) + distance(focus2, pt)
-    ellipse(focus1, focus2, k, action, stepvalue=stepvalue,
+    ellipse(focus1, focus2, k, action=action, stepvalue=stepvalue,
         vertices=vertices, reversepath=reversepath)
 end
 
+ellipse(focus1::Point, focus2::Point, pt::Point, action::Symbol;
+            stepvalue=pi/100,
+            vertices=false,
+            reversepath=false) = ellipse(focus1, focus2, pt;
+        action=action,
+        stepvalue=stepvalue,
+        vertices=vertices,
+        reversepath=reversepath)
+
 """
-    hypotrochoid(R, r, d, action=:none;
-            stepby=0.01,
-            period=0.0,
-            vertices=false)
+    hypotrochoid(R, r, d;
+        action=:none,
+        stepby=0.01,
+        period=0.0,
+        vertices=false)
 
 Make a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
 point attached to a circle of radius `r` rolling around the inside  of a fixed circle of
@@ -536,11 +666,12 @@ The function can return a polygon (a list of points), or draw the points directl
 the supplied `action`. If the points are drawn, the function returns a tuple showing how
 many points were drawn and what the period was (as a multiple of `pi`).
 """
-function hypotrochoid(R, r, d, action=:none;
-                      close    = true,
-                      stepby   = 0.01,
-                      period   = 0.0,
-                      vertices = false)
+function hypotrochoid(R, r, d;
+            action=:none,
+            close    = true,
+            stepby   = 0.01,
+            period   = 0.0,
+            vertices = false)
     function nextposition(t)
         x = (R - r) * cos(t) + (d * cos(((R - r)/r) * t))
         y = (R - r) * sin(t) - (d * sin(((R - r)/r) * t))
@@ -560,11 +691,23 @@ function hypotrochoid(R, r, d, action=:none;
     vertices ? points : (poly(points, action, close=close); (length(points), period/pi))
 end
 
+hypotrochoid(R, r, d, action::Symbol;
+            close    = true,
+            stepby   = 0.01,
+            period   = 0.0,
+            vertices = false) = hypotrochoid(R, r, d;
+                        action= action,
+                        close    = close,
+                        stepby   = stepby,
+                        period   = period,
+                        vertices = vertices)
+
 """
-    epitrochoid(R, r, d, action=:none;
-            stepby=0.01,
-            period=0,
-            vertices=false)
+    epitrochoid(R, r, d;
+        action=:none,
+        stepby=0.01,
+        period=0,
+        vertices=false)
 
 Make a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
 point attached to a circle of radius `r` rolling around the outside of a fixed circle of
@@ -580,11 +723,12 @@ The function can return a polygon (a list of points), or draw the points directl
 the supplied `action`. If the points are drawn, the function returns a tuple showing how
 many points were drawn and what the period was (as a multiple of `pi`).
 """
-function epitrochoid(R, r, d, action=:none;
-                     close    = true,
-                     stepby   = 0.01,
-                     period   = 0,
-                     vertices = false)
+function epitrochoid(R, r, d;
+            action   = :none,
+            close    = true,
+            stepby   = 0.01,
+            period   = 0,
+            vertices = false)
     function nextposition(t)
         x = (R + r) * cos(t) - (d * cos(((R - r)/r) * t))
         y = (R + r) * sin(t) - (d * sin(((R - r)/r) * t))
@@ -604,12 +748,24 @@ function epitrochoid(R, r, d, action=:none;
     vertices ? points : (poly(points, action, close=close); (length(points), period/pi))
 end
 
+epitrochoid(R, r, d, action::Symbol;
+            close    = true,
+            stepby   = 0.01,
+            period   = 0.0,
+            vertices = false) = epitrochoid(R, r, d;
+                        action= action,
+                        close    = close,
+                        stepby   = stepby,
+                        period   = period,
+                        vertices = vertices)
+
 """
-    spiral(a, b, action::Symbol=:none;
-                     stepby = 0.01,
-                     period = 4pi,
-                     vertices = false,
-                     log=false)
+    spiral(a, b;
+        action = :none,
+        stepby = 0.01,
+        period = 4pi,
+        vertices = false,
+        log =false)
 
 Make a spiral. The two primary parameters `a` and `b` determine the start radius, and the
 tightness.
@@ -630,11 +786,12 @@ For logarithmic spirals (`log=true`):
 
 Values of `b` around 0.1 produce tighter, staircase-like spirals.
 """
-function spiral(a, b, action::Symbol=:none;
-                 stepby = 0.01,
-                 period = 4pi,
-                 vertices = false,
-                 log=false)
+function spiral(a, b;
+        action=:none,
+        stepby = 0.01,
+        period = 4pi,
+        vertices = false,
+        log=false)
     function nextpositionlog(t)
         ebt = exp(t * b)
         if abs(ebt) < 10^8 # arbitrary cutoff to avoid NaNs and Infs
@@ -669,6 +826,16 @@ function spiral(a, b, action::Symbol=:none;
     return points
 end
 
+spiral(a, b, action::Symbol;
+        stepby = 0.01,
+        period = 4pi,
+        vertices = false,
+        log=false) = spiral(a, b;
+                action=action,
+                stepby = stepby,
+                period = period,
+                vertices = vertices,
+                log=log)
 """
     intersection2circles(pt1, r1, pt2, r2)
 
@@ -827,13 +994,15 @@ function circletangent2circles(radius, circle1center::Point, circle1radius, circ
 end
 
 """
-    arc2sagitta(p1::Point, p2::Point, s, action=:none)
+    arc2sagitta(p1::Point, p2::Point, s;
+        action=:none)
 
 Make a clockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
 
 Return tuple of the center point and the radius of the arc.
 """
-function arc2sagitta(p1::Point, p2::Point, s, action=:none)
+function arc2sagitta(p1::Point, p2::Point, s::Real;
+        action=:none)
     if isapprox(s, 0.0)
         throw(error("Height of arc $s should be greater than 0.0"))
     end
@@ -842,10 +1011,10 @@ function arc2sagitta(p1::Point, p2::Point, s, action=:none)
     flag, ip1, ip2 = intersectioncirclecircle(p1, r, p2, r)
     if flag
         if r <= s
-            arc2r(ip1, p1, p2, action)
+            arc2r(ip1, p1, p2, action=action)
             result = (ip1, r)
         else
-            arc2r(ip2, p1, p2, action)
+            arc2r(ip2, p1, p2, action=action)
             result = (ip2, r)
         end
     else
@@ -854,14 +1023,18 @@ function arc2sagitta(p1::Point, p2::Point, s, action=:none)
     return result
 end
 
+arc2sagitta(p1::Point, p2::Point, s::Real, action::Symbol) =  arc2sagitta(p1, p2, s; action=action)
+
 """
-    carc2sagitta(p1::Point, p2::Point, s, action=:none)
+    carc2sagitta(p1::Point, p2::Point, s;
+        action=:none)
 
 Make a counterclockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
 
 Return tuple of center point and radius of arc.
 """
-function carc2sagitta(p1::Point, p2::Point, s, action=:none)
+function carc2sagitta(p1::Point, p2::Point, s;
+        action=:none)
     if isapprox(s, 0.0)
         throw(error("Height of arc $s should be greater than 0.0"))
     end
@@ -870,10 +1043,10 @@ function carc2sagitta(p1::Point, p2::Point, s, action=:none)
     flag, ip1, ip2 = intersectioncirclecircle(p1, r, p2, r)
     if flag
         if r <= s
-            carc2r(ip2, p1, p2, action)
+            carc2r(ip2, p1, p2, action=action)
             result = (ip1, r)
         else
-            carc2r(ip1, p1, p2, action)
+            carc2r(ip1, p1, p2, action=action)
             result = (ip2, r)
         end
     else
@@ -881,6 +1054,8 @@ function carc2sagitta(p1::Point, p2::Point, s, action=:none)
     end
     return result
 end
+
+carc2sagitta(p1::Point, p2::Point, s::Int64, action::Symbol) =  carc2sagitta(p1, p2, s; action=action)
 
 """
     circlecircleoutertangents(cpt1::Point, r1, cpt2::Point, r2)
@@ -982,7 +1157,8 @@ function circlecircleinnertangents(circle1center::Point, circle1radius, circle2c
 end
 
 """
-    ellipseinquad(qgon, action=:none)
+    ellipseinquad(qgon;
+        action=:none)
 
 Calculate a Bézier-based ellipse that fits inside the
 quadrilateral `qgon`, an array of with at least four Points,
@@ -1006,7 +1182,8 @@ can't be found. (The qgon is probably not a convex polygon.)
 
 http://faculty.mae.carleton.ca/John_Hayes/Papers/InscribingEllipse.pdf
 """
-function ellipseinquad(qgon, action=:none)
+function ellipseinquad(qgon;
+        action=:none)
     p1, p2, p3, p4 = qgon
     length(unique([p1, p2, p3, p4])) != 4 && throw(error("ellipseinquad() the 4 points must be different: $(qgon)"))
     if !ispolyclockwise(qgon)
@@ -1062,13 +1239,16 @@ function ellipseinquad(qgon, action=:none)
     @layer begin
         translate(ellipsecenter)
         rotate(ellipseangle)
-        ellipse(O, 2ellipsesemimajor, 2ellipsesemiminor, action)
+        ellipse(O, 2ellipsesemimajor, 2ellipsesemiminor, action=action)
     end
     return ellipsecenter, ellipsesemimajor, ellipsesemiminor, ellipseangle
 end
 
+ellipseinquad(qgon, action) = ellipseinquad(qgon, action=action)
+
 """
-    crescent(pos, innerradius, outeradius, action=nothing;
+    crescent(pos, innerradius, outeradius;
+        action=nothing,
         vertices=false,
         reversepath=false,
         steps = 30)
@@ -1091,7 +1271,8 @@ Create a stroked crescent shape; the inner radius of 0 produces a semicircle.
 crescent(O, 0, 200, :stroke)
 ```
 """
-function crescent(pos::Point, innerradius::Real, outerradius::Real, action=nothing;
+function crescent(pos::Point, innerradius::Real, outerradius::Real;
+        action=nothing,
         vertices=false,
         reversepath=false,
         steps = 30)
@@ -1113,8 +1294,18 @@ function crescent(pos::Point, innerradius::Real, outerradius::Real, action=nothi
     return ptlist
 end
 
+crescent(pos::Point, innerradius::Real, outerradius::Real, action::Symbol;
+        vertices=false,
+        reversepath=false,
+        steps = 30) = crescent(pos, innerradius, outerradius;
+                action=action,
+                vertices=vertices,
+                reversepath=reversepath,
+                steps = steps)
+
 """
-crescent(cp1, r1, cp2, r2, action=nothing;
+crescent(cp1, r1, cp2, r2;
+            action=nothing,
             vertices=false,
             reversepath=false)
 
@@ -1132,14 +1323,15 @@ Create a filled crescent shape from two circles.
 crescent(O, 100, O + (60, 0), 150, :fill)
 ```
 """
-function crescent(cp1::Point, r1::Real, cp2::Point, r2::Real, action=nothing;
+function crescent(cp1::Point, r1::Real, cp2::Point, r2::Real;
+        action=nothing,
         vertices=false,
         reversepath=false)
     flag, ip1, ip2 = intersectioncirclecircle(cp1, r1, cp2, r2)
     if flag
         move(ip2)
-        carc(cp2, r2, slope(cp2, ip2), slope(cp2, ip1), :path)
-        arc(cp1, r1, slope(cp1, ip1), slope(cp1, ip2), :path)
+        carc(cp2, r2, slope(cp2, ip2), slope(cp2, ip1), action=:path)
+        arc(cp1, r1, slope(cp1, ip1), slope(cp1, ip2), action=:path)
         ptlist = pathtopoly()[1]
         if !vertices
             poly(ptlist, action, close=true, reversepath=reversepath)
@@ -1149,4 +1341,11 @@ function crescent(cp1::Point, r1::Real, cp2::Point, r2::Real, action=nothing;
         @info "crescent(): the two arcs won't intersect "
     end
 end
+
+crescent(cp1::Point, r1::Real, cp2::Point, r2::Real, action::Symbol;
+        vertices=false,
+        reversepath=false) = crescent(cp1, r1, cp2, r2;
+                action=action,
+                vertices=vertices,
+                reversepath=reversepath)
 # eof
