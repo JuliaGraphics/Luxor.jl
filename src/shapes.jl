@@ -526,3 +526,9 @@ function polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5, orientation
     end
     return pts
 end
+
+polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5) =
+    polycross(pt, radius, npoints, ratio, 0.0; action = :none)
+
+polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5, orientation::Real=0.0, action::Symbol=:none) =
+    polycross(pt, radius, npoints, ratio, orientation; action = action)

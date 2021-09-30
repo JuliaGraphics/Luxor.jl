@@ -25,7 +25,7 @@ rulers()
 sethue("grey40")
 rect(Point(0, 0), 100, 100, :stroke)
 sethue("blue")
-box(Point(0, 0), 100, 100, :stroke)
+box(Point(0, 0), 100, 100, action=:stroke)
 finish() # hide
 nothing # hide
 ```
