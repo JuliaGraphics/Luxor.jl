@@ -208,16 +208,18 @@ function Base.convert(::Type{Vector{Point}}, bbox::BoundingBox)
 end
 
 """
-    box(bbox::BoundingBox, :action;
-            vertices=false)
+    box(bbox::BoundingBox;
+        action   = :none,
+        vertices = false)
 
 Make a box using the bounds in `bbox`.
 
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-function box(bbox::BoundingBox, action::Symbol=:none;
-        vertices=false)
+function box(bbox::BoundingBox;
+        action   = :none,
+        vertices = false)
     if vertices || action == :none
         botleft  = Point(bbox.corner1.x, bbox.corner2.y)
         topleft  = bbox.corner1
@@ -228,6 +230,16 @@ function box(bbox::BoundingBox, action::Symbol=:none;
         box(bbox.corner1, bbox.corner2, action)
     end
 end
+
+"""
+    box(bbox::BoundingBox, action::Symbol=:none;
+        vertices=true)
+"""
+box(bbox::BoundingBox) =
+    box(bbox, action=:none, vertices=true)
+
+box(bbox::BoundingBox, action::Symbol) =
+    box(bbox, action=action, vertices=false)
 
 """
     poly(bbox::BoundingBox, :action; kwargs...)
