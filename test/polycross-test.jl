@@ -17,5 +17,4 @@ for i in 100:-1:1
 end
 
 @test finish() == true
-
 println("...finished test: output in $(fname)")

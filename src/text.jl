@@ -177,7 +177,8 @@ function textpath(t)
 end
 
 """
-    textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
+    textoutlines(s::AbstractString, pos::Point=O;
+        action=:none,
         halign=:left,
         valign=:baseline,
         startnewpath=true)
@@ -188,7 +189,8 @@ By default this function discards any current path, unless you use `startnewpath
 
 See also `textpath()`.
 """
-function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
+function textoutlines(s::AbstractString, pos::Point;
+    action=:none,
     halign=:left,
     valign=:baseline,
     startnewpath=true)
@@ -228,6 +230,17 @@ function textoutlines(s::AbstractString, pos::Point=O, action::Symbol=:none;
     end
     do_action(action)
 end
+
+textoutlines(s::AbstractString, pos::Point, action::Symbol;
+    halign=:left,
+    valign=:baseline,
+    startnewpath=true) = textoutlines(s, pos;
+        action=action,
+        halign=halign,
+        valign=valign,
+        startnewpath=startnewpath)
+
+textoutlines(s::AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
 
 """
     textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;

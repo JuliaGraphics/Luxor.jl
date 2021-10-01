@@ -185,7 +185,10 @@ box(pt::Point, width, height, action::Symbol;
 
 Create a box/rectangle centered at point `x/y` with width and height.
 """
-box(x::Real, y::Real, width::Real, height::Real, action::Symbol=:none) =
+box(x::Real, y::Real, width::Real, height::Real, action::Symbol) =
+    rect(x - width/2.0, y - height/2.0, width, height, action)
+
+box(x::Real, y::Real, width::Real, height::Real; action::Symbol=:none) =
     rect(x - width/2.0, y - height/2.0, width, height, action)
 
 """
@@ -196,10 +199,15 @@ round each corner by `cornerradius`.
 
 The constructed path consists of arcs and straight lines.
 """
-box(centerpoint::Point, width, height, cornerradius::Real, action::Symbol=:stroke) =
-    box(centerpoint, width, height, fill(cornerradius, 4), action)
+box(centerpoint::Point, width, height, cornerradius::Real, action::Symbol) =
+    box(centerpoint, width, height, fill(cornerradius, 4), action=action)
+
+box(centerpoint::Point, width, height, cornerradius::Real; action=:none) =
+    box(centerpoint, width, height, fill(cornerradius, 4), action=action)
 
 """
+    box(pt, width, height, cornerradii::Array;
+        action=:none)
     box(pt, width, height, cornerradii::Array, action=:none)
 
 Draw a box/rectangle centered at point `pt` with `width` and `height` and
@@ -218,7 +226,8 @@ the top left, and so on.
 end
 ```
 """
-function box(centerpoint::Point, width, height, cornerradii::Array, action::Symbol=:stroke)
+function box(centerpoint::Point, width, height, cornerradii::Array;
+        action=:none)
     gsave()
     translate(centerpoint)
 
@@ -268,6 +277,9 @@ function box(centerpoint::Point, width, height, cornerradii::Array, action::Symb
     grestore()
     do_action(action)
 end
+
+box(centerpoint::Point, width, height, cornerradii::Array, action::Symbol) =
+     box(centerpoint::Point, width, height, cornerradii::Array, action=action)
 
 """
     ngon(x, y, radius, sides=5, orientation=0;
@@ -527,8 +539,11 @@ function polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5, orientation
     return pts
 end
 
-polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5) =
-    polycross(pt, radius, npoints, ratio, 0.0; action = :none)
-
-polycross(pt::Point, radius::Real, npoints::Int, ratio=0.5, orientation::Real=0.0, action::Symbol=:none) =
-    polycross(pt, radius, npoints, ratio, orientation; action = action)
+polycross(pt::Point, radius::Real, npoints::Int, ratio, orientation::Real, action::Symbol;
+    splay       = .5,
+    vertices    = false,
+    reversepath = false) = polycross(pt, radius, npoints, ratio, orientation,
+        action = action,
+        splay       = splay,
+        vertices    = vertices,
+        reversepath = reversepath)

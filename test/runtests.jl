@@ -16,6 +16,10 @@ function run_all_tests()
         include("easingfunctions.jl")
     end
 
+    @testset "despatch methds" begin
+        include("action-testing.jl")
+    end
+
     @testset "polygons" begin
         include("boxtests.jl")
         include("offset-poly-tests.jl")

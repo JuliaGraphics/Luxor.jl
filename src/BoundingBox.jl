@@ -212,7 +212,7 @@ end
         action   = :none,
         vertices = false)
 
-Make a box using the bounds in `bbox`.
+Define a box using the bounds in `bbox`.
 
 Use `vertices=true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
@@ -232,12 +232,9 @@ function box(bbox::BoundingBox;
 end
 
 """
-    box(bbox::BoundingBox, action::Symbol=:none;
-        vertices=true)
+    box(bbox::BoundingBox, action::Symbol;
+        vertices=false)
 """
-box(bbox::BoundingBox) =
-    box(bbox, action=:none, vertices=true)
-
 box(bbox::BoundingBox, action::Symbol) =
     box(bbox, action=action, vertices=false)
 
@@ -250,13 +247,20 @@ poly(bbox::BoundingBox, action::Symbol=:none; kwargs...) =
     poly(convert(Vector{Point}, bbox), action; kwargs...)
 
 """
-    prettypoly(bbox::BoundingBox, :action; kwargs...)
+    prettypoly(bbox::BoundingBox, action; kwargs...)
 
 Make a decorated polygon around the BoundingBox in `bbox`. The vertices are in
 the order: bottom left, top left, top right, and bottom right.
 """
-prettypoly(bbox::BoundingBox, action::Symbol=:none; kwargs...) =
-    prettypoly(box(bbox, vertices=true), action; kwargs...)
+prettypoly(bbox::BoundingBox, a::Symbol=:none;
+    action=a,
+    close=false,
+    reversepath=false,
+    vertexlabels = (n, l) -> ()) = prettypoly(convert(Vector{Point}, bbox),
+        action=action,
+        close=close,
+        reversepath=reversepath,
+        vertexlabels = vertexlabels)
 
 """
     boundingboxesintersect(bbox1::BoundingBox, bbox2::BoundingBox)
