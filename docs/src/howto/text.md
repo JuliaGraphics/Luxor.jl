@@ -173,7 +173,7 @@ For PNG files, the appearance of fonts when output is controlled to some extent 
 
 ## Text to paths
 
-`textoutlines(string, position, action)` converts the text into graphic path(s), places them starting at `position`, and applies the `action`.
+`textoutlines(string, position)` converts the text into graphic path(s), places them starting at `position`, and applies the `action`.
 
 ```@example
 using Luxor # hide

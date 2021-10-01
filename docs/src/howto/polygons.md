@@ -1092,7 +1092,7 @@ pts = [Point(30x, 20sin(x)) for x in -2π:π/6:2π]
 
 # 1: drawn as defined
 
-prettypoly(pts, "stroke", drawvertices, vertexlabels = numbervertices)
+prettypoly(pts, :stroke, drawvertices, vertexlabels = numbervertices)
 
 translate(0, 50)
 

@@ -415,8 +415,7 @@ function sector(centerpoint::Point, innerradius::Real, outerradius::Real, starta
     grestore()
 end
 
-sector(centerpoint::Point, innerradius::Real,
-    outerradius::Real, startangle::Real, endangle::Real,
+sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
     cornerradius::Real, action::Symbol) = sector(centerpoint,
     innerradius, outerradius, startangle, endangle,
     cornerradius, action=action)
@@ -431,9 +430,12 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
        cornerradius::Real, action::Symbol) =
     sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action=action)
 
+sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, cornerradius::Real; action=:stroke) =
+    sector(O, innerradius, outerradius, startangle, endangle, cornerradius, action=action)
+
 """
-    pie(x, y, radius, startangle, endangle;
-        action=:none)
+    pie(x, y, radius, startangle, endangle; action=:none)
+    pie(centerpoint, radius, startangle, endangle; action=:none)
 
 Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
 are measured clockwise.
@@ -457,20 +459,11 @@ pie(x::Real, y::Real, radius::Real, startangle::Real, endangle::Real, action::Sy
 pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real; action=:none) =
     pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action=action)
 
+"""
+    pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real, action::Symbol)
+"""
 pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real, action::Symbol) =
     pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action=action)
-
-
-"""
-    pie(centerpoint, radius, startangle, endangle;
-        action=:none)
-
-Draw a pie shape centered at `centerpoint`.
-
-Angles start at the positive x-axis and are measured clockwise.
-"""
-pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real, action::Symbol) =
-    pie(centerpoint, radius, startangle, endangle, action=action)
 
 """
     pie(radius, startangle, endangle;
@@ -610,9 +603,6 @@ ellipse(f1::Point, f2::Point, k::Int64, action::Symbol;
         stepvalue=stepvalue,
         vertices=vertices,
         reversepath=reversepath)
-
-ellipse(f1::Point, f2::Point, k::Int64, action::Symbol) =
-    ellipse(f1, f2, k, action=action)
 
 """
     ellipse(focus1::Point, focus2::Point, pt::Point;

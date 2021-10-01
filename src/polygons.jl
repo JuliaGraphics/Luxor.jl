@@ -33,7 +33,8 @@ end
 
 poly(pts::NTuple{N, Point} where N; kwargs...) = poly(collect(pts); kwargs...)
 
-poly(pointlist::Array{Point, 1}, action::Symbol;
+poly(pointlist::Array{Point, 1}, a::Symbol;
+        action = a,
         close = false,
         reversepath = false) =  poly(pointlist, action = action, close=close, reversepath=reversepath)
 
@@ -282,7 +283,8 @@ function polysplit(pointlist::Array{Point, 1}, p1::Point, p2::Point)
 end
 
 """
-    prettypoly(points::Array{Point, 1}, action=:none, vertexfunction = () -> circle(O, 2, :stroke);
+    prettypoly(points::Array{Point, 1}, vertexfunction = () -> circle(O, 2, :stroke);
+        action=:none,
         close=false,
         reversepath=false,
         vertexlabels = (n, l) -> ()
@@ -296,7 +298,7 @@ The default vertexfunction draws a 2 pt radius circle.
 To mark each vertex of a polygon with a randomly colored filled circle:
 
     p = star(O, 70, 7, 0.6, 0, vertices=true)
-    prettypoly(p, :fill, () ->
+    prettypoly(p, action=:fill, () ->
         begin
             randomhue()
             circle(O, 10, :fill)
@@ -308,14 +310,14 @@ two arguments that can access the current vertex number and the total number of 
 at each vertex. For example, you can label the vertices of a triangle "1 of 3", "2 of 3",
 and "3 of 3" using:
 
-    prettypoly(triangle, :stroke,
+    prettypoly(triangle, action=:stroke,
         vertexlabels = (n, l) -> (text(string(n, " of ", l))))
 """
-function prettypoly(pointlist::Array{Point, 1}, action=:none, vertexfunction = () -> circle(O, 2, :stroke);
+function prettypoly(pointlist::Array{Point, 1}, vertexfunction = () -> circle(O, 2, :stroke);
+    action=:none,
     close=false,
     reversepath=false,
-    vertexlabels = (n, l) -> ()
-    )
+    vertexlabels = (n, l) -> ())
 
     if isempty(pointlist)
         return nothing
@@ -358,6 +360,23 @@ function prettypoly(pointlist::Array{Point, 1}, action=:none, vertexfunction = (
 
     return pointlist
 end
+
+# method with action as argument
+prettypoly(pointlist::Array{Point, 1}, argument::Symbol, vertexfunction = () -> circle(O, 2, :stroke);
+    close=false,
+    reversepath=false,
+    vertexlabels = (n, l) -> ()) = prettypoly(pointlist, vertexfunction,
+        action=:none,
+        close=close,
+        reversepath=reversepath,
+        vertexlabels = vertexlabels)
+
+# method with default
+prettypoly(pointlist, action::Symbol) = prettypoly(pointlist, () -> circle(O, 2, :stroke);
+    action=action,
+    close=false,
+    reversepath=false,
+    vertexlabels = (n, l) -> ())
 
 function getproportionpoint(point::Point, segment, length, dx, dy)
     scalefactor = segment / length
