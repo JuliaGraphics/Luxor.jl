@@ -996,7 +996,7 @@ Make a counterclockwise arc starting at `p1` and ending at `p2` that reaches a h
 
 Return tuple of center point and radius of arc.
 """
-function carc2sagitta(p1::Point, p2::Point, s;
+function carc2sagitta(p1::Point, p2::Point, s::Real;
         action=:none)
     if isapprox(s, 0.0)
         throw(error("Height of arc $s should be greater than 0.0"))
@@ -1018,7 +1018,7 @@ function carc2sagitta(p1::Point, p2::Point, s;
     return result
 end
 
-carc2sagitta(p1::Point, p2::Point, s::Int64, action::Symbol) =  carc2sagitta(p1, p2, s; action=action)
+carc2sagitta(p1::Point, p2::Point, s::Real, action::Symbol) =  carc2sagitta(p1, p2, s; action=action)
 
 """
     circlecircleoutertangents(cpt1::Point, r1, cpt2::Point, r2)
