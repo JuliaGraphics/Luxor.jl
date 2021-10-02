@@ -52,7 +52,7 @@ nothing # hide
 
 ![tiler](../assets/figures/tiler.png)
 
-[`Partition`])(@ref) is like `Tiler`, but you specify the width and height of the tiles, rather than
+[`Partition`](@ref) is like `Tiler`, but you specify the width and height of the tiles, rather than
 how many rows and columns of tiles you want.
 
 You can obtain the centerpoints of all the tiles in one go with:
@@ -71,7 +71,7 @@ tiles[1:2:end]
 
 The [`Table`](@ref) iterator can be used to define tables: rectangular grids with a specific number of rows and columns.
 
-Unlike a Tiler, the Table iterator lets you have columns with different widths, and rows with different heights.
+Unlike a `Tiler`, the `Table` iterator lets you have columns with different widths, and rows with different heights.
 
 !!! note
 
