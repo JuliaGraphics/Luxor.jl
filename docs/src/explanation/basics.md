@@ -10,7 +10,7 @@ The underlying drawing model is that you build paths, and these are filled and/o
 
 You can modify the current graphics state by transforming/rotating/scaling it, setting color and style parameters, and so on.
 
-Many of the drawing functions have an *action* argument. This can be `:none`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:none`, which is usually equivalent to `:path`, ie. add to the path.
+Many of the drawing functions have an *action* argument, supplied either as a symbol argument (eg `:fill`) or as a keyword argument (eg `action=:fill`). This action can be `:none`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:none`, which is usually equivalent to `:path`, ie. add to the current path but otherwise do nothing.
 
 Subsequent graphics use the new state, but the graphics you've already drawn are unchanged.
 

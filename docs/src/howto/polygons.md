@@ -176,10 +176,10 @@ origin() # hide
 sethue("steelblue4") # hide
 
 apoly = star(O, 70, 7, 0.6, 0, vertices=true)
-prettypoly(apoly, :fill, () ->
+prettypoly(apoly, action=:fill, () ->
         begin
             randomhue()
-            circle(O, 10, :fill)
+            circle(O, 10, action=:fill)
         end,
     close=true)
 finish() # hide
@@ -188,9 +188,10 @@ nothing # hide
 
 ![prettypoly](../assets/figures/prettypolybasic.png)
 
-An optional keyword argument `vertexlabels` lets you pass a function that can
-number each vertex. The function can use two arguments, the current vertex number, and the
-total number of points in the polygon:
+An optional keyword argument `vertexlabels` lets you pass a
+function that can number each vertex. The function can use
+two arguments, the current vertex number, and the total
+number of points in the polygon:
 
 ```@example
 using Luxor # hide
@@ -209,7 +210,6 @@ nothing # hide
 ```
 
 ![prettypoly](../assets/figures/prettypolyvertex.png)
-
 
 Recursive decoration is possible:
 

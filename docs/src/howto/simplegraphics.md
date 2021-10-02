@@ -793,9 +793,9 @@ function redbluearrow(shaftendpoint, endpoint, shaftangle)
         sethue("red")
         sidept1 = shaftendpoint  + polar(10, shaftangle + π/2 )
         sidept2 = shaftendpoint  - polar(10, shaftangle + π/2)
-        poly([sidept1, endpoint, sidept2], :fill)
+        poly([sidept1, endpoint, sidept2], action=:fill)
         sethue("blue")
-        poly([sidept1, endpoint, sidept2], :stroke, close=false)
+        poly([sidept1, endpoint, sidept2], action=:stroke, close=false)
     end
 end
 
@@ -843,9 +843,9 @@ label.(string.(["O", "control point 1", "control point 2", "control point 3"]),
     [O, pt1, pt2, pt3])
 
 sethue("red")
-map(p -> circle(p, 4, :fill), [O, pt1, pt2, pt3])
+map(p -> circle(p, 4, action=:fill), [O, pt1, pt2, pt3])
 
-line(Point(0, 0), pt1, :stroke)
+line(Point(0, 0), pt1, action=:stroke)
 line(pt2, pt3, :stroke)
 
 sethue("black")
@@ -926,9 +926,9 @@ Drawing(800, 200, "../assets/figures/sector.png") # hide
 background("antiquewhite") # hide
 origin() # hide
 sethue("tomato")
-sector(50, 90, π/2, 0, :fill)
+sector(50, 90, π/2, 0, action=:fill)
 sethue("olive")
-sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, :fill)
+sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, action=:fill)
 finish() # hide
 nothing # hide
 ```

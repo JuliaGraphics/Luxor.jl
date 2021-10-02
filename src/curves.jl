@@ -1,14 +1,5 @@
 # arcs, circles, ellipses, curves, pie, sector, bezier
 
-"""
-    circle(x, y, r;
-        action=:none)
-
-Make a circle of radius `r` centered at `x`/`y`.
-
-`action` is one of the actions applied by `do_action`, defaulting to `:none`. You can
-also use `ellipse()` to draw circles and place them by their centerpoint.
-"""
 function circle(x::Real, y::Real, r::Real;
      action=:none)
     if action != :path
@@ -19,23 +10,27 @@ function circle(x::Real, y::Real, r::Real;
 end
 
 """
-    circle(pt, r;
-        action=:none)
+    circle(centerpoint::Point, r; action=:none)
+    circle(centerpoint::Point, r, action)
 
-Make a circle centered at `pt`.
+Make a circle of radius `r` centered at 'centerpoint'.
+
+`action` is one of the actions applied by `do_action`, defaulting to `:none`.
+
+You can also use `ellipse()` to draw circles and place them by their centerpoint.
 """
-circle(centerpoint::Point, r::Real;
-        action=:none) =
+circle(centerpoint::Point, r::Real; action=:none) =
     circle(centerpoint.x, centerpoint.y, r, action=action)
 
 circle(pt::Point, r::Real, action::Symbol) = circle(pt, r, action = action::Symbol)
+
 circle(x::Real, y::Real, r::Real, action::Symbol) = circle(Point(x, y), r, action = action::Symbol)
 
 """
-    circle(pt1::Point, pt2::Point;
-        action=:none)
+    circle(pt1::Point, pt2::Point; action=:none)
+    circle(pt1::Point, pt2::Point, action)
 
-Make a circle that passes through two points that define the diameter:
+Make a circle that passes through two points that define the diameter.
 """
 function circle(pt1::Point, pt2::Point;
         action=:none)
@@ -47,8 +42,8 @@ end
 circle(pt1::Point, pt2::Point, action::Symbol) = circle(pt1, pt2, action=action)
 
 """
-    circle(pt1::Point, pt2::Point, pt3::Point;
-        action=:none)
+    circle(pt1::Point, pt2::Point, pt3::Point; action=:none)
+    circle(pt1::Point, pt2::Point, pt3::Point, action)
 
 Make a circle that passes through three points.
 """
@@ -90,12 +85,6 @@ function center3pts(p1::Point, p2::Point, p3::Point)
     end
 end
 
-"""
-    ellipse(xc, yc, w, h;
-        action=:none)
-
-Make an ellipse, centered at `xc/yc`, fitting in a box of width `w` and height `h`.
-"""
 function ellipse(xc::Real, yc::Real, w::Real, h::Real;
         action=:none)
     x  = xc - w/2
@@ -120,15 +109,14 @@ ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
     ellipse(xc, yc, w, h, action=action)
 
 """
-    ellipse(cpt, w, h;
-        action=:none)
+    ellipse(centerpoint::Point, w, h; action=:none)
+    ellipse(centerpoint::Point, w, h; action)
 
-Make an ellipse, centered at point `c`, with width `w`, and height `h`.
+Make an ellipse, centered at `centerpoint`, with width `w`, and height `h`.
 """
 ellipse(c::Point, w::Real, h::Real; action=:none) = ellipse(c.x, c.y, w, h, action=action)
 
-ellipse(c::Point, w::Real, h::Real, action::Symbol) =
-    ellipse(c, w, h, action=action)
+ellipse(c::Point, w::Real, h::Real, action::Symbol) = ellipse(c, w, h, action=action)
 
 """
     squircle(center::Point, hradius, vradius;
@@ -174,15 +162,6 @@ squircle(center::Point, hradius::Real, vradius::Real, action::Symbol;
         stepby = pi/40,
         reversepath=false)
 
-"""
-    arc(xc, yc, radius, angle1, angle2;
-        action=:none)
-
-Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
-at xc, yc.
-
-Angles are defined relative to the x-axis, positive clockwise.
-"""
 function arc(xc, yc, radius, angle1, angle2;
         action=:none)
     Cairo.arc(get_current_cr(), xc, yc, radius, angle1, angle2)
@@ -190,11 +169,13 @@ function arc(xc, yc, radius, angle1, angle2;
 end
 
 """
-    arc(centerpoint::Point, radius, angle1, angle2;
-        action=:none)
+    arc(centerpoint::Point, radius, angle1, angle2; action=:none)
+    arc(centerpoint::Point, radius, angle1, angle2, action)
 
 Add an arc to the current path from `angle1` to `angle2` going clockwise, centered
 at `centerpoint`.
+
+Angles are defined relative to the x-axis, positive clockwise.
 """
 arc(centerpoint::Point, radius, angle1, angle2; action=:none) =
     arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
@@ -202,15 +183,6 @@ arc(centerpoint::Point, radius, angle1, angle2; action=:none) =
 arc(centerpoint::Point, radius, angle1, angle2, action::Symbol) =
     arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
 
-"""
-    carc(xc, yc, radius, angle1, angle2;
-        action=:none)
-
-Add an arc to the current path from `angle1` to `angle2` going counterclockwise,
-centered at `xc`/`yc`.
-
-Angles are defined relative to the x-axis, positive clockwise.
-"""
 function carc(xc, yc, radius, angle1, angle2;
         action=:none)
     Cairo.arc_negative(get_current_cr(), xc, yc, radius, angle1, angle2)
@@ -218,11 +190,13 @@ function carc(xc, yc, radius, angle1, angle2;
 end
 
 """
-    carc(centerpoint::Point, radius, angle1, angle2;
-        action=:none)
+    carc(centerpoint::Point, radius, angle1, angle2; action=:none)
+    carc(centerpoint::Point, radius, angle1, angle2, action)
 
 Add an arc centered at `centerpoint` to the current path from `angle1` to
 `angle2`, going counterclockwise.
+
+Angles are defined relative to the x-axis, positive clockwise.
 """
 carc(centerpoint::Point, radius, angle1, angle2; action=:none) =
     carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
@@ -234,8 +208,8 @@ carc(x::Real, y::Real, radius, angle1, angle2, action::Symbol=:none) =
     carc(x, y, radius, angle1, angle2, action=action)
 
 """
-      arc2r(c1::Point, p2::Point, p3::Point;
-        action=:none)
+      arc2r(c1::Point, p2::Point, p3::Point; action=:none)
+      arc2r(c1::Point, p2::Point, p3::Point, action)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise,
 to the current path.
@@ -257,8 +231,7 @@ end
 arc2r(c1::Point, p2::Point, p3::Point, action::Symbol) = arc2r(c1, p2, p3, action = action)
 
 """
-    carc2r(c1::Point, p2::Point, p3::Point;
-        action=:none)
+    carc2r(c1::Point, p2::Point, p3::Point; action=:none)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`,
 going counterclockwise, to the current path.
@@ -1147,8 +1120,8 @@ function circlecircleinnertangents(circle1center::Point, circle1radius, circle2c
 end
 
 """
-    ellipseinquad(qgon;
-        action=:none)
+    ellipseinquad(qgon; action=:none)
+    ellipseinquad(qgon, action)
 
 Calculate a Bézier-based ellipse that fits inside the
 quadrilateral `qgon`, an array of with at least four Points,
@@ -1167,6 +1140,14 @@ ellipseangle`:
 
 The function returns `O, 0, 0, 0` if a suitable ellipse
 can't be found. (The qgon is probably not a convex polygon.)
+
+## Examples
+
+```julia
+ellipseinquad(box(O, 130, 130); action=:stroke)
+
+ellipseinquad(box(O, 140, 230), :stroke)
+```
 
 ### References
 
@@ -1252,13 +1233,15 @@ See also ```crescent(pos1, innerradius, pos2, outeradius...)```.
 
 Create a filled crescent shape with outer radius of 200, inner radius of 130.
 ```
-crescent(O, 130, 200, :fill)
+crescent(O, 130, 200, :fill) # or
+crescent(O, 130, 200, action=:fill)
 ```
 
 Create a stroked crescent shape; the inner radius of 0 produces a semicircle.
 
 ```
-crescent(O, 0, 200, :stroke)
+crescent(O, 0, 200, :stroke) # or
+crescent(O, 0, 200, action=:stroke)
 ```
 """
 function crescent(pos::Point, innerradius::Real, outerradius::Real;
@@ -1310,7 +1293,8 @@ See also ```crescent(point, innerradius, outeradius...)```.
 Create a filled crescent shape from two circles.
 
 ```
-crescent(O, 100, O + (60, 0), 150, :fill)
+crescent(O, 100, O + (60, 0), 150, :fill) # or
+crescent(O, 100, O + (60, 0), 150, action=:fill)
 ```
 """
 function crescent(cp1::Point, r1::Real, cp2::Point, r2::Real;

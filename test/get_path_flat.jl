@@ -7,10 +7,10 @@ using Test
 using Random
 Random.seed!(42)
 
-import Cairo.CAIRO_PATH_MOVE_TO
-import Cairo.CAIRO_PATH_LINE_TO
-import Cairo.CAIRO_PATH_CURVE_TO
-import Cairo.CAIRO_PATH_CLOSE_PATH
+CAIRO_PATH_MOVE_TO = 0
+CAIRO_PATH_LINE_TO = 1
+CAIRO_PATH_CURVE_TO = 2
+CAIRO_PATH_CLOSE_PATH = 3
 
 function get_path_flat(str)
     sethue("blue")
