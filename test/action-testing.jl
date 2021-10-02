@@ -155,7 +155,7 @@ expressions = [
 :(textoutlines("text", Point(0, 0), :stroke, halign=:left, valign=:middle, startnewpath=true)),
 ]
 
-fname = "action-dispatch-tests.svg"
+fname = "action-dispatch-tests.pdf"
 Drawing(2000, 2000, fname)
 origin()
 background("black")
