@@ -567,7 +567,7 @@ function ellipse(focus1::Point, focus2::Point, k;
     vertices ? points : poly(points, action, close=true, reversepath=reversepath)
 end
 
-ellipse(f1::Point, f2::Point, k::Int64, action::Symbol;
+ellipse(f1::Point, f2::Point, k, action::Symbol;
         stepvalue=pi/100,
         vertices=false,
         reversepath=false) =
