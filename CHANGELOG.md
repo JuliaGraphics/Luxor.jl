@@ -6,7 +6,7 @@
 
 ### Changed
 
-- many functions now can accept `action=` keyword arguments
+- many functions can now accept `action=` keyword arguments
 - offsetpoly(... function) algorithm altered (it still sucks, though :))
 - `include_first` kwarg added to `polysample()`
 
