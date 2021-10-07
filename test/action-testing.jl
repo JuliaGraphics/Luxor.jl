@@ -25,6 +25,15 @@ expressions = [
 :(box(BoundingBox(box([O, Point(24, 20), Point(20, 30)])), :fill)),
 :(box(BoundingBox(box([O, Point(24, 20), Point(20, 30)])), action=:fill)),
 
+:(begin
+    t = Table(3, 3)
+    pts = box(t, 2, 1, action=:stroke, vertices=false, reversepath=true)
+    pts = box(t, 2, 1, :stroke, vertices=false, reversepath=true)
+    t = Tiler(50, 50, 3, 3)
+    pts = box(t, 5, action=:stroke, vertices=false, reversepath=true)
+    pts = box(t, 5, :stroke, vertices=false, reversepath=true)
+end),
+
 :(box(Point(-30, -50), Point(20, 50), :fill)),
 :(box(Point(-25, -20), Point(23, 20), action=:fill)),
 

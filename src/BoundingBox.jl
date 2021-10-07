@@ -211,6 +211,8 @@ end
     box(bbox::BoundingBox;
         action   = :none,
         vertices = false)
+    box(bbox::BoundingBox, action::Symbol;
+        vertices=false)
 
 Define a box using the bounds in `bbox`.
 
@@ -231,10 +233,6 @@ function box(bbox::BoundingBox;
     end
 end
 
-"""
-    box(bbox::BoundingBox, action::Symbol;
-        vertices=false)
-"""
 box(bbox::BoundingBox, action::Symbol) =
     box(bbox, action=action, vertices=false)
 

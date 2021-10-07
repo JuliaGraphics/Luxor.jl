@@ -70,7 +70,7 @@ svgimage = @drawsvg begin
 
 setcolor("red")
 corners = ngon(Point(0, 0), 80, 3, vertices=true)
-circle.(corners, 10, :fill)
+circle.(corners, 10, action=:fill)
 
 end 500 500
 ```
@@ -80,7 +80,7 @@ Drawing(500, 500, "my-drawing.svg")
 origin()
 setcolor("red")
 corners = ngon(Point(0, 0), 80, 3, vertices=true)
-circle.(corners, 10, :fill)
+circle.(corners, 10, action=:fill)
 finish()
 preview()
 ```
@@ -289,7 +289,7 @@ To tidy up, it's a good idea to move the code into functions (to avoid running t
 
 Also, a background for the icon would look good. [`squircle`](@ref) is useful for drawing shapes that occupy the space between pointy dull rectangles and space-inefficient circles.
 
-The final script looks like this:
+The complete final script looks like this:
 
 ```@setup example_7
 using Luxor, Colors
@@ -353,7 +353,7 @@ svgimage # hide
 
 So, did the JuliaFission organization like their logo? Who
 knows? - they may still be debating how accurate the
-representation of an atom it should be... But if not, we can
+representation of an atom should be... But if not, we can
 always recycle some of these ideas for future projects. 😃
 
 ## Extra credit
@@ -364,4 +364,10 @@ Try refactoring your code so that you can automatically run through various para
 
 ### 2. Remember the random values
 
-Using random numbers is a great way to find new patterns and shapes; but unless you know what values were used, you can't easily reproduce them. It's frustrating to produce something really good but not know what values were used to make it. So modify the code so that the random numbers are remembered, and drawn on the screen (you can use the `text(str, position)` function),
+Using random numbers is a great way to find new patterns and
+shapes; but unless you know what values were used, you can't
+easily reproduce them. It's frustrating to produce something
+really good but not know what values were used to make it.
+So modify the code so that the random numbers are
+remembered, and drawn on the screen (you can use the
+`text(str, position)` function),

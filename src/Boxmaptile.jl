@@ -149,13 +149,14 @@ end
 
 """
     box(tile::BoxmapTile, action::Symbol=:none; vertices=false)
+    box(tile::BoxmapTile, action=:none, vertices=false)
 
 Use a Boxmaptile to make or draw a rectangular box. Use `vertices=true` to obtain
 the coordinates.
 
 Create boxmaps using `boxmap()`.
 """
-function box(tile::BoxmapTile, action::Symbol=:none; vertices=false)
+function box(tile::BoxmapTile, action::Symbol; vertices=false)
     if vertices
         return [Point(tile.x,           tile.y + tile.h),
                 Point(tile.x,           tile.y),
@@ -164,6 +165,9 @@ function box(tile::BoxmapTile, action::Symbol=:none; vertices=false)
     end
     rect(tile.x, tile.y, tile.w, tile.h, action)
 end
+
+box(tile::BoxmapTile; action=:none, vertices=false) =
+     box(tile, action, vertices=vertices)
 
 """
     BoundingBox(tile::BoxmapTile)

@@ -684,7 +684,12 @@ textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =
              kwargs...)
 
 """
-    texttrack(txt, pos, tracking, fontsize=12;
+    texttrack(txt, pos, tracking;
+        action=:fill,
+        halign=:left,
+        valign=:baseline,
+        startnewpath=true)
+    texttrack(txt, pos, tracking, fontsize;
         action=:fill,
         halign=:left,
         valign=:baseline,
@@ -693,27 +698,161 @@ textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =
 Place the text in `txt` at `pos`, left-justified, and letter
 space ('track') the text using the value in `tracking`.
 
-The tracking units depend on the current font size! 1 is
-1/1000 em. In a 6‑point font, 1 em equals 6 points; in a
-10‑point font, 1 em equals 10 points.
+The tracking units depend on the current font size. In a
+12‑point font, 1 em equals 12 points. A point is about
+0.35mm, 1em is about 4.2mm, and a 1000 units of tracking are
+about 4.2mm. So a tracking value of 1000 for a 12 point font
+places about 4mm between each character.
 
-A value of -50 would tighten the letter spacing noticeably.
-A value of 50 would make the text more open.
+A negative value tightens the letter spacing noticeably.
 
 The text drawing action applied to each character defaults
 to `textoutlines(... :fill)`.
+
+If `startnewpath` is true, each character is acted on
+separately. To clip and track text, specify the clip action
+and avoid resetting the clipping path for each character.
+
+```julia
+    newpath()
+    texttrack(t, O + (0, 80), 200, action=:clip, startnewpath=false)
+    ...
+    clipreset()
+```
+
+TODO Is it possible to fix strings with combining characters such as "\u0308"?
 """
-function texttrack(txt, pos, tracking, fontsize=12;
+function texttrack(txt, pos, tracking, fsize;
             action=:fill,
             halign=:left,
             valign=:baseline,
             startnewpath=true)
-    te = textextents(txt)
-    for i in txt
-        glyph = string(i)
-        glyph_x_bearing, glyph_y_bearing, glyph_width, glyph_height, glyph_x_advance, glyph_y_advance = textextents(glyph)
-        textoutlines(glyph, pos, action, halign=halign, valign=valign, startnewpath=startnewpath)
-        x = glyph_x_advance + (tracking/1000) * fontsize
-        pos += (x, 0)
+
+    advances = []
+    emspacewidth = textextents(" ")[5]
+    for c in txt
+        xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
+        if c == ' '
+            textwidth = emspacewidth
+        end
+        push!(advances, xadvance)
     end
+
+    # adjust start position for alignment
+    # first, horizontal alignment - 1, 2, 3
+    halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
+
+    # if unspecified or wrong, default to left, also treat UK spelling centre as center
+    if halignment == nothing
+        halignment = 1
+    elseif halignment == 4
+        halignment = 2
+    end
+
+    # calculate width of the final tracked string
+    # need this to do alignment
+    total_textwidth = sum(advances) + length(advances) * ((tracking/1000) * fsize)
+    textpointx = pos.x - [0, total_textwidth/2, total_textwidth][halignment]
+    # next vertical alignment
+    valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
+    # if unspecified or wrong, default to baseline
+    if valignment == nothing
+        valignment = 3
+    end
+    ybearing, textheight = textextents(txt)[[2, 4]]
+    textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+
+    # this is the first point of the text string
+    newpos = Point(textpointx, textpointy)
+
+    # if clipping, clip the entire path, not individual characters
+    if action == :clip
+        _action = :path
+    else
+        _action = action
+    end
+
+    # draw the text
+    for (n, c) in enumerate(txt)
+        textoutlines(string(c), newpos, _action, halign=:left, startnewpath=startnewpath)
+        # calculate new position based on precalculated widths plus the tracking
+        newpos = Point(newpos.x + advances[n] + ((tracking/1000) * fsize), newpos.y)
+    end
+    if action == :clip
+        do_action(:clip)
+    end
+end
+
+texttrack(txt, pos, tracking;
+            action=:fill,
+            halign=:left,
+            valign=:baseline,
+            startnewpath=true) = texttrack(txt, pos, tracking, get_fontsize();
+                        action=action,
+                        halign=halign,
+                        valign=valign,
+                        startnewpath=startnewpath)
+
+"""
+    textplace(txt::AbstractString, pos::Point, params::Vector)
+
+A low-level function that places text characters one by one
+according to the parameters in `params`. First character
+uses first tuple, second character the second, and so on.
+Return next text position.
+
+A tuple of parameters is:
+
+```julia
+(face = "TimesRoman", size = 12, kern = 0, shift = 0, advance = true)
+```
+
+where
+
+- face is fontface "string"                   # sticky
+
+- size is fontsize # pts                      # sticky
+
+- kern amount (pixels) shifted to the right   # resets after each char
+
+- shift = baseline shifted vertically         # resets after each char
+
+- advance - whether to advance                # resets after each char
+
+Font face and size parameters are sticky, and stay set until
+reset. Kern/shift/advance are reset for each character.
+
+## Example
+
+Draw the Hogwarts Express Platform number 9 and 3/4
+
+```julia
+txtpos = textplace("93—4", O, [
+        (size=120, face="Bodoni-Poster", ),                 # format for 9
+        (size=60,  kern = 10, shift = 60,  advance=false,), # format for 3
+        (          kern = 0,  shift = 25,  advance=false,), # format for -
+        (          kern = 10, shift = -20, advance=true),   # format for 4
+    ])
+```
+"""
+function textplace(txt::AbstractString, pos::Point, params::Vector)
+    @layer begin
+        emspacewidth = textextents(" ")[5]
+        textpos = Point(pos.x, pos.y)
+        defaultparams = (face = "", size = 12, kern=0, shift=0, advance=true)
+        for (n, c) in enumerate(txt)
+            defaultparams = merge(defaultparams, (kern=0, shift=0, advance=true,))
+            if n <= length(params)
+                defaultparams = merge(defaultparams, params[n])
+            end
+            fontface(defaultparams.face)
+            fontsize(defaultparams.size)
+            xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
+            textoutlines(string(c), Point(textpos.x + defaultparams.kern, textpos.y - defaultparams.shift), :fill, halign=:left)
+            if defaultparams.advance == true
+                textpos += (xadvance + defaultparams.advance, 0)
+            end
+        end
+    end
+    return textpos
 end

@@ -43,7 +43,7 @@ gamma = 2.2
 for n in 1:length(cols)
     col = cols[n][1]
     r, g, b = sethue(col)
-    box(table[n], table.colwidths[1], table.rowheights[1], :fill)
+    box(table[n], table.colwidths[1], table.rowheights[1], action=:fill)
     luminance = 0.2126 * r^gamma + 0.7152 * g^gamma + 0.0722 * b^gamma
     (luminance > 0.5^gamma) ? sethue("black") : sethue("white")
     text(string(cols[n][1]), table[n], halign=:center, valign=:middle)
@@ -78,7 +78,7 @@ for l in 1:3
     textcentred(["butt", "square", "round"][l], 80l, 80)
     setlinejoin(["round", "miter", "bevel"][l])
     textcentred(["round", "miter", "bevel"][l], 80l, 120)
-    poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), :strokepreserve, close=false)
+    poly(ngon(Point(80l, 0), 20, 3, 0, vertices=true), action=:strokepreserve, close=false)
     sethue("white")
     setline(1)
     strokepath()

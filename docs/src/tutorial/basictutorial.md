@@ -11,9 +11,8 @@ Experienced Julia users and programmers fluent in other languages and graphics s
 
 If you've already downloaded Julia, and have added the Luxor package successfully (using `] add Luxor`):
 
-```@raw html
-<span style="font-feature-settings: 'ss20' on;">
-<pre>
+```
+$ julia
                    _
        _       _ _(_)_     |  Documentation: https://docs.julialang.org
       (_)     | (_) (_)    |
@@ -23,10 +22,7 @@ If you've already downloaded Julia, and have added the Luxor package successfull
      _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
     |__/                   |
 
-$ julia
 (v1.6) pkg> add Luxor
-</pre>
-</span>
 ```
 
 then you're ready to start.

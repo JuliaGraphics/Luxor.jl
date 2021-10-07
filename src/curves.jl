@@ -122,6 +122,8 @@ ellipse(c::Point, w::Real, h::Real, action::Symbol) = ellipse(c, w, h, action=ac
     squircle(center::Point, hradius, vradius;
         action=:none,
         rt = 0.5, stepby = pi/40, vertices=false)
+    squircle(center::Point, hradius, vradius, action;
+        rt = 0.5, stepby = pi/40, vertices=false)
 
 Make a squircle or superellipse (basically a rectangle with rounded corners).
 Specify the center position, horizontal radius (distance from center to a side),
@@ -467,8 +469,14 @@ curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
         action=:none,
         reversepath=false,
         kappa = 0.5522847498307936)
+    circlepath(center::Point, radius, action;
+        reversepath=false,
+        kappa = 0.5522847498307936)
 
-Draw a circle using Bézier curves.
+Draw a circle using Bézier curves. One benefit of using this
+rather than `circle()` is that you can use the `reversepath`
+option to draw the circle clockwise rather than
+`circle`'s counterclockwise.
 
 The magic value, `kappa`, is `4.0 * (sqrt(2.0) - 1.0) / 3.0`.
 """
@@ -612,6 +620,10 @@ ellipse(focus1::Point, focus2::Point, pt::Point, action::Symbol;
         stepby=0.01,
         period=0.0,
         vertices=false)
+    hypotrochoid(R, r, d, action;
+        stepby=0.01,
+        period=0.0,
+        vertices=false)
 
 Make a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
 point attached to a circle of radius `r` rolling around the inside  of a fixed circle of
@@ -671,6 +683,10 @@ hypotrochoid(R, r, d, action::Symbol;
         stepby=0.01,
         period=0,
         vertices=false)
+    epitrochoid(R, r, d, action;
+        stepby=0.01,
+        period=0,
+        vertices=false)
 
 Make a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
 point attached to a circle of radius `r` rolling around the outside of a fixed circle of
@@ -725,6 +741,11 @@ epitrochoid(R, r, d, action::Symbol;
 """
     spiral(a, b;
         action = :none,
+        stepby = 0.01,
+        period = 4pi,
+        vertices = false,
+        log =false)
+    spiral(a, b, action;
         stepby = 0.01,
         period = 4pi,
         vertices = false,

@@ -462,6 +462,7 @@ end
 
 """
     polysmooth(points, radius, action=:action; debug=false)
+    polysmooth(points, radius; action=:none, debug=false)
 
 Make a closed path from the `points` and round the corners by making them arcs with the
 given radius. Execute the action when finished.
@@ -472,7 +473,7 @@ possible (as large as the shortest side allows).
 
 The `debug` option also draws the construction circles at each corner.
 """
-function polysmooth(points::Array{Point, 1}, radius, action=:action; debug=false)
+function polysmooth(points::Array{Point, 1}, radius, action::Symbol; debug=false)
     temppath = Tuple[]
     l = length(points)
     if l < 3
@@ -500,6 +501,9 @@ function polysmooth(points::Array{Point, 1}, radius, action=:action; debug=false
     end
     do_action(action)
 end
+
+polysmooth(points::Array{Point, 1}, radius; action=:none, debug=false) =
+   polysmooth(points, radius, action; debug=debug)
 
 """
     offsetpoly(plist::Array{Point, 1}, d) where T<:Number

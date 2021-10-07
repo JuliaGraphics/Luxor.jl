@@ -253,27 +253,34 @@ Base.eachindex(t::Table) = 1:length(t)
 
 # box extensions
 """
-    box(t::Table, r::T, c::T, action::Symbol=:none) where T <: Integer
+    box(t::Table, r::Integer, c::Integer, action::Symbol)
+    box(t::Table, r::Integer, c::Integer; action=:none)
 
 Draw a box in table `t` at row `r` and column `c`.
 """
-function box(t::Table, r::T, c::T, action::Symbol=:none; kwargs...) where T <: Integer
+function box(t::Table, r::Integer, c::Integer, action::Symbol; kwargs...)
     cellw, cellh = t.colwidths[c], t.rowheights[r]
     box(t[r, c], cellw, cellh, action; kwargs...)
 end
 
+box(t::Table, r::Integer, c::Integer; action=:none, reversepath=false, vertices=false) =
+    box(t, r, c, action, reversepath=reversepath, vertices=vertices)
+
 """
     box(t::Table, cellnumber::Int, action::Symbol=:none; vertices=false)
+    box(t::Table, cellnumber::Int; action=:none, vertices=false)
 
-Draw box `cellnumber` in table `t`.
+Make box around cell `cellnumber` in table `t`.
 """
-function box(t::Table, cellnumber::Int, action::Symbol=:none; vertices=false)
+function box(t::Table, cellnumber::Int, action::Symbol; vertices=false)
     r = div(cellnumber - 1, t.ncols) + 1
     c = mod1(cellnumber, t.ncols)
 
     cellw, cellh = t.colwidths[c], t.rowheights[r]
     box(t[r, c], cellw, cellh, action; vertices=vertices)
 end
+
+box(t::Table, cellnumber::Int; action=:none, vertices=false) = box(t, cellnumber, action, vertices=vertices)
 
 """
     highlightcells(t::Table, cellnumbers, action::Symbol=:stroke;

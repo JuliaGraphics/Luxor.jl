@@ -83,7 +83,10 @@ where some of the characters—eg "F", "+", "-", and "t"—issue turtle control 
 
 ## Strange
 
-It's usually better to draw fractals and similar images using pixels and image processing tools. But just for fun it's an interesting experiment to render a strange attractor image using vector drawing rather than placing pixels. This version uses about 600,000 circular dots (which is why it's better to target PNG rather than SVG or PDF for this example!).
+It's usually better to draw fractals and similar images
+using pixels and image processing tools. But just for fun
+it's an interesting experiment to render a strange attractor
+image using vector drawing rather than placing pixels.
 
 ```@example
 using Luxor, Colors
@@ -91,38 +94,71 @@ function strange(dotsize, w=800.0)
     xmin = -2.0; xmax = 2.0; ymin= -2.0; ymax = 2.0
     Drawing(w, w, "../assets/figures/strange-vector.png")
     origin()
-    background("white")
-    xinc = w/(xmax - xmin)
-    yinc = w/(ymax - ymin)
+    background("grey5")
+    xinc = w / (xmax - xmin)
+    yinc = w / (ymax - ymin)
     # control parameters
-    a = 2.24; b = 0.43; c = -0.65; d = -2.43; e1 = 1.0
+    a = 2.24
+    b = 0.43
+    c = -0.65
+    d = -2.43
+    e1 = 1.0
     x = y = z = 0.0
-    wover2 = w/2
-    for j in 1:w
-        for i in 1:w
-            xx = sin(a * y) - z  *  cos(b * x)
+    wover2 = w / 2 - 50 # margin
+    for j = 1:w
+        for i = 1:w
+            xx = sin(a * y) - z * cos(b * x)
             yy = z * sin(c * x) - cos(d * y)
             zz = e1 * sin(x)
-            x = xx; y = yy; z = zz
-            if xx < xmax && xx > xmin && yy < ymax && yy > ymin
-                xpos = rescale(xx, xmin, xmax, -wover2, wover2) # scale to range
-                ypos = rescale(yy, ymin, ymax, -wover2, wover2) # scale to range
-                rcolor = rescale(xx, -1, 1, 0.0, .7)
-                gcolor = rescale(yy, -1, 1, 0.2, .5)
-                bcolor = rescale(zz, -1, 1, 0.3, .8)
-                setcolor(convert(Colors.HSV, Colors.RGB(rcolor, gcolor, bcolor)))
-                circle(Point(xpos, ypos), dotsize, :fill)
+            x = xx
+            y = yy
+            z = zz
+            if xx < xmax && xx > xmin
+                if yy < ymax && yy > ymin
+                    xpos = rescale(
+                        xx,
+                        xmin,
+                        xmax,
+                        -wover2,
+                        wover2,
+                    ) # scale to range
+                    ypos = rescale(
+                        yy,
+                        ymin,
+                        ymax,
+                        -wover2,
+                        wover2,
+                    ) # scale to range
+                    rcolor = rescale(xx, -1, 1, 0.0, 0.6)
+                    gcolor = rescale(yy, -1, 1, 0.2, 0.5)
+                    bcolor = rescale(zz, -1, 1, 0.6, 0.9)
+                    setcolor(rcolor, gcolor, bcolor)
+                    move(Point(xpos, ypos))
+                    line(Point(xpos + dotsize, ypos))
+                    line(Point(
+                        xpos + dotsize,
+                        ypos + dotsize,
+                    ))
+                    line(Point(xpos, ypos + dotsize))
+                    fillpath()
+                end
             end
         end
     end
     finish()
 end
 
-strange(.3, 800)
+strange(.5, 800)
 nothing # hide
 ```
 
 ![strange attractor in vectors](../assets/figures/strange-vector.png)
+
+This example generates about 650,000 paths, which is why
+it’s better to target PNG rather than SVG or PDF for this
+example. Also for speed, the “dots” are actually simple
+paths, which are slightly quicker to draw than circles or
+polygons.
 
 ## More animations
 
@@ -171,9 +207,9 @@ end
 
 function draw_scarab_body()
     @layer begin
-        squircle(Point(0, -25), 26, 75, :path)
-        squircle(Point(0, 0), 50, 70, :path)
-        squircle(Point(0, 40), 65, 90, :path)
+        squircle(Point(0, -25), 26, 75, action=:path)
+        squircle(Point(0, 0), 50, 70, action=:path)
+        squircle(Point(0, 40), 65, 90, action=:path)
     end
 end
 
@@ -187,20 +223,20 @@ function draw()
     height= 240
 
     sethue("black")
-    squircle(O, width, height-5, rt=0.4, :fill)
+    squircle(O, width, height-5, rt=0.4, action=:fill)
 
     set_gold_blend()
-    squircle(O, width, height-5, rt=0.4, :path)
+    squircle(O, width, height-5, rt=0.4, action=:path)
     translate(0, 50)
     draw_scarab_legs(O)
     strokepath()
     draw_scarab_body()
     fillpath()
 
-    # julia dots === Ra
+    # julia dots === Ra egyptian sun deity
     @layer begin
         translate(0, -190)
-        circle(O, 48, :fill)
+        circle(O, 48, action=:fill)
         juliacircles(20)
     end
 

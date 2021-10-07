@@ -32,14 +32,14 @@ fontsize(20) # hide
 tiles = Tiler(800, 500, 4, 5, margin=5)
 for (pos, n) in tiles
     randomhue()
-    box(pos, tiles.tilewidth, tiles.tileheight, :fill)
+    box(pos, tiles.tilewidth, tiles.tileheight, action=:fill)
     if n % 3 == 0
         gsave()
         translate(pos)
         subtiles = Tiler(tiles.tilewidth, tiles.tileheight, 4, 4, margin=5)
         for (pos1, n1) in subtiles
             randomhue()
-            box(pos1, subtiles.tilewidth, subtiles.tileheight, :fill)
+            box(pos1, subtiles.tilewidth, subtiles.tileheight, action=:fill)
         end
         grestore()
     end
@@ -79,7 +79,7 @@ Unlike a `Tiler`, the `Table` iterator lets you have columns with different widt
     ‘width’ -> ‘height’, ‘row’ -> ‘column’. This flavour of
     consistency can sometimes be confusing if you’re
     expecting other kinds of consistency, such as ‘x before
-    y’ or ‘column major’...)
+    y’ or ‘column major’.)
 
 Tables don't store data, of course, but are designed to help you draw tabular data.
 
@@ -153,7 +153,7 @@ end
 
 setopacity(0.5)
 sethue("thistle")
-circle.(t[3, :], 20, :fill) # row 3, every column
+circle.(t[3, :], 20, action=:fill) # row 3, every column
 
 finish() # hide
 nothing # hide
