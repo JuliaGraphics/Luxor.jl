@@ -70,8 +70,8 @@ rect(cornerpoint::Point, w::Real, h::Real, action::Symbol;
                 vertices = vertices)
 
 """
-    box(cornerpoint1, cornerpoint2; action=:none, vertices=false)
-    box(cornerpoint1, cornerpoint2, action; vertices=false)
+    box(cornerpoint1, cornerpoint2; action=:none, vertices=false, reversepath=false)
+    box(cornerpoint1, cornerpoint2, action; vertices=false, reversepath=false)
 
 Create a box (rectangle) between two points and do an
 action.

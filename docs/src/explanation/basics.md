@@ -6,13 +6,24 @@ DocTestSetup = quote
 
 # The drawing model
 
-The underlying drawing model is that you build paths, and these are filled and/or stroked, using the current *graphics state*, which specifies colors, line thicknesses, scale, orientation, opacity, and so on.
+The underlying drawing model is that you build paths, and
+these are filled and/or stroked, using the current *graphics
+state*, which specifies colors, line thicknesses, scale,
+orientation, opacity, and so on.
 
-You can modify the current graphics state by transforming/rotating/scaling it, setting color and style parameters, and so on.
+You can modify the current graphics state by
+transforming/rotating/scaling it, setting color and style
+parameters, and so on. Subsequent graphics use the new
+state, but the graphics you've already drawn are unchanged.
 
-Many of the drawing functions have an *action* argument, supplied either as a symbol argument (eg `:fill`) or as a keyword argument (eg `action=:fill`). This action can be `:none`, `:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, or `:path`. The default is `:none`, which is usually equivalent to `:path`, ie. add to the current path but otherwise do nothing.
-
-Subsequent graphics use the new state, but the graphics you've already drawn are unchanged.
+Many of the drawing functions have an *action* argument,
+supplied either as a symbol argument (eg `:fill`) or as a
+keyword argument (eg `action=:fill`). This action determines
+what happens to the current path. It can be `:none`,
+`:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`,
+`:strokepreserve`, `:clip`, or `:path`. The default is
+`:none`, which is usually equivalent to `:path`, ie. add to
+the current path but otherwise do nothing.
 
 The main Julia data types you'll encounter in Luxor are:
 
@@ -33,9 +44,12 @@ The main Julia data types you'll encounter in Luxor are:
 
 ## Points and coordinates
 
-You specify points on the drawing surface using `Point(x, y)`. (A few older functions accept separate x and y values).
+You specify points on the drawing surface using `Point(x, y)`.
 
-The default _origin_ (ie the `x = 0, y = 0` point) is at the top left corner: the x axis runs left to right across the page, and the y axis runs top to bottom down the page, so Y coordinates increase downwards.
+The default _origin_ (ie the `x = 0, y = 0` point) is at the
+top left corner: the x axis runs left to right across the
+page, and the y axis runs top to bottom down the page, so Y
+coordinates increase downwards.
 
 By default, `Point(0, 100)` is below `Point(0, 0)`.
 
@@ -124,7 +138,9 @@ julia> Point.(plist)
  Point(14.2, 15.4)
 ```
 
-You can use the letter **O** as a shortcut to refer to the current Origin, `Point(0, 0)`.
+You can use the letter **O** as a shortcut to refer to the
+current Origin, `Point(0, 0)`. Most coding fonts clearly
+show the difference between the letter `O` and the digit `0`.
 
 ```@example
 using Luxor # hide
@@ -251,8 +267,8 @@ You can use an environment such as a Jupyter or Pluto notebook or the Juno or VS
 Luxor can create new SVG images, either in a file or in
 memory, and can also place existing SVG images on a drawing.
 See [Placing images](@ref) for more. It's also possible to
-obtain the source of an SVG drawing as a string. For example,
-this code draws the Julia logo using SVG code:
+obtain the source of the current SVG drawing as a string. For example,
+this code draws the Julia logo using SVG code and stores the SVG in `s`:
 
 ```julia
 Drawing(500, 500, :svg)
@@ -262,7 +278,7 @@ finish()
 s = svgstring()
 ```
 
-You can now examine the SVG code in `s` programmatically:
+You can now examine the SVG elements in `s` programmatically:
 
 ```julia
 eachmatch(r"rgb\(.*?\)", s) |> collect

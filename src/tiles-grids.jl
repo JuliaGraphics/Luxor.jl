@@ -348,17 +348,22 @@ function Base.getindex(pt::Partition, i::Int)
 end
 
 """
-    box(tiles::Tiler, n::T where T <: Integer, action::Symbol=:none;
-        vertices=false)
+    box(tiles::Tiler, n::Integer; action=:none, vertices=false, reversepath=false)
+    box(tiles::Tiler, n::Integer, action::Symbol=:none; vertices=false, reversepath=false)
 
 Draw a box in tile `n` of tiles `tiles`.
 """
-function box(tiles::Tiler, n::T where T <: Integer, action::Symbol=:none;
-        vertices=false)
+function box(tiles::Tiler, n::Integer;
+        action=:none,
+        vertices=false,
+        reversepath=false)
     tilew, tileh = tiles.tilewidth, tiles.tileheight
     if vertices == true || action == :none
-        box(first(tiles[n]), tilew, tileh, vertices=true)
+        box(first(tiles[n]), tilew, tileh, action=:none, vertices=true, reversepath=reversepath)
     else
-        box(first(tiles[n]), tilew, tileh, action)
+        box(first(tiles[n]), tilew, tileh, action=action, vertices=false, reversepath=reversepath)
     end
 end
+
+box(tiles::Tiler, n::Integer, action::Symbol; vertices=false, reversepath=false) =
+        box(tiles, n, action=action, vertices=vertices, reversepath=reversepath)

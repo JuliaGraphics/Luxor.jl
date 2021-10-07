@@ -62,7 +62,7 @@ documentation](https://cairographics.org/documentation/).
 
 If a Cairo function isn't yet supported in Cairo.jl or Luxor.jl, a temporary workround is to add a direct call to the Cairo library in your Luxor script.
 
-For example, the Cairo function to return the current line width ([cairo_get_line_width](https://cairographics.org/manual/cairo-cairo-t.html#cairo-get-line-width)) isn't yet available in Julia, but you can easily add it with code like this (or better):
+For example, the Cairo function to return the current line width ([`cairo_get_line_width`](https://cairographics.org/manual/cairo-cairo-t.html#cairo-get-line-width)) isn't yet available in Julia, but you can easily add it with code like this (or better):
 
 ```julia
 using Luxor

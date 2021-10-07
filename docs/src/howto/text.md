@@ -462,13 +462,18 @@ nothing # hide
 
 ## Text tracking
 
-Use [`texttrack`](@ref) to track or letter-space text, i.e. vary the spacing between every letter. ("Kerning" is when you do this for just a pair of letters.) The units are 1/1000 em, so the actual distance of "50 units of tracking" varies depending on the current font size.
+Use [`texttrack`](@ref) to track or letter-space text, i.e.
+vary the spacing between every letter. ("Kerning" is when
+you do this for just a pair of letters.)
 
-But really, don’t track text unless you have to.
+The tracking units depend on the current font size. In a
+12‑point font, 1 em equals 12 points. A point is about
+0.35mm, so a 1000 units of tracking for 12 point text
+produces about 4.2mm of space between each character.
 
 ```@example
 using Luxor # hide
-Drawing(600, 600, "../assets/figures/texttrack.svg") # hide
+Drawing(600, 400, "../assets/figures/texttrack.svg") # hide
 origin() # hide
 background("white") # hide
 sethue("black") # hide

@@ -1,14 +1,15 @@
 # Changelog
 
-## [v2.16.0] - forthcoming 2021-10-??
+## [v2.16.0] - forthcoming 2021-10-07
 
 ### Added
 
 ### Changed
 
-- many functions can now accept `action=` keyword arguments
+- many functions can now accept `action=` keyword arguments as well as positional ones
 - offsetpoly(... function) algorithm altered (it still sucks, though :))
 - `include_first` kwarg added to `polysample()`
+- texttrack() rewritten so that the alignment works
 
 ### Removed
 

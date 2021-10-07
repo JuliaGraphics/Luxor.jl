@@ -177,11 +177,14 @@ end
 """
     drawbezierpath(bezierpath::BezierPath, action=:none;
         close=true)
+    drawbezierpath(bezierpath::BezierPath;
+        action=:none,
+        close=true)
 
 Draw the Bézier path, and apply the action, such as `:none`, `:stroke`, `:fill`,
 etc. By default the path is closed.
 """
-function drawbezierpath(bezierpath::BezierPath, action=:none; close=true)
+function drawbezierpath(bezierpath::BezierPath, action; close=true)
     move(bezierpath[1].p1)
     for i in 1:length(bezierpath) - 1
         c = bezierpath[i]
@@ -193,6 +196,9 @@ function drawbezierpath(bezierpath::BezierPath, action=:none; close=true)
     end
     do_action(action)
 end
+
+drawbezierpath(bezierpath; action=:none, close=true) =
+    drawbezierpath(bezierpath, action; close=close)
 
 """
     drawbezierpath(bps::BezierPathSegment, action=:none;
