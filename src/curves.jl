@@ -159,7 +159,7 @@ squircle(center::Point, hradius::Real, vradius::Real, action::Symbol;
         reversepath=false) =
     squircle(center, hradius, vradius;
         action=action,
-        rt = 0.5,
+        rt = rt,
         vertices=false,
         stepby = pi/40,
         reversepath=false)
