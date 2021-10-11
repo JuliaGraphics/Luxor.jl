@@ -1,6 +1,19 @@
 # Changelog
 
-## [v2.16.0] - forthcoming 2021-10-07
+
+## [v2.16.1] - forthcoming 
+
+### Added
+
+### Changed
+
+- squircle rt keyword default bug fixed
+
+### Removed
+
+### Deprecated
+
+## [v2.16.0] - 2021-10-07
 
 ### Added
 
