@@ -9,7 +9,7 @@
 
 Luxor is a Julia package for drawing simple 2D vector graphics. Think of it as a high-level easier to use interface to [Cairo.jl](https://github.com/JuliaLang/Cairo.jl), with shorter names, fewer underscores, default contexts, and simplified functions. In Luxor, the emphasis is on simplicity and ease of use.
 
-!["luxor gallery"](docs/src/assets/figures/luxorgallery.png)
+!["luxor gallery"](docs/src/assets/figures/luxorgallery.svg)
 
 Luxor is thoroughly procedural and static: your code issues a sequence of simple graphics 'commands' until you've completed a drawing, then the results are saved into a PDF, PNG, SVG, or EPS file.
 

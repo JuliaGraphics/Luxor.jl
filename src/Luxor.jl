@@ -63,6 +63,7 @@ include("deprecations.jl")
 include("graphlayout.jl")
 include("randompoints.jl")
 include("Style.jl")
+include("Path.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
@@ -205,6 +206,12 @@ export Drawing,
 
     # misc
     image_as_matrix, @imagematrix, image_as_matrix!, @imagematrix!,
+
+    # paths
+
+    Path, PathClose, PathCurve, PathElement, PathLine,
+    PathMove, bezierpathtopath, drawpath, makepath,
+    polytopath,
 
     # experimental
     layoutgraph, Style, applystyle,
