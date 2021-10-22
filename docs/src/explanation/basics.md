@@ -41,6 +41,7 @@ The main Julia data types you'll encounter in Luxor are:
 | GridHex           | defines a hexagonal grid |
 | Scene             | used to define a scene for an animation |
 | Turtle            | represents a turtle for drawing turtle graphics |
+| Path              | contains a complete path |
 
 ## Points and coordinates
 

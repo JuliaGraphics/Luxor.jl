@@ -167,13 +167,53 @@ textextents(str) = Cairo.text_extents(get_current_cr(), str)
 """
     textpath(t)
 
-Convert the text in string `t` and adds closed paths to the current path, for subsequent filling/stroking etc...
+Convert the text in string `t` to paths, adding them to the current path, for subsequent filling/stroking etc...
 
-Typically you'll have to use `pathtopoly()` or `getpath()` or `getpathflat()` then
-work through the one or more path(s). Or use `textoutlines()`.
+You can use `pathtopoly()` or `getpath()` or `getpathflat()` to convert the paths to polygons.
+
+See also `textoutlines()`.
 """
 function textpath(t)
     Cairo.text_path(get_current_cr(), t)
+end
+"""
+    textpath(s::AbstractString, pos::Point;
+        action=:none,
+        halign=:left,
+        valign=:baseline,
+        startnewpath=true)
+
+Convert the text in string `s` to paths and apply the action.
+"""
+function textpath(s::AbstractString, pos::Point;
+        action=:none,
+        halign=:left,
+        valign=:baseline,
+        startnewpath=true)
+
+    # TODO this duplicates text() too much; re-factor needed
+    xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(s)
+    halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
+    if halignment == nothing
+        halignment = 1
+    elseif halignment == 4
+        halignment = 2
+    end
+    textpointx = pos.x - [0, xadvance/2, textwidth + xbearing][halignment]
+    valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
+    if valignment == nothing
+        valignment = 3
+    end
+    textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+    @layer begin
+        translate(Point(textpointx, textpointy))
+        if startnewpath
+           newpath() # forget any current path, start a new one
+        end
+        te = textextents(s)
+        textpath(s)
+    end
+    do_action(action)
 end
 
 """
@@ -183,7 +223,7 @@ end
         valign=:baseline,
         startnewpath=true)
 
-Convert text to a graphic path and apply `action`.
+Convert text to polygons and apply `action`.
 
 By default this function discards any current path, unless you use `startnewpath=false`
 

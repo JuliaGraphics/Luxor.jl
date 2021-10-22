@@ -1,13 +1,15 @@
 # Changelog
 
-
-## [v2.16.1] - forthcoming 
+## [v2.17.0] - forthcoming
 
 ### Added
 
+- Path type to hold a Cairo Path; `makepath`(), `drawpath`(), `polytopath`(), `bezierpathtopath`()
+
 ### Changed
 
-- squircle rt keyword default bug fixed
+- squircle() rt keyword default bug fixed
+- textpath() method has action and alignment options
 
 ### Removed
 

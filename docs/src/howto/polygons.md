@@ -6,13 +6,15 @@ A polygon is an ordered collection of Points stored in an array.
 
 A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
 
+You can store a path in a Path type, which contains path elements.
+
 Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
 |create                         |convert                 		|draw                   	|info                     	|edit                           |
 |:---	                        |:---	                 		|:---	                	|:---	                  	|:---                           |
 | *polygons*                    |                        		|                       	|				          	|                               |
 |[`ngon`](@ref)                 |[`polysmooth`](@ref)    		|[`poly`](@ref)         	|[`isinside`](@ref)       	|[`simplify`](@ref)             |
-|[`ngonside`](@ref)             |                        		|[`prettypoly`](@ref)   	|[`polyperimeter`](@ref)  	|[`polysplit`](@ref)            |
+|[`ngonside`](@ref)             |[`polytopath`](@ref)     		|[`prettypoly`](@ref)   	|[`polyperimeter`](@ref)  	|[`polysplit`](@ref)            |
 |[`star`](@ref)                 |                        		|[`polysmooth`](@ref)   	|[`polyarea`](@ref)       	|[`polyportion`](@ref)          |
 |[`polycross`](@ref)            |                        		|                       	|[`polycentroid`](@ref)   	|[`polyremainder`](@ref)        |
 |[`offsetpoly`](@ref)           |                        		|                       	|[`BoundingBox`](@ref)     	|[`polysortbyangle`](@ref)      |
@@ -26,12 +28,13 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |                               |                        		|                       	|				   			|[`polytriangulate`](@ref)      |
 |                               |                        		|                       	|				   			|[`insertvertices!`](@ref)      |
 | *paths*                       |                        		|                       	|				   			|                               |
-|[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|                       	|				   			|                               |
+|[`makepath`](@ref)             |                        		|                       	|				   			|                               |
+|[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)        |				   			|                               |
 |[`getpathflat`](@ref)          |                        		|                       	|				   			|                               |
 | *Bezier paths*                |                        		|                       	|				   			|                               |
 |[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)  	|[`drawbezierpath`](@ref)   |                  			|                               |
 |[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)   	|[`brush`](@ref)            |                  			|                               |
-|`BezierPath`                   |                        		|                           |                  			|                               |
+|`BezierPath`                   |[`bezierpathtopath`](@ref) 	|                           |                  			|                               |
 |`BezierPathSegment`            |                        		|                           |                  			|                               |
 |[`beziersegmentangles`](@ref)  |                        		|                           |                  			|                               |
 

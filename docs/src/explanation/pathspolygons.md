@@ -1,22 +1,26 @@
 # Paths versus polygons
 
-When drawing in Luxor you'll usually be creating _paths_ and _polygons_. It can be easy to confuse the two.
+When drawing in Luxor you'll usually be creating _paths_ and
+_polygons_. It can be easy to confuse the two.
 
-## Paths
+## Drawing graphics as paths
 
-In Luxor, a path is something that you manipulate by calling
-functions that control Cairo's path-drawing engine. There
-isn't a Luxor struct or datatype that contains or maintains
-a path (although see below). Cairo keeps track of the
-current path, the current point, and the current graphics
-state, in response to the functions you call.
+Luxor draws graphics onto the current drawing using paths.
+
+There's always a current path. It starts off being empty.
 
 A path can contain one or more sequences of straight lines
-and Bézier curves. There's always a single active path. It starts off being empty.
+and Bézier curves. You add straight lines to the current
+path using functions like `line()`, and add Bezier curves
+using functions like `curve()`. You can can continue the
+path at a different location of the drawing using `move()`.
 
-The following figure was drawn using this function, which creates a
-single path consisting of three separate shapes - a line, a
-rectangular box, and a circle:
+Cairo keeps track of the current path, the current point,
+and the current graphics state (color, line thickness, and
+so on), in response to the functions you call.
+
+This code creates a single path consisting of three separate
+shapes - a line, a rectangular box, and a circle:
 
 ```
 function make_path()
@@ -70,6 +74,8 @@ d # hide
 
 The [`move()`](@ref) function as used here is essentially a "pick up
 the pen and move it elsewhere" instruction.
+
+The `circle()` function creates four Bezier curves that provide a good approximation to a circle.
 
 The top path, in purple, is drawn when
 [`strokepath()`](@ref) is applied to this path. Each of the
@@ -152,56 +158,91 @@ polygon (a list of points), `box(Point(0, 0), 50, 50,
 polygon. However, `box(Point(0, 0), 50, 50, 5 ... )`
 constructs a path with Bézier-curved corners, so this
 method doesn't return any vertex information - you'll have
-to flatten the Béziers via [`getpathflat()`](@ref) or obtain the
-path with intact Béziers via [`getpath()`](@ref).
+to flatten the Béziers via [`getpathflat()`](@ref) or
+obtain the path with intact Béziers via
+[`getpath()`](@ref).
 
-The Luxor function [`getpath()`](@ref) retrieves the current
-Cairo path and returns a _Cairo path object_, which you
-could iterate through using code like this:
+## Path objects
+
+Sometimes it's useful to be able to store a path, rather
+than just construct it on the drawing. It would also be
+useful to draw it later, under different circumstances, and
+perhaps more than once. To do this, you can use the `makepath()`
+and `drawpath()` functions.
+
+Consider this code that uses `makepath()`:
+
+```julia
+move(Point(-220, 50))
+line(Point(-170, -50))
+line(Point(-120, 50))
+move(Point(0, 0))
+box(O, 100, 100, :path)
+move(Point(180, 0) + polar(40, 0)) # pt on circumference
+circle(Point(180, 0), 40, :path)
+
+pathexample = makepath() # save Path
+```
+
+`pathexample` now contains the path, stored in a Luxor object of type `Path`. The current path is still present.
 
 ```
-import Cairo
-o = getpath()
-x, y = currentpoint()
-for e in o
-    if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
-        (x, y) = e.points
-        move(x, y)
-    elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO
-        (x, y) = e.points
-        # straight lines
-        line(x, y)
-        strokepath()
-        circle(x, y, 1, :stroke)
-    elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
-        (x1, y1, x2, y2, x3, y3) = e.points
-        # Bézier control lines
-        circle(x1, y1, 1, :stroke)
-        circle(x2, y2, 1, :stroke)
-        circle(x3, y3, 1, :stroke)
-        move(x, y)
-        curve(x1, y1, x2, y2, x3, y3)
-        strokepath()
-        (x, y) = (x3, y3) # update current point
-    elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
-        closepath()
-    else
-        error("unknown CairoPathEntry " * repr(e.element_type))
-        error("unknown CairoPathEntry " * repr(e.points))
+julia> pathexample
+┌─ Cairo path:
+│─ PathMove(Point(-220.0, 50.0))
+│─ PathLine(Point(-170.0, -50.0))
+│─ PathLine(Point(-120.0, 50.0))
+│─ PathMove(Point(-50.0, 50.0))
+│─ PathLine(Point(-50.0, -50.0))
+│─ PathLine(Point(50.0, -50.0))
+│─ PathLine(Point(50.0, 50.0))
+│─ PathClose()
+│─ PathMove(Point(220.0, 0.0))
+│─ PathCurve(Point(220.0, 22.08984375), Point(202.08984375, 40.0), Point(180.0, 40.0))
+│─ PathCurve(Point(157.91015625, 40.0), Point(140.0, 22.08984375), Point(140.0, 0.0))
+│─ PathCurve(Point(140.0, -22.08984375), Point(157.91015625, -40.0), Point(180.0, -40.0))
+└─ PathCurve(Point(202.08984375, -40.0), Point(220.0, -22.08984375), Point(220.0, 0.0))
+```
+
+It's now possible to draw this stored path at a later time. For example, this code builds a path, saves it in `pathexample`, discards the current path, then draws a number of rotated copies:
+
+```@example
+using Luxor
+d = @draw begin
+    move(Point(-220, 50))
+    line(Point(-170, -50))
+    line(Point(-120, 50))
+    move(Point(0, 0))
+    box(O, 100, 100, :path)
+    move(Point(180, 0) + polar(40, 0))
+    circle(Point(180, 0), 40, :path)
+
+    pathexample = makepath() # store the path
+
+    newpath() # discard current path
+
+    rotate(-π/2)
+    for i in -200:50:200
+        @layer begin
+            randomhue()
+            translate(0, i)
+            drawpath(pathexample, :stroke)
+        end
     end
 end
+d # hide
 ```
 
-But the current Cairo path isn't otherwise accessible in Luxor.
+## Polygons
 
-### Polygons
-
-A polygon isn't an existing Luxor struct or datatype either.
-It always appears as a plain Vector (Array) of `Point`s.
+A polygon appears as a plain Vector (Array) of `Point`s.
 There are no lines or curves, just 2D coordinates in the
 form of `Point`s. When a polygon is eventually drawn, it's
 converted into a path, and the points are usually connected
 with short straight lines.
+
+One important difference between polygons and paths is that
+paths can contain Bezier curves.
 
 The [`pathtopoly()`](@ref) function extracts the current
 path that Cairo is in the process of constructing and
