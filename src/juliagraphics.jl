@@ -287,21 +287,21 @@ function juliacircles(radius=100;
         innercircleratio=0.65,
         action=:fill)
     # clockwise, from bottom left
-    color_sequence = [julia_red, julia_green, julia_purple]
+    color_sequence = [Luxor.julia_red, Luxor.julia_green, Luxor.julia_purple]
     points = ngon(O, radius, 3, pi/6, vertices=true)
     @layer begin
         for (n, p) in enumerate(points)
             setcolor(color_sequence[n]...)
             circle(p, outercircleratio * radius, :path)
-            if action != :fill
-                newsubpath()
-            else
+            if action != :clip
                 do_action(action)
+            else
             end
+            newsubpath()
         end
-        if action != :fill
-            do_action(action)
-        end
+    end
+    if action == :clip
+        do_action(:clip)
     end
     return points
 end

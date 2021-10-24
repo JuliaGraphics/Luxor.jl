@@ -188,23 +188,24 @@ pathexample = makepath() # save Path
 
 ```
 julia> pathexample
-┌─ Cairo path:
-│─ PathMove(Point(-220.0, 50.0))
-│─ PathLine(Point(-170.0, -50.0))
-│─ PathLine(Point(-120.0, 50.0))
-│─ PathMove(Point(-50.0, 50.0))
-│─ PathLine(Point(-50.0, -50.0))
-│─ PathLine(Point(50.0, -50.0))
-│─ PathLine(Point(50.0, 50.0))
-│─ PathClose()
-│─ PathMove(Point(220.0, 0.0))
-│─ PathCurve(Point(220.0, 22.08984375), Point(202.08984375, 40.0), Point(180.0, 40.0))
-│─ PathCurve(Point(157.91015625, 40.0), Point(140.0, 22.08984375), Point(140.0, 0.0))
-│─ PathCurve(Point(140.0, -22.08984375), Point(157.91015625, -40.0), Point(180.0, -40.0))
-└─ PathCurve(Point(202.08984375, -40.0), Point(220.0, -22.08984375), Point(220.0, 0.0))
+Path([
+ PathMove(Point(-220.0, 50.0)),
+ PathLine(Point(-170.0, -50.0)),
+ PathLine(Point(-120.0, 50.0)),
+ PathMove(Point(-50.0, 50.0)),
+ PathLine(Point(-50.0, -50.0)),
+ PathLine(Point(50.0, -50.0)),
+ PathLine(Point(50.0, 50.0)),
+ PathClose(),
+ PathMove(Point(220.0, 0.0)),
+ PathCurve(Point(220.0, 22.08984375), Point(202.08984375, 40.0), Point(180.0, 40.0)),
+ PathCurve(Point(157.91015625, 40.0), Point(140.0, 22.08984375), Point(140.0, 0.0)),
+ PathCurve(Point(140.0, -22.08984375), Point(157.91015625, -40.0), Point(180.0, -40.0)),
+ PathCurve(Point(202.08984375, -40.0), Point(220.0, -22.08984375), Point(220.0, 0.0))
+])
 ```
 
-It's now possible to draw this stored path at a later time. For example, this code builds a path, saves it in `pathexample`, discards the current path, then draws a number of rotated copies:
+It's now possible to draw this stored path at a later time. For example, this code builds a path, saves it in `pathexample`, then draws a number of rotated copies:
 
 ```@example
 using Luxor
@@ -218,8 +219,6 @@ d = @draw begin
     circle(Point(180, 0), 40, :path)
 
     pathexample = makepath() # store the path
-
-    newpath() # discard current path
 
     rotate(-π/2)
     for i in -200:50:200

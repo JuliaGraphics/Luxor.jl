@@ -81,10 +81,12 @@ Base.getindex(cp::Path, r::Union{LinRange, UnitRange, StepRangeLen}) = getindex(
 Base.lastindex(cp::Path) = length(cp.path)
 
 function Base.show(io::IO, cp::Path)
+    println(io, "Path([")
     for p in cp.path[1:end-1]
-        println(io, " $(p)")
+        println(io, " $(p),")
     end
     println(io, " $(cp.path[end])")
+    println(io, "])\n")
 end
 
 drawpath(cpe::PathMove) = move(cpe.pt1)
@@ -125,19 +127,22 @@ function makepath()
 end
 
 """
-    drawpath(cp::Path; action=:none)
-    drawpath(cp::Path, action)
+    drawpath(cp::Path; action=:none, startnewpath=true)
+    drawpath(cp::Path, action; startnewpath=true)
 
-Build the Luxor Path object stored in `cp` and apply the `action`.
+Make the Luxor Path object stored in `cp` and apply the `action`.
+
+By default, `startnewpath=true`, which starts a new path, discarding any existing path.
 """
-function drawpath(cp::Path; action=:none)
+function drawpath(cp::Path; action=:none, startnewpath=true)
+    startnewpath && newpath()
     for p in cp
           drawpath(p)
     end
     do_action(action)
 end
 
-drawpath(cp::Path, action::Symbol) = drawpath(cp::Path; action=action)
+drawpath(cp::Path, action::Symbol; startnewpath=true) = drawpath(cp::Path; action=action, startnewpath=startnewpath)
 
 """
     polytopath(ptlist)
