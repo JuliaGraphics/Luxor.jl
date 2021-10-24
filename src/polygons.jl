@@ -362,11 +362,11 @@ function prettypoly(pointlist::Array{Point, 1}, vertexfunction = () -> circle(O,
 end
 
 # method with action as argument
-prettypoly(pointlist::Array{Point, 1}, argument::Symbol, vertexfunction = () -> circle(O, 2, :stroke);
+prettypoly(pointlist::Array{Point, 1}, action::Symbol, vertexfunction = () -> circle(O, 2, :stroke);
     close=false,
     reversepath=false,
     vertexlabels = (n, l) -> ()) = prettypoly(pointlist, vertexfunction,
-        action=:none,
+        action=action,
         close=close,
         reversepath=reversepath,
         vertexlabels = vertexlabels)

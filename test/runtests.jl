@@ -107,9 +107,10 @@ function run_all_tests()
         include("dimensioning.jl")
     end
 
-    @testset "getpath" begin
+    @testset "paths" begin
         include("get_path.jl")
         include("get_path_flat.jl")
+        include("paths.jl")
     end
 
     @testset "julia logos" begin
@@ -131,6 +132,7 @@ function run_all_tests()
     @testset "clipping" begin
         include("clipping-test.jl")
     end
+
     @testset "tilerstables" begin
         include("pagetiler-test.jl")
         include("table-tests.jl")

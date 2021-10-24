@@ -216,6 +216,11 @@ function textpath(s::AbstractString, pos::Point;
     do_action(action)
 end
 
+textpath(s::AbstractString, pos::Point, action::Symbol;
+        halign=:left,
+        valign=:baseline,
+        startnewpath=true) = textpath(s, pos, action=action, halign=halign, valign=valign, startnewpath=startnewpath)
+
 """
     textoutlines(s::AbstractString, pos::Point=O;
         action=:none,
