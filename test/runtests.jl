@@ -152,6 +152,7 @@ function run_all_tests()
         include("intersection-line-circle.jl")
         include("line-intersections.jl")
         include("polygonintersect-test.jl")
+        include("pointcrossesboundingboxtests.jl")
     end
     @testset "misc" begin
         include("luxor-test1.jl")
