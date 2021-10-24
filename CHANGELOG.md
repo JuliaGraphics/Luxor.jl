@@ -11,6 +11,7 @@
 - squircle() rt keyword default bug fixed
 - textpath() method has action and alignment options
 - prettypoly() fix action keyword arg
+- pointcrossesboundingbox() fix bug (thanks @hustf!)
 
 ### Removed
 

@@ -4,8 +4,8 @@ using Luxor
 
 using Test
 
-function test_lux_bb(;cent = O)
-    bx = BoundingBox(box(O + cent, 200, 200, :none))
+function test_lux_bb(;center = O)
+    bx = BoundingBox(box(O + center, 200, 200, :none))
     box(bx, :stroke)
     for i in 0:14
         pt = if i < 4
@@ -29,8 +29,8 @@ function test_pointcrossesboundingbox(fname)
     origin(200,200)
     test_lux_bb()
     translate(400,0)
-    test_lux_bb(;cent = (-45, -25))
-    snapshot(;fname)
+    test_lux_bb(;center = (-45, -25))
+    snapshot(;fname=fname)
     println("...finished point crosses bounding box test, saved in $(fname)")
 end
 
