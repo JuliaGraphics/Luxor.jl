@@ -1135,7 +1135,7 @@ textpath("†", O, halign=:center, valign=:middle)
 dagger = storepath()
 ```
 
-stores the instructions to buld the current path (which describe the dagger symbol) in `dagger`.
+stores the instructions to build the current path (which describe the dagger symbol) in `dagger`.
 
 The `dagger` is a Luxor Path type, and contains:
 
@@ -1216,6 +1216,11 @@ for θ in range(0, step=2π/10, length=10)
 end
 end # hide
 ```
+
+After you've stored a path, the current path is still
+active. You might want to use `newpath()` to start a new
+one. The `drawpath()` function will start a new path but
+there is an option to continue drawing on the existing one.
 
 ## Julia logos
 
