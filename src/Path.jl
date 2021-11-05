@@ -95,7 +95,7 @@ drawpath(cpe::PathCurve) = curve(cpe.pt1, cpe.pt2, cpe.pt3)
 drawpath(cpe::PathClose) = closepath()
 
 """
-    makepath()
+    storepath()
 
 Obtain the current Cairo path and make a Luxor Path object,
 which is an array of PathElements.
@@ -104,7 +104,7 @@ Returns the Path object.
 
 See also getpath and getpathflat.
 """
-function makepath()
+function storepath()
     path = PathElement[]
     for e in getpath()
         if e.element_type == 0

@@ -28,7 +28,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |                               |                        		|                       	|				   			|[`polytriangulate`](@ref)      |
 |                               |                        		|                       	|				   			|[`insertvertices!`](@ref)      |
 | *paths*                       |                        		|                       	|				   			|                               |
-|[`makepath`](@ref)             |                        		|                       	|				   			|                               |
+|[`storepath`](@ref)             |                        		|                       	|				   			|                               |
 |[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)        |				   			|                               |
 |[`getpathflat`](@ref)          |                        		|                       	|				   			|                               |
 | *Bezier paths*                |                        		|                       	|				   			|                               |

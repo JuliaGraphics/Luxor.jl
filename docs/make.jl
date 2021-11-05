@@ -6,6 +6,7 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == "true",
         assets = ["assets/luxor-docs.css"],
+        warn_outdated = true,
         collapselevel=1,
         ),
     pages    = [

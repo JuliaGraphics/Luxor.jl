@@ -24,15 +24,15 @@ function path_test(fname)
     drawpath(p, action=:stroke)
 
     textpath("hello", O, :stroke)
-    p = makepath()
+    p = storepath()
     drawpath(p, action=:stroke)
 
     textpath("hello", O + (0, 100), action=:stroke)
-    p = makepath()
+    p = storepath()
     drawpath(p, :stroke)
 
     textpath("hello", O + (0, 150), action=:fill)
-    p = makepath()
+    p = storepath()
     drawpath(p, action=:fill)
 
     sethue("cyan")

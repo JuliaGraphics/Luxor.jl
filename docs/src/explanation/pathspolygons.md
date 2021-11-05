@@ -167,10 +167,10 @@ obtain the path with intact Béziers via
 Sometimes it's useful to be able to store a path, rather
 than just construct it on the drawing. It would also be
 useful to draw it later, under different circumstances, and
-perhaps more than once. To do this, you can use the `makepath()`
+perhaps more than once. To do this, you can use the `storepath()`
 and `drawpath()` functions.
 
-Consider this code that uses `makepath()`:
+Consider this code that uses `storepath()`:
 
 ```julia
 move(Point(-220, 50))
@@ -181,7 +181,7 @@ box(O, 100, 100, :path)
 move(Point(180, 0) + polar(40, 0)) # pt on circumference
 circle(Point(180, 0), 40, :path)
 
-pathexample = makepath() # save Path
+pathexample = storepath() # save Path
 ```
 
 `pathexample` now contains the path, stored in a Luxor object of type `Path`. The current path is still present.
@@ -218,7 +218,7 @@ d = @draw begin
     move(Point(180, 0) + polar(40, 0))
     circle(Point(180, 0), 40, :path)
 
-    pathexample = makepath() # store the path
+    pathexample = storepath() # store the path
 
     rotate(-π/2)
     for i in -200:50:200

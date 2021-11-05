@@ -582,6 +582,10 @@ There is a 'current position' which you can set with [`move`](@ref), and can use
 
 There is a current point. Use [`currentpoint`](@ref) and [`hascurrentpoint`](@ref).
 
+You can store a path for later use with [`storepath`](@ref) and draw it with [`drawpath`](@ref). See [Stored paths](@ref).
+
+For more about paths, see [Polygons and paths](@ref) and [Paths versus polygons](@ref).
+
 ## Lines
 
 Use [`line`](@ref) and [`rline`](@ref) to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` adds a line to the current path going from the current position to the point. `rline(pt)` adds a line relative to the current position.
@@ -1120,7 +1124,7 @@ nothing # hide
 
 ![polycross](../assets/figures/polycross.png)
 
-## Saved Paths
+## Stored Paths
 
 It's possible to store the current path in a Path object. For example, this code:
 
@@ -1128,10 +1132,12 @@ It's possible to store the current path in a Path object. For example, this code
 fontsize(160)
 fontface("Bodoni-Poster")
 textpath("†", O, halign=:center, valign=:middle)
-dagger = makepath()
+dagger = storepath()
 ```
 
-creates a Path of the current path (which describe the dagger symbol) and stores it in `dagger`, which now contains:
+stores the instructions to buld the current path (which describe the dagger symbol) in `dagger`.
+
+The `dagger` is a Luxor Path type, and contains:
 
 ```
 PathMove(Point(2.0, 90.5625)),
