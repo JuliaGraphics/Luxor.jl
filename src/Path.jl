@@ -102,7 +102,7 @@ which is an array of PathElements.
 
 Returns the Path object.
 
-See also getpath and getpathflat.
+See also getpath() and getpathflat().
 """
 function storepath()
     path = PathElement[]
@@ -130,9 +130,14 @@ end
     drawpath(cp::Path; action=:none, startnewpath=true)
     drawpath(cp::Path, action; startnewpath=true)
 
-Make the Luxor Path object stored in `cp` and apply the `action`.
+Make the Luxor path stored in `cp` and apply the `action`.
 
-By default, `startnewpath=true`, which starts a new path, discarding any existing path.
+To make paths, follow some path construction functions such
+as `move()`, `line()`, and `curve()` with the `storepath()`
+function.
+
+By default, `startnewpath=true`, which starts a new path,
+discarding any existing path contents.
 """
 function drawpath(cp::Path; action=:none, startnewpath=true)
     startnewpath && newpath()
