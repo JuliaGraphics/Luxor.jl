@@ -1124,7 +1124,7 @@ nothing # hide
 
 ![polycross](../assets/figures/polycross.png)
 
-## Stored Paths
+## Stored paths
 
 It's possible to store the current path in a Path object. For example, this code:
 
