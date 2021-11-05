@@ -12,6 +12,7 @@
 - textpath() method has action and alignment options
 - prettypoly() fix action keyword arg
 - pointcrossesboundingbox() fix bug (thanks @hustf!)
+- beziersegmentangles() attend to special cases
 
 ### Removed
 

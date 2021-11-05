@@ -843,8 +843,8 @@ texttrack(txt, pos, tracking;
 
 A low-level function that places text characters one by one
 according to the parameters in `params`. First character
-uses first tuple, second character the second, and so on.
-Return next text position.
+uses the first tuple, second character uses the second, and
+so on. Returns the next text position.
 
 A tuple of parameters is:
 
@@ -854,15 +854,15 @@ A tuple of parameters is:
 
 where
 
-- face is fontface "string"                   # sticky
+- `face` is fontface "string"                   # sticky
 
-- size is fontsize # pts                      # sticky
+- `size` is fontsize # pts                      # sticky
 
-- kern amount (pixels) shifted to the right   # resets after each char
+- `kern` amount (pixels) shifted to the right   # resets after each char
 
-- shift = baseline shifted vertically         # resets after each char
+- `shift` = baseline shifted vertically         # resets after each char
 
-- advance - whether to advance                # resets after each char
+- `advance` - whether to advance                # resets after each char
 
 Font face and size parameters are sticky, and stay set until
 reset. Kern/shift/advance are reset for each character.
@@ -872,30 +872,31 @@ reset. Kern/shift/advance are reset for each character.
 Draw the Hogwarts Express Platform number 9 and 3/4
 
 ```julia
-txtpos = textplace("93—4", O, [
-        (size=120, face="Bodoni-Poster", ),                 # format for 9
-        (size=60,  kern = 10, shift = 60,  advance=false,), # format for 3
-        (          kern = 0,  shift = 25,  advance=false,), # format for -
-        (          kern = 10, shift = -20, advance=true),   # format for 4
+txtpos = textplace("93—4!", O - (200, 0), [
+    (size=120, face="Bodoni-Poster",                 ), # format for 9
+    (size=60,  kern = 5, shift = 60,  advance=false,),  # format for 3
+    (          kern = 0, shift = 25,  advance=false,),  # format for -
+    (          kern = 5, shift = -20, advance=true),    # format for 4
+    (size=120, kern = 20,),
     ])
 ```
 """
 function textplace(txt::AbstractString, pos::Point, params::Vector)
     @layer begin
-        emspacewidth = textextents(" ")[5]
         textpos = Point(pos.x, pos.y)
-        defaultparams = (face = "", size = 12, kern=0, shift=0, advance=true)
+        currentparams = (face = "", size = 12, kern=0, shift=0, advance=true,)
         for (n, c) in enumerate(txt)
-            defaultparams = merge(defaultparams, (kern=0, shift=0, advance=true,))
+            currentparams = merge(currentparams, (kern=0, shift=0, advance=true,))
             if n <= length(params)
-                defaultparams = merge(defaultparams, params[n])
+                currentparams = merge(currentparams, params[n])
             end
-            fontface(defaultparams.face)
-            fontsize(defaultparams.size)
+            fontface(currentparams.face)
+            fontsize(currentparams.size)
             xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
-            textoutlines(string(c), Point(textpos.x + defaultparams.kern, textpos.y - defaultparams.shift), :fill, halign=:left)
-            if defaultparams.advance == true
-                textpos += (xadvance + defaultparams.advance, 0)
+            temp_text_pos = Point(textpos.x + currentparams.kern, textpos.y - currentparams.shift)
+            textoutlines(string(c), temp_text_pos, :fill, halign=:left)
+            if currentparams.advance == true
+                textpos += (xadvance + currentparams.kern, 0)
             end
         end
     end

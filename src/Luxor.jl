@@ -210,7 +210,7 @@ export Drawing,
     # paths
 
     Path, PathClose, PathCurve, PathElement, PathLine,
-    PathMove, bezierpathtopath, drawpath, makepath,
+    PathMove, bezierpathtopath, drawpath, storepath,
     polytopath,
 
     # experimental
