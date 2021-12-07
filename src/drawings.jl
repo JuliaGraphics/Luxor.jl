@@ -127,12 +127,19 @@ end
 function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     @debug "show MIME:text/plain"
     returnvalue = d.filename
+
     # IJulia and Juno call the `show` function twice: once for
     # the image MIME and a second time for the text/plain MIME.
     # We check if this is such a 'second call':
-    if (get(io, :jupyter, false) || Juno.isactive()) && (d.surfacetype == :svg || d.surfacetype == :png)
+    if (get(io, :jupyter, false) || Juno.isactive()) &&
+            (d.surfacetype == :svg || d.surfacetype == :png))
         return d.filename
     end
+
+    if isdefined(Main, :vscodedisplay) && (d.surfacetype == :svg || d.surfacetype == :png)
+       return d.filename
+    end
+
     # perhaps drawing hasn't started yet, eg in the REPL
     if !ispath(d.filename)
         location = !isempty(d.filename) ? d.filename : "in memory"
