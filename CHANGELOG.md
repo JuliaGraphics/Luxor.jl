@@ -1,5 +1,21 @@
 # Changelog
 
+## [v2.18.0] -
+
+### Added
+
+- code to support VSCode
+
+### Changed
+
+- method for `arc(0, 0, action)` fixes #184
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v2.17.0] - 2021-11-05
 
 ### Added

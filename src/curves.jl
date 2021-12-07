@@ -170,6 +170,9 @@ function arc(xc, yc, radius, angle1, angle2;
     do_action(action)
 end
 
+arc(xc, yc, radius, angle1, angle2, the_action::Symbol) =
+    arc(xc, yc, radius, angle1, angle2, action=the_action)
+
 """
     arc(centerpoint::Point, radius, angle1, angle2; action=:none)
     arc(centerpoint::Point, radius, angle1, angle2, action)
@@ -184,6 +187,7 @@ arc(centerpoint::Point, radius, angle1, angle2; action=:none) =
 
 arc(centerpoint::Point, radius, angle1, angle2, action::Symbol) =
     arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action=action)
+
 
 function carc(xc, yc, radius, angle1, angle2;
         action=:none)
