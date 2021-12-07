@@ -132,7 +132,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     # the image MIME and a second time for the text/plain MIME.
     # We check if this is such a 'second call':
     if (get(io, :jupyter, false) || Juno.isactive()) &&
-            (d.surfacetype == :svg || d.surfacetype == :png))
+            (d.surfacetype == :svg || d.surfacetype == :png)
         return d.filename
     end
 
