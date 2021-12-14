@@ -24,7 +24,6 @@ jobs:
           - windows-latest
         julia-arch:
           - x64
-          - x86
         exclude:
           - os: macOS-latest
             julia-arch: x86

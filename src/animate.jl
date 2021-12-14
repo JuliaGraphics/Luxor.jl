@@ -152,6 +152,23 @@ The `usenewffmpeg` option, `true` by default, uses single-pass palette
 generation and more complex filtering provided by recent versions of the
 `ffmpeg` utility, mainly to cope with transparent backgrounds. If set to
 `false`, the behavior is the same as in previous versions of Luxor.
+
+If you prefer to use the FFMPEG package, use code such as this:
+
+```julia
+using FFMPEG
+
+...
+
+tempdirectory = "/tmp/temp/"
+
+animate(movie, [
+        Scene(movie, frame, 1:50)
+    ], creategif=false, tempdirectory=tempdirectory)
+
+FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i \$(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
+
+```
 """
 function animate(movie::Movie, scenelist::Array{Scene, 1};
         creategif=false,
@@ -216,7 +233,7 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
             @info "$(tempdirectory)/$(movie.movietitle).gif"
             FFMPEG.ffmpeg_exe(`-framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
         else
-            # reduce verbosity ! 
+            # reduce verbosity !
             FFMPEG.ffmpeg_exe(`-loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
         end
     end

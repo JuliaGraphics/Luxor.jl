@@ -902,3 +902,86 @@ function textplace(txt::AbstractString, pos::Point, params::Vector)
     end
     return textpos
 end
+
+"""
+    textfit(string, bbox::BoundingBox, maxfontsize = 800;
+         horizontalmargin=12)
+
+Fit the string into the boundingbox by adjusting the font size and line breaks.
+
+Instead of using the current font size, a suitable vvvslue will be calculated. You can specify
+the largest size in maxfontsize, otherwise the largest possible value below 800 will be used.
+
+`horizontalmargin` is applied to each side.
+
+The function returns a named tuple with information about the calculated values:
+
+```julialang
+(fontsize = 37.6, linecount = 5, finalpos = Point(-117.80621977990893, 92.60406061738831)
+```
+
+!!! note
+
+    This function doesn't always work perfectly. It's not Adobe InDesign... :)
+
+"""
+function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 800;
+        horizontalmargin=12)
+    @layer begin
+        bbox  = bbox - horizontalmargin
+        width = boxwidth(bbox)
+        required_height = boxheight(bbox)
+        # remove blank lines
+        lines = filter!(!isempty, textlines(s, width))
+        fsize = maxfontsize
+        fontsize(maxfontsize)
+        te = textextents(lines[1])
+        # start below the top of the box
+        startpos = boxtopleft(bbox) + Point(0, te[4])
+        while true
+            fontsize(fsize)
+            lines = filter!(!isempty, textlines(s, width))
+
+            # calculate widest line
+            widestline = 0
+            for l in lines
+                te = textextents(l)
+                if widestline < te[3]
+                    widestline = te[3]
+                end
+            end
+
+            # calculate expected end point
+            finishpos = boxtopleft(bbox) + (0, (boxtopleft(bbox).y + (fsize * (length(lines)))))
+
+            # too high or too wide?
+            if distance(boxtopleft(bbox), finishpos) < required_height && widestline < boxwidth(bbox)
+                break
+            end
+            if distance(boxtopleft(bbox), finishpos) > required_height
+                # reduce
+                fsize *= 0.9
+            end
+            if widestline > boxwidth(bbox)
+                # reduce
+                fsize *= 0.9
+            end
+            if fsize <= 1.0
+                throw(error("textfit(): calculated font size is too small: make bounding box larger"))
+            end
+        end
+        # use most recent textextents
+        # allow for leading
+        fontsize(fsize)
+        lines = filter!(!isempty, textlines(s, width))
+        te = textextents(lines[1])
+        fontsize(te[4])
+        textpos = boxtopleft(bbox) + Point(0, te[4])
+        for (linenumber, linetext) in enumerate(lines)
+            text(linetext, textpos)
+            textpos = Point(textpos.x, textpos.y + te[4])
+        end
+        # return top position, bottom position
+    end
+    return (fontsize=fsize, linecount=length(lines), finalpos=textpos)
+end
