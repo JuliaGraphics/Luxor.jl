@@ -6,11 +6,15 @@
 
 - code to support VSCode
 
+- textfit() fits text inside bounding box
+
 ### Changed
 
 - method for `arc(0, 0, action)` fixes #184
 
 ### Removed
+
+- support for 32-bit Windows - (r)svg doesn't work
 
 ### Deprecated
 

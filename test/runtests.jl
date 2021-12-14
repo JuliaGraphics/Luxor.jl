@@ -58,6 +58,7 @@ function run_all_tests()
         include("text-wrapping.jl")
         include("text-boxes.jl")
         include("label-tests.jl")
+        include("textfit-tests.jl")
     end
 
     @testset "curves" begin

@@ -66,6 +66,23 @@ run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png
 
 Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.
 
+If you want to use a custom ffmpeg command, you can use code such as this:
+
+```julia
+using Luxor, FFMPEG
+
+...
+
+tempdirectory = "/tmp/temp/"
+
+animate(movie, [
+        Scene(movie, frame, 1:50)
+    ], creategif=false, tempdirectory=tempdirectory)
+
+FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
+
+```
+
 ### Passing information to the frame() function
 
 If you want to pass information to the frame function, such as an array of values, try these:
