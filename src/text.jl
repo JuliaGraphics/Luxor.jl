@@ -922,10 +922,10 @@ The function returns a named tuple with information about the calculated values:
 
 !!! note
 
-    This function doesn't always work perfectly. It's not Adobe InDesign... :)
+    This function is in need of improvement. It's not Adobe InDesign... :)
 
 """
-function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 800;
+function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 140;
         horizontalmargin=12)
     @layer begin
         bbox  = bbox - horizontalmargin
@@ -938,6 +938,7 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
         te = textextents(lines[1])
         # start below the top of the box
         startpos = boxtopleft(bbox) + Point(0, te[4])
+        counter = 0
         while true
             fontsize(fsize)
             lines = filter!(!isempty, textlines(s, width))
@@ -954,21 +955,23 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
             # calculate expected end point
             finishpos = boxtopleft(bbox) + (0, (boxtopleft(bbox).y + (fsize * (length(lines)))))
 
-            # too high or too wide?
-            if distance(boxtopleft(bbox), finishpos) < required_height && widestline < boxwidth(bbox)
+            # does it fit?
+            if distance(boxtopleft(bbox), finishpos) < required_height && widestline <= boxwidth(bbox)
                 break
             end
-            if distance(boxtopleft(bbox), finishpos) > required_height
+
+            if distance(boxtopleft(bbox), finishpos) > required_height || widestline > boxwidth(bbox)
                 # reduce
-                fsize *= 0.9
+                fsize -= 2
             end
-            if widestline > boxwidth(bbox)
-                # reduce
-                fsize *= 0.9
-            end
+
             if fsize <= 1.0
                 throw(error("textfit(): calculated font size is too small: make bounding box larger"))
             end
+
+            counter += 1
+            # panic time
+            counter > 200 && break
         end
         # use most recent textextents
         # allow for leading
