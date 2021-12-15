@@ -136,7 +136,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
         return d.filename
     end
 
-    if isdefined(Main, :vscodedisplay) && (d.surfacetype == :svg || d.surfacetype == :png)
+    if (isdefined(Main, :VSCodeServer) && Main.VSCodeServer.PLOT_PANE_ENABLED[]) && (d.surfacetype == :svg || d.surfacetype == :png)
        return d.filename
     end
 
