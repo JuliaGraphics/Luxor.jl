@@ -156,9 +156,7 @@ function douglas_peucker(pointlist::Array{Point, 1}, start_index, last_index, ep
             push!(temp_stack, (start_index, index))
             push!(temp_stack, (index, last_index))
         else
-            for i in start_index + 2:last_index - 1 # 2 seems to keep the starting point...
-                keep_list[i - global_start_index] = false
-            end
+            keep_list[global_start_index + start_index: global_start_index+last_index-2] .= false
         end
     end
     return pointlist[keep_list]
