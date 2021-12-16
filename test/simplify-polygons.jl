@@ -58,7 +58,7 @@ function simplify_poly(fname)
     println("...finished test: output in $(fname)")
 end
 
-function simplify_cube()
+function simplify_square()
     poly = Point[Point(-1.0, 0.0), Point(-1.0, -1.0), Point(0.0, -1.0), Point(1.0, -1.0), Point(1.0, 0.0), Point(1.0, 1.0), Point(0.0, 1.0), Point(-1.0, 1.0)]
 
     poly = simplify(poly, 0.01)
@@ -67,4 +67,4 @@ end
 
 simplify_poly("simplify-poly.pdf")
 
-simplify_cube()
+simplify_square()
