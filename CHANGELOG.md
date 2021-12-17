@@ -6,11 +6,15 @@
 
 - code to support VSCode
 
-- textfit() fits text inside bounding box
+- textfit() fits text inside bounding box, first attempt
+
+- polyhull() - thecedarprince persuaded me it was useful :)
 
 ### Changed
 
 - method for `arc(0, 0, action)` fixes #184
+
+- bug in simplify() #186 (thanks Ole @Wikunia!)
 
 ### Removed
 
