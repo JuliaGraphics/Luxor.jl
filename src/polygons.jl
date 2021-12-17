@@ -1519,3 +1519,49 @@ function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
     deleteat!(trianglelist, unique(indexes))
     return trianglelist
 end
+
+"""
+    polyhull(pts)
+
+Find all points in `pts` that form a convex hull around the
+points in `pts`, and return them.
+
+This uses the Jarvis March "Gift wrapping" algorithm.
+"""
+function polyhull(points::Vector{Point})
+    result = Point[]
+
+    # find the left-most x using just one scan of points
+    # otherwise we could use extrema and findfirst
+
+    leftmostx = 0.0
+    startpointindex = 1
+    for i in eachindex(points)
+        if  leftmostx < points[i].x
+            leftmostx = points[i].x
+            startpointindex = i
+        end
+    end
+
+    Q = startpointindex
+    push!(result, points[startpointindex])
+
+    while true
+        cursor = mod1(Q + 1, length(points))
+        for i in eachindex(points)
+            if i == Q
+                continue
+            end
+            θ = anglethreepoints(points[Q], points[i], points[cursor])
+            if θ >= π # heading right
+                cursor = i
+            end
+        end
+        Q = cursor
+        if Q == startpointindex
+            break
+        end
+        push!(result, points[cursor])
+    end
+    return result
+end

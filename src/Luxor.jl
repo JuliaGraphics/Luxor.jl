@@ -131,7 +131,7 @@ export Drawing,
     getnearestpointonline, isinside,
     rotate_point_around_point, perpendicular, crossproduct,
     dotproduct, distance, prettypoly, polysmooth, polysplit,
-    poly, simplify,  polycentroid, polysortbyangle,
+    poly, simplify,  polycentroid, polysortbyangle, polyhull,
     polysortbydistance, offsetpoly, polyfit, currentpoint,
     hascurrentpoint, getworldposition, anglethreepoints,
 

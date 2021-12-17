@@ -22,14 +22,14 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |[`epitrochoid`](@ref)          |                        		|                       	|[`ispolyconvex`](@ref)     |[`polyintersections`](@ref)    |
 |[`polyrotate!`](@ref)          |                        		|                       	|[`ispointonpoly`](@ref)    |[`polymove!`](@ref)            |
 |[`polyfit`](@ref)              |                        		|                       	|				   			|[`polyscale!`](@ref)           |
-|                               |                        		|                       	|				   			|                               |
+|[`polyhull`](@ref)             |                        		|                       	|				   			|                               |
 |                               |                        		|                       	|				   			|[`polyreflect!`](@ref)         |
 |                               |                        		|                       	|				   			|[`polysample`](@ref)           |
 |                               |                        		|                       	|				   			|[`polytriangulate`](@ref)      |
 |                               |                        		|                       	|				   			|[`insertvertices!`](@ref)      |
 | *paths*                       |                        		|                       	|				   			|                               |
-|[`storepath`](@ref)             |                        		|                       	|				   			|                               |
-|[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)        |				   			|                               |
+|[`storepath`](@ref)            |                        		|                       	|				   			|                               |
+|[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)         |				   			|                               |
 |[`getpathflat`](@ref)          |                        		|                       	|				   			|                               |
 | *Bezier paths*                |                        		|                       	|				   			|                               |
 |[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)  	|[`drawbezierpath`](@ref)   |                  			|                               |
@@ -625,6 +625,7 @@ setmesh(mesh(box(BoundingBox(pgon)),
     RGB(Luxor.julia_purple...),
     ]))
 poly(pgon, :fill)
+
 end
 ```
 
@@ -977,6 +978,42 @@ nothing # hide
 ```
 
 ![polyperimeter](../assets/figures/polyperimeter.png)
+
+To find the "left-most" point, ie the point with the lowest x coordinate, you can use built-in `extrema()` function, to return the left-most and right-most points. (This is because, when you compare points, the x coordinate is tested first.) To find the "lowest" points, ie the points with the lowest y value, you could find the y extrema and use it to find the index:
+
+```julia
+findfirst(pt -> isequal(pt.y, first(extrema(pt -> pt.y, pts))), pts)
+# 13
+```
+
+### Convex hull
+
+A convex hull of a polygon is the subset of points such that, when connected with straight lines, the resulting shape contains every point of the polygon.
+
+```@example
+using Luxor # hide
+d = Drawing(800, 500, :svg) # hide
+origin() # hide
+setline(4)
+
+juliacircles(130) # draw in color
+
+# get points
+juliacircles(130, action=:path)
+points  = simplify(pathtopoly()[1], 2)
+
+hull = polyhull(points)
+
+randomhue()
+sethue("gold2")
+
+poly(hull, close=true, :stroke)
+
+finish() # hide
+d # hide
+```
+
+In this example, the points forming the Julia logo (converted from a path to a polygon) are contained inside the convex hull.
 
 ## Polygon selection and modification
 
