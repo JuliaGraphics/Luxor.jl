@@ -926,15 +926,15 @@ The function returns a named tuple with information about the calculated values:
 
 """
 function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 140;
-        horizontalmargin=12)
+        horizontalmargin=3)
     @layer begin
         bbox  = bbox - horizontalmargin
         width = boxwidth(bbox)
         required_height = boxheight(bbox)
-        # remove blank lines
-        lines = filter!(!isempty, textlines(s, width))
         fsize = maxfontsize
         fontsize(maxfontsize)
+        # remove blank lines from rearranged lines
+        lines = filter!(!isempty, textlines(s, width))
         te = textextents(lines[1])
         # start below the top of the box
         startpos = boxtopleft(bbox) + Point(0, te[4])
@@ -947,38 +947,42 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
             widestline = 0
             for l in lines
                 te = textextents(l)
-                if widestline < te[3]
+                if widestline <= te[3]
                     widestline = te[3]
                 end
             end
 
             # calculate expected end point
-            finishpos = boxtopleft(bbox) + (0, (boxtopleft(bbox).y + (fsize * (length(lines)))))
+            finishheight = fsize * length(lines)
 
             # does it fit?
-            if distance(boxtopleft(bbox), finishpos) < required_height && widestline <= boxwidth(bbox)
+            if finishheight < required_height && widestline <= boxwidth(bbox)
                 break
             end
 
-            if distance(boxtopleft(bbox), finishpos) > required_height || widestline > boxwidth(bbox)
+            # ok try again
+            if finishheight > required_height || widestline > boxwidth(bbox)
                 # reduce
                 fsize -= 2
             end
 
-            if fsize <= 1.0
-                throw(error("textfit(): calculated font size is too small: make bounding box larger"))
+            if fsize <= 0.1
+                throw(error("textfit(): calculated font size $(fsize) is too small: make bounding box larger, currently $(bbox)"))
+                break
             end
 
             counter += 1
             # panic time
-            counter > 200 && break
+            if counter > 200
+                break
+            end
         end
         # use most recent textextents
-        # allow for leading
+        # TODO allow for leading one day
         fontsize(fsize)
         lines = filter!(!isempty, textlines(s, width))
         te = textextents(lines[1])
-        fontsize(te[4])
+        #fontsize(te[4])
         textpos = boxtopleft(bbox) + Point(0, te[4])
         for (linenumber, linetext) in enumerate(lines)
             text(linetext, textpos)

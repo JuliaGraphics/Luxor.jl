@@ -1004,7 +1004,6 @@ points  = simplify(pathtopoly()[1], 2)
 
 hull = polyhull(points)
 
-randomhue()
 sethue("gold2")
 
 poly(hull, close=true, :stroke)

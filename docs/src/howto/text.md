@@ -507,3 +507,30 @@ nothing # hide
 ```
 
 ![textbox](../assets/figures/texttrack.svg)
+
+## Text fitting
+
+Sometimes you want to fit some text into a specific area, rather than use a specific font size.
+
+To do this, use [`textfit`](@ref), and supply the text and a bounding box.
+
+```@example
+using Luxor # hide
+d = Drawing(800, 800, :svg) # hide
+origin() # hide
+background("grey7") # hide
+rh = 750 .* [4//11, 2//11, 4//11, 1//11]
+cw = 750 .* [6//11, 1//11, 3//11, 1//11]
+cells = Table(rh, cw)
+for (pos, n) in cells
+    r = rand()/2
+    setgrey(r)
+    box(cells, n, :fill)
+    setgrey(1 - r/2)
+    textfit("The sound of one hand clapping", BoundingBox(box(cells, n)))
+end
+finish() # hide
+d # hide
+```
+
+You can supply a value for `maximumfontsize` as an optional argument, such that the text never exceeds that size (although it will probably be smaller).
