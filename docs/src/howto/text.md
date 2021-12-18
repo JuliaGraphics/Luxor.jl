@@ -526,7 +526,7 @@ for (pos, n) in cells
     r = rand()/2
     setgrey(r)
     box(cells, n, :fill)
-    setgrey(1 - r/2)
+    setgrey(1)
     textfit("The sound of one hand clapping", BoundingBox(box(cells, n)))
 end
 finish() # hide
@@ -534,3 +534,7 @@ d # hide
 ```
 
 You can supply a value for `maximumfontsize` as an optional argument, such that the text never exceeds that size (although it will probably be smaller).
+
+!!! note
+
+    This function doesn't always produce ideal results. Suggestions for improvements welcome!
