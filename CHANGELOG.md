@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.18.0] -
+## [v2.18.0] - 2021-12-18
 
 ### Added
 
@@ -8,7 +8,7 @@
 
 - textfit() fits text inside bounding box, first attempt
 
-- polyhull() - thecedarprince persuaded me it was useful :)
+- polyhull() - @thecedarprince (Hi Jacob!) convinced me it was useful :)
 
 ### Changed
 

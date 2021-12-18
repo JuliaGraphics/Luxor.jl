@@ -909,8 +909,8 @@ end
 
 Fit the string into the boundingbox by adjusting the font size and line breaks.
 
-Instead of using the current font size, a suitable vvvslue will be calculated. You can specify
-the largest size in maxfontsize, otherwise the largest possible value below 800 will be used.
+Instead of using the current font size, a suitable value will be calculated. You can specify
+the largest size in `maxfontsize`, otherwise the largest possible value below 200 will be used.
 
 `horizontalmargin` is applied to each side.
 
@@ -925,7 +925,7 @@ The function returns a named tuple with information about the calculated values:
     This function is in need of improvement. It's not Adobe InDesign... :)
 
 """
-function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 140;
+function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 200;
         horizontalmargin=3)
     @layer begin
         bbox  = bbox - horizontalmargin
