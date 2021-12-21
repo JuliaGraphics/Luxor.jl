@@ -905,16 +905,25 @@ end
 
 """
     textfit(string, bbox::BoundingBox, maxfontsize = 800;
-         horizontalmargin=12)
+         horizontalmargin=12,
+         leading=100)
 
-Fit the string into the boundingbox by adjusting the font size and line breaks.
+Fit the string into the boundingbox by adjusting the font
+size and line breaks.
 
-Instead of using the current font size, a suitable value will be calculated. You can specify
-the largest size in `maxfontsize`, otherwise the largest possible value below 200 will be used.
+Instead of using the current font size, a suitable value
+will be calculated. You can specify the largest size in
+`maxfontsize`, otherwise the largest possible value below
+200 will be used.
 
 `horizontalmargin` is applied to each side.
 
-The function returns a named tuple with information about the calculated values:
+Optionally `leading` can be supplied, and it will be
+interpreted as a percentage of the final calculated font
+size.
+
+The function returns a named tuple with information about
+the calculated values:
 
 ```julialang
 (fontsize = 37.6, linecount = 5, finalpos = Point(-117.80621977990893, 92.60406061738831)
@@ -926,7 +935,8 @@ The function returns a named tuple with information about the calculated values:
 
 """
 function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 200;
-        horizontalmargin=3)
+        horizontalmargin=3,
+        leading=100)
     @layer begin
         bbox  = bbox - horizontalmargin
         width = boxwidth(bbox)
@@ -953,7 +963,7 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
             end
 
             # calculate expected end point
-            finishheight = fsize * length(lines)
+            finishheight = (fsize + (100/leading)) * length(lines)
 
             # does it fit?
             if finishheight < required_height && widestline <= boxwidth(bbox)
@@ -978,15 +988,13 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
             end
         end
         # use most recent textextents
-        # TODO allow for leading one day
-        fontsize(fsize)
+        fontsize(fsize * (100/leading))
         lines = filter!(!isempty, textlines(s, width))
         te = textextents(lines[1])
-        #fontsize(te[4])
         textpos = boxtopleft(bbox) + Point(0, te[4])
         for (linenumber, linetext) in enumerate(lines)
             text(linetext, textpos)
-            textpos = Point(textpos.x, textpos.y + te[4])
+            textpos = Point(textpos.x, textpos.y + (te[4] * (leading/100)))
         end
         # return top position, bottom position
     end

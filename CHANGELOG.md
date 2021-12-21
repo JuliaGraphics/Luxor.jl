@@ -1,5 +1,18 @@
 # Changelog
 
+## [v2.19.0] - forthcoming
+
+### Added
+
+- leading option for textfit()
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
 ## [v2.18.0] - 2021-12-18
 
 ### Added
