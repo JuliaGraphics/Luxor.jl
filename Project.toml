@@ -11,8 +11,9 @@ Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 FFMPEG = "c87230d0-a227-11e9-1b43-d7ebe4e7570a"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 Juno = "e5e0dc1b-0480-54bc-9374-aad01c23163d"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+MathTeXEngine = "0a4f8689-d25c-4efe-a92b-7142dfc1aa53"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 Rsvg = "c4c386cf-5103-5370-be45-f3a111cca3b8"
 
 [compat]
@@ -22,7 +23,8 @@ FFMPEG = "0.4"
 FileIO = "1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11"
 Juno = "0.7, 0.8"
 Rsvg = "1.0"
-Requires = "1.2"
+LaTeXStrings = "1"
+MathTeXEngine = "0.3.3"
 julia = "1.3"
 
 [extras]

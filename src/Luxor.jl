@@ -10,7 +10,9 @@ end
 """
 module Luxor
 
-using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG
+using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG, LaTeXStrings
+
+import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
@@ -64,6 +66,7 @@ include("graphlayout.jl")
 include("randompoints.jl")
 include("Style.jl")
 include("Path.jl")
+include("latex.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
@@ -216,13 +219,15 @@ export Drawing,
     # experimental
     layoutgraph, Style, applystyle,
 
-    tidysvg
+    tidysvg,
+
+    # latex
+    latextextsize, latexboundingbox
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0
 const cm = 28.3464566929
 const mm = 2.83464566929
-
 
 if VERSION >= v"1.1"   # work around https://github.com/JuliaLang/julia/issues/34121
     include("precompile.jl")
