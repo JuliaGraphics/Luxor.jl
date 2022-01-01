@@ -11,7 +11,7 @@ using MathTeXEngine
 
     for halign in [:left,:right,:center], valign in [:baseline, :bottom, :top, :middle]
         text(t, halign=halign, valign=valign)
-        @test round.(latextextsize(t);digits=2).== (37.78, 45.98)
+        @test round.(latextextsize(t);digits=2) == (37.78, 45.98)
         if halign === :left
             @test round(latexboundingbox(t, halign=halign, valign=valign)[1][1];digits=2) == 0.0
             @test round(latexboundingbox(t, halign=halign, valign=valign)[2][1];digits=2) == 37.78
