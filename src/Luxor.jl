@@ -10,9 +10,12 @@ end
 """
 module Luxor
 
-using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG, LaTeXStrings
+using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG
 
-import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
+using Requires
+# using LaTeXStrings
+
+# import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
@@ -66,9 +69,16 @@ include("graphlayout.jl")
 include("randompoints.jl")
 include("Style.jl")
 include("Path.jl")
-include("latex.jl")
+# include("latex.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
+
+function __init__()
+    @require MathTeXEngine = "0a4f8689-d25c-4efe-a92b-7142dfc1aa53" begin
+        @require LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f" include("latex.jl")
+    end
+end
+
 
 export Drawing,
     cm, inch, mm,
@@ -222,7 +232,7 @@ export Drawing,
     tidysvg,
 
     # latex
-    latextextsize, latexboundingbox
+    latextextsize, latexboundingbox, rawlatexboundingbox
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0
