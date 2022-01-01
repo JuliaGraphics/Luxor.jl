@@ -5,7 +5,7 @@ Helper function to align LaTeX text properly. Returns
 to be shifted depending on the type of alignment chosen
 and the dimensions of the text.
 """
-function texalign(halign, valign, textw, texth, font_size)
+function texalign(halign, valign, textw::Real, texth::Real, font_size)
     translate_x, translate_y = 0, 0
     if halign === :left
         translate_x = 0
@@ -27,6 +27,29 @@ function texalign(halign, valign, textw, texth, font_size)
     return translate_x, translate_y
 end
 
+function texalign(halign, valign, bottom_pt::Point, top_pt::Point, font_size)
+    textw = top_pt[1] - bottom_pt[1]
+    translate_x, translate_y = 0, 0
+
+    if halign === :left
+        translate_x = 0
+    elseif halign === :right
+        translate_x = -textw * font_size
+    elseif halign === :center
+        translate_x = -textw / 2 * font_size
+    end
+
+    if valign === :baseline
+        translate_y = 0
+    elseif valign === :bottom
+        translate_y = 0
+    elseif valign === :top
+        translate_y = -top_pt[2]* font_size
+    elseif valign === :middle
+        translate_y = (bottom_pt[2]-top_pt[2])* font_size / 2
+    end
+    return translate_x, translate_y
+end
 """
     rawlatexboundingbox(lstr::LaTeXString, font_size=1)
 Helper function that returns the coordinate points
@@ -95,8 +118,10 @@ function text(
     font_size = get_fontsize()
 
     textw, texth = latextextsize(lstr)
+    bottom_pt, top_pt = rawlatexboundingbox(lstr)
 
-    translate_x, translate_y = texalign(halign, valign, textw, texth, font_size)
+    translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
+    # translate_x, translate_y = texalign(halign, valign, textw, texth, font_size)
 
     # Writes text using ModernCMU font.
     for text in sentence

@@ -12,7 +12,7 @@ module Luxor
 
 using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG, LaTeXStrings
 
-import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound
+import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
