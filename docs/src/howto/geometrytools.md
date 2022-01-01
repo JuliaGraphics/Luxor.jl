@@ -316,13 +316,23 @@ nothing # hide
 
 ## Bounding boxes
 
-The `BoundingBox` type allows you to use rectangular extents to organize and interact with the 2D drawing area. A `BoundingBox` holds two points, the opposite corners of a bounding box.
+The `BoundingBox` type allows you to use rectangular extents
+to organize and interact with the 2D drawing area. A
+`BoundingBox` holds two points, the opposite corners of a
+bounding box.
 
-You can make a BoundingBox from the current drawing, two points, a text string, an existing polygon, or by modifying an existing one.
+You can make a BoundingBox from the current drawing, two
+points, a text string, an existing polygon, a stored path,
+or by modifying an existing one.
 
-`BoundingBox` without arguments defines an extent that encloses the drawing (assuming that the origin is at the center of the drawing—see [`origin`](@ref)). Use `centered=false` if the drawing origin is still at the top left corner.
+`BoundingBox` without arguments defines an extent that
+encloses the drawing (assuming that the origin is at the
+center of the drawing—see [`origin`](@ref)). Use
+`centered=false` if the drawing origin is still at the top
+left corner.
 
-This example draws circles at three points: at two of the drawing's corners and the midway point between them:
+This example draws circles at three points: at two of the
+drawing's corners and the midway point between them:
 
 ```@example
 using Luxor # hide

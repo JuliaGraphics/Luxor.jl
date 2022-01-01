@@ -6,6 +6,8 @@
 
 - leading option for textfit()
 
+- BoundingBox for stored Path objects
+
 ### Changed
 
 ### Removed
