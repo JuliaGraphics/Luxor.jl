@@ -183,3 +183,44 @@ function bezierpathtopath(bp::BezierPath)
     end
     return Path(path)
 end
+
+"""
+    BoundingBox(path::Path)
+
+Find bounding box of a stored Path (made with `storepath()`).
+"""
+function BoundingBox(path::Path)
+    # start with empty bbox, grow it using points in path
+    counter = 0
+    bbox = BoundingBox(O, O)
+    currentpoint = O
+    for p in path
+        counter += 1
+        if p isa PathMove
+            if isapprox(boxdiagonal(bbox), 0.0) # bbox empty?
+                bbox = BoundingBox(p.pt1, p.pt1)
+            else
+                bbox += BoundingBox(currentpoint, p.pt1)
+            end
+            currentpoint = p.pt1
+        elseif p isa PathLine
+            if isapprox(boxdiagonal(bbox), 0.0) # bbox empty?
+                bbox = BoundingBox(currentpoint, p.pt1)
+            else
+                bbox += BoundingBox(currentpoint, p.pt1)
+            end
+            currentpoint = p.pt1
+        elseif p isa PathCurve
+            # Wikipedia says a Bezier curve is completely contained within the
+            # convex hull of its control points, so we can just do this:
+            phbbox = BoundingBox(polyhull([currentpoint, p.pt1, p.pt2, p.pt3]))
+            if isapprox(boxdiagonal(bbox), 0.0) # bbox empty?
+                bbox = phbbox
+            else
+                bbox += phbbox
+            end
+            currentpoint = p.pt3
+        end
+    end
+    return bbox
+end
