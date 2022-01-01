@@ -1,5 +1,6 @@
 using LaTeXStrings
-import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
+import MathTeXEngine:
+    generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
@@ -25,9 +26,9 @@ function texalign(halign, valign, bottom_pt::Point, top_pt::Point, font_size)
     elseif valign === :bottom
         translate_y = 0
     elseif valign === :top
-        translate_y = -top_pt[2]* font_size
+        translate_y = -top_pt[2] * font_size
     elseif valign === :middle
-        translate_y = -(bottom_pt[2]+top_pt[2])* font_size / 2
+        translate_y = -(bottom_pt[2] + top_pt[2]) * font_size / 2
     end
     return translate_x, translate_y
 end
@@ -52,22 +53,22 @@ function rawlatexboundingbox(lstr::LaTeXString)
     return (bottom_pt, top_pt)
 end
 
-
 """
     latexboundingbox(lstr::LaTeXString, font_size=get_fontsize(); halign=:left, valign=:right)
 Returns the bounding box containing the latex text with
 `(Lower Left Point, Upper Right Point)`.
 Use `box(latex_bb(testext)...,:stroke)` to draw the bounding box.
 """
-function latexboundingbox(lstr::LaTeXString, font_size=get_fontsize(); halign=:left, valign=:right)
+function latexboundingbox(
+    lstr::LaTeXString, font_size=get_fontsize(); halign=:left, valign=:right
+)
     bottom_pt, top_pt = rawlatexboundingbox(lstr)
 
     translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
-    translate_pt = Point(translate_x,translate_y)
+    translate_pt = Point(translate_x, translate_y)
 
     return (bottom_pt * font_size + translate_pt, top_pt * font_size + translate_pt)
 end
-
 
 """
     latextextsize(lstr::LaTeXString)
@@ -80,15 +81,19 @@ function latextextsize(lstr::LaTeXString)
     return textw, texth
 end
 
-
-
 """
     text(lstr::LaTeXString, pt::Point; valign=:baseline, halign=:left, rotationfixed = false, angle=0, kwargs...)
 Draws LaTeX string using `MathTexEngine.jl`. Hence, uses ModernCMU as font family.
 When `rotationfixed = true`, the text will rotate around it's own axis, instead of rotating around `pt`.
 """
 function text(
-    lstr::LaTeXString, pt::Point; valign=:baseline, halign=:left, angle=0::Real, rotationfixed=false, kwargs...
+    lstr::LaTeXString,
+    pt::Point;
+    valign=:baseline,
+    halign=:left,
+    angle=0::Real,
+    rotationfixed=false,
+    kwargs...,
 )
 
     # Function from MathTexEngine
@@ -105,18 +110,17 @@ function text(
 
     # Writes text using ModernCMU font.
     for text in sentence
-            @layer begin
+        @layer begin
+            translate(pt)
+            if !rotationfixed
                 translate(translate_x, translate_y)
-                translate(pt)
-                if !rotationfixed
-                    rotate(angle)
-                else
-                    translate(
-                        (1 - cos(-angle)) * textw / 2 * font_size,
-                        font_size * textw / 2 * sin(-angle),
-                    )
-                    rotate(angle)
-                end
+                rotate(angle)
+            else
+                l_pt, r_pt = latexboundingbox(lstr, halign = halign, valign = valign)
+                translate((l_pt + r_pt)/2)
+                rotate(angle)
+                translate(Point(translate_x,translate_y)-(l_pt + r_pt)/2)
+            end
             if text[1] isa TeXChar
                 fontface(text[1].font.family_name)
                 fontsize(font_size * text[3])
