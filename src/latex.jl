@@ -31,6 +31,7 @@ function texalign(halign, valign, bottom_pt::Point, top_pt::Point, font_size)
     end
     return translate_x, translate_y
 end
+
 """
     rawlatexboundingbox(lstr::LaTeXString, font_size=1)
 Helper function that returns the coordinate points
@@ -53,7 +54,7 @@ end
 
 
 """
-    latexboundingbox(lstr::LaTeXString, font_size=1)
+    latexboundingbox(lstr::LaTeXString, font_size=get_fontsize(); halign=:left, valign=:right)
 Returns the bounding box containing the latex text with
 `(Lower Left Point, Upper Right Point)`.
 Use `box(latex_bb(testext)...,:stroke)` to draw the bounding box.
