@@ -113,8 +113,8 @@ function text(
         @layer begin
             translate(pt)
             if !rotationfixed
-                translate(translate_x, translate_y)
                 rotate(angle)
+                translate(translate_x, translate_y)
             else
                 l_pt, r_pt = latexboundingbox(lstr, halign = halign, valign = valign)
                 translate((l_pt + r_pt)/2)
