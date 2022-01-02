@@ -603,7 +603,7 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
             push!(currentline, " ")
         end
         wordextents =  textextents(word)
-        widthofword = wordextents[3] + wordextents[6]
+        widthofword = wordextents[3] + wordextents[5]
         isapprox(widthofword, 0.0, atol=0.1) && continue
         if (widthofword + spacewidth) > spaceleft
             # start a new line
