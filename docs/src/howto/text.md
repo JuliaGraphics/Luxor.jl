@@ -234,7 +234,7 @@ nothing # hide
 
 ![labels](../assets/figures/labels.png)
 
-## Text on a curve
+## Text on a circle
 
 Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
@@ -292,6 +292,42 @@ nothing # hide
 ```
 
 ![text centered on curve](../assets/figures/text-centered.png)
+
+## Text on a polygon
+
+Use [`textonpoly()`](@ref) to draw a string `str` that follows the route of a polygon.
+
+```@example
+using Luxor, Colors # hide
+
+d = @drawsvg begin # hide
+    origin() # hide
+    background("black") # hide
+    setmesh(mesh(
+        box(BoundingBox()),
+        [
+            RGB(0.2, 0.2, 0.99),
+            RGB(0.9, 0.2, 0.3),
+            RGB(0.9, 0.9, 0.4),
+            RGB(0.2, 0.8, 0.99),
+        ],
+    ))
+
+    fontsize(15)
+
+    for y = -250:20:250
+        points = [
+            Point(
+                65x,
+                y + 30sin(x + rescale(y, -260, 250, 0, 2π)),
+            ) for x = -2π:π/10:2π
+        ]
+        textonpoly("WAVES " ^ 15, points)
+    end
+
+end 800 500 # hide
+d # hide
+```
 
 ## Text clipping
 
