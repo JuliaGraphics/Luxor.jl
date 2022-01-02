@@ -574,3 +574,37 @@ You can supply a value for `maximumfontsize` as an optional argument, such that 
 !!! note
 
     This function doesn't always produce ideal results. Suggestions for improvements welcome!
+
+
+## Writing LaTeX
+
+If you wish to write mathematical equations, it's possible to write LaTeX strings. Luxor uses MathTeXEngine.jl
+to render `LaTeXStrings`, yet, MathTeXEngine.jl should be loaded separately by the user.
+!!! note
+
+    MathTeXEngine.jl is a package that enables rendering LaTeXStrings without requiring the user to have
+    a LaTeX compiler. In order to do this, the package uses fonts Computer Modern and New Computer Modern,
+    which should be installed by the user for the rendering to work. Note that all the fonts are
+    shipped with MathTeXEngine.jl, and can be found in the folder `assets`.
+
+
+```@example
+using Luxor
+using MathTeXEngine
+d = Drawing(200,200,:svg)
+origin(100,50)
+fontsize(18)
+t₁ = L"e^{i\pi} + 1 = 0"
+t₂ = L"e^x = \sum^\infty_{n=0} \frac{x^n}{n!} = \lim_{n\to\infty}(1+\frac{x}{n})^n"
+t₃ = L"cos(\theta)"
+text(t₁, halign=:center, valign=:baseline, angle=0)
+text(t₂, Point(0,20), halign=:center, valign=:top, angle=0)
+
+line(Point(0,132),Point(50,132),:stroke)
+line(Point(0,132),Point(50cos(π/4),132-50sin(π/4)),:stroke)
+text(t₃, Point(0,130), halign=:left, valign=:baseline, angle=-π/4, rotationfixed=false)
+finish()
+d
+```
+
+![textbox](../assets/figures/latexexample.svg)
