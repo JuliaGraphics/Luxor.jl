@@ -542,8 +542,9 @@ You can supply a value for `maximumfontsize` as an optional argument, such that 
 
 ## Writing LaTeX
 
-If you wish to write mathematical equations, it's possible to write LaTeX strings. Luxor uses MathTeXEngine.jl
-to render `LaTeXStrings`, yet, MathTeXEngine.jl should be loaded separately by the user.
+It's possible to write math equations with LaTeX by passing a `LaTeXString` to the `text` function.
+Luxor uses MathTeXEngine.jl to parse the `LaTeXString`, but, MathTeXEngine.jl should be loaded separately by the user.
+The reason for this is that Luxor uses Requires.jl to avoid hard dependency on MathTeXEngine.
 !!! note
 
     MathTeXEngine.jl is a package that enables rendering LaTeXStrings without requiring the user to have
@@ -571,4 +572,4 @@ finish()
 d
 ```
 
-![textbox](../assets/figures/latexexample.png)
+![textbox](../assets/figures/latexexample.svg)
