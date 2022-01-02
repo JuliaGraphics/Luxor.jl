@@ -167,7 +167,7 @@ export Drawing,
     textoutlines, textcurve, textcentred, textcentered,
     textright, textcurvecentred, textcurvecentered,
     get_fontsize, textwrap, textlines, splittext, textbox,
-    texttrack, textplace, textfit,
+    texttrack, textplace, textfit, textonpoly,
 
     setcolor, setopacity, sethue, setgrey, setgray,
     randomhue, randomcolor, @setcolor_str,

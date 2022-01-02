@@ -359,10 +359,10 @@ that need positioning around a circle. (A cheesy effect much beloved of hipster
 brands and retronauts.)
 
 `letter_spacing` adjusts the tracking/space between chars, tighter is (-),
-looser is (+)).  `baselineshift` moves the text up or down away from the
+looser is (+)). `baselineshift` moves the text up or down away from the
 baseline.
 
-textcurvecentred (UK spelling) is a synonym
+`textcurvecentred` (UK spelling) is a synonym.
 """
 function textcurvecentered(the_text, the_angle, the_radius, center::Point;
                            clockwise = true,
@@ -904,11 +904,11 @@ function textplace(txt::AbstractString, pos::Point, params::Vector)
 end
 
 """
-    textfit(string, bbox::BoundingBox, maxfontsize = 800;
+    textfit(str, bbox::BoundingBox, maxfontsize = 800;
          horizontalmargin=12,
          leading=100)
 
-Fit the string into the boundingbox by adjusting the font
+Fit the string `str` into the bounding box `bbox` by adjusting the font
 size and line breaks.
 
 Instead of using the current font size, a suitable value
@@ -918,15 +918,15 @@ will be calculated. You can specify the largest size in
 
 `horizontalmargin` is applied to each side.
 
-Optionally `leading` can be supplied, and it will be
+Optionally, `leading` can be supplied, and it will be
 interpreted as a percentage of the final calculated font
-size.
+size. The default value is 100, so no extra leading is used.
 
 The function returns a named tuple with information about
 the calculated values:
 
 ```julialang
-(fontsize = 37.6, linecount = 5, finalpos = Point(-117.80621977990893, 92.60406061738831)
+(fontsize = 37.6, linecount = 5, finalpos = Point(-117.43, 92.60)
 ```
 
 !!! note
@@ -999,4 +999,118 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
         # return top position, bottom position
     end
     return (fontsize=fsize, linecount=length(lines), finalpos=textpos)
+end
+
+"""
+    textonpoly(str, pgon;
+            tracking = 0,
+            startoffset = 0.0,
+            baselineshift = 0.0,
+            closed = false)
+
+Draw the text in `str` along the route of the polygon in
+`pgon`.
+
+The `closed` option determines whether the final edge of the
+polygon (joining the last point to the first) is included or
+not. Eg if you want to draw a string around all three sides
+of a triangle, you'd use `closed=true`:
+
+```julia
+textonpoly("mèdeis ageômetrètos eisitô mou tèn
+stegèn - let no one ignorant of geometry come under my roof
+",
+    ngon(O, 100, 3, vertices=true),
+    closed=true)
+```
+
+If `false`, only two sides are considered.
+
+Increase `tracking` from 0 to add space between the glyphs.
+
+The `startoffset` value is a normalized percentage that
+specifies the start position. So, to start drawing the text
+halfway along the polygon, specify a start offset value of
+0.5.
+
+Positive values for `baselineshift` move the characters
+upwards from the baseline.
+
+Returns a tuple with the number of characters drawn, and the
+last-used value of the index (between 0.0 and 1.0).
+"""
+function textonpoly(str, pgon;
+        tracking = 0,
+        startoffset = 0.0,
+        baselineshift = 0.0,
+        closed=false)
+    pdist = polydistances(pgon, closed = closed)
+    pgondist = polyperimeter(pgon, closed = closed)
+    currentindex = startoffset
+    characters_drawn = 1
+
+    # hack: we can't find the slope of the line at its end
+    # kludge: extend last segment
+    if !closed
+        push!(pgon, between(pgon[end - 1], pgon[end], 1.0001))
+    end
+    for (n, c) in enumerate(str)
+        glyph = string(c)
+        fs = get_fontsize()
+        if glyph == " "
+            # we need the dimensions of the space character
+            glyph_x_bearing,
+            glyph_y_bearing,
+            glyph_width,
+            glyph_height,
+            glyph_x_advance,
+            glyph_y_advance =
+                textextents("m m") .- textextents("mm")
+        else
+            glyph_x_bearing,
+            glyph_y_bearing,
+            glyph_width,
+            glyph_height,
+            glyph_x_advance,
+            glyph_y_advance = textextents(glyph)
+        end
+
+        currentindex += (glyph_width / 2 + glyph_x_bearing + tracking) / pgondist
+        # find slope of line at the current location
+        θ = slope(
+            last(polyportion(
+                pgon,
+                mod(currentindex - 0.0001, 1.0),
+                closed = false,
+                pdist=pdist
+            )),
+            last(polyportion(
+                pgon,
+                mod(currentindex + 0.0001, 1.0),
+                closed = false,
+                pdist=pdist
+            )),
+        )
+        # move to the position for the middle of the glyph
+        @layer begin
+            translate(last(polyportion(
+                pgon,
+                currentindex,
+                closed = closed,
+            )))
+            rotate(θ)
+            # draw the glyph
+            text(glyph, O + (0, -baselineshift), halign = :center)
+        end
+        # move on
+        currentindex +=
+            (glyph_width / 2 + glyph_x_bearing + tracking) /
+            pgondist
+
+        characters_drawn = n
+        if currentindex >= 1.0
+            break
+        end
+    end
+    return (characters_drawn, currentindex)
 end

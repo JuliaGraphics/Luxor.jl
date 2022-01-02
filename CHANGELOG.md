@@ -8,6 +8,8 @@
 
 - BoundingBox for stored Path objects
 
+- `textonpoly()`
+
 ### Changed
 
 ### Removed
