@@ -571,4 +571,4 @@ finish()
 d
 ```
 
-![textbox](../assets/figures/latexexample.svg)
+![textbox](../assets/figures/latexexample.png)
