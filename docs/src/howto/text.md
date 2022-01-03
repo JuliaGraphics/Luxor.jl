@@ -131,6 +131,52 @@ nothing # hide
 
 ![pro text placement](../assets/figures/pro-text-placement.png)
 
+## Writing LaTeX
+
+It's possible to write math equations in ``\LaTeX`` by
+passing a `LaTeXString` to the `text` function. Luxor uses
+[MathTeXEngine.jl](https://github.com/Kolaru/MathTeXEngine.jl)
+to parse the `LaTeXString`. You should load MathTeXEngine.jl
+(`using MathTeXEngine`) before accessing this feature.
+
+!!! note
+
+    MathTeXEngine.jl is a package that renders
+    `LaTeXString`s without requiring a ``\LaTeX`` compiler.
+    The package uses the fonts _Computer Modern_ and _New
+    Computer Modern_. They're included with the
+    MathTeXEngine package, and you can find them in your
+    `julia` folder in
+    `packages/MathTeXEngine/.../assets/fonts`. You should
+    make sure these have been installed before running
+    Luxor and writing ``\LaTeX`` strings.
+
+```@example
+using Luxor
+using MathTeXEngine
+d = Drawing(600, 400,:svg) # hide
+origin() # hide
+background("grey6")
+fontsize(26)
+sethue("white")
+t₁ = L"e^{i\pi} + 1 = 0"
+t₂ = L"e^x = \sum^\infty_{n=0} \frac{x^n}{n!} = \lim_{n\to\infty}(1+\frac{x}{n})^n"
+t₃ = L"cos(\theta)"
+
+text(t₁, Point(0, -100), halign=:center, valign=:baseline, angle=0)
+text(t₂, Point(0, -20), halign=:center, valign=:top, angle=0)
+
+line(Point(0, 132), Point(50, 132), :stroke)
+line(Point(0, 132), Point(50cos(π/4), 132 - 50sin(π/4)), :stroke)
+
+fontsize(18)
+text(t₃, Point(0, 120), halign = :left, valign = :baseline, angle = -π/4, rotationfixed = false)
+finish() # hide
+nothing # hide
+```
+
+![textbox](../assets/figures/latexexample.svg)
+
 ## Notes on fonts
 
 Fonts are loaded when you first start using Luxor/Cairo in a Julia session. This partly explains why starting a Luxor/Cairo session can take a few seconds.
@@ -559,8 +605,7 @@ rh = 750 .* [4//11, 2//11, 4//11, 1//11]
 cw = 750 .* [6//11, 1//11, 3//11, 1//11]
 cells = Table(rh, cw)
 for (pos, n) in cells
-    r = rand()/2
-    setgrey(r)
+    setgrey(rand()/2)
     box(cells, n, :fill)
     setgrey(1)
     textfit("The sound of one hand clapping", BoundingBox(box(cells, n)))
@@ -569,43 +614,12 @@ finish() # hide
 d # hide
 ```
 
-You can supply a value for `maximumfontsize` as an optional argument, such that the text never exceeds that size (although it will probably be smaller).
+You can supply a value for `maximumfontsize` as an optional
+argument, such that the text never exceeds that size
+(although it will probably be smaller).
 
 !!! note
 
-    This function doesn't always produce ideal results. Suggestions for improvements welcome!
-
-
-## Writing LaTeX
-
-It's possible to write math equations with LaTeX by passing a `LaTeXString` to the `text` function.
-Luxor uses MathTeXEngine.jl to parse the `LaTeXString`, but, MathTeXEngine.jl should be loaded separately by the user.
-The reason for this is that Luxor uses Requires.jl to avoid hard dependency on MathTeXEngine.
-!!! note
-
-    MathTeXEngine.jl is a package that enables rendering LaTeXStrings without requiring the user to have
-    a LaTeX compiler. In order to do this, the package uses fonts Computer Modern and New Computer Modern,
-    which should be installed by the user for the rendering to work. Note that all the fonts are
-    shipped with MathTeXEngine.jl, and can be found in the folder `assets`.
-
-
-```@example
-using Luxor
-using MathTeXEngine
-d = Drawing(200,200,:svg)
-origin(100,50)
-fontsize(18)
-t₁ = L"e^{i\pi} + 1 = 0"
-t₂ = L"e^x = \sum^\infty_{n=0} \frac{x^n}{n!} = \lim_{n\to\infty}(1+\frac{x}{n})^n"
-t₃ = L"cos(\theta)"
-text(t₁, halign=:center, valign=:baseline, angle=0)
-text(t₂, Point(0,20), halign=:center, valign=:top, angle=0)
-
-line(Point(0,132),Point(50,132),:stroke)
-line(Point(0,132),Point(50cos(π/4),132-50sin(π/4)),:stroke)
-text(t₃, Point(0,130), halign=:left, valign=:baseline, angle=-π/4, rotationfixed=false)
-finish()
-d
-```
-
-![textbox](../assets/figures/latexexample.svg)
+    The algorithm used by this function doesn't always
+    produce ideal results. Suggestions for improvements
+    welcome!

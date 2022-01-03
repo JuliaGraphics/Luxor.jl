@@ -5,12 +5,13 @@
 """
     text(str)
     text(str, pos)
-    text(str, pos, angle=pi/2)
+    text(str, pos, angle = pi/2)
     text(str, x, y)
-    text(str, pos, halign=:left)
-    text(str, valign=:baseline)
-    text(str, valign=:baseline, halign=:left)
-    text(str, pos, valign=:baseline, halign=:left)
+    text(str, pos, halign = :left)
+    text(str, valign = :baseline)
+    text(str, valign = :baseline, halign = :left)
+    text(str, pos, valign = :baseline, halign = :left)
+    text(latexstr, pos, valign = :baseline, halign = :left, rotationfixed = false, angle = 0)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
 string at the point. If you omit the point, it's placed at the current `0/0`.

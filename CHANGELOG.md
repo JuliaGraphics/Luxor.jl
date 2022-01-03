@@ -4,11 +4,13 @@
 
 ### Added
 
+- LaTeX strings for text() - amazing work by @davibarreira, @Kolaru, and @TheCedarPrince - Thanks!
+
 - leading option for textfit()
 
 - BoundingBox for stored Path objects
 
-- `textonpoly()`
+- `textonpoly()` can put text the route of a polygon
 
 ### Changed
 

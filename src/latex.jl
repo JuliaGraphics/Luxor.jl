@@ -82,9 +82,13 @@ function latextextsize(lstr::LaTeXString)
 end
 
 """
-    text(lstr::LaTeXString, pt::Point; valign=:baseline, halign=:left, rotationfixed = false, angle=0, kwargs...)
-Draws LaTeX string using `MathTexEngine.jl`. Hence, uses ModernCMU as font family.
-When `rotationfixed = true`, the text will rotate around it's own axis, instead of rotating around `pt`.
+    text(lstr::LaTeXString, pt::Point; valign=:baseline,
+    halign=:left, rotationfixed = false, angle=0, kwargs...)
+
+Draws LaTeX string using `MathTexEngine.jl`. Hence, uses
+ModernCMU as font family. When `rotationfixed = true`,
+the text will rotate around its own axis, instead of
+rotating around `pt`.
 """
 function text(
     lstr::LaTeXString,

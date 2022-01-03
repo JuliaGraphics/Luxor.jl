@@ -38,10 +38,10 @@ makedocs(
             "Basic concepts"               =>  "explanation/basics.md",
             "Paths vs Polygon"             =>  "explanation/pathspolygons.md",
             "Perfect pixels and antialising"  =>  "explanation/perfectpixels.md",
-            "Transforms and matrices"      =>  "explanation/transforms.md",
+           "Transforms and matrices"      =>  "explanation/transforms.md",
             "Image matrix"                 =>  "explanation/imagematrix.md",
             "Luxor and Cairo"              =>  "explanation/luxorcairo.md",
-            "Contributing"                 =>  "explanation/contributing.md",
+           "Contributing"                 =>  "explanation/contributing.md",
             ],
         "Reference" => [
             "Alphabetical function list"   =>  "reference/functionindex.md"
