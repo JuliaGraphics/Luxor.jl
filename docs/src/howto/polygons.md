@@ -990,6 +990,8 @@ findfirst(pt -> isequal(pt.y, first(extrema(pt -> pt.y, pts))), pts)
 
 A convex hull of a polygon is the subset of points such that, when connected with straight lines, the resulting shape contains every point of the polygon.
 
+Use [`polyhull`](@ref) to find the convex hull of an array of points.
+
 ```@example
 using Luxor # hide
 d = Drawing(800, 500, :svg) # hide

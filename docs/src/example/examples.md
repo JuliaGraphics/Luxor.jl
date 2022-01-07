@@ -261,3 +261,58 @@ A = rand(1:99, 5, 8)
     drawmatrix(A, cellsize = 10 .* size(A))
 end
 ```
+
+## Triangulations
+
+This example shows how a Delaunay triangulation of a set of
+random points can be used to derive a set of Voronoi cells.
+
+```@example
+using Luxor, ColorSchemes, Random
+Random.seed!(42)
+
+@drawsvg begin
+    background("black")
+    setlinejoin("bevel")
+    verts = randompointarray(BoundingBox(), 40)
+
+    triangles = polytriangulate(verts)
+
+    @layer begin
+        for tri in triangles
+            sethue(get(ColorSchemes.vangogh, rand()))
+            poly(tri, :stroke, close=true)
+        end
+    end
+
+    dict = Dict{Point, Vector{Int}}()
+
+    for (n, t) in enumerate(triangles)
+        for pt in t
+            if haskey(dict, pt)
+                push!(dict[pt], n)
+            else
+                dict[pt] = [n]
+            end
+        end
+    end
+
+    setopacity(0.9)
+    setline(3)
+    for v in verts
+        hull = Point[]
+        # vertex v belongs in triangle tri
+        tris = dict[v]
+        for tri in tris
+            push!(hull, trianglecenter(triangles[tri]...))
+        end
+        sethue(get(ColorSchemes.vangogh, rand()))
+        if length(hull) >= 3
+            ph = polyhull(hull)
+            poly(ph, :fillpreserve, close=true)
+            sethue("black")
+            strokepath()
+        end
+    end
+end 800 500
+```
