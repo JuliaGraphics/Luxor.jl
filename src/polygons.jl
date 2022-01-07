@@ -1565,7 +1565,22 @@ function polyhull(points)
 	# Given a set of points on the plane, find a point with
 	# the highest Y coordinate value.
 
-	_, anchorindex = findmax(pt -> pt.y, points)
+    if VERSION > v"1.5.0"
+        _, anchorindex = findmax(pt -> pt.y, points)
+    else
+        anchorindex  = let
+            maxyindex = 1
+            maxpt = boxtopcenter(BoundingBox(points))
+            for (n, pt) in enumerate(points)
+                if pt.y > maxpt.y
+                    maxyindex = n
+                    maxpt = pt
+                end
+            end
+             maxyindex
+        end
+    end
+    
     anchor = points[anchorindex]
 
     # Sort all the points based on the polar angle they make
