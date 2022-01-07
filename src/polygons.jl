@@ -1520,48 +1520,81 @@ function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
     return trianglelist
 end
 
+# convex hull
+function _polar_angle(pt1, pt2)
+    return atan(pt1.y - pt2.y, pt1.x - pt2.x)
+end
+
+function _polarsortpoints(anchor, pt1, pt2)
+	if _polar_angle(anchor, pt1) < _polar_angle(anchor, pt2)
+		return true
+	elseif _polar_angle(anchor, pt1) > _polar_angle(anchor, pt2)
+		return false
+	elseif isapprox(_polar_angle(anchor, pt1), _polar_angle(anchor, pt2))
+		if distance(anchor, pt1) < distance(anchor, pt2)
+			return true
+		else
+			return false
+		end
+	else
+		return false
+	end
+end
+
+function _ccw(a, b, c)
+    return ((b.x - a.x) * (c.y - a.y)) - ((c.x - a.x) * (b.y - a.y))
+end
+
 """
-    polyhull(pts)
+polyhull(pts)
 
 Find all points in `pts` that form a convex hull around the
 points in `pts`, and return them.
 
-This uses the Jarvis March "Gift wrapping" algorithm.
+This uses the Graham Scan algorithm.
+
+TODO : there might be bugs
 """
-function polyhull(points::Vector{Point})
-    result = Point[]
+function polyhull(points)
+	if length(points) == 3
+		return points
+	end
+	if length(points) < 3
+		throw(error("polyhull(): not enough points"))
+	end
+	# Given a set of points on the plane, find a point with
+	# the highest Y coordinate value.
 
-    # find the left-most x using just one scan of points
-    # otherwise we could use extrema and findfirst
+	_, anchorindex = findmax(pt -> pt.y, points)
+    anchor = points[anchorindex]
 
-    leftmostx = 0.0
-    startpointindex = 1
-    for i in eachindex(points)
-        if  leftmostx < points[i].x
-            leftmostx = points[i].x
-            startpointindex = i
-        end
+    # Sort all the points based on the polar angle they make
+    # with the anchor point. If two points make the same
+    # angle with Anchor Point P, then sort it by distance
+    # from P
+
+    sortedpts = sort(
+        points,
+        lt = (pt1, pt2) -> _polarsortpoints(anchor, pt1, pt2))
+
+    # Initialize the convex hull array with the anchor point and
+    # the first element in the sorted array.
+
+    convex_hull = [anchor]
+
+    # Iterate over each point in the sorted array and see if
+    # traversing to a point from the previous two points makes
+    # a clockwise or a counter-clockwise direction. If
+    # clockwise then reject the point and move on to the next
+    # point. Continue this till the end of the sorted array.
+
+    for point in sortedpts[2:end]
+		if length(convex_hull) > 2
+        	while _ccw(convex_hull[end-1], convex_hull[end], point) <= 0.0
+            	pop!(convex_hull) # backtrack
+        	end
+		end
+		push!(convex_hull, point)
     end
-
-    Q = startpointindex
-    push!(result, points[startpointindex])
-
-    while true
-        cursor = mod1(Q + 1, length(points))
-        for i in eachindex(points)
-            if i == Q
-                continue
-            end
-            θ = anglethreepoints(points[Q], points[i], points[cursor])
-            if θ >= π # heading right
-                cursor = i
-            end
-        end
-        Q = cursor
-        if Q == startpointindex
-            break
-        end
-        push!(result, points[cursor])
-    end
-    return result
+    return convex_hull
 end

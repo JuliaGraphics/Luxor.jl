@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.20.0] - forthcoming
+
+### Added
+
+### Changed
+
+- switched to Graham Scan algorithm for polyhull()
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v2.19.0] - forthcoming
 
 ### Added
