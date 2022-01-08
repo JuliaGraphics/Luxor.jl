@@ -268,12 +268,13 @@ This example shows how a Delaunay triangulation of a set of
 random points can be used to derive a set of Voronoi cells.
 
 ```@example
-using Luxor, ColorSchemes, Random
-Random.seed!(42)
+# Inspired by @TheCedarPrince! 
+using Luxor, ColorSchemes, Random # hide
+Random.seed!(42) # hide
 
-@drawsvg begin
-    background("black")
-    setlinejoin("bevel")
+d = @drawsvg begin # hide
+    background("black") # hide
+    setlinejoin("bevel") # hide
     verts = randompointarray(BoundingBox(), 40)
 
     triangles = polytriangulate(verts)
@@ -314,5 +315,6 @@ Random.seed!(42)
             strokepath()
         end
     end
-end 800 500
+end 800 500 # hide
+d # hide
 ```
