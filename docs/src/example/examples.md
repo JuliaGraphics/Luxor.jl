@@ -268,8 +268,8 @@ This example shows how a Delaunay triangulation of a set of
 random points can be used to derive a set of Voronoi cells.
 
 ```@example
-# Inspired by @TheCedarPrince! 
-using Luxor, ColorSchemes, Random # hide
+# Inspired by @TheCedarPrince!
+using Luxor, Colors, Random # hide
 Random.seed!(42) # hide
 
 d = @drawsvg begin # hide
@@ -281,7 +281,7 @@ d = @drawsvg begin # hide
 
     @layer begin
         for tri in triangles
-            sethue(get(ColorSchemes.vangogh, rand()))
+            sethue(HSB(rand(120:320), 0.7, 0.7))
             poly(tri, :stroke, close=true)
         end
     end
@@ -307,7 +307,7 @@ d = @drawsvg begin # hide
         for tri in tris
             push!(hull, trianglecenter(triangles[tri]...))
         end
-        sethue(get(ColorSchemes.vangogh, rand()))
+        sethue(HSB(rand(120:320), 0.7, 0.7))
         if length(hull) >= 3
             ph = polyhull(hull)
             poly(ph, :fillpreserve, close=true)

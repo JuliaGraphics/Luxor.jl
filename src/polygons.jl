@@ -1526,19 +1526,19 @@ function _polar_angle(pt1, pt2)
 end
 
 function _polarsortpoints(anchor, pt1, pt2)
-	if _polar_angle(anchor, pt1) < _polar_angle(anchor, pt2)
-		return true
-	elseif _polar_angle(anchor, pt1) > _polar_angle(anchor, pt2)
-		return false
-	elseif isapprox(_polar_angle(anchor, pt1), _polar_angle(anchor, pt2))
-		if distance(anchor, pt1) < distance(anchor, pt2)
-			return true
-		else
-			return false
-		end
-	else
-		return false
-	end
+    if _polar_angle(anchor, pt1) < _polar_angle(anchor, pt2)
+    return true
+    elseif _polar_angle(anchor, pt1) > _polar_angle(anchor, pt2)
+    return false
+    elseif isapprox(_polar_angle(anchor, pt1), _polar_angle(anchor, pt2))
+    if distance(anchor, pt1) < distance(anchor, pt2)
+    return true
+    else
+    return false
+    end
+    else
+    return false
+    end
 end
 
 function _ccw(a, b, c)
@@ -1556,14 +1556,13 @@ This uses the Graham Scan algorithm.
 TODO : there might be bugs
 """
 function polyhull(points)
-	if length(points) == 3
-		return points
-	end
-	if length(points) < 3
-		throw(error("polyhull(): not enough points"))
-	end
-	# Given a set of points on the plane, find a point with
-	# the highest Y coordinate value.
+    if length(points) == 3
+        return points
+    end
+    if length(points) < 3
+        throw(error("polyhull(): not enough points"))
+    end
+    # find a point with the highest Y coordinate value
 
     if VERSION > v"1.5.0"
         _, anchorindex = findmax(pt -> pt.y, points)
@@ -1577,39 +1576,32 @@ function polyhull(points)
                     maxpt = pt
                 end
             end
-             maxyindex
+            maxyindex
         end
     end
-    
+
     anchor = points[anchorindex]
 
-    # Sort all the points based on the polar angle they make
-    # with the anchor point. If two points make the same
-    # angle with Anchor Point P, then sort it by distance
-    # from P
+    # sort the points based on the polar angle they make
+    # with the anchor point
 
-    sortedpts = sort(
-        points,
+    sortedpts = sort(points,
         lt = (pt1, pt2) -> _polarsortpoints(anchor, pt1, pt2))
 
-    # Initialize the convex hull array with the anchor point and
-    # the first element in the sorted array.
+    # initialize the convex hull with the anchor point
 
     convex_hull = [anchor]
 
-    # Iterate over each point in the sorted array and see if
-    # traversing to a point from the previous two points makes
-    # a clockwise or a counter-clockwise direction. If
-    # clockwise then reject the point and move on to the next
-    # point. Continue this till the end of the sorted array.
+    # see if traversing to a point from the previous two points is
+    # clockwise; reject and backtrack or continue
 
     for point in sortedpts[2:end]
-		if length(convex_hull) > 2
-        	while _ccw(convex_hull[end-1], convex_hull[end], point) <= 0.0
-            	pop!(convex_hull) # backtrack
-        	end
-		end
-		push!(convex_hull, point)
+        if length(convex_hull) > 2
+            while _ccw(convex_hull[end-1], convex_hull[end], point) <= 0.0
+                pop!(convex_hull) # backtrack
+            end
+        end
+        push!(convex_hull, point)
     end
     return convex_hull
 end
