@@ -1,10 +1,15 @@
 # Changelog
 
-## [v2.20.0] - forthcoming
+## [v????] - forthcoming
 
 ### Added
 
+- dependency on LatexStrings
+
 ### Changed
+
+- changed return values of circle/ellipse/rect to boundingbox pts
+(for @TheCedarPrince)
 
 - switched to Graham Scan algorithm for polyhull()
 
