@@ -78,6 +78,8 @@ function BoundingBox(pointlist::Array{Point,1})
     )
 end
 
+BoundingBox(pts::NTuple{2, Point}) = BoundingBox(pts...)
+
 """
     BoundingBox(str::AbstractString)
 

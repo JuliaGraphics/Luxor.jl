@@ -5,6 +5,8 @@
 Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and then
 do an action.
 
+Returns a tuple of two points, the corners of a bounding box that encloses the rectangle.
+
 See `box()` for more ways to do similar things, such as supplying two opposite corners,
 placing by centerpoint and dimensions.
 """
@@ -15,6 +17,7 @@ function rect(xmin::Real, ymin::Real, w::Real, h::Real;
     end
     Cairo.rectangle(get_current_cr(), xmin, ymin, w, h)
     do_action(action)
+    return Point(xmin, ymin), Point(xmin + w, ymin + h)
 end
 
 rect(xmin::Real, ymin::Real, w::Real, h::Real, action::Symbol) = rect(xmin, ymin, w, h, action = action)

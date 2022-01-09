@@ -7,6 +7,7 @@ function circle(x::Real, y::Real, r::Real;
     end
     Cairo.arc(get_current_cr(), x, y, r, 0, 2pi)
     do_action(action)
+    return (Point(x, y) - (r, r), Point(x, y) + (r, r))
 end
 
 """
@@ -16,6 +17,8 @@ end
 Make a circle of radius `r` centered at 'centerpoint'.
 
 `action` is one of the actions applied by `do_action`, defaulting to `:none`.
+
+Returns a tuple of two points, the corners of a bounding box that encloses the circle.
 
 You can also use `ellipse()` to draw circles and place them by their centerpoint.
 """
@@ -103,6 +106,7 @@ function ellipse(xc::Real, yc::Real, w::Real, h::Real;
     curve(xe, ym + oy, xm + ox, ye, xm, ye)
     curve(xm - ox, ye, x, ym + oy, x, ym)
     do_action(action)
+    return (Point(xc, yc) - (w/2, h/2), Point(xc, yc) + (w/2, h/2))
 end
 
 ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
@@ -113,6 +117,8 @@ ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
     ellipse(centerpoint::Point, w, h; action)
 
 Make an ellipse, centered at `centerpoint`, with width `w`, and height `h`.
+
+Returns a tuple of two points, the corners of a bounding box that encloses the ellipse. 
 """
 ellipse(c::Point, w::Real, h::Real; action=:none) = ellipse(c.x, c.y, w, h, action=action)
 
