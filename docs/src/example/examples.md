@@ -262,6 +262,26 @@ A = rand(1:99, 5, 8)
 end
 ```
 
+## Simple ``\LaTeX`` equations
+
+If you have the right fonts installed, you can easily draw simple ``\LaTeX`` equations.
+
+```julia
+background("khaki")
+f(t) = Point(4cos(t) + 2cos(5t), 4sin(t) + 2sin(5t))
+setline(15)
+fontsize(35)
+@layer begin
+    setopacity(0.4)
+    sethue("purple")
+    poly(20f.(range(0, 2π, length=160)), :stroke)
+end
+sethue("grey5")
+text(L"f(t) = [4cos(t) + 2cos(5t), 4sin(t) + 2sin(5t)]", halign=:center)
+```
+
+![LaTEX](../assets/figures/latexequation.svg)
+
 ## Triangulations
 
 This example shows how a Delaunay triangulation of a set of
@@ -273,48 +293,48 @@ using Luxor, Colors, Random # hide
 Random.seed!(42) # hide
 
 d = @drawsvg begin # hide
-    background("black") # hide
-    setlinejoin("bevel") # hide
-    verts = randompointarray(BoundingBox(), 40)
+background("black") # hide
+setlinejoin("bevel") # hide
+verts = randompointarray(BoundingBox(), 40)
 
-    triangles = polytriangulate(verts)
+triangles = polytriangulate(verts) # create Delaunay
 
-    @layer begin
-        for tri in triangles
-            sethue(HSB(rand(120:320), 0.7, 0.7))
-            poly(tri, :stroke, close=true)
-        end
-    end
-
-    dict = Dict{Point, Vector{Int}}()
-
-    for (n, t) in enumerate(triangles)
-        for pt in t
-            if haskey(dict, pt)
-                push!(dict[pt], n)
-            else
-                dict[pt] = [n]
-            end
-        end
-    end
-
-    setopacity(0.9)
-    setline(3)
-    for v in verts
-        hull = Point[]
-        # vertex v belongs in triangle tri
-        tris = dict[v]
-        for tri in tris
-            push!(hull, trianglecenter(triangles[tri]...))
-        end
+@layer begin
+    for tri in triangles
         sethue(HSB(rand(120:320), 0.7, 0.7))
-        if length(hull) >= 3
-            ph = polyhull(hull)
-            poly(ph, :fillpreserve, close=true)
-            sethue("black")
-            strokepath()
+        poly(tri, :stroke, close=true)
+    end
+end
+
+dict = Dict{Point, Vector{Int}}()
+
+for (n, t) in enumerate(triangles)
+    for pt in t
+        if haskey(dict, pt)
+            push!(dict[pt], n)
+        else
+            dict[pt] = [n]
         end
     end
+end
+
+setopacity(0.9)
+setline(3)
+for v in verts
+    hull = Point[]
+    tris = dict[v]
+    # vertex v belongs to all triangles tris
+    for tri in tris
+        push!(hull, trianglecenter(triangles[tri]...))
+    end
+    sethue(HSB(rand(120:320), 0.7, 0.7))
+    if length(hull) >= 3
+        ph = polyhull(hull)
+        poly(ph, :fillpreserve, close=true)
+        sethue("black")
+        strokepath()
+    end
+end
 end 800 500 # hide
 d # hide
 ```

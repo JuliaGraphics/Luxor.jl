@@ -1,7 +1,6 @@
-# simple benchmars
+# simple benchmarks
 
-using Luxor, BenchmarkTools
-
+using Luxor
 using BenchmarkTools
 
 function bm1()
