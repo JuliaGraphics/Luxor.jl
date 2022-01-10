@@ -28,9 +28,9 @@ function triangle_tests(fname)
         circle.((orthocenter, incenter, center, circumcenter), 2, :fill)
 
         # all centers are the same
-        @test isapprox(orthocenter, incenter)
-        @test isapprox(orthocenter, center)
-        @test isapprox(orthocenter, circumcenter)
+        @test isapprox(orthocenter, incenter, atol=1.0e-12)
+        @test isapprox(orthocenter, center,  atol=1.0e-12)
+        @test isapprox(orthocenter, circumcenter, atol=1.0e-12)
     end
 
     @layer begin

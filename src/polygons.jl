@@ -470,6 +470,8 @@ shortest side, the arc can't be drawn at its full radius and is therefore drawn 
 possible (as large as the shortest side allows).
 
 The `debug` option also draws the construction circles at each corner.
+
+TODO Return something more useful than a Boolean.
 """
 function polysmooth(points::Array{Point, 1}, radius, action::Symbol; debug=false)
     temppath = Tuple[]

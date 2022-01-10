@@ -68,10 +68,10 @@ end
 
 isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
 
-isapprox(p1::Point, p2::Point)        = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
-
 # allow kwargs
-isapprox(p1::Point, p2::Point; kwargs...) = isapprox(p1.x, p2.x; kwargs...) && (isapprox(p1.y, p2.y; kwargs...))
+function Base.isapprox(p1::Point, p2::Point; atol=1e-6, kwargs...)
+    return isapprox(p1.x, p2.x; atol=atol, kwargs...) && isapprox(p1.y, p2.y; atol=atol, kwargs...)
+end
 
 isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
 !=(p1::Point, p2::Point)              = !isequal(p1, p2)

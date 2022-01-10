@@ -17,7 +17,7 @@ function rotate_points_test(fname)
 
     # they should be equal
     for pr in zip(pts, pts1)
-        @test first(pr) ≈ last(pr)
+        @test isapprox(first(pr), last(pr), atol=1.0e-12)
     end
 
     # now rotate each point by π
