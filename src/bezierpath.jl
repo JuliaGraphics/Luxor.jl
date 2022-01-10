@@ -183,6 +183,8 @@ end
 
 Draw the Bézier path, and apply the action, such as `:none`, `:stroke`, `:fill`,
 etc. By default the path is closed.
+
+TODO Return something more useful than a Boolean.
 """
 function drawbezierpath(bezierpath::BezierPath, action; close=true)
     move(bezierpath[1].p1)
@@ -206,6 +208,8 @@ drawbezierpath(bezierpath; action=:none, close=true) =
 
 Draw the Bézier path segment, and apply the action, such as `:none`, `:stroke`,
 `:fill`, etc. By default the path is open.
+
+TODO Return something more useful than a Boolean.
 """
 function drawbezierpath(bps::BezierPathSegment,
     action=:none; close=false)

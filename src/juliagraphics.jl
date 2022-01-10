@@ -56,6 +56,8 @@ julialogo(action=:path)
 sethue("red")
 strokepath()
 ```
+
+TODO Return something more useful than a Boolean.
 """
 function julialogo(;
         action    = :fill,
@@ -68,7 +70,10 @@ function julialogo(;
     end
 
     # save current color
-    r, g, b, a = Luxor.get_current_redvalue(), Luxor.get_current_greenvalue(), Luxor.get_current_bluevalue(), Luxor.get_current_alpha()
+    r, g, b, a = Luxor.get_current_redvalue(),
+                    Luxor.get_current_greenvalue(),
+                    Luxor.get_current_bluevalue(),
+                    Luxor.get_current_alpha()
 
     # "j" without dot
     _j  =  [

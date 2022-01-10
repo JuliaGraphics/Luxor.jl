@@ -185,6 +185,8 @@ end
         startnewpath=true)
 
 Convert the text in string `s` to paths and apply the action.
+
+TODO Return something more useful than a Boolean.
 """
 function textpath(s::AbstractString, pos::Point;
         action=:none,
@@ -234,6 +236,8 @@ Convert text to polygons and apply `action`.
 By default this function discards any current path, unless you use `startnewpath=false`
 
 See also `textpath()`.
+
+TODO Return something more useful than a Boolean.
 """
 function textoutlines(s::AbstractString, pos::Point;
     action=:none,

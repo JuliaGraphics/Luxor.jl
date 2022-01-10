@@ -13,7 +13,7 @@
 
 - switched to Graham Scan algorithm for polyhull()
 
-- isapprox allow kwargs
+- allow use to change tolerance for isapprox()
 
 ### Removed
 

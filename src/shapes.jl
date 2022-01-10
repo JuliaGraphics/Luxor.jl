@@ -278,6 +278,8 @@ function box(centerpoint::Point, width, height, cornerradii::Array;
     closepath()
     grestore()
     do_action(action)
+    return Point(centerpoint.x - width/2, centerpoint.y - height/2),
+           Point(centerpoint.x + width/2, centerpoint.y + height/2)
 end
 
 box(centerpoint::Point, width, height, cornerradii::Array, action::Symbol) =

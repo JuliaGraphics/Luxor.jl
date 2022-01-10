@@ -118,7 +118,7 @@ ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
 
 Make an ellipse, centered at `centerpoint`, with width `w`, and height `h`.
 
-Returns a tuple of two points, the corners of a bounding box that encloses the ellipse. 
+Returns a tuple of two points, the corners of a bounding box that encloses the ellipse.
 """
 ellipse(c::Point, w::Real, h::Real; action=:none) = ellipse(c.x, c.y, w, h, action=action)
 
@@ -284,6 +284,7 @@ end
 
 Draw an annular sector centered at `centerpoint`.
 
+TODO - return something more useful than a Boolean
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real,
                 startangle::Real, endangle::Real;
@@ -329,6 +330,8 @@ centered at `centerpoint`.
 
 TODO: The results aren't 100% accurate at the moment. There are small
 discontinuities where the curves join.
+
+TODO - return something more useful than a Boolean
 
 The cornerradius is reduced from the supplied value if neceesary to prevent overshoots.
 """
@@ -424,6 +427,8 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, c
 
 Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
 are measured clockwise.
+
+TODO - return something more useful than a Boolean
 """
 function pie(x::Real, y::Real, radius::Real, startangle::Real, endangle::Real;
         action=:none)
@@ -489,6 +494,8 @@ option to draw the circle clockwise rather than
 `circle`'s counterclockwise.
 
 The magic value, `kappa`, is `4.0 * (sqrt(2.0) - 1.0) / 3.0`.
+
+Return two points, the corners of a bounding box.
 """
 function circlepath(center::Point, radius;
         action=:none,
@@ -547,6 +554,7 @@ function circlepath(center::Point, radius;
         easttonorth(center, radius, kappa)
     end
     do_action(action)
+    return (center - (radius, radius), center + (radius, radius))
 end
 
 circlepath(center::Point, radius, action::Symbol; reversepath=false, kappa = 0.5522847498307936) = circlepath(center, radius;

@@ -138,6 +138,8 @@ function.
 
 By default, `startnewpath=true`, which starts a new path,
 discarding any existing path contents.
+
+TODO Return something more useful than a Boolean!
 """
 function drawpath(cp::Path; action=:none, startnewpath=true)
     startnewpath && newpath()
