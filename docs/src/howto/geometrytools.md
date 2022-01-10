@@ -170,7 +170,15 @@ Functions that help with geometry include [`distance`](@ref), [`getnearestpointo
 
 ## Triangle centers
 
-To find the center  of a triangle, use one of [`trianglecircumcenter`](@ref), [`triangleincenter`](@ref), [`trianglecenter`](@ref), [`triangleorthocenter`](@ref).
+To find the center  of a triangle, use one of:
+
+- [`trianglecircumcenter`](@ref) center of circumcircle/intersection of the perpendicular bisectors.
+
+- [`triangleincenter`](@ref) intersection of the interior angle bisectors
+
+- [`trianglecenter`](@ref) centroid
+
+- [`triangleorthocenter`](@ref) intersection of the altitudes
 
 ```@example
 using Luxor # hide
@@ -323,9 +331,10 @@ bounding box.
 
 You can make a BoundingBox from the current drawing, two
 points, a text string, an existing polygon, a stored path,
-or by modifying an existing one.
+by modifying an existing one, or from calls to functions such
+as `circle` or `box`.
 
-`BoundingBox` without arguments defines an extent that
+[`BoundingBox`](@ref) without arguments defines an extent that
 encloses the drawing (assuming that the origin is at the
 center of the drawing—see [`origin`](@ref)). Use
 `centered=false` if the drawing origin is still at the top

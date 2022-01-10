@@ -8,10 +8,12 @@
 
 ### Changed
 
-- changed return values of circle/ellipse/rect to boundingbox pts
-(for @TheCedarPrince)
+- changed return values of circle/ellipse/rect to boundingbox-able pts
+(for @TheCedarPrince :))
 
 - switched to Graham Scan algorithm for polyhull()
+
+- isapprox allow kwargs
 
 ### Removed
 

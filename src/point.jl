@@ -51,7 +51,6 @@ Base.eltype(::Point) = Float64
 Base.iterate(p::Point, state = 1) = state > length(p) ? nothing : (p[state], state + 1)
 Base.length(::Point) = 2
 
-
 """
     dotproduct(a::Point, b::Point)
 
@@ -68,7 +67,12 @@ end
 # comparisons
 
 isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
+
 isapprox(p1::Point, p2::Point)        = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
+
+# allow kwargs
+isapprox(p1::Point, p2::Point; kwargs...) = isapprox(p1.x, p2.x; kwargs...) && (isapprox(p1.y, p2.y; kwargs...))
+
 isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
 !=(p1::Point, p2::Point)              = !isequal(p1, p2)
 <(p1::Point, p2::Point)               = isless(p1, p2)
@@ -536,7 +540,7 @@ end
 
 Find the angle formed by two lines defined by three points.
 
-If the angle is less than π, the line heads to the left. 
+If the angle is less than π, the line heads to the left.
 """
 function anglethreepoints(A::Point, B::Point, C::Point)
     v1 = B - A # line from A to B

@@ -28,6 +28,7 @@ An instance of the BoundingBox type holds two Points,
 BoundingBox(;centered = true)   # the bounding box of the Drawing
 BoundingBox(s::AbstractString)  # the bounding box of a text string at the origin
 BoundingBox(pt::Array)          # the bounding box of a polygon
+BoundingBox(circle(O, 100))     # the bounding box of a circle function
 BoundingBox(path::Path)         # the bounding box of a Path
 """
 function BoundingBox(; centered = true)
