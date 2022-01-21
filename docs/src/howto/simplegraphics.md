@@ -724,7 +724,7 @@ function marker(r, t) #hide
         circle(Point(0, 0), r,  :fill) #hide
         sethue("white") #hide
         fontsize(25) #hide
-        text(string(t), halign=:center, valign=:middle) #hide
+        text(string(t), halign=:center, valign=:middle) # hide
     end #hide
 end #hide
 
@@ -741,7 +741,7 @@ sethue("olivedrab")
 arrow(pts[1:4]...,
     decorate = () ->
         ngon(Point(0, 0), 20, 4, 0, :fill),
-    decoration = 0.75, :none)
+    decoration = 0.75, :none) # default action is :stroke
 
 finish() # hide
 nothing # hide

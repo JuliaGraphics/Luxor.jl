@@ -205,8 +205,9 @@ end
     do_action(action)
 
 This is usually called by other graphics functions. Actions for graphics commands include
-`:fill`, `:stroke`, `:clip`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:none`, and
-`:path`.
+`:fill`, `:stroke`, `:clip`, `:fillstroke`, `:fillpreserve`, and `:strokepreserve`.
+
+The `:path` action adds the graphics to the current path.
 """
 function do_action(action)
     if action == :fill
@@ -221,8 +222,8 @@ function do_action(action)
         fillpreserve()
     elseif action == :strokepreserve
         strokepreserve()
-    elseif action == :none
     end
+    # ignore any other value for action
     return true
 end
 
@@ -371,13 +372,13 @@ line(x, y)      = Cairo.line_to(get_current_cr(), x, y)
 line(pt)        = line(pt.x, pt.y)
 
 """
-    line(pt1::Point, pt2::Point; action=:none)
-    line(pt1::Point, pt2::Point, action=:none)
+    line(pt1::Point, pt2::Point; action=:path)
+    line(pt1::Point, pt2::Point, action=:path)
 
 Make a line between two points, `pt1` and `pt2` and do an action.
 """
 function line(pt1::Point, pt2::Point;
-        action=:none)
+        action=:path)
     move(pt1)
     line(pt2)
     do_action(action)

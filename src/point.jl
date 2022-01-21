@@ -64,6 +64,25 @@ function dotproduct(a::Point, b::Point)
     return result
 end
 
+"""
+    determinant3(p1::Point, p2::Point, p3::Point)
+
+Find the determinant of the 3×3 matrix:
+
+```math
+\\begin{bmatrix}
+p1.x & p1.y & 1 \\\\
+p2.x & p2.y & 1 \\\\
+p3.x & p3.y & 1  \\\\
+\\end{bmatrix}
+```
+
+If the value is 0.0, the points are collinear.
+"""
+function determinant3(p1::Point, p2::Point, p3::Point)
+    (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
+end
+
 # comparisons
 
 isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))

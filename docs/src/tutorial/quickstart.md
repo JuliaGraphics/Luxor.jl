@@ -58,7 +58,7 @@ This short piece of code does the following things:
 
 In case you're wondering, the units are *points* (as in font sizes), and there are 72 points in an inch, just over 3 per millimeter. The y-axis points down the page. If you want to be reminded of where the x and y axes are, uses the [`rulers`](@ref) function.
 
-The `:fill` at the end of [`circle`](@ref) is one of a set of symbols that lets you use the shape in different ways. There's the `:stroke` action, which draws around the edges but doesn't fill the shape with color, and you might also meet the `:path`, `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, and `:none` actions. You can usually supply these either as an argument or using the keyword argument version, eg `action=:fill`.
+The `:fill` at the end of [`circle`](@ref) is one of a set of symbols that lets you use the shape in different ways. There's the `:stroke` action, which draws around the edges but doesn't fill the shape with color, and you might also meet the `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, and `:path` actions. You can usually supply these either as an argument or using the keyword argument version, eg `action=:fill`.
 
 ## Circles in a spiral
 

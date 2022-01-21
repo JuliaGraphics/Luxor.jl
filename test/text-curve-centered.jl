@@ -10,6 +10,13 @@ Random.seed!(42)
 function hipster(fname)
     Drawing(400, 350, fname) # hide
     origin() # hide
+
+    # test text on poly
+    pts = squircle(O, 150, 150, rt = 0.7, vertices=true)
+    fontsize(13.6)
+    sethue("white")
+    textonpoly("Hipster Logo • " ^ 11, pts)
+    
     rotate(pi/8)
 
     circle(O, 135, :clip)

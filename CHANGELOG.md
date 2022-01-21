@@ -1,19 +1,25 @@
 # Changelog
 
-## [v????] - forthcoming
+## [v3.0.0] - forthcoming
 
 ### Added
 
 - dependency on LatexStrings
 
+- `Luxor.get_current_hue()` and `Luxor.get_current_color()`
+
 ### Changed
 
-- changed return values of circle/ellipse/rect to boundingbox-able pts
-(for @TheCedarPrince :))
+- the shape-making functions such as
+  `circle`/`ellipse`/`rect` now return 'useful' values
+  instead of Booleans. These values can usually be used as
+  arguments to `BoundingBox()`. (for @TheCedarPrince :))
 
-- switched to Graham Scan algorithm for polyhull()
+- switched to Graham Scan algorithm for `polyhull()`
 
-- allow use to change tolerance for isapprox()
+- allow user to change tolerance for `isapprox()`
+
+- export `determinant3()`
 
 ### Removed
 
@@ -21,17 +27,17 @@
 
 # ────────────────────────────────────────────────────────────────────────────────────
 
-## [v2.19.0] - forthcoming
+## [v2.19.0] - 2022-01-03
 
 ### Added
 
-- LaTeX strings for text() - amazing work by @davibarreira, @Kolaru, and @TheCedarPrince - Thanks!
+- LaTeX strings for `text()` - amazing work by @davibarreira, @Kolaru, and @TheCedarPrince - Thanks!
 
-- leading option for textfit()
+- leading option for `textfit()`
 
-- BoundingBox for stored Path objects
+- `BoundingBox()` for stored Path objects
 
-- `textonpoly()` can put text the route of a polygon
+- `textonpoly()` can put text on the route of a polygon
 
 ### Changed
 

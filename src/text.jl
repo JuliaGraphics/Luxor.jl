@@ -1042,7 +1042,9 @@ Positive values for `baselineshift` move the characters
 upwards from the baseline.
 
 Returns a tuple with the number of characters drawn, and the
-last-used value of the index (between 0.0 and 1.0).
+final value of the index, between 0.0 and 1.0. If the
+returned index value is less than 1, this means that the
+text supplied ran out before the end of the polygon was reached.
 """
 function textonpoly(str, pgon;
         tracking = 0,

@@ -2,13 +2,16 @@
     rect(xmin, ymin, w, h; action=:none)
     rect(xmin, ymin, w, h, action)
 
-Create a rectangle with one corner at (`xmin`/`ymin`) with width `w` and height `h` and then
-do an action.
+Create a rectangle with one corner at (`xmin`/`ymin`) with
+width `w` and height `h`, and add it to the current path.
+Then apply `action`.
 
-Returns a tuple of two points, the corners of a bounding box that encloses the rectangle.
+Returns a tuple of two points, the corners of a bounding box
+that encloses the rectangle.
 
-See `box()` for more ways to do similar things, such as supplying two opposite corners,
-placing by centerpoint and dimensions.
+See `box()` for more ways to do similar things, such as
+supplying two opposite corners, placing by centerpoint and
+dimensions.
 """
 function rect(xmin::Real, ymin::Real, w::Real, h::Real;
         action = :none)
@@ -28,11 +31,12 @@ rect(xmin::Real, ymin::Real, w::Real, h::Real, action::Symbol) = rect(xmin, ymin
     rect(cornerpoint, w, h, action; reversepath=false,
         vertices=false)
 
-Create a rectangle with one corner at `cornerpoint` with width `w` and height
-`h` and do the action `action`.
+Create a rectangle with one corner at `cornerpoint` with
+width `w` and height `h`, and add it to the current path.
+Then apply `action`.
 
-Use `vertices=true` to return an array of the four corner points: bottom left,
-top left, top right, bottom right.
+Use `vertices=true` to return an array of the four corner
+points: bottom left, top left, top right, bottom right.
 
 `reversepath` reverses the direction of the path (and
 returns points in the order: bottom left, bottom right, top
@@ -76,8 +80,8 @@ rect(cornerpoint::Point, w::Real, h::Real, action::Symbol;
     box(cornerpoint1, cornerpoint2; action=:none, vertices=false, reversepath=false)
     box(cornerpoint1, cornerpoint2, action; vertices=false, reversepath=false)
 
-Create a box (rectangle) between two points and do an
-action.
+Create a box (rectangle) between two points and add it to
+the current path. Then apply `action`.
 
 Use `vertices=true` to return an array of the four corner
 points: bottom left, top left, top right, bottom right
@@ -134,11 +138,13 @@ box(corner1::Point, corner2::Point, action::Symbol;
         reversepath=reversepath,
         vertices=vertices)
 
-Create a box/rectangle using the first two points of an array of Points to
-defined opposite corners.
+Create a box/rectangle using the first two points of an
+array of Points to defined opposite corners, and add it to
+the current path. Then apply `action`.
 
-Use `vertices=true` to return an array of the four corner points: bottom left,
-top left, top right, bottom right rather than execute action.
+Use `vertices=true` to return an array of the four corner
+points: bottom left, top left, top right, bottom right
+rather than execute action.
 """
 box(bbox::Array, action::Symbol; kwargs...) =
     box(bbox[1], bbox[2], action; kwargs...)

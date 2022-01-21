@@ -166,7 +166,35 @@ nothing # hide
 
 ![angle three points](../assets/figures/anglethreepoints.png)
 
-Functions that help with geometry include [`distance`](@ref), [`getnearestpointonline`](@ref), [`pointlinedistance`](@ref), [`slope`](@ref), [`perpendicular`](@ref), [`dotproduct`](@ref), [`@polar`](@ref), [`polar`](@ref), [`ispointonline`](@ref),[`ispointonpoly`](@ref), [`isarcclockwise`](@ref), [`pointinverse`](@ref), and [`anglethreepoints`](@ref).
+Functions that help with geometry include:
+
+- [`distance`](@ref)
+
+- [`getnearestpointonline`](@ref)
+
+- [`pointlinedistance`](@ref)
+
+- [`slope`](@ref)
+
+- [`perpendicular`](@ref)
+
+- [`dotproduct`](@ref)
+
+- [`@polar`](@ref)
+
+- [`polar`](@ref)
+
+- [`ispointonline`](@ref)
+
+- [`ispointonpoly`](@ref)
+
+- [`isarcclockwise`](@ref)
+
+- [`pointinverse`](@ref)
+
+- [`anglethreepoints`](@ref)
+
+- [`determinant3`](@ref)
 
 ## Triangle centers
 
@@ -485,7 +513,7 @@ Drawing(600, 400, "../assets/figures/bbox4.png") # hide
 background("antiquewhite") # hide
 Random.seed!(42) # hide
 origin() # hide
-bx = BoundingBox(box(O, 200, 200, :none))
+bx = BoundingBox(box(O, 200, 200))
 setline(1)
 sethue("black") # hide
 box(bx, :stroke)

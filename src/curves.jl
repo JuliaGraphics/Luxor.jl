@@ -14,7 +14,7 @@ end
     circle(centerpoint::Point, r; action=:none)
     circle(centerpoint::Point, r, action)
 
-Make a circle of radius `r` centered at 'centerpoint'.
+Make a circle of radius `r` centered at 'centerpoint', and add it to the current path.
 
 `action` is one of the actions applied by `do_action`, defaulting to `:none`.
 
@@ -33,7 +33,7 @@ circle(x::Real, y::Real, r::Real, action::Symbol) = circle(Point(x, y), r, actio
     circle(pt1::Point, pt2::Point; action=:none)
     circle(pt1::Point, pt2::Point, action)
 
-Make a circle that passes through two points that define the diameter.
+Make a circle that passes through two points that define the diameter, and add it to the current path.
 """
 function circle(pt1::Point, pt2::Point;
         action=:none)
@@ -48,7 +48,7 @@ circle(pt1::Point, pt2::Point, action::Symbol) = circle(pt1, pt2, action=action)
     circle(pt1::Point, pt2::Point, pt3::Point; action=:none)
     circle(pt1::Point, pt2::Point, pt3::Point, action)
 
-Make a circle that passes through three points.
+Make a circle that passes through three points, and add it to the current path.
 """
 function circle(pt1::Point, pt2::Point, pt3::Point;
         action=:none)
@@ -116,7 +116,7 @@ ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
     ellipse(centerpoint::Point, w, h; action=:none)
     ellipse(centerpoint::Point, w, h; action)
 
-Make an ellipse, centered at `centerpoint`, with width `w`, and height `h`.
+Make an ellipse, centered at `centerpoint`, with width `w`, and height `h`, and add it to the current path.
 
 Returns a tuple of two points, the corners of a bounding box that encloses the ellipse.
 """
@@ -131,9 +131,11 @@ ellipse(c::Point, w::Real, h::Real, action::Symbol) = ellipse(c, w, h, action=ac
     squircle(center::Point, hradius, vradius, action;
         rt = 0.5, stepby = pi/40, vertices=false)
 
-Make a squircle or superellipse (basically a rectangle with rounded corners).
-Specify the center position, horizontal radius (distance from center to a side),
-and vertical radius (distance from center to top or bottom):
+Make a squircle or superellipse (basically a rectangle with
+rounded corners), and add it to the current path. Specify
+the center position, horizontal radius (distance from center
+to a side), and vertical radius (distance from center to top
+or bottom):
 
 The root (`rt`) option defaults to 0.5, and gives an intermediate shape. Values
 less than 0.5 make the shape more rectangular. Values above make the shape more
@@ -282,7 +284,7 @@ end
     sector(centerpoint::Point, innerradius, outerradius, startangle, endangle;
         action=:none)
 
-Draw an annular sector centered at `centerpoint`.
+Make an annular sector centered at `centerpoint`, and add it to the current path.
 
 TODO - return something more useful than a Boolean
 """
@@ -311,7 +313,7 @@ sector(centerpoint::Point, innerradius::Real, outerradius::Real,
     sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real;
        action=:none)
 
-Draw an annular sector centered at the origin.
+Make an annular sector centered at the origin, and add it to the current path.
 """
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real;
         action=:none) =
@@ -325,8 +327,8 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, a
             startangle, endangle, cornerradius;
            action:none)
 
-Draw an annular sector with rounded corners, basically a bent sausage shape,
-centered at `centerpoint`.
+Make an annular sector with rounded corners, basically a bent sausage shape,
+centered at `centerpoint`, and add it to the current path.
 
 TODO: The results aren't 100% accurate at the moment. There are small
 discontinuities where the curves join.
@@ -412,7 +414,8 @@ sector(centerpoint::Point, innerradius::Real, outerradius::Real, startangle::Rea
     sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
        cornerradius::Real, action)
 
-Draw an annular sector with rounded corners, centered at the current origin.
+Make an annular sector with rounded corners, centered at the
+current origin, and add it to the current path.
 """
 sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real,
        cornerradius::Real, action::Symbol) =
@@ -425,8 +428,8 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, c
     pie(x, y, radius, startangle, endangle; action=:none)
     pie(centerpoint, radius, startangle, endangle; action=:none)
 
-Draw a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
-are measured clockwise.
+Make a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
+are measured clockwise, and add it to the current path.
 
 TODO - return something more useful than a Boolean
 """
@@ -459,7 +462,7 @@ pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real, action::
     pie(radius, startangle, endangle;
         action=:none)
 
-Draw a pie shape centered at the origin
+Make a pie shape centered at the origin, and add it to the current path.
 """
 pie(radius::Real, startangle::Real, endangle::Real; action=:none) =
     pie(O, radius, startangle, endangle, action=action)
@@ -471,7 +474,7 @@ pie(radius::Real, startangle::Real, endangle::Real, action::Symbol) =
     curve(x1, y1, x2, y2, x3, y3)
     curve(p1, p2, p3)
 
-Add a Bézier curve.
+Add a Bézier curve to the current path..
 
 The spline starts at the current position, finishing at `x3/y3` (`p3`),
 following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`).
@@ -488,10 +491,12 @@ curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
         reversepath=false,
         kappa = 0.5522847498307936)
 
-Draw a circle using Bézier curves. One benefit of using this
-rather than `circle()` is that you can use the `reversepath`
-option to draw the circle clockwise rather than
-`circle`'s counterclockwise.
+Make a circle using Bézier curves, and add it to the current
+path.
+
+One benefit of using this rather than `circle()` is
+that you can use the `reversepath` option to draw the circle
+clockwise rather than `circle`'s counterclockwise.
 
 The magic value, `kappa`, is `4.0 * (sqrt(2.0) - 1.0) / 3.0`.
 
@@ -569,9 +574,12 @@ circlepath(center::Point, radius, action::Symbol; reversepath=false, kappa = 0.5
             vertices=false,
             reversepath=false)
 
-Build a polygon approximation to an ellipse, given two points and a distance, `k`, which is
-the sum of the distances to the focii of any points on the ellipse (or the shortest length
-of string required to go from one focus to the perimeter and on to the other focus).
+Build a polygon approximation to an ellipse, given two
+points and a distance, `k`, which is the sum of the
+distances to the focii of any points on the ellipse (or the
+shortest length of string required to go from one focus to
+the perimeter and on to the other focus), and add it to the
+current path.
 """
 function ellipse(focus1::Point, focus2::Point, k;
             action=:none,
@@ -643,21 +651,27 @@ ellipse(focus1::Point, focus2::Point, pt::Point, action::Symbol;
         period=0.0,
         vertices=false)
 
-Make a hypotrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
-point attached to a circle of radius `r` rolling around the inside  of a fixed circle of
-radius `R`, where the point is a distance `d` from  the center of the interior circle.
+Make a hypotrochoid with short line segments, and add it to
+the current path. (Like a Spirograph.) The curve is traced
+by a point attached to a circle of radius `r` rolling around
+the inside  of a fixed circle of radius `R`, where the point
+is a distance `d` from  the center of the interior circle.
 Things get interesting if you supply non-integral values.
 
-Special cases include the hypocycloid, if `d` = `r`, and an ellipse, if `R` = `2r`.
+Special cases include the hypocycloid, if `d` = `r`, and an
+ellipse, if `R` = `2r`.
 
-`stepby`, the angular step value, controls the amount of detail, ie the smoothness of the
-polygon,
+`stepby`, the angular step value, controls the amount of
+detail, ie the smoothness of the polygon,
 
-If `period` is not supplied, or 0, the lowest period is calculated for you.
+If `period` is not supplied, or 0, the lowest period is
+calculated for you.
 
-The function can return a polygon (a list of points), or draw the points directly using
-the supplied `action`. If the points are drawn, the function returns a tuple showing how
-many points were drawn and what the period was (as a multiple of `pi`).
+The function can return a polygon (a list of points), or
+draw the points directly using the supplied `action`. If the
+points are drawn, the function returns a tuple showing how
+many points were drawn and what the period was (as a
+multiple of `pi`).
 """
 function hypotrochoid(R, r, d;
             action=:none,
@@ -706,19 +720,24 @@ hypotrochoid(R, r, d, action::Symbol;
         period=0,
         vertices=false)
 
-Make a epitrochoid with short line segments. (Like a Spirograph.) The curve is traced by a
-point attached to a circle of radius `r` rolling around the outside of a fixed circle of
-radius `R`, where the point is a distance `d` from the center of the circle.
-Things get interesting if you supply non-integral values.
+Make a epitrochoid with short line segments, and add it to
+the current path. (Like a Spirograph.) The curve is traced
+by a point attached to a circle of radius `r` rolling around
+the outside of a fixed circle of radius `R`, where the point
+is a distance `d` from the center of the circle. Things get
+interesting if you supply non-integral values.
 
-`stepby`, the angular step value, controls the amount of detail, ie the smoothness of the
-polygon.
+`stepby`, the angular step value, controls the amount of
+detail, ie the smoothness of the polygon.
 
-If `period` is not supplied, or 0, the lowest period is calculated for you.
+If `period` is not supplied, or 0, the lowest period is
+calculated for you.
 
-The function can return a polygon (a list of points), or draw the points directly using
-the supplied `action`. If the points are drawn, the function returns a tuple showing how
-many points were drawn and what the period was (as a multiple of `pi`).
+The function can return a polygon (a list of points), or
+draw the points directly using the supplied `action`. If the
+points are drawn, the function returns a tuple showing how
+many points were drawn and what the period was (as a
+multiple of `pi`).
 """
 function epitrochoid(R, r, d;
             action   = :none,
@@ -769,8 +788,9 @@ epitrochoid(R, r, d, action::Symbol;
         vertices = false,
         log =false)
 
-Make a spiral. The two primary parameters `a` and `b` determine the start radius, and the
-tightness.
+Make a spiral, and add it to the current path. The two
+primary parameters `a` and `b` determine the start radius,
+and the tightness.
 
 For linear spirals (`log=false`), `b` values are:
 
@@ -999,7 +1019,9 @@ end
     arc2sagitta(p1::Point, p2::Point, s;
         action=:none)
 
-Make a clockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
+Make a clockwise arc starting at `p1` and ending at `p2`
+that reaches a height of `s`, the sagitta, at the middle,
+and add it to the current path.
 
 Return tuple of the center point and the radius of the arc.
 """
@@ -1031,7 +1053,9 @@ arc2sagitta(p1::Point, p2::Point, s::Real, action::Symbol) =  arc2sagitta(p1, p2
     carc2sagitta(p1::Point, p2::Point, s;
         action=:none)
 
-Make a counterclockwise arc starting at `p1` and ending at `p2` that reaches a height of `s`, the sagitta, at the middle. Might append to current path...
+Make a counterclockwise arc starting at `p1` and ending at
+`p2` that reaches a height of `s`, the sagitta, at the
+middle, and add it to the current path.
 
 Return tuple of center point and radius of arc.
 """
@@ -1163,19 +1187,19 @@ end
     ellipseinquad(qgon, action)
 
 Calculate a Bézier-based ellipse that fits inside the
-quadrilateral `qgon`, an array of with at least four Points,
-then apply `action`.
+quadrilateral `qgon`, an array with at least four Points
+that form a convex polygon, and add it to the current path.
 
-Returns `ellipsecenter, ellipsesemimajor, ellipsesemiminor,
+It returns `ellipsecenter, ellipsesemimajor, ellipsesemiminor,
 ellipseangle`:
 
-`ellipsecenter` the ellipse center
+- `ellipsecenter` the ellipse center
 
-`ellipsesemimajor` ellipse semimajor axis
+- `ellipsesemimajor` ellipse semimajor axis
 
-`ellipsesemiminor` ellipse semiminor axis
+- `ellipsesemiminor` ellipse semiminor axis
 
-`ellipseangle` ellipse rotation
+- `ellipseangle` ellipse rotation
 
 The function returns `O, 0, 0, 0` if a suitable ellipse
 can't be found. (The qgon is probably not a convex polygon.)
@@ -1263,8 +1287,9 @@ ellipseinquad(qgon, action) = ellipseinquad(qgon, action=action)
         reversepath=false,
         steps = 30)
 
-Create a crescent-shaped polygon, aligned with the current x-axis.
-If the inner radius is 0, you'll get a semicircle.
+Create a crescent-shaped polygon, aligned with the current
+x-axis, and add it to the current path. If the inner radius
+is 0, you'll get a semicircle.
 
 See also ```crescent(pos1, innerradius, pos2, outeradius...)```.
 
@@ -1276,7 +1301,8 @@ crescent(O, 130, 200, :fill) # or
 crescent(O, 130, 200, action=:fill)
 ```
 
-Create a stroked crescent shape; the inner radius of 0 produces a semicircle.
+Create a stroked crescent shape - the inner radius of 0
+produces a semicircle - and add it to the current path.
 
 ```
 crescent(O, 0, 200, :stroke) # or
@@ -1322,8 +1348,9 @@ crescent(cp1, r1, cp2, r2;
             reversepath=false)
 
 Create a crescent-shaped polygon, aligned with the current
-x-axis, by finding the intersection of two circles.
-The two center positions should be different.
+x-axis, by finding the intersection of two circles, and add
+it to the current path. The two center positions should be
+different.
 
 See also ```crescent(point, innerradius, outeradius...)```.
 
