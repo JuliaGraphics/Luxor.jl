@@ -173,10 +173,6 @@ function simplify(pointlist::Array{Point, 1}, detail=0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
 
-function det3p(q1::Point, q2::Point, p::Point)
-    (q1.x - p.x) * (q2.y - p.y) - (q2.x - p.x) * (q1.y - p.y)
-end
-
 """
     isinside(p, pol; allowonedge=false)
 
@@ -217,11 +213,11 @@ function isinside(p::Point, pointlist::Array{Point, 1};
             if q1.x >= p.x
                 if q2.x > p.x
                     c = !c
-                elseif ((det3p(q1, q2, p) > 0) == (q2.y > q1.y))
+                elseif ((determinant3(q1, q2, p) > 0) == (q2.y > q1.y))
                     c = !c
                 end
             elseif q2.x > p.x
-                if ((det3p(q1, q2, p) > 0) == (q2.y > q1.y))
+                if ((determinant3(q1, q2, p) > 0) == (q2.y > q1.y))
                     c = !c
                 end
             end
@@ -1543,10 +1539,6 @@ function _polarsortpoints(anchor, pt1, pt2)
     end
 end
 
-function _ccw(a, b, c)
-    return ((b.x - a.x) * (c.y - a.y)) - ((c.x - a.x) * (b.y - a.y))
-end
-
 """
 polyhull(pts)
 
@@ -1599,7 +1591,7 @@ function polyhull(points)
 
     for point in sortedpts[2:end]
         if length(convex_hull) > 2
-            while _ccw(convex_hull[end-1], convex_hull[end], point) <= 0.0
+            while determinant3(convex_hull[end-1], convex_hull[end], point) <= 0.0
                 pop!(convex_hull) # backtrack
             end
         end

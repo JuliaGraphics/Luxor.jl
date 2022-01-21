@@ -643,7 +643,7 @@ Random.seed!(42) # hide
 pts = [Point(x, rand(-100:100)) for x in -280:30:280]
 setopacity(0.7)
 sethue("red")
-prettypoly(pts, :none, () -> circle(O, 5, :fill))
+prettypoly(pts, () -> circle(O, 5, :fill))
 sethue("darkmagenta")
 poly(polyfit(pts, 200), :stroke)
 

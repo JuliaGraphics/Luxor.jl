@@ -267,6 +267,8 @@ end
 If you have the right fonts installed, you can easily draw simple ``\LaTeX`` equations.
 
 ```julia
+# using Luxor
+# using MathTeXEngine
 background("khaki")
 f(t) = Point(4cos(t) + 2cos(5t), 4sin(t) + 2sin(5t))
 setline(15)

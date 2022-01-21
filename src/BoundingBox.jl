@@ -15,21 +15,29 @@ The default `BoundingBox(;centered=true)` returns a
 BoundingBox the same size and position as the current
 drawing, and assumes the origin (0, 0) is at the center.
 
-If the `centered` option is `false`, the function
-assumes that the origin is at the top left of the drawing.
-
-So this function doesn't really work if the current matrix
-has been modified (by `translate()`, `scale()`, `rotate()`
-etc.)
+If the `centered` option is `false`, the function assumes
+that the origin is at the top left of the drawing. So this
+function doesn't really work if the current matrix has been
+modified (by `translate()`, `scale()`, `rotate()` etc.)
 
 An instance of the BoundingBox type holds two Points,
 `corner1` and `corner2`.
 
 BoundingBox(;centered = true)   # the bounding box of the Drawing
+
 BoundingBox(s::AbstractString)  # the bounding box of a text string at the origin
+
 BoundingBox(pt::Array)          # the bounding box of a polygon
-BoundingBox(circle(O, 100))     # the bounding box of a circle function
+
+BoundingBox(circle(O, 100))     # the bounding box of a path added by circle()
+
 BoundingBox(path::Path)         # the bounding box of a Path
+
+You can use `BoundingBox()` with the functions that add
+graphic shapes to the current path (eg `box()`, `circle()`,
+`star()`, `ngon()`). But note that eg `BoundingBox(box(O,
+100, 100))` adds a shape to the current path as well as
+returning a bounding box.
 """
 function BoundingBox(; centered = true)
     if currentdrawing() == false
@@ -291,14 +299,12 @@ end
 
 Define a box using the bounds in `bbox`.
 
-Use `vertices=true` to return an array of the four corner points: bottom left,
+Use `vertices = true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
-function box(
-    bbox::BoundingBox;
+function box(bbox::BoundingBox;
     action = :none,
-    vertices = false,
-)
+    vertices = false)
     if vertices || action == :none
         botleft = Point(bbox.corner1.x, bbox.corner2.y)
         topleft = bbox.corner1

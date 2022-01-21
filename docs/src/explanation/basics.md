@@ -19,11 +19,10 @@ state, but the graphics you've already drawn are unchanged.
 Many of the drawing functions have an *action* argument,
 supplied either as a symbol argument (eg `:fill`) or as a
 keyword argument (eg `action=:fill`). This action determines
-what happens to the current path. It can be `:none`,
-`:fill`, `:stroke`, `:fillstroke`, `:fillpreserve`,
+what happens to the current path. It can be  `:fill`,
+`:stroke`, `:fillstroke`, `:fillpreserve`,
 `:strokepreserve`, `:clip`, or `:path`. The default is
-`:none`, which is usually equivalent to `:path`, ie. add to
-the current path but otherwise do nothing.
+usually `:path`, ie. add the graphics to the current path.
 
 The main Julia data types you'll encounter in Luxor are:
 
