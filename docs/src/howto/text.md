@@ -241,6 +241,8 @@ nothing # hide
 
 [`textpath`](@ref) converts the text into graphic paths suitable for further manipulation.
 
+`textpath` preserves the Bézier curves, whereas `textoutlines` flattens all curves and converts them to polygons.
+
 ## Text and font dimensions ("Toy" API only)
 
 The `textextents(str)` function returns the dimensions of the string `str`, given the current font. There has to be a current drawing before this function is called.
@@ -623,3 +625,35 @@ argument, such that the text never exceeds that size
     The algorithm used by this function doesn't always
     produce ideal results. Suggestions for improvements
     welcome!
+
+## Animating text
+
+To animate the drawing of text, you can obtain and store the paths, and then build an animation using `drawpath()`.
+
+![text animation](../assets/figures/textanimation.gif)
+
+```julia
+using Luxor
+
+function frame(scene, framenumber)
+    background("black")
+    sethue("gold")
+    fontface("BigMummy")
+    fontsize(40)
+    textpath("Thank you for using", boxtopcenter() + (0, 80) , halign=:center)
+    tp1 = storepath()
+    fontsize(130)
+    textpath("Luxor", O + (0, 80), halign=:center)
+    tp2 = storepath()
+
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, scene.framerange.stop - scene.framerange.start)
+
+    for tp in (tp1, tp2)
+        drawpath(tp, eased_n, :stroke)
+    end
+end
+
+amovie = Movie(600, 250, "a movie")
+animate(amovie, Scene(amovie, frame, 1:150), creategif=true, pathname="/tmp/textanimation.gif")
+```

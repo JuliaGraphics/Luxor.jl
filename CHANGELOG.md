@@ -1,6 +1,26 @@
 # Changelog
 
-## [v3.0.0] - forthcoming
+## [v3.1.0] - ...
+
+### Added
+
+- drawpath() progressive path drawing
+- trimbezier() and splitbezier()
+- pathsample() like polysample() for paths, but different
+
+### Changed
+
+- docs now forcepush to gh-pages
+- latex text strings can also be paths
+- Bezier arrows are now a bit tidier might fix #200
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
+
+## [v3.0.0] -  2022-01-23
 
 ### Added
 

@@ -102,7 +102,7 @@ export Drawing,
     bezierpathtopoly, beziertopoly, pathtobezierpaths,
     bezierfrompoints, beziercurvature, bezierstroke,
     setbezierhandles, beziersegmentangles,
-    shiftbezierhandles, brush,
+    shiftbezierhandles, brush, trimbezier, splitbezier,
 
     strokepath, fillpath,
 
@@ -224,7 +224,7 @@ export Drawing,
 
     Path, PathClose, PathCurve, PathElement, PathLine,
     PathMove, bezierpathtopath, drawpath, storepath,
-    polytopath,
+    polytopath, pathlength, pathsample, 
 
     # experimental
     layoutgraph, Style, applystyle,

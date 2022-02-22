@@ -165,7 +165,7 @@ obtain the path with intact Béziers via
 ## Path objects
 
 Sometimes it's useful to be able to store a path, rather
-than just construct it on the drawing. It would also be
+than just construct it on the drawing. It might also be
 useful to draw it later, under different circumstances, and
 perhaps more than once. To do this, you can use the `storepath()`
 and `drawpath()` functions.
@@ -205,7 +205,7 @@ Path([
 ])
 ```
 
-It's now possible to draw this stored path at a later time. For example, this code builds a path, saves it in `pathexample`, then draws a number of rotated copies:
+It's now possible to draw this stored path at a later time. For example, this code builds a path, saves it as `pathexample`, then draws a number of rotated copies:
 
 ```@example
 using Luxor

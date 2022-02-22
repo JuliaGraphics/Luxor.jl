@@ -29,11 +29,11 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |                               |                        		|                       	|				   			|[`insertvertices!`](@ref)      |
 | *paths*                       |                        		|                       	|				   			|                               |
 |[`storepath`](@ref)            |                        		|                       	|				   			|                               |
-|[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)         |				   			|                               |
+|[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)         |[`pathlength`](@ref)       |[`pathsample`](@ref)           |
 |[`getpathflat`](@ref)          |                        		|                       	|				   			|                               |
 | *Bezier paths*                |                        		|                       	|				   			|                               |
-|[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)  	|[`drawbezierpath`](@ref)   |                  			|                               |
-|[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)   	|[`brush`](@ref)            |                  			|                               |
+|[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)  	|[`drawbezierpath`](@ref)   |                  			|[`trimbezier`](@ref)           |
+|[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)   	|[`brush`](@ref)            |                  			|[`splitbezier`](@ref)          |
 |`BezierPath`                   |[`bezierpathtopath`](@ref) 	|                           |                  			|                               |
 |`BezierPathSegment`            |                        		|                           |                  			|                               |
 |[`beziersegmentangles`](@ref)  |                        		|                           |                  			|                               |
@@ -884,6 +884,36 @@ nothing # hide
 ```
 
 ![bezier segment angles](../assets/figures/beziersegmentangles.svg)
+
+There are some functions that can modify Bezier path segments. For example, [`trimbezier`](@ref) chops chunks off each end:
+
+```@example
+using Luxor # hide
+d = Drawing(600, 400, :svg) # hide
+background("ivory") # hide
+origin() # hide
+
+setline(2)
+
+bez  = BezierPathSegment(ngon(O, 150, 4, vertices=true)...)
+drawbezierpath(bez, :stroke)
+
+setopacity(0.4)
+sethue("red")
+setline(20)
+trimbez = trimbezier(bez, 0.2, 0.8)
+drawbezierpath(trimbez, :stroke)
+
+setline(40)
+sethue("purple")
+trimbez = trimbezier(trimbez, 0.2, 0.8)
+drawbezierpath(trimbez, :stroke)
+
+finish() # hide
+d # hide
+```
+
+[`splitbezier`](@ref) can split a segment into two shorter segments.
 
 ## Brush strokes
 
