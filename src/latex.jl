@@ -127,8 +127,9 @@ function text(
     textw, texth = latextextsize(lstr)
     bottom_pt, top_pt = rawlatexboundingbox(lstr)
 
-    translate_x, translate_y = Luxor.texalign(halign, valign, bottom_pt, top_pt, font_size)
-    # translate_x, translate_y = texalign(halign, valign, textw, texth, font_size)
+    translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
+
+
 
     # Writes text using ModernCMU font.
     for text in sentence
@@ -145,8 +146,9 @@ function text(
             end
 
             if text[1] isa TeXChar
-                fontface(text[1].font.family_name)
-                fontsize(font_size * text[3])
+
+                # fontface(text[1].font.family_name)
+                # fontsize(font_size * text[3])
 
                 if paths == true
                     newsubpath()
@@ -156,7 +158,7 @@ function text(
                         action=:path,
                         startnewpath=false)
                 else
-                    Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
+                    writelatexchar(text, font_size)
                 end
             elseif text[1] isa HLine
                 # text is eg (HLine{Float64}(0.7105, 0.009), [0.0, 0.2106], 1.0))
@@ -176,4 +178,34 @@ function text(
             end
         end
     end
+end
+
+
+"""
+    writelatexchar(t::AbstractString)
+Helper function to handle extra chars that are not supported
+in MathTeXEngine.
+"""
+function writelatexchar(text, font_size)
+    # Extra chars not supported by MathTeXEngine
+    extrachars = ["⨟","{","}","𝔸","𝔹","ℂ","𝔻","𝔽", "𝔾", "ℍ", "𝕀", "𝕁", "𝕂", "𝕃", "𝕄", "ℕ", "𝕆", "ℙ", "ℚ", "ℝ", "𝕊", "𝕋", "𝕌", "𝕎", "𝕍", "𝕏", "ℤ", "𝔄", "𝔅", "ℭ", "𝔇", "𝔈", "𝔉", "𝔊", "ℌ", "ℑ", "𝔍", "𝔎", "𝔏", "𝔐", "𝔑", "𝔒", "𝔓", "𝔔", "ℜ", "𝔖", "𝔗", "𝔘", "𝔙", "𝔚", "𝔛", "𝔜", "ℨ", "𝕬", "𝕭", "𝕮", "𝕯", "𝕰", "𝕱", "𝕲", "𝕳", "𝕴", "𝕵", "𝕶", "𝕷", "𝕸", "𝕹", "𝕺", "𝕻", "𝕼", "𝕽", "𝕾", "𝕿", "𝖀", "𝖁", "𝖂", "𝖃", "𝖄", "𝖅", "𝒜", "ℬ", "𝒞", "𝒟", "ℰ", "ℱ", "𝒢", "ℋ", "ℐ", "𝒥", "𝒦", "ℒ", "ℳ", "𝒩", "𝒪", "𝒫", "𝒬", "ℛ", "𝒮", "𝒯", "𝒰", "𝒱", "𝒲", "𝒳", "𝒴", "𝒵"]
+
+    fontface(text[1].font.family_name)
+    fontsize(font_size * text[3])
+
+    if string(text[1].char) == "⨟"
+        setfont(text[1].font.family_name, font_size * text[3])
+        Luxor.settext(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0.25,0.3)*font_size)
+
+    elseif text[1].represented_char == '{' || text[1].represented_char == '}'
+        Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0,-0.8)*font_size)
+
+    elseif string(text[1].char) in extrachars
+        setfont(text[1].font.family_name, 1.3font_size * text[3]) 
+        Luxor.settext(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0,0.3)*font_size)
+
+    else
+        Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
+    end
+
 end
