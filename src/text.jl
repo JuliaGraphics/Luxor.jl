@@ -854,7 +854,7 @@ so on. Returns the next text position.
 A tuple of parameters is:
 
 ```julia
-(face = "TimesRoman", size = 12, kern = 0, shift = 0, advance = true)
+(face = "TimesRoman", size = 12, color=colorant"black", kern = 0, shift = 0, advance = true)
 ```
 
 where
@@ -863,33 +863,45 @@ where
 
 - `size` is fontsize # pts                      # sticky
 
+- `color` is color                              # sticky
+
 - `kern` amount (pixels) shifted to the right   # resets after each char
 
 - `shift` = baseline shifted vertically         # resets after each char
 
 - `advance` - whether to advance                # resets after each char
 
-Font face and size parameters are sticky, and stay set until
-reset. Kern/shift/advance are reset for each character.
+Some parameters are "sticky": once set, they apply for all
+subsequent characters until a new value is supplied. Others
+aren't sticky, and are reset for each character. So font
+face, size, and color parameters need only be specified
+once, whereas kern/shift/advance modifiers are reset for each
+character.
 
 ## Example
 
-Draw the Hogwarts Express Platform number 9 and 3/4
+Draw the Hogwarts Express Platform number 9 and 3/4:
 
 ```julia
 txtpos = textplace("93—4!", O - (200, 0), [
-    (size=120, face="Bodoni-Poster",                 ), # format for 9
-    (size=60,  kern = 5, shift = 60,  advance=false,),  # format for 3
-    (          kern = 0, shift = 25,  advance=false,),  # format for -
-    (          kern = 5, shift = -20, advance=true),    # format for 4
+    # format for 9:
+    (size=120, face="Bodoni-Poster", color=colorant"grey10"),
+    # format for 3:
+    (size=60,  kern = 5, shift = 60,  advance=false,),
+    # format for -:
+    (          kern = 0, shift = 25,  advance=false,),
+    # format for 4:
+    (          kern = 5, shift = -20, advance=true),
+    # format for !:
     (size=120, kern = 20,),
     ])
 ```
 """
-function textplace(txt::AbstractString, pos::Point, params::Vector)
+function textplace(txt::AbstractString, pos::Point, params::Vector;
+        action=:fill)
     @layer begin
         textpos = Point(pos.x, pos.y)
-        currentparams = (face = "", size = 12, kern=0, shift=0, advance=true,)
+        currentparams = (face = "", size = 12, color = colorant"black", kern=0, shift=0, advance=true,)
         for (n, c) in enumerate(txt)
             currentparams = merge(currentparams, (kern=0, shift=0, advance=true,))
             if n <= length(params)
@@ -897,9 +909,10 @@ function textplace(txt::AbstractString, pos::Point, params::Vector)
             end
             fontface(currentparams.face)
             fontsize(currentparams.size)
+            sethue(currentparams.color)
             xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
             temp_text_pos = Point(textpos.x + currentparams.kern, textpos.y - currentparams.shift)
-            textoutlines(string(c), temp_text_pos, :fill, halign=:left)
+            textoutlines(string(c), temp_text_pos, action=action, halign=:left)
             if currentparams.advance == true
                 textpos += (xadvance + currentparams.kern, 0)
             end
