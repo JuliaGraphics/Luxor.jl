@@ -146,7 +146,9 @@ function text(
             end
 
             if text[1] isa TeXChar
-                writelatexchar(text, font_size)
+
+                # fontface(text[1].font.family_name)
+                # fontsize(font_size * text[3])
 
                 if paths == true
                     newsubpath()
@@ -156,7 +158,7 @@ function text(
                         action=:path,
                         startnewpath=false)
                 else
-                    Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
+                    writelatexchar(text, font_size)
                 end
             elseif text[1] isa HLine
                 # text is eg (HLine{Float64}(0.7105, 0.009), [0.0, 0.2106], 1.0))
@@ -192,7 +194,7 @@ function writelatexchar(text, font_size)
     fontsize(font_size * text[3])
 
     if string(text[1].char) == "⨟"
-        setfont(text[1].font.family_name, font_size * text[3]) 
+        setfont(text[1].font.family_name, font_size * text[3])
         Luxor.settext(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0.25,0.3)*font_size)
 
     elseif text[1].represented_char == '{' || text[1].represented_char == '}'
