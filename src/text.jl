@@ -172,7 +172,7 @@ Convert the text in string `t` to paths, adding them to the current path, for su
 
 You can use `pathtopoly()` or `getpath()` or `getpathflat()` to convert the paths to polygons.
 
-See also `textoutlines()`.
+See also `textoutlines()`. `textpath()` retains Bezier curves, whereas `textoutlines()` returns flattened curves.
 """
 function textpath(t)
     Cairo.text_path(get_current_cr(), t)
@@ -235,7 +235,7 @@ Convert text to polygons and apply `action`.
 
 By default this function discards any current path, unless you use `startnewpath=false`
 
-See also `textpath()`.
+See also `textpath()`. `textpath()` retains Bezier curves, whereas `textoutlines()` returns flattened curves.
 
 TODO Return something more useful than a Boolean.
 """

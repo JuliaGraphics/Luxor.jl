@@ -681,3 +681,64 @@ function beziersegmentangles(pt1, pt2;
     end
     return bp
 end
+
+"""
+    splitbezier(bps::BezierPathSegment, t)
+
+Split the Bezier path segment at t, where t is between 0 and 1.
+
+Use de CastelJau's algorithm.
+
+Returns a tuple of two BezierPathSegments, the lower one followed by the higher one.
+
+## Example
+
+```julia
+bps = BezierPathSegment(ngon(O, 200, 4, vertices=true)...)
+l, h = splitbezier(bps::BezierPathSegment, 0.5)
+
+julia> l
+4-element BezierPathSegment:
+ Point(1.2246467991473532e-14, 200.0)
+ Point(-100.0, 100.00000000000001)
+ Point(-100.0, 1.4210854715202004e-14)
+ Point(-50.00000000000001, -49.99999999999999)
+
+julia> h
+4-element BezierPathSegment:
+ Point(-50.00000000000001, -49.99999999999999)
+ Point(-1.4210854715202004e-14, -100.0)
+ Point(99.99999999999999, -100.00000000000003)
+ Point(200.0, -4.898587196589413e-14)
+```
+
+julia> l.p2 == h.p1
+true
+"""
+function splitbezier(bps::BezierPathSegment, t)
+    p1, cp1, cp2, p2 = bps.p1, bps.cp1, bps.cp2, bps.p2
+    icp1 = (1.0 − t)p1   + (t * cp1)
+    M    = (1.0 − t)cp1  + (t * cp2)
+    icp4 = (1.0 − t)cp2  + (t * p2)
+    icp2 = (1.0 − t)icp1 + (t * M)
+    icp3 = (1.0 − t)M    + (t * icp4)
+    mp   = (1.0 − t)icp2 + (t * icp3)
+    return (BezierPathSegment(p1, icp1, icp2, mp), BezierPathSegment(mp, icp3, icp4, p2))
+end
+
+"""
+    trimbezier(bps::BezierPathSegment, lowpt, highpt)
+
+Chop the ends of a BezierPathSegment at `lowpt` and
+`highpt`. `lowpt` and `highpt` should be between 0 and 1.
+
+Returns a trimmed BezierPathSegment.
+"""
+function trimbezier(bps::BezierPathSegment, lowpt, highpt)
+    if lowpt > highpt
+        lowpt, highpt = highpt, lowpt
+    end
+    _, highptbezier = splitbezier(bps, lowpt)
+    centerbezier, _ = splitbezier(highptbezier, highpt)
+    return centerbezier
+end

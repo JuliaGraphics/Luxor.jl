@@ -82,23 +82,41 @@ function latextextsize(lstr::LaTeXString)
 end
 
 """
-    text(lstr::LaTeXString, pt::Point; valign=:baseline,
-    halign=:left, rotationfixed = false, angle=0, kwargs...)
+    text(lstr::LaTeXString, pt::Point;
+        valign=:baseline,
+        halign=:left,
+        rotationfixed = false,
+        angle=0,
+        paths=false,
+        kwargs...)
 
 Draws LaTeX string using `MathTexEngine.jl`. Hence, uses
 ModernCMU as font family. When `rotationfixed = true`,
 the text will rotate around its own axis, instead of
 rotating around `pt`.
+
+If `paths` is true, text paths are added to the current
+path, rather than drawn.
+
+```
+using Luxor
+using MathTeXEngine
+using LaTeXStrings
+@draw begin
+    fontsize(70)
+    text(L"e^{i\\pi} + 1 = 0", halign=:center)
+end
+```
 """
 function text(
-    lstr::LaTeXString,
-    pt::Point;
-    valign=:baseline,
-    halign=:left,
-    angle=0::Real,
-    rotationfixed=false,
-    kwargs...,
-)
+        lstr::LaTeXString,
+        pt::Point;
+        valign=:baseline,
+        halign=:left,
+        angle=0::Real,
+        rotationfixed=false,
+        paths=false,
+        kwargs...)
 
     # Function from MathTexEngine
     sentence = generate_tex_elements(lstr)
@@ -109,7 +127,7 @@ function text(
     textw, texth = latextextsize(lstr)
     bottom_pt, top_pt = rawlatexboundingbox(lstr)
 
-    translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
+    translate_x, translate_y = Luxor.texalign(halign, valign, bottom_pt, top_pt, font_size)
     # translate_x, translate_y = texalign(halign, valign, textw, texth, font_size)
 
     # Writes text using ModernCMU font.
@@ -125,16 +143,36 @@ function text(
                 rotate(angle)
                 translate(Point(translate_x,translate_y)-(l_pt + r_pt)/2)
             end
+
             if text[1] isa TeXChar
                 fontface(text[1].font.family_name)
                 fontsize(font_size * text[3])
-                Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
 
+                if paths == true
+                    newsubpath()
+                    move(Point(text[2]...) * font_size * (1, -1))
+                    Luxor.textoutlines(string(text[1].char),
+                        Point(text[2]...) * font_size * (1, -1),
+                        action=:path,
+                        startnewpath=false)
+                else
+                    Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
+                end
             elseif text[1] isa HLine
-                pointstart = Point(text[2]...) * font_size * (1, -1)
-                pointend = pointstart + Point(text[1].width, 0) * font_size
-                setline(0.5)
-                line(pointstart, pointend, :stroke)
+                # text is eg (HLine{Float64}(0.7105, 0.009), [0.0, 0.2106], 1.0))
+                #                            width   thick    x     y      scale
+                if paths == true
+                    pointstart = Point(text[2]...) * font_size * (1, -1)
+                    pointend = pointstart + Point(text[1].width, 0) * font_size
+                    poly([pointstart, pointend], :path)
+                    closepath()
+                    newsubpath()
+                else
+                    pointstart = Point(text[2]...) * font_size * (1, -1)
+                    pointend = pointstart + Point(text[1].width, 0) * font_size
+                    setline(0.5)
+                    line(pointstart, pointend, :stroke)
+                end
             end
         end
     end

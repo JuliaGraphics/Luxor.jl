@@ -331,42 +331,62 @@ end
         arrowheadfunction = myarrowheadfunction)
 end
 ```
-
 """
 function arrow(start::Point, C1::Point, C2::Point, finish::Point, action=:stroke;
         # optional
-        linewidth=1.0,
-        arrowheadlength=10,
-        arrowheadangle=pi/8,
-        arrowheadfill=true,
-        startarrow=false,
-        finisharrow=true,
-        decoration = 0.5,
-        decorate = nothing,
+        linewidth         = 1.0,
+        arrowheadlength   = 10,
+        arrowheadangle    = π/8,
+        arrowheadfill     = true,
+        startarrow        = false,
+        finisharrow       = true,
+        decoration        = 0.5,
+        decorate          = nothing,
         arrowheadfunction = nothing)
     @layer begin
         setline(linewidth)
-        overlap = 0.1 # radians of fudginess
-        # TODO rewrite all this
-        # arrow heads are a pain
-        # length of proposed arrow
-        bezlength = polyperimeter(beziertopoly(BezierPathSegment(start, C1, C2, finish)))
+        # TODO rewrite all this?
+        # arrow heads are a pain :)
+        # we're going to shorten the segment so that the
+        # ends hits the base of the arrowhead and doesn't
+        # stick out the top. This method is brute force and
+        # inefficient!
+        # suggestions for alternatives welcome
+        _startfrac = 0.0
+        _endfrac = 1.0
         if startarrow && arrowheadfill
-            # calculate the shorter version
-            actualcurvestart = bezier((arrowheadlength * cos(arrowheadangle + overlap))/bezlength, start, C1, C2, finish)
-        else
-            actualcurvestart = start
-        end
-        if finisharrow && arrowheadfill
-            # calculate the shorter version
-            actualcurvefinish = bezier(1 - (arrowheadlength * cos(arrowheadangle + overlap))/bezlength, start, C1, C2, finish)
-        else
-            actualcurvefinish = finish
-        end
+             true_arrowheadlength = arrowheadlength * cos(arrowheadangle)
+             for i in 0:0.01:1
+                 if distance(bezier(i, start, C1, C2, finish), start) > true_arrowheadlength
+                     _startfrac = i
+                     break
+                 end
+             end
+             # the 0.01 adds a bit of overlap :)
+             actualcurvestart = bezier(_startfrac - 0.01, start, C1, C2, finish)
+         else
+             actualcurvestart = start
+         end
 
+         if finisharrow && arrowheadfill
+             # calculate the shorter version
+             # brute force as above
+             true_arrowheadlength = arrowheadlength * cos(arrowheadangle)
+             for i in 1:-0.01:0.0
+                 if distance(bezier(i, start, C1, C2, finish), finish) > true_arrowheadlength
+                     _endfrac = i + 0.01 # use previous
+                     break
+                 end
+             end
+             actualcurvefinish = bezier(_endfrac, start, C1, C2, finish)
+         else
+             actualcurvefinish = finish
+         end
+
+         # finally draw Bezier starting at _startfrac and ending at _endfrac
         move(actualcurvestart)
-        curve(C1, C2, actualcurvefinish)
-
+        newcurve = trimbezier(BezierPathSegment(start, C1, C2, finish), _startfrac, _endfrac)
+        curve(newcurve.cp1, newcurve.cp2, newcurve.p2) # in Cairo form finally
         do_action(action)
 
         start_shaftangle  = slope(start, C1)
