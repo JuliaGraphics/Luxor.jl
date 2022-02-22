@@ -130,7 +130,7 @@ svgimage # hide
 
 ## Just add color
 
-The Julia colors are available as constants in Luxor, so we can make two changes that cycle through them. The first line creates the set of Julia colors; the [`setcolor`](@ref) function then works through them. `mod1` (get the `nth` element of an array) is the 1-based version of the `mod` function, essential for working with Julia and its 1-based indexing, such that `mod1(4, end)` gets the first value of a four element array (whereas `mod(4, end)` would fail, since it returns 0, and `colors[0]` is an error).
+The Julia colors are available as constants in Luxor, so we can make two changes that cycle through them. The first line creates the set of Julia colors; the [`setcolor`](@ref) function then works through them. `mod1` (get the `nth` element of an array) is the 1-based version of the `mod` function, essential for working with Julia and its 1-based indexing, such that `mod1(4, end)` gets the last value of a four element array (whereas `mod(4, end)` would fail, since it returns 0, and `colors[0]` is an error).
 
 ```@setup example_4
 using Luxor, Colors
