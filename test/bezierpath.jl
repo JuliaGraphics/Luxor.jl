@@ -7,6 +7,17 @@ using Test
 using Random
 Random.seed!(42)
 
+function bezierarithmetic()
+    bps = BezierPathSegment(ngon(O, 100, 4, vertices=true)...)
+    @test length(bps) == 4
+    @test Luxor.get_bezier_length(bps) ≈ 281.4703644162024
+
+    l, r = splitbezier(bps, 0.5)
+    @test last(l) ≈ first(r)
+    @test first(l) ≈ first(bps)
+    @test last(r) ≈ last(bps)
+end
+
 function bezierpathtest(fname)
     Random.seed!(3)
     currentwidth = 1200
@@ -66,6 +77,8 @@ function pathtobezierpath(fname)
     end
     @test finish() == true
 end
+
+bezierarithmetic()
 
 fname = "bezierpath.png"
 bezierpathtest(fname)
