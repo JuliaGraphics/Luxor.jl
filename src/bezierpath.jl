@@ -716,9 +716,9 @@ julia> l.p2 == h.p1
 true
 """
 function splitbezier(bps::BezierPathSegment, t)
-    p1, cp1, cp2, p2, = bps.p1, bps.cp1, bps.cp2, bps.p2
+    p1, cp1, cp2, p2 = bps.p1, bps.cp1, bps.cp2, bps.p2
     icp1 = (1.0 − t)p1   + (t * cp1)
-    M    = (1.0 − t)cp1  + (t * cp2)
+    M    = (1.0 − t)cp1  + (t * cp2) # unused center point
     icp4 = (1.0 − t)cp2  + (t * p2)
     icp2 = (1.0 − t)icp1 + (t * M)
     icp3 = (1.0 − t)M    + (t * icp4)
