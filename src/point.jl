@@ -1,13 +1,16 @@
 import Base: +, -, *, /, ^, !=, <, >, ==
 import Base: isequal, isless, isapprox, cmp, size, getindex, broadcastable
 
+
+abstract type AbstractPoint end
+
 """
 The Point type holds two coordinates. It's immutable, you can't
 change the values of the x and y values directly.
 """
-struct Point
-   x::Float64
-   y::Float64
+struct Point <: AbstractPoint
+    x::Float64
+    y::Float64
 end
 
 """
@@ -16,29 +19,29 @@ O is a shortcut for the current origin, `0/0`
 const O = Point(0, 0)
 
 # basics
-+(z::Number, p1::Point)              = Point(p1.x + z,    p1.y + z)
-+(p1::Point, z::Number)              = Point(p1.x + z,    p1.y + z)
-+(p1::Point, p2::Point)              = Point(p1.x + p2.x, p1.y + p2.y)
--(p1::Point, p2::Point)              = Point(p1.x - p2.x, p1.y - p2.y)
--(p::Point)                          = Point(-p.x,        -p.y)
--(z::Number, p1::Point)              = Point(p1.x - z,    p1.y - z)
--(p1::Point, z::Number)              = Point(p1.x - z,    p1.y - z)
-*(k::Number, p2::Point)              = Point(k * p2.x,    k * p2.y)
-*(p2::Point, k::Number)              = Point(k * p2.x,    k * p2.y)
-/(p2::Point, k::Number)              = Point(p2.x/k,      p2.y/k)
-*(p1::Point, p2::Point)              = Point(p1.x * p2.x, p1.y * p2.y)
-^(p::Point, e::Integer)              = Point(p.x^e,       p.y^e)
-^(p::Point, e::Float64)              = Point(p.x^e,       p.y^e)
++(z::Number, p1::Point) = Point(p1.x + z, p1.y + z)
++(p1::Point, z::Number) = Point(p1.x + z, p1.y + z)
++(p1::Point, p2::Point) = Point(p1.x + p2.x, p1.y + p2.y)
+-(p1::Point, p2::Point) = Point(p1.x - p2.x, p1.y - p2.y)
+-(p::Point) = Point(-p.x, -p.y)
+-(z::Number, p1::Point) = Point(p1.x - z, p1.y - z)
+-(p1::Point, z::Number) = Point(p1.x - z, p1.y - z)
+*(k::Number, p2::Point) = Point(k * p2.x, k * p2.y)
+*(p2::Point, k::Number) = Point(k * p2.x, k * p2.y)
+/(p2::Point, k::Number) = Point(p2.x / k, p2.y / k)
+*(p1::Point, p2::Point) = Point(p1.x * p2.x, p1.y * p2.y)
+^(p::Point, e::Integer) = Point(p.x^e, p.y^e)
+^(p::Point, e::Float64) = Point(p.x^e, p.y^e)
 
 # some refinements
 # modifying points with tuples
-+(p1::Point, shift::NTuple{2, Real}) = Point(p1.x + shift[1], p1.y + shift[2])
--(p1::Point, shift::NTuple{2, Real}) = Point(p1.x - shift[1], p1.y - shift[2])
-*(p1::Point, shift::NTuple{2, Real}) = Point(p1.x * shift[1], p1.y * shift[2])
-/(p1::Point, shift::NTuple{2, Real}) = Point(p1.x / shift[1], p1.y / shift[2])
++(p1::Point, shift::NTuple{2,Real}) = Point(p1.x + shift[1], p1.y + shift[2])
+-(p1::Point, shift::NTuple{2,Real}) = Point(p1.x - shift[1], p1.y - shift[2])
+*(p1::Point, shift::NTuple{2,Real}) = Point(p1.x * shift[1], p1.y * shift[2])
+/(p1::Point, shift::NTuple{2,Real}) = Point(p1.x / shift[1], p1.y / shift[2])
 
 # convenience
-Point((x, y)::Tuple{Real, Real}) = Point(x, y)
+Point((x, y)::Tuple{Real,Real}) = Point(x, y)
 
 # for broadcasting
 Base.size(::Point) = 2
@@ -85,26 +88,28 @@ end
 
 # comparisons
 
-isequal(p1::Point, p2::Point)         = isapprox(p1.x, p2.x, atol=0.00000001) && (isapprox(p1.y, p2.y, atol=0.00000001))
+isequal(p1::Point, p2::Point) =
+    isapprox(p1.x, p2.x, atol = 0.00000001) && (isapprox(p1.y, p2.y, atol = 0.00000001))
 
 # allow kwargs
-function Base.isapprox(p1::Point, p2::Point; atol=1e-6, kwargs...)
-    return isapprox(p1.x, p2.x; atol=atol, kwargs...) && isapprox(p1.y, p2.y; atol=atol, kwargs...)
+function Base.isapprox(p1::Point, p2::Point; atol = 1e-6, kwargs...)
+    return isapprox(p1.x, p2.x; atol = atol, kwargs...) &&
+           isapprox(p1.y, p2.y; atol = atol, kwargs...)
 end
 
-isless(p1::Point, p2::Point)          = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
-!=(p1::Point, p2::Point)              = !isequal(p1, p2)
-<(p1::Point, p2::Point)               = isless(p1, p2)
->(p1::Point, p2::Point)               = p2 < p1
-==(p1::Point, p2::Point)              = isequal(p1, p2)
+isless(p1::Point, p2::Point) = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
+!=(p1::Point, p2::Point) = !isequal(p1, p2)
+<(p1::Point, p2::Point) = isless(p1, p2)
+>(p1::Point, p2::Point) = p2 < p1
+==(p1::Point, p2::Point) = isequal(p1, p2)
 
-cmp(p1::Point, p2::Point)             = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
+cmp(p1::Point, p2::Point) = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 # a unique that works better on points?
 # I think this uses ==
 # TODO perhaps unique(x -> round(x, sigdigits=13), myarray) ?
 # "any implementation of unique with a tolerance will have some odd behaviors" Steven GJohnson
-function Base.unique(pts::Array{Point, 1})
+function Base.unique(pts::Array{Point,1})
     apts = Point[]
     for pt in pts
         if pt ∉ apts
@@ -122,7 +127,7 @@ Find the distance between two points (two argument form).
 function distance(p1::Point, p2::Point)
     dx = p2.x - p1.x
     dy = p2.y - p1.y
-    return sqrt(dx*dx + dy*dy)
+    return sqrt(dx * dx + dy * dy)
 end
 
 """
@@ -131,9 +136,9 @@ end
 Find the distance between a point `p` and a line between two points `a` and `b`.
 """
 function pointlinedistance(p::Point, a::Point, b::Point)
-  dx = b.x - a.x
-  dy = b.y - a.y
-  return abs(p.x * dy - p.y * dx + b.x * a.y - b.y * a.x) / hypot(dx, dy);
+    dx = b.x - a.x
+    dy = b.y - a.y
+    return abs(p.x * dy - p.y * dx + b.x * a.y - b.y * a.x) / hypot(dx, dy)
 end
 
 """
@@ -180,7 +185,7 @@ function between(p1::Point, p2::Point, x)
     return p1 + (x * (p2 - p1))
 end
 
-function between(couple::NTuple{2, Point}, x)
+function between(couple::NTuple{2,Point}, x)
     p1, p2 = couple
     return p1 + (x * (p2 - p1))
 end
@@ -198,8 +203,8 @@ function perpendicular(p1::Point, p2::Point, k)
     py = p2.y - p1.y
     l = hypot(px, py)
     if l > 0.0
-        ux = -py/l
-        uy = px/l
+        ux = -py / l
+        uy = px / l
         return Point(p1.x + (k * ux), p1.y + (k * uy))
     else
         error("these two points are the same")
@@ -217,8 +222,8 @@ function perpendicular(p1::Point, p2::Point)
         throw(error("perpendicular(); no line, the two points are the same"))
     end
     ip = p2 - p1
-    ep1 = Point(-ip.y, ip.x)/2 + (p1 + p2)/2
-    ep2 = Point(ip.y, -ip.x)/2 + (p1 + p2)/2
+    ep1 = Point(-ip.y, ip.x) / 2 + (p1 + p2) / 2
+    ep2 = Point(ip.y, -ip.x) / 2 + (p1 + p2) / 2
     return (ep1, ep2)
 end
 
@@ -251,9 +256,7 @@ If `extended` is false (the default) the point must lie on the line segment betw
 `pt1` and `pt2`. If `extended` is true, the point lies on the line if extended in
 either direction.
 """
-function ispointonline(pt::Point, pt1::Point, pt2::Point;
-        atol=10E-5,
-        extended=false)
+function ispointonline(pt::Point, pt1::Point, pt2::Point; atol = 10E-5, extended = false)
     dxc = pt.x - pt1.x
     dyc = pt.y - pt1.y
     dxl = pt2.x - pt1.x
@@ -261,7 +264,7 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
     cpr = (dxc * dyl) - (dyc * dxl)
 
     # point not on line
-    if !isapprox(cpr, 0.0, atol=atol)
+    if !isapprox(cpr, 0.0, atol = atol)
         return false
     end
 
@@ -272,13 +275,9 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
 
     # point on the line
     if (abs(dxl) >= abs(dyl))
-        return dxl > 0 ?
-            pt1.x <= pt.x && pt.x <= pt2.x :
-            pt2.x <= pt.x && pt.x <= pt1.x
+        return dxl > 0 ? pt1.x <= pt.x && pt.x <= pt2.x : pt2.x <= pt.x && pt.x <= pt1.x
     else
-        return dyl > 0 ?
-            pt1.y <= pt.y && pt.y <= pt2.y :
-            pt2.y <= pt.y && pt.y <= pt1.y
+        return dyl > 0 ? pt1.y <= pt.y && pt.y <= pt2.y : pt2.y <= pt.y && pt.y <= pt1.y
     end
 end
 
@@ -288,12 +287,11 @@ end
 
 Return `true` if `pt` lies on the polygon `pgon.`
 """
-function ispointonpoly(pt::Point, pgon::Array{Point, 1};
-        atol=10E-5)
-    @inbounds for i in 1:length(pgon)
+function ispointonpoly(pt::Point, pgon::Array{Point,1}; atol = 10E-5)
+    @inbounds for i = 1:length(pgon)
         p1 = pgon[i]
         p2 = pgon[mod1(i + 1, end)]
-        if ispointonline(pt, p1, p2, atol=atol)
+        if ispointonline(pt, p1, p2, atol = atol)
             return true
         end
     end
@@ -324,10 +322,11 @@ end
 
 function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
     a = (p2.x - p1.x)^2 + (p2.y - p1.y)^2
-    b = 2.0 * ((p2.x - p1.x) * (p1.x - cpoint.x) +
-               (p2.y - p1.y) * (p1.y - cpoint.y))
-    c = ((cpoint.x)^2 + (cpoint.y)^2 + (p1.x)^2 + (p1.y)^2 - 2.0 *
-        (cpoint.x * p1.x + cpoint.y * p1.y) - r^2)
+    b = 2.0 * ((p2.x - p1.x) * (p1.x - cpoint.x) + (p2.y - p1.y) * (p1.y - cpoint.y))
+    c = (
+        (cpoint.x)^2 + (cpoint.y)^2 + (p1.x)^2 + (p1.y)^2 -
+        2.0 * (cpoint.x * p1.x + cpoint.y * p1.y) - r^2
+    )
     i = b^2 - 4.0 * a * c
     if i < 0.0
         number_of_intersections = 0
@@ -342,8 +341,7 @@ function intersection_line_circle(p1::Point, p2::Point, cpoint::Point, r)
         number_of_intersections = 2
         # first intersection
         mu = (-b + sqrt(i)) / (2.0 * a)
-        intpoint1 = Point(p1.x + mu * (p2.x - p1.x),
-                     p1.y + mu * (p2.y - p1.y))
+        intpoint1 = Point(p1.x + mu * (p2.x - p1.x), p1.y + mu * (p2.y - p1.y))
         # second intersection
         mu = (-b - sqrt(i)) / (2.0 * a)
         intpoint2 = Point(p1.x + mu * (p2.x - p1.x), p1.y + mu * (p2.y - p1.y))
@@ -383,7 +381,7 @@ produces
 """
 macro polar(p)
     quote
-      Point($(esc(p))[1] * cos($(esc(p))[2]), $(esc(p))[1] * sin($(esc(p))[2]))
+        Point($(esc(p))[1] * cos($(esc(p))[2]), $(esc(p))[1] * sin($(esc(p))[2]))
     end
 end
 
@@ -420,8 +418,7 @@ within the other.
 If the lines are collinear and share a point in common, that
 is the intersection point.
 """
-function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
-        crossingonly = false)
+function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point; crossingonly = false)
     resultflag = false
     resultip = Point(0.0, 0.0)
     if p0 == p1 # no lines at all
@@ -454,12 +451,12 @@ function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
 
         l2 = (a2, b2, -c2)
 
-        d  = l1[1] * l2[2] - l1[2] * l2[1]
+        d = l1[1] * l2[2] - l1[2] * l2[1]
         dx = l1[3] * l2[2] - l1[2] * l2[3]
         dy = l1[1] * l2[3] - l1[3] * l2[1]
 
         if !iszero(d)
-            resultip = pt = Point(dx/d, dy/d)
+            resultip = pt = Point(dx / d, dy / d)
             if crossingonly == true
                 if ispointonline(resultip, p0, p1) && ispointonline(resultip, p2, p3)
                     resultflag = true
@@ -467,8 +464,8 @@ function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
                     resultflag = false
                 end
             else
-                if ispointonline(resultip, p0, p1, extended=true) &&
-                   ispointonline(resultip, p2, p3, extended=true)
+                if ispointonline(resultip, p0, p1, extended = true) &&
+                   ispointonline(resultip, p2, p3, extended = true)
                     resultflag = true
                 else
                     resultflag = false
@@ -476,7 +473,7 @@ function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
             end
         else
             resultflag = false
-            resultip =  Point(0, 0)
+            resultip = Point(0, 0)
         end
     end
     return (resultflag, resultip)
@@ -494,7 +491,8 @@ distance(centerpoint, A) * distance(centerpoint, A′) == rad^2
 Return (true, A′) or (false, A).
 """
 function pointinverse(A::Point, centerpoint, rad)
-    A == centerpoint && throw(error("pointinverse(): point $A and centerpoint $centerpoint are the same"))
+    A == centerpoint &&
+        throw(error("pointinverse(): point $A and centerpoint $centerpoint are the same"))
     result = (false, A)
     n, C, pt2 = intersectionlinecircle(centerpoint, A, centerpoint, rad)
     if n > 0
@@ -548,10 +546,10 @@ translate(120, 120)
 @show getworldposition()  # => Point(120.0, 120.0)
 ```
 """
-function getworldposition(pt::Point=O;
-    centered=true)
+function getworldposition(pt::Point = O; centered = true)
     x, y = cairotojuliamatrix(getmatrix()) * [pt.x, pt.y, 1]
-    return Point(x, y) - (centered ? (Luxor.current_width()/2.0, Luxor.current_height()/2.0) : (0 , 0))
+    return Point(x, y) -
+           (centered ? (Luxor.current_width() / 2.0, Luxor.current_height() / 2.0) : (0, 0))
 end
 
 """
