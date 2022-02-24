@@ -365,6 +365,7 @@ function drawpath(path::Path, k::Real;
         elseif pathelement isa PathClose
             # I think Close is just drawing to the point established by previous Move...
             drawpath(PathLine(firstpoint))
+            closepath() # ???
         end
         currentlength > requiredlength && break
     end
@@ -385,8 +386,8 @@ drawpath(path::Path, k::Real, act::Symbol;
     pathsample(path::Path, spacing)
 
 Return a new Path that resamples the `path` such that each
-line and arc of the original path is divided into sections
-that are `spacing` units long.
+line and curve of the original path is divided into sections
+that are approximately `spacing` units long.
 """
 function pathsample(path::Path, spacing)
     isapprox(spacing, 0.0) && throw(error("pathsample(): space between vertices must not be zero"))

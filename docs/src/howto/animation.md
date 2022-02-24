@@ -5,6 +5,11 @@ DocTestSetup = quote
 ```
 # Animation helper functions
 
+
+!!! note
+
+    [Javis.jl](https://github.com/JuliaAnimators/Javis.jl) is the best way to make animated graphics  with Julia.
+
 Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.
 
 There are four steps to creating an animation.
@@ -103,9 +108,60 @@ animate(demo, [
     pathname="...")
 ```
 
+## Animating paths
+
+A useful function to help with animations is [`drawpath`](@ref). This has
+a method that accepts a value between 0 and 1 that draws a
+portion of a Path object.
+
+For example, the purple stroke is about half the length of the path.
+
+```@example
+using Luxor # hide
+
+d = Drawing(600, 250, :svg) # hide
+background("antiquewhite") # hide
+origin() # hide
+
+fontsize(300)
+textpath("s", O, halign=:center, valign=:middle)
+s = storepath()
+drawpath(s, action=:stroke)
+
+sethue("purple")
+setline(10)
+setopacity(0.5)
+pt = drawpath(s, 0.5, action=:stroke) # return final pt
+
+setcolor("red")
+circle(pt, 5, :fill)
+finish() # hide
+d # hide
+```
+
+It's also useful for animating text paths.
+
+![text animation](../assets/figures/textanimation.gif)
+
+which uses code like this:
+
+```julia
+...
+f =  # a value between 0 and 1
+textpath("Thank you for using", pt, halign=:center)
+tp = storepath()
+drawpath(tp, f, :stroke)
+...
+```
+
 ## Easing functions
 
-Transitions for animations often use non-constant and non-linear motions, and these are usually provided by *easing* functions. Luxor defines some of the basic easing functions and they're listed in the (unexported) array `Luxor.easingfunctions`. Each scene can have one easing function.
+Transitions for animations often use non-constant and
+non-linear motions, and these are usually provided by
+*easing* functions. Luxor defines some of the basic easing
+functions and they're listed in the (unexported) array
+`Luxor.easingfunctions`. Each scene can have one easing
+function.
 
 
 |List of easing functions|
