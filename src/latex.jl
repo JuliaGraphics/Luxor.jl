@@ -129,8 +129,6 @@ function text(
 
     translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
 
-
-
     # Writes text using ModernCMU font.
     for text in sentence
         @layer begin
@@ -147,10 +145,9 @@ function text(
 
             if text[1] isa TeXChar
 
-                # fontface(text[1].font.family_name)
-                # fontsize(font_size * text[3])
-
                 if paths == true
+                    fontface(text[1].font.family_name)
+                    fontsize(font_size * text[3])
                     newsubpath()
                     move(Point(text[2]...) * font_size * (1, -1))
                     Luxor.textoutlines(string(text[1].char),
@@ -201,7 +198,7 @@ function writelatexchar(text, font_size)
         Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0,-0.8)*font_size)
 
     elseif string(text[1].char) in extrachars
-        setfont(text[1].font.family_name, 1.3font_size * text[3]) 
+        setfont(text[1].font.family_name, 1.3font_size * text[3])
         Luxor.settext(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0,0.3)*font_size)
 
     else
