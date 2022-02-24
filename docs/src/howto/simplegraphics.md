@@ -1224,7 +1224,7 @@ there is an option to continue drawing on the existing one.
 
 ## Julia logos
 
-A couple of functions in Luxor provide you with instant access to the Julia logo, and the three colored circles:
+A couple of functions, [`julialogo`](@ref) and [`juliacircles`](@ref), provide you with instant access to the Julia logo and the three colored circles/dots:
 
 ```@example
 using Luxor, Random # hide
@@ -1260,7 +1260,16 @@ finish() # hide
 nothing # hide
 ```
 
-![get path](../assets/figures/julia-logo.png)
+![julia logo and circles](../assets/figures/julia-logo.png)
+
+There are various options for `julialogo()` to control coloring ans positioning.
+
+The four standard Julia colors are available as RGB tuples as `Luxor.julia_blue`, `Luxor.julia_green`, `Luxor.julia_purple`,  `Luxor.julia_red`:
+
+```julia
+julia> Luxor.julia_red
+(0.796, 0.235, 0.2)
+```
 
 ## Hypotrochoids
 

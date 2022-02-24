@@ -885,7 +885,7 @@ nothing # hide
 
 ![bezier segment angles](../assets/figures/beziersegmentangles.svg)
 
-There are some functions that can modify Bezier path segments. For example, [`trimbezier`](@ref) chops chunks off each end:
+There are some functions that can modify Bezier path segments. For example, [`trimbezier`](@ref) chops portions off each end:
 
 ```@example
 using Luxor # hide
@@ -912,6 +912,8 @@ drawbezierpath(trimbez, :stroke)
 finish() # hide
 d # hide
 ```
+
+When working with Bézier curves it's usual to consider the curve in terms of a parameter `t` going from 0.0 to 1.0.  
 
 [`splitbezier`](@ref) can split a segment into two shorter segments.
 

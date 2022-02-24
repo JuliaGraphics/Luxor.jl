@@ -32,6 +32,9 @@ function Base.iterate(bps::BezierPathSegment, s)
     return bps[s], s+1
 end
 
+BezierPathSegment(a::Array{Point, 1}) =
+    BezierPathSegment(a[1], a[2], a[3], a[4])
+
 # function Base.show(io::IO, bps::BezierPathSegment)
 #     println(io, "p1  $(bps.p1)  cp1 $(bps.cp1)")
 #     println(io, "cp2  $(bps.cp2)  p2 $(bps.p2)")
@@ -73,6 +76,9 @@ bezier(t, A::Point, A1::Point, B1::Point, B::Point) =
       (B1 * 3t^2 * (1.0 - t)) +
       (B * t^3)
 
+bezier(t, bps::BezierPathSegment) =
+    bezier(t, bps.p1, bps.cp1, bps.cp1, bps.p2)
+
 """
   bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
 
@@ -80,12 +86,18 @@ Return the first derivative of the Bezier function.
 """
 bezier′(t, A, A1, B1, B) = 3(1.0-t)^2 * (A1-A) + 6(1.0-t) * t * (B1-A1) + 3t^2 * (B-B1)
 
+bezier′(t, bps::BezierPathSegment) =
+    bezier′(t, bps.p1, bps.cp1, bps.cp1, bps.p2)
+
 """
     bezier′′(t, A::Point, A1::Point, B1::Point, B::Point)
 
 Return the second derivative of Bezier function.
 """
 bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
+
+bezier′′(t, bps::BezierPathSegment) =
+    bezier′′(t, bps.p1, bps.cp1, bps.cp1, bps.p2)
 
 """
     beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
@@ -121,6 +133,9 @@ function beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
     y′′ = bezier′′(t, A, A1, B1, B).y
     return ((x′ * y′′) - (y′ * x′′)) / (x′^2 + y′^2)^(3/2)
 end
+
+beziercurvature(t, bps::BezierPathSegment) =
+    beziercurvature(t, bps.p1, bps.cp1, bps.cp1, bps.p2)
 
 """
     findbeziercontrolpoints(previouspt::Point,
