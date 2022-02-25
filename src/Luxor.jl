@@ -139,7 +139,7 @@ export Drawing,
     ngon, ngonside, star, pie, polycross,
     do_action, paint, paint_with_alpha, fillstroke,
 
-    Point, O, randompoint, randompointarray, midpoint,
+    AbstractPoint, Point, O, randompoint, randompointarray, midpoint,
     between, slope, intersectionlines, pointlinedistance,
     getnearestpointonline, isinside,
     rotate_point_around_point, perpendicular, crossproduct,
@@ -224,7 +224,7 @@ export Drawing,
 
     Path, PathClose, PathCurve, PathElement, PathLine,
     PathMove, bezierpathtopath, drawpath, storepath,
-    polytopath, pathlength, pathsample, 
+    polytopath, pathlength, pathsample,
 
     # experimental
     layoutgraph, Style, applystyle,

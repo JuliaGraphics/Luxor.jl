@@ -399,7 +399,7 @@ produces
 polar(r, theta) = Point(r * cos(theta), r * sin(theta))
 
 """
-    intersectionlines(p0, p1, p2, p3,
+    intersectionlines(p0, p1, p2, p3;
         crossingonly=false)
 
 Find point where two lines intersect.
@@ -418,7 +418,8 @@ within the other.
 If the lines are collinear and share a point in common, that
 is the intersection point.
 """
-function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point; crossingonly = false)
+function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
+        crossingonly = false)
     resultflag = false
     resultip = Point(0.0, 0.0)
     if p0 == p1 # no lines at all
@@ -546,7 +547,8 @@ translate(120, 120)
 @show getworldposition()  # => Point(120.0, 120.0)
 ```
 """
-function getworldposition(pt::Point = O; centered = true)
+function getworldposition(pt::Point = O;
+        centered = true)
     x, y = cairotojuliamatrix(getmatrix()) * [pt.x, pt.y, 1]
     return Point(x, y) -
            (centered ? (Luxor.current_width() / 2.0, Luxor.current_height() / 2.0) : (0, 0))
