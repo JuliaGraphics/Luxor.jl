@@ -232,6 +232,8 @@ end
 d # hide
 ```
 
+See also [Stored paths](@ref).
+
 ## Polygons
 
 A polygon appears as a plain Vector (Array) of `Point`s.

@@ -2,19 +2,22 @@
 
 ## Anti-aliasing
 
-The process of converting precise graphic shapes to a grid of
-pixels is automatically performed by Luxor when you
-save the drawing as a PNG file. If you make an SVG or PDF
-drawing, this process is carried out at a later stage, by the application you
-use to view or display the file.
+The process of converting precise graphic shapes to a grid
+of pixels is automatically performed by Luxor when you save
+the drawing as a PNG file. If you make an SVG or PDF
+drawing, this process is carried out at a later stage, by
+the application you use to view or display the file.
 
 It's usually better to defer this conversion as long as
-possible. Of course, eventually - unless you're using a pen plotter or
-laser cutter - your smooth outlines will have to be
-converted ("rasterized") to a grid of colored pixels for
+possible. Of course, eventually - unless you're using a pen
+plotter or laser cutter - your smooth outlines will have to
+be converted ("rasterized") to a grid of colored pixels for
 their final journey to the analogue world.
 
-The conversion to PNG includes "anti-aliasing", which gradually changes the colors of pixels along a boundary so as to avoid the grid-like "staircase" effect. You can, to some extent, adjust the amount of anti-aliasing used when
+The conversion to PNG includes "anti-aliasing", which
+gradually changes the colors of pixels along a boundary so
+as to avoid the grid-like "staircase" effect. You can, to
+some extent, adjust the amount of anti-aliasing used when
 you make drawings in Luxor.
 
 ```@setup draw_matrix

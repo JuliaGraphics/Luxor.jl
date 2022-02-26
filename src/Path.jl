@@ -41,7 +41,8 @@ end
 
 Create a Path from the points in `ptlist`.
 """
-function Path(ptlist::Vector{Point}; close=false)
+function Path(ptlist::Vector{Point};
+        close=false)
     p = Path(PathElement[])
     push!(p.path, PathMove(ptlist[1]))
     for pt in ptlist[2:end]
@@ -145,7 +146,8 @@ discarding any existing path contents.
 
 TODO Return something more useful than a Boolean!
 """
-function drawpath(cp::Path; action=:none, startnewpath=true)
+function drawpath(cp::Path;
+        action=:none, startnewpath=true)
     startnewpath && newpath()
     for p in cp
           drawpath(p)
@@ -232,8 +234,8 @@ function BoundingBox(path::Path)
 end
 
 """
-      get_bezier_points(bps::BezierPathSegment;
-              steps=10)
+    get_bezier_points(bps::BezierPathSegment;
+        steps=10)
 
 The flattening: return a list of all the points on the
 Bezier curve, including start and end, using `steps` to
@@ -307,12 +309,14 @@ Draw the path in `path` starting at the beginning and
 stopping at `k` between 0 and 1. So if `k` is 0.5, half the
 path is drawn.
 
+Returns the last point processed.
+
 The function calculates the length of the entire path before
 drawing it. If you want to draw a large path more than once,
 it might be more efficient to calculate the length of the
 path first, and provide it to the `pathlength` keyword.
 
-Returns the last point processed.
+The `steps` parameter is used when approximating the length of any curve (Bezier) sections.
 """
 function drawpath(path::Path, k::Real;
         steps=10, # used when approximating Bezier curve segments
@@ -383,14 +387,22 @@ drawpath(path::Path, k::Real, act::Symbol;
             pathlength = pathlength)
 
 """
-    pathsample(path::Path, spacing)
+    pathsample(path::Path, spacing;
+        steps=10)
 
 Return a new Path that resamples the `path` such that each
 line and curve of the original path is divided into sections
 that are approximately `spacing` units long.
+
+The `steps` parameter is used when approximating the length
+of any curve (Bezier) sections. For measurement purposes,
+each Bezier curve is divided in `steps` straight lines; the
+error will be smaller for flatter curves and larger for more
+curvy ones.
 """
-function pathsample(path::Path, spacing)
-    isapprox(spacing, 0.0) && throw(error("pathsample(): space between vertices must not be zero"))
+function pathsample(path::Path, spacing;
+        steps=10)
+    isapprox(spacing, 0.0) && throw(error("pathsample(): a spacing of $(spacing) is too close to zero"))
     newpath = PathElement[]
     currentpoint = O
     firstpoint = currentpoint
@@ -404,7 +416,7 @@ function pathsample(path::Path, spacing)
                 pathelement.pt1,
                 pathelement.pt2,
                 pathelement.pt3)
-            plength = Luxor.get_bezier_length(bps)
+            plength = Luxor.get_bezier_length(bps, steps=steps)
             _step = spacing/plength
             for i in range(0.0, 1.0 - _step, step=_step)
                 bezsegment = trimbezier(bps, i, i + _step)

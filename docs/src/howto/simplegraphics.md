@@ -6,11 +6,16 @@ DocTestSetup = quote
 # Simple graphics
 
 In Luxor, there are different ways of working with graphical
-items. You can either draw them immediately, ie place them
-on the drawing, and they're then fixed. Or you can construct
-geometric objects containing lists of points for further
-processing. Watch out for a `vertices=true` option, which
-returns coordinate data rather than drawing a shape.
+items:
+
+- You can either draw them immediately, ie create lines and curves to form a **path** on the drawing, paint them, and they're then fixed.
+
+- You can construct geometric objects containing lists of
+  points for further processing. Watch out for a
+  `vertices=true` option, which returns coordinate data
+  rather than drawing a path shape.
+
+- You can combine these two approaches: create a path from lines and curves (and jumps), then store the path, ready for drawing later on.
 
 ## Rectangles and boxes
 
@@ -1221,6 +1226,14 @@ After you've stored a path, the current path is still
 active. You might want to use `newpath()` to start a new
 one. The `drawpath()` function will start a new path but
 there is an option to continue drawing on the existing one.
+
+Other functions for working with stored paths include:
+
+- [`drawpath`](@ref) draw part of a path
+
+- [`pathsample`](@ref) resample the path
+
+- [`pathlength`](@ref) find the length of a path
 
 ## Julia logos
 

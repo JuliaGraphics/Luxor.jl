@@ -13,9 +13,6 @@ module Luxor
 using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG
 
 using Requires
-# using LaTeXStrings
-
-# import MathTeXEngine: generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
@@ -78,7 +75,6 @@ function __init__()
         @require LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f" include("latex.jl")
     end
 end
-
 
 export Drawing,
     cm, inch, mm,

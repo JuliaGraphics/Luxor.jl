@@ -1,9 +1,10 @@
-using LaTeXStrings
 import MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
+using LaTeXStrings
 
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
+
 Helper function to align LaTeX text properly. Returns
 `translate_x` and `translate_y` which consists of the amount
 to be shifted depending on the type of alignment chosen
@@ -35,6 +36,7 @@ end
 
 """
     rawlatexboundingbox(lstr::LaTeXString, font_size=1)
+
 Helper function that returns the coordinate points
 of the bounding box containing the specific LaTeX text.
 """
@@ -55,13 +57,14 @@ end
 
 """
     latexboundingbox(lstr::LaTeXString, font_size=get_fontsize(); halign=:left, valign=:right)
+
 Returns the bounding box containing the latex text with
 `(Lower Left Point, Upper Right Point)`.
 Use `box(latex_bb(testext)...,:stroke)` to draw the bounding box.
 """
-function latexboundingbox(
-    lstr::LaTeXString, font_size=get_fontsize(); halign=:left, valign=:right
-)
+function latexboundingbox(lstr::LaTeXString, font_size=get_fontsize();
+        halign=:left, valign=:right)
+
     bottom_pt, top_pt = rawlatexboundingbox(lstr)
 
     translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
@@ -72,6 +75,7 @@ end
 
 """
     latextextsize(lstr::LaTeXString)
+
 Returns the width and height of a latex string.
 """
 function latextextsize(lstr::LaTeXString)
@@ -108,9 +112,7 @@ using LaTeXStrings
 end
 ```
 """
-function text(
-        lstr::LaTeXString,
-        pt::Point;
+function text(lstr::LaTeXString, pt::Point;
         valign=:baseline,
         halign=:left,
         angle=0::Real,
@@ -180,6 +182,7 @@ end
 
 """
     writelatexchar(t::AbstractString)
+
 Helper function to handle extra chars that are not supported
 in MathTeXEngine.
 """
@@ -204,5 +207,4 @@ function writelatexchar(text, font_size)
     else
         Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
     end
-
 end

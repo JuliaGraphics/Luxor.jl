@@ -1,9 +1,7 @@
 #!/usr/bin/env julia
 
 using Luxor
-
 using Test
-
 using Random
 Random.seed!(42)
 
@@ -11,7 +9,7 @@ function bezierarithmetic()
     bps = BezierPathSegment(ngon(O, 100, 4, vertices=true)...)
     @test length(bps) == 4
     @test Luxor.get_bezier_length(bps) ≈ 281.4703644162024
-
+    @test Luxor.get_bezier_length(bps, steps=100) ≈ 282.8313796714682
     l, r = splitbezier(bps, 0.5)
     @test last(l) ≈ first(r)
     @test first(l) ≈ first(bps)

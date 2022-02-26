@@ -66,7 +66,7 @@ Base.push!(bp::BezierPath, v::BezierPathSegment) = Base.push!(bp.segments, v)
 """
     bezier(t, A::Point, A1::Point, B1::Point, B::Point)
 
-Return the result of evaluating the Bezier cubic curve function, `t` going from
+Return the result of evaluating the Bézier cubic curve function, `t` going from
 0 to 1, starting at A, finishing at B, control points A1 (controlling A), and B1
 (controlling B).
 """
@@ -82,7 +82,7 @@ bezier(t, bps::BezierPathSegment) =
 """
   bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
 
-Return the first derivative of the Bezier function.
+Return the first derivative of the Bézier function.
 """
 bezier′(t, A, A1, B1, B) = 3(1.0-t)^2 * (A1-A) + 6(1.0-t) * t * (B1-A1) + 3t^2 * (B-B1)
 
@@ -92,7 +92,7 @@ bezier′(t, bps::BezierPathSegment) =
 """
     bezier′′(t, A::Point, A1::Point, B1::Point, B::Point)
 
-Return the second derivative of Bezier function.
+Return the second derivative of Bézier function.
 """
 bezier′′(t, A, A1, B1, B) = 6(1-t) * (B1-2A1+A) + 6t * (B-2B1+A1)
 
@@ -102,7 +102,7 @@ bezier′′(t, bps::BezierPathSegment) =
 """
     beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
 
-Return the curvature of the Bezier curve at `t` ([0-1]), given start and end
+Return the curvature of the Bézier curve at `t` ([0-1]), given start and end
 points A and B, and control points A1 and B1. The value (kappa) will typically
 be a value between -0.001 and 0.001 for points with coordinates in the 100-500
 range.
@@ -138,17 +138,22 @@ beziercurvature(t, bps::BezierPathSegment) =
     beziercurvature(t, bps.p1, bps.cp1, bps.cp1, bps.p2)
 
 """
-    findbeziercontrolpoints(previouspt::Point,
+    findbeziercontrolpoints(
+        previouspt::Point,
         pt1::Point,
         pt2::Point,
         nextpt::Point;
-        smooth_value=0.5)
+            smoothing = 0.5)
 
 Find the Bézier control points for the line between `pt1` and `pt2`, where the
 point before `pt1` is `previouspt` and the next point after `pt2` is `nextpt`.
 """
-function findbeziercontrolpoints(previouspt::Point, point1::Point, point2::Point, nextpt::Point;
-    smoothing=0.5)
+function findbeziercontrolpoints(
+        previouspt::Point,
+        point1::Point,
+        point2::Point,
+        nextpt::Point;
+            smoothing=0.5)
 
     xc1 = (previouspt.x + point1.x)/2.0 ; yc1 = (previouspt.y + point1.y)/2.0
     xc2 = (point1.x + point2.x)/2.0     ; yc2 = (point1.y + point2.y)/2.0
@@ -166,16 +171,20 @@ function findbeziercontrolpoints(previouspt::Point, point1::Point, point2::Point
 end
 
 """
-    makebezierpath(pgon::Array{Point, 1}; smoothing=1.0)
+    makebezierpath(pgon::Array{Point, 1};
+        smoothing=1.0)
 
 Return a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier
 path is an array of segments (tuples of 4 points); each segment contains the
-four points that make up a section of the entire Bézier path. `smoothing`
-determines how closely the curve follows the polygon. A value of 0 returns a
-straight-sided path; as values move above 1 the paths deviate further from
-the original polygon's edges.
+four points that make up a section of the entire Bézier path.
+
+`smoothing` determines how closely the curve follows the
+polygon. A value of 0 returns a straight-sided path; as
+values move above 1 the paths deviate further from the
+original polygon's edges.
 """
-function makebezierpath(pgon::Array{Point, 1}; smoothing=1.0)
+function makebezierpath(pgon::Array{Point, 1};
+        smoothing=1.0)
     lpg = length(pgon)
     newpath = BezierPath()
     for i in 1:lpg
@@ -201,7 +210,8 @@ etc. By default the path is closed.
 
 TODO Return something more useful than a Boolean.
 """
-function drawbezierpath(bezierpath::BezierPath, action; close=true)
+function drawbezierpath(bezierpath::BezierPath, action;
+        close=true)
     move(bezierpath[1].p1)
     for i in 1:length(bezierpath) - 1
         c = bezierpath[i]
@@ -226,8 +236,8 @@ Draw the Bézier path segment, and apply the action, such as `:none`, `:stroke`,
 
 TODO Return something more useful than a Boolean.
 """
-function drawbezierpath(bps::BezierPathSegment,
-    action=:none; close=false)
+function drawbezierpath(bps::BezierPathSegment, action=:none;
+        close=false)
     move(bps.p1)
     curve(bps.cp1, bps.cp2, bps.p2)
     if close == true
@@ -240,11 +250,13 @@ drawbezierpath(bpsa::Array{BezierPathSegment, 1}, action=:none) =
    foreach(b -> drawbezierpath(b, action), bpsa)
 
 """
-    beziertopoly(bpseg::BezierPathSegment; steps=10)
+    beziertopoly(bpseg::BezierPathSegment;
+        steps=10)
 
-Convert a Bezier segment to a polygon (an array of points).
+Convert a BezierPathsegment to a polygon (an array of points).
 """
-function beziertopoly(bpseg::BezierPathSegment; steps=10)
+function beziertopoly(bpseg::BezierPathSegment;
+        steps=10)
     thepolygon = Point[]
     anchor1, control1, control2, anchor2 = bpseg.p1, bpseg.cp1, bpseg.cp2, bpseg.p2
     dx1 = control1.x - anchor1.x
@@ -292,17 +304,19 @@ function beziertopoly(bpseg::BezierPathSegment; steps=10)
 end
 
 """
-    bezierpathtopoly(bezierpath::BezierPath; steps=10)
+    bezierpathtopoly(bezierpath::BezierPath;
+        steps=10)
 
-Convert a Bezier path (an array of Bezier segments, where each segment is a
-tuple of four points: anchor1, control1, control2, anchor2) to a polygon.
+Convert a Bézier path (an array of BezierPathSegments, where each is a
+tuple of four points: anchor1, control1, control2, anchor2), to a polygon.
 
-To make a Bezier path, use `makebezierpath()` on a polygon.
+To make a Bézier path, use `makebezierpath()` on a polygon.
 
-The `steps` optional keyword determines how many line sections are used for each
-path.
+The `steps` optional keyword determines how many straight
+line sections are used for each path.
 """
-function bezierpathtopoly(bezierpath::BezierPath; steps=10)
+function bezierpathtopoly(bezierpath::BezierPath;
+        steps=10)
     resultpoly = Point[]
     for bp in bezierpath
         p = beziertopoly(bp, steps=steps)
@@ -318,16 +332,16 @@ end
     pathtobezierpaths(
         ; flat=true)
 
-Convert the current path (which may consist of one or more paths) to an array of
-Bezier paths. Each Bezier path is, in turn, an array of path segments. Each path
-segment is a tuple of four points. A straight line is converted to a Bezier segment
+Convert the current Cairo path (which may consist of one or more paths) to an array of
+Bézier paths, each of which is an array of BezierPathSegments. Each path
+segment is a tuple of four points. A straight line is converted to a Bézier segment
 in which the control points are set to be the same as the end points.
 
 If `flat` is true, use `getpathflat()` rather than `getpath()`.
 
 # Example
 
-This code draws the Bezier segments and shows the control points as "handles", like
+This code draws the BezierPathSegments and shows the control points as "handles", like
 a vector-editing program might.
 
 ```
@@ -361,7 +375,8 @@ end
 ```
 
 """
-function pathtobezierpaths(; flat=true)
+function pathtobezierpaths(;
+        flat=true)
     flat ? (originalpath = getpath()) : (originalpath = getpathflat())
     # to store all the Bezier paths
     result = BezierPath[]
@@ -424,15 +439,20 @@ _b2(t) = (1 - t) * t * t * 3
 _b3(t) = (t ^ 3)
 
 """
-    bezierfrompoints(startpoint::Point, pointonline1::Point,
-        pointonline2::Point, endpoint::Point)
+    bezierfrompoints(startpoint::Point,
+        pointonline1::Point,
+        pointonline2::Point,
+        endpoint::Point)
 
-Given four points, return the Bezier curve that passes through all four points,
+Given four points, return the Bézier curve that passes through all four points,
 starting at `startpoint` and ending at `endpoint`. The two middle points of the
 returned BezierPathSegment are the two control points that make the curve pass
 through the two middle points supplied.
 """
-function bezierfrompoints(startpoint::Point, pointonline1::Point, pointonline2::Point, endpoint::Point)
+function bezierfrompoints(startpoint::Point,
+        pointonline1::Point,
+        pointonline2::Point,
+        endpoint::Point)
     # chord lengths
     c1 = sqrt((pointonline1.x - startpoint.x) * (pointonline1.x - startpoint.x) + (pointonline1.y - startpoint.y) * (pointonline1.y - startpoint.y))
     c2 = sqrt((pointonline2.x - pointonline1.x) * (pointonline2.x - pointonline1.x) + (pointonline2.y - pointonline1.y) * (pointonline2.y - pointonline1.y))
@@ -448,7 +468,7 @@ end
 """
     bezierfrompoints(ptslist::Array{Point, 1})
 
-Given four points, return the Bezier curve that passes through all four points.
+Given four points, return the Bézier curve that passes through all four points.
 """
 bezierfrompoints(ptslist::Array{Point, 1}) = bezierfrompoints(ptslist...)
 
@@ -511,16 +531,16 @@ end
             angles  = [0.05, -0.1],
             handles = [0.3, 0.3])
 
-Return a new Bezier path segment with new locations for the Bezier control
-points in the Bezier path segment `bps`.
+Return a new BezierPathSegment with new locations for the Bezier control
+points in the BezierPathSegment `bps`.
 
 `angles` are the two angles that the "handles" make with the line direciton.
 
 ` handles` are the lengths of the "handles". 0.3 is a typical value.
 """
 function setbezierhandles(bps::BezierPathSegment;
-            angles=[0.05, -0.1],
-            handles=[0.3, 0.3])
+        angles=[0.05, -0.1],
+        handles=[0.3, 0.3])
     d = distance(bps[1], bps[4])
     s = slope(bps[1], bps[4])
     bezhandle1 = bps[1] + polar(d * handles[1], s - angles[1])
@@ -531,11 +551,11 @@ end
 
 """
     setbezierhandles(bezpath::BezierPath;
-            angles=[0 .05, -0.1],
-            handles=[0.3, 0.3])
+        angles=[0 .05, -0.1],
+        handles=[0.3, 0.3])
 
-Return a new Bezierpath with new locations for the Bezier control points in
-every Bezier path segment of the BezierPath in `bezpath`.
+Return a new BezierPath with new locations for the Bézier control points in
+every Bézier path segment of the BezierPath in `bezpath`.
 
 `angles` are the two angles that the "handles" make with the line direciton.
 
@@ -553,9 +573,10 @@ end
 
 """
     shiftbezierhandles(bps::BezierPathSegment;
-        angles=[0.1, -0.1], handles=[1.1, 1.1])
+        angles=[0.1, -0.1],
+        handles=[1.1, 1.1])
 
-Return a new BezierPathSegment that modifies the Bezier path in `bps` by moving
+Return a new BezierPathSegment that modifies the Bézier path in `bps` by moving
 the control handles. The values in `angles` increase the angle of the handles;
 the values in `handles` modifies the lengths: 1 preserves the length, 0.5 halves
 the length of the  handles, 2 doubles them.
@@ -702,9 +723,11 @@ end
 
 Split the Bezier path segment at t, where t is between 0 and 1.
 
-Use de CastelJau's algorithm.
+Use Paul de Casteljaus' algorithm (the man who really
+introduced Bezier curves...).
 
-Returns a tuple of two BezierPathSegments, the lower one followed by the higher one.
+Returns a tuple of two BezierPathSegments, the 'lower' one
+(0 to `t`) followed by the 'higher' one (`t` to 1).
 
 ## Example
 

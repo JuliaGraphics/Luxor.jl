@@ -39,7 +39,8 @@ graphic shapes to the current path (eg `box()`, `circle()`,
 100, 100))` adds a shape to the current path as well as
 returning a bounding box.
 """
-function BoundingBox(; centered = true)
+function BoundingBox(;
+        centered = true)
     if currentdrawing() == false
         # return a default bounding box of 600×600
         r = BoundingBox(Point(-300, -300), Point(300, 300))
@@ -83,8 +84,7 @@ function BoundingBox(pointlist::Array{Point,1})
     end
     return BoundingBox(
         Point(lowx, lowy),
-        Point(highx, highy),
-    )
+        Point(highx, highy))
 end
 
 BoundingBox(pts::NTuple{2, Point}) = BoundingBox(pts...)
@@ -145,11 +145,7 @@ Base.getindex(bbox::BoundingBox, i::Number) =
     bbox[convert(Int, i)]
 Base.getindex(bbox::BoundingBox, I) = [bbox[i] for i in I]
 
-function Base.setindex(
-    bbox::BoundingBox,
-    v::Point,
-    i::Number,
-)
+function Base.setindex(bbox::BoundingBox, v::Point, i::Number)
     if i == 1
         return BoundingBox(v, bbox.corner2)
     else
@@ -189,27 +185,23 @@ end
 (/)(s::Real, bb::BoundingBox) = bb / s
 
 # modifying with tuples shifts the box in x and y
-+(bb1::BoundingBox, shift::NTuple{2,Real}) = BoundingBox(
-    Point(
-        bb1.corner1.x + shift[1],
-        bb1.corner1.y + shift[2],
-    ),
-    Point(
-        bb1.corner2.x + shift[1],
-        bb1.corner2.y + shift[2],
-    ),
-)
++(bb1::BoundingBox, shift::NTuple{2,Real}) =
+    BoundingBox(
+        Point(
+            bb1.corner1.x + shift[1],
+            bb1.corner1.y + shift[2]),
+        Point(
+            bb1.corner2.x + shift[1],
+            bb1.corner2.y + shift[2]))
 
--(bb1::BoundingBox, shift::NTuple{2,Real}) = BoundingBox(
-    Point(
-        bb1.corner1.x - shift[1],
-        bb1.corner1.y - shift[2],
-    ),
-    Point(
-        bb1.corner2.x - shift[1],
-        bb1.corner2.y - shift[2],
-    ),
-)
+-(bb1::BoundingBox, shift::NTuple{2,Real}) =
+    BoundingBox(
+        Point(
+            bb1.corner1.x - shift[1],
+            bb1.corner1.y - shift[2]),
+        Point(
+            bb1.corner2.x - shift[1],
+            bb1.corner2.y - shift[2]))
 
 # also add/subtract a point to a bounding box shifts the box
 +(bb1::BoundingBox, pt::Point) =
@@ -221,22 +213,12 @@ end
 
 # if you add two bounding boxes, you get the biggest enclosing box
 function +(bb1::BoundingBox, bb2::BoundingBox)
-    pts =
-        [bb1.corner1, bb1.corner2, bb2.corner1, bb2.corner2]
-    lox, hix =
-        sort!(pts, by = a -> a.x, lt = (a, b) -> a < b)[[
-            1,
-            end,
-        ]]
-    loy, hiy =
-        sort!(pts, by = a -> a.y, lt = (a, b) -> a < b)[[
-            1,
-            end,
-        ]]
+    pts = [bb1.corner1, bb1.corner2, bb2.corner1, bb2.corner2]
+    lox, hix = sort!(pts, by = a -> a.x, lt = (a, b) -> a < b)[[1, end]]
+    loy, hiy = sort!(pts, by = a -> a.y, lt = (a, b) -> a < b)[[1, end]]
     return BoundingBox(
         Point(lox.x, loy.y),
-        Point(hix.x, hiy.y),
-    )
+        Point(hix.x, hiy.y))
 end
 
 """
@@ -278,16 +260,12 @@ Convert a BoundingBox to a four-point clockwise polygon.
 
     convert(Vector{Point}, BoundingBox())
 """
-function Base.convert(
-    ::Type{Vector{Point}},
-    bbox::BoundingBox,
-)
+function Base.convert(::Type{Vector{Point}}, bbox::BoundingBox)
     return [
         bbox.corner1,
         Point(bbox.corner2.x, bbox.corner1.y),
         bbox.corner2,
-        Point(bbox.corner1.x, bbox.corner2.y),
-    ]
+        Point(bbox.corner1.x, bbox.corner2.y)]
 end
 
 """
@@ -303,8 +281,8 @@ Use `vertices = true` to return an array of the four corner points: bottom left,
 top left, top right, bottom right.
 """
 function box(bbox::BoundingBox;
-    action = :none,
-    vertices = false)
+        action = :none,
+        vertices = false)
     if vertices || action == :none
         botleft = Point(bbox.corner1.x, bbox.corner2.y)
         topleft = bbox.corner1
@@ -333,20 +311,16 @@ poly(bbox::BoundingBox, action::Symbol = :none; kwargs...) =
 Make a decorated polygon around the BoundingBox in `bbox`. The vertices are in
 the order: bottom left, top left, top right, and bottom right.
 """
-prettypoly(
-    bbox::BoundingBox,
-    a::Symbol = :none;
+prettypoly(bbox::BoundingBox, a::Symbol = :none;
     action = a,
     close = false,
     reversepath = false,
-    vertexlabels = (n, l) -> (),
-) = prettypoly(
-    convert(Vector{Point}, bbox),
-    action = action,
-    close = close,
-    reversepath = reversepath,
-    vertexlabels = vertexlabels,
-)
+    vertexlabels = (n, l) -> ()) =
+    prettypoly(convert(Vector{Point}, bbox),
+        action = action,
+        close = close,
+        reversepath = reversepath,
+        vertexlabels = vertexlabels)
 
 """
     boundingboxesintersect(bbox1::BoundingBox, bbox2::BoundingBox)
@@ -354,12 +328,11 @@ prettypoly(
 
 Return true if the two bounding boxes intersect.
 """
-function boundingboxesintersect(
-    acorner1::Point,
-    acorner2::Point,
-    bcorner1::Point,
-    bcorner2::Point,
-)
+function boundingboxesintersect(acorner1::Point,
+        acorner2::Point,
+        bcorner1::Point,
+        bcorner2::Point)
+
     minax, maxax = minmax(acorner1.x, acorner2.x)
     minay, maxay = minmax(acorner1.y, acorner2.y)
 
@@ -374,27 +347,19 @@ function boundingboxesintersect(
     return true # boxes overlap
 end
 
-boundingboxesintersect(
-    bbox1::BoundingBox,
-    bbox2::BoundingBox,
-) = boundingboxesintersect(
-    bbox1.corner1,
-    bbox1.corner2,
-    bbox2.corner1,
-    bbox2.corner2,
-)
+boundingboxesintersect(bbox1::BoundingBox, bbox2::BoundingBox) =
+    boundingboxesintersect(bbox1.corner1,
+        bbox1.corner2,
+        bbox2.corner1,
+        bbox2.corner2)
 
 """
     intersectboundingboxes(bb1::BoundingBox, bb2::BoundingBox)
 
 Return a BoundingBox that's an intersection of the two bounding boxes.
 """
-function intersectboundingboxes(
-    bb1::BoundingBox,
-    bb2::BoundingBox,
-)
-    !boundingboxesintersect(bb1, bb2) &&
-    return BoundingBox(O, O)
+function intersectboundingboxes(bb1::BoundingBox, bb2::BoundingBox)
+    !boundingboxesintersect(bb1, bb2) && return BoundingBox(O, O)
     minax, maxax = minmax(bb1.corner1.x, bb1.corner2.x)
     minay, maxay = minmax(bb1.corner1.y, bb1.corner2.y)
 
@@ -402,8 +367,7 @@ function intersectboundingboxes(
     minby, maxby = minmax(bb2.corner1.y, bb2.corner2.y)
     return BoundingBox(
         Point(max(minax, minbx), max(minay, minby)),
-        Point(min(maxax, maxbx), min(maxay, maxby)),
-    )
+        Point(min(maxax, maxbx), min(maxay, maxby)))
 end
 
 """
@@ -449,6 +413,7 @@ boxtopleft(bb::BoundingBox = BoundingBox()) = bb[1]
     boxtopcenter(bb::BoundingBox=BoundingBox())
 
 Return the point at the top center of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ■ ⋅
 ⋅ ⋅ ⋅
@@ -457,13 +422,13 @@ Return the point at the top center of the BoundingBox `bb`, defaulting to the dr
 
 """
 boxtopcenter(bb::BoundingBox = BoundingBox()) =
-    midpoint(bb.corner1, bb.corner2) -
-    (0, boxheight(bb) / 2)
+    midpoint(bb.corner1, bb.corner2) - (0, boxheight(bb) / 2)
 
 """
     boxtopright(bb::BoundingBox=BoundingBox())
 
 Return the point at the top right of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ■
 ⋅ ⋅ ⋅
@@ -478,6 +443,7 @@ boxtopright(bb::BoundingBox = BoundingBox()) =
     boxmiddleleft(bb::BoundingBox=BoundingBox())
 
 Return the point at the middle left of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ⋅
 ■ ⋅ ⋅
@@ -492,6 +458,7 @@ boxmiddleleft(bb::BoundingBox = BoundingBox()) =
     boxmiddlecenter(bb::BoundingBox=BoundingBox())
 
 Return the point at the center of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ⋅
 ⋅ ■ ⋅
@@ -505,6 +472,7 @@ boxmiddlecenter(bb::BoundingBox = BoundingBox()) =
     boxmiddleright(bb::BoundingBox=BoundingBox())
 
 Return the point at the midde right of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ■
@@ -518,6 +486,7 @@ boxmiddleright(bb::BoundingBox = BoundingBox()) =
     boxbottomleft(bb::BoundingBox=BoundingBox())
 
 Return the point at the bottom left of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
@@ -531,6 +500,7 @@ boxbottomleft(bb::BoundingBox = BoundingBox()) =
     boxbottomcenter(bb::BoundingBox=BoundingBox())
 
 Return the point at the bottom center of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
@@ -545,6 +515,7 @@ boxbottomcenter(bb::BoundingBox = BoundingBox()) =
     boxbottomright(bb::BoundingBox=BoundingBox())
 
 Return the point at the bottom right of the BoundingBox `bb`, defaulting to the drawing extent.
+
 ```
 ⋅ ⋅ ⋅
 ⋅ ⋅ ⋅
@@ -601,18 +572,19 @@ end
 
 """
     rand(bbox::BoundingBox)
+
 Return a random `Point` that lies inside `bbox`.
 """
-Base.rand(bb::BoundingBox) = Point(
-    (bb.corner2.x - bb.corner1.x) * rand() + bb.corner1.x,
-    (bb.corner2.y - bb.corner1.y) * rand() + bb.corner1.y,
-)
+Base.rand(bb::BoundingBox) =
+    Point((bb.corner2.x - bb.corner1.x) * rand() + bb.corner1.x,
+          (bb.corner2.y - bb.corner1.y) * rand() + bb.corner1.y)
 
 """
     in(pt, bbox::BoundingBox)
+
 Test whether `pt` is inside `bbox`.
 """
 Base.in(pt::Point, bbox::BoundingBox) =
     isinside(pt, bbox::BoundingBox)
 
-# BoundingBox(path::Path) -> Path.jl
+# for BoundingBox(path::Path) -> Path.jl

@@ -1,7 +1,6 @@
 import Base: +, -, *, /, ^, !=, <, >, ==
 import Base: isequal, isless, isapprox, cmp, size, getindex, broadcastable
 
-
 abstract type AbstractPoint end
 
 """
@@ -92,9 +91,10 @@ isequal(p1::Point, p2::Point) =
     isapprox(p1.x, p2.x, atol = 0.00000001) && (isapprox(p1.y, p2.y, atol = 0.00000001))
 
 # allow kwargs
-function Base.isapprox(p1::Point, p2::Point; atol = 1e-6, kwargs...)
-    return isapprox(p1.x, p2.x; atol = atol, kwargs...) &&
-           isapprox(p1.y, p2.y; atol = atol, kwargs...)
+function Base.isapprox(p1::Point, p2::Point;
+        atol = 1e-6, kwargs...)
+    return isapprox(p1.x, p2.x, atol = atol, kwargs...) &&
+           isapprox(p1.y, p2.y, atol = atol, kwargs...)
 end
 
 isless(p1::Point, p2::Point) = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
@@ -256,7 +256,8 @@ If `extended` is false (the default) the point must lie on the line segment betw
 `pt1` and `pt2`. If `extended` is true, the point lies on the line if extended in
 either direction.
 """
-function ispointonline(pt::Point, pt1::Point, pt2::Point; atol = 10E-5, extended = false)
+function ispointonline(pt::Point, pt1::Point, pt2::Point;
+        atol = 10E-5, extended = false)
     dxc = pt.x - pt1.x
     dyc = pt.y - pt1.y
     dxl = pt2.x - pt1.x
@@ -287,7 +288,8 @@ end
 
 Return `true` if `pt` lies on the polygon `pgon.`
 """
-function ispointonpoly(pt::Point, pgon::Array{Point,1}; atol = 10E-5)
+function ispointonpoly(pt::Point, pgon::Array{Point,1};
+        atol = 10E-5)
     @inbounds for i = 1:length(pgon)
         p1 = pgon[i]
         p2 = pgon[mod1(i + 1, end)]

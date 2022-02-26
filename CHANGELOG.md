@@ -1,17 +1,19 @@
 # Changelog
 
-## [v3.1.0] - ...
+## [v3.1.0] - 2022-02-06
 
 ### Added
 
 - drawpath() progressive path drawing
 - trimbezier() and splitbezier()
 - pathsample() like polysample() for paths, but different
+- more LaTeX characters (thanks @davibarreira!)
+- AbstractPoint (thanks Giovanni @gpucce!)
 
 ### Changed
 
 - docs now forcepush to gh-pages
-- latex text strings can also be paths
+- latex text strings can also be paths (except the new LaTeX characters)
 - Bezier arrows are now a bit tidier might fix #200
 
 ### Removed
