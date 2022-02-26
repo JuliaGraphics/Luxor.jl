@@ -151,10 +151,10 @@ to parse the `LaTeXString`. You should load MathTeXEngine.jl
     make sure these have been installed before running
     Luxor and writing ``\LaTeX`` strings.
 
-```@example
+```julia
 using Luxor
 using MathTeXEngine
-d = Drawing(600, 400,:svg) # hide
+d = Drawing(600, 400, :svg) # hide
 origin() # hide
 background("grey6")
 fontsize(26)
