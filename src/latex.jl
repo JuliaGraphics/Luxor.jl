@@ -1,6 +1,6 @@
-import MathTeXEngine:
+import .MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
-using LaTeXStrings
+using .LaTeXStrings
 
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
