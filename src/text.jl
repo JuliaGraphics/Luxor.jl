@@ -844,12 +844,16 @@ texttrack(txt, pos, tracking;
                         startnewpath=startnewpath)
 
 """
-    textplace(txt::AbstractString, pos::Point, params::Vector)
+    textplace(txt::AbstractString, pos::Point, params::Vector;
+        action = :fill,
+        startnewpath = false)
 
 A low-level function that places text characters one by one
 according to the parameters in `params`. First character
 uses the first tuple, second character uses the second, and
-so on. Returns the next text position.
+so on.
+
+Returns the next text position.
 
 A tuple of parameters is:
 
@@ -898,7 +902,8 @@ txtpos = textplace("93—4!", O - (200, 0), [
 ```
 """
 function textplace(txt::AbstractString, pos::Point, params::Vector;
-        action=:fill)
+        action = :fill,
+        startnewpath = false)
     @layer begin
         textpos = Point(pos.x, pos.y)
         currentparams = (face = "", size = 12, color = colorant"black", kern=0, shift=0, advance=true,)
@@ -912,7 +917,7 @@ function textplace(txt::AbstractString, pos::Point, params::Vector;
             sethue(currentparams.color)
             xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
             temp_text_pos = Point(textpos.x + currentparams.kern, textpos.y - currentparams.shift)
-            textoutlines(string(c), temp_text_pos, action=action, halign=:left)
+            textoutlines(string(c), temp_text_pos, action=action, halign=:left, startnewpath = startnewpath)
             if currentparams.advance == true
                 textpos += (xadvance + currentparams.kern, 0)
             end
