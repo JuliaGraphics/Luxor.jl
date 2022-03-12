@@ -297,7 +297,7 @@ box(centerpoint::Point, width, height, cornerradii::Array, action::Symbol) =
         vertices = false,
         reversepath = false)
 
-Draw a regular polygon centered at point `centerpos`.
+Draw a regular polygon centered at point `Point(x,y)`.
 """
 function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0;
             action=:none,
@@ -348,7 +348,7 @@ Luxor.Point(4.0, -9.797174393178826e-16)
 whereas
 
 ```
-ngon(0, 0, 4, 4, 0, :close) # draws a polygon
+ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """
 ngon(centerpoint::Point, radius, sides::Int=5, orientation=0.0;
