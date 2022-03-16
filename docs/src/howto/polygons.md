@@ -27,6 +27,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |                               |                        		|                       	|				   			|[`polysample`](@ref)           |
 |                               |                        		|                       	|				   			|[`polytriangulate`](@ref)      |
 |                               |                        		|                       	|				   			|[`insertvertices!`](@ref)      |
+|                               |                        		|                       	|				   			|[`polymorph`](@ref)           |
 | *paths*                       |                        		|                       	|				   			|                               |
 |[`storepath`](@ref)            |                        		|                       	|				   			|                               |
 |[`getpath`](@ref)              |[`pathtopoly`](@ref)    		|[`drawpath`](@ref)         |[`pathlength`](@ref)       |[`pathsample`](@ref)           |
@@ -1390,3 +1391,29 @@ nothing # hide
 ```
 
 ![polygon triangulation](../assets/figures/polytriangulate.png)
+
+### Morphing
+
+"morph" means to make one thing turn into another. The experimental [`polymorph`](@ref) function can gradually turn one polygon into another.
+
+You supply two polygons (remember that a polygon can be an array of shapes) and a value `k` between 0 and 1. For example, if the value of `k` is 0.5, the result of this function is a polygon that is about halfway between the two polygons.
+
+In this example, a square morphs into a hexagon. In this case, with just simple polygons, only the first element of the result of the `polymorph()` function is needed.
+
+```@example
+using Luxor # hide
+
+@drawsvg begin # hide
+background(0.15, 0.15, 0.1)
+pgon1 = ngon(O, 80, 4,  vertices = true)
+pgon2 = ngon(O, 270, 6, vertices = true)
+sethue("cyan")
+setline(1)
+for i in 0:0.05:1.0
+    sethue(i, 1 - i, 0.5)
+    poly(first(polymorph(pgon1, pgon2, i)),
+        action = :stroke,
+        close = true)
+end
+end 600 600 # hide
+```

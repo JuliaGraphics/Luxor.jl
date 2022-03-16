@@ -208,7 +208,7 @@ export Drawing,
     # experimental polygon functions
     polyremovecollinearpoints, polytriangulate!,
     polytriangulate, ispointinsidetriangle, ispolyclockwise,
-    polyorientation, ispolyconvex,
+    polyorientation, ispolyconvex, polymorph, 
 
     # triangles
     trianglecircumcenter, triangleincenter, trianglecenter, triangleorthocenter,
