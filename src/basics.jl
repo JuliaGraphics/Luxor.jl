@@ -656,3 +656,95 @@ function rulers()
     end
     return true
 end
+
+"""
+    hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
+
+Creates a new drawing by horizontal concatenation of drawings. If drawings
+have different height, the `valign` option can be used in order to define
+how to align. The `hpad` argument can be used to add padding between
+concatenated images.
+
+The `clip` argument is a boolean for whether
+the concatenated images should be clipped before concatenation.
+Note that drawings sometimes have elements that go beyond it's margins,
+and they only show when the image is drawn in a larger canvas. The `clip`
+argument ensures that these elements are not drawn in the concatenated drawing.
+"""
+function Base.hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
+    dheight, dwidth = 0,-hpad
+    for d in D
+        dheight = max(dheight, d.height)
+        dwidth += d.width + hpad
+    end
+    dcat = Drawing(dwidth,dheight,:svg)
+    @layer begin
+        for d in D
+            if valign === :top
+                pt = O
+                clip ? rect(pt, d.width, d.height, :clip) : nothing
+                placeimage(d, pt)
+            elseif valign === :bottom
+                pt = Point(0,dheight-d.height)
+                clip ? rect(pt, d.width, d.height, :clip) : nothing
+                placeimage(d,pt)
+            elseif valign === :middle
+                pt = Point(0,dheight-d.height)/2
+                clip ? rect(pt, d.width, d.height, :clip) : nothing
+                placeimage(d,pt)
+            else
+                throw("`valign` option not valid. Use either `:top`, `:bottom` or `:middle`.")
+            end
+            clipreset()
+            translate(Point(d.width+hpad,0))
+        end
+    end
+    finish()
+    dcat
+end
+
+"""
+    vcat(D::Drawing...; halign=:left, vpad=0, clip=true)
+
+Creates a new drawing by vertical concatenation of drawings. If drawings
+have different widths, the `halign` option can be used in order to define
+how to align. The `vpad` argument can be used to add padding between
+concatenated images.
+
+The `clip` argument is a boolean for whether
+the concatenated images should be clipped before concatenation.
+Note that drawings sometimes have elements that go beyond it's margins,
+and they only show when the image is drawn in a larger canvas. The `clip`
+argument ensures that these elements are not drawn in the concatenated drawing.
+"""
+function Base.vcat(D::Drawing...; halign=:left, vpad=0, clip=true)
+    dheight, dwidth = -vpad, 0
+    for d in D
+        dwidth = max(dwidth, d.width)
+        dheight += d.height + vpad
+    end
+    dcat = Drawing(dwidth,dheight,:svg)
+    @layer begin
+        for d in D
+            if halign === :left
+                pt = O
+                clip ? rect(pt, d.width, d.height, :clip) : nothing
+                placeimage(d, pt)
+            elseif halign === :right
+                pt = Point(dwidth-d.width, 0)
+                clip ? rect(pt, d.width, d.height, :clip) : nothing
+                placeimage(d,pt)
+            elseif halign === :center
+                pt = Point(dwidth-d.width, 0)/2
+                clip ? rect(pt, d.width, d.height, :clip) : nothing
+                placeimage(d,pt)
+            else
+                throw("`halign` option not valid. Use either `:left`, `:right` or `:center`.")
+            end
+            clipreset()
+            translate(Point(0, d.height+vpad))
+        end
+    end
+    finish()
+    dcat
+end
