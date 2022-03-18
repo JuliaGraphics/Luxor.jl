@@ -660,7 +660,7 @@ end
 """
     hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
 
-Creates a new drawing by horizontal concatenation of drawings. If drawings
+Creates a new SVG drawing by horizontal concatenation of SVG drawings. If drawings
 have different height, the `valign` option can be used in order to define
 how to align. The `hpad` argument can be used to add padding between
 concatenated images.
@@ -670,12 +670,27 @@ the concatenated images should be clipped before concatenation.
 Note that drawings sometimes have elements that go beyond it's margins,
 and they only show when the image is drawn in a larger canvas. The `clip`
 argument ensures that these elements are not drawn in the concatenated drawing.
+
+Example:
+
+```julia
+d1 = Drawing(200,100,:svg)
+origin()
+circle(O,60,:fill)
+finish()
+
+d2 = Drawing(200,200,:svg)
+rect(O,200,200,:fill)
+finish()
+hcat(d1,d2; hpad=10, valign=:top, clip = true)
+```
 """
 function Base.hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
     dheight, dwidth = 0,-hpad
     for d in D
         dheight = max(dheight, d.height)
         dwidth += d.width + hpad
+        @assert d.surfacetype === :svg "Drawings must be SVG."
     end
     dcat = Drawing(dwidth,dheight,:svg)
     @layer begin
@@ -706,7 +721,7 @@ end
 """
     vcat(D::Drawing...; halign=:left, vpad=0, clip=true)
 
-Creates a new drawing by vertical concatenation of drawings. If drawings
+Creates a new SVG drawing by vertical concatenation of SVG drawings. If drawings
 have different widths, the `halign` option can be used in order to define
 how to align. The `vpad` argument can be used to add padding between
 concatenated images.
@@ -716,12 +731,27 @@ the concatenated images should be clipped before concatenation.
 Note that drawings sometimes have elements that go beyond it's margins,
 and they only show when the image is drawn in a larger canvas. The `clip`
 argument ensures that these elements are not drawn in the concatenated drawing.
+
+Example:
+
+```julia
+d1 = Drawing(200,100,:svg)
+origin()
+circle(O,60,:fill)
+finish()
+
+d2 = Drawing(200,200,:svg)
+rect(O,200,200,:fill)
+finish()
+vcat(d1,d2; vpad=10, halign=:left, clip = true)
+```
 """
 function Base.vcat(D::Drawing...; halign=:left, vpad=0, clip=true)
     dheight, dwidth = -vpad, 0
     for d in D
         dwidth = max(dwidth, d.width)
         dheight += d.height + vpad
+        @assert d.surfacetype === :svg "Drawings must be SVG."
     end
     dcat = Drawing(dwidth,dheight,:svg)
     @layer begin
