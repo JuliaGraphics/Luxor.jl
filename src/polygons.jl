@@ -1618,9 +1618,9 @@ function _loopmorph(loop1, loop2, k;
     result = Point[]
     loop1 = polysample(loop1, samples)
     loop2 = polysample(loop2, samples)
-    ratio = easingfunction(k, 0.0, 1.0, 1.0)
+    eased_k = easingfunction(k, 0.0, 1.0, 1.0)
     for j in 1:length(loop1)
-        push!(result, between(loop1[j], loop2[j], ratio))
+        push!(result, between(loop1[j], loop2[j], eased_k))
     end
     return result
 end

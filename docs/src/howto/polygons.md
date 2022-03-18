@@ -1417,3 +1417,40 @@ for i in 0:0.05:1.0
 end
 end 600 600 # hide
 ```
+
+In the next example, a "circle" (a 120-sided polygon) with a square hole morphs into a square with a circular hole.
+
+```@example
+using Luxor # hide
+
+@drawsvg begin # hide
+background(0.15, 0.15, 0.1)
+
+# build first polygon
+ngon(O + (-350, 0), 30, 120, π, :path)
+newsubpath()
+box(O + (-350, 0), 30, 30, reversepath=true, :path)
+pgon1 = pathtopoly()
+
+
+# build second polygon
+newpath()
+box(O + (350, 0), 60, 60, :path)
+newsubpath()
+ngon(O + (350, 0), 20, 120, π, reversepath=true, :path)
+pgon2 = pathtopoly()
+
+# draw morphs
+sethue("cyan")
+setline(1)
+for i in 0:0.1:1.0
+    sethue(i, 1 - i, 0.5)
+    poly.(polymorph(pgon1, pgon2, i),
+        action=:path,
+        close=true)
+    fillpath()
+end
+end 850 250 # hide
+```
+
+Notice that, because both polygons have reversed subpaths (ie "holes"), the polygons should be drawn using `:path` and `fillpath()`. 
