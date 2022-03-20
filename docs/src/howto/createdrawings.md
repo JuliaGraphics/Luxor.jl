@@ -110,6 +110,26 @@ You can specify `:image` as the surface type. This allows you to copy the curren
 
 Use [`svgstring`](@ref) to obtain the SVG source for a finished SVG drawing.
 
+### Concatenating SVG drawings
+
+The Julia functions `hcat()` and `vcat()` can concatenate two SVG drawings horizontally or vertically.
+
+```@example
+using Luxor
+
+d1 = @drawsvg begin
+    sethue("blue")
+    paint()
+     end 200 100
+
+d2 = @drawsvg begin
+    sethue("yellow")
+    paint()
+    end 200 100
+
+vcat(d1, d2)
+```
+
 ## Interactive drawings
 
 ### Using Pluto
