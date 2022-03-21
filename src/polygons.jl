@@ -1628,26 +1628,33 @@ end
 """
     polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
         samples = 100,
-        easingfunction = easingflat)
+        easingfunction = easingflat,
+        min_k = 0.01,
+        max_k = 0.99,
+        kludge = true)
 
 "morph" is to gradually change from one thing to another.
 This function changes one polygon into another.
 
-It returns an array of polygons, each being the intermediate
-shape between the corresponding shapes in `pgon1` and
-`pgon2` at the point `k`, where `0.0 < k < 1.0`. When `k` is
-zero, the `pgon1` is returned, and when `k` is one, `pgon2`
-is returned.
+It returns an array of polygons, `[p_1, p_2, p_3, ... ]`,
+where each polygon `p_n` is the intermediate shape between
+the corresponding shape in `pgon1[1...n]` and `pgon2[1...n]`
+at `k`, where `0.0 < k < 1.0`. When `k <= min_k` , the
+`pgon1[1...n]` is returned, and when `k >= max_k`,
+`pgon2[1...n]` is returned.
 
-`pgon1` and `pgon2` can be simple polygons or arrays of one
-or more polygonal shapes (eg as created by pathtopoly()).
-For example, `pgon1` might consist of two shapes, a square
-shape and a triangular shaped hole inside, and `pgon2`
-might be a triangular shape with a square hole.
+`pgon1` and `pgon2` can be either simple polygons or arrays
+of one or more polygonal shapes (eg as created by
+`pathtopoly()`). For example, `pgon1` might consist of two
+polygonal shapes, a square and a triangular shaped
+hole inside; `pgon2` might be a triangular shape with a
+square hole.
 
-It makes sense for the two arguments to have the same number
-of shapes. If one has more than another, some shapes will be
-lost when it morphs.
+It makes sense for both arguments to have the same number of
+polygonal shapes. If one has more than another, some shapes
+would be lost when it morphs. But the suggestively-named
+`kludge` keyword argument, when set to (the default) true,
+tries to compensate for this.
 
 By default, `easingfunction = easingflat`, so the
 intermediate steps are linear. If you use another easing
@@ -1657,7 +1664,7 @@ the easing function at `k`.
 This function isn't very efficient, because it copies the
 polygons and resamples them.
 
-TODO : experimental, can be improved.
+TODO : experimental, can surely be improved.
 
 # Extended help
 
@@ -1669,7 +1676,7 @@ octagon is controlled by the easing function
 of the transition.
 
 Only the first shape of the returned
-polygon array is used.
+polygon array is needed.
 
 ```julia
 pgon1 = ngon(O, 30, 4, 0, vertices = true)
@@ -1679,31 +1686,6 @@ for i in 0:0.1:1.0
             easingfunction = easeinoutinversequad)),
         action = :stroke,
         close = true)
-end
-```
-
-The next example changes "Python" into "Julia!" Without the
-`!`, the `n` in Python quickly disappears as there is
-nothing for it to morph into.
-
-The intermediate results are hideous, really, as you might
-expect. :)
-
-```julia
-fontsize(50)
-
-textoutlines("Python", O + (0, -200), halign = :center)
-t1 = pathtopoly()
-
-textoutlines("Julia!", O + (0, 200), halign = :center)
-t2 = pathtopoly()
-
-for i in 0:0.1:1.0
-    sethue(i, 1 - i, 0.5 + i / 2)
-    for p in polymorph(t1, t2, i)
-        poly(p, :path, close = true)
-    end
-    fillpath()
 end
 ```
 
@@ -1725,7 +1707,7 @@ pg2 = pathtopoly()
 
 for i in reverse(0.0:0.1:1.0)
     randomhue()
-    newpath()/
+    newpath()
     # use :path followed by fillpath() to preserve correct "hole"-iness
     poly.(polymorph(pg1, pg2, i), :path, close = true)
     fillpath()
@@ -1734,22 +1716,49 @@ end
 """
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
     	samples = 100,
-    	easingfunction = easingflat)
-    k <= 0.01 && return pgon1
-    k >= 0.99 && return pgon2
+    	easingfunction = easingflat,
+        min_k = 0.01,
+        max_k = 0.99,
+		kludge = true)
+    k <= min_k && return pgon1
+    k >= max_k && return pgon2
     loopcount1 = length(pgon1)
     loopcount2 = length(pgon2)
 	result = Array{Point,1}[]
+	centroid1 = centroid2 = O # kludge-y eh?
 	for i in 1:max(loopcount1, loopcount2)
-	    from_ok = B = empty1 = to_ok = E = empty2 = false
+	    from_ok = to_ok = false
 	    not_empty1 = i <= loopcount1
 	    not_empty2 = i <= loopcount2
-	    not_empty1 && length(pgon1[i]) >= 3 ? from_ok = true : B = true
-	    not_empty2 && length(pgon2[i]) >= 3 ? to_ok = true : E = true
+	    if (not_empty1 && length(pgon1[i]) >= 3)
+			from_ok = true
+		end
+	    if (not_empty2 && length(pgon2[i]) >= 3)
+			to_ok = true
+		end
 	    if from_ok && to_ok
+            # a simple morph should suffice
 			push!(result, Luxor._betweenpoly(pgon1[i], pgon2[i], k,
 				samples = samples,
 				easingfunction = easingfunction))
+			centroid1 = polycentroid(pgon1[i])
+			centroid2 = polycentroid(pgon2[i])
+	    elseif from_ok && !to_ok && kludge
+            # nothing to morph to, so make something up
+			pdir = !ispolyclockwise(pgon1[i])
+			loop2 = ngon(centroid2, 0.1, reversepath = pdir, length(pgon1[i]), vertices = true)
+			push!(result, Luxor._betweenpoly(pgon1[i], loop2, k,
+				samples = samples,
+				easingfunction = easingfunction))
+			centroid1 = polycentroid(pgon1[i])
+		elseif !from_ok && to_ok && kludge
+		   # nothing to morph from, so make something up
+			pdir = !ispolyclockwise(pgon2[i])
+			loop1 = ngon(centroid1, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true)
+			push!(result, Luxor._betweenpoly(loop1, pgon2[i], k,
+				samples = samples,
+				easingfunction = easingfunction))
+			centroid2 = polycentroid(pgon2[i])
 	    end
 	end
     return result

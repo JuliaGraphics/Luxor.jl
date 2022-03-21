@@ -824,7 +824,7 @@ function texttrack(txt, pos, tracking, fsize;
 
     # draw the text
     for (n, c) in enumerate(txt)
-        textoutlines(string(c), newpos, _action, halign=:left, startnewpath=startnewpath)
+        textpath(string(c), newpos, _action, halign=:left, startnewpath=startnewpath)
         # calculate new position based on precalculated widths plus the tracking
         newpos = Point(newpos.x + advances[n] + ((tracking/1000) * fsize), newpos.y)
     end
