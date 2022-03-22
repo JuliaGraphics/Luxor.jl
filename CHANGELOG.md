@@ -5,7 +5,7 @@
 ### Added
 
 - first attempt at `polymorph()`
-- `hcat()` and `vcat()` can join SVG drawings (thanks @davibarreira!) 
+- `hcat()` and `vcat()` can join SVG drawings (thanks @davibarreira!)
 
 ### Changed
 

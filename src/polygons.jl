@@ -1602,24 +1602,28 @@ end
 
 """
     _betweenpoly(loop1, loop2, k;
-        samples = 100)
+        samples = 100,
+        easingfunction = easingflat)
 
 Find a simple polygon between the two simple
 polygons `loop1` and `loop2` corresponding to `k`, where
 `0.0 < k < 1.0`.
 
-See `between()` for more.
+By default, `easingfunction = easingflat`, so the
+intermediate steps are linearly spaced. If you use another
+easing function, intermediate steps are determined by the
+value of the easing function at `k`.
 
 Used by `polymorph()`.
 """
 function _betweenpoly(loop1, loop2, k;
-    samples = 100,
-    easingfunction = easingflat)
+        samples = 100,
+        easingfunction = easingflat)
     result = Point[]
     loop1 = polysample(loop1, samples)
     loop2 = polysample(loop2, samples)
     eased_k = easingfunction(k, 0.0, 1.0, 1.0)
-    for j in 1:length(loop1)
+    for j in 1:samples
         push!(result, between(loop1[j], loop2[j], eased_k))
     end
     return result
