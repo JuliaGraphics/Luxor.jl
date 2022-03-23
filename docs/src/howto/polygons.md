@@ -1400,14 +1400,13 @@ You supply two polygons and a value `k` between 0 and 1. For example, if the val
 
 Sometimes polygons consist of two or more loops - this is how holes work. So `polymorph()` accepts both simple polygons and arrays of polygons, but always returns an array of polygons.
 
-In this first example, `fromshape`, the circle, is an array holding a single vector of Points (`pathtopoly()` returns an array of poygons), and `toshape`, the line, is a simple vector of points (the minimum of three points). In this case, with just simple polygons, only the first element of the result of the `polymorph()` function is needed.
+In this first example, `fromshape`, the circle, is an array holding a single vector of Points (`pathtopoly()` returns an array of polygons), and `toshape`, the line, is a simple vector of points (the minimum of three points). In this case, with just simple polygons, only the first element of the result of the `polymorph()` function is needed.
 
 ```@example
 using Luxor # hide
-@drawsvg begin
-background("black")
-setline(0.5)
-sethue("gold")
+@drawsvg begin # hide
+background("black") # hide
+setline(0.5) # hide
 circlepath(O, 200, :path)
 fromshape = pathtopoly()
 toshape = [Point(0, -250), O, Point(0, 250)] # minimum of 3
@@ -1416,7 +1415,7 @@ for i in 0:0.015:1
     morph = polymorph(fromshape, toshape, i, easingfunction=easeinoutsine)
     poly(first(morph), :stroke, close=true)
 end
-end
+end # hide
 ```
 
 In the next example, a square morphs into a hexagon.
@@ -1424,7 +1423,7 @@ In the next example, a square morphs into a hexagon.
 ```@example
 using Luxor # hide
 @drawsvg begin # hide
-background(0.15, 0.15, 0.1)
+background(0.15, 0.15, 0.1) # hide
 pgon1 = ngon(O, 80, 4,  vertices = true)
 pgon2 = ngon(O, 270, 6, vertices = true)
 sethue("cyan")
@@ -1443,8 +1442,7 @@ In the next example, an octagon with a square hole morphs into a square with an 
 ```@example
 using Luxor # hide
 @drawsvg begin # hide
-background(0.15, 0.15, 0.1)
-
+background(0.15, 0.15, 0.1) # hide
 # build first polygon
 ngon(O + (-350, 0), 40, 8, π, :path)
 newsubpath()
@@ -1501,4 +1499,4 @@ animate(amovie, Scene(amovie, frame, 1:120), creategif=true, pathname="/tmp/pyth
 
 ![python julia animation](../assets/figures/python-julia.gif)
 
-The length of "Python" is 9, whereas the length of "Julia" is 8. The `polymorph()` function tries to work around this - notice how the "n" morphs down to nothing. If you don't want this to happen, set `kludge` to false. In this particular case, you could increase the number of loops in `totext` to match by using a lower-case "j".
+The "Python" path has 9 loops, whereas "Julia" has 8. The `polymorph()` function tries to work around this - notice how the ninth loop, "n", morphs down to nothing. If you don't want this to happen, set the `kludge` keyword to false. In this particular case, you could increase the number of loops in `totext` to match by using a lower-case "j".

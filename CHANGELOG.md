@@ -9,6 +9,8 @@
 
 ### Changed
 
+- check for dodgy corners in `polysmooth()` (thanks @arbitrandomuser!)
+
 ### Removed
 
 ### Deprecated

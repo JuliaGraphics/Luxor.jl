@@ -375,6 +375,9 @@ prettypoly(pointlist, action::Symbol) = prettypoly(pointlist, () -> circle(O, 2,
     vertexlabels = (n, l) -> ())
 
 function getproportionpoint(point::Point, segment, length, dx, dy)
+    if isapprox(segment, 0.0) || isapprox(length, 0.0)
+        throw(error("getproportionpoint: impossible construction with segment $(segment) length $(length)"))
+    end
     scalefactor = segment / length
     return Point((point.x - dx * scalefactor), (point.y - dy * scalefactor))
 end
@@ -482,6 +485,9 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
             p1 = points[mod1(i, l)]
             p2 = points[mod1(i + 1, l)]
             p3 = points[mod1(i + 2, l)]
+            if isapprox(distance(p1, p2), 0.0) || isapprox(distance(p2, p3), 0.0)
+                throw(error("polysmooth(): impossible to round the vertex at point #$(i + 1)"))
+            end 
             drawroundedcorner(p2, p1, p3, radius, temppath, debug = debug)
         end
     end
