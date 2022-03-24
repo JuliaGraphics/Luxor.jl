@@ -5,8 +5,11 @@
 ### Added
 
 - first attempt at `polymorph()`
+- `hcat()` and `vcat()` can join SVG drawings (thanks @davibarreira!)
 
 ### Changed
+
+- check for dodgy corners in `polysmooth()` (thanks @arbitrandomuser!)
 
 ### Removed
 

@@ -7,13 +7,13 @@ Draw a polygon.
         close=false,
         reversepath=false)
 
-A polygon is an Array of Points. By default `poly()` doesn't close or fill the polygon,
-to allow for clipping.
+Create a path with the points in `pointlist` and apply `action`.
+By default `poly()` doesn't close or fill the polygon.
 """
 function poly(pointlist::Array{Point,1};
-    action = :none,
-    close = false,
-    reversepath = false)
+        action = :none,
+        close = false,
+        reversepath = false)
     if action != :path
         newpath()
     end
@@ -39,7 +39,7 @@ poly(pointlist::Array{Point,1}, a::Symbol;
     reversepath = false) = poly(pointlist, action = action, close = close, reversepath = reversepath)
 
 """
-Find the centroid of simple polygon.
+Find the centroid of a simple polygon.
 
     polycentroid(pointlist)
 
@@ -93,7 +93,7 @@ with a specified point.
 
     polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
 
-The `refpoint` can be chosen, but the minimum point is usually OK too:
+The `refpoint` can be chosen, but the default minimum point is usually OK too:
 
     polysortbyangle(parray, polycentroid(parray))
 """
@@ -375,6 +375,9 @@ prettypoly(pointlist, action::Symbol) = prettypoly(pointlist, () -> circle(O, 2,
     vertexlabels = (n, l) -> ())
 
 function getproportionpoint(point::Point, segment, length, dx, dy)
+    if isapprox(segment, 0.0) || isapprox(length, 0.0)
+        throw(error("getproportionpoint: impossible construction with segment $(segment) length $(length)"))
+    end
     scalefactor = segment / length
     return Point((point.x - dx * scalefactor), (point.y - dy * scalefactor))
 end
@@ -482,6 +485,9 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
             p1 = points[mod1(i, l)]
             p2 = points[mod1(i + 1, l)]
             p3 = points[mod1(i + 2, l)]
+            if isapprox(distance(p1, p2), 0.0) || isapprox(distance(p2, p3), 0.0)
+                throw(error("polysmooth(): impossible to round the vertex at point #$(i + 1)"))
+            end 
             drawroundedcorner(p2, p1, p3, radius, temppath, debug = debug)
         end
     end
@@ -1540,14 +1546,14 @@ function _polarsortpoints(anchor, pt1, pt2)
 end
 
 """
-polyhull(pts)
+    polyhull(pts)
 
 Find all points in `pts` that form a convex hull around the
 points in `pts`, and return them.
 
 This uses the Graham Scan algorithm.
 
-TODO : there might be bugs
+TODO : experimental, can be improved.
 """
 function polyhull(points)
     if length(points) == 3
@@ -1601,26 +1607,30 @@ function polyhull(points)
 end
 
 """
-    _loopmorph(loop1, loop2, k;
-        samples = 100)
+    _betweenpoly(loop1, loop2, k;
+        samples = 100,
+        easingfunction = easingflat)
 
 Find a simple polygon between the two simple
 polygons `loop1` and `loop2` corresponding to `k`, where
 `0.0 < k < 1.0`.
 
-See `between()` for more.
+By default, `easingfunction = easingflat`, so the
+intermediate steps are linearly spaced. If you use another
+easing function, intermediate steps are determined by the
+value of the easing function at `k`.
 
 Used by `polymorph()`.
 """
-function _loopmorph(loop1, loop2, k;
-    samples = 100,
-    easingfunction = easingflat)
+function _betweenpoly(loop1, loop2, k;
+        samples = 100,
+        easingfunction = easingflat)
     result = Point[]
     loop1 = polysample(loop1, samples)
     loop2 = polysample(loop2, samples)
-    ratio = easingfunction(k, 0.0, 1.0, 1.0)
-    for j in 1:length(loop1)
-        push!(result, between(loop1[j], loop2[j], ratio))
+    eased_k = easingfunction(k, 0.0, 1.0, 1.0)
+    for j in 1:samples
+        push!(result, between(loop1[j], loop2[j], eased_k))
     end
     return result
 end
@@ -1628,28 +1638,43 @@ end
 """
     polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
         samples = 100,
-        easingfunction = easingflat)
+        easingfunction = easingflat,
+        min_k = 0.01,
+        max_k = 0.99,
+        kludge = true)
 
 "morph" is to gradually change from one thing to another.
 This function changes one polygon into another.
 
-It returns an array of one or more polygons that lie between
-the polygons `pgon1` and `pgon2`. The transition is
-determined by the value of `k`, where `0.0 < k < 1.0`. When
-`k` is zero, the first polygon is returned, and when `k` is
-one, the second polygon is returned.
+It returns an array of polygons, `[p_1, p_2, p_3, ... ]`,
+where each polygon `p_n` is the intermediate shape between
+the corresponding shape in `pgon1[1...n]` and `pgon2[1...n]`
+at `k`, where `0.0 < k < 1.0`. When `k <= min_k` , the
+`pgon1[1...n]` is returned, and when `k >= max_k`,
+`pgon2[1...n]` is returned.
 
-Remember that `pgon1` and `pgon2` are both arrays of one or
-more polygonal shapes. For example, the first polygon can
-consist of two shapes, a square shape and a triangular shape inside.
+`pgon1` and `pgon2` can be either simple polygons or arrays
+of one or more polygonal shapes (eg as created by
+`pathtopoly()`). For example, `pgon1` might consist of two
+polygonal shapes, a square and a triangular shaped
+hole inside; `pgon2` might be a triangular shape with a
+square hole.
 
-This function isn't very efficient, because it copies the
-polygons and resamples them.
+It makes sense for both arguments to have the same number of
+polygonal shapes. If one has more than another, some shapes
+would be lost when it morphs. But the suggestively-named
+`kludge` keyword argument, when set to (the default) true,
+tries to compensate for this.
 
 By default, `easingfunction = easingflat`, so the
 intermediate steps are linear. If you use another easing
 function, intermediate steps are determined by the value of
 the easing function at `k`.
+
+This function isn't very efficient, because it copies the
+polygons and resamples them.
+
+TODO : experimental, can surely be improved.
 
 # Extended help
 
@@ -1658,8 +1683,10 @@ the easing function at `k`.
 This simple morph between a small square and a larger
 octagon is controlled by the easing function
 `easeinoutinversequad`, which slows down around the middle
-of the transition. Only the first shape of the returned
-polygon array is used.
+of the transition.
+
+Only the first shape of the returned
+polygon array is needed.
 
 ```julia
 pgon1 = ngon(O, 30, 4, 0, vertices = true)
@@ -1669,32 +1696,6 @@ for i in 0:0.1:1.0
             easingfunction = easeinoutinversequad)),
         action = :stroke,
         close = true)
-end
-```
-
-The next example changes "Python" into "Julia!" Without the
-`!`, the `n` in Python quickly disappears as there is
-nothing for it to morph into.
-
-The intermediate results are hideous, really, as you might
-expect. :)
-
-```julia
-background("black")
-
-fontsize(50)
-textoutlines("Python", O + (0, -200), halign = :center)
-t1 = pathtopoly()
-
-textoutlines("Julia!", O + (0, 200), halign = :center)
-t2 = pathtopoly()
-
-for i in 0:0.1:1.0
-    sethue(i, 1 - i, 0.5 + i / 2)
-    for p in polymorph(t1, t2, i)
-        poly(p, :path, close = true)
-    end
-    fillpath()
 end
 ```
 
@@ -1717,61 +1718,59 @@ pg2 = pathtopoly()
 for i in reverse(0.0:0.1:1.0)
     randomhue()
     newpath()
-    # use :path to preserve correct "hole"-iness
+    # use :path followed by fillpath() to preserve correct "hole"-iness
     poly.(polymorph(pg1, pg2, i), :path, close = true)
     fillpath()
 end
 ```
 """
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
-        samples = 100,
-        easingfunction = easingflat)
-    if k <= 0.01
-        return pgon1
-    end
-
-    if k >= 0.99
-        return pgon2
-    end
+    	samples = 100,
+    	easingfunction = easingflat,
+        min_k = 0.01,
+        max_k = 0.99,
+		kludge = true)
+    k <= min_k && return pgon1
+    k >= max_k && return pgon2
     loopcount1 = length(pgon1)
     loopcount2 = length(pgon2)
-
-    # pgon1 and pgon2 can contain any number of loops
-    # so we must make them similar
-    newpgon1 = Array{Point,1}[]
-    newpgon2 = Array{Point,1}[]
-    for i in 1:max(loopcount1, loopcount2)
-        if i <= loopcount1 && i <= loopcount2
-            push!(newpgon1, pgon1[i])
-            push!(newpgon2, pgon2[i])
-        elseif i > loopcount1
-            # make a new loop from second poly to first poly
-            pcentroid = polycentroid(pgon2[i])
-            pdir = !ispolyclockwise(pgon2[i])
-            push!(
-                newpgon1,
-                ngon(pcentroid, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true),
-            )
-            push!(newpgon2, pgon2[i])
-        elseif i > loopcount2
-            # make a new loop from first poly to second poly
-            pcentroid = polycentroid(pgon1[i])
-            pdir = !ispolyclockwise(pgon1[i])
-            push!(
-                newpgon2,
-                ngon(pcentroid, 0.1, reversepath = pdir, length(pgon1[i]), vertices = true),
-            )
-            push!(newpgon1, pgon1[i])
-        else
-            throw(error("polymorph(): why am I here?"))
-        end
-    end
-    result = Array{Point,1}[]
-    for i in 1:length(newpgon1) # loopcount1 should equal loopcount2 now
-        if length(newpgon1[i]) >= 3 && length(newpgon2[i]) >= 3
-            push!(result, _loopmorph(newpgon1[i], newpgon2[i], k, samples = samples, easingfunction = easingfunction))
-        end
-    end
+	result = Array{Point,1}[]
+	centroid1 = centroid2 = O # kludge-y eh?
+	for i in 1:max(loopcount1, loopcount2)
+	    from_ok = to_ok = false
+	    not_empty1 = i <= loopcount1
+	    not_empty2 = i <= loopcount2
+	    if (not_empty1 && length(pgon1[i]) >= 3)
+			from_ok = true
+		end
+	    if (not_empty2 && length(pgon2[i]) >= 3)
+			to_ok = true
+		end
+	    if from_ok && to_ok
+            # a simple morph should suffice
+			push!(result, Luxor._betweenpoly(pgon1[i], pgon2[i], k,
+				samples = samples,
+				easingfunction = easingfunction))
+			centroid1 = polycentroid(pgon1[i])
+			centroid2 = polycentroid(pgon2[i])
+	    elseif from_ok && !to_ok && kludge
+            # nothing to morph to, so make something up
+			pdir = !ispolyclockwise(pgon1[i])
+			loop2 = ngon(centroid2, 0.1, reversepath = pdir, length(pgon1[i]), vertices = true)
+			push!(result, Luxor._betweenpoly(pgon1[i], loop2, k,
+				samples = samples,
+				easingfunction = easingfunction))
+			centroid1 = polycentroid(pgon1[i])
+		elseif !from_ok && to_ok && kludge
+		   # nothing to morph from, so make something up
+			pdir = !ispolyclockwise(pgon2[i])
+			loop1 = ngon(centroid1, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true)
+			push!(result, Luxor._betweenpoly(loop1, pgon2[i], k,
+				samples = samples,
+				easingfunction = easingfunction))
+			centroid2 = polycentroid(pgon2[i])
+	    end
+	end
     return result
 end
 
