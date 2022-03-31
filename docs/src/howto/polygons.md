@@ -150,25 +150,58 @@ nothing # hide
 
 ![simple poly](../assets/figures/simplepoly.png)
 
-A polygon can contain holes. The `reversepath` keyword changes the direction of the polygon. The following piece of code uses [`ngon`](@ref) to make and draw two paths, the second forming a hole in the first, to make a hexagonal bolt shape:
+### Holes
+
+To form a hole in a polygon, you reverse the direction of the hole compared to the outer shape. When converted to paths (which happens as part of the drawing process), the reversed polygon forms a hole when drawn.
+
+In this example, the first nut is made by reversing the list of points, the second by using the keyword argument when constructing the shape, and the third when drawing the polygon as a path.
 
 ```@example
 using Luxor # hide
-Drawing(400, 250, "../assets/figures/holes.png") # hide
-background("white") # hide
+d = Drawing(600, 300, :svg) # hide
+background("antiquewhite") # hide
 origin() # hide
-setline(5)
-sethue("gold")
-line(Point(-200, 0), Point(200, 0), :stroke)
-sethue("orchid4")
-ngon(O, 60, 6, 0, action=:path)
+
+# nut 1
+
+translate(-100, 0)
+
+nut = ngon(O, 120, 6, vertices=true)
+hole = reverse(ngon(O, 70, 6, vertices=true))
+
+poly.((nut, hole), :path)
+fillpath()
+
+# nut 2
+
+translate(100, 0)
+
+sethue("purple")
+nut = ngon(O, 120, 6, vertices=true)
+hole = ngon(O, 70, 6, reversepath=true, vertices=true)
+
+poly(nut, :path)
+poly(hole, :path)
+fillpath()
+
+# nut 3
+
+translate(100, 0)
+
+sethue("orange")
+nut = ngon(O, 120, 6, vertices=true)
+hole = ngon(O, 70, 6, vertices=true)
+
+poly(nut, :path)
 newsubpath()
-ngon(O, 40, 6, 0, :path, reversepath=true)
-fillstroke()
+poly(hole, reversepath=true, :path)
+fillpath()
+
 finish() # hide
-nothing # hide
+d # hide
 ```
-![holes](../assets/figures/holes.png)
+
+### Pretty polygons
 
 The [`prettypoly`](@ref) function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
 

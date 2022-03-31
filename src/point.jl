@@ -60,9 +60,8 @@ Return the scalar dot product of the two points.
 """
 function dotproduct(a::Point, b::Point)
     result = 0.0
-    for i in [:x, :y]
-        result += getfield(a, i) * getfield(b, i)
-    end
+    result += a.x * b.x
+    result += a.y * b.y
     return result
 end
 
@@ -146,18 +145,11 @@ end
 
 Given a line from `pt1` to `pt2`, and `startpt` is the start of a perpendicular heading
 to meet the line, at what point does it hit the line?
+
+See `perpendicular()`.
 """
 function getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)
-    # first convert line to normalized unit vector
-    dx = pt2.x - pt1.x
-    dy = pt2.y - pt1.y
-    mag = hypot(dx, dy)
-    dx /= mag
-    dy /= mag
-
-    # translate the point and get the dot product
-    lambda = (dx * (startpt.x - pt1.x)) + (dy * (startpt.y - pt1.y))
-    return Point((dx * lambda) + pt1.x, (dy * lambda) + pt1.y)
+    perpendicular(pt1, pt2, startpt)
 end
 
 """
@@ -188,6 +180,17 @@ end
 function between(couple::NTuple{2,Point}, x)
     p1, p2 = couple
     return p1 + (x * (p2 - p1))
+end
+
+"""
+    perpendicular(p1::Point, p2::Point, p3::Point)
+
+Return a point on a line passing through `p1` and `p2` that
+is perpendicular to `p3`.
+"""
+function perpendicular(p1::Point, p2::Point, p3::Point)
+    v2 = p2 - p1
+    return p1 + (dotproduct(p3 - p1, v2)/dotproduct(v2, v2)) * v2
 end
 
 """

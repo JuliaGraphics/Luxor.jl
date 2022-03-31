@@ -308,7 +308,11 @@ function ngon(x::Real, y::Real, radius::Real, sides::Int=5, orientation=0.0;
     if !vertices
         poly(ptlist, action=action, close=true, reversepath=reversepath)
     end
-    return ptlist
+    if reversepath
+        return reverse(ptlist)
+    else
+        return ptlist
+    end
 end
 
 ngon(x::Real, y::Real, radius::Real, sides::Int, action::Symbol) =

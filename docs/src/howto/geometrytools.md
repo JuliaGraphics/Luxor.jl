@@ -61,39 +61,46 @@ Values less than 0.0 and greater than 1.0 appear to work well too, placing the p
 
 [`center3pts`](@ref) finds the radius and center point of a circle passing through three points which you can then use with functions such as [`circle`](@ref) or [`arc2r`](@ref).
 
-[`getnearestpointonline`](@ref) finds perpendiculars, as does [`perpendicular`](@ref).
+[`perpendicular`](@ref) finds the foot of a perpendicular line which lies on a line through two points perpendicular to a another point.
 
 ```@example
 using Luxor # hide
-Drawing(600, 400, "../assets/figures/perpendicular.svg") # hide
-origin() # hide
-background("white") # hide
+d = @drawsvg begin # hide
+A, B = Point(-150, 0), Point(150, 50)
 
-pt1, pt2 = Point(-150, 0), Point(150, 50)
-line(pt1, pt2, :stroke)
+sethue("grey50")
+fontsize(18)
+setline(4)
 
-pt3 = Point(-50, -80)
-circle.([pt1, pt2, pt3], 3, :fill)
+line(A, B, :stroke)
 
-p = getnearestpointonline(pt1, pt2, pt3)
+# point perpendicular to line
+C = Point(-50, -80)
+D = perpendicular(A, B, C)
+
+# line perpendicular to line
+E, F = perpendicular(A, B)
+
+# point perpendicular to extended line
+G = Point(230, -200)
+H = perpendicular(A, B, G)
+
+sethue("grey50")
+label.(string.(["A", "B", "C", "D", "E", "F", "G", "H"]),
+    :ne, offset=10,
+    (A, B, C, D, E, F, G, H))
+
 sethue("red")
-arrow(pt3, p)
-circle(pt3, 4, :fill)
-
-pt4, pt5 = perpendicular(pt1, pt2)
-setline(3)
-
-sethue("black")
-label.(string.(["p", "pt1", "pt2", "pt3", "pt4", "pt5"]), :ne, (p, pt1, pt2, pt3, pt4, pt5))
-
+arrow(C, D)
 sethue("green")
-arrow(pt4, pt5)
-circle.([pt4, pt5], 4, :fill)
-
-finish() # hide
-nothing # hide
+arrow(E, F)
+sethue("orange")
+arrow(G, H)
+sethue("purple")
+circle.([A, B, C, D, E, F, G, H], 4, :fill)
+end # hide
+d # hide
 ```
-![arc](../assets/figures/perpendicular.svg)
 
 ## Points and arcs
 
