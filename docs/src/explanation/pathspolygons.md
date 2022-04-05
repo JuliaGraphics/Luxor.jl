@@ -12,7 +12,7 @@ There's always a current path. It starts off being empty.
 A path can contain one or more sequences of straight lines
 and Bézier curves. You add straight lines to the current
 path using functions like `line()`, and add Bezier curves
-using functions like `curve()`. You can can continue the
+using functions like `curve()`. You can continue the
 path at a different location of the drawing using `move()`.
 
 Cairo keeps track of the current path, the current point,

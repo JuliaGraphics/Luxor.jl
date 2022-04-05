@@ -219,9 +219,7 @@ function BoundingBox(path::Path)
             end
             currentpoint = p.pt1
         elseif p isa PathCurve
-            # Wikipedia says a Bezier curve is completely contained within the
-            # convex hull of its control points, so we can just do this:
-            phbbox = BoundingBox(polyhull([currentpoint, p.pt1, p.pt2, p.pt3]))
+            phbbox = BoundingBox(Luxor.get_bezier_points(BezierPathSegment(currentpoint, p.pt1, p.pt2, p.pt3)))
             if isapprox(boxdiagonal(bbox), 0.0) # bbox empty?
                 bbox = phbbox
             else

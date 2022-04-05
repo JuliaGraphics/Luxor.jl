@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.2.0] - ????????
+## [v3.2.0] - 2022-04-05 09:41:54
 
 ### Added
 
@@ -13,6 +13,7 @@
 - check for dodgy corners in `polysmooth()` (thanks @arbitrandomuser!)
 - even more LaTeX characters (thanks @davibarreira!)
 - bug in ngon()-vertices-reversepath fixed
+- `BoundingBox(path)` calculates boundingbox more precisely (fixes #213)
 
 ### Removed
 
