@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.3.0] - forthcoming
+
+### Added
+
+### Changed
+
+- `textfit()` algorithm revisited; it's quicker, at least....
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
 ## [v3.2.0] - 2022-04-05 09:41:54
 
 ### Added

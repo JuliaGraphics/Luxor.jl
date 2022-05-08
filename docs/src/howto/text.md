@@ -603,14 +603,14 @@ using Luxor # hide
 d = Drawing(800, 800, :svg) # hide
 origin() # hide
 background("grey7") # hide
-rh = 750 .* [4//11, 2//11, 4//11, 1//11]
-cw = 750 .* [6//11, 1//11, 3//11, 1//11]
+rh = 700 .* [4//11, 2//11, 4//11, 1//11]
+cw = 700 .* [6//11, 2//11, 3//11, 1//11]
 cells = Table(rh, cw)
 for (pos, n) in cells
     setgrey(rand()/2)
     box(cells, n, :fill)
     setgrey(1)
-    textfit("The sound of one hand clapping", BoundingBox(box(cells, n)))
+    textfit("The sound of one hand clapping", BoundingBox(box(cells, n)), horizontalmargin=10)
 end
 finish() # hide
 d # hide

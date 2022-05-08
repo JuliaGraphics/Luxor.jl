@@ -602,13 +602,13 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
     spaceleft = textwidth
     currentline = String[]
     for word in fields
-        # hyphenation can leave an empty string field
+		# hyphenation can leave an empty string field
         if word == ""
             word = " "
             push!(currentline, " ")
         end
-        wordextents =  textextents(word)
-        widthofword = wordextents[3] + wordextents[5]
+        wordextents = textextents(word)
+        widthofword = wordextents[1] + wordextents[3]
         isapprox(widthofword, 0.0, atol=0.1) && continue
         if (widthofword + spacewidth) > spaceleft
             # start a new line
@@ -621,7 +621,7 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
         else
             push!(currentline, word * " ")
         end
-        spaceleft -= (widthofword + spacewidth)
+        spaceleft -= (wordextents[5] + spacewidth)
     end
     push!(result, strip(join(currentline)))
 
@@ -934,90 +934,111 @@ end
 Fit the string `str` into the bounding box `bbox` by adjusting the font
 size and line breaks.
 
-Instead of using the current font size, a suitable value
-will be calculated. You can specify the largest size in
-`maxfontsize`, otherwise the largest possible value below
-200 will be used.
+Instead of using the current font size, the largest possible
+value will be calculated. You can specify a size limit in
+`maxfontsize`, such that the text will never be larger than this
+value, although it may have to be smaller.
 
 `horizontalmargin` is applied to each side.
 
-Optionally, `leading` can be supplied, and it will be
+Optionally, `leading` can be supplied, and this will be
 interpreted as a percentage of the final calculated font
-size. The default value is 100, so no extra leading is used.
+size. The default value is 110 (%).
 
 The function returns a named tuple with information about
 the calculated values:
 
-```julialang
+```julia
 (fontsize = 37.6, linecount = 5, finalpos = Point(-117.43, 92.60)
 ```
 
 !!! note
 
-    This function is in need of improvement. It's not Adobe InDesign... :)
+    This function is in need of improvement. It's quite
+    difficult to find out the height of a line of text in a
+    specific font. (Unless we import FreeType.) Suggestions for
+    improvements welcome!
 
 """
-function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 200;
+function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 800;
         horizontalmargin=3,
-        leading=100)
+        leading=110)
     @layer begin
         bbox  = bbox - horizontalmargin
         width = boxwidth(bbox)
-        required_height = boxheight(bbox)
+        requiredheight = boxheight(bbox)
+
+        # we'll never go bigger than this:
         fsize = maxfontsize
-        fontsize(maxfontsize)
+        fontsize(fsize)
+
         # remove blank lines from rearranged lines
         lines = filter!(!isempty, textlines(s, width))
+
         te = textextents(lines[1])
-        # start below the top of the box
-        startpos = boxtopleft(bbox) + Point(0, te[4])
-        counter = 0
-        while true
-            fontsize(fsize)
-            lines = filter!(!isempty, textlines(s, width))
 
-            # calculate widest line
-            widestline = 0
-            for l in lines
-                te = textextents(l)
-                if widestline <= te[3]
-                    widestline = te[3]
-                end
-            end
+        # set up our binary search
+		foundminsize = 0.5
+		foundmaxsize = maxfontsize
+		totalattempts = 20
+		attempts = 0
 
-            # calculate expected end point
-            finishheight = (fsize + (100/leading)) * length(lines)
+        # binary search for the closest fontsize that satisfies our requirements
+		while foundmaxsize - foundminsize > 0.1
+			attempts += 1
+		    if attempts > totalattempts
+		        throw(error("textfit(): couldn't fit the text with $maxfontsize maxfontsize after trying $(atttempts) times"))
+		    end
 
-            # does it fit?
-            if finishheight < required_height && widestline <= boxwidth(bbox)
-                break
-            end
+			fsize = foundminsize + (foundmaxsize - foundminsize) / 2.0
+			fontsize(fsize)
 
-            # ok try again
-            if finishheight > required_height || widestline > boxwidth(bbox)
-                # reduce
-                fsize -= 2
-            end
+			# split into lines
+		    lines = filter!(!isempty, textlines(s, width))
 
-            if fsize <= 0.1
-                throw(error("textfit(): calculated font size $(fsize) is too small: make bounding box larger, currently $(bbox)"))
-                break
-            end
+			# estimate the finish height with our current fontsize
+			# since we don't know the height well enough, just hope that putting leading
+			# between every line will work
+			estimatedfinishheight = (fsize + (100/leading)) * length(lines)
 
-            counter += 1
-            # panic time
-            if counter > 200
-                break
-            end
-        end
-        # use most recent textextents
+		    # estimate finish width
+		    widestline = 0
+		    for l in lines
+			   	 te = textextents(l)
+			   	 if widestline <= te[3]
+			          widestline = te[3]
+			   	 end
+		    end
+
+		    # is this estimated result good enough with this font size?
+		    if estimatedfinishheight < requiredheight && widestline < boxwidth(bbox)
+			    # estimated size is too small
+			    # search for a larger font size
+		        foundminsize = fsize
+		    else
+				# estimated size is too large
+				# search for a smaller font size.
+		    	foundmaxsize = fsize
+		    end
+		end # while
+
+        # use the most recent font size
         fontsize(fsize * (100/leading))
         lines = filter!(!isempty, textlines(s, width))
-        te = textextents(lines[1])
-        textpos = boxtopleft(bbox) + Point(0, te[4])
+
+		# start below the top of the box
+
+		te = textextents(lines[1])
+		# we can't get the height of a text character, sadly
+		# but we can guess
+		# not all fonts will have these characters though?
+		fontheight = textextents("AA⃰gg̲")[4]
+		textpos = boxtopleft(bbox) + Point(0, max(te[4], fontheight))
+
         for (linenumber, linetext) in enumerate(lines)
             text(linetext, textpos)
-            textpos = Point(textpos.x, textpos.y + (te[4] * (leading/100)))
+			te = textextents(linetext)
+            textpos = Point(textpos.x, textpos.y + (max(te[4], fontheight) * (leading/100)))
         end
         # return top position, bottom position
     end
