@@ -1564,7 +1564,7 @@ function polyhull(points)
     end
     # find a point with the highest Y coordinate value
 
-    if VERSION > v"1.5.0"
+    if VERSION ≥ v"1.7.0"
         _, anchorindex = findmax(pt -> pt.y, points)
     else
         anchorindex = let
