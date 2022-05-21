@@ -53,5 +53,6 @@ makedocs(
 deploydocs(
     repo = "github.com/JuliaGraphics/Luxor.jl.git",
     target = "build",
+    push_preview = true,
     forcepush = true
 )
