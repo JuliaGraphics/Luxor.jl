@@ -151,17 +151,19 @@ to parse the `LaTeXString`. You should load MathTeXEngine.jl
     make sure these have been installed before running
     Luxor and writing ``\LaTeX`` strings.
 
-```julia
+```@example
 using Luxor
 using MathTeXEngine
-d = Drawing(600, 400, :svg) # hide
-origin() # hide
+path_svg = "latexexample.svg"
+path_svg = "../assets/figures/latexexample.svg" # hide
+Drawing(600, 400, path_svg)
+origin()
 background("grey6")
 fontsize(26)
 sethue("white")
 t₁ = L"e^{i\pi} + 1 = 0"
 t₂ = L"e^x = \sum^\infty_{n=0} \frac{x^n}{n!} = \lim_{n\to\infty}(1+\frac{x}{n})^n"
-t₃ = L"cos(\theta)"
+t₃ = L"\cos(\theta)"
 
 text(t₁, Point(0, -100), halign=:center, valign=:baseline, angle=0)
 text(t₂, Point(0, -20), halign=:center, valign=:top, angle=0)
@@ -171,7 +173,7 @@ line(Point(0, 132), Point(50cos(π/4), 132 - 50sin(π/4)), :stroke)
 
 fontsize(18)
 text(t₃, Point(0, 120), halign = :left, valign = :baseline, angle = -π/4, rotationfixed = false)
-finish() # hide
+finish()
 nothing # hide
 ```
 
