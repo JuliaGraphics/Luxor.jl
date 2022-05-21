@@ -235,9 +235,4 @@ const inch = 72.0
 const cm = 28.3464566929
 const mm = 2.83464566929
 
-if VERSION >= v"1.1"   # work around https://github.com/JuliaLang/julia/issues/34121
-    include("precompile.jl")
-    _precompile_()
-end
-
 end # module
