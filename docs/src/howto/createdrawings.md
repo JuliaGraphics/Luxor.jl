@@ -144,12 +144,12 @@ using Luxor, PlutoUI, Colors
 @bind y Slider(1:12)
 
 @draw begin
-	setopacity(0.8)
-	for i in 0:0.1:1
-		sethue(HSB(360i, .8, .8))
-		squircle(O, 50, 50, :fill, rt = x * i)
-		rotate(2π/y)
-	end
+    setopacity(0.8)
+    for i in 0:0.1:1
+        sethue(HSB(360i, .8, .8))
+        squircle(O, 50, 50, :fill, rt = x * i)
+        rotate(2π/y)
+    end
 end 100 100
 ```
 
@@ -159,14 +159,14 @@ or
 begin
     d = Drawing(800, 800, :svg)
     origin()
-	for (n, m) in enumerate(exp10.(range(0.0, 2, step=0.2)))
-		setmesh(mesh(convert(Vector{Point}, BoundingBox()/m),
-			["darkviolet","gold2", "firebrick2", "slateblue4"]))
-    	rotate(π/7)
-    	paint()
-	end
+    for (n, m) in enumerate(exp10.(range(0.0, 2, step=0.2)))
+        setmesh(mesh(convert(Vector{Point}, BoundingBox()/m),
+            ["darkviolet","gold2", "firebrick2", "slateblue4"]))
+        rotate(π/7)
+        paint()
+    end
     finish()
-	d
+    d
 end
 ```
 

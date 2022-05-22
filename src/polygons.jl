@@ -1725,52 +1725,52 @@ end
 ```
 """
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
-    	samples = 100,
-    	easingfunction = easingflat,
+        samples = 100,
+        easingfunction = easingflat,
         min_k = 0.01,
         max_k = 0.99,
-		kludge = true)
+        kludge = true)
     k <= min_k && return pgon1
     k >= max_k && return pgon2
     loopcount1 = length(pgon1)
     loopcount2 = length(pgon2)
-	result = Array{Point,1}[]
-	centroid1 = centroid2 = O # kludge-y eh?
-	for i in 1:max(loopcount1, loopcount2)
-	    from_ok = to_ok = false
-	    not_empty1 = i <= loopcount1
-	    not_empty2 = i <= loopcount2
-	    if (not_empty1 && length(pgon1[i]) >= 3)
-			from_ok = true
-		end
-	    if (not_empty2 && length(pgon2[i]) >= 3)
-			to_ok = true
-		end
-	    if from_ok && to_ok
+    result = Array{Point,1}[]
+    centroid1 = centroid2 = O # kludge-y eh?
+    for i in 1:max(loopcount1, loopcount2)
+        from_ok = to_ok = false
+        not_empty1 = i <= loopcount1
+        not_empty2 = i <= loopcount2
+        if (not_empty1 && length(pgon1[i]) >= 3)
+            from_ok = true
+        end
+        if (not_empty2 && length(pgon2[i]) >= 3)
+            to_ok = true
+        end
+        if from_ok && to_ok
             # a simple morph should suffice
-			push!(result, Luxor._betweenpoly(pgon1[i], pgon2[i], k,
-				samples = samples,
-				easingfunction = easingfunction))
-			centroid1 = polycentroid(pgon1[i])
-			centroid2 = polycentroid(pgon2[i])
-	    elseif from_ok && !to_ok && kludge
+            push!(result, Luxor._betweenpoly(pgon1[i], pgon2[i], k,
+                samples = samples,
+                easingfunction = easingfunction))
+            centroid1 = polycentroid(pgon1[i])
+            centroid2 = polycentroid(pgon2[i])
+        elseif from_ok && !to_ok && kludge
             # nothing to morph to, so make something up
-			pdir = !ispolyclockwise(pgon1[i])
-			loop2 = ngon(centroid2, 0.1, reversepath = pdir, length(pgon1[i]), vertices = true)
-			push!(result, Luxor._betweenpoly(pgon1[i], loop2, k,
-				samples = samples,
-				easingfunction = easingfunction))
-			centroid1 = polycentroid(pgon1[i])
-		elseif !from_ok && to_ok && kludge
-		   # nothing to morph from, so make something up
-			pdir = !ispolyclockwise(pgon2[i])
-			loop1 = ngon(centroid1, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true)
-			push!(result, Luxor._betweenpoly(loop1, pgon2[i], k,
-				samples = samples,
-				easingfunction = easingfunction))
-			centroid2 = polycentroid(pgon2[i])
-	    end
-	end
+            pdir = !ispolyclockwise(pgon1[i])
+            loop2 = ngon(centroid2, 0.1, reversepath = pdir, length(pgon1[i]), vertices = true)
+            push!(result, Luxor._betweenpoly(pgon1[i], loop2, k,
+                samples = samples,
+                easingfunction = easingfunction))
+            centroid1 = polycentroid(pgon1[i])
+        elseif !from_ok && to_ok && kludge
+           # nothing to morph from, so make something up
+            pdir = !ispolyclockwise(pgon2[i])
+            loop1 = ngon(centroid1, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true)
+            push!(result, Luxor._betweenpoly(loop1, pgon2[i], k,
+                samples = samples,
+                easingfunction = easingfunction))
+            centroid2 = polycentroid(pgon2[i])
+        end
+    end
     return result
 end
 
