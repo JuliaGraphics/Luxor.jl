@@ -13,14 +13,14 @@ function text_path_clip(fname)
     origin()
     background("darkslategray3")
 
-    fontsize(600) # big text to use for clipping
+    fontsize(600) # big text to use for clipping
     fontface("Agenda-Black")
     str = "julia" # string to be clipped
-    w, h = textextents(str)[3:4] # get width and height
+    w, h = textextents(str)[3:4] # get width and height
 
     translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
 
-    textpath(str) # make text into a path
+    textpath(str) # make text into a path
     setline(3)
     setcolor("black")
     fillpreserve() # fill but keep
@@ -28,7 +28,7 @@ function text_path_clip(fname)
 
     fontface("Monaco")
     fontsize(10)
-    namelist = map(x->string(x), names(Base)) # list of names in Base.
+    namelist = map(x->string(x), names(Base)) # list of names in Base.
 
     x = -20
     y = -h

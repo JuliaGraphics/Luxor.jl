@@ -41,7 +41,7 @@ function get_path(str)
             # Use point interface, to make sure that is also tested
             curve(Point(x1, y1), Point(x2, y2), Point(x3, y3))
             strokepath()
-            (x, y) = (x3, y3) # update current point
+            (x, y) = (x3, y3) # update current point
         elseif e.element_type == CAIRO_PATH_CLOSE_PATH
             closepath()
         else

@@ -1131,7 +1131,7 @@ Drawing(600, 250, "../assets/figures/insertvertices.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
-sethue("black") # hide
+sethue("black") # hide
 
 pts = box(O, 500, 200, vertices=true)
 prettypoly(pts, :stroke, close=true)
@@ -1158,7 +1158,7 @@ Drawing(600, 250, "../assets/figures/polysample.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
-sethue("black") # hide
+sethue("black") # hide
 
 pts = ngon(O, 100, 4, vertices=true)
 for (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))
@@ -1183,12 +1183,12 @@ Drawing(600, 250, "../assets/figures/polysample2.png") # hide
 origin() # hide
 background("white") # hide
 setline(1) # hide
-sethue("black") # hide
-fontsize(8) # hide
+sethue("black") # hide
+fontsize(8) # hide
 
-translate(0, -50) # hide
+translate(0, -50) # hide
 setline(1) # hide
-sethue("black") # hide
+sethue("black") # hide
 
 # original polygon
 

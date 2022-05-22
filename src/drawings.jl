@@ -192,7 +192,7 @@ function tidysvg(fname)
     return outfile
 end
 
-# in memory:
+# in memory:
 
 Base.showable(::MIME"image/svg+xml", d::Luxor.Drawing) = d.surfacetype == :svg
 Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png

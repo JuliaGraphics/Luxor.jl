@@ -296,7 +296,7 @@ textoutlines(s::AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
     textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
           # optional keyword arguments:
           spiral_ring_step = 0,    # step out or in by this amount
-          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
+          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
           spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards
           clockwise = true
           )
@@ -375,7 +375,7 @@ function textcurvecentered(the_text, the_angle, the_radius, center::Point;
                            baselineshift = 0
       )
     atextbox = textextents(the_text)
-    atextwidth = atextbox[3]                         # width of text
+    atextwidth = atextbox[3]                         # width of text
     if clockwise
         baselineradius = the_radius + baselineshift  # could be adjusted if we knew font height
     else

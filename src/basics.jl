@@ -593,7 +593,7 @@ for e in o
           move(x, y)
           curve(x1, y1, x2, y2, x3, y3)
           strokepath()
-          (x, y) = (x3, y3) # update current point
+          (x, y) = (x3, y3) # update current point
       elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
           closepath()
       else
