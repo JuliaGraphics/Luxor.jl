@@ -4,7 +4,7 @@ using Luxor
 using BenchmarkTools
 
 function bm1()
-    Drawing(1000, 1000, "luxor-test1.pdf")
+    Drawing(1000, 1000, "/tmp/luxor-test1.pdf")
     origin()
     t = Tiler(1000, 1000, 10, 10, margin=10)
     for (pos, n) in t
@@ -15,7 +15,7 @@ function bm1()
 end
 
 function bm2()
-    Drawing(1000, 1000, "luxor-test2.pdf")
+    Drawing(1000, 1000, "/tmp/luxor-test2.pdf")
     origin()
     t = Tiler(1000, 1000, 10, 10, margin=10)
     for (pos, n) in t

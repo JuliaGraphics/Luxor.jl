@@ -7,6 +7,7 @@
 ### Changed
 
 - `textfit()` algorithm revisited; it's quicker, at least....
+- `polymorph()` keywords changed
 
 ### Removed
 

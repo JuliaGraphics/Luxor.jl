@@ -487,7 +487,7 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
             p3 = points[mod1(i + 2, l)]
             if isapprox(distance(p1, p2), 0.0) || isapprox(distance(p2, p3), 0.0)
                 throw(error("polysmooth(): impossible to round the vertex at point #$(i + 1)"))
-            end 
+            end
             drawroundedcorner(p2, p1, p3, radius, temppath, debug = debug)
         end
     end
@@ -1639,8 +1639,6 @@ end
     polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
         samples = 100,
         easingfunction = easingflat,
-        min_k = 0.01,
-        max_k = 0.99,
         kludge = true)
 
 "morph" is to gradually change from one thing to another.
@@ -1649,8 +1647,8 @@ This function changes one polygon into another.
 It returns an array of polygons, `[p_1, p_2, p_3, ... ]`,
 where each polygon `p_n` is the intermediate shape between
 the corresponding shape in `pgon1[1...n]` and `pgon2[1...n]`
-at `k`, where `0.0 < k < 1.0`. When `k <= min_k` , the
-`pgon1[1...n]` is returned, and when `k >= max_k`,
+at `k`, where `0.0 < k < 1.0`. If `k ≈ 0.0`, the
+`pgon1[1...n]` is returned, and if ``k ≈ 1.0`,
 `pgon2[1...n]` is returned.
 
 `pgon1` and `pgon2` can be either simple polygons or arrays
@@ -1727,11 +1725,9 @@ end
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
     	samples = 100,
     	easingfunction = easingflat,
-        min_k = 0.01,
-        max_k = 0.99,
 		kludge = true)
-    k <= min_k && return pgon1
-    k >= max_k && return pgon2
+    isapprox(k, 0.0) && return pgon1
+    isapprox(k, 1.0) && return pgon2
     loopcount1 = length(pgon1)
     loopcount2 = length(pgon2)
 	result = Array{Point,1}[]
