@@ -17,7 +17,7 @@ function boxmaptest(fname)
     for (n, t) in enumerate(tiles)
     randomhue()
 
-    #box(t, :fill) # box() would work, but BoundingBoxes are fun too
+    #box(t, :fill) # box() would work, but BoundingBoxes are fun too
 
     bb = BoundingBox(t)
     sethue("black")

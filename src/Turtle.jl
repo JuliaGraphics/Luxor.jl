@@ -37,8 +37,8 @@ mutable struct Turtle
     xpos::Float64
     ypos::Float64
     pendown::Bool
-    orientation::Float64 # stored in radians but set in degrees
-    pencolor::Tuple{Float64, Float64, Float64} # it's an RGB turtle
+    orientation::Float64 # stored in radians but set in degrees
+    pencolor::Tuple{Float64, Float64, Float64} # it's an RGB turtle
     function Turtle(xpos, ypos, pendown::Bool, orientation, pencolor=(0.0, 0.0, 0.0))
         new(xpos, ypos, pendown, orientation, pencolor)
     end

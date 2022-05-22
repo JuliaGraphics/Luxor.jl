@@ -113,7 +113,7 @@ function polygon_test(fname)
     # fill, then clip to heptagon
     setcolor("lightcyan")
     setline(3)
-    ngon(0, 0, 270, 7, 0, :fillpreserve) # fill it
+    ngon(0, 0, 270, 7, 0, :fillpreserve) # fill it
     sethue("orange")
     strokepreserve()                     # stroke it
     clip()                               # then use to clip

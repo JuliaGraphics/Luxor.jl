@@ -49,7 +49,7 @@ function test(pagewidth, pageheight)
 end
 
 function simplify_poly(fname)
-    pagewidth  = 1190.0 # points
+    pagewidth  = 1190.0 # points
     pageheight = 1684.0 # points
     Drawing(pagewidth, pageheight, fname)
     sinecurves()

@@ -138,7 +138,7 @@ end 400 400 "boxmap.svg"
 """
 function boxmap(A::Array, pt::Point, w, h)
     # algorithm basically from Bruls, Huizing, van Wijk, "Squarified Treemaps"
-    # without the silly name
+    # without the silly name
     !all(n -> n > 0, A) && error("all values must be positive")
     sort!(A, rev=true)
     totalvalue = sum(A)

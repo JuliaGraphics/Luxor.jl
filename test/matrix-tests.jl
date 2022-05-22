@@ -57,14 +57,14 @@ function matrix_tests(fname)
 
     original_matrix = getmatrix()
 
-    # absolute position 200, 250 relative to top left origin (0, 0)
+    # absolute position 200, 250 relative to top left origin (0, 0)
     setmatrix([1, 0, 0, 1, 200, 250.0])
     sethue("red")
     fontsize(20)
     text("hello world")
 
     sethue("green")
-    # absolute position 400, 500 from top left origin (0, 0)
+    # absolute position 400, 500 from top left origin (0, 0)
     setmatrix([1, 0, 0, 1, 400, 500.0])
     text("hello world")
 
