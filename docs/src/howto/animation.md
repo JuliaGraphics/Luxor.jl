@@ -165,7 +165,7 @@ function.
 
 
 |List of easing functions|
-|:---	                 |
+|:---                    |
 |easingflat|
 |lineartween|
 |easeinquad|

@@ -1,7 +1,7 @@
 #!/usr/bin/env julia
 
 # testing isinside(), is point inside polygon
-# all the random points are drawn only if they're inside one of the polygons
+# all the random points are drawn only if they're inside one of the polygons
 
 using Luxor
 
@@ -35,7 +35,7 @@ function point_inside_polygon(fname)
             randomsize = rand(4:12)
             bp = bounding_b(pt.x, pt.y, randomsize)
             # check that all four corners of a 5x5 bounding box are inside this polygon
-            # slow but this is Julia so it's still quick...
+            # slow but this is Julia so it's still quick...
             if isinside(bp[1], pol) && isinside(bp[2], pol) && isinside(bp[3], pol) && isinside(bp[4], pol)
                 randomhue()
                 circle(pt.x, pt.y, randomsize, :fill)

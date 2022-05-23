@@ -40,7 +40,7 @@ function get_path_flat(str)
             move(x, y)
             curve(x1, y1, x2, y2, x3, y3)
             strokepath()
-            (x, y) = (x3, y3) # update current point
+            (x, y) = (x3, y3) # update current point
         elseif e.element_type == CAIRO_PATH_CLOSE_PATH
             closepath()
         else

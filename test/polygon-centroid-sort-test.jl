@@ -46,7 +46,7 @@ function drawpoly(p, x, y, counter)
     circle(cp, 5, :fill)
     text(string(counter), cp.x, cp.y)
 
-    # highlight cases where centroid isn't inside poly. Might be an error...
+    # highlight cases where centroid isn't inside poly. Might be an error...
     if ! isinside(cp, psort)
         gsave()
         setdash("dotted")

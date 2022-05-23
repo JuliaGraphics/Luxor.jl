@@ -335,9 +335,9 @@ get_current_hue()
 As set by eg `sethue()`. Return an RGB colorant.
 """
 function get_current_hue()
-	return RGB(Luxor.get_current_redvalue(),
-		Luxor.get_current_greenvalue(),
-		Luxor.get_current_bluevalue())
+    return RGB(Luxor.get_current_redvalue(),
+        Luxor.get_current_greenvalue(),
+        Luxor.get_current_bluevalue())
 end
 
 """
@@ -346,8 +346,8 @@ get_current_color()
 As set by eg `setcolor()`. Return an RGBA colorant.
 """
 function get_current_color()
-	return RGBA(Luxor.get_current_redvalue(),
-		Luxor.get_current_greenvalue(),
-		Luxor.get_current_bluevalue(),
-		Luxor.get_current_alpha())
+    return RGBA(Luxor.get_current_redvalue(),
+        Luxor.get_current_greenvalue(),
+        Luxor.get_current_bluevalue(),
+        Luxor.get_current_alpha())
 end

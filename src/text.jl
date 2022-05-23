@@ -296,7 +296,7 @@ textoutlines(s::AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
     textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
           # optional keyword arguments:
           spiral_ring_step = 0,    # step out or in by this amount
-          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
+          letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
           spiral_in_out_shift = 0, # + values go outwards, - values spiral inwards
           clockwise = true
           )
@@ -375,7 +375,7 @@ function textcurvecentered(the_text, the_angle, the_radius, center::Point;
                            baselineshift = 0
       )
     atextbox = textextents(the_text)
-    atextwidth = atextbox[3]                         # width of text
+    atextwidth = atextbox[3]                         # width of text
     if clockwise
         baselineradius = the_radius + baselineshift  # could be adjusted if we knew font height
     else
@@ -602,7 +602,7 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
     spaceleft = textwidth
     currentline = String[]
     for word in fields
-		# hyphenation can leave an empty string field
+        # hyphenation can leave an empty string field
         if word == ""
             word = " "
             push!(currentline, " ")
@@ -978,66 +978,66 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
         te = textextents(lines[1])
 
         # set up our binary search
-		foundminsize = 0.5
-		foundmaxsize = maxfontsize
-		totalattempts = 20
-		attempts = 0
+        foundminsize = 0.5
+        foundmaxsize = maxfontsize
+        totalattempts = 20
+        attempts = 0
 
         # binary search for the closest fontsize that satisfies our requirements
-		while foundmaxsize - foundminsize > 0.1
-			attempts += 1
-		    if attempts > totalattempts
-		        throw(error("textfit(): couldn't fit the text with $maxfontsize maxfontsize after trying $(atttempts) times"))
-		    end
+        while foundmaxsize - foundminsize > 0.1
+            attempts += 1
+            if attempts > totalattempts
+                throw(error("textfit(): couldn't fit the text with $maxfontsize maxfontsize after trying $(atttempts) times"))
+            end
 
-			fsize = foundminsize + (foundmaxsize - foundminsize) / 2.0
-			fontsize(fsize)
+            fsize = foundminsize + (foundmaxsize - foundminsize) / 2.0
+            fontsize(fsize)
 
-			# split into lines
-		    lines = filter!(!isempty, textlines(s, width))
+            # split into lines
+            lines = filter!(!isempty, textlines(s, width))
 
-			# estimate the finish height with our current fontsize
-			# since we don't know the height well enough, just hope that putting leading
-			# between every line will work
-			estimatedfinishheight = (fsize + (100/leading)) * length(lines)
+            # estimate the finish height with our current fontsize
+            # since we don't know the height well enough, just hope that putting leading
+            # between every line will work
+            estimatedfinishheight = (fsize + (100/leading)) * length(lines)
 
-		    # estimate finish width
-		    widestline = 0
-		    for l in lines
-			   	 te = textextents(l)
-			   	 if widestline <= te[3]
-			          widestline = te[3]
-			   	 end
-		    end
+            # estimate finish width
+            widestline = 0
+            for l in lines
+                te = textextents(l)
+                if widestline <= te[3]
+                    widestline = te[3]
+                end
+            end
 
-		    # is this estimated result good enough with this font size?
-		    if estimatedfinishheight < requiredheight && widestline < boxwidth(bbox)
-			    # estimated size is too small
-			    # search for a larger font size
-		        foundminsize = fsize
-		    else
-				# estimated size is too large
-				# search for a smaller font size.
-		    	foundmaxsize = fsize
-		    end
-		end # while
+            # is this estimated result good enough with this font size?
+            if estimatedfinishheight < requiredheight && widestline < boxwidth(bbox)
+                # estimated size is too small
+                # search for a larger font size
+                foundminsize = fsize
+            else
+                # estimated size is too large
+                # search for a smaller font size.
+                foundmaxsize = fsize
+            end
+        end # while
 
         # use the most recent font size
         fontsize(fsize * (100/leading))
         lines = filter!(!isempty, textlines(s, width))
 
-		# start below the top of the box
+        # start below the top of the box
 
-		te = textextents(lines[1])
-		# we can't get the height of a text character, sadly
-		# but we can guess
-		# not all fonts will have these characters though?
-		fontheight = textextents("AA⃰gg̲")[4]
-		textpos = boxtopleft(bbox) + Point(0, max(te[4], fontheight))
+        te = textextents(lines[1])
+        # we can't get the height of a text character, sadly
+        # but we can guess
+        # not all fonts will have these characters though?
+        fontheight = textextents("AA⃰gg̲")[4]
+        textpos = boxtopleft(bbox) + Point(0, max(te[4], fontheight))
 
         for (linenumber, linetext) in enumerate(lines)
             text(linetext, textpos)
-			te = textextents(linetext)
+            te = textextents(linetext)
             textpos = Point(textpos.x, textpos.y + (max(te[4], fontheight) * (leading/100)))
         end
         # return top position, bottom position

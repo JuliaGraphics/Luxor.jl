@@ -1,12 +1,12 @@
 @font-face {
-	font-family: JuliaMono;
-	src:
-		local('JuliaMono'),
-		url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
+    font-family: JuliaMono;
+    src:
+        local('JuliaMono'),
+        url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
 }
 
 pre, code {
-	font-family: JuliaMono !important;
+    font-family: JuliaMono !important;
     font-feature-settings: "calt" 1;
 }
 
@@ -28,14 +28,14 @@ p > a:after {
 }
 
 html.theme--documenter-dark p > code {
-	  	color: #eff !important;
+    color: #eff !important;
 }
 
 html.theme--documenter-dark li > code {
-	  	color: #eff !important;
+    color: #eff !important;
 }
 
 
 html.theme--documenter-dark a > code {
-	  	color: #eff !important;
+    color: #eff !important;
 }
