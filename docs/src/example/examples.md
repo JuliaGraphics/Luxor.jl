@@ -166,7 +166,7 @@ function draw(n)
     sierpinski(points, n)
 end
 
-depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
+depth = 8 # 12 is ok, 20 is right out (on my computer, at least)
 cols = distinguishable_colors(depth) # from Colors.jl
 draw(depth)
 

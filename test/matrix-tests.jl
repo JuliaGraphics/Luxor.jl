@@ -12,12 +12,12 @@ Random.seed!(42)
 function matrix_tests(fname)
     # matrix tests
 
-    # translate(dx, dy) =	transform([1,  0, 0,  1, dx, dy])                shift by
-    # scale(fx, fy)    =    transform([fx, 0, 0, fy,  0, 0])                 scale by
-    # rotate(A)        =    transform([c, s, -c, c,   0, 0])                 rotate to A radians
-    # x-skew(a)        =    transform([1,  0, tan(a), 1,   0, 0])            xskew by A
-    # y-skew(a)        =    transform([1, tan(a), 0, 1, 0, 0])               yskew by A
-    # flip HV          =    transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)]) flip
+    # translate(dx, dy) =   transform([1,  0, 0,  1, dx, dy])                shift by
+    # scale(fx, fy)     =   transform([fx, 0, 0, fy,  0, 0])                 scale by
+    # rotate(A)         =   transform([c, s, -c, c,   0, 0])                 rotate to A radians
+    # x-skew(a)         =   transform([1,  0, tan(a), 1,   0, 0])            xskew by A
+    # y-skew(a)         =   transform([1, tan(a), 0, 1, 0, 0])               yskew by A
+    # flip HV           =   transform([fx, 0, 0, fy, cx(*1-fx), cy* (fy-1)]) flip
 
     Drawing(1000, 1000, fname)
 
@@ -57,14 +57,14 @@ function matrix_tests(fname)
 
     original_matrix = getmatrix()
 
-    # absolute position 200, 250 relative to top left origin (0, 0)
+    # absolute position 200, 250 relative to top left origin (0, 0)
     setmatrix([1, 0, 0, 1, 200, 250.0])
     sethue("red")
     fontsize(20)
     text("hello world")
 
     sethue("green")
-    # absolute position 400, 500 from top left origin (0, 0)
+    # absolute position 400, 500 from top left origin (0, 0)
     setmatrix([1, 0, 0, 1, 400, 500.0])
     text("hello world")
 

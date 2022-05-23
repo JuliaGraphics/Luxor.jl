@@ -7,8 +7,12 @@
 ### Changed
 
 - `textfit()` algorithm revisited; it's quicker, at least....
+- `polymorph()` keywords changed
+- minimum Julia version is now 1.6
 
 ### Removed
+
+- support for Julia v1.3
 
 ### Deprecated
 

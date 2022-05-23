@@ -32,7 +32,7 @@ function background_text(str_array)
 end
 
 function heart()
-    move(127, 1) # damn, it's offset from 0/0, who drew this :/
+    move(127, 1) # damn, it's offset from 0/0, who drew this :/
     curve(134.2, -6.5, 134.2, -6.5, 156.1, -29.6)
     curve(185.8, -60.5, 198.1, -74.3, 213.7, -95.3)
     curve(240.4, -131, 253.3, -163.7, 253.3, -194.9)
@@ -75,7 +75,7 @@ end
 function outlined_heart()
     gsave()
     scale(1.2, 1.2)
-    translate(-127, -30) # must fix that x-offset one day
+    translate(-127, -30) # must fix that x-offset one day
     heart_with_julias()
     heart()
     setline(4)
@@ -91,7 +91,7 @@ function julia_heart(fname)
 
     origin()
     background("black")
-    namelist = map(x -> string(x), names(Base)) # list of names in Base.
+    namelist = map(x -> string(x), names(Base)) # list of names in Base.
 
     background_text(namelist)
     for n in 1:5

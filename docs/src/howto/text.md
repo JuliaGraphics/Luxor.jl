@@ -290,11 +290,11 @@ Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
 ```@example
 using Luxor # hide
-Drawing(800, 800, "../assets/figures/text-spiral.png") # hide
+Drawing(800, 800, "../assets/figures/text-spiral.png") # hide
 
-origin() # hide
-background("ivory") # hide
-sethue("royalblue4") # hide
+origin() # hide
+background("ivory") # hide
+sethue("royalblue4") # hide
 fontsize(7)
 fontface("Menlo")
 textstring = join(names(Base), " ")
@@ -307,7 +307,7 @@ textcurve("this spiral contains every word in julia names(Base): " * textstring,
 fontsize(35)
 fontface("Avenir-Black")
 textcentered("julia names(Base)", 0, 0)
-finish() # hide
+finish() # hide
 
 nothing # hide
 ```
@@ -395,14 +395,14 @@ Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
 origin()
 background("darkslategray3")
 
-fontsize(600)                             # big fontsize to use for clipping
+fontsize(600)                             # big fontsize to use for clipping
 fontface("Agenda-Black")
 str = "julia"                             # string to be clipped
-w, h = textextents(str)[3:4]              # get width and height
+w, h = textextents(str)[3:4]              # get width and height
 
 translate(-(currentwidth/2) + 50, -(currentheight/2) + h)
 
-textpath(str)                             # make text into a path
+textpath(str)                             # make text into a path
 setline(3)
 setcolor("black")
 fillpreserve()                            # fill but keep
@@ -410,7 +410,7 @@ clip()                                    # and use for clipping region
 
 fontface("Monaco")
 fontsize(10)
-namelist = map(x->string(x), names(Base)) # get list of function names in Base.
+namelist = map(x->string(x), names(Base)) # get list of function names in Base.
 
 let
     x = -20

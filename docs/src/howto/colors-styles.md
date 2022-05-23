@@ -595,12 +595,12 @@ col2 = RGB(rand(), rand(), rand())
 col3 = RGB(rand(), rand(), rand())
 col4 = RGB(rand(), rand(), rand())
 for (pos, n) in tiles
-	bx = box(
-		pos - (tiles.tilewidth/2, tiles.tileheight/2),
-		pos + (tiles.tilewidth/2, tiles.tileheight/2),
-		vertices = true)
-	add_mesh_patch(the_mesh, bx,
-	 	Random.shuffle!([col1, col2, col3, col4]))
+    bx = box(
+        pos - (tiles.tilewidth/2, tiles.tileheight/2),
+        pos + (tiles.tilewidth/2, tiles.tileheight/2),
+        vertices = true)
+    add_mesh_patch(the_mesh, bx,
+        Random.shuffle!([col1, col2, col3, col4]))
 end
 setmesh(the_mesh)
 paint()

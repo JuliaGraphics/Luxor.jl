@@ -31,7 +31,7 @@ function draw(fname, n)
   background("ivory")
   circle(O, 75, :clip)
   my_points = ngon(O, 150, 3, -pi/2, vertices=true)
-  depth = 8 # 12 is ok, 20 is right out
+  depth = 8 # 12 is ok, 20 is right out
   sierpinski(my_points, n)
   @test finish() == true
 end
