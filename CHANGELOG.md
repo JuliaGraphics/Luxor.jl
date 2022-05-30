@@ -8,6 +8,7 @@
 
 - `textfit()` algorithm revisited; it's quicker, at least....
 - `polymorph()` keywords changed
+- `polymorph()` can now morph between open polygons
 - minimum Julia version is now 1.6
 - there are still bugs/edgecases in `polyhull()` which I can't find/fix
 

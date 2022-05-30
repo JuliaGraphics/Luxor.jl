@@ -1637,16 +1637,37 @@ easing function, intermediate steps are determined by the
 value of the easing function at `k`.
 
 Used by `polymorph()`.
+
+Because `polysample()` can treat the polygon as open or
+closed (with different results), you can specify how the
+sampling is done here, with the `closed=` keyword:
+
+- closed = true
+-> polygons are sampled as closed
+
+- closed = false
+-> polygons are sampled as open
+
+- closed = (true, false)
+-> first polygon is sampled as closed, second as open
 """
 function _betweenpoly(loop1, loop2, k;
         samples = 100,
-        easingfunction = easingflat)
+        easingfunction = easingflat,
+        closed = (true, true))
+    if closed == true
+        closed = (true, true)
+    elseif closed == false
+        closed = (false, false)
+    end
+    l1 = polysample(loop1, samples, closed=first(closed))
+    l2 = polysample(loop2, samples, closed=last(closed))
     result = Point[]
-    loop1 = polysample(loop1, samples)
-    loop2 = polysample(loop2, samples)
     eased_k = easingfunction(k, 0.0, 1.0, 1.0)
+    # don't skip first point like polysample() does :(
+    push!(result, between(loop1[1], loop2[1], eased_k))
     for j in 1:samples
-        push!(result, between(loop1[j], loop2[j], eased_k))
+        push!(result, between(l1[j], l2[j], eased_k))
     end
     return result
 end
@@ -1655,7 +1676,8 @@ end
     polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
         samples = 100,
         easingfunction = easingflat,
-        kludge = true)
+        kludge = true
+        closed = true)
 
 "morph" is to gradually change from one thing to another.
 This function changes one polygon into another.
@@ -1684,6 +1706,19 @@ By default, `easingfunction = easingflat`, so the
 intermediate steps are linear. If you use another easing
 function, intermediate steps are determined by the value of
 the easing function at `k`.
+
+Because `polysample()` can treat the polygon as open or
+closed (with different results), you can specify how the
+sampling is done here, with the `closed=` keyword:
+
+- closed = true
+    -> polygons are sampled as closed
+
+- closed = false
+    -> polygons are sampled as open
+
+- closed = (true, false)
+    -> first polygon is sampled as closed, second as open
 
 This function isn't very efficient, because it copies the
 polygons and resamples them.
@@ -1741,7 +1776,8 @@ end
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
     	samples = 100,
     	easingfunction = easingflat,
-		kludge = true)
+		kludge = true,
+        closed=true)
     isapprox(k, 0.0) && return pgon1
     isapprox(k, 1.0) && return pgon2
     loopcount1 = length(pgon1)
@@ -1762,7 +1798,8 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
             # a simple morph should suffice
             push!(result, Luxor._betweenpoly(pgon1[i], pgon2[i], k,
                 samples = samples,
-                easingfunction = easingfunction))
+                easingfunction = easingfunction,
+                closed=closed))
             centroid1 = polycentroid(pgon1[i])
             centroid2 = polycentroid(pgon2[i])
         elseif from_ok && !to_ok && kludge
@@ -1771,7 +1808,8 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
             loop2 = ngon(centroid2, 0.1, reversepath = pdir, length(pgon1[i]), vertices = true)
             push!(result, Luxor._betweenpoly(pgon1[i], loop2, k,
                 samples = samples,
-                easingfunction = easingfunction))
+                easingfunction = easingfunction,
+                closed=closed))
             centroid1 = polycentroid(pgon1[i])
         elseif !from_ok && to_ok && kludge
            # nothing to morph from, so make something up
@@ -1779,7 +1817,8 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
             loop1 = ngon(centroid1, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true)
             push!(result, Luxor._betweenpoly(loop1, pgon2[i], k,
                 samples = samples,
-                easingfunction = easingfunction))
+                easingfunction = easingfunction,
+                closed=closed))
             centroid2 = polycentroid(pgon2[i])
         end
     end

@@ -1324,6 +1324,139 @@ nothing # hide
 
 ![poly area](../assets/figures/polyarea.png)
 
+## Morphing polygons
+
+"morph" means to make one thing turn into another. The experimental [`polymorph`](@ref) function can gradually turn one polygon into another.
+
+You supply two polygons and a value `k` between 0 and 1. For example, if the value of `k` is 0.5, the shape is about halfway between the two polygons.
+
+`polymorph()` always returns an array of polygons.
+
+By default, the polygons are assumed to be closed, suitable for filling.
+
+But in this example, each of the two wavy-line polygons are open rather than closed, so you can pass `false` values to the `closed` argument, and the polygons won't be treated as closed shapes.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+background("black") # hide
+setline(1.5) # hide
+rotate(π/2)
+fromshape  = [Point(90x, -230 + 50sin(3x)) for x in range(-π, π, length=250)]
+toshape  = [Point(90x, 230 + 50sin(-3x)) for x in range(-π, π, length=250)]
+for i in 0:0.03:1
+    sethue(1 - i, i/4 + 0.2, 1 - i/4)
+    morph = polymorph(fromshape, toshape, i,
+        easingfunction=easeinoutcubic,
+        closed=(false, false))
+    poly(first(morph), :stroke)
+end
+end # hide
+```
+
+Sometimes polygons consist of two or more loops - this is how holes work. So `polymorph()` accepts both simple polygons and arrays of polygons, but always returns an array of polygons.
+
+In the next example, `fromshape`, the circle, is an array holding a single vector of Points (`pathtopoly()` returns an array of polygons), and `toshape`, the line, is a simple vector of points (the minimum of three points). In this case, with just simple polygons, only the first element of the result of the `polymorph()` function is needed.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+background("black") # hide
+setline(0.5) # hide
+circlepath(O, 200, :path)
+fromshape = pathtopoly()
+toshape = [Point(0, -250), O, Point(0, 250)] # minimum of 3
+for i in 0:0.015:1
+    sethue(i, 1 - i, i/2 + 0.5)
+    morph = polymorph(fromshape, toshape, i, easingfunction=easeinoutsine)
+    poly(first(morph), :stroke, close=true)
+end
+end # hide
+```
+
+In the next example, a square morphs into a hexagon.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+background(0.15, 0.15, 0.1) # hide
+pgon1 = ngon(O, 80, 4,  vertices = true)
+pgon2 = ngon(O, 270, 6, vertices = true)
+sethue("cyan")
+setline(1)
+for i in 0:0.05:1.0
+    sethue(i, 1 - i, 0.5)
+    poly(first(polymorph(pgon1, pgon2, i)),
+        action = :stroke,
+        close = true)
+end
+end 600 600 # hide
+```
+
+In the next example, an octagon with a square hole morphs into a square with an octagonal hole.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+background(0.15, 0.15, 0.1) # hide
+# build first polygon
+ngon(O + (-350, 0), 40, 8, π, :path)
+newsubpath()
+box(O + (-350, 0), 30, 30, reversepath=true, :path)
+pgon1 = pathtopoly()
+
+# build second polygon
+newpath()
+box(O + (350, 0), 60, 60, :path)
+newsubpath()
+ngon(O + (350, 0), 20, 8, π, reversepath=true, :path)
+pgon2 = pathtopoly()
+
+# draw morphs
+sethue("cyan")
+setline(1)
+for i in 0:0.1:1.0
+    sethue(i, 1 - i, 0.5)
+    poly.(polymorph(pgon1, pgon2, i),
+        action=:path,
+        close=true)
+    fillpath()
+end
+end 850 250 # hide
+```
+
+Because both polygons have reversed subpaths (holes), the polygons should be drawn using `:path` and `fillpath()`.
+
+The next example animates a morph between two text strings.
+
+```julia
+function frame(scene, framenumber)
+    background("black")
+    fontface("WorkSans-Black")
+    fontsize(130)
+    textoutlines("Python", O + (0, -100), halign=:center, valign=:middle, :path)
+    fromtext = pathtopoly()
+
+    textoutlines("Julia", O + (0, 100), halign=:center, valign=:middle, :path)
+    totext   = pathtopoly()
+
+    newpath()
+    sethue("cyan")
+    i = sin(rescale(framenumber, 1, 120) * π)
+    poly.(polymorph(fromtext, totext, i, easingfunction=easingflat, samples=200),
+        action=:path,
+        close=true)
+    strokepath()
+end
+
+amovie = Movie(600, 400, "morphie")
+animate(amovie, Scene(amovie, frame, 1:120), creategif=true, pathname="/tmp/python-julia.gif")
+```
+
+![python julia animation](../assets/figures/python-julia.gif)
+
+The "Python" path has 9 loops, whereas "Julia" has 8. The `polymorph()` function tries to work around this - notice how the ninth loop, "n", morphs down to nothing. If you don't want this to happen, set the `kludge` keyword to false. In this particular case, you could increase the number of loops in `totext` to match by using a lower-case "j".
+
 ## Other polygon operations
 
 These functions are still in development. Expect varying degrees of success when using them.
@@ -1424,112 +1557,3 @@ nothing # hide
 ```
 
 ![polygon triangulation](../assets/figures/polytriangulate.png)
-
-### Morphing
-
-"morph" means to make one thing turn into another. The experimental [`polymorph`](@ref) function can gradually turn one polygon into another.
-
-You supply two polygons and a value `k` between 0 and 1. For example, if the value of `k` is 0.5, the result of this function is a polygon that is about halfway between the two polygons.
-
-Sometimes polygons consist of two or more loops - this is how holes work. So `polymorph()` accepts both simple polygons and arrays of polygons, but always returns an array of polygons.
-
-In this first example, `fromshape`, the circle, is an array holding a single vector of Points (`pathtopoly()` returns an array of polygons), and `toshape`, the line, is a simple vector of points (the minimum of three points). In this case, with just simple polygons, only the first element of the result of the `polymorph()` function is needed.
-
-```@example
-using Luxor # hide
-@drawsvg begin # hide
-background("black") # hide
-setline(0.5) # hide
-circlepath(O, 200, :path)
-fromshape = pathtopoly()
-toshape = [Point(0, -250), O, Point(0, 250)] # minimum of 3
-for i in 0:0.015:1
-    sethue(i, 1 - i, i/2 + 0.5)
-    morph = polymorph(fromshape, toshape, i, easingfunction=easeinoutsine)
-    poly(first(morph), :stroke, close=true)
-end
-end # hide
-```
-
-In the next example, a square morphs into a hexagon.
-
-```@example
-using Luxor # hide
-@drawsvg begin # hide
-background(0.15, 0.15, 0.1) # hide
-pgon1 = ngon(O, 80, 4,  vertices = true)
-pgon2 = ngon(O, 270, 6, vertices = true)
-sethue("cyan")
-setline(1)
-for i in 0:0.05:1.0
-    sethue(i, 1 - i, 0.5)
-    poly(first(polymorph(pgon1, pgon2, i)),
-        action = :stroke,
-        close = true)
-end
-end 600 600 # hide
-```
-
-In the next example, an octagon with a square hole morphs into a square with an octagonal hole.
-
-```@example
-using Luxor # hide
-@drawsvg begin # hide
-background(0.15, 0.15, 0.1) # hide
-# build first polygon
-ngon(O + (-350, 0), 40, 8, π, :path)
-newsubpath()
-box(O + (-350, 0), 30, 30, reversepath=true, :path)
-pgon1 = pathtopoly()
-
-# build second polygon
-newpath()
-box(O + (350, 0), 60, 60, :path)
-newsubpath()
-ngon(O + (350, 0), 20, 8, π, reversepath=true, :path)
-pgon2 = pathtopoly()
-
-# draw morphs
-sethue("cyan")
-setline(1)
-for i in 0:0.1:1.0
-    sethue(i, 1 - i, 0.5)
-    poly.(polymorph(pgon1, pgon2, i),
-        action=:path,
-        close=true)
-    fillpath()
-end
-end 850 250 # hide
-```
-
-Because both polygons have reversed subpaths (holes), the polygons should be drawn using `:path` and `fillpath()`.
-
-The next example animates a morph between two text strings.
-
-```julia
-function frame(scene, framenumber)
-    background("black")
-    fontface("WorkSans-Black")
-    fontsize(130)
-    textoutlines("Python", O + (0, -100), halign=:center, valign=:middle, :path)
-    fromtext = pathtopoly()
-
-    textoutlines("Julia", O + (0, 100), halign=:center, valign=:middle, :path)
-    totext   = pathtopoly()
-
-    newpath()
-    sethue("cyan")
-    i = sin(rescale(framenumber, 1, 120) * π)
-    poly.(polymorph(fromtext, totext, i, easingfunction=easingflat, samples=200),
-        action=:path,
-        close=true)
-    strokepath()
-end
-
-amovie = Movie(600, 400, "morphie")
-animate(amovie, Scene(amovie, frame, 1:120), creategif=true, pathname="/tmp/python-julia.gif")
-```
-
-![python julia animation](../assets/figures/python-julia.gif)
-
-The "Python" path has 9 loops, whereas "Julia" has 8. The `polymorph()` function tries to work around this - notice how the ninth loop, "n", morphs down to nothing. If you don't want this to happen, set the `kludge` keyword to false. In this particular case, you could increase the number of loops in `totext` to match by using a lower-case "j".
