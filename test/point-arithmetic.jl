@@ -20,6 +20,12 @@ function general_tests()
     @test Point((1, 2)) == Point(1, 2)
     @test [Point(3, 1), Point(4.0, 1.0), Point(2//3,3//4)] == Point.([(3.0, 1.0), (4, 1), (2//3,3//4)])
 
+    # origin point with Base.zero
+    @test zero(Point) == zero(Point(1,2)) == O
+    @test zeros(Point, 5) == fill(O, 5)
+    @test iszero(O)
+    @test !iszero(Point(1,2))
+
     # is point/4 inside a box
     # a: we now have to wrap arguments with Ref() to ensure they  broadcast as scalar
     @test isinside(Ref(pt1) ./ 4, box(O, 10, 10, vertices=true))
