@@ -267,12 +267,11 @@ end
 If you have the right fonts installed, you can easily draw simple ``\LaTeX`` equations.
 
 ```@example
-using Luxor
+# drawing with 800×300 canvas
+using Luxor # hide
 using MathTeXEngine
-path_svg = "latexequation.svg"
-path_svg = "../assets/figures/latexequation.svg" # hide
-Drawing(800, 300, path_svg)
-origin()
+d = Drawing(800, 300, :svg) # hide
+origin() # hide
 background("khaki")
 f(t) = Point(4cos(t) + 2cos(5t), 4sin(t) + 2sin(5t))
 setline(15)
@@ -284,11 +283,9 @@ fontsize(35)
 end
 sethue("grey5")
 text(L"f(t) = [4\cos(t) + 2\cos(5t), 4\sin(t) + 2\sin(5t)]", halign=:center)
-finish()
-nothing # hide
+finish() # hide
+d # hide
 ```
-
-![LaTeX](../assets/figures/latexequation.svg)
 
 ## Triangulations
 
