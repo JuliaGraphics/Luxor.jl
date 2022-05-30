@@ -16,6 +16,8 @@ end
 O is a shortcut for the current origin, `0/0`
 """
 const O = Point(0, 0)
+Base.zero(::Type{Point}) = O
+Base.zero(::Point) = O
 
 # basics
 +(z::Number, p1::Point) = Point(p1.x + z, p1.y + z)
