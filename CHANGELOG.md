@@ -9,10 +9,11 @@
 - `textfit()` algorithm revisited; it's quicker, at least....
 - `polymorph()` keywords changed
 - minimum Julia version is now 1.6
+- there are still bugs/edgecases in `polyhull()` which I can't find/fix
 
 ### Removed
 
-- support for Julia v1.3
+- support for Julia v1.3, minimum version is now Julia 1.6.
 
 ### Deprecated
 

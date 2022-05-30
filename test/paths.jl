@@ -138,4 +138,4 @@ function path_test_2(fname)
 end
 
 path_test_1("path-test-1.png")
-path_test_2("path-test-3.png")
+path_test_2("path-test-2.png")

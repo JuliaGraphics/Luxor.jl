@@ -1588,6 +1588,22 @@ function polyhull(points)
     sortedpts = sort(points,
         lt = (pt1, pt2) -> _polarsortpoints(anchor, pt1, pt2))
 
+    # remove collinear points
+    # TODO this breaks occasionally
+    to_remove = Int64[]
+    for i in 1:length(sortedpts)
+        d = anglethreepoints(
+            sortedpts[i],
+            sortedpts[mod1(i + 1, end)],
+            sortedpts[mod1(i + 2, end)],
+        )
+        if isapprox(d, π, atol = 10e-3)
+            push!(to_remove, i + 1)
+        end
+    end
+    sortedpts = [sortedpts[i] for i in eachindex(sortedpts) if i ∉ to_remove]
+
+
     # initialize the convex hull with the anchor point
 
     convex_hull = [anchor]
