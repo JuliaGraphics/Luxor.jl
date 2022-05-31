@@ -1427,11 +1427,23 @@ end 850 250 # hide
 
 Because both polygons have reversed subpaths (holes), the polygons should be drawn using `:path` and `fillpath()`.
 
-The next example animates a morph between two text strings.
+The next example animates a morph between two programming languages.
 
 ```julia
+using Luxor, Colors
+
 function frame(scene, framenumber)
     background("black")
+
+    fontface("JuliaMono")
+    fontsize(120)
+
+    textoutlines("", O + (0, 0), halign=:center, valign=:middle)
+    python_logo = pathtopoly()
+
+    textoutlines("", O + (0, 0), halign=:center, valign=:middle)
+    julia_logo = pathtopoly()
+
     fontface("WorkSans-Black")
     fontsize(130)
     textoutlines("Python", O + (0, -100), halign=:center, valign=:middle, :path)
@@ -1442,15 +1454,30 @@ function frame(scene, framenumber)
 
     newpath()
     sethue("cyan")
-    i = sin(rescale(framenumber, 1, 120) * π)
+
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+      0, 1, scene.framerange.stop - scene.framerange.start)
+
+    i = sin(eased_n * π)
     poly.(polymorph(fromtext, totext, i, easingfunction=easingflat, samples=200),
         action=:path,
         close=true)
     strokepath()
+
+    pm = polymorph(python_logo, julia_logo, i)
+    for p in pm
+        poly(p, :path)
+    end
+    fillpath()
 end
 
-amovie = Movie(600, 400, "morphie")
-animate(amovie, Scene(amovie, frame, 1:120), creategif=true, pathname="/tmp/python-julia.gif")
+amovie = Movie(600, 400, "p to j")
+animate(amovie,
+    Scene(amovie, frame, 1:200,
+    easingfunction = easeinoutsine),
+    creategif=true,
+    pathname="/tmp/python-julia.gif")
+end
 ```
 
 ![python julia animation](../assets/figures/python-julia.gif)
