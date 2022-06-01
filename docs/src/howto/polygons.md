@@ -1227,6 +1227,16 @@ nothing # hide
 
 ![polysampling 2](../assets/figures/polysample2.png)
 
+!!! note
+
+    In Luxor, you'll meet `close` and `closed` options.
+    `close` is an instruction to path-drawing functions,
+    that says "join the most recent point to the first
+    point". Whereas, `closed` is an indication that the
+    polygons or paths should be treated as being closed
+    rather than open, ie whether that last segment joining
+    the end point to the first is used for calculations.
+
 ### Polygon side lengths
 
 `polydistances` returns an array of the accumulated side lengths of a polygon.

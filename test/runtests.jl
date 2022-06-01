@@ -48,6 +48,7 @@ function run_all_tests()
         include("convexandclockwise.jl")
         include("various-points-tests.jl")
         include("polyhull-test.jl")
+        include("polymorph-test.jl")
     end
 
     @testset "text" begin

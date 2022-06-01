@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.3.0] - forthcoming
+## [v3.3.0] - 2022-06-01 11:28:44
 
 ### Added
 
@@ -8,9 +8,10 @@
 
 - `textfit()` algorithm revisited; it's quicker, at least....
 - `polymorph()` keywords changed
-- `polymorph()` can now morph between open polygons
+- `polymorph()` can now also morph between open polygons
 - minimum Julia version is now 1.6
 - there are still bugs/edgecases in `polyhull()` which I can't find/fix
+- docs now built on Linux (for LaTeX purposes)
 
 ### Removed
 

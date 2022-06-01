@@ -16,17 +16,10 @@ Use:
 - `fontface(fontname)` to specify the fontname
 - `fontsize(fontsize)` to specify the fontsize
 
-```@example
-using Luxor # hide
-Drawing(600, 100, "../assets/figures/toy-text-example.png") # hide
-origin() # hide
-background("azure") # hide
-sethue("black") # hide
+```julia
 fontsize(16)
 fontface("Georgia-Bold")
 text("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign=:center)
-finish() # hide
-nothing # hide
 ```
 
 ![text placement](../assets/figures/toy-text-example.png)
@@ -42,16 +35,9 @@ Use:
 - `setfont(fontname, fontsize)` to specify the fontname and size
 - `settext(text, [position])` to place the text at a position, and optionally specify horizontal and vertical alignment, rotation (in degrees counterclockwise!), and the presence of any pseudo-Pango-flavored markup.
 
-```@example
-using Luxor # hide
-Drawing(600, 100, "../assets/figures/pro-text-example.png") # hide
-origin() # hide
-background("azure") # hide
-sethue("black") # hide
+```julia
 setfont("Georgia Bold", 16)
 settext("Georgia: a serif typeface designed in 1993 by Matthew Carter.", halign="center")
-finish() # hide
-nothing # hide
 ```
 
 ![text placement](../assets/figures/pro-text-example.png)
@@ -68,11 +54,7 @@ To select a font in the Pro text API, use [`setfont`](@ref) and supply both the 
 
 Use [`text`](@ref) to place text.
 
-```@example
-using Luxor # hide
-Drawing(400, 150, "../assets/figures/text-placement.png") # hide
-origin() # hide
-background("white") # hide
+```julia
 fontsize(80) # hide
 sethue("black") # hide
 pt1 = Point(-100, 0)
@@ -87,23 +69,15 @@ text("5", pt2, halign=:center, valign = :top)
 text("6",  pt3, halign=:right,  valign = :top)
 sethue("red")
 map(p -> circle(p, 4, :fill), [pt1, pt2, pt3])
-finish() # hide
-nothing # hide
 ```
 
 ![text placement](../assets/figures/text-placement.png)
 
-```@example
-using Luxor # hide
-Drawing(400, 300, "../assets/figures/text-rotation.png") # hide
-origin() # hide
-background("white") # hide
+```julia
 sethue("black") # hide
 fontsize(10)
 fontface("Georgia")
 [text(string(θ), Point(40cos(θ), 40sin(θ)), angle=θ) for θ in 0:π/12:47π/24]
-finish() # hide
-nothing # hide
 ```
 
 ![text rotation](../assets/figures/text-rotation.png)
@@ -141,15 +115,16 @@ to parse the `LaTeXString`. You should load MathTeXEngine.jl
 
 !!! note
 
-    MathTeXEngine.jl is a package that renders
+    MathTeXEngine.jl is a package that renders many
     `LaTeXString`s without requiring a ``\LaTeX`` compiler.
     The package uses the fonts _Computer Modern_ and _New
     Computer Modern_. They're included with the
     MathTeXEngine package, and you can find them in your
     `julia` folder in
     `packages/MathTeXEngine/.../assets/fonts`. You should
-    make sure these have been installed before running
-    Luxor and writing ``\LaTeX`` strings.
+    make sure these have been copied to your system's
+    font directories before running Luxor and writing
+    ``\LaTeX`` strings.
 
 ```@example
 using Luxor
@@ -178,6 +153,15 @@ nothing # hide
 ```
 
 ![textbox](../assets/figures/latexexample.svg)
+
+!!! note
+
+    The string macros in the
+    [LaTeXStrings.jl](https://github.com/stevengj/LaTeXStrings.jl)
+    package allow you to enter LaTeX equations
+    without having to escape backslashes and dollar signs
+    (and they'll add the dollar signs for you if you omit
+    them).
 
 ## Notes on fonts
 
@@ -223,10 +207,7 @@ For PNG files, the appearance of fonts when output is controlled to some extent 
 
 `textoutlines(string, position)` converts the text into graphic path(s), places them starting at `position`, and applies the `action`.
 
-```@example
-using Luxor # hide
-Drawing(400, 400, "../assets/figures/textoutlines.png") # hide
-origin() # hide
+```julia
 fontface("Times-Roman")
 fontsize(500)
 setline(4)
@@ -235,8 +216,6 @@ textoutlines("&", O, :path, valign=:middle, halign=:center)
 fillpreserve()
 sethue("black")
 strokepath()
-finish() # hide
-nothing # hide
 ```
 
 ![text outlines](../assets/figures/textoutlines.png)
@@ -262,12 +241,7 @@ The `textextents(str)` function returns the dimensions of the string `str`, give
 The [`label`](@ref) function places text relative to a specific point, and you can use compass
 points or angles to indicate where it should be. So `:N` (for North) places a text label directly above the point, as does `3π/2`.
 
-```@example
-using Luxor # hide
-Drawing(400, 350, "../assets/figures/labels.png") # hide
-origin() # hide
-background("white") # hide
-sethue("black")
+```julia
 fontsize(15)
 octagon = ngon(O, 100, 8, 0, vertices=true)
 
@@ -277,9 +251,6 @@ for i in 1:8
     circle(octagon[i], 5, :fill)
     label(string(compass[i]), compass[i], octagon[i], leader=true, leaderoffsets=[0.2, 0.9], offset=50)
 end
-
-finish() # hide
-nothing # hide
 ```
 
 ![labels](../assets/figures/labels.png)
@@ -288,12 +259,7 @@ nothing # hide
 
 Use `textcurve(str)` to draw a string `str` on a circular arc or spiral.
 
-```@example
-using Luxor # hide
-Drawing(800, 800, "../assets/figures/text-spiral.png") # hide
-
-origin() # hide
-background("ivory") # hide
+```julia
 sethue("royalblue4") # hide
 fontsize(7)
 fontface("Menlo")
@@ -307,20 +273,13 @@ textcurve("this spiral contains every word in julia names(Base): " * textstring,
 fontsize(35)
 fontface("Avenir-Black")
 textcentered("julia names(Base)", 0, 0)
-finish() # hide
-
-nothing # hide
 ```
 
 ![text on a curve or spiral](../assets/figures/text-spiral.png)
 
 For shorter strings, [`textcurvecentered`](@ref) tries to place the text on a circular arc by its center point.
 
-```@example
-using Luxor # hide
-Drawing(400, 250, "../assets/figures/text-centered.png") # hide
-origin() # hide
-background("white") # hide
+```julia
 fontface("Arial-Black")
 fontsize(24) # hide
 sethue("black") # hide
@@ -337,8 +296,6 @@ textcurvecentered("hello world", π/2, 100, O;
     letter_spacing = 0,
     baselineshift = 10
     )
-finish() # hide
-nothing # hide
 ```
 
 ![text centered on curve](../assets/figures/text-centered.png)
@@ -386,15 +343,6 @@ You can use newly-created text paths as a clipping region - here the text paths 
 ![text clipping](../assets/figures/text-path-clipping.png)
 
 ```julia
-using Luxor
-
-currentwidth = 1250 # pts
-currentheight = 800 # pts
-Drawing(currentwidth, currentheight, "/tmp/text-path-clipping.png")
-
-origin()
-background("darkslategray3")
-
 fontsize(600)                             # big fontsize to use for clipping
 fontface("Agenda-Black")
 str = "julia"                             # string to be clipped
@@ -412,36 +360,26 @@ fontface("Monaco")
 fontsize(10)
 namelist = map(x->string(x), names(Base)) # get list of function names in Base.
 
-let
-    x = -20
-    y = -h
-    while y < currentheight
-        sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
-        s = namelist[rand(1:end)]
-        text(s, x, y)
-        se = textextents(s)
-        x += se[5]                            # move to the right
-        if x > w
-            x = -20                            # next row
-            y += 10
-        end
+x = -20
+y = -h
+while y < currentheight
+    sethue(rand(7:10)/10, rand(7:10)/10, rand(7:10)/10)
+    s = namelist[rand(1:end)]
+    text(s, x, y)
+    se = textextents(s)
+    x += se[5]                            # move to the right
+    if x > w
+        x = -20                            # next row
+        y += 10
     end
 end
-
-finish()
-preview()
 ```
 
 ## Text blocks, boxes, and wrapping
 
 Longer lines of text can be made to wrap inside an imaginary rectangle with [`textwrap`](@ref). Specify the required width of the rectangle, and the location of the top left corner.
 
-```@example
-
-using Luxor # hide
-Drawing(500, 400, "../assets/figures/text-wrapping.png") # hide
-origin() # hide
-background("white") # hide
+```julia
 fontface("Georgia")
 fontsize(12) # hide
 sethue("black") # hide
@@ -459,20 +397,13 @@ leo tristique, a condimentum tortor faucibus."""
 setdash("dot")
 box(O, 200, 200, :stroke)
 textwrap(loremipsum, 200, O - (200/2, 200/2))
-
-finish() # hide
-nothing # hide
 ```
 
 ![text wrapping](../assets/figures/text-wrapping.png)
 
 [`textwrap`](@ref) accepts a function that allows you to insert code that responds to the next line's linenumber, contents, position, and height.
 
-```@example
-using Luxor, Colors # hide
-Drawing(500, 400, "../assets/figures/text-wrapping-1.png") # hide
-origin() # hide
-background("white") # hide
+```julia
 fontface("Georgia")
 fontsize(12) # hide
 sethue("black") # hide
@@ -492,9 +423,6 @@ textwrap(loremipsum, 200, O - (200/2, 200/2),
         sethue(Colors.HSB(rescale(lnumber, 1, 15, 0, 360), 1, 1))
         text(string("line ", lnumber), pt - (50, 0))
     end)
-
-finish() # hide
-nothing # hide
 ```
 
 ![text wrapped](../assets/figures/text-wrapping-1.png)
@@ -503,12 +431,7 @@ The [`textbox`](@ref) function also draws text inside a box, but doesn't alter t
 
 This example counts the number of characters drawn, using a simple closure. The function returns the position of the start of what would have been the next line.
 
-```@example
-using Luxor, Colors # hide
-Drawing(600, 300, "../assets/figures/textbox.png") # hide
-origin() # hide
-background("ivory") # hide
-sethue("black") # hide
+```julia
 fontface("Georgia")
 fontsize(30)
 
@@ -539,9 +462,6 @@ finishpos = textbox(filter(!isempty, split(loremipsum, "\n")),
 
 fontsize(10)
 text(string(counter(0), " characters"), finishpos)
-
-finish() # hide
-nothing # hide
 ```
 
 ![textbox](../assets/figures/textbox.png)
@@ -557,13 +477,7 @@ The tracking units depend on the current font size. In a
 0.35mm, so a 1000 units of tracking for 12 point text
 produces about 4.2mm of space between each character.
 
-```@example
-using Luxor # hide
-Drawing(600, 400, "../assets/figures/texttrack.svg") # hide
-origin() # hide
-background("white") # hide
-sethue("black") # hide
-
+```julia
 function text_tracking_example()
     fonts = [
         "Verdana",
@@ -584,12 +498,10 @@ function text_tracking_example()
         texttrack("This is some text in $(f): it’s been tracked by -$(tracking)",
             nextgridpoint(grid), -tracking, fsize)
     end
-
-    finish() # hide
+    finish()
 end
 
 text_tracking_example()
-nothing # hide
 ```
 
 ![textbox](../assets/figures/texttrack.svg)
@@ -635,8 +547,6 @@ To animate the drawing of text, you can obtain and store the paths, and then bui
 ![text animation](../assets/figures/textanimation.gif)
 
 ```julia
-using Luxor
-
 function frame(scene, framenumber)
     background("black")
     sethue("gold")

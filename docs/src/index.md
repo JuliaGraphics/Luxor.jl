@@ -56,5 +56,5 @@ This documentation was built using [Documenter.jl](https://github.com/JuliaDocs)
 
 ```@example
 using Dates # hide
-println("Documentation built $(Dates.now()) with Julia $(VERSION)") # hide
+println("Documentation built $(Dates.now()) with Julia $(VERSION) on $(Sys.KERNEL)") # hide
 ```
