@@ -165,7 +165,7 @@ Notice that for some frames, such as frame 0, 1, or 23, three of the functions a
 
 ### An alternative
 
-As this is a very simple example, there is of course an easier wayto make this particular animation.
+As this is a very simple example, there is of course an easier way to make this particular animation.
 
 We can use the incoming framenumber, rescaled, as the master
 parameter that determines the position and appearance of all

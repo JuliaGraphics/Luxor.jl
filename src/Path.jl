@@ -357,8 +357,9 @@ function drawpath(path::Path, k::Real;
             currentlength += plength
             if currentlength > requiredlength
                 # we mustn't draw all of this line, since it overshoots
-                overshoot  = (currentlength - requiredlength) / pathlength
+                overshoot = (currentlength - requiredlength)/plength
                 # just draw the overshoot fraction of the line
+                drawpath(PathLine(between(currentpoint, pathelement.pt1, 1 - overshoot)))
             else
                 drawpath(pathelement)
             end

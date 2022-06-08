@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.4.0] -
+
+### Added
+
+### Changed
+
+- fix `drawpath()` straight lines (thanks @jules for spotting this!)
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
 ## [v3.3.0] - 2022-06-01 11:28:44
 
 ### Added
