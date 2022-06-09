@@ -329,46 +329,57 @@ function drawpath(path::Path, k::Real;
     currentlength = 0
     startnewpath && newpath()
     # firstpoint is the point we will return to for a Close
-    # currentpoint is Cairo's current point
+    # currentposition is our current position
     # mostrecentpoint is the point we last visited
-    currentpoint = mostrecentpoint = firstpoint = O
+    currentposition = mostrecentpoint = firstpoint = O
     for pathelement in path
         if pathelement isa PathMove # pt1
-            currentpoint = firstpoint = pathelement.pt1
+            currentposition = firstpoint = pathelement.pt1
             drawpath(pathelement)
+            mostrecentpoint = Luxor.currentpoint() # remember how far we've got
         elseif pathelement isa PathCurve # pt1 pt2  pt3
-            plength = Luxor.get_bezier_length(BezierPathSegment(currentpoint, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps=steps)
+            plength = Luxor.get_bezier_length(BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps=steps)
             currentlength += plength
             if currentlength > requiredlength
                 # we mustn't draw all of this curve, since it overshoots
                 overshoot  = (currentlength - requiredlength) / pathlength
                 # just draw the overshoot fraction of the curve
-                bps = BezierPathSegment(currentpoint, pathelement.pt1, pathelement.pt2, pathelement.pt3)
+                bps = BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3)
                 newbezier = bezier.(range(0.0, overshoot, length=steps), bps...)
-                # using the last three, currentpoint is the first pt
+                # using the last three, currentposition is the first pt
                 drawpath(PathCurve(newbezier[2], newbezier[3], newbezier[4]))
             else
                 drawpath(pathelement)
             end
-            mostrecentpoint = currentpoint # remember how far we got
-            currentpoint = pathelement.pt3 # update currentpoint
+            mostrecentpoint = Luxor.currentpoint() # remember how far we've got
+            currentposition = pathelement.pt3 # update currentposition
         elseif pathelement isa PathLine  # pt1
-            plength = distance(currentpoint, pathelement.pt1)
+            plength = distance(currentposition, pathelement.pt1)
             currentlength += plength
             if currentlength > requiredlength
                 # we mustn't draw all of this line, since it overshoots
                 overshoot = (currentlength - requiredlength)/plength
                 # just draw the overshoot fraction of the line
-                drawpath(PathLine(between(currentpoint, pathelement.pt1, 1 - overshoot)))
+                drawpath(PathLine(between(currentposition, pathelement.pt1, 1 - overshoot)))
             else
                 drawpath(pathelement)
             end
-            mostrecentpoint = currentpoint
-            currentpoint = pathelement.pt1
+            mostrecentpoint = Luxor.currentpoint()
+            currentposition = pathelement.pt1
         elseif pathelement isa PathClose
-            # I think Close is just drawing to the point established by previous Move...
-            drawpath(PathLine(firstpoint))
-            closepath() # ???
+            # same as Line, want to animate the closing line too
+            plength = distance(currentposition, firstpoint)
+            currentlength += plength
+            if currentlength > requiredlength
+                # we mustn't draw all of this line, since it overshoots
+                overshoot = (currentlength - requiredlength)/plength
+                # just draw the overshoot fraction of the line
+                drawpath(PathLine(between(currentposition, firstpoint, 1 - overshoot)))
+            else
+                drawpath(PathLine(firstpoint))
+                closepath() # ???
+            end
+            mostrecentpoint = Luxor.currentpoint()
         end
         currentlength > requiredlength && break
     end
