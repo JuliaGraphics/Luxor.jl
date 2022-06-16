@@ -52,26 +52,27 @@ To select a font in the Pro text API, use [`setfont`](@ref) and supply both the 
 
 ## Placing text ("Toy" API)
 
-Use [`text`](@ref) to place text.
+Use [`text`](@ref) to place a string. The left edge is placed at the origin, by default. Or you can supply a position. Use `halign` and/or `valign` to align the string at the position.
 
-```julia
-fontsize(80) # hide
-sethue("black") # hide
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+background("black") # hide
+fontsize(20) # hide
 pt1 = Point(-100, 0)
 pt2 = Point(0, 0)
 pt3 = Point(100, 0)
-sethue("black")
-text("1",  pt1, halign=:left,   valign = :bottom)
-text("2",  pt2, halign=:center, valign = :bottom)
-text("3",  pt3, halign=:right,  valign = :bottom)
-text("4",  pt1, halign=:left,   valign = :top)
-text("5", pt2, halign=:center, valign = :top)
-text("6",  pt3, halign=:right,  valign = :top)
+sethue("white")
+text("text 1",  pt1, halign=:left,   valign = :bottom)
+text("text 2",  pt2, halign=:center, valign = :bottom)
+text("text 3",  pt3, halign=:right,  valign = :bottom)
+text("text 4",  pt1, halign=:left,   valign = :top)
+text("text 5",  pt2, halign=:center, valign = :top)
+text("text 6",  pt3, halign=:right,  valign = :top)
 sethue("red")
-map(p -> circle(p, 4, :fill), [pt1, pt2, pt3])
+map(p -> circle(p, 5, :fill), [pt1, pt2, pt3])
+end 600 100 # hide
 ```
-
-![text placement](../assets/figures/text-placement.png)
 
 ```julia
 sethue("black") # hide

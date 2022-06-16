@@ -12,10 +12,9 @@ struct PathLine
     pt1::Point
 end
 
-struct PathClose
-end
+struct PathClose end
 
-const PathElement = Union{PathCurve, PathMove, PathLine, PathClose}
+const PathElement = Union{PathCurve,PathMove,PathLine,PathClose}
 
 """
 A Path object contains, in the `.path` field, a vector of
@@ -30,7 +29,6 @@ Path([PathMove(Point(2.0, 90.5625)),
       PathClose()
      ])
 ```
-
 """
 struct Path
     path::Vector{PathElement}
@@ -42,7 +40,7 @@ end
 Create a Path from the points in `ptlist`.
 """
 function Path(ptlist::Vector{Point};
-        close=false)
+    close = false)
     p = Path(PathElement[])
     push!(p.path, PathMove(ptlist[1]))
     for pt in ptlist[2:end]
@@ -78,7 +76,7 @@ function Base.iterate(cp::Path, state)
     end
 end
 
-Base.getindex(cp::Path, r::Union{LinRange, UnitRange, StepRangeLen}) = getindex(cp.path, r)
+Base.getindex(cp::Path, r::Union{LinRange,UnitRange,StepRangeLen}) = getindex(cp.path, r)
 Base.lastindex(cp::Path) = length(cp.path)
 
 function Base.show(io::IO, cp::Path)
@@ -86,7 +84,7 @@ function Base.show(io::IO, cp::Path)
         print(io, "Path is empty")
     else
         println(io, "Path([")
-        for p in cp.path[1:end-1]
+        for p in cp.path[1:(end - 1)]
             println(io, " $(p),")
         end
         println(io, " $(cp.path[end])")
@@ -94,10 +92,24 @@ function Base.show(io::IO, cp::Path)
     end
 end
 
-drawpath(cpe::PathMove) = move(cpe.pt1)
-drawpath(cpe::PathLine) = line(cpe.pt1)
-drawpath(cpe::PathCurve) = curve(cpe.pt1, cpe.pt2, cpe.pt3)
-drawpath(cpe::PathClose) = closepath()
+function drawpath(cpe::PathMove)
+    move(cpe.pt1)
+    return currentpoint()
+end
+
+function drawpath(cpe::PathLine)
+    line(cpe.pt1)
+    return currentpoint()
+end
+
+function drawpath(cpe::PathCurve)
+    curve(cpe.pt1, cpe.pt2, cpe.pt3)
+    return currentpoint()
+end
+
+function drawpath(cpe::PathClose)
+    closepath()
+end
 
 """
     storepath()
@@ -143,26 +155,26 @@ function.
 
 By default, `startnewpath=true`, which starts a new path,
 discarding any existing path contents.
-
-TODO Return something more useful than a Boolean!
 """
 function drawpath(cp::Path;
-        action=:none, startnewpath=true)
+    action = :none, startnewpath = true)
     startnewpath && newpath()
     for p in cp
-          drawpath(p)
+        drawpath(p)
     end
     do_action(action)
+    return currentpoint()
 end
 
-drawpath(cp::Path, action::Symbol; startnewpath=true) = drawpath(cp::Path; action=action, startnewpath=startnewpath)
+drawpath(cp::Path, action::Symbol; startnewpath = true) = drawpath(cp::Path; action = action, startnewpath = startnewpath)
 
 """
     polytopath(ptlist)
 
 Convert a polygon to a Path object.
+
 ```julia
-@draw drawpath(polytopath(ngon(O, 145, 5, vertices=true)), action=:fill)
+@draw drawpath(polytopath(ngon(O, 145, 5, vertices = true)), action = :fill)
 ```
 """
 function polytopath(ptlist::Vector{Point})
@@ -180,7 +192,7 @@ end
 Convert a Bezier path to a Path object.
 
 ```julia
-@draw drawpath(polytopath(ngon(O, 145, 5, vertices=true)), action=:fill)
+@draw drawpath(polytopath(ngon(O, 145, 5, vertices = true)), action = :fill)
 ```
 """
 function bezierpathtopath(bp::BezierPath)
@@ -240,8 +252,8 @@ Bezier curve, including start and end, using `steps` to
 determine the accuracy.
 """
 function get_bezier_points(bps::BezierPathSegment;
-        steps=10)
-    return bezier.(range(0.0, 1.0, length=steps), bps...)
+    steps = 10)
+    return bezier.(range(0.0, 1.0, length = steps), bps...)
 end
 
 """
@@ -256,10 +268,10 @@ This is obviously just an approximation; the maths to do
 it properly is too difficult for me. :(
 """
 function get_bezier_length(bps::BezierPathSegment;
-        steps=10)
-    LUT  = get_bezier_points(bps, steps=steps)
+    steps = 10)
+    LUT = get_bezier_points(bps, steps = steps)
     curvelength = 0.0
-    for i in 1:length(LUT) - 1
+    for i in 1:(length(LUT) - 1)
         curvelength += distance(LUT[i], LUT[mod1(i + 1, end)])
     end
     return curvelength
@@ -274,7 +286,7 @@ Return the length of a Path.
 The `steps` parameter is used when approximating the length of any curve (Bezier) sections.
 """
 function pathlength(path::Path;
-        steps=10)
+    steps = 10)
     currentpoint = O
     firstpoint = currentpoint
     plength = 0.0
@@ -283,7 +295,7 @@ function pathlength(path::Path;
             firstpoint = pathelement.pt1
             currentpoint = pathelement.pt1
         elseif pathelement isa PathCurve # pt1 pt2  pt3
-            plength += get_bezier_length(BezierPathSegment(currentpoint, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps=steps)
+            plength += get_bezier_length(BezierPathSegment(currentpoint, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps = steps)
             currentpoint = pathelement.pt3
         elseif pathelement isa PathLine  # pt1
             plength += distance(currentpoint, pathelement.pt1)
@@ -317,13 +329,12 @@ path first, and provide it to the `pathlength` keyword.
 The `steps` parameter is used when approximating the length of any curve (Bezier) sections.
 """
 function drawpath(path::Path, k::Real;
-        steps=10, # used when approximating Bezier curve segments
-        action=:none,
-        startnewpath=true,
-        pathlength = 0.0)
-
+    steps = 10, # used when approximating Bezier curve segments
+    action = :none,
+    startnewpath = true,
+    pathlength = 0.0)
     if iszero(pathlength)
-       pathlength = Luxor.pathlength(path)
+        pathlength = Luxor.pathlength(path)
     end
     requiredlength = k * pathlength
     currentlength = 0
@@ -338,14 +349,14 @@ function drawpath(path::Path, k::Real;
             drawpath(pathelement)
             mostrecentpoint = Luxor.currentpoint() # remember how far we've got
         elseif pathelement isa PathCurve # pt1 pt2  pt3
-            plength = Luxor.get_bezier_length(BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps=steps)
+            plength = Luxor.get_bezier_length(BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps = steps)
             currentlength += plength
             if currentlength > requiredlength
                 # we mustn't draw all of this curve, since it overshoots
-                overshoot  = (currentlength - requiredlength) / pathlength
+                overshoot = (currentlength - requiredlength) / pathlength
                 # just draw the overshoot fraction of the curve
                 bps = BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3)
-                newbezier = bezier.(range(0.0, overshoot, length=steps), bps...)
+                newbezier = bezier.(range(0.0, overshoot, length = steps), bps...)
                 # using the last three, currentposition is the first pt
                 drawpath(PathCurve(newbezier[2], newbezier[3], newbezier[4]))
             else
@@ -358,7 +369,7 @@ function drawpath(path::Path, k::Real;
             currentlength += plength
             if currentlength > requiredlength
                 # we mustn't draw all of this line, since it overshoots
-                overshoot = (currentlength - requiredlength)/plength
+                overshoot = (currentlength - requiredlength) / plength
                 # just draw the overshoot fraction of the line
                 drawpath(PathLine(between(currentposition, pathelement.pt1, 1 - overshoot)))
             else
@@ -372,7 +383,7 @@ function drawpath(path::Path, k::Real;
             currentlength += plength
             if currentlength > requiredlength
                 # we mustn't draw all of this line, since it overshoots
-                overshoot = (currentlength - requiredlength)/plength
+                overshoot = (currentlength - requiredlength) / plength
                 # just draw the overshoot fraction of the line
                 drawpath(PathLine(between(currentposition, firstpoint, 1 - overshoot)))
             else
@@ -388,13 +399,13 @@ function drawpath(path::Path, k::Real;
 end
 
 drawpath(path::Path, k::Real, act::Symbol;
-        steps=10, # used when approximating Bezier curve segments
-        startnewpath=true,
-        pathlength = 0.0) = drawpath(path, k;
-            steps = steps,
-            action = act,
-            startnewpath = startnewpath,
-            pathlength = pathlength)
+    steps = 10, # used when approximating Bezier curve segments
+    startnewpath = true,
+    pathlength = 0.0) = drawpath(path, k;
+    steps = steps,
+    action = act,
+    startnewpath = startnewpath,
+    pathlength = pathlength)
 
 """
     pathsample(path::Path, spacing;
@@ -411,7 +422,7 @@ error will be smaller for flatter curves and larger for more
 curvy ones.
 """
 function pathsample(path::Path, spacing;
-        steps=10)
+    steps = 10)
     isapprox(spacing, 0.0) && throw(error("pathsample(): a spacing of $(spacing) is too close to zero"))
     newpath = PathElement[]
     currentpoint = O
@@ -426,17 +437,17 @@ function pathsample(path::Path, spacing;
                 pathelement.pt1,
                 pathelement.pt2,
                 pathelement.pt3)
-            plength = Luxor.get_bezier_length(bps, steps=steps)
-            _step = spacing/plength
-            for i in range(0.0, 1.0 - _step, step=_step)
+            plength = Luxor.get_bezier_length(bps, steps = steps)
+            _step = spacing / plength
+            for i in range(0.0, 1.0 - _step, step = _step)
                 bezsegment = trimbezier(bps, i, i + _step)
                 push!(newpath, PathCurve(bezsegment.cp1, bezsegment.cp2, bezsegment.p2))
             end
             currentpoint = pathelement.pt3
         elseif pathelement isa PathLine  # pt1
             plength = distance(currentpoint, pathelement.pt1)
-            _step = spacing/plength
-            for i in range(0.0, 1.0, step=_step)
+            _step = spacing / plength
+            for i in range(0.0, 1.0, step = _step)
                 push!(newpath, PathLine(between(currentpoint, pathelement.pt1, i)))
             end
             currentpoint = pathelement.pt1
@@ -444,8 +455,8 @@ function pathsample(path::Path, spacing;
             # I think Close is just drawing to the point established by previous Move...
             plength = distance(currentpoint, firstpoint)
             if !iszero(plength)
-                _step = spacing/plength
-                for i in range(0.0, 1.0, step=_step)
+                _step = spacing / plength
+                for i in range(0.0, 1.0, step = _step)
                     push!(newpath, PathLine(between(currentpoint, firstpoint, i)))
                 end
             end

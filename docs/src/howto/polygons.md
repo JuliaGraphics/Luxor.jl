@@ -1487,7 +1487,6 @@ animate(amovie,
     easingfunction = easeinoutsine),
     creategif=true,
     pathname="/tmp/python-julia.gif")
-end
 ```
 
 ![python julia animation](../assets/figures/python-julia.gif)

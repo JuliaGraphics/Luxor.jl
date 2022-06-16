@@ -8,6 +8,8 @@
 
 - fix `drawpath()` straight lines (thanks @jules for spotting this!)
 
+- add return values for some path functions
+
 ### Removed
 
 ### Deprecated

@@ -24,10 +24,9 @@ Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
 
 The default alignment is `:left`, `:baseline`.
 
-This uses `textextents()` to query the dimensions of the text. This returns
-values of the built in to the font. You can't find
+This function uses Cairo's Toy text API.
 
-This uses Cairo's Toy text API.
+See also `textextents()`, `settext()`, `label()`.
 """
 function text(t, pt::Point;
         halign=:left,
