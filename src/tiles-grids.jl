@@ -3,10 +3,10 @@
 
 A Tiler is an iterator that, for each iteration, returns a tuple of:
 
-- the `x`/`y` point of the center of each tile in a set of tiles that divide up a
-  rectangular space such as a page into rows and columns (relative to current 0/0)
+  - the `x`/`y` point of the center of each tile in a set of tiles that divide up a
+    rectangular space such as a page into rows and columns (relative to current 0/0)
 
-- the number of the tile
+  - the number of the tile
 
 `areawidth` and `areaheight` are the dimensions of the area to be tiled, `nrows`/`ncols`
 are the number of rows and columns required, and `margin` is applied to all four
@@ -14,9 +14,9 @@ edges of the area before the function calculates the tile sizes required.
 
 Tiler and Partition are similar:
 
-- Partition lets you specify the width and height of a cell
+  - Partition lets you specify the width and height of a cell
 
-- Tiler lets you specify how many rows and columns of cells you want, and a margin:
+  - Tiler lets you specify how many rows and columns of cells you want, and a margin:
 
 ```
 tiles = Tiler(1000, 800, 4, 5, margin=20)
@@ -55,26 +55,26 @@ mutable struct Tiler
     currentrow::Int
     currentcol::Int
     margin::Real
-    function Tiler(areawidth, areaheight, nrows::Int, ncols::Int; margin=10)
-        tilewidth  = (areawidth - 2margin)/ncols
-        tileheight = (areaheight - 2margin)/nrows
-        currentrow=1
-        currentcol=1
+    function Tiler(areawidth, areaheight, nrows::Int, ncols::Int; margin = 10)
+        tilewidth = (areawidth - 2margin) / ncols
+        tileheight = (areaheight - 2margin) / nrows
+        currentrow = 1
+        currentcol = 1
         new(areawidth, areaheight, tilewidth, tileheight, nrows, ncols, currentrow, currentcol, margin)
     end
 end
 
 function Base.iterate(pt::Tiler)
-    x = -(pt.areawidth/2)  + pt.margin + (pt.tilewidth/2)
-    y = -(pt.areaheight/2) + pt.margin + (pt.tileheight/2)
+    x = -(pt.areawidth / 2) + pt.margin + (pt.tilewidth / 2)
+    y = -(pt.areaheight / 2) + pt.margin + (pt.tileheight / 2)
     tilenumber = 1
     x1 = x + pt.tilewidth
     y1 = y
-    if x1 > (pt.areawidth/2) - pt.margin
+    if x1 > (pt.areawidth / 2) - pt.margin
         y1 += pt.tileheight
-        x1 = -(pt.areawidth/2) + pt.margin + (pt.tilewidth/2)
+        x1 = -(pt.areawidth / 2) + pt.margin + (pt.tilewidth / 2)
     end
-    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    pt.currentrow, pt.currentcol = (div(tilenumber - 1, pt.ncols) + 1, mod1(tilenumber, pt.ncols))
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
@@ -87,11 +87,11 @@ function Base.iterate(pt::Tiler, state)
     tilenumber = state[2]
     x1 = x + pt.tilewidth
     y1 = y
-    if x1 > (pt.areawidth/2) - pt.margin
+    if x1 > (pt.areawidth / 2) - pt.margin
         y1 += pt.tileheight
-        x1 = -(pt.areawidth/2) + pt.margin + (pt.tilewidth/2)
+        x1 = -(pt.areawidth / 2) + pt.margin + (pt.tilewidth / 2)
     end
-    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    pt.currentrow, pt.currentcol = (div(tilenumber - 1, pt.ncols) + 1, mod1(tilenumber, pt.ncols))
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
@@ -100,9 +100,9 @@ function Base.length(pt::Tiler)
 end
 
 function Base.getindex(pt::Tiler, i::Int)
-    1 <= i <= pt.ncols *  pt.nrows || throw(BoundsError(pt, i))
-    xcoord = -pt.areawidth/2  + pt.margin + mod1(i, pt.ncols) * pt.tilewidth  - pt.tilewidth/2
-    ycoord = -pt.areaheight/2 + pt.margin + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
+    1 <= i <= pt.ncols * pt.nrows || throw(BoundsError(pt, i))
+    xcoord = -pt.areawidth / 2 + pt.margin + mod1(i, pt.ncols) * pt.tilewidth - pt.tilewidth / 2
+    ycoord = -pt.areaheight / 2 + pt.margin + (div(i - 1, pt.ncols) * pt.tileheight) + pt.tileheight / 2
     return (Point(xcoord, ycoord), i)
 end
 
@@ -149,7 +149,7 @@ mutable struct GridRect
     height::Float64
     rownumber::Int
     colnumber::Int
-    function GridRect(startpoint, xspacing, yspacing, width=1200.0, height=1200.0)
+    function GridRect(startpoint, xspacing, yspacing, width = 1200.0, height = 1200.0)
         rownumber = 1
         colnumber = 0
         # find the "previous" point, so that the first call gets the real first point
@@ -180,7 +180,7 @@ mutable struct GridHex
     height::Float64
     rownumber::Int
     colnumber::Int
-    function GridHex(startpoint, radius, width=1200.0, height=1200.0)
+    function GridHex(startpoint, radius, width = 1200.0, height = 1200.0)
         rownumber = 1
         colnumber = 0
         # find the "previous" point, so that the first call gets the real first point
@@ -229,9 +229,9 @@ function nextgridpoint(g::GridHex)
         g.rownumber += 1
         g.colnumber = 1
         if g.rownumber % 2 == 0
-            g.currentpoint = Point(g.startpoint.x + (sqrt(3) * g.radius)/2, g.currentpoint.y + (3/2) * g.radius)
+            g.currentpoint = Point(g.startpoint.x + (sqrt(3) * g.radius) / 2, g.currentpoint.y + (3 / 2) * g.radius)
         else
-            g.currentpoint = Point(g.startpoint.x, g.currentpoint.y + (3/2) * g.radius)
+            g.currentpoint = Point(g.startpoint.x, g.currentpoint.y + (3 / 2) * g.radius)
         end
     end
     if g.currentpoint.y >= g.height     # finished?
@@ -247,24 +247,25 @@ end
 
 A Partition is an iterator that, for each iteration, returns a tuple of:
 
-- the `x`/`y` point of the center of each tile in a set of tiles that divide up a
-rectangular space such as a page into rows and columns (relative to current 0/0)
+  - the `x`/`y` point of the center of each tile in a set of tiles that divide up a
+    rectangular space such as a page into rows and columns (relative to current 0/0)
 
-- the number of the tile
+  - the number of the tile
 
 `areawidth` and `areaheight` are the dimensions of the area to be tiled,
 `tilewidth`/`tileheight` are the dimensions of the tiles.
 
 Tiler and Partition are similar:
 
-- Partition lets you specify the width and height of a cell
+  - Partition lets you specify the width and height of a cell
 
-- Tiler lets you specify how many rows and columns of cells you want, and a margin
-
-
+  - Tiler lets you specify how many rows and columns of cells you want, and a margin
+    
     tiles = Partition(1200, 1200, 30, 30)
     for (pos, n) in tiles
-        # the point pos is the center of the tile
+    
+    # the point pos is the center of the tile
+    
     end
 
 You can access the calculated tile width and height like this:
@@ -294,7 +295,7 @@ mutable struct Partition
     currentrow::Int
     currentcol::Int
     function Partition(areawidth, areaheight, tilewidth, tileheight)
-        ncols = areawidth  / tilewidth  |> floor |> Integer
+        ncols = areawidth / tilewidth |> floor |> Integer
         nrows = areaheight / tileheight |> floor |> Integer
         if ncols < 1 || nrows < 1
             throw(error("partition(): not enough space for tiles that size"))
@@ -306,16 +307,16 @@ mutable struct Partition
 end
 
 function Base.iterate(pt::Partition)
-    x = -(pt.areawidth/2)  + (pt.tilewidth/2)
-    y = -(pt.areaheight/2) + (pt.tileheight/2)
+    x = -(pt.areawidth / 2) + (pt.tilewidth / 2)
+    y = -(pt.areaheight / 2) + (pt.tileheight / 2)
     tilenumber = 1
     x1 = x + pt.tilewidth
     y1 = y
-    if (x1 + pt.tilewidth/2) > (pt.areawidth/2)
+    if (x1 + pt.tilewidth / 2) > (pt.areawidth / 2)
         y1 += pt.tileheight
-        x1 = -(pt.areawidth/2) + (pt.tilewidth/2)
+        x1 = -(pt.areawidth / 2) + (pt.tilewidth / 2)
     end
-    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    pt.currentrow, pt.currentcol = (div(tilenumber - 1, pt.ncols) + 1, mod1(tilenumber, pt.ncols))
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
@@ -328,11 +329,11 @@ function Base.iterate(pt::Partition, state)
     tilenumber = state[2]
     x1 = x + pt.tilewidth
     y1 = y
-    if (x1 + pt.tilewidth/2) > (pt.areawidth/2)
+    if (x1 + pt.tilewidth / 2) > (pt.areawidth / 2)
         y1 += pt.tileheight
-        x1 = -(pt.areawidth/2) + (pt.tilewidth/2)
+        x1 = -(pt.areawidth / 2) + (pt.tilewidth / 2)
     end
-    pt.currentrow, pt.currentcol = (div(tilenumber-1, pt.ncols)+1, mod1(tilenumber, pt.ncols))
+    pt.currentrow, pt.currentcol = (div(tilenumber - 1, pt.ncols) + 1, mod1(tilenumber, pt.ncols))
     return ((Point(x, y), tilenumber), (Point(x1, y1), tilenumber + 1))
 end
 
@@ -341,9 +342,9 @@ function Base.length(pt::Partition)
 end
 
 function Base.getindex(pt::Partition, i::Int)
-    1 <= i <= pt.ncols *  pt.nrows || throw(BoundsError(pt, i))
-    xcoord = -pt.areawidth/2  + mod1(i, pt.ncols) * pt.tilewidth  - pt.tilewidth/2
-    ycoord = -pt.areaheight/2 + (div(i - 1,  pt.ncols) * pt.tileheight) + pt.tileheight/2
+    1 <= i <= pt.ncols * pt.nrows || throw(BoundsError(pt, i))
+    xcoord = -pt.areawidth / 2 + mod1(i, pt.ncols) * pt.tilewidth - pt.tilewidth / 2
+    ycoord = -pt.areaheight / 2 + (div(i - 1, pt.ncols) * pt.tileheight) + pt.tileheight / 2
     return (Point(xcoord, ycoord), i)
 end
 
@@ -354,16 +355,35 @@ end
 Draw a box in tile `n` of tiles `tiles`.
 """
 function box(tiles::Tiler, n::Integer;
-        action=:none,
-        vertices=false,
-        reversepath=false)
+    action = :none,
+    vertices = false,
+    reversepath = false)
     tilew, tileh = tiles.tilewidth, tiles.tileheight
     if vertices == true || action == :none
-        box(first(tiles[n]), tilew, tileh, action=:none, vertices=true, reversepath=reversepath)
+        box(first(tiles[n]), tilew, tileh, action = :none, vertices = true, reversepath = reversepath)
     else
-        box(first(tiles[n]), tilew, tileh, action=action, vertices=false, reversepath=reversepath)
+        box(first(tiles[n]), tilew, tileh, action = action, vertices = false, reversepath = reversepath)
     end
 end
 
-box(tiles::Tiler, n::Integer, action::Symbol; vertices=false, reversepath=false) =
-        box(tiles, n, action=action, vertices=vertices, reversepath=reversepath)
+box(tiles::Tiler, n::Integer, action::Symbol;
+    vertices = false, reversepath = false) =
+    box(tiles, n, action = action, vertices = vertices, reversepath = reversepath)
+
+"""
+    BoundingBox(t::Tiler, n)
+
+Return the Bounding Box enclosing tile `n`.
+"""
+function BoundingBox(t::Tiler, n)
+    BoundingBox(box(first.(t)[n], t.tilewidth, t.tileheight))
+end
+
+"""
+    BoundingBox(t::Tiler, r, c)
+
+Return the Bounding Box enclosing the tile at row `r` column `c`.
+"""
+function BoundingBox(t::Tiler, r, c)
+    return BoundingBox(t, ((r - 1) * t.ncols) + c)
+end

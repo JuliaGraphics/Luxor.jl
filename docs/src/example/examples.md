@@ -47,7 +47,7 @@ using Luxor
 
 @png begin
         fontsize(50)
-        circle(Point(0, 0), 150, :stroke)
+        circle(Point(0, 0), 150, action = :stroke)
         text("hello world", halign=:center, valign=:middle)
      end
 ```
@@ -61,7 +61,7 @@ using Luxor
     background("black")
     sethue("red")
     randpoint = Point(rand(-300:300), rand(-300:300))
-    circle(randpoint, 5, :fill)
+    circle(randpoint, 5, action = :fill)
     sethue("white")
     foreach(f -> arrow(f, between(f, randpoint, .1), arrowheadlength=6),
         first.(collect(Table(fill(30, 20), fill(30, 20)))))
@@ -93,7 +93,7 @@ using Luxor
             Luxor.julia_red,
             Luxor.julia_purple,
             Luxor.julia_blue][mod1(n, 4)])
-        sector(Point(0, 0), 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), :fill)
+        sector(Point(0, 0), 50, 250 + 2n, θ, θ + 2π/steps - deg2rad(gap), action = :fill)
     end
 end
 ```
@@ -154,7 +154,7 @@ origin()
 
 function triangle(points, degree)
     sethue(cols[degree])
-    poly(points, :fill)
+    poly(points, action = :fill)
 end
 
 function sierpinski(points, degree)
@@ -221,7 +221,7 @@ using Luxor
                     text(string(d), O + (0, -20), halign=:center)
                     setline(3)
                 end
-                line(O - (0, 5), O + (0, 5), :stroke)
+                line(O - (0, 5), O + (0, 5), action = :stroke)
             end
         )
 end 800 300
@@ -257,7 +257,7 @@ function drawmatrix(A::Matrix;
             halign=:center,
             valign=:middle)
         sethue("white")
-        box(table, r, c, :stroke)        
+        box(table, r, c, action = :stroke)        
     end
 end
 
@@ -289,7 +289,7 @@ fontsize(35)
 @layer begin
     setopacity(0.4)
     sethue("purple")
-    poly(20f.(range(0, 2π, length=160)), :stroke)
+    poly(20f.(range(0, 2π, length=160)), action = :stroke)
 end
 sethue("grey5")
 text(L"f(t) = [4\cos(t) + 2\cos(5t), 4\sin(t) + 2\sin(5t)]", halign=:center)
@@ -317,7 +317,7 @@ triangles = polytriangulate(verts) # create Delaunay
 @layer begin
     for tri in triangles
         sethue(HSB(rand(120:320), 0.7, 0.7))
-        poly(tri, :stroke, close=true)
+        poly(tri, action = :stroke, close=true)
     end
 end
 
@@ -345,7 +345,7 @@ for v in verts
     sethue(HSB(rand(120:320), 0.7, 0.7))
     if length(hull) >= 3
         ph = polyhull(hull)
-        poly(ph, :fillpreserve, close=true)
+        poly(ph, action = :fillpreserve, close=true)
         sethue("black")
         strokepath()
     end

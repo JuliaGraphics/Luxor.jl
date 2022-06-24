@@ -21,7 +21,7 @@ Drawing(700, 220, "../assets/figures/midpoint.png") # hide
 origin() # hide
 background("white") # hide
 sethue("red")
-ngon(O, 100, 5, 0, :stroke)
+ngon(O, 100, 5, 0, action = :stroke)
 
 sethue("darkgreen")
 p5 = ngon(O, 100, 5, 0, vertices=true)
@@ -29,7 +29,7 @@ p5 = ngon(O, 100, 5, 0, vertices=true)
 for i in eachindex(p5)
     pt1 = p5[mod1(i, 5)]
     pt2 = p5[mod1(i + 1, 5)]
-    ngon(midpoint(pt1, pt2), 20, 5, 0, :fill)
+    ngon(midpoint(pt1, pt2), 20, 5, 0, action = :fill)
 end
 finish() # hide
 nothing # hide
@@ -50,7 +50,7 @@ line(p1, p2)
 strokepath()
 for i in -0.5:0.1:1.5
     randomhue()
-    circle(between(p1, p2, i), 5, :fill)
+    circle(between(p1, p2, i), 5, action = :fill)
 end
 finish() # hide
 nothing # hide
@@ -72,7 +72,7 @@ sethue("grey50")
 fontsize(18)
 setline(4)
 
-line(A, B, :stroke)
+line(A, B, action = :stroke)
 
 # point perpendicular to line
 C = Point(-50, -80)
@@ -97,7 +97,7 @@ arrow(E, F)
 sethue("orange")
 arrow(G, H)
 sethue("purple")
-circle.([A, B, C, D, E, F, G, H], 4, :fill)
+circle.([A, B, C, D, E, F, G, H], 4, action = :fill)
 end # hide
 d # hide
 ```
@@ -115,16 +115,16 @@ origin() # hide
 background("antiquewhite") # hide
 setline(1) # hide
 radius = 60
-circle(O, radius + 20, :stroke)
+circle(O, radius + 20, action = :stroke)
 
 points = polycross(O, radius, 7, vertices=true)
-poly(points, :stroke, close=true)
+poly(points, action = :stroke, close=true)
 
 antipoints = last.(pointinverse.(points, O, radius+20))
 
 for (n, pt) in enumerate(zip(points, antipoints))
     sethue(HSB(length(points) * n, 0.8, 0.8))
-    @. circle(pt, distance(O, pt)/6, :fill)
+    @. circle(pt, distance(O, pt)/6, action = :fill)
     sethue("black")
     arrow(pt...)
 end
@@ -156,7 +156,7 @@ let
         @layer begin
             translate(pos)
             pg = [polar(50, 0), O, polar(50, n * -2π/16)]
-            poly(pg, :stroke)
+            poly(pg, action = :stroke)
             for n in 1:3
                 pt1 = pg[1]
                 pt2 = pg[2]
@@ -232,29 +232,29 @@ fontsize(11) # hide
 end
 
 # circumcenter
-circle(▲..., :stroke)
+circle(▲..., action = :stroke)
 cp = trianglecircumcenter(▲...)
-circle(cp, 2, :fill)
+circle(cp, 2, action = :fill)
 label("circumcenter", :N, cp)
 
 # incenter
 cp = triangleincenter(▲...)
-circle(cp, 2, :fill)
+circle(cp, 2, action = :fill)
 pt1 = getnearestpointonline(▲[1], ▲[2], cp)
 @layer begin
     sethue("black")
-    circle(cp, distance(cp, pt1), :stroke)
+    circle(cp, distance(cp, pt1), action = :stroke)
     label("incenter", :S, cp)
 end
 
 # center    
 cp = trianglecenter(▲...)
-circle(cp, 2, :fill)
+circle(cp, 2, action = :fill)
 label("center", :w, cp)
 
 # orthocenter
 cp = triangleorthocenter(▲...)
-circle(cp, 2, :fill)
+circle(cp, 2, action = :fill)
 label("orthocenter", :e, cp)
 
 finish() # hide
@@ -276,12 +276,12 @@ origin() # hide
 sethue("black")
 P1, P2, P3, P4 = ngon(O, 100, 5, vertices=true)
 label.(["P1", "P2", "P3", "P4"], :N, [P1, P2, P3, P4])
-line(P1, P2, :stroke)
-line(P4, P3, :stroke)
+line(P1, P2, action = :stroke)
+line(P4, P3, action = :stroke)
 
 flag, ip =  intersectionlines(P1, P2, P4, P3)
 if flag
-    circle(ip, 5, :fill)
+    circle(ip, 5, action = :fill)
 end
 
 finish() # hide
@@ -302,14 +302,14 @@ l1 = Point(-100.0, -75.0)
 l2 = Point(300.0, 100.0)
 rad = 100
 cpoint = Point(0, 0)
-line(l1, l2, :stroke)
+line(l1, l2, action = :stroke)
 sethue("darkgreen") # hide
-circle(cpoint, rad, :stroke)
+circle(cpoint, rad, action = :stroke)
 nints, ip1, ip2 =  intersectionlinecircle(l1, l2, cpoint, rad)
 sethue("black")
 if nints == 2
-    circle(ip1, 8, :stroke)
-    circle(ip2, 8, :stroke)
+    circle(ip1, 8, action = :stroke)
+    circle(ip2, 8, action = :stroke)
 end
 finish() # hide
 nothing # hide
@@ -331,12 +331,12 @@ sethue("black") # hide
 c1 = (O, 150)
 c2 = (O + (100, 0), 150)
 
-circle(c1... , :stroke)
-circle(c2... , :stroke)
+circle(c1... , action = :stroke)
+circle(c2... , action = :stroke)
 
 sethue("purple")
-circle(c1... , :clip)
-circle(c2... , :fill)
+circle(c1... , action = :clip)
+circle(c2... , action = :fill)
 clipreset()
 
 sethue("black")
@@ -350,7 +350,7 @@ text(string(intersection2circles(c1..., c2...) |> round),
 sethue("red")
 flag, C, D = intersectioncirclecircle(c1..., c2...)
 if flag
-    circle.([C, D], 5, :fill)
+    circle.([C, D], 5, action = :fill)
 end
 finish() # hide
 nothing # hide
@@ -364,10 +364,17 @@ to organize and interact with the 2D drawing area. A
 `BoundingBox` holds two points, the opposite corners of a
 bounding box.
 
-You can make a BoundingBox from the current drawing, two
-points, a text string, an existing polygon, a stored path,
-by modifying an existing one, or from calls to functions such
-as `circle` or `box`.
+You can make a BoundingBox from:
+
+- the current drawing
+- two points
+- a text string
+- an existing polygon
+- a stored path
+- a table or table cell
+
+and by modifying an existing bounding box, or using the results of functions such
+as `circle()` or `box()`.
 
 [`BoundingBox`](@ref) without arguments defines an extent that
 encloses the drawing (assuming that the origin is at the
@@ -389,17 +396,17 @@ bb = BoundingBox()
 setline(10)
 sethue("orange")
 
-circle(bb[1], 150, :stroke) # first corner
+circle(bb[1], 150, action = :stroke) # first corner
 
-circle(bb[2], 150, :stroke) # second corner
+circle(bb[2], 150, action = :stroke) # second corner
 
-circle(midpoint(bb...), 150, :stroke) # midpoint
+circle(midpoint(bb...), 150, action = :stroke) # midpoint
 
 sethue("blue")
-circle.([bb[1], midpoint(bb[1:2]), bb[2]], 130, :fill)
+circle.([bb[1], midpoint(bb[1:2]), bb[2]], 130, action = :fill)
 
 sethue("red")
-circle.([first(bb), midpoint(bb...), last(bb)], 100, :fill)
+circle.([first(bb), midpoint(bb...), last(bb)], 100, action = :fill)
 
 finish() # hide
 nothing # hide
@@ -417,10 +424,10 @@ origin() # hide
 
 p = star(O, 100, 5, 0.1, π/3.3, vertices=true)
 sethue("antiquewhite")
-box(BoundingBox(p), :fill)
+box(BoundingBox(p), action = :fill)
 
 sethue("black")
-poly(p, :stroke, close=true)
+poly(p, action = :stroke, close=true)
 
 finish() # hide
 nothing # hide
@@ -446,21 +453,21 @@ translate(-130,0)
 fontsize(40)
 str = "good afternoon"
 sethue("purple")
-box(BoundingBox(str), :fill)
+box(BoundingBox(str), action = :fill)
 sethue("white")
 text(str)
 
 sethue("blue")
 modbox = BoundingBox(str) + 40 # add 40 units to all sides
-poly(modbox, :stroke, close=true)
+poly(modbox, action = :stroke, close=true)
 
 sethue("green")
 modbox = BoundingBox(str) * 1.3
-poly(modbox, :stroke, close=true)
+poly(modbox, action = :stroke, close=true)
 
 sethue("orange")
 modbox = BoundingBox(str) + (0, 100)
-poly(modbox, :fill, close=true)
+poly(modbox, action = :fill, close=true)
 
 finish() # hide
 nothing # hide
@@ -482,27 +489,27 @@ setline(8)
 
 bbox1 = BoundingBox()/2 - (50, 30)
 sethue("yellow")
-box(bbox1, :fill)
+box(bbox1, action = :fill)
 
 bbox2 = BoundingBox()/2  + (50, 30)
 sethue("pink")
-box(bbox2, :fill)
+box(bbox2, action = :fill)
 
 sethue("black")
-box(bbox1 + bbox2, :stroke)
+box(bbox1 + bbox2, action = :stroke)
 
 sethue("red")
 bothboxes = intersectboundingboxes(bbox1, bbox2)
-box(bothboxes, :fill)
+box(bothboxes, action = :fill)
 
 for i in 1:500
     pt = rand(bbox1 + bbox2)
     if isinside(pt, bothboxes)
         sethue("white")
-        circle(pt, 3, :fill)
+        circle(pt, 3, action = :fill)
     else
         sethue("black")
-        circle(pt, 2, :fill)
+        circle(pt, 2, action = :fill)
     end
 end
 
@@ -523,7 +530,7 @@ origin() # hide
 bx = BoundingBox(box(O, 200, 200))
 setline(1)
 sethue("black") # hide
-box(bx, :stroke)
+box(bx, action = :stroke)
 for i in 1:10
     pt = randompoint((1.5bx)...)
     pt2 = pointcrossesboundingbox(pt, bx)
@@ -531,7 +538,7 @@ for i in 1:10
     sethue("grey50")
     arrow(O, pt)
     sethue("red")
-    circle(pt2, 3, :stroke)
+    circle(pt2, 3, action = :stroke)
 end
 
 finish() # hide
@@ -566,7 +573,7 @@ setblend(b)
 
 for pt in randompointarray(BoundingBox() * 0.9, 15)
     d = rescale(distance(pt, O), 0, sqrt(800 * 500), 1, 0)
-    circle(pt, 1 + 7d, :fill)
+    circle(pt, 1 + 7d, action = :fill)
 end
 end 800 500 # hide
 ```
@@ -586,11 +593,11 @@ pt1 = Point(-300, -150)
 pt2 = Point(300, 150)
 
 sethue("purple")
-map(pt -> circle(pt, 6, :fill), (pt1, pt2))
-box(pt1, pt2, :stroke)
+map(pt -> circle(pt, 6, action = :fill), (pt1, pt2))
+box(pt1, pt2, action = :stroke)
 
 sethue("blue")
-map(pt -> circle(pt, 4, :fill), randompointarray(pt1, pt2, 200))
+map(pt -> circle(pt, 4, action = :fill), randompointarray(pt1, pt2, 200))
 
 end 800 400 # hide
 ```
@@ -624,7 +631,7 @@ for (pos, n) in tiles
         detail=d,
         persistence=pers)
     setgray(ns)
-    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+    box(pos, tiles.tilewidth, tiles.tileheight, action = :fillstroke)
 end
 
 finish() # hide

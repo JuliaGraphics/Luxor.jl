@@ -97,7 +97,7 @@ A `nightskyfunction` draws the night sky, covering the entire drawing:
 ```julia
 function nightskyfunction(scene::Scene, framenumber)
     sethue("midnightblue")
-    box(O, 400, 400, :fill)
+    box(O, 400, 400, action = :fill)
 end
 ```
 
@@ -106,7 +106,7 @@ A `dayskyfunction` draws the daytime sky:
 ```julia
 function dayskyfunction(scene::Scene, framenumber)
     sethue("skyblue")
-    box(O, 400, 400, :fill)
+    box(O, 400, 400, action = :fill)
 end
 ```
 
@@ -117,7 +117,7 @@ function sunfunction(scene::Scene, framenumber)
     t = rescale(framenumber, 0, 23, 2pi, 0)
     gsave()
         sethue("yellow")
-        circle(polar(150, t), 20, :fill)
+        circle(polar(150, t), 20, action = :fill)
     grestore()
 end
 ```
@@ -128,7 +128,7 @@ And finally, tere's a `groundfunction` that draws the ground, the lower half of 
 function groundfunction(scene::Scene, framenumber)
     gsave()
     sethue("brown")
-    box(Point(O.x, O.y + 100), 400, 200, :fill)
+    box(Point(O.x, O.y + 100), 400, 200, action = :fill)
     grestore()
     sethue("white")
 end
@@ -177,14 +177,14 @@ function frame(scene, framenumber)
     n   = rescale(framenumber, scene.framerange.start, scene.framerange.stop, 0, 1)
     n2π = rescale(n, 0, 1, 0, 2π)
     sethue(n, 0.5, 0.5)
-    box(BoundingBox(), :fill)
+    box(BoundingBox(), action = :fill)
     if 0.25 < n < 0.75
         sethue("yellow")
-        circle(polar(150, n2π + π/2), 20, :fill)
+        circle(polar(150, n2π + π/2), 20, action = :fill)
     end
     if n < 0.25 || n > 0.75
         sethue("white")
-        circle(polar(150, n2π + π/2), 20, :fill)
+        circle(polar(150, n2π + π/2), 20, action = :fill)
     end
 end
 ```

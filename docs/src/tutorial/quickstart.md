@@ -26,7 +26,7 @@ Let's try out some ideas.
 using Luxor
 svgimage = @drawsvg begin
 setcolor("red")
-circle(Point(0, 0), 100, :fill)
+circle(Point(0, 0), 100, action = :fill)
 end 500 500
 ```
 
@@ -35,7 +35,7 @@ using Luxor
 Drawing(500, 500, "my-drawing.svg")
 origin()
 setcolor("red")
-circle(Point(0, 0), 100, :fill)
+circle(Point(0, 0), 100, action = :fill)
 finish()
 preview()
 ```
@@ -70,7 +70,7 @@ svgimage = @drawsvg begin
 
 setcolor("red")
 corners = ngon(Point(0, 0), 80, 3, vertices=true)
-circle.(corners, 10, action=:fill)
+circle.(corners, 10, action = :fill)
 
 end 500 500
 ```
@@ -80,7 +80,7 @@ Drawing(500, 500, "my-drawing.svg")
 origin()
 setcolor("red")
 corners = ngon(Point(0, 0), 80, 3, vertices=true)
-circle.(corners, 10, action=:fill)
+circle.(corners, 10, action = :fill)
 finish()
 preview()
 ```
@@ -103,7 +103,7 @@ setcolor("red")
 for i in 1:6
     rotate(i * deg2rad(5))
     corners = ngon(Point(0, 0), 80 + 10i, 3, vertices=true)
-    circle.(corners, 10, :fill)
+    circle.(corners, 10, action = :fill)
 end
 
 end 500 500
@@ -117,7 +117,7 @@ setcolor("red")
 for i in 1:6
     rotate(i * deg2rad(5))
     corners = ngon(Point(0, 0), 80 + 10i, 3, vertices=true)
-    circle.(corners, 10, :fill)
+    circle.(corners, 10, action = :fill)
 end
 
 finish()
@@ -142,7 +142,7 @@ for i in 1:6
     setcolor(colors[mod1(i, end)])
     rotate(i * deg2rad(5))
     corners = ngon(Point(0, 0), 80 + 10i, 3, vertices=true)
-    circle.(corners, 10, :fill)
+    circle.(corners, 10, action = :fill)
 end
 
 end 500 500
@@ -160,7 +160,7 @@ for i in 1:6
     setcolor(colors[mod1(i, end)])
     rotate(i * deg2rad(5))
     corners = ngon(Point(0, 0), 80 + 10i, 3, vertices=true)
-    circle.(corners, 10, :fill)
+    circle.(corners, 10, action = :fill)
 end
 
 finish()
@@ -195,7 +195,7 @@ function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
     for i in 5:-0.1:1
         setcolor(rescale(i, 5, 1, 0.5, 3) .* c)
-        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), :fill)
+        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), action = :fill)
     end
 end
 
@@ -213,7 +213,7 @@ function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
     for i in 5:-0.1:1
         setcolor(rescale(i, 5, 1, 0.5, 3) .* c)
-        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), :fill)
+        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), action = :fill)
     end
 end
 
@@ -254,7 +254,7 @@ function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
     for i in 5:-0.1:1
         setcolor(rescale(i, 5, 1, 0.5, 3) .* c)
-        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), :fill)
+        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), action = :fill)
     end
 end
 
@@ -300,14 +300,14 @@ function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
     for i in 5:-.1:1
         setcolor(rescale(i, 5, 1, 0.5, 3) .* c)
-        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), :fill)
+        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), action = :fill)
     end
 end
 
 function main(filename)
     @drawsvg begin
         setcolor(0.2, 0.2, 0.3)
-        squircle(O, 240, 240, rt=0.5, :fill)
+        squircle(O, 240, 240, rt=0.5, action = :fill)
         for i in 1:12
             rotate(i * deg2rad(1.5))
             corners = ngon(Point(0, 0), 10 + 12i, 5, vertices=true)
@@ -326,7 +326,7 @@ function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
     for i in 5:-.1:1
         setcolor(rescale(i, 5, 1, 0.5, 3) .* c)
-        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), :fill)
+        circle(pos + (i/2, i/2), rescale(i, 5, 1, radius, radius/6), action = :fill)
     end
 end
 
@@ -334,7 +334,7 @@ function main(filename)
     Drawing(500, 500, filename)
     origin()
     setcolor(0.2, 0.2, 0.3)
-    squircle(O, 240, 240, rt=0.5, :fill)
+    squircle(O, 240, 240, rt=0.5, action = :fill)
     for i in 1:12
         rotate(i * deg2rad(1.5))
         corners = ngon(Point(0, 0), 10 + 12i, 5, vertices=true)

@@ -179,7 +179,7 @@ origin() # hide
 background("white") # hide
 orangeblue = blend(Point(-200, 0), Point(200, 0), "orange", "blue")
 setblend(orangeblue)
-box(O, 400, 100, :fill)
+box(O, 400, 100, action = :fill)
 rulers()
 
 translate(0, -70)
@@ -200,7 +200,7 @@ origin() # hide
 background("white") # hide
 greenmagenta = blend(Point(0, 0), 5, Point(0, 0), 150, "green", "magenta")
 setblend(greenmagenta)
-box(O, 400, 200, :fill)
+box(O, 400, 200, action = :fill)
 rulers()
 finish() # hide
 nothing # hide
@@ -221,7 +221,7 @@ addstop(goldblend, 0.5,  "gold3")
 addstop(goldblend, 0.75, "darkgoldenrod4")
 addstop(goldblend, 1.0,  "gold2")
 setblend(goldblend)
-box(O, 400, 200, :fill)
+box(O, 400, 200, action = :fill)
 rulers()
 finish() # hide
 nothing # hide
@@ -248,7 +248,7 @@ for (pos, n) in tiles
     gsave()
     setblend(goldblend)
     translate(pos)
-    ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)
+    ellipse(O, tiles.tilewidth, tiles.tilewidth, action = :fill)
     grestore()
 end
 finish() # hide
@@ -276,7 +276,7 @@ for (pos, n) in tiles
     gsave()
     translate(pos)
     setblend(goldblend)
-    ellipse(O, tiles.tilewidth, tiles.tilewidth, :fill)
+    ellipse(O, tiles.tilewidth, tiles.tilewidth, action = :fill)
     grestore()
 end
 finish() # hide
@@ -365,7 +365,7 @@ function drawcircle_with_mode(extendmode)
     addstop(a_blend, 0.5, "green")
     setblend(a_blend)
     setblendextend(a_blend, extendmode)    
-    circle(O, 150, :fill)
+    circle(O, 150, action = :fill)
     sethue("black")
     text(string(extendmode), Point(0, -tiles.tileheight/2), halign=:center)
 end
@@ -437,13 +437,13 @@ for (pos, n) in tiles
 
     # first red shape uses default blend operator
     setcolor(0.7, 0, 0, .7)
-    circle(upper, tiles.tilewidth/4, :fill)
+    circle(upper, tiles.tilewidth/4, action = :fill)
 
     # second blue shape shows results of blend operator
     setcolor(0, 0, 0.9, 0.7)
     blendingmode = Luxor.blendingmodes[mod1(n, modes)]
     setmode(blendingmode)
-    circle(lower, tiles.tilewidth/4, :fill)
+    circle(lower, tiles.tilewidth/4, action = :fill)
 
     clipreset()
     grestore()
@@ -453,7 +453,7 @@ for (pos, n) in tiles
     sethue("antiquewhite")
     txt = Luxor.blendingmodes[mod1(n, modes)]
     pos = O + (0, tiles.tilewidth/2)
-    box(pos, textextents(txt)[3] + 5, 25, :fill)
+    box(pos, textextents(txt)[3] + 5, 25, action = :fill)
     sethue("black")
     text(txt, pos, halign=:center, valign=:middle)
     grestore()
@@ -521,7 +521,7 @@ Drawing(600, 600, "../assets/figures/mesh1.png") # hide
 origin() # hide
 background("white") # hide
 setcolor("grey50")
-circle.([Point(x, y) for x in -200:25:200, y in -200:25:200], 10, :fill)
+circle.([Point(x, y) for x in -200:25:200, y in -200:25:200], 10, action = :fill)
 
 bp = makebezierpath(box(O, 300, 300, vertices=true), smoothing=.4)
 setline(3)
@@ -535,7 +535,7 @@ mesh1 = mesh(bp, [
     Colors.RGB(1, 0, 1)        # bottom right, purple
     ])
 setmesh(mesh1)
-box(O, 500, 500, :fillpreserve)
+box(O, 500, 500, action = :fillpreserve)
 sethue("grey50")
 strokepath()
 
@@ -658,7 +658,7 @@ tiles = Tiler(600, 600, 15, 15, margin=0)
 bw = boxwidth(BoundingBox())
 for (pos, n) in tiles
     setgray(mask(pos, O, bw/2))
-    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+    box(pos, tiles.tilewidth, tiles.tileheight, action = :fillstroke)
 end
 
 sethue("white")
@@ -683,7 +683,7 @@ bh = boxheight(BoundingBox())
 for (pos, n) in tiles
     mv = mask(pos, O, bw, bh, easingfunction=easeinoutcubic)
     setgray(mv)
-    box(pos, tiles.tilewidth, tiles.tileheight, :fillstroke)
+    box(pos, tiles.tilewidth, tiles.tileheight, action = :fillstroke)
 end
 
 finish() # hide

@@ -28,7 +28,7 @@ background("antiquewhite") # hide
 origin() # hide
 rulers()
 sethue("grey40")
-rect(Point(0, 0), 100, 100, :stroke)
+rect(Point(0, 0), 100, 100, action = :stroke)
 sethue("blue")
 box(Point(0, 0), 100, 100, action=:stroke)
 finish() # hide
@@ -51,19 +51,19 @@ d = @drawsvg begin
         translate(panes[1])
         p1 = Point(-70, -70)
         p2 = Point(70, 70)
-        box(p1, p2, :stroke)
+        box(p1, p2, action = :stroke)
         text("box(p1, p2", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
         sethue("purple")
-        circle.((p1, p2), 8, :fill)
+        circle.((p1, p2), 8, action = :fill)
         label.(["p1", "p2"], [:N, :S], [p1, p2], offset=20)
     end
     @layer begin
         translate(panes[2])
         p = Point(0, 0)
-        box(p, 140, 140, :stroke)
+        box(p, 140, 140, action = :stroke)
         text("box(p, w, h", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
         sethue("purple")
-        circle(p, 8, :fill)
+        circle(p, 8, action = :fill)
         label("p", :S, p, offset=20)
         corners = box(BoundingBox(box(p, 140, 140))...)
         arrow(corners[2] + (0, -15), corners[3] + (0, -15), decorate = () -> text("w", O + (0, -10)))
@@ -72,10 +72,10 @@ d = @drawsvg begin
     @layer begin
         translate(panes[3])
         pt = Point(-70, -70)
-        rect(pt, 140, 140, :stroke)
+        rect(pt, 140, 140, action = :stroke)
         text("rect(pt, w, h", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
         sethue("purple")
-        circle(pt, 8, :fill)
+        circle(pt, 8, action = :fill)
         label("pt", :SE, pt, offset=20)
         corners = box(BoundingBox(box(O, 140, 140))...)
         arrow(corners[2] + (0, -15), corners[3] + (0, -15), decorate = () -> text("w", O + (0, -10)))
@@ -84,9 +84,9 @@ d = @drawsvg begin
     @layer begin
         translate(panes[4])
         sethue("purple")
-        s = star(O, 70, 5, 0.5, 0, :stroke)
+        s = star(O, 70, 5, 0.5, 0, action = :stroke)
         sethue("black")
-        box(BoundingBox(s), :stroke)
+        box(BoundingBox(s), action = :stroke)
         text("BoundingBox(poly...)", boxbottomcenter(BoundingBox(box(O, 140, 140)) + (0, 20)), halign=:center)
     end
 end 800 250
@@ -132,9 +132,9 @@ origin() # hide
 background("antiquewhite") # hide
 setline(6)
 sethue("black") # hide
-box(O, 200, 150, 10, :stroke) # 1 value for all corners
+box(O, 200, 150, 10, action = :stroke) # 1 value for all corners
 sethue("purple")
-box(O, 260, 220, [0, 15, 40, 80], :stroke) # different for each
+box(O, 260, 220, [0, 15, 40, 80], action = :stroke) # different for each
 finish() # hide
 nothing # hide
 ```
@@ -150,7 +150,7 @@ origin() # hide
 background("antiquewhite") # hide
 sethue("black") # hide
 setline(4)
-polysmooth(box(O, 200, 150, vertices=true), 10, :stroke)
+polysmooth(box(O, 200, 150, vertices=true), 10, action = :stroke)
 finish() # hide
 nothing # hide
 ```
@@ -178,16 +178,16 @@ sethue("black")
 p1 = Point(0, -50)
 p2 = Point(100, 0)
 p3 = Point(0, 65)
-map(p -> circle(p, 4, :fill), [p1, p2, p3])
+map(p -> circle(p, 4, action = :fill), [p1, p2, p3])
 sethue("orange")
-circle(center3pts(p1, p2, p3)..., :stroke)
+circle(center3pts(p1, p2, p3)..., action = :stroke)
 
 sethue("red")
 p1 = Point(0, 30)
 p2 = Point(20, -40)
 p3 = Point(50, 5)
-circle.((p1, p2, p3), 3, :stroke)
-circle(p1, p2, p3, :stroke)
+circle.((p1, p2, p3), 3, action = :stroke)
+circle(p1, p2, p3, action = :stroke)
 
 finish() # hide
 nothing # hide
@@ -207,9 +207,9 @@ sethue("black")
 p1 = Point(0, -50)
 p2 = Point(100, 0)
 p3 = Point(0, 65)
-map(p -> circle(p, 4, :fill), [p1, p2, p3])
+map(p -> circle(p, 4, action = :fill), [p1, p2, p3])
 sethue("orange")
-circle(center3pts(p1, p2, p3)..., :stroke)
+circle(center3pts(p1, p2, p3)..., action = :stroke)
 finish() # hide
 nothing # hide
 ```
@@ -231,7 +231,7 @@ height = 25
 for (pos, n) in tiles
     global width, height
     randomhue()
-    ellipse(pos, width, height, :fill)
+    ellipse(pos, width, height, action = :fill)
     sethue("black")
     label = string(round(width/height, digits=2))
     textcentered(label, pos.x, pos.y + 25)
@@ -259,14 +259,14 @@ fontface("Menlo")
 f1 = Point(-100, 0)
 f2 = Point(100, 0)
 
-circle.([f1, f2], 3, :fill)
+circle.([f1, f2], 3, action = :fill)
 
 epoly = ellipse(f1, f2, 250, vertices=true)
-poly(epoly, :stroke,  close=true)
+poly(epoly, action = :stroke,  close=true)
 
 pt = epoly[rand(1:end)]
 
-poly([f1, pt, f2], :stroke)
+poly([f1, pt, f2], action = :stroke)
 
 label("f1", :W, f1, offset=10)
 label("f2", :E, f2, offset=10)
@@ -296,7 +296,7 @@ f2 = Point(100, 0)
 ellipsepoly = ellipse(f1, f2, 170, :none, vertices=true)
 [ begin
     setgray(rescale(c, 150, 1, 0, 1))
-    poly(offsetpoly(ellipsepoly, c), close=true, :fill);
+    poly(offsetpoly(ellipsepoly, c), close=true, action = :fill);
     rotate(π/20)
   end
      for c in 150:-10:1 ]
@@ -322,16 +322,16 @@ top = vcat(O, pg[[3, 4, 5]])
 left = vcat(O, pg[[1, 2, 3]])
 right = vcat(O, pg[[5, 6, 1]])
 sethue("red")
-poly(top, :fill, close=true)
+poly(top, action = :fill, close=true)
 
 sethue("green")
-poly(left, :fill, close=true)
+poly(left, action = :fill, close=true)
 
 sethue("blue")
-poly(right, :fill, close=true)
+poly(right, action = :fill, close=true)
 
 sethue("orange")
-ellipseinquad.((top, left, right), :fill)
+ellipseinquad.((top, left, right), action = :fill)
 
 finish() # hide
 nothing # hide
@@ -351,9 +351,9 @@ setline(4)
 tiles = Tiler(600, 250, 1, 5)
 for (pos, n) in tiles
     randomhue()
-    circlepath(pos, tiles.tilewidth/2, :path)
+    circlepath(pos, tiles.tilewidth/2, action = :path)
     newsubpath()
-    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), :fill, reversepath=true)
+    circlepath(pos, rand(5:tiles.tilewidth/2 - 1), action = :fill, reversepath=true)
 end
 finish() # hide
 nothing # hide
@@ -384,10 +384,10 @@ point = Point(-150, 0)
 circlecenter = Point(150, 0)
 circleradius = 80
 
-circle.((point, circlecenter), 5, :fill)
-circle(circlecenter, circleradius, :stroke)
+circle.((point, circlecenter), 5, action = :fill)
+circle(circlecenter, circleradius, action = :stroke)
 pt1, pt2 = pointcircletangent(point, circlecenter, circleradius)
-circle.((pt1, pt2), 5, :fill)
+circle.((pt1, pt2), 5, action = :fill)
 
 sethue("grey65")
 rule(point, slope(point, pt1))
@@ -412,9 +412,9 @@ circle1radius = 60
 circle2center = Point(150, 0)
 circle2radius = 80
 
-circle.((circle1center, circle2center), 5, :fill)
-circle(circle1center, circle1radius, :stroke)
-circle(circle2center, circle2radius, :stroke)
+circle.((circle1center, circle2center), 5, action = :fill)
+circle(circle1center, circle1radius, action = :stroke)
+circle(circle2center, circle2radius, action = :stroke)
 
 p1, p2, p3, p4 = circlecircleoutertangents(
     circle1center, circle1radius,
@@ -445,9 +445,9 @@ circle1radius = 60
 circle2center = Point(150, 0)
 circle2radius = 80
 
-circle.((circle1center, circle2center), 5, :fill)
-circle(circle1center, circle1radius, :stroke)
-circle(circle2center, circle2radius, :stroke)
+circle.((circle1center, circle2center), 5, action = :fill)
+circle(circle1center, circle1radius, action = :stroke)
+circle(circle2center, circle2radius, action = :stroke)
 
 p1, p2, p3, p4 = circlecircleinnertangents(
     circle1center, circle1radius,
@@ -459,7 +459,7 @@ rule(p1, slope(p1, p2))
 rule(p3, slope(p3, p4))
 
 sethue("purple")
-circle.((p1, p2, p3, p4), 3, :fill)
+circle.((p1, p2, p3, p4), 3, action = :fill)
 
 finish() # hide
 nothing # hide
@@ -478,21 +478,21 @@ sethue("black") # hide
 setline(1) # hide
 
 circle1 = (Point(-100, 0), 90)
-circle(circle1..., :stroke)
+circle(circle1..., action = :stroke)
 circle2 = (Point(100, 0), 90)
-circle(circle2..., :stroke)
+circle(circle2..., action = :stroke)
 
 requiredradius = 25
 ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
 
 if ncandidates==2
     sethue("orange")
-    circle(p1, requiredradius, :fill)
+    circle(p1, requiredradius, action = :fill)
     sethue("green")
-    circle(p2, requiredradius, :fill)
+    circle(p2, requiredradius, action = :fill)
     sethue("purple")
-    circle(p1, requiredradius, :stroke)
-    circle(p2, requiredradius, :stroke)
+    circle(p1, requiredradius, action = :stroke)
+    circle(p2, requiredradius, action = :stroke)
 end
 
 # the circles are 10 apart, so there should be just one circle
@@ -503,9 +503,9 @@ ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2.
 
 if ncandidates==1
     sethue("blue")
-    circle(p1, requiredradius, :fill)
+    circle(p1, requiredradius, action = :fill)
     sethue("cyan")
-    circle(p1, requiredradius, :stroke)
+    circle(p1, requiredradius, action = :stroke)
 end
 
 finish() # hide
@@ -525,7 +525,7 @@ sethue("black") # hide
 setline(1) # hide
 
 circle1 = (Point(-100, 0), 90)
-circle(circle1..., :stroke)
+circle(circle1..., action = :stroke)
 
 requiredradius = 50
 requiredpassthrough = O + (80, 0)
@@ -533,13 +533,13 @@ ncandidates, p1, p2 = circlepointtangent(requiredpassthrough, requiredradius, ci
 
 if ncandidates==2
     sethue("orange")
-    circle(p1, requiredradius, :stroke)
+    circle(p1, requiredradius, action = :stroke)
     sethue("green")
-    circle(p2, requiredradius, :stroke)
+    circle(p2, requiredradius, action = :stroke)
 end
 
 sethue("black")
-circle(requiredpassthrough, 4, :fill)
+circle(requiredpassthrough, 4, action = :fill)
 
 finish() # hide
 nothing # hide
@@ -564,12 +564,12 @@ origin() # hide
 # method 1: same radius, different centers
 
 sethue("purple")
-crescent(Point(-200, 0), 200, Point(-150, 0), 200, :fill)
+crescent(Point(-200, 0), 200, Point(-150, 0), 200, action = :fill)
 
 # method 2: same center, different radii
 
 sethue("orange")
-crescent(O, 100, 200, :fill)
+crescent(O, 100, 200, action = :fill)
 
 finish() # hide
 nothing # hide
@@ -606,7 +606,7 @@ setline(0.5) # hide
 y = 10
 for x in 10 .^ range(0, length=100, stop=3)
     global y
-    circle(Point(x, y), 2, :fill)
+    circle(Point(x, y), 2, action = :fill)
     rule(Point(x, y), -π/2, boundingbox=BoundingBox(centered=false))
     y += 2
 end
@@ -626,7 +626,7 @@ origin()
 background("antiquewhite") # hide
 sethue("black") # hide
 setline(0.75) # hide
-box(BoundingBox() * 0.9, :stroke)
+box(BoundingBox() * 0.9, action = :stroke)
 for x in 10 .^ range(0, length=100, stop=3)
     rule(Point(x, 0), π/2,  boundingbox=BoundingBox() * 0.9)
     rule(Point(-x, 0), π/2, boundingbox=BoundingBox() * 0.9)
@@ -745,7 +745,7 @@ sethue("olivedrab")
 # no arrow, just a graphic, at 0.75
 arrow(pts[1:4]...,
     decorate = () ->
-        ngon(Point(0, 0), 20, 4, 0, :fill),
+        ngon(Point(0, 0), 20, 4, 0, action = :fill),
     decoration = 0.75, :none) # default action is :stroke
 
 finish() # hide
@@ -764,8 +764,8 @@ the slope of the shaft at that point.
 using Luxor
 
 function fletcher()
-    line(O, polar(30, deg2rad(220)), :stroke)
-    line(O, polar(30, deg2rad(140)), :stroke)
+    line(O, polar(30, deg2rad(220)), action = :stroke)
+    line(O, polar(30, deg2rad(140)), action = :stroke)
 end
 
 @drawsvg begin
@@ -855,7 +855,7 @@ sethue("red")
 map(p -> circle(p, 4, action=:fill), [O, pt1, pt2, pt3])
 
 line(Point(0, 0), pt1, action=:stroke)
-line(pt2, pt3, :stroke)
+line(pt2, pt3, action = :stroke)
 
 sethue("black")
 setline(3)
@@ -884,11 +884,11 @@ tiles = Tiler(700, 200, 1, 6)
 for (pos, n) in tiles
     c1, pt2, pt3 = ngon(pos, rand(10:50), 3, rand(0:pi/12:2pi), vertices=true)
     sethue("black")
-    map(pt -> circle(pt, 4, :fill), [c1, pt3])
+    map(pt -> circle(pt, 4, action = :fill), [c1, pt3])
     sethue("red")
-    circle(pt2, 4, :fill)
+    circle(pt2, 4, action = :fill)
     randomhue()
-    arc2r(c1, pt2, pt3, :stroke)
+    arc2r(c1, pt2, pt3, action = :stroke)
 end
 finish() # hide
 nothing # hide
@@ -913,12 +913,12 @@ for n in reverse(range(1, length=7, stop=120))
     sethue("red")
     rule(Point(0, -n))
     sethue(LCHab(70, 80, rescale(n, 120, 1, 0, 359)))
-    pt, r = arc2sagitta(pt1, pt2, n, :fillpreserve)
+    pt, r = arc2sagitta(pt1, pt2, n, action = :fillpreserve)
     sethue("black")
     strokepath()
     text(string(round(n)), O + (120, -n))
 end
-circle.((pt1, pt2), 5, :fill)
+circle.((pt1, pt2), 5, action = :fill)
 finish() # hide
 nothing # hide
 ```
@@ -952,9 +952,9 @@ Drawing(800, 200, "../assets/figures/sectorrounded.png") # hide
 background("antiquewhite") # hide
 origin() # hide
 sethue("tomato")
-sector(50, 90, π/2, 0, 15, :fill)
+sector(50, 90, π/2, 0, 15, action = :fill)
 sethue("olive")
-sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, 15, :fill)
+sector(Point(O.x + 200, O.y), 50, 90, 0, π/2, 15, action = :fill)
 finish() # hide
 nothing # hide
 ```
@@ -969,7 +969,7 @@ Drawing(800, 300, "../assets/figures/pie.png") # hide
 background("antiquewhite") # hide
 origin() # hide
 sethue("magenta") # hide
-pie(0, 0, 100, π/2, π, :fill)
+pie(0, 0, 100, π/2, π, action = :fill)
 finish() # hide
 nothing # hide
 ```
@@ -999,7 +999,7 @@ grid = GridRect(O - (200, 0), 130, 50)
 for aspiral in spiraldata
     @layer begin
         translate(nextgridpoint(grid))
-        spiral(last(aspiral), first(aspiral), period=20π, :stroke)
+        spiral(last(aspiral), first(aspiral), period=20π, action = :stroke)
         label(aspiral[2], :S, offset=100)
     end
 end
@@ -1031,7 +1031,7 @@ grid = GridRect(O - (200, 0), 175, 50)
 for aspiral in spiraldata
     @layer begin
         translate(nextgridpoint(grid))
-        spiral(first(aspiral), last(aspiral), log=true, period=10π, :stroke)
+        spiral(first(aspiral), last(aspiral), log=true, period=10π, action = :stroke)
         label(string(aspiral), :S, offset=100)
     end
 end
@@ -1056,7 +1056,7 @@ setline(2)
 tiles = Tiler(600, 250, 1, 3)
 for (pos, n) in tiles
     sethue("lavender")
-    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], :fillpreserve)
+    squircle(pos, 80, 80, rt=[0.3, 0.5, 0.7][n], action = :fillpreserve)
     sethue("grey20")
     strokepath()
     textcentered("rt = $([0.3, 0.5, 0.7][n])", pos)
@@ -1079,7 +1079,7 @@ origin() # hide
 tiles = Tiler(400, 300, 4, 6, margin=5)
 for (pos, n) in tiles
     randomhue()
-    star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, :fill)
+    star(pos, tiles.tilewidth/3, rand(3:8), 0.5, 0, action = :fill)
 end
 finish() # hide
 nothing # hide
@@ -1097,7 +1097,7 @@ fontsize(10) # hide
 tiles = Tiler(800, 250, 1, 6, margin=10)
 sethue("black") # hide
 for (pos, n) in tiles
-    s = star(pos, tiles.tilewidth/2, 5, 1/n, 0, :stroke)
+    s = star(pos, tiles.tilewidth/2, 5, 1/n, 0, action = :stroke)
     l2 = distance(pos, s[1])
     l1 = distance(pos, s[2])
     text(string(round(l1/l2, digits=2)), pos, halign=:center)
@@ -1216,7 +1216,7 @@ for θ in range(0, step=2π/10, length=10)
         rotate(θ)
         translate(150, 0)
         rotate(π/2)
-        drawpath(dagger, :fill)
+        drawpath(dagger, action = :fill)
     end
 end
 end # hide
@@ -1295,9 +1295,9 @@ origin()
 background("grey15")
 sethue("antiquewhite")
 setline(1)
-p = hypotrochoid(100, 25, 55, :stroke, stepby=0.01, vertices=true)
+p = hypotrochoid(100, 25, 55, action = :stroke, stepby=0.01, vertices=true)
 for i in 0:3:15
-    poly(offsetpoly(p, i), :stroke, close=true)
+    poly(offsetpoly(p, i), action = :stroke, close=true)
 end
 finish() # hide
 nothing # hide
@@ -1366,8 +1366,8 @@ majticks, minticks = tickline(Point(-350, 100), Point(350, 100),
     log=true,
     axis=false,
     vertices=true)
-circle.(majticks, 5, :fill)
-box.(minticks, 1, 25, :fill)
+circle.(majticks, 5, action = :fill)
+box.(minticks, 1, 25, action = :fill)
 end 800 350  # hide
 ```
 
@@ -1381,7 +1381,7 @@ function color_temp(n, pos;
           nticks = 1)
     k = rescale(n, 0, nticks - 1, startnumber, finishnumber)
     sethue(RGB(colormatch(k)))
-    circle(pos, 20, :fillpreserve)
+    circle(pos, 20, action = :fillpreserve)
     sethue("white")
     strokepath()
     text("$(convert(Int, floor(k))) nm", pos - (0, 30), halign=:left, angle=-π/4)
@@ -1416,7 +1416,7 @@ for (n, pt) in enumerate(minticks)
     sethue(LCHab(60, 100, 360k))
     setline(1/k)
     wave = [pt + Point(120k * sin(y), 600/2π * y) for y in -π:π/20:π]
-    poly(wave, :stroke)
+    poly(wave, action = :stroke)
 end
 
 end 800 600  # hide
@@ -1435,7 +1435,7 @@ Drawing(800, 250, "../assets/figures/cropmarks.png")  # hide
 origin() # hide
 background("antiquewhite") # hide
 sethue("red")
-box(O, 150, 150, :stroke)
+box(O, 150, 150, action = :stroke)
 cropmarks(O, 150, 150)
 finish() # hide
 nothing # hide
@@ -1457,8 +1457,8 @@ background("antiquewhite") # hide
 setline(0.75)
 sethue("purple")
 pentagon = ngonside(O, 120, 5, vertices=true)
-poly(pentagon, :stroke, close=true)
-circle.(pentagon, 2, :fill)
+poly(pentagon, action = :stroke, close=true)
+circle.(pentagon, 2, action = :fill)
 fontsize(6)
 label.(split("12345", ""), :NE, pentagon)
 fontface("Menlo")
@@ -1551,10 +1551,10 @@ function mybarfunction(values, i, low, high, barwidth, scaledvalue)
         extremes = extrema(values)
         sethue(Colors.HSB(rescale(values[i], extremes[1], extremes[2], 0, 360), 1.0, 0.5))
         csize = rescale(values[i], extremes[1], extremes[2], 5, 15)
-        circle(high, csize, :fill)
+        circle(high, csize, action = :fill)
         setline(1)
         sethue("blue")
-        line(low, high, :stroke)
+        line(low, high, action = :stroke)
         sethue("white")
         text(string(values[i]), high, halign=:center, valign=:middle)
     end
@@ -1570,7 +1570,7 @@ end
 v = rand(1:100, 15)
 
 bbox = BoundingBox() * 0.8
-box(bbox, :clip)
+box(bbox, action = :clip)
 p = barchart(v, boundingbox=bbox, barfunction=mybarfunction, labelfunction=mylabelfunction)
 
 rule(p[1])
@@ -1605,10 +1605,10 @@ for (n, t) in enumerate(tiles)
     randomhue()
     bb = BoundingBox(t)
     sethue("black")
-    box(bb - 5, :stroke)
+    box(bb - 5, action = :stroke)
 
     randomhue()
-    box(bb - 8, :fill)
+    box(bb - 8, action = :fill)
 
     # text labels
     sethue("white")

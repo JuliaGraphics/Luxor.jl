@@ -1,8 +1,10 @@
 # Changelog
 
-## [v3.4.0] -
+## [v3.4.0] - forthcoming 
 
 ### Added
+
+- BoundingBox() can be used on Tables and table cells (needs tests)
 
 ### Changed
 
@@ -15,6 +17,7 @@
 ### Deprecated
 
 # ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v3.3.0] - 2022-06-01 11:28:44
 
 ### Added

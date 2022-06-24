@@ -144,8 +144,8 @@ t₃ = L"\cos(\theta)"
 text(t₁, Point(0, -100), halign=:center, valign=:baseline, angle=0)
 text(t₂, Point(0, -20), halign=:center, valign=:top, angle=0)
 
-line(Point(0, 132), Point(50, 132), :stroke)
-line(Point(0, 132), Point(50cos(π/4), 132 - 50sin(π/4)), :stroke)
+line(Point(0, 132), Point(50, 132), action = :stroke)
+line(Point(0, 132), Point(50cos(π/4), 132 - 50sin(π/4)), action = :stroke)
 
 fontsize(18)
 text(t₃, Point(0, 120), halign = :left, valign = :baseline, angle = -π/4, rotationfixed = false)
@@ -286,7 +286,7 @@ fontsize(24) # hide
 sethue("black") # hide
 setdash("dot") # hide
 setline(0.25) # hide
-circle(O, 100, :stroke)
+circle(O, 100, action = :stroke)
 textcurvecentered("hello world", -π/2, 100, O;
     clockwise = true,
     letter_spacing = 0,
@@ -396,7 +396,7 @@ quis, mattis hendrerit nunc. Nullam vehicula leo ac
 leo tristique, a condimentum tortor faucibus."""
 
 setdash("dot")
-box(O, 200, 200, :stroke)
+box(O, 200, 200, action = :stroke)
 textwrap(loremipsum, 200, O - (200/2, 200/2))
 ```
 
@@ -563,7 +563,7 @@ function frame(scene, framenumber)
         0, 1, scene.framerange.stop - scene.framerange.start)
 
     for tp in (tp1, tp2)
-        drawpath(tp, eased_n, :stroke)
+        drawpath(tp, eased_n, action = :stroke)
     end
 end
 

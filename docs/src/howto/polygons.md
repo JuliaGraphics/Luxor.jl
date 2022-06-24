@@ -64,11 +64,11 @@ for (pos, n) in tiles
 
         sethue(cols[n])
 
-        poly(p, :fill, close=true)
+        poly(p, action = :fill, close=true)
         sethue("black")
-        poly(p, :stroke, close=true)
+        poly(p, action = :stroke, close=true)
 
-        circle(Point(0, 0), 4, :fill)
+        circle(Point(0, 0), 4, action = :fill)
 
         label.([string(i) for i in 1:n], slope.(O, p), p, offset=5)
     end
@@ -94,9 +94,9 @@ origin() # hide
 setline(2) # hide
 for i in 20:-1:3
     sethue(i/20, 0.5, 0.7)
-    ngonside(Point(0, 0), 75, i, 0, :fill)
+    ngonside(Point(0, 0), 75, i, 0, action = :fill)
     sethue("black")
-    ngonside(Point(0, 0), 75, i, 0, :stroke)
+    ngonside(Point(0, 0), 75, i, 0, action = :stroke)
 end
 
 finish() # hide
@@ -136,12 +136,12 @@ randompoints = [Point(rand(-100:100), rand(-100:100)) for i in 1:10]
 
 gsave()
 translate(tile1[1])
-poly(randompoints, :stroke)
+poly(randompoints, action = :stroke)
 grestore()
 
 gsave()
 translate(tile2[1])
-poly(randompoints, :fill)
+poly(randompoints, action = :fill)
 grestore()
 
 finish() # hide
@@ -169,7 +169,7 @@ translate(-100, 0)
 nut = ngon(O, 120, 6, vertices=true)
 hole = reverse(ngon(O, 70, 6, vertices=true))
 
-poly.((nut, hole), :path)
+poly.((nut, hole), action = :path)
 fillpath()
 
 # nut 2
@@ -180,8 +180,8 @@ sethue("purple")
 nut = ngon(O, 120, 6, vertices=true)
 hole = ngon(O, 70, 6, reversepath=true, vertices=true)
 
-poly(nut, :path)
-poly(hole, :path)
+poly(nut, action = :path)
+poly(hole, action = :path)
 fillpath()
 
 # nut 3
@@ -192,9 +192,9 @@ sethue("orange")
 nut = ngon(O, 120, 6, vertices=true)
 hole = ngon(O, 70, 6, vertices=true)
 
-poly(nut, :path)
+poly(nut, action = :path)
 newsubpath()
-poly(hole, reversepath=true, :path)
+poly(hole, reversepath=true, action = :path)
 fillpath()
 
 finish() # hide
@@ -263,12 +263,12 @@ decorate(pos, p, level) = begin
     if level < 4
         randomhue()
         scale(0.25, 0.25)
-        prettypoly(p, :fill, () -> decorate(pos, p, level+1), close=true)
+        prettypoly(p, action = :fill, () -> decorate(pos, p, level+1), close=true)
     end
 end
 
 apoly = star(O, 100, 7, 0.6, 0, vertices=true)
-prettypoly(apoly, :fill, () -> decorate(O, apoly, 1), close=true)
+prettypoly(apoly, action = :fill, () -> decorate(O, apoly, 1), close=true)
 finish() # hide
 nothing # hide
 ```
@@ -287,18 +287,18 @@ setline(1) # hide
 fontsize(20) # hide
 translate(0, -120) # hide
 sincurve = [Point(6x, 80sin(x)) for x in -5π:π/20:5π]
-prettypoly(collect(sincurve), :stroke,
+prettypoly(collect(sincurve), action = :stroke,
     () -> begin
             sethue("red")
-            circle(O, 3, :fill)
+            circle(O, 3, action = :fill)
           end)
 text(string("number of points: ", length(collect(sincurve))), 0, 100)
 translate(0, 200)
 simplercurve = simplify(collect(sincurve), 0.5)
-prettypoly(simplercurve, :stroke,
+prettypoly(simplercurve, action = :stroke,
     () -> begin
             sethue("red")
-            circle(O, 3, :fill)
+            circle(O, 3, action = :fill)
           end)
 text(string("number of points: ", length(simplercurve)), 0, 100)
 finish() # hide
@@ -317,7 +317,7 @@ origin() # hide
 apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
 for pt in collect(first.(Table(30, 30, 15, 15)))
     sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))
-    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, :fill) : circle(pt, 3, :fill)
+    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, action = :fill) : circle(pt, 3, action = :fill)
 end
 
 finish() # hide
@@ -337,14 +337,14 @@ origin() # hide
 sethue("magenta") # hide
 shape = star(O, 10, 5, 0.5, 0, vertices=true)
 
-circle(O, 3, :stroke)
+circle(O, 3, action = :stroke)
 
 polymove!(shape, O, O + (0, 50))
 
-poly(shape, :stroke, close=true)
+poly(shape, action = :stroke, close=true)
 
 for i in 1:20
-    poly(polyrotate!(shape, π/5), :fill, close=true)
+    poly(polyrotate!(shape, π/5), action = :fill, close=true)
     polyscale!(shape, 19//18)
 end
 
@@ -365,11 +365,11 @@ setopacity(0.7) # hide
 sethue("grey60") # hide
 pgon = randompointarray(BoundingBox()/2 ..., 10)
 polymove!(pgon, O, Point(-80, 0))
-poly(pgon, :fill, close=true)
+poly(pgon, action = :fill, close=true)
 # reflect in y axis:
 polyreflect!(pgon, Point(0, 0), Point(0, 100))
 sethue("blue")
-poly(pgon, :fill, close=true)
+poly(pgon, action = :fill, close=true)
 finish() # hide
 nothing # hide
 ```
@@ -390,12 +390,12 @@ sethue("black") # hide
 s = squircle(O, 60, 60, vertices=true)
 pt1 = Point(0, -120)
 pt2 = Point(0, 120)
-line(pt1, pt2, :stroke)
+line(pt1, pt2, action = :stroke)
 poly1, poly2 = polysplit(s, pt1, pt2)
 randomhue()
-poly(poly1, :fill)
+poly(poly1, action = :fill)
 randomhue()
-poly(poly2, :fill)
+poly(poly2, action = :fill)
 finish() # hide
 nothing # hide
 ```
@@ -419,9 +419,9 @@ tiles = Tiler(600, 250, 1, 5, margin=10)
 for (pos, n) in tiles
     p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)
     sethue("red")
-    poly(p, close=true, :stroke)
+    poly(p, close=true, action = :stroke)
     sethue("black")
-    polysmooth(p, n * 2, :fill)
+    polysmooth(p, n * 2, action = :fill)
 end
 
 finish() # hide
@@ -443,10 +443,10 @@ setline(1) # hide
 p = star(O, 60, 5, 0.35, 0, vertices=true)
 setdash("dot")
 sethue("red")
-prettypoly(p, close=true, :stroke)
+prettypoly(p, close=true, action = :stroke)
 setdash("solid")
 sethue("black")
-polysmooth(p, 40, :fill, debug=true)
+polysmooth(p, 40, action = :fill, debug=true)
 finish() # hide
 nothing # hide
 ```
@@ -499,20 +499,20 @@ setline(1.5) # hide
 p = star(O, 45, 5, 0.5, 0, vertices=true)
 sethue("red")
 setdash("dot")
-poly(p, :stroke, close=true)
+poly(p, action = :stroke, close=true)
 setdash("solid")
 sethue("black")
 
-poly(offsetpoly(p, 20), :stroke, close=true)
-poly(offsetpoly(p, 25), :stroke, close=true)
-poly(offsetpoly(p, 30), :stroke, close=true)
-poly(offsetpoly(p, 35), :stroke, close=true)
+poly(offsetpoly(p, 20), action = :stroke, close=true)
+poly(offsetpoly(p, 25), action = :stroke, close=true)
+poly(offsetpoly(p, 30), action = :stroke, close=true)
+poly(offsetpoly(p, 35), action = :stroke, close=true)
 
 sethue("darkcyan")
 
-poly(offsetpoly(p, -10), :stroke, close=true)
-poly(offsetpoly(p, -15), :stroke, close=true)
-poly(offsetpoly(p, -20), :stroke, close=true)
+poly(offsetpoly(p, -10), action = :stroke, close=true)
+poly(offsetpoly(p, -15), action = :stroke, close=true)
+poly(offsetpoly(p, -20), action = :stroke, close=true)
 finish() # hide
 nothing # hide
 ```
@@ -555,9 +555,9 @@ for θ in range(0, 2π, step=π/12)
     @layer begin
         sethue("black")
         rotate(θ)
-        poly(offsetpoly(spine, startoffset=1, endoffset=30), :fill)
+        poly(offsetpoly(spine, startoffset=1, endoffset=30), action = :fill)
         sethue("orange")
-        poly(spine, :stroke)
+        poly(spine, action = :stroke)
     end
 end
 
@@ -590,11 +590,11 @@ setlinejoin("round") # hide
 spine = between.(O - (200, 0), O + (200, 0), 0:0.025:1)
 
 sethue("red")
-prettypoly(spine, :stroke)
+prettypoly(spine, action = :stroke)
 
 sethue("black")
 pg = offsetpoly(spine, startoffset=0, endoffset=200, easingfunction=easeinoutquad)
-prettypoly(pg, :stroke, close=true)
+prettypoly(pg, action = :stroke, close=true)
 
 finish() # hide
 nothing # hide
@@ -622,10 +622,10 @@ f(t, b, c, d) = 2sin(t * π)
 
 pg = offsetpoly(spine, startoffset=1, endoffset=10, easingfunction=f)
 sethue("black")
-poly(pg, :fill)
+poly(pg, action = :fill)
 
 sethue("white")
-poly(spine, :stroke)
+poly(spine, action = :stroke)
 
 finish() # hide
 nothing # hide
@@ -649,7 +649,7 @@ f(x, θ) =  10 + 40sin(x * π)
 spine = spiral(30, 1.3, vertices=true)
 ps = polysample(spine, 250, include_first=true, closed=false)
 pgon = offsetpoly(ps, f)
-poly(pgon, :stroke)
+poly(pgon, action = :stroke)
 
 setmesh(mesh(box(BoundingBox(pgon)),
     [
@@ -658,7 +658,7 @@ setmesh(mesh(box(BoundingBox(pgon)),
     RGB(Luxor.julia_green...),
     RGB(Luxor.julia_purple...),
     ]))
-poly(pgon, :fill)
+poly(pgon, action = :fill)
 
 end
 ```
@@ -677,9 +677,9 @@ Random.seed!(42) # hide
 pts = [Point(x, rand(-100:100)) for x in -280:30:280]
 setopacity(0.7)
 sethue("red")
-prettypoly(pts, () -> circle(O, 5, :fill))
+prettypoly(pts, () -> circle(O, 5, action = :fill))
 sethue("darkmagenta")
-poly(polyfit(pts, 200), :stroke)
+poly(polyfit(pts, 200), action = :stroke)
 
 finish() # hide
 nothing # hide
@@ -705,10 +705,10 @@ plist = pathtopoly()
 setline(0.5) # hide
 for (n, pgon) in enumerate(plist)
     randomhue()
-    prettypoly(pgon, :stroke, close=true)
+    prettypoly(pgon, action = :stroke, close=true)
     gsave()
     translate(0, 100)
-    poly(polysortbyangle(pgon, polycentroid(pgon)), :stroke, close=true)
+    poly(polysortbyangle(pgon, polycentroid(pgon)), action = :stroke, close=true)
     grestore()
 end
 finish() # hide
@@ -757,16 +757,16 @@ setline(1.5) # hide
 setgray(0.5) # hide
 pts = ngon(O, 150, 3, pi/6, vertices=true)
 bezpath = makebezierpath(pts)
-poly(pts, :stroke)
+poly(pts, action = :stroke)
 for (p1, c1, c2, p2) in bezpath[1:end-1]
-    circle.([p1, p2], 4, :stroke)
-    circle.([c1, c2], 2, :fill)
-    line(p1, c1, :stroke)
-    line(p2, c2, :stroke)
+    circle.([p1, p2], 4, action = :stroke)
+    circle.([c1, c2], 2, action = :fill)
+    line(p1, c1, action = :stroke)
+    line(p2, c2, action = :stroke)
 end
 sethue("black")
 setline(3)
-drawbezierpath(bezpath, :stroke, close=false)
+drawbezierpath(bezpath, action = :stroke, close=false)
 finish() # hide
 nothing # hide
 ```
@@ -789,9 +789,9 @@ for (pos, n) in tiles
                     4))
         setopacity(0.7)
         sethue("black")
-        prettypoly(pts, :stroke, close=true)
+        prettypoly(pts, action = :stroke, close=true)
         randomhue()
-        drawbezierpath(makebezierpath(pts), :fill)
+        drawbezierpath(makebezierpath(pts), action = :fill)
     end
 end
 finish() # hide
@@ -815,7 +815,7 @@ pgon = star(O, 250, 5, 0.6, 0, vertices=true)
 @layer begin
     setgrey(0.5)
     setdash("dot")
-    poly(pgon, :stroke, close=true)
+    poly(pgon, action = :stroke, close=true)
     setline(5)
 end
 
@@ -824,13 +824,13 @@ setline(4)
 sethue("orangered")
 
 np = makebezierpath(pgon)    
-drawbezierpath(np, :stroke)
+drawbezierpath(np, action = :stroke)
 
 sethue("steelblue")
 p = bezierpathtopoly(np, steps=3)    
 
 q1 = offsetpoly(p, 20)
-prettypoly(q1, :stroke, close=true)
+prettypoly(q1, action = :stroke, close=true)
 
 finish() # hide
 nothing # hide
@@ -857,17 +857,17 @@ nbps = pathtobezierpaths()
 setline(1.5)
 for nbp in nbps
     sethue("grey80")
-    drawbezierpath(nbp, :stroke)
+    drawbezierpath(nbp, action = :stroke)
     for p in nbp
         sethue("darkorange")
-        circle(p[2], 2.0, :fill)
-        circle(p[3], 2.0, :fill)
-        line(p[2], p[1], :stroke)
-        line(p[3], p[4], :stroke)
+        circle(p[2], 2.0, action = :fill)
+        circle(p[3], 2.0, action = :fill)
+        line(p[2], p[1], action = :stroke)
+        line(p[3], p[4], action = :stroke)
         if p[1] != p[4]
             sethue("black")
-            circle(p[1], 2.0, :fill)
-            circle(p[4], 2.0, :fill)
+            circle(p[1], 2.0, action = :fill)
+            circle(p[4], 2.0, action = :fill)
         end
     end
 end
@@ -902,14 +902,14 @@ pts = beziersegmentangles(P, Q,
 @layer begin
     setline(2)
     sethue("purple")
-    drawbezierpath(pts, :stroke)
+    drawbezierpath(pts, action = :stroke)
 end
 
 sethue("grey50")
-line(O, pts[2], :stroke)
-line(Q, pts[3], :stroke)
+line(O, pts[2], action = :stroke)
+line(Q, pts[3], action = :stroke)
 fontsize(15)
-circle.((P, pts[2], pts[3], Q), 5, :fill)
+circle.((P, pts[2], pts[3], Q), 5, action = :fill)
 label.(("P", "Q"), :ne, (P, Q))
 text("60°", P + (40, 20))
 text("135°", Q + (10, 20))
@@ -930,18 +930,18 @@ origin() # hide
 setline(2)
 
 bez  = BezierPathSegment(ngon(O, 150, 4, vertices=true)...)
-drawbezierpath(bez, :stroke)
+drawbezierpath(bez, action = :stroke)
 
 setopacity(0.4)
 sethue("red")
 setline(20)
 trimbez = trimbezier(bez, 0.2, 0.8)
-drawbezierpath(trimbez, :stroke)
+drawbezierpath(trimbez, action = :stroke)
 
 setline(40)
 sethue("purple")
 trimbez = trimbezier(trimbez, 0.2, 0.8)
-drawbezierpath(trimbez, :stroke)
+drawbezierpath(trimbez, action = :stroke)
 
 finish() # hide
 d # hide
@@ -963,7 +963,7 @@ using Luxor, Random # hide
 brushα(nbpb) = begin
     setline(1)
     setopacity(0.3)
-    drawbezierpath(nbpb, :stroke)
+    drawbezierpath(nbpb, action = :stroke)
     sethue(0.2, 0.3, rand(0.3:0.01:0.65))
     return nbpb
 end
@@ -1031,12 +1031,12 @@ setline(1.5) # hide
 sethue("black") # hide
 fontsize(20) # hide
 p = box(O, 50, 50, vertices=true)
-poly(p, :stroke)
+poly(p, action = :stroke)
 text(string(round(polyperimeter(p, closed=false))), O.x, O.y + 60)
 
 translate(200, 0)
 
-poly(p, :stroke, close=true)
+poly(p, action = :stroke, close=true)
 text(string(round(polyperimeter(p, closed=true))), O.x, O.y + 60)
 
 finish() # hide
@@ -1074,7 +1074,7 @@ hull = polyhull(points)
 
 sethue("gold2")
 
-poly(hull, close=true, :stroke)
+poly(hull, close=true, action = :stroke)
 
 finish() # hide
 d # hide
@@ -1099,23 +1099,23 @@ sethue("black") # hide
 fontsize(20) # hide
 
 p = ngon(O, 100, 7, 0, vertices=true)
-poly(p, :stroke, close=true)
+poly(p, action = :stroke, close=true)
 setopacity(0.75)
 
 setline(20)
 sethue("red")
-poly(polyportion(p, 0.25), :stroke)
+poly(polyportion(p, 0.25), action = :stroke)
 
 setline(10)
 sethue("green")
-poly(polyportion(p, 0.5), :stroke)
+poly(polyportion(p, 0.5), action = :stroke)
 
 setline(5)
 sethue("blue")
-poly(polyportion(p, 0.75), :stroke)
+poly(polyportion(p, 0.75), action = :stroke)
 
 setline(1)
-circle(polyremainder(p, 0.75)[1], 5, :stroke) # first point
+circle(polyremainder(p, 0.75)[1], 5, action = :stroke) # first point
 
 finish() # hide
 nothing # hide
@@ -1134,11 +1134,11 @@ setline(1) # hide
 sethue("black") # hide
 
 pts = box(O, 500, 200, vertices=true)
-prettypoly(pts, :stroke, close=true)
+prettypoly(pts, action = :stroke, close=true)
 
 for i in 1:5
     insertvertices!(pts)
-    prettypoly(pts, :stroke, close=true)
+    prettypoly(pts, action = :stroke, close=true)
     fontsize(16)
     label(string(length(pts)), :ne, pts[1], offset=10)
     scale(0.8)
@@ -1165,7 +1165,7 @@ for (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))
     prettypoly(polysample(pts, npoints),
         :stroke, close=true,
         () -> begin
-                circle(O, 2n, :stroke)
+                circle(O, 2n, action = :stroke)
               end)
 end    
 
@@ -1193,13 +1193,13 @@ sethue("black") # hide
 # original polygon
 
 numbervertices(l, n) = label(string(l), :N, O)
-drawvertices() = ngon(O, 3, 4, 0, :fill)
+drawvertices() = ngon(O, 3, 4, 0, action = :fill)
 
 pts = [Point(30x, 20sin(x)) for x in -2π:π/6:2π]
 
 # 1: drawn as defined
 
-prettypoly(pts, :stroke, drawvertices, vertexlabels = numbervertices)
+prettypoly(pts, action = :stroke, drawvertices, vertexlabels = numbervertices)
 
 translate(0, 50)
 
@@ -1209,7 +1209,7 @@ translate(0, 50)
 npoints = 40
 
 sethue("cornflowerblue")
-prettypoly(polysample(pts, npoints, closed=true), :stroke, drawvertices,
+prettypoly(polysample(pts, npoints, closed=true), action = :stroke, drawvertices,
     vertexlabels = numbervertices)
 
 translate(0, 50)
@@ -1217,7 +1217,7 @@ translate(0, 50)
 # 3: resampled as open
 
 sethue("magenta")
-prettypoly(polysample(pts, npoints, closed=false), :stroke, drawvertices,
+prettypoly(polysample(pts, npoints, closed=false), action = :stroke, drawvertices,
     vertexlabels = numbervertices)
 
 
@@ -1269,7 +1269,7 @@ sethue("black") # hide
 setline(0.5) # hide
 
 p = ngonside(O, 200, 3, vertices=true)
-prettypoly(p, :stroke, close=true, vertexlabels = (n, l) -> label(string(n), :NW, offset=10))
+prettypoly(p, action = :stroke, close=true, vertexlabels = (n, l) -> label(string(n), :NW, offset=10))
 
 # distances array
 da = polydistances(p)
@@ -1277,7 +1277,7 @@ da = polydistances(p)
 nidx, over = nearestindex(da, polyperimeter(p)/2)
 
 sethue("red")
-circle(p[nidx], 5, :stroke)
+circle(p[nidx], 5, action = :stroke)
 
 arrow(p[nidx],
       between(p[nidx], p[nidx+1], over/distance(p[nidx], p[nidx+1])),
@@ -1315,7 +1315,7 @@ for i in 3:total
     global radius
     text(string(i), properties[i, 1], halign=:right)
     p = ngon(outerframe[1], radius, i, 0, vertices=true)
-    prettypoly(p, :stroke, close=true, () -> (sethue("red"); circle(O, 2, :fill)))
+    prettypoly(p, action = :stroke, close=true, () -> (sethue("red"); circle(O, 2, action = :fill)))
     pa = polyarea(p)
     pp = polyperimeter(p)
     ppoverradius = pp/radius
@@ -1359,7 +1359,7 @@ for i in 0:0.03:1
     morph = polymorph(fromshape, toshape, i,
         easingfunction=easeinoutcubic,
         closed=(false, false))
-    poly(first(morph), :stroke)
+    poly(first(morph), action = :stroke)
 end
 end # hide
 ```
@@ -1373,13 +1373,13 @@ using Luxor # hide
 @drawsvg begin # hide
 background("black") # hide
 setline(0.5) # hide
-circlepath(O, 200, :path)
+circlepath(O, 200, action = :path)
 fromshape = pathtopoly()
 toshape = [Point(0, -250), O, Point(0, 250)] # minimum of 3
 for i in 0:0.015:1
     sethue(i, 1 - i, i/2 + 0.5)
     morph = polymorph(fromshape, toshape, i, easingfunction=easeinoutsine)
-    poly(first(morph), :stroke, close=true)
+    poly(first(morph), action = :stroke, close=true)
 end
 end # hide
 ```
@@ -1410,16 +1410,16 @@ using Luxor # hide
 @drawsvg begin # hide
 background(0.15, 0.15, 0.1) # hide
 # build first polygon
-ngon(O + (-350, 0), 40, 8, π, :path)
+ngon(O + (-350, 0), 40, 8, π, action = :path)
 newsubpath()
-box(O + (-350, 0), 30, 30, reversepath=true, :path)
+box(O + (-350, 0), 30, 30, reversepath=true, action = :path)
 pgon1 = pathtopoly()
 
 # build second polygon
 newpath()
-box(O + (350, 0), 60, 60, :path)
+box(O + (350, 0), 60, 60, action = :path)
 newsubpath()
-ngon(O + (350, 0), 20, 8, π, reversepath=true, :path)
+ngon(O + (350, 0), 20, 8, π, reversepath=true, action = :path)
 pgon2 = pathtopoly()
 
 # draw morphs
@@ -1456,10 +1456,10 @@ function frame(scene, framenumber)
 
     fontface("WorkSans-Black")
     fontsize(130)
-    textoutlines("Python", O + (0, -100), halign=:center, valign=:middle, :path)
+    textoutlines("Python", O + (0, -100), halign=:center, valign=:middle, action = :path)
     fromtext = pathtopoly()
 
-    textoutlines("Julia", O + (0, 100), halign=:center, valign=:middle, :path)
+    textoutlines("Julia", O + (0, 100), halign=:center, valign=:middle, action = :path)
     totext   = pathtopoly()
 
     newpath()
@@ -1476,7 +1476,7 @@ function frame(scene, framenumber)
 
     pm = polymorph(python_logo, julia_logo, i)
     for p in pm
-        poly(p, :path)
+        poly(p, action = :path)
     end
     fillpath()
 end
@@ -1510,19 +1510,19 @@ Random.seed!(5) # hide
 setline(0.3)
 sethue("thistle")
 c = star(O, 120, 7, 0.2, vertices=true)
-poly(c, :fillstroke, close=true)
+poly(c, action = :fillstroke, close=true)
 for n in 1:15
     pt1 = Point(rand(-250:250, 2)...)
     pt2 = Point(rand(-250:250, 2)...)
     ips = intersectlinepoly(pt1, pt2, c)
     if !isempty(ips)
             sethue("grey20")
-            line(pt1, pt2, :stroke)
+            line(pt1, pt2, action = :stroke)
             randomhue()
-            circle.(ips, 2, :fill)
+            circle.(ips, 2, action = :fill)
     else
         sethue("grey80")
-        line(pt1, pt2, :stroke)
+        line(pt1, pt2, action = :stroke)
     end
 end
 finish() # hide
@@ -1544,11 +1544,11 @@ setopacity(0.8) # hide
 pentagon = ngon(O, 250, 5, vertices=true)
 square = box(O + (80, 20), 280, 400, vertices=true)
 
-poly(pentagon, :stroke, close=true)
-poly(square, :stroke, close=true)
+poly(pentagon, action = :stroke, close=true)
+poly(square, action = :stroke, close=true)
 
 sethue("orange")
-circle.(polyintersect(pentagon, square), 8, :fill)
+circle.(polyintersect(pentagon, square), 8, action = :fill)
 
 finish() # hide
 nothing # hide
@@ -1579,14 +1579,14 @@ for (n, tri) in enumerate(triangles)
             Luxor.julia_red,  
             Luxor.julia_green
             ][mod1(n, end)])
-    poly(offsetpoly(tri, -2), :fill, close = true)
+    poly(offsetpoly(tri, -2), action = :fill, close = true)
     sethue("white")
     text(string(n), polycentroid(tri), halign=:center)
 end
 
 sethue("red")
 setline(3)
-poly(pts, :stroke, close=true)
+poly(pts, action = :stroke, close=true)
 
 finish() # hide
 nothing # hide

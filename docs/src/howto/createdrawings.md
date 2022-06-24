@@ -33,7 +33,7 @@ If you're using Juno or VS Code, then PNG and SVG files should appear in the Plo
 The `@draw`, `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
 
 ```julia
-@svg circle(Point(0, 0), 20, :stroke) 50 50
+@svg circle(Point(0, 0), 20, action = :stroke) 50 50
 ```
 
 expands to
@@ -43,7 +43,7 @@ Drawing(50, 50, "luxor-drawing-(timestamp).svg")
 origin()
 background("white")
 sethue("black")
-circle(Point(0, 0), 20, :stroke)
+circle(Point(0, 0), 20, action = :stroke)
 finish()
 preview()
 ```
@@ -54,7 +54,7 @@ They're just short-cuts - designed to save a bit of typing. You can omit the wid
 @svg begin
     setline(10)
     sethue("purple")
-    circle(Point(0, 0), 20, :fill)
+    circle(Point(0, 0), 20, action = :fill)
 end
 ```
 
@@ -63,7 +63,7 @@ or (less nicely):
 ```julia
 @svg (setline(10);
       sethue("purple");
-      circle(Point(0, 0), 20, :fill)
+      circle(Point(0, 0), 20, action = :fill)
      )
 ```
 
@@ -85,7 +85,7 @@ background(1, 1, 1, 0)
 origin()
 setline(30)
 sethue("green") # assumes current opacity
-box(BoundingBox() - 50, :stroke)
+box(BoundingBox() - 50, action = :stroke)
 finish()
 preview()
 ```
@@ -147,7 +147,7 @@ using Luxor, PlutoUI, Colors
     setopacity(0.8)
     for i in 0:0.1:1
         sethue(HSB(360i, .8, .8))
-        squircle(O, 50, 50, :fill, rt = x * i)
+        squircle(O, 50, 50, action = :fill, rt = x * i)
         rotate(2π/y)
     end
 end 100 100
@@ -182,8 +182,8 @@ using Interact, Colors, Luxor
     d = Drawing(300, 300, :svg)
     sethue(Colors.HSB(h, s, b))
     origin()
-    circle(Point(0, 0), 100, :fill)  
-    circle(polar(110, deg2rad(h)), 10, :fill)
+    circle(Point(0, 0), 100, action = :fill)  
+    circle(polar(110, deg2rad(h)), 10, action = :fill)
     sethue("black")
     label(string(h, "°"), deg2rad(h), polar(120, deg2rad(h)))
         finish()

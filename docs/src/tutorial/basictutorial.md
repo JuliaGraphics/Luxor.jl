@@ -44,7 +44,7 @@ Here's an easy shortcut for making drawings in Luxor. It's a Julia macro, and it
 ```julia
 @png begin
     text("Hello world")
-    circle(Point(0, 0), 200, :stroke)
+    circle(Point(0, 0), 200, action = :stroke)
 end
 ```
 
@@ -55,7 +55,7 @@ background("white")
 origin()
 sethue("black")
 text("Hello world")
-circle(Point(0, 0), 200, :stroke)
+circle(Point(0, 0), 200, action = :stroke)
 finish()
 ```
 
@@ -84,7 +84,7 @@ Once more, with more black, and some rulers:
 ```julia
 @png begin
     text("Hello again, world!", Point(0, 250))
-    circle(Point(0, 0), 200, :fill)
+    circle(Point(0, 0), 200, action = :fill)
     rulers()
 end
 ```
@@ -96,7 +96,7 @@ background("white")
 origin()
 sethue("black")
 text("Hello again, world!", Point(0, 250))
-circle(Point(0, 0), 200, :fill)
+circle(Point(0, 0), 200, action = :fill)
 rulers()
 finish()
 ```
@@ -141,13 +141,13 @@ Next, make two points, A and B, which will lie either side of the origin point. 
 With two points defined, draw a line from A to B, and stroke it.
 
 ```julia
-    line(A, B, :stroke)
+    line(A, B, action = :stroke)
 ```
 
 Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter **O** as a short cut for Origin, ie the `Point(0, 0)`.
 
 ```julia
-    circle(O, radius, :stroke)
+    circle(O, radius, action = :stroke)
 end
 ```
 
@@ -160,8 +160,8 @@ radius=80
 setdash("dot")
 sethue("gray30")
 A, B = [Point(x, 0) for x in [-radius, radius]]
-line(A, B, :stroke)
-circle(O, radius, :stroke)
+line(A, B, action = :stroke)
+circle(O, radius, action = :stroke)
 finish()
 nothing
 ```
@@ -179,15 +179,15 @@ Edit your previous code by adding instructions to draw some labels and circles:
     setdash("dot")
     sethue("gray30")
     A, B = [Point(x, 0) for x in [-radius, radius]]
-    line(A, B, :stroke)
-    circle(Point(0, 0), radius, :stroke)
+    line(A, B, action = :stroke)
+    circle(Point(0, 0), radius, action = :stroke)
 # >>>>
     label("A", :NW, A)
     label("O", :N,  O)
     label("B", :NE, B)
 
-    circle.([A, O, B], 2, :fill)
-    circle.([A, B], 2radius, :stroke)
+    circle.([A, O, B], 2, action = :fill)
+    circle.([A, B], 2radius, action = :stroke)
 end
 ```
 
@@ -201,13 +201,13 @@ setdash("dot")
 sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
-line(A, B, :stroke)
-circle(O, radius, :stroke)
+line(A, B, action = :stroke)
+circle(O, radius, action = :stroke)
 label("A", :NW, A)
 label("O", :N, O)
 label("B", :NE, B)
-circle.([A, O, B], 2, :fill)
-circle.([A, B], 2radius, :stroke)
+circle.([A, O, B], 2, action = :fill)
+circle.([A, B], 2radius, action = :stroke)
 finish()
 ```
 ![point example](../assets/figures/tutorial-egg-2.png)
@@ -225,15 +225,15 @@ We're now ready to tackle the job of finding the coordinates of the two points w
     setdash("dot")
     sethue("gray30")
     A, B = [Point(x, 0) for x in [-radius, radius]]
-    line(A, B, :stroke)
-    circle(O, radius, :stroke) # use letter O for Point(0, 0)
+    line(A, B, action = :stroke)
+    circle(O, radius, action = :stroke) # use letter O for Point(0, 0)
 
     label("A", :NW, A)
     label("O", :N,  O)
     label("B", :NE, B)
 
-    circle.([A, O, B], 2, :fill)
-    circle.([A, B], 2radius, :stroke)
+    circle.([A, O, B], 2, action = :fill)
+    circle.([A, B], 2radius, action = :stroke)
 ```
 
 The [`intersectionlinecircle`](@ref) takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.
@@ -246,7 +246,7 @@ The line is specified with two points with an x value of 0 and y values of ± tw
         intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 
     if nints == 2
-        circle.([C, D], 2, :fill)
+        circle.([C, D], 2, action = :fill)
         label.(["D", "C"], :N, [D, C])
     end
 
@@ -263,17 +263,17 @@ setdash("dot")
 sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
-line(A, B, :stroke)
-circle(O, radius, :stroke)
+line(A, B, action = :stroke)
+circle(O, radius, action = :stroke)
 label("A", :NW, A)
 label("O", :N, O)
 label("B", :NE, B)
-circle.([A, O, B], 2, :fill)
-circle.([A, B], 2radius, :stroke)
+circle.([A, O, B], 2, action = :fill)
+circle.([A, B], 2radius, action = :stroke)
 
 nints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
-    circle.([C, D], 2, :fill)
+    circle.([C, D], 2, action = :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
@@ -296,7 +296,7 @@ Add some more lines to your code:
 
     nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
     if nints == 2
-        circle(C1, 3, :fill)
+        circle(C1, 3, action = :fill)
         label("C1", :N, C1)
     end
 
@@ -313,23 +313,23 @@ setdash("dot")
 sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
-line(A, B, :stroke)
-circle(O, radius, :stroke)
+line(A, B, action = :stroke)
+circle(O, radius, action = :stroke)
 label("A", :NW, A)
 label("O", :N, O)
 label("B", :NE, B)
-circle.([A, O, B], 2, :fill)
-circle.([A, B], 2radius, :stroke)
+circle.([A, O, B], 2, action = :fill)
+circle.([A, B], 2radius, action = :stroke)
 
 nints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
-    circle.([C, D], 2, :fill)
+    circle.([C, D], 2, action = :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
 nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
 if nints == 2
-    circle(C1, 3, :fill)
+    circle(C1, 3, action = :fill)
     label("C1", :N, C1)
 end
 finish()
@@ -346,7 +346,7 @@ To find (and draw) these points is straightforward. We'll mark these as intermed
     nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
     nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-    circle.([I1, I2, I3, I4], 2, :fill)
+    circle.([I1, I2, I3, I4], 2, action = :fill)
 ```
 
 So we can use the [`distance`](@ref) function to find the distance between two points, and it's simple enough to compare the values and choose the shortest.
@@ -368,7 +368,7 @@ So we can use the [`distance`](@ref) function to find the distance between two p
 
     label("ip1", :N, ip1)
     label("ip2", :N, ip2)
-    circle(C1, distance(C1, ip1), :stroke)
+    circle(C1, distance(C1, ip1), action = :stroke)
 
 end
 ```
@@ -383,23 +383,23 @@ setdash("dot")
 sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
-line(A, B, :stroke)
-circle(O, radius, :stroke)
+line(A, B, action = :stroke)
+circle(O, radius, action = :stroke)
 label("A", :NW, A)
 label("O", :N, O)
 label("B", :NE, B)
-circle.([A, O, B], 2, :fill)
-circle.([A, B], 2radius, :stroke)
+circle.([A, O, B], 2, action = :fill)
+circle.([A, B], 2radius, action = :stroke)
 
 nints, C, D = intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
-    circle.([C, D], 2, :fill)
+    circle.([C, D], 2, action = :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
 nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
 if nints == 2
-    circle(C1, 3, :fill)
+    circle(C1, 3, action = :fill)
     label("C1", :N, C1)
 end
 
@@ -408,7 +408,7 @@ end
 nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
 nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-circle.([I1, I2, I3, I4], 2, :fill)
+circle.([I1, I2, I3, I4], 2, action = :fill)
 
 if distance(C1, I1) < distance(C1, I2)
     ip1 = I1
@@ -423,7 +423,7 @@ end
 
 label("ip1", :N, ip1)
 label("ip2", :N, ip2)
-circle(C1, distance(C1, ip1), :stroke)
+circle(C1, distance(C1, ip1), action = :stroke)
 
 finish()
 ```
@@ -439,7 +439,7 @@ The shape consists of four curves, so we'll use the `:path` action. Instead of i
 
     label("ip1", :N, ip1)
     label("ip2", :N, ip2)
-    circle(C1, distance(C1, ip1), :stroke)
+    circle(C1, distance(C1, ip1), action = :stroke)
 
 # >>>>
 
@@ -472,24 +472,24 @@ setdash("dot")
 sethue("gray30")
 
 A, B = [Point(x, 0) for x in [-radius, radius]]
-line(A, B, :stroke)
-circle(O, radius, :stroke)
+line(A, B, action = :stroke)
+circle(O, radius, action = :stroke)
 label("A", :NW, A)
 label("O", :N, O)
 label("B", :NE, B)
-circle.([A, O, B], 2, :fill)
-circle.([A, B], 2radius, :stroke)
+circle.([A, O, B], 2, action = :fill)
+circle.([A, B], 2radius, action = :stroke)
 
 nints, C, D =
     intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
 if nints == 2
-    circle.([C, D], 2, :fill)
+    circle.([C, D], 2, action = :fill)
     label.(["D", "C"], :N, [D, C])
 end
 
 nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
 if nints == 2
-    circle(C1, 3, :fill)
+    circle(C1, 3, action = :fill)
     label("C1", :N, C1)
 end
 
@@ -498,7 +498,7 @@ end
 nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
 nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
 
-circle.([I1, I2, I3, I4], 2, :fill)
+circle.([I1, I2, I3, I4], 2, action = :fill)
 
 if distance(C1, I1) < distance(C1, I2)
     ip1 = I1
@@ -513,7 +513,7 @@ end
 
 label("ip1", :N, ip1)
 label("ip2", :N, ip2)
-circle(C1, distance(C1, ip1), :stroke)
+circle(C1, distance(C1, ip1), action = :stroke)
 
 setline(5)
 setdash("solid")
@@ -566,7 +566,7 @@ function egg(radius, action=:none)
 end
 ```
 
-This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is the required action.
+This keeps all the intermediate code and calculations safely hidden away, and it's now possible to draw a Euclidean egg by calling `egg(100, action = :stroke)`, for example, where `100` is the required width (radius), and `:stroke` is the required action.
 
 (Of course, there's no error checking. This should be added if the function is to be used for any serious applications...!)
 
@@ -681,7 +681,7 @@ The [`pathtopoly`](@ref) function converts the current path made by `egg(160, :p
 
 ```julia
     pc = polycentroid(pgon)
-    circle(pc, 5, :fill)
+    circle(pc, 5, action = :fill)
 ```
 
 [`polycentroid`](@ref) finds the centroid of the new polygon.
@@ -692,7 +692,7 @@ This loop steps through the points and moves every odd-numbered one halfway towa
     for pt in 1:2:length(pgon)
         pgon[pt] = between(pc, pgon[pt], 0.5)
     end
-    poly(pgon, :stroke)
+    poly(pgon, action = :stroke)
 end
 ```
 
@@ -733,12 +733,12 @@ egg(160, :path)
 sethue("black")
 pgon = first(pathtopoly())
 pc = polycentroid(pgon)
-circle(pc, 5, :fill)
+circle(pc, 5, action = :fill)
 
 for pt in 1:2:length(pgon)
     pgon[pt] = between(pc, pgon[pt], 0.5)
 end
-poly(pgon, :stroke)
+poly(pgon, action = :stroke)
 finish()
 ```
 ![point example](../assets/figures/tutorial-egg-8.png)
@@ -760,7 +760,7 @@ For a final experiment with our `egg` function, here's Luxor's [`offsetpoly`](@r
     for i in 30:-3:-8
         randomhue()
         op = offsetpoly(pgon, i)
-        poly(op, :stroke, close=true)
+        poly(op, action = :stroke, close=true)
     end
 end 800 800 "spike-egg.png"
 ```
@@ -802,7 +802,7 @@ Random.seed!(42)
 egg(80, :path)
 pgon = first(pathtopoly()) |> unique
 pc = polycentroid(pgon)
-circle(pc, 5, :fill)
+circle(pc, 5, action = :fill)
 
 for pt in 1:2:length(pgon)
     pgon[pt] = between(pc, pgon[pt], 0.8)
@@ -811,7 +811,7 @@ end
 for i in 30:-3:-8
     randomhue()
     op = offsetpoly(pgon, i)
-    poly(op, :stroke, close=true)
+    poly(op, action = :stroke, close=true)
 end
 
 finish()
@@ -840,7 +840,7 @@ using Luxor, Colors
        for i in 360:-4:1
            sethue(Colors.HSV(i, 1.0, 0.8))
            rotate(π/30)
-           ngon(O, i, 5, 0, :stroke)
+           ngon(O, i, 5, 0, action = :stroke)
        end
     end
     clipreset()
@@ -891,7 +891,7 @@ eg(:clip)
    for i in 360:-4:1
        sethue(Colors.HSV(i, 1.0, 0.8))
        rotate(π/30)
-       ngon(O, i, 5, 0, :stroke)
+       ngon(O, i, 5, 0, action = :stroke)
    end
 end
 clipreset()

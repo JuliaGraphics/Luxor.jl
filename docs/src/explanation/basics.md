@@ -17,9 +17,9 @@ parameters, and so on. Subsequent graphics use the new
 state, but the graphics you've already drawn are unchanged.
 
 Many of the drawing functions have an *action* argument,
-supplied either as a symbol argument (eg `:fill`) or as a
+supplied as a
 keyword argument (eg `action=:fill`). This action determines
-what happens to the current path. It can be  `:fill`,
+what happens to the current path. It can be `:fill`,
 `:stroke`, `:fillstroke`, `:fillpreserve`,
 `:strokepreserve`, `:clip`, or `:path`. The default is
 usually `:path`, ie. add the graphics to the current path.
@@ -57,12 +57,12 @@ By default, `Point(0, 100)` is below `Point(0, 0)`.
 using Luxor
 svgimage = @drawsvg begin
 sethue("antiquewhite")
-box(boxtopleft(BoundingBox() + (40, 40)), boxbottomright(BoundingBox() - (40, 40)), :fill)
+box(boxtopleft(BoundingBox() + (40, 40)), boxbottomright(BoundingBox() - (40, 40)), action = :fill)
 translate(boxtopleft(BoundingBox() + (40, 40)))
 sethue("black")
-circle(Point(0, 0), 6, :fill)
+circle(Point(0, 0), 6, action = :fill)
 label("(0, 0)", :se, Point(0, 0), offset=15)
-circle(Point(0, 100), 6, :fill)
+circle(Point(0, 100), 6, action = :fill)
 label("(0, 100)", :se, Point(0, 100), offset=15)
 rulers()
 end
@@ -149,7 +149,7 @@ background("white") # hide
 origin() # hide
 sethue("blue") # hide
 rulers()
-box.([O + (i, 0) for i in range(0, stop=200, length=5)], 20, 20, :stroke)
+box.([O + (i, 0) for i in range(0, stop=200, length=5)], 20, 20, action = :stroke)
 finish() # hide
 nothing # hide
 ```
@@ -169,7 +169,7 @@ Because Julia allows you to combine numbers and variables directly, you can supp
 For example:
 
 ```julia
-rect(Point(20mm, 2cm), 5inch, (22/7)inch, :fill)
+rect(Point(20mm, 2cm), 5inch, (22/7)inch, action = :fill)
 ```
 
 # The drawing surface
@@ -178,7 +178,9 @@ The [`origin`](@ref) function moves the 0/0 point to the center of the drawing. 
 
 You can use functions like [`scale`](@ref), [`rotate`](@ref), and [`translate`](@ref) to change the coordinate system.
 
-[`background`](@ref) fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. If there is a current clipping region, [`background`](@ref) fills just that region. In the next example, the first [`background`](@ref) fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the `Table` iterator:
+[`background`](@ref) usually fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. 
+
+If there is a current clipping region, [`background`](@ref) fills just that region. In the next example, the first [`background`](@ref) fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the `Table` iterator:
 
 ```@example
 using Luxor # hide
@@ -190,7 +192,7 @@ for (pos, n) in table
     box(pos,
         table.colwidths[table.currentcol],
         table.rowheights[table.currentrow],
-        :clip)
+        action = :clip)
     background(randomhue()...)
     clipreset()
 end
@@ -222,9 +224,9 @@ The `@layer` macro is a synonym for a [`gsave`](@ref)...[`grestore`](@ref) pair.
 
 ```julia
 @svg begin
-    circle(Point(0, 0), 100, :stroke)
+    circle(Point(0, 0), 100, action = :stroke)
     @layer (sethue("red"); rule(Point(0, 0)); rule(O, π/2))
-    circle(Point(0, 0), 200, :stroke)
+    circle(Point(0, 0), 200, action = :stroke)
 end
 ```
 
@@ -232,13 +234,13 @@ or
 
 ```julia
 @svg begin
-    circle(Point(0, 0), 100, :stroke)
+    circle(Point(0, 0), 100, action = :stroke)
     @layer begin
         sethue("red")
         rule(Point(0, 0))
         rule(Point(0, 0), pi/2)
     end
-    circle(Point(0, 0), 200, :stroke)
+    circle(Point(0, 0), 200, action = :stroke)
 end
 ```
 

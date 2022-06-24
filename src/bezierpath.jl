@@ -228,7 +228,8 @@ drawbezierpath(bezierpath; action=:none, close=true) =
     drawbezierpath(bezierpath, action; close=close)
 
 """
-    drawbezierpath(bps::BezierPathSegment, action=:none;
+    drawbezierpath(bps::BezierPathSegment;
+        action=:none,
         close=false)
 
 Draw the Bézier path segment, and apply the action, such as `:none`, `:stroke`,
@@ -236,8 +237,9 @@ Draw the Bézier path segment, and apply the action, such as `:none`, `:stroke`,
 
 TODO Return something more useful than a Boolean.
 """
-function drawbezierpath(bps::BezierPathSegment, action=:none;
-        close=false)
+function drawbezierpath(bps::BezierPathSegment;
+        action = :none,
+        close = false)
     move(bps.p1)
     curve(bps.cp1, bps.cp2, bps.p2)
     if close == true
@@ -245,6 +247,10 @@ function drawbezierpath(bps::BezierPathSegment, action=:none;
     end
     do_action(action)
 end
+
+# allow drawbezierpath(bps, :stroke)
+drawbezierpath(bps::BezierPathSegment, action::Symbol; close = true) =
+    drawbezierpath(bps, action=action, close=close)
 
 drawbezierpath(bpsa::Array{BezierPathSegment, 1}, action=:none) =
    foreach(b -> drawbezierpath(b, action), bpsa)
