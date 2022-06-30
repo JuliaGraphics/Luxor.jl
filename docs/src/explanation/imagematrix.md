@@ -1,13 +1,29 @@
-# Drawing as image matrix
+# Drawings as image matrices
 
 # Images as matrices
 
-While drawing, you can copy the current graphics in a
-drawing as a matrix of colored pixels, using the
-[`image_as_matrix`](@ref) function. And with the
-[`@imagematrix`](@ref) macro, you can create your drawing
-with vector graphics in the usual way, and then return the
+While drawing a PNG drawing, you can at any time copy the current graphics in a drawing as a matrix of colored pixels, using the [`image_as_matrix`](@ref) function. 
+
+With the
+[`@imagematrix`](@ref) macro, you can create a drawing
+in the usual way, and then return the
 result as a matrix of colored pixels.
+
+This code draws a very small PNG image and also uses the `image_as_matrix()` function to stores the pixels in `mat` as a `25×25 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):`. 
+
+```julia
+using Luxor
+Drawing(25, 25, :png)
+origin()
+background(randomhue()...)
+sethue("red")
+fontsize(20)
+fontface("Georgia")
+text("42", halign=:center, valign=:middle)
+mat = image_as_matrix()
+finish()
+preview()
+````
 
 The next example draws an ampersand and then processes the
 pixels further in Images.jl.

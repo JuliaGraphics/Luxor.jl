@@ -157,7 +157,7 @@ nothing # hide
 This example generates about 650,000 paths, which is why
 it’s better to target PNG rather than SVG or PDF for this
 example. Also for speed, the “dots” are actually simple
-paths, which are slightly quicker to draw than circles or
+square paths, which are slightly quicker to draw than circles or
 polygons.
 
 ## More animations

@@ -205,7 +205,7 @@ Functions that help with geometry include:
 
 ## Triangle centers
 
-To find the center  of a triangle, use one of:
+To find the center of a triangle, use one of:
 
 - [`trianglecircumcenter`](@ref) center of circumcircle/intersection of the perpendicular bisectors.
 
@@ -383,7 +383,7 @@ center of the drawing—see [`origin`](@ref)). Use
 left corner.
 
 This example draws circles at three points: at two of the
-drawing's corners and the midway point between them:
+drawing's corners and at the midway point between them:
 
 ```@example
 using Luxor # hide
@@ -435,7 +435,7 @@ nothing # hide
 
 ![bounding box of polygon](../assets/figures/bboxpoly.png)
 
-The resulting bounding box objects can be passed to [`box`](@ref) or [`poly`](@ref) to be drawn.
+The resulting bounding boxes can be passed to [`box`](@ref) or [`poly`](@ref) to be drawn.
 
 To convert a bounding box `b` into a box, use `box(b, vertices=true)` or `convert(Vector{Point}, BoundingBox())`.
 

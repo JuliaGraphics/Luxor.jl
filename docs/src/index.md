@@ -28,8 +28,6 @@ Install the package using the package manager:
 ] add Luxor
 ```
 
-Cairo.jl and Colors.jl will be installed if necessary.
-
 To use Luxor, type:
 
 ```julia

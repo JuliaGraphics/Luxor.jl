@@ -8,12 +8,9 @@ DocTestSetup = quote
 In Luxor, there are different ways of working with graphical
 items:
 
-- You can either draw them immediately, ie create lines and curves to form a **path** on the drawing, paint them, and they're then fixed.
+- Draw them immediately. Create lines and curves to build a **path** on the drawing. When you paint the path, the graphics are ‘fixed’, and you move on to the next.
 
-- You can construct geometric objects containing lists of
-  points for further processing. Watch out for a
-  `vertices=true` option, which returns coordinate data
-  rather than drawing a path shape.
+- Construct arrays of points - **polygons** - which you can draw at some later point. Watch out for a `vertices=true` option, which returns coordinate data rather than adding shapes to the current path.
 
 - You can combine these two approaches: create a path from lines and curves (and jumps), then store the path, ready for drawing later on.
 
@@ -123,7 +120,7 @@ box(Point(0, 0), 100, 100)
 ```
 
 To draw a box/rectangle with rounded corners, supply one or
-four values for corner radius.
+four values for corner radii.
 
 ```@example
 using Luxor # hide
@@ -306,7 +303,7 @@ nothing # hide
 
 ![even more ellipses](../assets/figures/ellipses_2.png)
 
-The [`ellipseinquad`](@ref) function constructs an ellipse that fits in a four-sided quadrilateral.
+The [`ellipseinquad`](@ref) function constructs an ellipse that fits inside a four-sided quadrilateral.
 
 ```@example
 using Luxor # hide
@@ -378,7 +375,6 @@ origin() # hide
 background("antiquewhite") # hide
 setline(1) # hide
 sethue("black") # hide
-
 
 point = Point(-150, 0)
 circlecenter = Point(150, 0)
@@ -579,13 +575,11 @@ nothing # hide
 
 ## Paths and positions
 
-A path is a sequence of lines and curves. You can add lines and curves to the current path, then use [`closepath`](@ref) to join the last point to the first.
+A path is a sequence of lines and curves. You can add lines and curves to the current path with various functions, then use [`closepath`](@ref) to join the last point to the first. Once you fill or stroke it, the path is emptied, and you start again.
 
 A path can have subpaths, created with[` newsubpath`](@ref), which can form holes.
 
-There is a 'current position' which you can set with [`move`](@ref), and can use implicitly in functions like [`line`](@ref), [`rline`](@ref), [`rmove`](@ref), [`text`](@ref), [`newpath`](@ref), [`closepath`](@ref), [`arc`](@ref), and [`curve`](@ref).
-
-There is a current point. Use [`currentpoint`](@ref) and [`hascurrentpoint`](@ref).
+There is a 'current point' which you can set with [`move`](@ref), and which is updated after functions like [`line`](@ref), [`rline`](@ref), [`rmove`](@ref), [`text`](@ref), [`newpath`](@ref), [`closepath`](@ref), [`arc`](@ref), and [`curve`](@ref). Use [`currentpoint`](@ref) and [`hascurrentpoint`](@ref) to find out about it.
 
 You can store a path for later use with [`storepath`](@ref) and draw it with [`drawpath`](@ref). See [Stored paths](@ref).
 
@@ -593,7 +587,7 @@ For more about paths, see [Polygons and paths](@ref) and [Paths versus polygons]
 
 ## Lines
 
-Use [`line`](@ref) and [`rline`](@ref) to draw straight lines. `line(pt1, pt2, action)` draws a line between two points. `line(pt)` adds a line to the current path going from the current position to the point. `rline(pt)` adds a line relative to the current position.
+Use [`line`](@ref) and [`rline`](@ref) to draw straight lines. `line(pt1, pt2, action)` makes a path consisting of a line between two points. `line(pt)` adds a line to the current path going from the most recent current point to `pt`. `rline(pt)` adds a line relative to the current point.
 
 You can use [`rule`](@ref) to draw a horizontal line through a point. Supply an angle for lines at an angle to the current x-axis.
 
@@ -693,7 +687,7 @@ nothing # hide
 ### Decoration
 
 The [`arrow`](@ref) functions allow you to specify
-decorations - graphics at one or more points somewhere along
+**decorations** - graphics at one or more points somewhere along
 the shaft. For example, say you want to draw a number and a
 circle at the midpoint of an arrow's shaft, you can define a
 function that draws text `t` in a circle of radius `r` like
@@ -782,7 +776,7 @@ end 800 350
 
 To make custom arrowheads, you can define a three-argument
 function that draws them to your own design. This function
-takes:
+takes the arguments:
 
 - the point at the end of the arrow's shaft
 
@@ -1069,7 +1063,7 @@ nothing # hide
 
 ## Stars and crosses
 
-Use [`star`](@ref) to make a star. You can draw it immediately, or use the points it can create.
+Use [`star`](@ref) to make a star. You can draw it immediately, or use the array of points it can create.
 
 ```@example
 using Luxor # hide
@@ -1222,18 +1216,22 @@ end
 end # hide
 ```
 
-After you've stored a path, the current path is still
-active. You might want to use `newpath()` to start a new
-one. The `drawpath()` function will start a new path but
-there is an option to continue drawing on the existing one.
+!!! note
+
+    After you've stored the current path, it's still
+    active. You might want to use `newpath()` before starting the next
+    one. The `drawpath()` function will by default start a new path but
+    there is an option to continue drawing the current one.
 
 Other functions for working with stored paths include:
 
-- [`drawpath`](@ref) draw part of a path
+- [`drawpath`](@ref) draw all or part of a stored path using the current graphics state
 
-- [`pathsample`](@ref) resample the path
+- [`pathsample`](@ref) resample the stored path
 
-- [`pathlength`](@ref) find the length of a path
+- [`pathlength`](@ref) find the length of a stored path
+
+- [`BoundingBox`](@ref) find the bounding box of a stored path
 
 ## Julia logos
 
@@ -1275,7 +1273,7 @@ nothing # hide
 
 ![julia logo and circles](../assets/figures/julia-logo.png)
 
-There are various options for `julialogo()` to control coloring ans positioning.
+There are various options for `julialogo()` to control coloring and positioning.
 
 The four standard Julia colors are available as RGB tuples as `Luxor.julia_blue`, `Luxor.julia_green`, `Luxor.julia_purple`,  `Luxor.julia_red`:
 

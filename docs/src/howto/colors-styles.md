@@ -11,17 +11,17 @@ For color definitions and conversions, you can use
 [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).
 
 [`setcolor`](@ref) and [`sethue`](@ref) will apply a single
-solid or transparent color to new graphics.
+color to all new graphics.
 
 [`setblend`](@ref) will apply a smooth transition between
-two or more colors to new graphics.
+two or more colors to all new graphics.
 
-[`setmesh`](@ref) will apply a color mesh to new graphics.
+[`setmesh`](@ref) will apply a color mesh to all new graphics.
 
 The difference between the [`setcolor`](@ref) and
 [`sethue`](@ref) functions is that [`sethue`](@ref) doesn't
-change alpha opacity (transparency), so you can change the
-hue without changing the current alpha opacity
+change the current alpha opacity (transparency), so you can change the
+current color without changing the current alpha opacity
 (transparency) value.
 
 Named colors, such as "gold", or "lavender", can be found in
@@ -33,7 +33,6 @@ Drawing(800, 800, "../assets/figures/colors.svg") # hide
 
 origin() # hide
 background("white") # hide
-fontface("AvenirNextCondensed-Regular") # hide
 fontsize(8)
 cols = sort(collect(Colors.color_names))
 ncols = 15
@@ -156,7 +155,7 @@ nothing # hide
 
 ![more dashes](../assets/figures/moredashes.svg)
 
-Notice that odd-numbered patterns flip the ink and skip numbers each time through.
+Notice that odd-numbered patterns flip the ink and skip values each time through.
 
 ## Gradient blends
 
@@ -168,7 +167,7 @@ select a solid color.
 
 You can make linear or radial blends. Use [`blend`](@ref) in either case.
 
-The current blend affects subsequent stroked and filled graphics.
+After `setblend()`, the current blend affects all subsequent stroked and filled graphics.
 
 To create a simple linear blend between two colors, supply two points and two colors to [`blend`](@ref):
 
@@ -531,7 +530,7 @@ drawbezierpath(bp, :stroke)
 mesh1 = mesh(bp, [
     Colors.RGBA(1, 0, 0, 1),   # bottom left, red
     Colors.RGBA(1, 1, 1, 0.0), # top left, transparent
-    Colors.RGB(0, 0, 1),      # top right, blue
+    Colors.RGB(0, 0, 1),       # top right, blue
     Colors.RGB(1, 0, 1)        # bottom right, purple
     ])
 setmesh(mesh1)

@@ -5,11 +5,11 @@ a series of PNG images into an animated GIF.
 
 !!! note
 
-    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl).
+    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl), which is designed specifically for the purpose.
 
 ## 1: A Julia spinner
 
-The first thing to do is to create a `Movie` object. This acts as a useful object that we can pass from function to function.
+The first thing to do is to create a `Movie` object. This acts as a useful way to pass information from function to function.
 
 ```julia
 using Luxor
@@ -18,9 +18,9 @@ mymovie = Movie(400, 400, "mymovie")
 
 The resulting animation will be 400 × 400 pixels.
 
-To make the graphics, define a function called `frame()` (it doesn't have to be called that, but it's a good name) which accepts two arguments, a Scene object, and a framenumber (integer).
+To make the graphics, define a function called `frame()` (it doesn't have to be called that, but it's a good name) which accepts two arguments, a Scene object, and a framenumber (which  will be an integer).
 
-A movie consists of one or more scenes. A scene is an object which determines how many drawings should be made into a sequence and what function should be used to make them. The framenumber lets you keep track of where you are in a scene.
+A movie consists of one or more scenes. A scene determines how many Luxor drawings should be made into a sequence and what function should be used to make them. The framenumber lets you keep track of where you are in a scene.
 
 Here's a simple `frame` function which creates a drawing.
 
@@ -40,16 +40,14 @@ This function is responsible for drawing all the graphics
 for a single frame. The incoming frame number is converted
 (normalized) to lie between 0 and 1 - ie. between the first
 frame and the last frame of the scene. It's multiplied by 2π
-and used as input to `rotate`.
-
-So as the framenumber goes from 1 to `n`, each drawing will
+and used as input to `rotate`. So, as the framenumber goes from 1 to the last frame in the scene, each drawing will
 be rotated by an increasing angle from 0 to 2π. For example,
 for a scene with 60 frames, framenumber 30 will set a
 rotation value of about `2π * 0.5`.
 
-The Scene object has details about the number of frames for this scene, the number of times the `frame` function is called.
+The Scene object has details about the number of frames for this scene, including the number of times the `frame` function is called.
 
-To actually build the animation, the [`animate`](@ref) function takes an array of one or more scenes and builds a GIF.
+To actually build the animation, the [`animate`](@ref) function takes a movie and an array of one or more scenes and creates all the drawings required. It can also build a GIF.
 
 ```julia
 animate(mymovie,
@@ -65,14 +63,14 @@ animate(mymovie,
 Obviously, if you increase the range from 1:60 to, say,
 1:300, you'll generate 300 drawings rather than 60, and the
 rotation will take longer and will be much
-smoother. Unless, of course, you change the framerate to be
+smoother. Of course, you could change the framerate to be
 something other than the default `30`.
 
 ## 2: Combining scenes
 
 In the next example, we'll construct an animation that uses different scenes.
 
-Consider this animation, showing the sun's position for each hour of a 24 hour day. (It's only a model...)
+Consider this animation, showing the sun’s position for each hour of a 24 hour day. (It’s only a model...)
 
 ![sun24 animation](../assets/figures/sun24.gif)
 
@@ -148,7 +146,7 @@ ground    = Scene(sun24demo, groundfunction, 0:23)       # every frame
 ```
 
 Finally, the `animate` function scans all the scenes in the
-scenelist for the  movie, and calls the specified functions for each
+scenelist for the movie, and calls the specified functions for each
 frame to build the animation:
 
 ```julia
@@ -161,7 +159,7 @@ animate(sun24demo, [
 
 ![sun24 animation](../assets/figures/sun24.gif)
 
-Notice that for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called.
+Notice that, for some frames, such as frame 0, 1, or 23, three of the functions are called: for others, such as 7 and 8, four or more functions are called.
 
 ### An alternative
 

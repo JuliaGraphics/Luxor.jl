@@ -46,9 +46,9 @@ svgimage # hide
 
 This short piece of code does the following things:
 
-- makes a new drawing 500 units square, and saves it in "my-drawing.svg" in SVG format.
+- makes a new drawing 500 units square, and will save it in the file "my-drawing.svg" in SVG format.
 
-- moves the zero point from the top left to the center. Graphics applications usually start measuring from the top left (occasionally from the bottom left), but it's easier to work out the positions of things if you start at the center. The `origin` function moves the `0/0` point to the center of the drawing.
+- moves the zero point from the top left to the center. Graphics applications usually start measuring from the top left (occasionally from the bottom left), but it's easier to work out the positions of things if you start at the center. The `origin()` function moves the `0/0` point to the center of the drawing.
 
 - selects one of the 200 or so named colors (defined in [Colors.jl](http://juliagraphics.github.io/Colors.jl/stable/))
 
@@ -56,13 +56,13 @@ This short piece of code does the following things:
 
 - finishes the drawing and displays it on the screen
 
-In case you're wondering, the units are *points* (as in font sizes), and there are 72 points in an inch, just over 3 per millimeter. The y-axis points down the page. If you want to be reminded of where the x and y axes are, uses the [`rulers`](@ref) function.
+In case you're wondering, the units are *points* (as in font sizes), and there are 72 points in an inch, just over 3 per millimeter. The y-axis points down the page. If you want to be reminded of where the x and y axes are, use the [`rulers`](@ref) function.
 
-The `:fill` at the end of [`circle`](@ref) is one of a set of symbols that lets you use the shape in different ways. There's the `:stroke` action, which draws around the edges but doesn't fill the shape with color, and you might also meet the `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, and `:path` actions. You can usually supply these either as an argument or using the keyword argument version, eg `action=:fill`.
+The `action=:fill` at the end of [`circle`](@ref) uses one of a set of symbols that let you use the shape you've created in different ways. There's the `:stroke` action, which draws around the edges but doesn't fill the shape with color. You might also meet the `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, and `:path` actions.
 
 ## Circles in a spiral
 
-We want more than just one circle. We'll define a triangular shape, and place a circle at each corner. The [`ngon`](@ref) function creates regular polygon (eg triangles, squares, etc.), and the `vertices=true` keyword returns the corner points rather than draws the shape - just what we want.
+We want more than just one circle. We'll define a triangular shape, and place a circle at each corner. The [`ngon`](@ref) function creates regular polygons (eg triangles, squares, pentagons, etc.), and the `vertices=true` keyword doesn't draw the shape, it just provides the corner points - just what we want.
 
 ```@setup example_2
 using Luxor
@@ -76,6 +76,7 @@ end 500 500
 ```
 
 ```julia
+# using Luxor
 Drawing(500, 500, "my-drawing.svg")
 origin()
 setcolor("red")
@@ -89,9 +90,9 @@ preview()
 svgimage # hide
 ```
 
-Notice the "." after `circle`. This broadcasts the `circle()` function over the `corners`, drawing a 10-unit red filled circle at every point.
+Notice the "." after `circle`. This broadcasts the `circle()` function over the `corners`, thus drawing a 10-unit red-filled circle at every point.
 
-The arguments to `ngon` are centerpoint, radius, and number of sides. Try changing the third argument from 3 (triangle) to 4 (square) or 31 (traikontagon?).
+The arguments to `ngon` are usually centerpoint, radius, and the number of sides. Try changing the third argument from 3 (triangle) to 4 (square) or 31 (traikontagon?).
 
 To create a spiral of circles, we want to repeat this "draw a circle at each vertex of a triangle" procedure more than once. A simple loop will do: we'll rotate the drawing by `i * ` 5° (`deg2rad(5)` radians) each time (so 5°, 10°, 15°, 20°, 25°, and 30°), and at the same time increase the size of the polygon by multiples of 10:
 
@@ -130,7 +131,7 @@ svgimage # hide
 
 ## Just add color
 
-The Julia colors are available as constants in Luxor, so we can make two changes that cycle through them. The first line creates the set of Julia colors; the [`setcolor`](@ref) function then works through them. `mod1` (get the `nth` element of an array) is the 1-based version of the `mod` function, essential for working with Julia and its 1-based indexing, such that `mod1(4, end)` gets the last value of a four element array (whereas `mod(4, end)` would fail, since it returns 0, and `colors[0]` is an error).
+The colors used in the Julia logo are available as constants in Luxor, so we can make two changes that cycle through them. The first new line creates the set of Julia colors; then the [`setcolor`](@ref) function then works through them. `mod1` (get the `nth` element of an array) is the 1-based version of the `mod` function, essential for working with Julia and its 1-based indexing, such that `mod1(4, end)` gets the last value of a four element array (whereas `mod(4, end)` would fail, since it would return 0, and `colors[0]` would be an error).
 
 ```@setup example_4
 using Luxor, Colors
@@ -149,6 +150,7 @@ end 500 500
 ```
 
 ```julia
+using Luxor
 using Colors
 
 Drawing(500, 500, "my-drawing.svg")
@@ -175,8 +177,8 @@ svgimage # hide
 ## Taking particles seriously
 
 The flat circles are a bit dull, so let's write a function
-that draws the circles as 'particles'. The `drawcircle()` function
-draws lots of circles, but each one is drawn with a slightly
+that draws the circles as ‘particles’. The `drawcircle()` function
+draws lots of circles on top of each other, but each one is drawn with a slightly
 smaller radius and a slightly lighter shade of the incoming
 color. The [`rescale`](@ref) function in Luxor provides an
 easy way to map or adjust values from one range to another.
@@ -370,4 +372,4 @@ easily reproduce them. It's frustrating to produce something
 really good but not know what values were used to make it.
 So modify the code so that the random numbers are
 remembered, and drawn on the screen (you can use the
-`text(str, position)` function),
+`text(string, position)` function),

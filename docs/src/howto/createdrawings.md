@@ -6,31 +6,27 @@ To create a drawing, and optionally specify the filename, type, and dimensions, 
 
 To finish a drawing and close the file, use [`finish`](@ref), and, if the drawing doesn't appear in your notebook, you can launch an external application to view it using [`preview`](@ref).
 
-The [`@draw`](@ref), [`@svg`](@ref), [`@png`](@ref), and [`@pdf`](@ref) macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions.
-
-!!! note
-
-    The macros are shortcuts, designed to make it quick and easy to get started. For full control over all parameters, use [`Drawing`](@ref).
-
-## Drawings and files
-
-To create a drawing, and optionally specify the filename, type, and dimensions, use the `Drawing` constructor function.
-
 To finish a drawing and close the file, use [`finish`](@ref), and, to launch an external application to view it, use [`preview`](@ref).
 
 ![jupyter](../assets/figures/jupyter.png)
 
-If you're using Juno or VS Code, then PNG and SVG files should appear in the Plots pane. In a Pluto notebook, output appears above the cell. In a notebook environment, output appears in the next notebook cell.
+If you're using VS Code, then PNG and SVG drawings should appear in the Plots pane, if it's enabled. In a Pluto notebook, output appears above the cell. In a notebook environment, output appears in the next notebook cell.
 
 ![juno](../assets/figures/juno.png)
 
 !!! note
 
-    SVGs are text based, and can get quite big. Up to a certain size, SVGs will be previewable as easily and quickly as PNGs. But very large drawings in SVG format won't necessarily  be displayed.
+    SVGs are text-based, and can get quite big. Up to a certain size, SVGs will preview as easily and quickly as PNGs. As they get larger, though, they'll take longer, and it won't be long before they'll take longer to preview than to create in the first place. Very large drawings in SVG format might not display at all.
 
 ## Quick drawings with macros
 
-The `@draw`, `@svg`, `@png`, and `@pdf` macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions. For example, the Julia code:
+The [`@draw`](@ref), [`@svg`](@ref), [`@png`](@ref), and [`@pdf`](@ref) macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions.
+
+!!! note
+
+    The macros are shortcuts, designed to make it quick and easy to get started. You can save a few keystrokes and some time, but, for full control over all parameters, use [`Drawing`](@ref).
+
+For example, the Julia code:
 
 ```julia
 @svg circle(Point(0, 0), 20, action = :stroke) 50 50
@@ -48,7 +44,7 @@ finish()
 preview()
 ```
 
-They're just short-cuts - designed to save a bit of typing. You can omit the width and height (thus defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
+They're just short-cuts. You can omit the width and height (thus defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -66,10 +62,6 @@ or (less nicely):
       circle(Point(0, 0), 20, action = :fill)
      )
 ```
-
-The [`@draw`](@ref) macro creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (Juno, VSCode, Jupyter, Pluto).
-
-The SVG equivalent of `@draw` is [`@drawsvg`](@ref).
 
 If you don't specify a size, the defaults are usually 600 by 600. If you don't specify a file name, files created with the macros are placed in your current working directory as `luxor-drawing-` followed by a time stamp. You don't even have to specify the suffix:
 
@@ -92,23 +84,25 @@ preview()
 
 ![transparent background](../assets/figures/transparentbackground.png)
 
-You can obtain the raw SVG code of a drawing using `@savesvg`.
+### In-memory drawings
 
-## Drawings in memory
+You can choose to store drawings in memory. The advantage is that in-memory drawings are quicker, and the results can be passed as Julia data. Also, it's useful in some environments to not have to worry about writing files. 
 
-You can choose to store the drawing in memory. The advantage is that in-memory drawings are quicker, and can be passed as Julia data. It's useful in some environments to not have to worry about writing files. This syntax for the [`Drawing`](@ref) function:
+This syntax for the [`Drawing`](@ref) function:
 
 ```julia
 Drawing(width, height, surfacetype, [filename])
 ```
 
-lets you supply `surfacetype` as a symbol (`:svg` or `:png`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
+lets you supply `surfacetype` as a symbol (`:svg`, `:png`, `:image`, or `:rec`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
 
-The `@draw` and `@drawsvg` macros creates PNG/SVG files in memory.
+The [`@draw`](@ref) macro (equivalent to `Drawing(..., :png)` creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (VSCode, Jupyter, Pluto).
 
-You can specify `:image` as the surface type. This allows you to copy the current drawing into a 2D matrix (using [`image_as_matrix`](@ref)). See the Images chapter for more information.
+The SVG equivalent of `@draw` is [`@drawsvg`](@ref).
 
-Use [`svgstring`](@ref) to obtain the SVG source for a finished SVG drawing.
+Use [`svgstring()`](@ref) to extract the SVG source for a finished SVG drawing.
+
+If you want to generate SVG without making a drawing, use `@savesvg` instead of `@drawsvg`.
 
 ### Concatenating SVG drawings
 
@@ -190,5 +184,15 @@ using Interact, Colors, Luxor
     d
 end
 ```
-
+ 
 ![interactive](../assets/figures/interact.png)
+
+## Extracting the drawing as an image
+
+If you create a drawing using `Drawing(w, h, :png)`, you can use the [`image_as_matrix`](@ref) function at any stage in the drawing process to extract the drawing in its current state as a matrix of pixels.
+
+See the [Drawings as image matrices](@ref) section for more information.
+
+## Recordings
+
+The `:rec` option for `Drawing()` creates a recording surface in memory. You can then use `snapshot(filename, ...)` to copy the drawing into a file.
