@@ -12,6 +12,8 @@
 
 - add return values for some path functions
 
+- fixed obscure bug in `polyportion()` if polygons were closed
+
 ### Removed
 
 ### Deprecated

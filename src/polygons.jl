@@ -989,11 +989,15 @@ function polyportion(p::Array{Point,1}, portion = 0.5; closed = true, pdist = []
     portion = clamp(portion, 0.0, 1.0)
     # don't bother to do 0.0
     isapprox(portion, 0.0, atol = 0.00001) && return p[1:1]
-    # don't bother to do 1.0
-    if closed == false && isapprox(portion, 1.0, atol = 0.00001)
-        return p
-    elseif isapprox(portion, 1.0, atol = 0.00001)
-        return p
+
+    # do 1.0 more carefully
+    if isapprox(portion, 1.0, atol = 0.00001)
+        if closed == false
+            return p
+        else
+            # include the last line from the end to the first point
+            return vcat(p, p[1])
+        end 
     end
     ind, surplus = nearestindex(pdist, portion * pdist[end])
     if surplus > 0.0
