@@ -13,20 +13,6 @@ function trianglecircumcenter(pt1::Point, pt2::Point, pt3::Point)
     return Point(x, y)
 end
 
-# """
-#     trianglecircumcenter(pt1::Point, pt2::Point, pt3::Point)
-# """
-# function trianglecircumcenter(pt1::Point, pt2::Point, pt3::Point)
-#     ap1, ap2 = perpendicular(pt1, pt2)
-#     bp1, bp2 = perpendicular(pt2, pt3)
-#     flag, ip = intersectionlines(ap1, ap2, bp1, bp2)
-#     if flag
-#         return ip
-#     else
-#         throw(error("trianglecircumcenter(): triangle is not valid"))
-#     end
-# end
-
 """
     triangleincenter(pt1::Point, pt2::Point, pt3::Point)
 

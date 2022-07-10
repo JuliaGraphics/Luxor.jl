@@ -996,7 +996,8 @@ function polyportion(p::Array{Point,1}, portion = 0.5; closed = true, pdist = []
             return p
         else
             # include the last line from the end to the first point
-            return vcat(p, p[1])
+            push!(p, p[1])
+            return p
         end 
     end
     ind, surplus = nearestindex(pdist, portion * pdist[end])

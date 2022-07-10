@@ -6,6 +6,8 @@
 
 - BoundingBox() can be used on Tables and table cells (needs tests)
 
+- first pass at hexagon constructors 
+
 ### Changed
 
 - fix `drawpath()` straight lines (thanks @jules for spotting this!)

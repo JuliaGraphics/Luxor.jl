@@ -45,6 +45,7 @@ include("shapes.jl")
 include("BoundingBox.jl")
 include("polygons.jl")
 include("triangles.jl")
+include("hexagons.jl")
 include("curves.jl")
 include("tiles-grids.jl")
 include("arrows.jl")
@@ -80,48 +81,24 @@ export Drawing,
     cm, inch, mm,
     paper_sizes,
     Tiler, Partition,
-    rescale,
-
-    currentdrawing,
-
-    finish, preview, snapshot,
-    origin, rulers, background,
-
-    @png, @pdf, @svg, @eps, @draw, @drawsvg, @savesvg,
+    rescale, currentdrawing, finish, preview, snapshot,
+    origin, rulers, background, @png, @pdf, @svg, @eps, @draw, @drawsvg, @savesvg,
 
     # @play,
 
-    newpath, closepath, newsubpath,
-
-    BezierPath, BezierPathSegment, bezier, bezier′,
+    newpath, closepath, newsubpath, BezierPath, BezierPathSegment, bezier, bezier′,
     bezier′′, makebezierpath, drawbezierpath,
     bezierpathtopoly, beziertopoly, pathtobezierpaths,
     bezierfrompoints, beziercurvature, bezierstroke,
     setbezierhandles, beziersegmentangles,
-    shiftbezierhandles, brush, trimbezier, splitbezier,
-
-    strokepath, fillpath,
-
-    rect, box, cropmarks,
-
-    setantialias, setline, setlinecap, setlinejoin, setdash,
-    setstrokescale,
-
-    move, rmove, line, rule, rline, arrow, arrowhead,
-    dimension, tickline,
-
-    BoundingBox, boxwidth, boxheight, boxdiagonal,
+    shiftbezierhandles, brush, trimbezier, splitbezier, strokepath, fillpath, rect, box, cropmarks, setantialias, setline, setlinecap, setlinejoin, setdash,
+    setstrokescale, move, rmove, line, rule, rline, arrow, arrowhead,
+    dimension, tickline, BoundingBox, boxwidth, boxheight, boxdiagonal,
     boxaspectratio, boxtop, boxbottom, boxtopleft,
     boxtopcenter, boxtopright, boxmiddleleft,
     boxmiddlecenter, boxmiddleright, boxbottomleft,
-    boxbottomcenter, boxbottomright,
-
-    intersectboundingboxes, boundingboxesintersect,
-    pointcrossesboundingbox,
-
-    BoxmapTile, boxmap,
-
-    circle, circlepath, ellipse, hypotrochoid, epitrochoid,
+    boxbottomcenter, boxbottomright, intersectboundingboxes, boundingboxesintersect,
+    pointcrossesboundingbox, BoxmapTile, boxmap, circle, circlepath, ellipse, hypotrochoid, epitrochoid,
     squircle, center3pts, curve, arc, carc, arc2r, carc2r,
     isarcclockwise, arc2sagitta, carc2sagitta, spiral,
     sector, intersection2circles, intersection_line_circle,
@@ -130,71 +107,33 @@ export Drawing,
     polyintersect, polyintersections, circlepointtangent,
     circletangent2circles, pointinverse, pointcircletangent,
     circlecircleoutertangents, circlecircleinnertangents,
-    ellipseinquad, crescent,
-
-    ngon, ngonside, star, pie, polycross,
-    do_action, paint, paint_with_alpha, fillstroke,
-
-    AbstractPoint, Point, O, randompoint, randompointarray, midpoint,
+    ellipseinquad, crescent, ngon, ngonside, star, pie, polycross,
+    do_action, paint, paint_with_alpha, fillstroke, AbstractPoint, Point, O, randompoint, randompointarray, midpoint,
     between, slope, intersectionlines, pointlinedistance,
     getnearestpointonline, isinside,
     rotate_point_around_point, perpendicular, crossproduct,
     dotproduct, determinant3, distance, prettypoly, polysmooth, polysplit,
-    poly, simplify,  polycentroid, polysortbyangle, polyhull,
+    poly, simplify, polycentroid, polysortbyangle, polyhull,
     polysortbydistance, offsetpoly, polyfit, currentpoint,
-    hascurrentpoint, getworldposition, anglethreepoints,
-
-    polyperimeter, polydistances, polyportion,
+    hascurrentpoint, getworldposition, anglethreepoints, polyperimeter, polydistances, polyportion,
     polyremainder, nearestindex, polyarea, polysample,
-    insertvertices!,
-
-    polymove!, polyscale!, polyrotate!, polyreflect!,
-
-    @polar, polar,
-
-    strokepreserve, fillpreserve,
+    insertvertices!, polymove!, polyscale!, polyrotate!, polyreflect!, @polar, polar, strokepreserve, fillpreserve,
     gsave, grestore, @layer,
     scale, rotate, translate,
-    clip, clippreserve, clipreset,
-
-    getpath, getpathflat, pathtopoly,
-
-    fontface, fontsize, text, textpath, label, textextents,
+    clip, clippreserve, clipreset, getpath, getpathflat, pathtopoly, fontface, fontsize, text, textpath, label, textextents,
     textoutlines, textcurve, textcentred, textcentered,
     textright, textcurvecentred, textcurvecentered,
     get_fontsize, textwrap, textlines, splittext, textbox,
-    texttrack, textplace, textfit, textonpoly,
-
-    setcolor, setopacity, sethue, setgrey, setgray,
+    texttrack, textplace, textfit, textonpoly, setcolor, setopacity, sethue, setgrey, setgray,
     randomhue, randomcolor, @setcolor_str,
-    getmatrix, setmatrix, transform,
-
-    setfont, settext,
-
-    Blend, setblend, blend, addstop, blendadjust,
+    getmatrix, setmatrix, transform, setfont, settext, Blend, setblend, blend, addstop, blendadjust,
     blendmatrix, setblendextend, rotationmatrix, scalingmatrix,
     translationmatrix, cairotojuliamatrix,
     juliatocairomatrix, getrotation, getscale,
-    gettranslation,
-
-    setmode, getmode,
-
-    GridHex, GridRect, nextgridpoint,
-
-    Table, highlightcells,
-
-    readpng, readsvg, placeimage, svgstring,
-
-    julialogo, juliacircles,
-
-    barchart,
-
-    mesh, setmesh, add_mesh_patch, mask,
+    gettranslation, setmode, getmode, GridHex, GridRect, nextgridpoint, Table, highlightcells, readpng, readsvg, placeimage, svgstring, julialogo, juliacircles, barchart, mesh, setmesh, add_mesh_patch, mask,
 
     # animation
-    Movie, Scene, animate,
-
-    lineartween, easeinquad, easeoutquad, easeinoutquad,
+    Movie, Scene, animate, lineartween, easeinquad, easeoutquad, easeinoutquad,
     easeincubic, easeoutcubic, easeinoutcubic, easeinquart,
     easeoutquart, easeinoutquart, easeinquint, easeoutquint,
     easeinoutquint, easeinsine, easeoutsine, easeinoutsine,
@@ -208,24 +147,32 @@ export Drawing,
     # experimental polygon functions
     polyremovecollinearpoints, polytriangulate!,
     polytriangulate, ispointinsidetriangle, ispolyclockwise,
-    polyorientation, ispolyconvex, polymorph, 
+    polyorientation, ispolyconvex, polymorph,
 
     # triangles
     trianglecircumcenter, triangleincenter, trianglecenter, triangleorthocenter,
+
+    # hexagons
+    HexagonAxial, HexagonCubic, HexagonOffsetOddR, HexagonOffsetEvenR,
+    # hexagon, 
+    hexcenter, hexcube_round, hexcube_linedraw, hexneighbor,
+    HexagonVertexIterator, hextile,
+    HexagonNeighborIterator, hexneighbors,
+    HexagonDiagonalIterator, hexdiagonals,
+    HexagonDistanceIterator, hexagons_within,
+    HexagonRingIterator, hexring,
+    HexagonSpiralIterator, hexspiral,
 
     # misc
     image_as_matrix, @imagematrix, image_as_matrix!, @imagematrix!,
 
     # paths
-
     Path, PathClose, PathCurve, PathElement, PathLine,
     PathMove, bezierpathtopath, drawpath, storepath,
     polytopath, pathlength, pathsample,
 
     # experimental
-    layoutgraph, Style, applystyle,
-
-    tidysvg,
+    layoutgraph, Style, applystyle, tidysvg,
 
     # latex
     latextextsize, latexboundingbox, rawlatexboundingbox

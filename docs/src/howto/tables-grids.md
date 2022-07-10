@@ -9,10 +9,12 @@ You often want to position graphics at regular locations on the drawing. The pos
 
 - `Tiler`: a rectangular grid which you specify by enclosing area, and the number of rows and columns
 - `Partition`: a rectangular grid which you specify by enclosing area, and the width and height of each cell
-- `Grid` and `GridHex` a rectangular or hexagonal grid, on demand
+- `Grid` a rectangular grid, points supplied on demand
 - `Table`: a rectangular grid which you specify by providing row and column numbers, row heights and column widths
 
 These are types which act as iterators. Their job is to provide you with centerpoints; you'll probably want to use these in combination with the cell's widths and heights.
+
+There are also functions to make hexagonal grids. See [Hexagonal grids](@ref).
 
 ## Tiles and partitions
 
@@ -243,7 +245,7 @@ nothing # hide
 
 You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.
 
-Define a rectangular grid with `GridRect`, and a hexagonal grid with `GridHex`. Get the next grid point from a grid with `nextgridpoint(grid)`.
+Define a rectangular grid with `GridRect`. Get the next grid point from a grid with `nextgridpoint(grid)`.
 
 ```@example
 using Luxor, Random # hide
@@ -266,25 +268,109 @@ nothing # hide
 
 ![grids](../assets/figures/grids.png)
 
-```@example
-using Luxor, Random # hide
-Drawing(700, 400, "../assets/figures/grid-hex.png")  # hide
-background("white") # hide
-fontsize(22) # hide
-Random.seed!(42)
-translate(100, 100) # hide
-radius = 70
-grid = GridHex(O, radius, 600)
+## Hexagonal grids
 
-for i in 1:15
-    randomhue()
-    p = nextgridpoint(grid)
-    ngon(p, radius-5, 6, π/2, :fillstroke)
-    sethue("white")
-    text(string(i), p, halign=:center)
-end
-finish() # hide
-nothing # hide
+Use the hexagon types `HexagonOffsetOddR`, `HexagonOffsetEvenR`, `HexagonAxial`, and `HexagonCubic` to define a hexagonal tile on a grid, using index values to specify their location. 
+You can use `hexcenter()` to find the Cartesian coordinates of the center of a hexagonal tile on the grid, and `hextile()` to return the Cartesian coordinates of the vertices of the tile.
+
+For example, this code draws a hexagon with hexagonal indices `0 0` on a grid centred at the origin with grid spacing of 100 units:
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin  # hide
+    sethue("purple")
+    poly(hextile(HexagonOffsetOddR(0, 0, 100)), :fill)
+end 600 300  # hide
 ```
 
-![hex grid](../assets/figures/grid-hex.png)
+By default the hexagonal grid indices `0 0` are located at the drawing's origin (`Point(0, 0)`). You can change this, and also specify the width and height of the hexagonal grid.
+
+By using different index values you can draw hexagons at other locations on the hexagonal grid.
+
+```@example
+using Luxor, Colors  # hide
+@drawsvg begin  # hide
+    sethue("purple")
+    poly(hextile(HexagonOffsetOddR(-1, -1, 40)), :fill)
+    sethue("orange")
+    poly(hextile(HexagonOffsetOddR(-1, 1, 40)), :fill)
+    sethue("green")
+    poly(hextile(HexagonOffsetOddR(1, 1, 40)), :fill)
+    sethue("blue")
+    poly(hextile(HexagonOffsetOddR(1, -1, 40)), :fill)
+end 600 300  # hide
+```
+
+### Hexagonal grid indexing 
+
+Whereas rectangular grids can be indexed using x ("row") and y ("column") integers, hexagonal grids can be indexed in various ways. For example, odd-numbered "rows" can be shifted to the right:
+
+```@example
+using Luxor, Colors, Random  # hide
+@drawsvg begin  # hide
+    fontsize(16)
+    for q in -2:2 # vertical
+        for r in -2:2 # horizontal
+            pgon = hextile(HexagonOffsetOddR(q, r, 40))
+            sethue(HSB(rand(1:360), 0.6, 0.7))
+            poly(pgon, :fill)
+            sethue("white")
+            text("$q", hexcenter(HexagonOffsetOddR(q, r, 40)),
+                halign=:left, valign=:top)
+            text("$r", hexcenter(HexagonOffsetOddR(q, r, 40)),
+                halign=:right, valign=:bottom)
+        end
+    end
+end 600 350  # hide
+```
+
+Alternatively, even-numbered "rows" can be shifted to the right:
+
+```@example
+using Luxor, Colors, Random  # hide
+@drawsvg begin # hide
+    fontsize(16)
+    for q in -2:2 # vertical
+        for r in -2:2 # horizontal
+            pgon = hextile(HexagonOffsetEvenR(q, r, 40))
+            sethue(HSB(rand(1:360), 0.6, 0.7))
+            poly(pgon, :fill)
+            sethue("white")
+            text("$q", hexcenter(HexagonOffsetEvenR(q, r, 40)),
+                halign=:left, valign=:top)
+            text("$r", hexcenter(HexagonOffsetEvenR(q, r, 40)),
+                halign=:right, valign=:bottom)
+        end
+    end
+end 600 350 # hide
+```
+
+The cubic hexagon constructor accepts three coordinates: 
+
+```@example
+using Luxor, Colors, Random  # hide
+@drawsvg begin # hide
+    for q in -2:2 
+        for r in -2:2 
+            pgon = hextile(HexagonCubic(q, r, -q - r, 25))
+            sethue(HSB(rand(1:360), 0.6, 0.7))
+            poly(pgon, :fill)
+        end
+    end
+end 600 350 # hide
+```
+
+The axial constructor accepts two:
+
+```@example
+using Luxor, Colors, Random  # hide
+@drawsvg begin # hide
+    for q in -2:2
+        for r in -2:2
+            pgon = hextile(HexagonAxial(q, r, 25))
+            sethue(HSB(rand(1:360), 0.6, 0.7))
+            poly(pgon, :fill)
+        end
+    end
+end 600 350 # hide
+```
