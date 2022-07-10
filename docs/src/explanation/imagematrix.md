@@ -23,7 +23,7 @@ text("42", halign=:center, valign=:middle)
 mat = image_as_matrix()
 finish()
 preview()
-````
+```
 
 The next example draws an ampersand and then processes the
 pixels further in Images.jl.
