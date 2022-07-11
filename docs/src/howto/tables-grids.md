@@ -278,8 +278,8 @@ For example, this code draws a hexagon with hexagonal indices `0 0` on a grid ce
 ```@example
 using Luxor, Colors # hide
 @drawsvg begin  # hide
-    sethue("purple")
-    poly(hextile(HexagonOffsetOddR(0, 0, 100)), :fill)
+sethue("purple")
+poly(hextile(HexagonOffsetOddR(0, 0, 100)), :fill)
 end 600 300  # hide
 ```
 
@@ -290,14 +290,14 @@ By using different index values you can draw hexagons at other locations on the 
 ```@example
 using Luxor, Colors  # hide
 @drawsvg begin  # hide
-    sethue("purple")
-    poly(hextile(HexagonOffsetOddR(-1, -1, 40)), :fill)
-    sethue("orange")
-    poly(hextile(HexagonOffsetOddR(-1, 1, 40)), :fill)
-    sethue("green")
-    poly(hextile(HexagonOffsetOddR(1, 1, 40)), :fill)
-    sethue("blue")
-    poly(hextile(HexagonOffsetOddR(1, -1, 40)), :fill)
+sethue("purple")
+poly(hextile(HexagonOffsetOddR(-1, -1, 40)), :fill)
+sethue("orange")
+poly(hextile(HexagonOffsetOddR(-1, 1, 40)), :fill)
+sethue("green")
+poly(hextile(HexagonOffsetOddR(1, 1, 40)), :fill)
+sethue("blue")
+poly(hextile(HexagonOffsetOddR(1, -1, 40)), :fill)
 end 600 300  # hide
 ```
 
@@ -308,19 +308,19 @@ Whereas rectangular grids can be indexed using x ("row") and y ("column") intege
 ```@example
 using Luxor, Colors, Random  # hide
 @drawsvg begin  # hide
-    fontsize(16)
-    for q in -2:2 # vertical
-        for r in -2:2 # horizontal
-            pgon = hextile(HexagonOffsetOddR(q, r, 40))
-            sethue(HSB(rand(1:360), 0.6, 0.7))
-            poly(pgon, :fill)
-            sethue("white")
-            text("$q", hexcenter(HexagonOffsetOddR(q, r, 40)),
-                halign=:left, valign=:top)
-            text("$r", hexcenter(HexagonOffsetOddR(q, r, 40)),
-                halign=:right, valign=:bottom)
-        end
+fontsize(16)
+for q in -2:2 # vertical
+    for r in -2:2 # horizontal
+        pgon = hextile(HexagonOffsetOddR(q, r, 40))
+        sethue(HSB(rand(1:360), 0.6, 0.7))
+        poly(pgon, :fill)
+        sethue("white")
+        text("$q", hexcenter(HexagonOffsetOddR(q, r, 40)),
+            halign=:left, valign=:top)
+        text("$r", hexcenter(HexagonOffsetOddR(q, r, 40)),
+            halign=:right, valign=:bottom)
     end
+end
 end 600 350  # hide
 ```
 
@@ -329,19 +329,19 @@ Alternatively, even-numbered "rows" can be shifted to the right:
 ```@example
 using Luxor, Colors, Random  # hide
 @drawsvg begin # hide
-    fontsize(16)
-    for q in -2:2 # vertical
-        for r in -2:2 # horizontal
-            pgon = hextile(HexagonOffsetEvenR(q, r, 40))
-            sethue(HSB(rand(1:360), 0.6, 0.7))
-            poly(pgon, :fill)
-            sethue("white")
-            text("$q", hexcenter(HexagonOffsetEvenR(q, r, 40)),
-                halign=:left, valign=:top)
-            text("$r", hexcenter(HexagonOffsetEvenR(q, r, 40)),
-                halign=:right, valign=:bottom)
-        end
+fontsize(16)
+for q in -2:2 # vertical
+    for r in -2:2 # horizontal
+        pgon = hextile(HexagonOffsetEvenR(q, r, 40))
+        sethue(HSB(rand(1:360), 0.6, 0.7))
+        poly(pgon, :fill)
+        sethue("white")
+        text("$q", hexcenter(HexagonOffsetEvenR(q, r, 40)),
+            halign=:left, valign=:top)
+        text("$r", hexcenter(HexagonOffsetEvenR(q, r, 40)),
+            halign=:right, valign=:bottom)
     end
+end
 end 600 350 # hide
 ```
 
@@ -350,13 +350,13 @@ The cubic hexagon constructor accepts three coordinates:
 ```@example
 using Luxor, Colors, Random  # hide
 @drawsvg begin # hide
-    for q in -2:2 
-        for r in -2:2 
-            pgon = hextile(HexagonCubic(q, r, -q - r, 25))
-            sethue(HSB(rand(1:360), 0.6, 0.7))
-            poly(pgon, :fill)
-        end
+for q in -2:2 
+    for r in -2:2 
+        pgon = hextile(HexagonCubic(q, r, -q - r, 25))
+        sethue(HSB(rand(1:360), 0.6, 0.7))
+        poly(pgon, :fill)
     end
+end
 end 600 350 # hide
 ```
 
@@ -365,12 +365,54 @@ The axial constructor accepts two:
 ```@example
 using Luxor, Colors, Random  # hide
 @drawsvg begin # hide
-    for q in -2:2
-        for r in -2:2
-            pgon = hextile(HexagonAxial(q, r, 25))
-            sethue(HSB(rand(1:360), 0.6, 0.7))
-            poly(pgon, :fill)
-        end
+for q in -2:2
+    for r in -2:2
+        pgon = hextile(HexagonAxial(q, r, 25))
+        sethue(HSB(rand(1:360), 0.6, 0.7))
+        poly(pgon, :fill)
     end
+end
 end 600 350 # hide
+```
+
+### Hexagonal rings
+
+The `hexring()` function finds the `n`th ring of adjacent hexagons surrounding a hexagon.
+
+The first ring consists of six hexagons. Ring `n` consists of `6n` hexagons. 
+
+```@example
+using Luxor # hide
+using Colors # hide
+
+@drawsvg begin # hide
+hexa = HexagonOffsetOddR(0, 0, 10)
+for i in 1:15
+    ring = hexring(i, hexa)
+    sethue(HSB(rescale(i, 1, 15, 0, 360), 0.8, 0.8))
+    for (n, h) in enumerate(ring)
+        poly(hextile(h), :fillpreserve)
+    end
+end
+end # hide
+```
+
+### Neighbouring hexagons
+
+To find the six hexagons that surround a hexagon, use `hexneighbors()`.
+
+```@example
+using Luxor # hide
+using Colors # hide
+
+@drawsvg begin # hide
+for i in 1:10
+    sethue(HSB(rand(0:360), 0.8, 0.8))
+    hex1 = HexagonOffsetOddR(rand(-7:7), rand(-7:7), 15)
+    for neighbor in hexneighbors(hex1)
+        poly(hextile(neighbor), :fill)
+        circle(hexcenter(neighbor), 25, :stroke)
+    end
+end
+end # hide
 ```

@@ -10,20 +10,20 @@ using Test
 using Random
 Random.seed!(42)
 
-function ngon_poly(x, y, radius, sides::Int, orientation=0, action=:none; close=true)
-    [Point(x+cos(orientation + n * 2pi/sides) * radius,
-    y+sin(orientation + n * 2pi/sides) * radius) for n in 1:sides]
+function ngon_poly(x, y, radius, sides::Int, orientation = 0, action = :none; close = true)
+    [Point(x + cos(orientation + n * 2pi / sides) * radius,
+        y + sin(orientation + n * 2pi / sides) * radius) for n in 1:sides]
 end
 
 function bounding_b(x, y, o)
-    return [Point(x-o, y-o), Point(x-o, y+o), Point(x+o, y+o), Point(x+o, y-o)]
+    return [Point(x - o, y - o), Point(x - o, y + o), Point(x + o, y + o), Point(x + o, y - o)]
 end
 
 function point_inside_polygon(fname)
     Drawing(1200, 1200, fname)
     origin()
     background("grey20")
-    polys = [ngon_poly(x, y, 60, 5, pi/2) for x in -500:150:500, y in -500:150:500]
+    polys = [ngon_poly(x, y, 60, 5, pi / 2) for x in -500:150:500, y in -500:150:500]
     for pol in polys
         randomhue()
         poly(pol, :fill)
@@ -45,11 +45,6 @@ function point_inside_polygon(fname)
 
     @test finish() == true
     println("...finished test: output in $(fname)")
-
-
-preview()
-
-
 end
 
 point_inside_polygon("point-inside-polygon.png")
