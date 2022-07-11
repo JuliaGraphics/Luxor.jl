@@ -28,7 +28,6 @@ function circlecircletangent_test(fname)
     end
     @test finish() == true
     println("...finished test: output in $(fname)")
-    preview()
 end
 
 function circlecircletangent_test2(fname)

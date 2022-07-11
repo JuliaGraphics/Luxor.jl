@@ -1,7 +1,6 @@
 # algorithms from https://www.redblobgames.com/grids/hexagons/
 # first adapted by GiovineItalia/Hexagons.jl
-# then further tweaked for Luxor use
-
+# then further tweaked for Julia v1 compatibility, Luxor use, etc.
 abstract type Hexagon end
 
 """
@@ -36,9 +35,13 @@ end
 Two axes
 
 q:: first index
+
 r:: second index
+
 origin::Point
+
 width:: of tile
+
 height:: of tile
 """
 struct HexagonAxial <: Hexagon
@@ -55,9 +58,15 @@ end
 Three axes
 
 q:: first index
+
 r:: second index
+
+s:: third index
+
 origin::Point
+
 width:: of tile
+
 height:: of tile
 """
 struct HexagonCubic <: Hexagon
@@ -84,15 +93,28 @@ end
 # hexagon(q::Int64, r::Int64) = HexagonAxial(q, r, Point(0, 0), 10.0, 10.0)
 
 HexagonAxial(q, r) = HexagonAxial(q, r, Point(0, 0), 10.0, 10.0)
+HexagonAxial(q, r, o::Point) = HexagonAxial(q, r, o, 10.0, 10.0)
 HexagonAxial(q, r, w) = HexagonAxial(q, r, Point(0, 0), w, w)
+HexagonAxial(q, r, o::Point, w) = HexagonAxial(q, r, o, w, w)
+HexagonAxial(q, r, w, h) = HexagonAxial(q, r, Point(0, 0), w, h)
 
 HexagonCubic(x, y, z) = HexagonCubic(x, y, z, Point(0, 0), 10.0, 10.0)
+HexagonCubic(x, y, z, o::Point) = HexagonCubic(x, y, z, o, 10.0, 10.0)
 HexagonCubic(x, y, z, w) = HexagonCubic(x, y, z, Point(0, 0), w, w)
+HexagonCubic(x, y, z, o::Point, w) = HexagonCubic(x, y, z, o, w, w)
+HexagonCubic(x, y, z, w, h) = HexagonCubic(x, y, z, Point(0, 0), w, h)
 
 HexagonOffsetOddR(q, r) = HexagonOffsetOddR(q, r, Point(0, 0), 10.0, 10.0)
+HexagonOffsetOddR(q, r, o::Point) = HexagonOffsetOddR(q, r, o::Point, 10.0, 10.0)
 HexagonOffsetOddR(q, r, w) = HexagonOffsetOddR(q, r, Point(0, 0), w, w)
+HexagonOffsetOddR(q, r, o::Point, w) = HexagonOffsetOddR(q, r, o::Point, w, w)
+HexagonOffsetOddR(q, r, w, h) = HexagonOffsetOddR(q, r, Point(0, 0), w, h)
+
 HexagonOffsetEvenR(q, r) = HexagonOffsetEvenR(q, r, Point(0, 0), 10.0, 10.0)
+HexagonOffsetEvenR(q, r, o::Point) = HexagonOffsetEvenR(q, r, o::Point, 10.0, 10.0)
 HexagonOffsetEvenR(q, r, w) = HexagonOffsetEvenR(q, r, Point(0, 0), w, w)
+HexagonOffsetEvenR(q, r, o::Point, w) = HexagonOffsetEvenR(q, r, o::Point, w, w)
+HexagonOffsetEvenR(q, r, w, h) = HexagonOffsetEvenR(q, r, Point(0, 0), w, h)
 
 function Base.convert(::Type{HexagonAxial}, hex::HexagonCubic)
     HexagonAxial(hex.q, hex.s, hex.origin, hex.width, hex.height)
@@ -157,16 +179,39 @@ const CUBIC_HEX_NEIGHBOR_OFFSETS = [
     0 -1 1
 ]
 
+"""
+    hexneighbors(hex::Hexagon) 
+
+Return the neighbors of `hex`.
+
+## Example
+
+```
+julia> h = HexagonOffsetEvenR(0, 0, 70.0)
+
+julia> hexneighbors(h)
+HexagonNeighborIterator(HexagonCubic(0, 0, 0, Point(0.0, 0.0), 70.0, 70.0))
+
+julia> collect(hexneighbors(h))
+6-element Vector{Any}:
+HexagonCubic(1, -1, 0, Point(0.0, 0.0), 70.0, 70.0)
+HexagonCubic(1, 0, -1, Point(0.0, 0.0), 70.0, 70.0)
+HexagonCubic(0, 1, -1, Point(0.0, 0.0), 70.0, 70.0)
+HexagonCubic(-1, 1, 0, Point(0.0, 0.0), 70.0, 70.0)
+HexagonCubic(-1, 0, 1, Point(0.0, 0.0), 70.0, 70.0)
+HexagonCubic(0, -1, 1, Point(0.0, 0.0), 70.0, 70.0)
+```
+"""
 hexneighbors(hex::Hexagon) = HexagonNeighborIterator(convert(HexagonCubic, hex))
 
 Base.length(::HexagonNeighborIterator) = 6
 
 function Base.iterate(it::HexagonNeighborIterator, state = 1)
     state > 6 && return nothing
-    dx = CUBIC_HEX_NEIGHBOR_OFFSETS[state, 1]
-    dy = CUBIC_HEX_NEIGHBOR_OFFSETS[state, 2]
-    dz = CUBIC_HEX_NEIGHBOR_OFFSETS[state, 3]
-    hexneighbor = HexagonCubic(it.hex.x + dx, it.hex.y + dy, it.hex.z + dz)
+    dq = CUBIC_HEX_NEIGHBOR_OFFSETS[state, 1]
+    dr = CUBIC_HEX_NEIGHBOR_OFFSETS[state, 2]
+    ds = CUBIC_HEX_NEIGHBOR_OFFSETS[state, 3]
+    hexneighbor = HexagonCubic(it.hex.q + dq, it.hex.r + dr, it.hex.s + ds, it.hex.origin, it.hex.width, it.hex.height)
     return (hexneighbor, state + 1)
 end
 
@@ -183,16 +228,21 @@ const CUBIC_HEX_DIAGONAL_OFFSETS = [
     +1 -2 +1
 ]
 
+"""
+    hexdiagonals(hex::Hexagon)
+
+Return the six hexagons that lie on the diagonals to `hex`.
+"""
 hexdiagonals(hex::Hexagon) = HexagonDiagonalIterator(convert(HexagonCubic, hex))
 
 Base.length(::HexagonDiagonalIterator) = 6
 
 function Base.iterate(it::HexagonDiagonalIterator, state = 1)
     state > 6 && return nothing
-    dx = CUBIC_HEX_DIAGONAL_OFFSETS[state, 1]
-    dy = CUBIC_HEX_DIAGONAL_OFFSETS[state, 2]
-    dz = CUBIC_HEX_DIAGONAL_OFFSETS[state, 3]
-    diagonal = HexagonCubic(it.hex.x + dx, it.hex.y + dy, it.hex.z + dz)
+    dq = CUBIC_HEX_DIAGONAL_OFFSETS[state, 1]
+    dr = CUBIC_HEX_DIAGONAL_OFFSETS[state, 2]
+    ds = CUBIC_HEX_DIAGONAL_OFFSETS[state, 3]
+    diagonal = HexagonCubic(it.hex.q + dq, it.hex.r + dr, it.hex.s + ds, it.hex.origin, it.hex.width, it.hex.height)
     return (diagonal, state + 1)
 end
 
@@ -251,9 +301,15 @@ struct HexagonDistanceIterator
     n::Int
 end
 
-function hexagons_within(n::Int, hex::Hexagon = hexagon(0, 0))
+"""
+    hexagons_within(n::Int, hex::Hexagon)
+
+Return all the hexagons within index distance `n` of `hex`. If `n` is 0, only the `hex` itself is returned.
+If `n` is 1, `hex` and the six hexagons one index away are returned. If `n` is 2, 19 hexagons surrounding `hex` are returned.
+"""
+function hexagons_within(n::Int, hex::Hexagon)
     cubic_hex = convert(HexagonCubic, hex)
-    HexagonDistanceIterator(hex, n)
+    HexagonDistanceIterator(cubic_hex, n)
 end
 
 hexagons_within(hex::Hexagon, n::Int) = hexagons_within(n, hex)
@@ -261,16 +317,16 @@ hexagons_within(hex::Hexagon, n::Int) = hexagons_within(n, hex)
 Base.length(it::HexagonDistanceIterator) = it.n * (it.n + 1) * 3 + 1
 
 function Base.iterate(it::HexagonDistanceIterator, state = (-it.n, 0))
-    q, y = state
+    q, r = state
     q > it.n && return nothing
-    s = -q - y
-    hex = HexagonCubic(q, y, z)
-    y += 1
-    if y > min(it.n, it.n - q)
+    s = -q - r
+    hex = HexagonCubic(q, r, s, it.hex.origin, it.hex.width, it.hex.height)
+    r += 1
+    if r > min(it.n, it.n - q)
         q += 1
-        y = max(-it.n, -it.n - q)
+        r = max(-it.n, -it.n - q)
     end
-    return hex, (q, y)
+    return hex, (q, r)
 end
 
 function Base.collect(it::HexagonDistanceIterator)
@@ -282,7 +338,12 @@ struct HexagonRingIterator
     n::Int
 end
 
-function hexring(n::Int, hex::Hexagon = hexagon(0, 0))
+"""
+    hexring(n::Int, hex::Hexagon)
+
+Return the ring of hexagons that surround `hex`. If `n` is 1, the hexagons immediately surrounding `hex` are returned.
+"""
+function hexring(n::Int, hex::Hexagon)
     cubic_hex = convert(HexagonCubic, hex)
     HexagonRingIterator(cubic_hex, n)
 end
@@ -301,61 +362,6 @@ function Base.iterate(it::HexagonRingIterator,
 end
 
 function Base.collect(it::HexagonRingIterator)
-    collect(HexagonCubic, it)
-end
-
-# Iterator over all hexes within a certain distance
-
-struct HexagonSpiralIterator
-    hex::HexagonCubic
-    n::Int
-end
-
-struct HexagonSpiralIteratorState
-    hexring_i::Int
-    hexring_it::HexagonRingIterator
-    hexring_it_i::Int
-    hexring_it_hex::HexagonCubic
-end
-
-function hexspiral(n::Int, hex::Hexagon = hexagon(0, 0))
-    cubic_hex = convert(HexagonCubic, hex)
-    HexagonSpiralIterator(cubic_hex, n)
-end
-hexspiral(hex::Hexagon, n::Int) = hexspiral(n, hex)
-
-Base.length(it::HexagonSpiralIterator) = it.n * (it.n + 1) * 3
-
-# The state of a HexagonSpiralIterator consists of
-# 1. an Int, the index of the current ring
-# 2. a HexagonRingIterator and its state to keep track 
-# of the current position in the ring.
-
-function Base.iterate(it::HexagonSpiralIterator)
-    first_ring = hexring(it.hex, 1)
-    iterate(it, HexagonSpiralIteratorState(1, first_ring, start(first_ring)...))
-end
-
-function Base.iterate(it::HexagonSpiralIterator, state::HexagonSpiralIteratorState)
-    state.hexring_i > it.n && return nothing
-    # Get current state
-    hexring_i, hexring_it, hexring_it_i, hexring_it_hex =
-        state.hexring_i, state.hexring_it, state.hexring_it_i, state.hexring_it_hex
-    # Update state of inner iterator
-    hexring_it_hex, (hexring_it_i, hexring_it_hex_next) =
-        next(hexring_it, (hexring_it_i, hexring_it_hex))
-    # Check if inner iterator is done, and update if necessary
-    if done(hexring_it, (hexring_it_i, hexring_it_hex_next))
-        hexring_i += 1
-        hexring_it = ring(it.hex, hexring_i)
-        hexring_it_i, hexring_it_hex_next = start(hexring_it)
-    end
-
-    hexring_it_hex, HexagonSpiralIteratorState(hexring_i, hexring_it,
-        hexring_it_i, hexring_it_hex_next)
-end
-
-function Base.collect(it::HexagonSpiralIterator)
     collect(HexagonCubic, it)
 end
 
@@ -386,29 +392,37 @@ function hexcenter(hex::Hexagon)
     return Point(xoff + xsize * sqrt(3) * (axh.q + axh.r / 2), yoff + ysize * (3 / 2) * axh.r)
 end
 
-# TODO: Split up in two functions for performance (distance)?
 function hexneighbor(hex::HexagonCubic, direction::Int, distance::Int = 1)
-    dx = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 1] * distance
-    dy = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 2] * distance
-    dz = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 3] * distance
-    HexagonCubic(hex.x + dx, hex.y + dy, hex.z + dz)
+    dq = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 1] * distance
+    dr = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 2] * distance
+    ds = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 3] * distance
+    HexagonCubic(hex.q + dq, hex.r + dr, hex.s + ds, hex.origin, hex.width, hex.height)
 end
 
+"""
+    hexcube_linedraw(hexa::Hexagon, hexb::Hexagon)
+
+Find and return the hexagons that lie (mostly) on a straight line between `hexa` and `hexb`.
+"""
 function hexcube_linedraw(a::Hexagon, b::Hexagon)
     hexa = convert(HexagonCubic, a)
     hexb = convert(HexagonCubic, b)
+    o = hexa.origin
+    w = hexa.width
+    h = hexa.height
     N = distance(hexa, hexb)
     dx, dy, dz = hexb.q - hexa.q, hexb.r - hexa.r, hexb.s - hexa.s
     ax, ay, az = hexa.q + 1e-6, hexa.r + 1e-6, hexa.s - 2e-6
-    map(i -> hexnearest_cubic(ax + i * dx, ay + i * dy, az + i * dz), 0:(1 / N):1)
+    map(i -> hexnearest_cubic(ax + i * dx, ay + i * dy, az + i * dz, o, w, h), 0:(1 / N):1)
 end
 
 """
-    hexnearest_cubic(x::Real, y::Real, z::Real)
+     hexnearest_cubic(x::Real, y::Real, z::Real, origin, width, height)
 
-Find the nearest hexagon in cubic coordinates.
+Find the nearest hexagon in cubic coordinates, ie as
+`q`, `r`, `s` integer indices, given (x, y, z) as Real numbers, with the hexagonal grid centered at `origin`, and with tiles of `width`/`height`.
 """
-function hexnearest_cubic(x::Real, y::Real, z::Real)
+function hexnearest_cubic(x::Real, y::Real, z::Real, origin, width, height)
     rx, ry, rz = round(Integer, x), round(Integer, y), round(Integer, z)
     x_diff, y_diff, z_diff = abs(rx - x), abs(ry - y), abs(rz - z)
 
@@ -419,22 +433,21 @@ function hexnearest_cubic(x::Real, y::Real, z::Real)
     else
         rz = -rx - ry
     end
-    HexagonCubic(rx, ry, rz, Point(0, 0), 10.0, 10.0)
+    HexagonCubic(rx, ry, rz, origin, width, height)
 end
 
 """
-    hexcube_round(x, y, xsize = 10.0, ysize = 10.0)
+    hexcube_round(x, y, origin, width = 10.0, height = 10.0)
 
-Return the index (in cubic coordinates) of the hexagon containing the
-point x, y.
+Return the hexagon containing the point x, y, on the hexagonal grid centered at `origin`, and with tiles of `width`/`height`
 
-A point in Cartesian space can be mapped to the index of the hexagon that contains it.
+point in Cartesian space can be mapped to the index of the hexagon that contains it.
 """
-function hexcube_round(x, y, xsize = 10.0, ysize = 10.0)
-    x /= xsize
-    y /= ysize
+function hexcube_round(x, y, origin = Point(0, 0), width = 10.0, height = 10.0)
+    x /= width
+    y /= height
     q = sqrt(3) / 3 * x - y / 3
     r = 2 * y / 3
-    h = hexnearest_cubic(q, -q - r, r)
+    h = hexnearest_cubic(q, -q - r, r, origin, width, height)
     return h
 end

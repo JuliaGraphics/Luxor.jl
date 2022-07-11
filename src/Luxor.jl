@@ -63,9 +63,7 @@ include("Table.jl")
 include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
-include("graphlayout.jl")
 include("randompoints.jl")
-include("Style.jl")
 include("Path.jl")
 # include("latex.jl")
 # include("play.jl") # will require MiniFB
@@ -155,13 +153,12 @@ export Drawing,
     # hexagons
     HexagonAxial, HexagonCubic, HexagonOffsetOddR, HexagonOffsetEvenR,
     # hexagon, 
-    hexcenter, hexcube_round, hexcube_linedraw, hexneighbor,
+    hexcenter, hexcube_round, hexcube_linedraw,
     HexagonVertexIterator, hextile,
     HexagonNeighborIterator, hexneighbors,
     HexagonDiagonalIterator, hexdiagonals,
     HexagonDistanceIterator, hexagons_within,
-    HexagonRingIterator, hexring,
-    HexagonSpiralIterator, hexspiral,
+    HexagonRingIterator, hexring, hexnearest_cubic,
 
     # misc
     image_as_matrix, @imagematrix, image_as_matrix!, @imagematrix!,
@@ -172,7 +169,7 @@ export Drawing,
     polytopath, pathlength, pathsample,
 
     # experimental
-    layoutgraph, Style, applystyle, tidysvg,
+    tidysvg,
 
     # latex
     latextextsize, latexboundingbox, rawlatexboundingbox

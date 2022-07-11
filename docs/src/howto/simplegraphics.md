@@ -158,7 +158,7 @@ The [`squircle`](@ref) function makes nicer shapes.
 
 ## Triangles, pentagons, and regular polygons
 
-For regular polygons, pentagons, and so on, see the section on [Polygons and paths](@ref).
+For regular polygons, pentagons, and so on, see the section on [Polygons and paths](@ref). If you like drawing hexagons, you could also read [Hexagonal grids](@ref).
 
 ## Circles and ellipses
 
