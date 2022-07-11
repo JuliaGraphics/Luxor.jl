@@ -154,20 +154,29 @@ Close the current path. This is Cairo's `close_path()` function.
 """
 closepath() = Cairo.close_path(get_current_cr())
 
+abstract type DefaultLuxor  end
+#global constant to decide dispatch, a single element array which 
+#with a Type that other modules can change
+const DISPATCHER = Array{Type}([DefaultLuxor])
+
+for funcname in [:strokepath , :strokepreserve, :fillpath , :fillpreserve]
+    eval(quote $funcname() = $funcname(DISPATCHER[1]) end)
+end
+
 """
     strokepath()
 
 Stroke the current path with the current line width, line join, line cap, dash,
 and stroke scaling settings. The current path is then cleared.
 """
-strokepath() = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
+strokepath(::Type{DefaultLuxor}) = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
 
 """
     fillpath()
 
 Fill the current path according to the current settings. The current path is then cleared.
 """
-fillpath() = Cairo.fill(get_current_cr())
+fillpath(::Type{DefaultLuxor}) = Cairo.fill(get_current_cr())
 
 """
     paint()
@@ -182,14 +191,14 @@ paint() = Cairo.paint(get_current_cr())
 Stroke the current path with current line width, line join, line cap, dash, and
 stroke scaling settings, but then keep the path current.
 """
-strokepreserve()    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
+strokepreserve(::Type{DefaultLuxor})    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
 
 """
     fillpreserve()
 
 Fill the current path with current settings, but then keep the path current.
 """
-fillpreserve()      = Cairo.fill_preserve(get_current_cr())
+fillpreserve(::Type{DefaultLuxor})      = Cairo.fill_preserve(get_current_cr())
 
 """
     fillstroke()
