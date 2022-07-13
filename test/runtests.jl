@@ -171,6 +171,7 @@ function run_all_tests()
         include("triangles.jl")
         include("place-svg.jl")
         include("strokescale-test.jl")
+        include("dispatcher.jl")
     end
 end
 
