@@ -356,11 +356,13 @@ end
 Return an array of hexagons to spiral around a central hexagon forming `n` rings.
 """
 function hexspiral(hex, nrings)
-    result = Luxor.Hexagon[]
+    result = Hexagon[]
     ringn = 1
     while ringn < nrings
         hexes = collect(hexring(hex, ringn))
-        circshift!(hexes, 1)
+        # circshift!(hexes, 1) doesn't work on < v1.7 
+        # replace with circshift! one day
+        push!(hexes, popfirst!(hexes))
         append!(result, hexes)
         ringn += 1
     end

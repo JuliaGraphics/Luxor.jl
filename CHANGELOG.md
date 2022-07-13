@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3...........] - forthcoming
+
+### Added
+
+### Changed
+
+- fixed hexspiral to work on v1.7 and earlier
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v3.4.0] - 2022-07-13 09:01:18
 
 ### Added
