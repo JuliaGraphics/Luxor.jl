@@ -55,6 +55,12 @@ function grid_test(fname)
         end
         rulers()
     end
+
+    @layer begin
+        h = HexagonOffsetEvenR(0, 0)
+        sethue("white")
+        poly.(hextile.(hexspiral(h, 10)), :stroke, close = true)
+    end
     @test finish() == true
 end
 

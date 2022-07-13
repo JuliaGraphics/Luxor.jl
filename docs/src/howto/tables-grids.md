@@ -427,11 +427,11 @@ using Colors # hide
 background("black")
 hexagon = HexagonOffsetEvenR(0, 0, 16)
 setline(0.75)
-for h in hexspiral(hexagon, 10)
+for (n, h) in enumerate(hexspiral(hexagon, 10))
     sethue(HSB(mod1(5n, 360), 0.8, 0.8))
     poly(hextile(h), :fillpreserve)
     sethue("black")
     strokepath()
 end
-end 600 600 # hide
+end # hide
 ```
