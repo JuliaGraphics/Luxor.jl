@@ -78,20 +78,6 @@ struct HexagonCubic <: Hexagon
     height::Float64
 end
 
-# """
-#     hexagon(q::Int64, r::Int64, s::Int64)
-
-# calls HexagonCubic(q, r, s, Point(0, 0), 10.0, 10.0)
-# """
-# hexagon(q::Int64, r::Int64, s::Int64) = HexagonCubic(q, r, s, Point(0, 0), 10.0, 10.0)
-
-# """
-#     hexagon(q::Int64, r::Int64)
-
-# calls HexagonAxial(q, r, Point(0, 0), 10.0, 10.0)
-# """
-# hexagon(q::Int64, r::Int64) = HexagonAxial(q, r, Point(0, 0), 10.0, 10.0)
-
 HexagonAxial(q, r) = HexagonAxial(q, r, Point(0, 0), 10.0, 10.0)
 HexagonAxial(q, r, o::Point) = HexagonAxial(q, r, o, 10.0, 10.0)
 HexagonAxial(q, r, w) = HexagonAxial(q, r, Point(0, 0), w, w)
@@ -352,8 +338,7 @@ hexring(hex::Hexagon, n::Int) = hexring(n, hex)
 
 Base.length(it::HexagonRingIterator) = it.n * 6
 
-function Base.iterate(it::HexagonRingIterator,
-    state::(Tuple{Int,HexagonCubic}) = (1, hexneighbor(it.hex, 5, it.n)))
+function Base.iterate(it::HexagonRingIterator, state::(Tuple{Int,HexagonCubic}) = (1, hexneighbor(it.hex, 5, it.n)))
     hex_i, cur_hex = state
     hex_i > length(it) && return nothing
     ring_part = div(hex_i - 1, it.n) + 1
@@ -363,6 +348,23 @@ end
 
 function Base.collect(it::HexagonRingIterator)
     collect(HexagonCubic, it)
+end
+
+"""
+    hexspiral(hex, n)
+
+Return an array of hexagons to spiral around a central hexagon forming `n` rings.
+"""
+function hexspiral(hex, nrings)
+    result = Luxor.Hexagon[]
+    ringn = 1
+    while ringn < nrings
+        hexes = collect(hexring(hex, ringn))
+        circshift!(hexes, 1)
+        append!(result, hexes)
+        ringn += 1
+    end
+    return result
 end
 
 """
@@ -402,7 +404,7 @@ end
 """
     hexcube_linedraw(hexa::Hexagon, hexb::Hexagon)
 
-Find and return the hexagons that lie (mostly) on a straight line between `hexa` and `hexb`.
+Find and return the hexagons that lie (mostly) on a straight line between `hexa` and `hexb`. If you filled/stroked them appropriately, you'd get a jagged line.
 """
 function hexcube_linedraw(a::Hexagon, b::Hexagon)
     hexa = convert(HexagonCubic, a)

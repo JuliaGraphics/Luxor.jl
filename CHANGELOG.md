@@ -1,12 +1,12 @@
 # Changelog
 
-## [v3.4.0] - forthcoming 
+## [v3.4.0] - 2022-07-13 09:01:18
 
 ### Added
 
 - BoundingBox() can be used on Tables and table cells (needs tests)
 
-- first pass at hexagon constructors 
+- hexagon constructors 
 
 ### Changed
 
@@ -17,6 +17,8 @@
 - fixed obscure bug in `polyportion()` if polygons were closed
 
 ### Removed
+
+- some old unused stuff
 
 ### Deprecated
 

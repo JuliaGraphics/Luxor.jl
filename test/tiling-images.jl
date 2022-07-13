@@ -12,7 +12,6 @@ function get_png_files()
     folder = dirname(dirname(pathof(Luxor))) * "/docs/src/assets/figures/"
     imagelist = filter(f -> !startswith(f, ".") && endswith(f, "png"), readdir(folder))
     imagepathlist = map(fn -> folder * "/" * fn, imagelist)
-    @show imagepathlist
     return imagepathlist
 end
 
