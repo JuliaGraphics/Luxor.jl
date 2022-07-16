@@ -157,12 +157,12 @@ closepath() = Cairo.close_path(get_current_cr())
 abstract type LDispatcher  end
 # Packages which want to override strokepath/fillpath/strokepreserve/fillpreserve
 # can subtype an empty struct from this abstract type and dispatch on them .
-# make sure Luxor.DISPATCHER[1] is set to an instance of the struct you want to
+# Make sure Luxor.DISPATCHER[1] is set to an instance of the struct you want to
 # dispatch on in your module.
 
+#Default luxor behaviour dispatches on `DefaultLuxor`
 struct DefaultLuxor <: LDispatcher end
 #global constant to decide dispatch, a single element array which 
-#with a Type that other modules can change
 const DISPATCHER = Array{LDispatcher}([DefaultLuxor()])
 
 """
