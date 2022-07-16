@@ -29,7 +29,6 @@ The following is an example of a that changes the behavior of all calls to
 canvas.
 
 ```julia
-
 struct MyDispatcher <:  Luxor.LDispatcher end
 
 function Luxor.strokepath(::MyDispatcher)
