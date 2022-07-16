@@ -165,16 +165,13 @@ struct DefaultLuxor <: LDispatcher end
 #with a Type that other modules can change
 const DISPATCHER = Array{LDispatcher}([DefaultLuxor()])
 
-for funcname in [:strokepath , :strokepreserve, :fillpath , :fillpreserve]
-    eval(quote $funcname() = $funcname(DISPATCHER[1]) end)
-end
-
 """
     strokepath()
 
 Stroke the current path with the current line width, line join, line cap, dash,
 and stroke scaling settings. The current path is then cleared.
 """
+strokepath() = strokepath(DISPATCHER[1])
 strokepath(::DefaultLuxor) = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
 
 """
@@ -182,6 +179,7 @@ strokepath(::DefaultLuxor) = get_current_strokescale() ? Cairo.stroke_transforme
 
 Fill the current path according to the current settings. The current path is then cleared.
 """
+fillpath() = fillpath(DISPATCHER[1])
 fillpath(::DefaultLuxor) = Cairo.fill(get_current_cr())
 
 """
@@ -197,6 +195,7 @@ paint() = Cairo.paint(get_current_cr())
 Stroke the current path with current line width, line join, line cap, dash, and
 stroke scaling settings, but then keep the path current.
 """
+strokepreserve() = strokepreserve(DISPATCHER[1])
 strokepreserve(::DefaultLuxor)    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
 
 """
@@ -204,6 +203,7 @@ strokepreserve(::DefaultLuxor)    = get_current_strokescale() ? Cairo.stroke_pre
 
 Fill the current path with current settings, but then keep the path current.
 """
+fillpreserve() = fillpreserve(DISPATCHER[1])
 fillpreserve(::DefaultLuxor)      = Cairo.fill_preserve(get_current_cr())
 
 """
