@@ -22,6 +22,10 @@ One can make custom behavior for the functions by the following way.
 	- Change `Luxor.DISPATCHER[1]` to an instance of your struct 
 
 
+The following is an example of a that changes the behavior of all
+calls to  `strokepath()` to return the current path as polys just
+before it draws to the canvas.
+
 ```julia
 
 struct MyDispatcher <:  Luxor.LDispatcher end
@@ -34,6 +38,3 @@ function Luxor.strokepath(::MyDispatcher)
 	return polys
 end
 ```
-
-This method now changes the behavior of all calls to  `strokepath` to 
-return the current path as polys just before it draws to the canvas.

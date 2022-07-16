@@ -41,6 +41,7 @@ makedocs(
              "Transforms and matrices"      =>  "explanation/transforms.md",
              "Image matrix"                 =>  "explanation/imagematrix.md",
              "Luxor and Cairo"              =>  "explanation/luxorcairo.md",
+             "Customizze strokepath/fillpath"  =>  "explanation/strokepathdispatch.md",
              "Contributing"                 =>  "explanation/contributing.md",
              ],
          "Reference" => [
