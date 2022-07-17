@@ -1,13 +1,16 @@
 # Custom behavior for strokepath and fillpath 
 
 There are 4 functions that "paint" the current path to the canvas
-they are `strokepath` , `strokepreserve` , `fillpath` and `fillpreserve`
+they are `strokepath` , `strokepreserve` , `fillpath` and `fillpreserve`.
+Other mechanisms to draw on the canvas are `clip` , `clippreserve` and `paint`.
+(`text` is another function that draws on the canvas but is not considered here)
 
-If you would like to have some custom behavior for these functions  (like say
-to extract/modify paths etc) `Luxor` provides a way to do so.
+If you would like to have some custom behavior for these functions above
+mentioned (like say to extract/modify paths etc) `Luxor` provides a way to do
+so.
 
-The four functions `strokepath`,`strokepreserve`,`fillpath`,`fillpreserve`, are
-basically defined as 
+The functions mentioned above , are
+basically defined in Luxor's source as 
 
 `funcname() = funcname(DISPATCHER[1])`
 and 
@@ -26,9 +29,9 @@ One can make custom behavior for the functions by the following way.
 	- Change `Luxor.DISPATCHER[1]` to an instance of your struct 
 
 
-The following is an example of a method that changes the behavior of all calls to
-`strokepath()` to return the current path as polys just before it draws to the
-canvas.
+The following is an example of a method that changes the behavior of all calls
+to `strokepath()` to return the current path as polys just before it draws to
+the canvas.
 
 ```julia
 struct MyDispatcher <:  Luxor.LDispatcher end
@@ -41,3 +44,10 @@ end
 
 Luxor.DISPATCHER[1] = MyDispatcher()
 ```
+
+Now all calls to `strokepath()` whether explicitly called  or through other
+functions (for example `line(O,+100,:stroke)`) will end up calling your custom
+defined `strokepath(::MyDispatcher)`.
+
+Similar dispatches can be written for `strokepreserve`, `fillpath`,
+`fillpreserve`, `clip` , `clippreserve` and `paint`. 
