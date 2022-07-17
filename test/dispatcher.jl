@@ -1,5 +1,5 @@
 using Luxor
-import Luxor:strokepath,fillpath,strokepreserve,fillpreserve
+import Luxor:strokepath,fillpath,strokepreserve,fillpreserve,clip,clippreserve,paint
 using Test
 
 struct NewDispatcher <: Luxor.LDispatcher end
@@ -33,8 +33,8 @@ Luxor.DISPATCHER[1] = NewDispatcher()
 @test Luxor.fillpath() == "new fillpath"
 @test Luxor.fillpreserve() == "new fillpreserve"
 @test Luxor.strokepreserve() == "new strokepreserve"
-@test Luxor.clip() == "new cip"
-@test Luxor.clippreserve() == "new cippreserve"
+@test Luxor.clip() == "new clip"
+@test Luxor.clippreserve() == "new clippreserve"
 @test Luxor.paint() == "new paint"
 
 #check if setting back gets default behavior
