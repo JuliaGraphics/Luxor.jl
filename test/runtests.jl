@@ -102,6 +102,7 @@ function run_all_tests()
 
     @testset "imagematrix" begin
         include("imagematrix.jl")
+        include("imagematrix2.jl")
     end
 
     @testset "arrows and dimensions" begin

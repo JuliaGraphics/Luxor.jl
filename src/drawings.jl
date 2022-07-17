@@ -13,6 +13,23 @@ mutable struct Drawing
     bufferdata::Array{UInt8, 1} # Direct access to data
     strokescale::Bool
 
+    function Drawing(img::Matrix{T}; strokescale=false) where {T<:Union{RGB24,ARGB32}}
+        w,h = size(img)
+        bufdata = UInt8[]
+        iobuf = IOBuffer(bufdata, read=true, write=true)
+        the_surfacetype = :image
+        f = ""
+        the_surface = Cairo.CairoImageSurface(img)
+        the_cr  = Cairo.CairoContext(the_surface)
+        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
+        if isempty(CURRENTDRAWING)
+            push!(CURRENTDRAWING, currentdrawing)
+        else
+            CURRENTDRAWING[1] = currentdrawing
+        end
+        return currentdrawing
+    end
+
     function Drawing(w, h, stype::Symbol, f::AbstractString=""; strokescale=false)
         bufdata = UInt8[]
         iobuf = IOBuffer(bufdata, read=true, write=true)
@@ -334,6 +351,17 @@ Drawing(width, height, strokescale=true)
 
 creates the drawing and enables stroke scaling (strokes will be scaled according to the current transformation).
 (Stroke scaling is disabled by default.)
+
+```
+Drawing(img, strokescale=true)
+```
+
+creates the drawing from an existing image buffer of type `Matrix{Union{RGB24,ARGB32}}`, e.g.:
+```
+using Luxor, Colors
+buffer=zeros(ARGB32, 100, 100)
+d=Drawing(buffer)
+```
 """
 function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png"; strokescale=false)
     (path, ext)         = splitext(f)
