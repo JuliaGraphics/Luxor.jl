@@ -14,7 +14,7 @@ basically defined in Luxor's source as
 
 `funcname() = funcname(DISPATCHER[1])`
 `funcname(::DefaultLuxor) = -do_some_cairo_things-`
-`funcname(::Any) = funcname(DefaultLuxor())`
+`funcname(::LDispatcher) = funcname(DefaultLuxor())`
 
 `DISPATCHER[1]` is defined in luxor as an instance of a struct (with no fields)
 `DefaultLuxor`. The datatype `DefualtLuxor` is a subtype of `LDispatcher`.

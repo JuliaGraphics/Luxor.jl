@@ -173,7 +173,7 @@ and stroke scaling settings. The current path is then cleared.
 """
 strokepath() = strokepath(DISPATCHER[1])
 strokepath(::DefaultLuxor) = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
-strokepath(::Any) = strokepath(DefaultLuxor())
+strokepath(::LDispatcher) = strokepath(DefaultLuxor())
 
 """
     fillpath()
@@ -182,7 +182,7 @@ Fill the current path according to the current settings. The current path is the
 """
 fillpath() = fillpath(DISPATCHER[1])
 fillpath(::DefaultLuxor) = Cairo.fill(get_current_cr())
-fillpath(::Any) = fillpath(DefaultLuxor())
+fillpath(::LDispatcher) = fillpath(DefaultLuxor())
 
 """
     paint()
@@ -191,7 +191,7 @@ Paint the current clip region with the current settings.
 """
 paint() = paint(DISPATCHER[1])
 paint(::DefaultLuxor) = Cairo.paint(get_current_cr())
-paint(::Any) = paint(DefaultLuxor())
+paint(::LDispatcher) = paint(DefaultLuxor())
 
 """
     strokepreserve()
@@ -201,7 +201,7 @@ stroke scaling settings, but then keep the path current.
 """
 strokepreserve() = strokepreserve(DISPATCHER[1])
 strokepreserve(::DefaultLuxor)    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
-strokepreserve(::Any) = strokepreserve(DefaultLuxor())
+strokepreserve(::LDispatcher) = strokepreserve(DefaultLuxor())
 
 """
     fillpreserve()
@@ -210,7 +210,7 @@ Fill the current path with current settings, but then keep the path current.
 """
 fillpreserve() = fillpreserve(DISPATCHER[1])
 fillpreserve(::DefaultLuxor)      = Cairo.fill_preserve(get_current_cr())
-fillpreserve(::Any) = fillpreserve(DefaultLuxor())
+fillpreserve(::LDispatcher) = fillpreserve(DefaultLuxor())
 
 """
     fillstroke()
@@ -259,7 +259,7 @@ a `gsave()`-`grestore()` block is lost after `grestore()`. [?]
 """
 clip() = clip(DISPATCHER[1])
 clip(::DefaultLuxor) = Cairo.clip(get_current_cr())
-clip(::Any) = clip(DefaultLuxor())
+clip(::LDispatcher) = clip(DefaultLuxor())
 
 """
     clippreserve()
@@ -269,7 +269,7 @@ path, but keep the current path.
 """
 clippreserve() = clippreserve(DISPATCHER[1])
 clippreserve(::DefaultLuxor) = Cairo.clip_preserve(get_current_cr())
-clippreserve(::Any) = clippreserve(DefaultLuxor())
+clippreserve(::LDispatcher) = clippreserve(DefaultLuxor())
 
 """
     clipreset()
