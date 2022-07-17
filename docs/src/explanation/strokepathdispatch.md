@@ -13,8 +13,8 @@ The functions mentioned above , are
 basically defined in Luxor's source as 
 
 `funcname() = funcname(DISPATCHER[1])`
-and 
 `funcname(::DefaultLuxor) = -do_some_cairo_things-`
+`funcname(::Any) = funcname(DefaultLuxor())`
 
 `DISPATCHER[1]` is defined in luxor as an instance of a struct (with no fields)
 `DefaultLuxor`. The datatype `DefualtLuxor` is a subtype of `LDispatcher`.
@@ -51,3 +51,6 @@ defined `strokepath(::MyDispatcher)`.
 
 Similar dispatches can be written for `strokepreserve`, `fillpath`,
 `fillpreserve`, `clip` , `clippreserve` and `paint`. 
+
+Functions which dont have methods defined for the types will default
+to calling `funcname(Luxor.DefaultLuxor())`
