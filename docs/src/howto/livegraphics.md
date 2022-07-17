@@ -95,6 +95,115 @@ end
 
 clock(ColorSchemes.klimt)
 ```
+Another example of using Luxor with MiniFB as the display window, but without the `@play` macro.
+This allows for interactive graphic commands on the REPL instantly displayed in the window:
+```
+using MiniFB, Luxor, Colors
+
+function windowUpdateTask(window,buffer,showFPS=false)
+	sb=buffer[1:105,1:55]
+    state=mfb_update(window,buffer)
+	updateCount=0
+	startTime=floor(Int,time())
+	fps="0"
+	while state == MiniFB.STATE_OK
+		if showFPS
+			elapsedTime=floor(Int,time())-startTime
+			if elapsedTime > 1
+				fps=string(round(Int,updateCount/elapsedTime))
+				startTime=floor(Int,time())
+				updateCount=0
+			end
+			sb.=buffer[1:105,1:55]
+			@layer begin
+				(dx,dy)=Point(0.0, 0.0)-getworldposition(Point(0.0, 0.0);centered=false)
+				setcolor((1.0, 0, 0, 0.5))
+				fontsize(50)
+				text(fps, Point(5+dx,5+dy), halign=:left, valign = :top)
+			end
+		end
+		state=mfb_update(window,buffer)
+		if showFPS
+			buffer[1:105,1:55].=sb
+		end
+        sleep(1.0/120.0)
+		updateCount+=1
+    end
+	println("\nWindow closed\n")
+end
+
+WIDTH=800
+HEIGHT=600
+buffer=zeros(ARGB32, WIDTH, HEIGHT)
+d=Drawing(buffer)
+
+window = mfb_open_ex("MiniFB", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+@async windowUpdateTask(window,buffer,true)
+
+origin()
+setcolor("red")
+circle(0,0,300,action=:fill)
+setcolor("blue")
+circle(0,0,200,action=:fill)
+```
+
+If you want to do life animations in the window in a while loop, you need to `sleep` for a 
+while to allow the `windowUpdateTask` to get some execution time.
+
+In this example you can enter "q" and "return" in the REPL to stop the animation while loop.
+Using "ctrl-c" to stop the animation could also stop the window update task by chance.
+
+```
+mutable struct Ball
+    position::Point
+    velocity::Point
+end
+origin()
+function sticks(w, h)
+    channel = Channel(10)
+    #enter "q" and "return" to stop the while loop
+    @async while true
+        kb = readline(stdin)
+        if contains(kb, "q")
+            put!(channel, 1)
+            break
+        end
+    end
+	colors=[rand(1:255),rand(1:255),rand(1:255)]
+	newcolors=[rand(1:255),rand(1:255),rand(1:255)]
+	c=ARGB(colors[1]/255,colors[2]/255,colors[3]/255,1.0)
+	balls=[Ball( rand(BoundingBox(Point(-w/2, -h/2), Point(w/2, h/2))), rand(BoundingBox(Point(-10, -10), Point(10, 10))) ) for _ in 1:2] 
+	while true
+		background(0,0,0,0.05)
+		if colors == newcolors
+			newcolors=[rand(1:255),rand(1:255),rand(1:255)]
+		end
+		for (index,(col,newcol)) in enumerate(zip(colors,newcolors))
+			if col != newcol
+				col > newcol ? col-=1 : col+=1
+				colors[index]=col
+			end
+		end
+		c=ARGB(colors[1]/255,colors[2]/255,colors[3]/255,1.0)
+		for ball in balls
+			if !(-w/2 < ball.position.x < w/2)
+				ball.velocity = Point(-ball.velocity.x,ball.velocity.y)
+			end
+			if !(-h/2 < ball.position.y < h/2)
+				ball.velocity = Point(ball.velocity.x,-ball.velocity.y)
+			end
+			ball.position = ball.position + ball.velocity
+		end
+		setcolor(c)
+		line(balls[1].position,balls[2].position,:stroke)
+		sleep(1.0/120.0)
+        if isready(channel)
+            break
+        end
+	end
+end
+sticks(WIDTH, HEIGHT)
+```
 
 ## Snapshots
 
