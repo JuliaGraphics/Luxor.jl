@@ -16,6 +16,15 @@ end
 function fillpreserve(::NewDispatcher)
     return "new fillpreserve"
 end
+function clip(::NewDispatcher)
+    return "new clip"
+end
+function clippreserve(::NewDispatcher)
+    return "new clippreserve"
+end
+function paint(::NewDispatcher)
+    return "new paint"
+end
 
 
 Luxor.DISPATCHER[1] = NewDispatcher()
@@ -24,6 +33,9 @@ Luxor.DISPATCHER[1] = NewDispatcher()
 @test Luxor.fillpath() == "new fillpath"
 @test Luxor.fillpreserve() == "new fillpreserve"
 @test Luxor.strokepreserve() == "new strokepreserve"
+@test Luxor.clip() == "new cip"
+@test Luxor.clippreserve() == "new cippreserve"
+@test Luxor.paint() == "new paint"
 
 #check if setting back gets default behavior
 Luxor.DISPATCHER[1] = Luxor.DefaultLuxor()
@@ -41,4 +53,11 @@ function drawthings(fname)
 end
 
 fname = "dispatcher_test.png"
+drawthings(fname)
+
+#test if defaults to luxor behavior if method is not defined
+struct NewDispatcher2 <: Luxor.LDispatcher end
+Luxor.DISPATCHER[1] = NewDispatcher2()
+
+fname = "dispatcher_default_test.png"
 drawthings(fname)
