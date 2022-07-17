@@ -187,7 +187,8 @@ fillpath(::DefaultLuxor) = Cairo.fill(get_current_cr())
 
 Paint the current clip region with the current settings.
 """
-paint() = Cairo.paint(get_current_cr())
+paint() = paint(DISPATCHER[1])
+paint(::DefaultLuxor) = Cairo.paint(get_current_cr())
 
 """
     strokepreserve()
@@ -251,7 +252,8 @@ current path and then clearing the current path.
 An existing clipping region is enforced through and after a `gsave()`-`grestore()` block, but a clipping region set inside
 a `gsave()`-`grestore()` block is lost after `grestore()`. [?]
 """
-clip() = Cairo.clip(get_current_cr())
+clip() = clip(DISPATCHER[1])
+clip(::DefaultLuxor) = Cairo.clip(get_current_cr())
 
 """
     clippreserve()
@@ -259,7 +261,8 @@ clip() = Cairo.clip(get_current_cr())
 Establish a new clipping region by intersecting the current clipping region with the current
 path, but keep the current path.
 """
-clippreserve() = Cairo.clip_preserve(get_current_cr())
+clippreserve() = clippreserve(DISPATCHER[1])
+clippreserve(::DefaultLuxor) = Cairo.clip_preserve(get_current_cr())
 
 """
     clipreset()
