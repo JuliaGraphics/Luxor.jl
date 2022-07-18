@@ -22,10 +22,11 @@ mutable struct Drawing
         the_surface = Cairo.CairoImageSurface(img)
         the_cr  = Cairo.CairoContext(the_surface)
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
-        if isempty(CURRENTDRAWING)
+        if ! isassigned(CURRENTDRAWING, CURRENTDRAWINGINDEX[1])
             push!(CURRENTDRAWING, currentdrawing)
+            CURRENTDRAWINGINDEX[1] = lastindex(CURRENTDRAWING)
         else
-            CURRENTDRAWING[1] = currentdrawing
+            CURRENTDRAWING[CURRENTDRAWINGINDEX[1]] = currentdrawing
         end
         return currentdrawing
     end
@@ -67,15 +68,18 @@ mutable struct Drawing
         the_cr  = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
-        if isempty(CURRENTDRAWING)
+        if ! isassigned(CURRENTDRAWING,CURRENTDRAWINGINDEX[1])
             push!(CURRENTDRAWING, currentdrawing)
+            CURRENTDRAWINGINDEX[1] = lastindex(CURRENTDRAWING)
         else
-            CURRENTDRAWING[1] = currentdrawing
+            CURRENTDRAWING[CURRENTDRAWINGINDEX[1]] = currentdrawing
         end
         return currentdrawing
     end
 end
 
+const CURRENTDRAWINGINDEX = Array{Int,1}()
+push!(CURRENTDRAWINGINDEX,1)
 const CURRENTDRAWING = Array{Drawing, 1}()
 
 # utility functions that access the internal current Cairo drawing object, which is
@@ -83,34 +87,34 @@ const CURRENTDRAWING = Array{Drawing, 1}()
 
 function get_current_cr()
     try
-        getfield(CURRENTDRAWING[1], :cr)
+        getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :cr)
     catch
         error("There is no current drawing.")
     end
 end
 
-get_current_redvalue()    = getfield(CURRENTDRAWING[1], :redvalue)
-get_current_greenvalue()  = getfield(CURRENTDRAWING[1], :greenvalue)
-get_current_bluevalue()   = getfield(CURRENTDRAWING[1], :bluevalue)
-get_current_alpha()       = getfield(CURRENTDRAWING[1], :alpha)
+get_current_redvalue()    = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :redvalue)
+get_current_greenvalue()  = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :greenvalue)
+get_current_bluevalue()   = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :bluevalue)
+get_current_alpha()       = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :alpha)
 
-set_current_redvalue(r)   = setfield!(CURRENTDRAWING[1], :redvalue, convert(Float64, r))
-set_current_greenvalue(g) = setfield!(CURRENTDRAWING[1], :greenvalue, convert(Float64, g))
-set_current_bluevalue(b)  = setfield!(CURRENTDRAWING[1], :bluevalue, convert(Float64, b))
-set_current_alpha(a)      = setfield!(CURRENTDRAWING[1], :alpha, convert(Float64, a))
+set_current_redvalue(r)   = setfield!(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :redvalue, convert(Float64, r))
+set_current_greenvalue(g) = setfield!(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :greenvalue, convert(Float64, g))
+set_current_bluevalue(b)  = setfield!(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :bluevalue, convert(Float64, b))
+set_current_alpha(a)      = setfield!(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :alpha, convert(Float64, a))
 
-current_filename()        = getfield(CURRENTDRAWING[1], :filename)
-current_width()           = getfield(CURRENTDRAWING[1], :width)
-current_height()          = getfield(CURRENTDRAWING[1], :height)
-current_surface()         = getfield(CURRENTDRAWING[1], :surface)
-current_surface_ptr()     = getfield(getfield(CURRENTDRAWING[1], :surface), :ptr)
-current_surface_type()    = getfield(CURRENTDRAWING[1], :surfacetype)
+current_filename()        = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :filename)
+current_width()           = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :width)
+current_height()          = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :height)
+current_surface()         = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :surface)
+current_surface_ptr()     = getfield(getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :surface), :ptr)
+current_surface_type()    = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :surfacetype)
 
-current_buffer()          = getfield(CURRENTDRAWING[1], :buffer)
-current_bufferdata()      = getfield(CURRENTDRAWING[1], :bufferdata)
+current_buffer()          = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :buffer)
+current_bufferdata()      = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :bufferdata)
 
-get_current_strokescale() = getfield(CURRENTDRAWING[1], :strokescale)
-set_current_strokescale(s)= setfield!(CURRENTDRAWING[1], :strokescale, s)
+get_current_strokescale() = getfield(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :strokescale)
+set_current_strokescale(s)= setfield!(CURRENTDRAWING[CURRENTDRAWINGINDEX[1]], :strokescale, s)
 
 """
     currentdrawing()
@@ -123,7 +127,7 @@ function currentdrawing()
         @info "There is no current drawing"
         return false
     else
-        return CURRENTDRAWING[1]
+        return CURRENTDRAWING[CURRENTDRAWINGINDEX[1]]
     end
 end
 
@@ -366,11 +370,11 @@ d=Drawing(buffer)
 function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png"; strokescale=false)
     (path, ext)         = splitext(f)
     currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f, strokescale=strokescale)
-    if isempty(CURRENTDRAWING)
-        push!(CURRENTDRAWING, currentdrawing)
-    else
-        CURRENTDRAWING[1] = currentdrawing
-    end
+    #if isempty(CURRENTDRAWING)
+    #    push!(CURRENTDRAWING, currentdrawing)
+    #else
+    #    CURRENTDRAWING[CURRENTDRAWINGINDEX[1]] = currentdrawing
+    #end
     return currentdrawing
 end
 
@@ -528,7 +532,7 @@ function snapshot(fname, cb, scalefactor)
     finish()
 
     # Switch back to continue recording
-    CURRENTDRAWING[1] = rd
+    CURRENTDRAWING[CURRENTDRAWINGINDEX[1]] = rd
     # Return the snapshot in case it should be displayed
     nd
 end
@@ -553,7 +557,7 @@ Otherwise:
 """
 function preview()
     @debug "preview()"
-    return CURRENTDRAWING[1]
+    return CURRENTDRAWING[CURRENTDRAWINGINDEX[1]]
 end
 
 # for filenames, the @pdf/png/svg macros may pass either
@@ -898,7 +902,7 @@ finish()
 ```
 """
 function image_as_matrix()
-    if length(CURRENTDRAWING) != 1
+    if ! isassigned(CURRENTDRAWING,CURRENTDRAWINGINDEX[1])
         error("no current drawing")
     end
     w = Int(current_surface().width)
@@ -1049,7 +1053,7 @@ Images.RGB.(m)
 ```
 """
 function image_as_matrix!(buffer)
-    if length(Luxor.CURRENTDRAWING) != 1
+    if ! isassigned(CURRENTDRAWING,CURRENTDRAWINGINDEX[1])
         error("no current drawing")
     end
     # create a new image surface to receive the data from the current drawing
