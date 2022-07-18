@@ -1,8 +1,12 @@
 # Changelog
 
-## [v3...........] - forthcoming
+## [v3.5.0] - forthcoming
 
 ### Added
+
+- drawing image buffer (thanks @oheil!)
+
+- action dispatcher (thanks @ArbitRandomUser)
 
 ### Changed
 
