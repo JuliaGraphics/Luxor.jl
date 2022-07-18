@@ -154,27 +154,44 @@ Close the current path. This is Cairo's `close_path()` function.
 """
 closepath() = Cairo.close_path(get_current_cr())
 
+abstract type LDispatcher  end
+# Packages which want to override strokepath/fillpath/strokepreserve/fillpreserve
+# can subtype an empty struct from this abstract type and dispatch on them .
+# Make sure Luxor.DISPATCHER[1] is set to an instance of the struct you want to
+# dispatch on in your module.
+
+#Default luxor behaviour dispatches on `DefaultLuxor`
+struct DefaultLuxor <: LDispatcher end
+#global constant to decide dispatch, a single element array which 
+const DISPATCHER = Array{LDispatcher}([DefaultLuxor()])
+
 """
     strokepath()
 
 Stroke the current path with the current line width, line join, line cap, dash,
 and stroke scaling settings. The current path is then cleared.
 """
-strokepath() = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
+strokepath() = strokepath(DISPATCHER[1])
+strokepath(::DefaultLuxor) = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
+strokepath(::LDispatcher) = strokepath(DefaultLuxor())
 
 """
     fillpath()
 
 Fill the current path according to the current settings. The current path is then cleared.
 """
-fillpath() = Cairo.fill(get_current_cr())
+fillpath() = fillpath(DISPATCHER[1])
+fillpath(::DefaultLuxor) = Cairo.fill(get_current_cr())
+fillpath(::LDispatcher) = fillpath(DefaultLuxor())
 
 """
     paint()
 
 Paint the current clip region with the current settings.
 """
-paint() = Cairo.paint(get_current_cr())
+paint() = paint(DISPATCHER[1])
+paint(::DefaultLuxor) = Cairo.paint(get_current_cr())
+paint(::LDispatcher) = paint(DefaultLuxor())
 
 """
     strokepreserve()
@@ -182,14 +199,18 @@ paint() = Cairo.paint(get_current_cr())
 Stroke the current path with current line width, line join, line cap, dash, and
 stroke scaling settings, but then keep the path current.
 """
-strokepreserve()    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
+strokepreserve() = strokepreserve(DISPATCHER[1])
+strokepreserve(::DefaultLuxor)    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
+strokepreserve(::LDispatcher) = strokepreserve(DefaultLuxor())
 
 """
     fillpreserve()
 
 Fill the current path with current settings, but then keep the path current.
 """
-fillpreserve()      = Cairo.fill_preserve(get_current_cr())
+fillpreserve() = fillpreserve(DISPATCHER[1])
+fillpreserve(::DefaultLuxor)      = Cairo.fill_preserve(get_current_cr())
+fillpreserve(::LDispatcher) = fillpreserve(DefaultLuxor())
 
 """
     fillstroke()
@@ -236,7 +257,9 @@ current path and then clearing the current path.
 An existing clipping region is enforced through and after a `gsave()`-`grestore()` block, but a clipping region set inside
 a `gsave()`-`grestore()` block is lost after `grestore()`. [?]
 """
-clip() = Cairo.clip(get_current_cr())
+clip() = clip(DISPATCHER[1])
+clip(::DefaultLuxor) = Cairo.clip(get_current_cr())
+clip(::LDispatcher) = clip(DefaultLuxor())
 
 """
     clippreserve()
@@ -244,7 +267,9 @@ clip() = Cairo.clip(get_current_cr())
 Establish a new clipping region by intersecting the current clipping region with the current
 path, but keep the current path.
 """
-clippreserve() = Cairo.clip_preserve(get_current_cr())
+clippreserve() = clippreserve(DISPATCHER[1])
+clippreserve(::DefaultLuxor) = Cairo.clip_preserve(get_current_cr())
+clippreserve(::LDispatcher) = clippreserve(DefaultLuxor())
 
 """
     clipreset()
