@@ -95,6 +95,9 @@ end
 
 clock(ColorSchemes.klimt)
 ```
+
+## Live graphics with MiniFB
+
 Another example of using Luxor with MiniFB as the display window, but without the `@play` macro.
 This allows for interactive graphic commands on the REPL instantly displayed in the window:
 ```
