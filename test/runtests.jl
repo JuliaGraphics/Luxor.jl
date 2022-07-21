@@ -9,6 +9,10 @@ function run_all_tests()
         include("basic-test.jl")
     end
 
+    @testset "multiple drawings" begin
+        include("multi-draw.jl")
+    end
+
     @testset "animation (Unix only)" begin
         if ! Sys.iswindows()
             include("animation-test.jl")
