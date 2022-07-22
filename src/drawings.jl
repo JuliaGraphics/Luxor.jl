@@ -78,8 +78,6 @@ mutable struct Drawing
 end
 
 const CURRENTDRAWINGINDEX = Ref(1)
-#const CURRENTDRAWINGINDEX = Array{Int,1}()
-#push!(CURRENTDRAWINGINDEX,1)
 const CURRENTDRAWING = Array{Drawing, 1}()
 
 # utility functions that access the internal current Cairo drawing object, which is
@@ -443,7 +441,7 @@ function finish()
     Cairo.finish(current_surface())
     Cairo.destroy(current_surface())
 
-    if ! file_written && current_filename() != ""
+    if current_filename() != ""
         write(current_filename(), current_bufferdata())
     end
 
