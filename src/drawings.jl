@@ -434,7 +434,7 @@ function finish()
         current_surface_type() == :image &&
         typeof(current_surface()) == Cairo.CairoSurfaceImage{ARGB32} &&
         endswith(current_filename(), r"\.png"i)
-            Cairo.write_to_png(current_surface(), current_filename())
+            Cairo.write_to_png(current_surface(), current_buffer())
             file_written = true
         end
 
