@@ -13,12 +13,11 @@ mutable struct Drawing
     bufferdata::Array{UInt8, 1} # Direct access to data
     strokescale::Bool
 
-    function Drawing(img::Matrix{T}; strokescale=false) where {T<:Union{RGB24,ARGB32}}
+    function Drawing(img::Matrix{T}, f::AbstractString=""; strokescale=false) where {T<:Union{RGB24,ARGB32}}
         w,h = size(img)
         bufdata = UInt8[]
         iobuf = IOBuffer(bufdata, read=true, write=true)
         the_surfacetype = :image
-        f = ""
         the_surface = Cairo.CairoImageSurface(img)
         the_cr  = Cairo.CairoContext(the_surface)
         currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
@@ -79,6 +78,8 @@ mutable struct Drawing
 end
 
 const CURRENTDRAWINGINDEX = Ref(1)
+#const CURRENTDRAWINGINDEX = Array{Int,1}()
+#push!(CURRENTDRAWINGINDEX,1)
 const CURRENTDRAWING = Array{Drawing, 1}()
 
 # utility functions that access the internal current Cairo drawing object, which is
@@ -421,19 +422,28 @@ Finish the drawing, and close the file. You may be able to open it in an
 external viewer application with `preview()`.
 """
 function finish()
+    file_written = false
     if current_surface_ptr() == C_NULL
         # Already finished
         return false
     end
     if current_surface_type() == :png
         Cairo.write_to_png(current_surface(), current_buffer())
+        file_written = true
     end
+
+    if ! file_written && 
+        current_surface_type() == :image &&
+        typeof(current_surface()) == Cairo.CairoSurfaceImage{ARGB32} &&
+        endswith(current_filename(), r"\.png"i)
+            Cairo.write_to_png(current_surface(), current_filename())
+            file_written = true
+        end
 
     Cairo.finish(current_surface())
     Cairo.destroy(current_surface())
 
-
-    if current_filename() != ""
+    if ! file_written && current_filename() != ""
         write(current_filename(), current_bufferdata())
     end
 
