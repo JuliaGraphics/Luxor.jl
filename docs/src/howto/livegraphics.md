@@ -95,9 +95,12 @@ end
 
 clock(ColorSchemes.klimt)
 ```
+
+## Live graphics with MiniFB
+
 Another example of using Luxor with MiniFB as the display window, but without the `@play` macro.
 This allows for interactive graphic commands on the REPL instantly displayed in the window:
-```
+```julia
 using Colors
 using Luxor
 using MiniFB
@@ -156,7 +159,7 @@ while to allow the `window_update_task` to get some execution time.
 In this example you can enter "q" and "return" in the REPL to stop the animation while loop.
 Using "ctrl-c" to stop the animation could also stop the window update task by chance.
 
-```
+```julia
 mutable struct Ball
     position::Point
     velocity::Point
@@ -207,6 +210,100 @@ end
 
 origin()
 sticks(WIDTH, HEIGHT)
+```
+
+## Live and interactive graphics with multiple drawings in MiniFB
+
+This examples shows how to do interactive graphics with Luxor and MiniFB using
+multiple drawings simultaneously.
+
+First we setup our MiniFB windows, one for each drawing:
+
+```julia
+using MiniFB, Luxor, Colors, FixedPointNumbers
+
+WIDTH=500
+HEIGHT=500
+
+function windowUpdateTask(window,buffer)
+    state=mfb_update(window,buffer)
+    while state == MiniFB.STATE_OK
+        state=mfb_update(window,buffer)
+        sleep(1.0/120.0)
+    end
+    println("\nWindow closed\n")
+end
+
+window1 = mfb_open_ex("1", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+buffer1 = zeros(ARGB32, WIDTH, HEIGHT)
+@async windowUpdateTask(window1,buffer1)
+
+window2 = mfb_open_ex("2", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+buffer2 = zeros(ARGB32, WIDTH, HEIGHT)
+@async windowUpdateTask(window2,buffer2)
+
+window3 = mfb_open_ex("3=1+2", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+buffer3 = zeros(ARGB32, WIDTH, HEIGHT)
+@async windowUpdateTask(window3,buffer3)
+```
+
+Rearrange now the 3 windows, so that they are all visible on the desktop.
+In window 1 and 2 we create some components which are than combined into window 3 name "3=1+2".
+
+Now we setup 3 drawings to work with simultaneously:
+```julia
+d1=Drawing(buffer1)     # buffer1,2,3 are the live buffers for the MiniFB windows
+
+Luxor.set_next_drawing_index()   # another drawing
+d2=Drawing(buffer2)
+
+Luxor.set_next_drawing_index()   # another drawing
+d3=Drawing(buffer3, raw"c:\temp\julia.png")   # the result we want to safe in julia.png
+
+Luxor.set_drawing_index(1) # back to drawing 1 for interactive graphics
+```
+
+We now have 3 drawings which are live updated and visible in 3 windows.
+Lets start with the drawing at drawing index 1:
+
+```julia
+origin()
+setopacity(.4)
+foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
+gsave()
+translate(-100, 0)
+for i in 1:500
+	sethue(foregroundcolors[rand(1:end)])
+	circle(rand(-50:350), rand(0:300), 15, :fill)
+end
+grestore()
+```
+
+Lets draw the second component into window/drawing 2:
+
+```julia
+Luxor.set_drawing_index(2)  # next drawing commands into drawing at index 2, window 2
+origin()
+setopacity(1.0)
+gsave()
+translate(-100, 0)
+julialogo(bodycolor=colorant"white")
+grestore()
+```
+
+Now we combine the two into drawing/window 3:
+
+```julia
+Luxor.set_drawing_index(3)  # work on drawing at index 3, window 3
+background("black")
+# combine buffer1 + 2 with AND 
+buffer3 .= reinterpret(ARGB{N0f8}, ( reinterpret.(UInt32,buffer1) .& reinterpret.(UInt32,buffer2) ) )
+# before we finish we have to set opacity to 1.0 on each pixel:
+buffer3.=ARGB32.(RGB24.(buffer3))
+# now finish drawing 3 and save as c:\temp\julia.png
+# The julia.png would look strange if we wouldn't have changed the opacity to 1.0 before
+finish()
+preview()
 ```
 
 ## Snapshots
