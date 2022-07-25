@@ -254,13 +254,13 @@ Now we setup 3 drawings to work with simultaneously:
 ```julia
 d1=Drawing(buffer1)     # buffer1,2,3 are the live buffers for the MiniFB windows
 
-Luxor.set_next_drawing()   # another drawing
+Luxor.set_next_drawing_index()   # another drawing
 d2=Drawing(buffer2)
 
-Luxor.set_next_drawing()   # another drawing
+Luxor.set_next_drawing_index()   # another drawing
 d3=Drawing(buffer3, raw"c:\temp\julia.png")   # the result we want to safe in julia.png
 
-Luxor.set_current_drawing(1) # back to drawing 1 for interactive graphics
+Luxor.set_drawing_index(1) # back to drawing 1 for interactive graphics
 ```
 
 We now have 3 drawings which are live updated and visible in 3 windows.
@@ -282,7 +282,7 @@ grestore()
 Lets draw the second component into window/drawing 2:
 
 ```julia
-Luxor.set_current_drawing(2)  # next drawing commands into drawing at index 2, window 2
+Luxor.set_drawing_index(2)  # next drawing commands into drawing at index 2, window 2
 origin()
 setopacity(1.0)
 gsave()
@@ -294,7 +294,7 @@ grestore()
 Now we combine the two into drawing/window 3:
 
 ```julia
-Luxor.set_current_drawing(3)  # work on drawing at index 3, window 3
+Luxor.set_drawing_index(3)  # work on drawing at index 3, window 3
 background("black")
 # combine buffer1 + 2 with AND 
 buffer3 .= reinterpret(ARGB{N0f8}, ( reinterpret.(UInt32,buffer1) .& reinterpret.(UInt32,buffer2) ) )
