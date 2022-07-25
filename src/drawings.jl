@@ -300,6 +300,19 @@ function set_next_drawing_index()
     return CURRENTDRAWINGINDEX()
 end
 
+function has_currentdrawing()
+    return ! isempty(CURRENTDRAWING())
+end
+
+function currentdrawing(d::Drawing)
+    if ! isassigned(CURRENTDRAWING(), CURRENTDRAWINGINDEX())
+        push!(CURRENTDRAWING(), d)
+        CURRENTDRAWINGINDEX(lastindex(CURRENTDRAWING()))
+    else
+        CURRENTDRAWING()[CURRENTDRAWINGINDEX()] = d
+    end
+    return d
+end
 
 """
     currentdrawing()
