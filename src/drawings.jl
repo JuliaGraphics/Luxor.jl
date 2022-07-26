@@ -77,11 +77,8 @@ mutable struct Drawing
     end
 end
 
-#const CURRENTDRAWINGINDEX = Ref(1)
-#const CURRENTDRAWING = Array{Drawing, 1}()
 let CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 => nothing)),
     CURRENTDRAWINGINDICES = Ref{Dict{Int,Int}}(Dict(0 => 0))
-
     global CURRENTDRAWING
     function CURRENTDRAWING()
         id = Threads.threadid()
@@ -98,7 +95,6 @@ let CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 => 
         end
         return CURRENTDRAWINGS[][id]
     end
-
     global CURRENTDRAWINGINDEX
     function CURRENTDRAWINGINDEX()
         id = Threads.threadid()
@@ -106,7 +102,7 @@ let CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 => 
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                CURRENTDRAWINGINDICES[][preID] = 1
+                CURRENTDRAWINGINDICES[][preID] = 0
             end
             unlock(lc)
         end
@@ -121,7 +117,7 @@ let CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 => 
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                CURRENTDRAWINGINDICES[][preID] = 1
+                CURRENTDRAWINGINDICES[][preID] = 0
             end
             unlock(lc)
         end
@@ -240,7 +236,7 @@ drawing_indices() = length(CURRENTDRAWING()) == 0 ? (1:1) : (1:length(CURRENTDRA
 
 Returns the index of the current drawing. If there isn't any drawing yet returns 1.
 """
-get_drawing_index() = CURRENTDRAWINGINDEX()
+get_drawing_index() = CURRENTDRAWINGINDEX() == 0 ? 1 : CURRENTDRAWINGINDEX()
 
 """
     Luxor.set_drawing_index(i::Int)
@@ -265,7 +261,7 @@ function set_drawing_index(i::Int)
     if isassigned(CURRENTDRAWING(),i)
         CURRENTDRAWINGINDEX(i)
     end
-    return CURRENTDRAWINGINDEX()
+    return get_drawing_index()
 end
 
 """
@@ -296,14 +292,28 @@ index where a finished (`finish()`) drawing was stored before.
 Returns the current drawing index.
 """
 function set_next_drawing_index()
-    CURRENTDRAWINGINDEX(get_next_drawing_index())
+    if has_drawing()
+        CURRENTDRAWINGINDEX(get_next_drawing_index())
+    else
+        return get_next_drawing_index()
+    end
     return CURRENTDRAWINGINDEX()
 end
 
-function has_currentdrawing()
-    return ! isempty(CURRENTDRAWING())
+"""
+    Luxor.has_drawing()
+
+returns true if there is a current drawing available or finished, otherwise false.
+"""
+function has_drawing()
+    return CURRENTDRAWINGINDEX() != 0
 end
 
+"""
+    currentdrawing(d::Drawing)
+
+Sets and returns the current Luxor drawing overwriting an existing drawing if exists.
+"""
 function currentdrawing(d::Drawing)
     if ! isassigned(CURRENTDRAWING(), CURRENTDRAWINGINDEX())
         push!(CURRENTDRAWING(), d)

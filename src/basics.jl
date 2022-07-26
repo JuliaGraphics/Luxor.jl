@@ -504,7 +504,24 @@ function rule(pos, theta=0.0;
     return ruledline
 end
 
-saved_colors = Tuple{Float64, Float64, Float64, Float64}[]
+let SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64, Float64, Float64, Float64},1}}}(Dict(0 => Array{Tuple{Float64, Float64, Float64, Float64},1}()))
+    global SAVED_COLORS
+    function SAVED_COLORS()
+        id = Threads.threadid()
+        if ! haskey(SAVED_COLORS_STACK[],id)
+            lc = ReentrantLock()
+            lock(lc)
+            for preID in 1:Threads.nthreads()
+                SAVED_COLORS_STACK[][preID] = Array{Tuple{Float64, Float64, Float64, Float64},1}()
+            end
+            unlock(lc)
+        end
+        if isnothing(SAVED_COLORS_STACK[][id])
+            error("(4)thread id should be preallocated")
+        end
+        return SAVED_COLORS_STACK[][id]
+    end
+end
 
 # I originally used simple Cairo save() but the colors/opacity
 # thing I've got going didn't save/restore properly, hence the stack
@@ -520,7 +537,7 @@ function gsave()
                   get_current_bluevalue(),
                   get_current_alpha()
                  )
-    push!(saved_colors, (r, g, b, a))
+    push!(SAVED_COLORS(), (r, g, b, a))
     return (r, g, b, a)
 end
 
@@ -532,7 +549,7 @@ Replace the current graphics state with the one on top of the stack.
 function grestore()
     Cairo.restore(get_current_cr())
     try
-        (r, g, b, a) =  pop!(saved_colors)
+        (r, g, b, a) =  pop!(SAVED_COLORS())
         set_current_redvalue(r)
         set_current_greenvalue(g)
         set_current_bluevalue(b)
