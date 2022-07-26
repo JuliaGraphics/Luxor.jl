@@ -4,7 +4,7 @@
 
 ### Added
 
-- drawing image buffer (thanks @oheil!)
+- drawing image buffer and drawing indices (thanks @oheil!)
 
 - action dispatcher (thanks @ArbitRandomUser)
 

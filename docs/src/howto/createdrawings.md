@@ -187,6 +187,37 @@ end
  
 ![interactive](../assets/figures/interact.png)
 
+## Drawing pixels
+
+The `Drawing()` function accepts an array of ARGB32 values as a drawing surface. You can use Images.jl to display the buffer when you've finished drawing.
+
+```julia
+using Luxor, Colors, Images
+
+buffer = zeros(ARGB32, 150, 600) # 150 rows, 600 columns
+
+Drawing(buffer) # or Drawing(buffer, filename.png)
+origin()
+
+for i in 1:15:150
+    buffer[i:i+10, 1:600] .= RGB(rand(), rand(), rand())
+end
+
+for i in 1:100
+    randomhue()
+    ngon(rand(BoundingBox()), 15, 4, 0, :fill)
+end
+
+finish()
+buffer
+```
+
+![buffer drawing](../assets/figures/buffer-drawing.png)
+
+!!! note
+
+    This example uses standard Julian "column-major" array addressing, as used by Images.jl. So `buffer[1, 600]` addresses the pixel at the top right of the buffer when displayed by Images. When displayed by Luxor as a PNG, this pixel will appear at the bottom left of the drawing.
+
 ## Extracting the drawing as an image
 
 If you create a drawing using `Drawing(w, h, :png)`, you can use the [`image_as_matrix`](@ref) function at any stage in the drawing process to extract the drawing in its current state as a matrix of pixels.

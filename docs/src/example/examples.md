@@ -307,6 +307,34 @@ d
 
 See the [Writing LaTeX](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
 
+## Drawing pixels
+
+You can use Luxor to draw into an array of ARGB32 values, which are essentially colored pixels. This example uses Images.jl to display the array.
+
+```julia
+using Luxor, Colors, Images
+
+# a matrix of 150 rows, 600 columns
+buffer = zeros(ARGB32, 150, 600) 
+
+Drawing(buffer)
+origin()
+
+for i in 1:15:150
+    buffer[i:i+10, 1:600] .= RGB(rand(), rand(), rand())
+end
+
+for i in 1:100
+    randomhue()
+    ngon(rand(BoundingBox()), 15, 4, 0, :fill)
+end
+
+finish()
+buffer
+```
+
+![buffer drawing](../assets/figures/buffer-drawing.png)
+
 ## Triangulations
 
 This example shows how a Delaunay triangulation of a set of

@@ -242,7 +242,7 @@ Set the compositing/blending mode. `mode` can be one of:
 - `"over"` The default mode: like two transparent slides overlapping.
 - `"in"` The first object is removed completely, the second is only drawn where the first was.
 - `"out"` The second object is drawn only where the first one wasn't.
-- `"atop"` The first object is mostly intact, but mixes both objects in the overlapping area. The second object object is not drawn elsewhere.
+- `"atop"` The first object is mostly intact, but mixes both objects in the overlapping area. The second object is not drawn elsewhere.
 - `"dest"` Discard the second object completely.
 - `"dest_over"` Like "over" but draw second object below the first
 - `"dest_in"` Keep the first object whereever the second one overlaps.

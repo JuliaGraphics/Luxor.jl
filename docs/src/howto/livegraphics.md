@@ -1,6 +1,6 @@
-# Live graphics and snapshots
+# Interactive graphics and snapshots
 
-## Live graphics
+## Continuous display
 
 With the help of an external appication to manage windows, it's possible to use Luxor to create continuously changing graphics in a window.
 
@@ -30,6 +30,8 @@ end
 ```
 
 draws a continuously rotating hypotrochoid.
+
+![live hypo](../assets/figures/live-hypo.gif)
 
 ### Clock
 
@@ -96,68 +98,73 @@ end
 clock(ColorSchemes.klimt)
 ```
 
-## Live graphics with MiniFB
+## Live coding with MiniFB
 
-Another example of using Luxor with MiniFB as the display window, but without the `@play` macro.
-This allows for interactive graphic commands on the REPL instantly displayed in the window:
+Here are some examples of how to use Luxor with MiniFB as the display window, without using the simple `@play` macro.
+
+### Interactivity
+
+This example lets you type graphic commands at the REPL and see the results instantly displayed in a window.
+
+First, run this code to connect a Luxor drawing to a MiniFB buffer:
+
 ```julia
-using Colors
 using Luxor
+using Colors
 using MiniFB
+
+function window_update_task(window, buffer, showFPS=false)
+    state = mfb_update(window, buffer)
+    updateCount = 0
+    startTime = floor(Int, time())
+    fps = "0"
+    while state == MiniFB.STATE_OK
+        if showFPS
+            elapsedTime = floor(Int, time()) - startTime
+            if elapsedTime > 1
+                fps = string(round(Int, updateCount / elapsedTime))
+                startTime = floor(Int, time())
+                updateCount = 0
+            end
+            @layer begin
+                setcolor("black")
+                circle(boxtopleft() + (15, 15), 15, :fill)
+                setcolor("white")
+                fontsize(20)
+                text(fps, boxtopleft() + (15, 15), halign=:center, valign=:middle)
+            end
+        end
+        state = mfb_update(window, buffer)
+        sleep(1.0 / 120.0)
+        updateCount += 1
+    end
+    println("\nWindow closed\n")
+end
 
 const WIDTH = 800
 const HEIGHT = 600
 
-function window_update_task(window, buffer, showFPS=false)
-	sb = buffer[1:105, 1:55]
-    state = mfb_update(window, buffer)
-	updateCount = 0
-	startTime = floor(Int, time())
-	fps = "0"
-	while state == MiniFB.STATE_OK
-		if showFPS
-			elapsedTime = floor(Int, time()) - startTime
-			if elapsedTime > 1
-				fps = string(round(Int, updateCount/elapsedTime))
-				startTime = floor(Int, time())
-				updateCount = 0
-			end
-			sb .= buffer[1:105, 1:55]
-			@layer begin
-				(dx,dy) = Point(0.0, 0.0) - getworldposition(Point(0.0, 0.0); centered=false)
-				setcolor((1.0, 0, 0, 0.5))
-				fontsize(50)
-				text(fps, Point(5+dx, 5+dy), halign=:left, valign=:top)
-			end
-		end
-		state = mfb_update(window, buffer)
-		if showFPS
-			buffer[1:105, 1:55] .= sb
-		end
-        sleep(1.0/120.0)
-		updateCount += 1
-    end
-	println("\nWindow closed\n")
-end
-
 buffer = zeros(ARGB32, WIDTH, HEIGHT)
 d = Drawing(buffer)
-
 window = mfb_open_ex("MiniFB", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
 @async window_update_task(window, buffer, true)
-
-origin()
-setcolor("red")
-circle(0, 0, 300, action=:fill)
-setcolor("blue")
-circle(0, 0, 200, action=:fill)
 ```
 
-If you want to do life animations in the window in a while loop, you need to `sleep` for a 
-while to allow the `window_update_task` to get some execution time.
+Now, the window will display the results of any expressions you type at the REPL:
 
-In this example you can enter "q" and "return" in the REPL to stop the animation while loop.
-Using "ctrl-c" to stop the animation could also stop the window update task by chance.
+![live graphics 1](../assets/figures/live-coding-1.png)
+
+### Live animations
+
+If you want to do live animations in the window in a "while" loop, you need to call `sleep()` for a while to allow the `window_update_task()` to get some execution time. 
+
+In this example you can enter "q" and "return" in the REPL to stop the animation's while loop. Using "ctrl-c" to stop the animation could also stop the window update task by chance.
+
+![live graphics 2](../assets/figures/livegraphics.gif)
+
+```@raw html
+<details closed><summary>Code for this example</summary>
+```
 
 ```julia
 mutable struct Ball
@@ -212,12 +219,17 @@ origin()
 sticks(WIDTH, HEIGHT)
 ```
 
-## Live and interactive graphics with multiple drawings in MiniFB
+```@raw html
+</details>
+```
 
-This examples shows how to do interactive graphics with Luxor and MiniFB using
-multiple drawings simultaneously.
+### Interactive graphics with multiple drawings
 
-First we setup our MiniFB windows, one for each drawing:
+This next example shows how to work with multiple drawings. We'll create three windows, then combine (`AND`) the contents of the first two and display them in the third.
+
+![multiple drawings](../assets/figures/multiple-drawings.png)
+
+First, we'll setup our display buffers and MiniFB windows, one for each Luxor drawing:
 
 ```julia
 using MiniFB, Luxor, Colors, FixedPointNumbers
@@ -247,61 +259,62 @@ buffer3 = zeros(ARGB32, WIDTH, HEIGHT)
 @async windowUpdateTask(window3,buffer3)
 ```
 
-Rearrange now the 3 windows, so that they are all visible on the desktop.
-In window 1 and 2 we create some components which are than combined into window 3 name "3=1+2".
+Buffers 1, 2, and 3 are the buffers for the three MiniFB windows. They'll appear on your display.
 
-Now we setup 3 drawings to work with simultaneously:
+Next we'll create three Luxor drawings that connect to these buffers.
+
 ```julia
-d1=Drawing(buffer1)     # buffer1,2,3 are the live buffers for the MiniFB windows
+d1 = Drawing(buffer1)    
 
-Luxor.set_next_drawing_index()   # another drawing
-d2=Drawing(buffer2)
+Luxor.set_next_drawing_index()   
+d2 = Drawing(buffer2)
 
-Luxor.set_next_drawing_index()   # another drawing
-d3=Drawing(buffer3, raw"c:\temp\julia.png")   # the result we want to safe in julia.png
-
-Luxor.set_drawing_index(1) # back to drawing 1 for interactive graphics
+Luxor.set_next_drawing_index()   
+d3 = Drawing(buffer3, "julia.png")
 ```
 
-We now have 3 drawings which are live updated and visible in 3 windows.
-Lets start with the drawing at drawing index 1:
+We now have three drawings which are continuously updated and visible in three separate windows.
+Let's start by drawing on drawing 1.
 
 ```julia
+Luxor.set_drawing_index(1) 
 origin()
-setopacity(.4)
-foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s = 0.99, b=0.8)
+setopacity(0.4)
+foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s=0.99, b=0.8)
 gsave()
-translate(-100, 0)
 for i in 1:500
-	sethue(foregroundcolors[rand(1:end)])
-	circle(rand(-50:350), rand(0:300), 15, :fill)
+    sethue(foregroundcolors[rand(1:end)])
+    circle(Point(rand(-300:300), rand(-300:300)), 15, :fill)
 end
 grestore()
 ```
 
-Lets draw the second component into window/drawing 2:
+Now let's switch to drawing 2 and draw the Julia logo:
 
 ```julia
-Luxor.set_drawing_index(2)  # next drawing commands into drawing at index 2, window 2
+Luxor.set_drawing_index(2)
 origin()
 setopacity(1.0)
 gsave()
-translate(-100, 0)
-julialogo(bodycolor=colorant"white")
+julialogo(centered=true, bodycolor=colorant"white")
 grestore()
 ```
 
-Now we combine the two into drawing/window 3:
+Finally, we'll switch to drawing 3, and set its contents by ANDing the buffers of drawings 1 and 2:
 
 ```julia
-Luxor.set_drawing_index(3)  # work on drawing at index 3, window 3
+Luxor.set_drawing_index(3)  
 background("black")
-# combine buffer1 + 2 with AND 
-buffer3 .= reinterpret(ARGB{N0f8}, ( reinterpret.(UInt32,buffer1) .& reinterpret.(UInt32,buffer2) ) )
-# before we finish we have to set opacity to 1.0 on each pixel:
+buffer3 .= reinterpret(ARGB{N0f8}, 
+    (reinterpret.(UInt32,buffer1) .& 
+     reinterpret.(UInt32,buffer2)))
+```
+
+To finish, we'll set the opacity of each pixel to 1.0:
+
+```julia
 buffer3.=ARGB32.(RGB24.(buffer3))
-# now finish drawing 3 and save as c:\temp\julia.png
-# The julia.png would look strange if we wouldn't have changed the opacity to 1.0 before
+
 finish()
 preview()
 ```
