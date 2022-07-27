@@ -504,22 +504,30 @@ function rule(pos, theta=0.0;
     return ruledline
 end
 
-let SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64, Float64, Float64, Float64},1}}}(Dict(0 => Array{Tuple{Float64, Float64, Float64, Float64},1}()))
-    global SAVED_COLORS
-    function SAVED_COLORS()
+# we need a thread safe way to store the color palette as a stack:
+#  access to the stack is only possible using the global function:
+#   - predefine all needed Dict entries in a thread safe way
+#   - each thread has it's own stack, separated by threadid
+# this is not enough for Threads.@spawn (TODO, but no solution yet)
+let _SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64, Float64, Float64, Float64},1}}}(Dict(0 => Array{Tuple{Float64, Float64, Float64, Float64},1}()))
+    global _saved_colors
+    function _saved_colors()
         id = Threads.threadid()
-        if ! haskey(SAVED_COLORS_STACK[],id)
+        if ! haskey(_SAVED_COLORS_STACK[],id)
+            # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                SAVED_COLORS_STACK[][preID] = Array{Tuple{Float64, Float64, Float64, Float64},1}()
+                _SAVED_COLORS_STACK[][preID] = Array{Tuple{Float64, Float64, Float64, Float64},1}()
             end
             unlock(lc)
         end
-        if isnothing(SAVED_COLORS_STACK[][id])
+        if isnothing(_SAVED_COLORS_STACK[][id])
+            # all Dict entries are predefined, so we should never reach this error
             error("(4)thread id should be preallocated")
         end
-        return SAVED_COLORS_STACK[][id]
+        # thread specific stack
+        return _SAVED_COLORS_STACK[][id]
     end
 end
 
@@ -537,7 +545,7 @@ function gsave()
                   get_current_bluevalue(),
                   get_current_alpha()
                  )
-    push!(SAVED_COLORS(), (r, g, b, a))
+    push!(_saved_colors(), (r, g, b, a))
     return (r, g, b, a)
 end
 
@@ -549,7 +557,7 @@ Replace the current graphics state with the one on top of the stack.
 function grestore()
     Cairo.restore(get_current_cr())
     try
-        (r, g, b, a) =  pop!(SAVED_COLORS())
+        (r, g, b, a) =  pop!(_saved_colors())
         set_current_redvalue(r)
         set_current_greenvalue(g)
         set_current_bluevalue(b)
