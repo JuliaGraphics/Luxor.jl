@@ -152,7 +152,7 @@ function text(lstr::LaTeXString, pt::Point;
                     fontsize(font_size * text[3])
                     newsubpath()
                     move(Point(text[2]...) * font_size * (1, -1))
-                    Luxor.textoutlines(string(text[1].char),
+                    Luxor.textoutlines(string(text[1].represented_char),
                         Point(text[2]...) * font_size * (1, -1),
                         action=:path,
                         startnewpath=false)
@@ -193,18 +193,18 @@ function writelatexchar(text, font_size)
     fontface(text[1].font.family_name)
     fontsize(font_size * text[3])
 
-    if string(text[1].char) == "⨟"
+    if string(text[1].represented_char) == "⨟"
         setfont(text[1].font.family_name, font_size * text[3])
-        Luxor.settext(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0.25,0.3)*font_size)
+        Luxor.settext(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0.25,0.3)*font_size)
 
     elseif text[1].represented_char == '{' || text[1].represented_char == '}'
-        Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0,-0.8)*font_size)
+        Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0,-0.8)*font_size)
 
-    elseif string(text[1].char) in extrachars
+    elseif string(text[1].represented_char) in extrachars
         setfont(text[1].font.family_name, 1.3font_size * text[3])
-        Luxor.settext(string(text[1].char), Point(text[2]...) * font_size * (1, -1)+Point(0,0.3)*font_size)
+        Luxor.settext(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0,0.3)*font_size)
 
     else
-        Luxor.text(string(text[1].char), Point(text[2]...) * font_size * (1, -1))
+        Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1))
     end
 end
