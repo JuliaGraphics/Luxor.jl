@@ -32,7 +32,8 @@ makedocs(
              "Placing images"               =>  "howto/images.md",
              "Turtle graphics"              =>  "howto/turtle.md",
              "Make animations"              =>  "howto/animation.md",
-             "Live graphics and snapshots"  =>  "howto/livegraphics.md",
+             "Snapshots"                    =>  "howto/snapshots.md",
+             "Interactive graphics and Threads"  =>  "howto/livegraphics.md",
              ],
          "Explanations" => [
              "Basic concepts"               =>  "explanation/basics.md",
