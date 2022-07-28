@@ -237,7 +237,7 @@ using MiniFB, Luxor, Colors, FixedPointNumbers
 WIDTH=500
 HEIGHT=500
 
-function windowUpdateTask(window,buffer)
+function window_update_task(window,buffer)
     state=mfb_update(window,buffer)
     while state == MiniFB.STATE_OK
         state=mfb_update(window,buffer)
@@ -248,15 +248,15 @@ end
 
 window1 = mfb_open_ex("1", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
 buffer1 = zeros(ARGB32, WIDTH, HEIGHT)
-@async windowUpdateTask(window1,buffer1)
+@async window_update_task(window1,buffer1)
 
 window2 = mfb_open_ex("2", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
 buffer2 = zeros(ARGB32, WIDTH, HEIGHT)
-@async windowUpdateTask(window2,buffer2)
+@async window_update_task(window2,buffer2)
 
 window3 = mfb_open_ex("3=1+2", WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
 buffer3 = zeros(ARGB32, WIDTH, HEIGHT)
-@async windowUpdateTask(window3,buffer3)
+@async window_update_task(window3,buffer3)
 ```
 
 Buffers 1, 2, and 3 are the buffers for the three MiniFB windows. They'll appear on your display.
@@ -280,7 +280,10 @@ Let's start by drawing on drawing 1.
 Luxor.set_drawing_index(1) 
 origin()
 setopacity(0.4)
-foregroundcolors = Colors.diverging_palette(rand(0:360), rand(0:360), 200, s=0.99, b=0.8)
+foregroundcolors = Colors.diverging_palette(
+    rand(0:360), 
+    rand(0:360), 
+    200, s=0.99, b=0.8)
 gsave()
 for i in 1:500
     sethue(foregroundcolors[rand(1:end)])
@@ -321,31 +324,32 @@ preview()
 
 ## Threads
 
-Luxor is thread safe. For the examples below you have to [start Julia with more than 1 thread](https://docs.julialang.org/en/v1/manual/multi-threading/#Starting-Julia-with-multiple-threads):
+Luxor is thread safe. To run the examples below, [start Julia with more than 1 thread](https://docs.julialang.org/en/v1/manual/multi-threading/#Starting-Julia-with-multiple-threads):
 
 ```julia
 julia> Threads.nthreads()
 4
 ```
 
-As a first example we produce multiple .png files in parallel:
+As a first example, we'll produce multiple PNG files in parallel:
 
 ```julia
 using Luxor, Colors
 
-cd(raw"c:\Temp")     # we want to create a bunch of files, e.g sample1.png, easy to delete again
+tempdir = mktempdir(;cleanup=false)
+cd(tempdir)
 
 function make_drawings(i::Int)
-    println( Threads.threadid() )
-    colors = ["red","green","blue","yellow","pink"]
+    println(Threads.threadid())
+    colors = ["red", "green", "blue", "yellow", "pink"]
     w = 300
     h = 300
-    filename = "sample"*string(i)*".png"
+    filename = "sample" * string(i) * ".png"
     Drawing(w, h, :png, filename)
     origin()
     setcolor(colors[1 + i % 5])
-    background(0.0,0.0,0.0,1.0)
-    circle(0,0,100,:fill)
+    background(0.0, 0.0, 0.0, 1.0)
+    circle(0, 0, 100, :fill)
     finish()
     return
 end
@@ -355,21 +359,25 @@ Threads.@threads for i = 1:(2*Threads.nthreads())
 end
 ```
 
+## Advanced threads with live view
+
 To demonstrate what is possible, we again show live graphics in MiniFB windows, 
 but this time in different threads.
 
-## Advanced Threads with live view
+There are two ways to use threads with Luxor. 
 
-There are two ways to use threads with Luxor. On way is to use a single thread for
+One way is to use a single thread for
 each window we want to show, i.e each window we spawn and the Luxor graphics inside
-is a different thread. The other way to use threads is e.g. a single window, with
+is a different thread. 
+
+The other way to use threads is e.g. a single window, with
 several threads all drawing into the same buffer, which is shown in the single window.
-For this the user needs to utilize locks as shown in the second example below.
+For this you need to utilize locks as shown in the second example below.
 
 ### A thread for each window
 
-First we start with the example where each window and its Luxor graphics is
-a single thread. No locks or channels are needed for this.
+First, here's an example where each window and its graphics is
+a single thread. No locks or channels are needed.
 
 Let's start with the header and a helper function for our animation:
 
@@ -386,12 +394,13 @@ mutable struct Ball
     position::Point
     velocity::Point
 end
-function step_ball(ball,w,h,r)
-    if ball.position.x - r < -w/2 || ball.position.x + r > w/2
-        ball.velocity = Point(-ball.velocity.x,ball.velocity.y)
+
+function step_ball(ball, w, h, r)
+    if ball.position.x - r < -w / 2 || ball.position.x + r > w / 2
+        ball.velocity = Point(-ball.velocity.x, ball.velocity.y)
     end
-    if ball.position.y - r < -h/2 || ball.position.y + r > h/2
-        ball.velocity = Point(ball.velocity.x,-ball.velocity.y)
+    if ball.position.y - r < -h / 2 || ball.position.y + r > h / 2
+        ball.velocity = Point(ball.velocity.x, -ball.velocity.y)
     end
     ball.position = ball.position + ball.velocity
     return ball
@@ -406,17 +415,17 @@ function window_ball()
     h=500
     r=50
     buffer = zeros(RGB24, w, h)
-    ball=Ball( Point(0, 0), rand(BoundingBox(Point(-10, -10), Point(10, 10))) )
+    ball=Ball(Point(0, 0), rand(BoundingBox(Point(-10, -10), Point(10, 10))))
     Drawing(buffer)
     origin()
     window = mfb_open_ex("Ball", w, h, MiniFB.WF_RESIZABLE)
     state = MiniFB.STATE_OK
     while state == MiniFB.STATE_OK
-        ball=step_ball(ball,w,h,r)
-        background(0.0,0.0,0.0,1.0)
+        ball=step_ball(ball, w, h, r)
+        background(0.0, 0.0, 0.0, 1.0)
         setcolor("red")
-        circle(ball.position.x,ball.position.y,r,:fill)
-        state=mfb_update(window,buffer)
+        circle(ball.position.x, ball.position.y, r, :fill)
+        state=mfb_update(window, buffer)
         sleep(1.0/120.0)
     end
     println("\nWindow closed\n")
@@ -432,20 +441,22 @@ function window_stick()
     h=500
     r=0
     buffer = zeros(RGB24, w, h)
-    balls=[Ball( rand(BoundingBox(Point(-w/2, -h/2), Point(w/2, h/2))), rand(BoundingBox(Point(-10, -10), Point(10, 10))) ) for _ in 1:2] 
+    balls=[Ball(rand(BoundingBox(Point(-w/2, -h/2), 
+        Point(w/2, h/2))), 
+        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) for _ in 1:2] 
     Drawing(buffer)
     origin()
     background(0.0,0.0,0.0,1.0)
     window = mfb_open_ex("Sticks", w, h, MiniFB.WF_RESIZABLE)
     state = MiniFB.STATE_OK
     while state == MiniFB.STATE_OK
-        background(0.0,0.0,0.0,0.05)
+        background(0.0, 0.0, 0.0, 0.05)
         setcolor("green")
         for ball in balls
-            ball=step_ball(ball,w,h,r)
+            ball=step_ball(ball, w, h, r)
         end
-        line(balls[1].position,balls[2].position,:stroke)
-        state=mfb_update(window,buffer)
+        line(balls[1].position, balls[2].position, :stroke)
+        state=mfb_update(window, buffer)
         sleep(1.0/120.0)
     end
     println("\nWindow closed\n")
@@ -459,7 +470,7 @@ If you have threads left you can start another thread with a third window:
 spawnbg(window_stick)
 ```
 
-If you run out of threadids the command `spawnbg(window_stick)` will block
+If you run out of threadids, the command `spawnbg(window_stick)` will block
 the REPL until a thread is freed, e.g. by closing one of the windows.
 
 ### A single window with graphics of several threads
@@ -489,13 +500,13 @@ struct Window
     end
 end
 
-function windowUpdateTask(win::Window,showFPS=true)
+function window_update_task(win::Window, showFPS=true)
     w=win.w
     h=win.h
     updateCount=0
-    startTime=floor(Int,time())
+    startTime=floor(Int, time())
     fps="0"
-    sb=zeros(ARGB32,105,55)
+    sb=zeros(ARGB32, 105, 55)
     window = mfb_open_ex("MiniFB", w, h, MiniFB.WF_RESIZABLE)
     state=MiniFB.STATE_OK
     set_drawing = true
@@ -512,19 +523,19 @@ function windowUpdateTask(win::Window,showFPS=true)
                 startTime=floor(Int,time())
                 updateCount=0
             end
-            sb.=win.buffer[1:105,1:55]
+            sb.=win.buffer[1:105, 1:55]
             @layer begin
-                (dx,dy)=Point(0.0, 0.0)-getworldposition(Point(0.0, 0.0);centered=false)
-                setcolor((1.0, 0, 0, 0.5))
+                (dx,dy) = Point(0.0, 0.0) - getworldposition(Point(0.0, 0.0);centered=false)
+                setcolor(1.0, 0, 0, 0.5)
                 fontsize(50)
-                text(fps, Point(5+dx,5+dy), halign=:left, valign = :top)
+                text(fps, Point(5+dx, 5+dy), halign=:left, valign = :top)
             end
         end
         state=mfb_update(window,win.buffer)
         if showFPS
-            win.buffer[1:105,1:55].=sb
+            win.buffer[1:105, 1:55].=sb
         end
-        background(0,0,0,0.05)
+        background(0, 0, 0, 0.05)
         unlock(win.c)
         sleep(1.0/120.0)
         updateCount+=1
@@ -536,32 +547,36 @@ end
 That's all we need to define a window with a fps display. Let's define it and run it as a new thread:
 
 ```julia
-win=Window(800,600)    # the window definition
+win = Window(800, 600)    # the window definition
 
 # we need a function without parameter, that's what we create here:
 let window=win
-   global t_windowUpdateTask
-   function t_windowUpdateTask()
-       windowUpdateTask(window)
+   global t_window_update_task
+   function t_window_update_task()
+       window_update_task(window)
    end
 end
 
 # run the task as a new thread:
-spawnbg(t_windowUpdateTask)
+spawnbg(t_window_update_task)
 ```
 
-The window with a FPS display shows up. It runs in it's own thread so we can still
+The window with a FPS display shows up. It runs in its own thread so we can still
 use the REPL to create new threads which draw into this window. The most important
 special code here is:
+
 ```julia
 currentdrawing(win.d)
 ```
+
 We start a new thread for every drawing and because the Luxor drawings of different
 threads are separated from each other to ensure thread safety, we overwrite the
 drawing in each thread with the drawing started with
+
 ```julia
-win=Window(800,600)
+win=Window(800, 600)
 ```
+
 and stored in the `win`-object. See the constructor in `struct Window`.
 
 Let's show it:
@@ -571,31 +586,35 @@ mutable struct Ball
     position::Point
     velocity::Point
 end
+
 function stick(win)
-    w=win.w
-    h=win.h
-    colors=[rand(1:255),rand(1:255),rand(1:255)]
-    newcolors=[rand(1:255),rand(1:255),rand(1:255)]
-    c=ARGB(colors[1]/255,colors[2]/255,colors[3]/255,1.0)
-    balls=[Ball( rand(BoundingBox(Point(-w/2, -h/2), Point(w/2, h/2))), rand(BoundingBox(Point(-10, -10), Point(10, 10))) ) for _ in 1:2] 
+    w = win.w
+    h = win.h
+    colors = [rand(1:255), rand(1:255), rand(1:255)]
+    newcolors = [rand(1:255), rand(1:255), rand(1:255)]
+    c = ARGB(colors[1] / 255, colors[2] / 255, colors[3] / 255, 1.0)
+    balls = [Ball(
+        rand(BoundingBox(Point(-w / 2, -h / 2), Point(w / 2, h / 2))), 
+        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) 
+            for _ in 1:2]
     set_drawing = true
     while true
         if colors == newcolors
-            newcolors=[rand(1:255),rand(1:255),rand(1:255)]
+            newcolors = [rand(1:255), rand(1:255), rand(1:255)]
         end
-        for (index,(col,newcol)) in enumerate(zip(colors,newcolors))
+        for (index, (col, newcol)) in enumerate(zip(colors, newcolors))
             if col != newcol
-                col > newcol ? col-=1 : col+=1
-                colors[index]=col
+                col > newcol ? col -= 1 : col += 1
+                colors[index] = col
             end
         end
-        c=ARGB(colors[1]/255,colors[2]/255,colors[3]/255,1.0)
+        c = ARGB(colors[1] / 255, colors[2] / 255, colors[3] / 255, 1.0)
         for ball in balls
-            if !(-w/2 < ball.position.x < w/2)
-                ball.velocity = Point(-ball.velocity.x,ball.velocity.y)
+            if !(-w / 2 < ball.position.x < w / 2)
+                ball.velocity = Point(-ball.velocity.x, ball.velocity.y)
             end
-            if !(-h/2 < ball.position.y < h/2)
-                ball.velocity = Point(ball.velocity.x,-ball.velocity.y)
+            if !(-h / 2 < ball.position.y < h / 2)
+                ball.velocity = Point(ball.velocity.x, -ball.velocity.y)
             end
             ball.position = ball.position + ball.velocity
         end
@@ -605,9 +624,9 @@ function stick(win)
             set_drawing = false
         end
         setcolor(c)
-        line(balls[1].position,balls[2].position,:stroke)
+        line(balls[1].position, balls[2].position, :stroke)
         unlock(win.c)
-        sleep(1.0/60.0)
+        sleep(1.0 / 60.0)
     end
 end
 
@@ -624,7 +643,7 @@ spawnbg(t_stick)
 ```
 
 Because our threads are synchronized via `lock`/`unlock` we can spawn
-low level threads as much as we want and our machine allows:
+low-level threads as much as we want and our machine allows:
 
 ```julia
 function spawn_many()

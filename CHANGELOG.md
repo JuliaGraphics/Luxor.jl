@@ -1,16 +1,20 @@
 # Changelog
 
-## [v3.5.0] - forthcoming
+## [v3.5.0] - 2022-07-28 10:15
 
 ### Added
 
 - drawing image buffer and drawing indices (thanks @oheil!)
 
-- action dispatcher (thanks @ArbitRandomUser)
+- thread safety (thanks @oheil!)
+
+- action dispatcher (thanks @ArbitRandomUser!)
 
 ### Changed
 
 - fixed hexspiral to work on v1.7 and earlier
+
+- some work to adapt to changes made in MathTeXEngine release 0.5.0
 
 ### Removed
 
