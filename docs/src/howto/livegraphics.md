@@ -364,7 +364,7 @@ There are two ways to use threads with Luxor. On way is to use a single thread f
 each window we want to show, i.e each window we spawn and the Luxor graphics inside
 is a different thread. The other way to use threads is e.g. a single window, with
 several threads all drawing into the same buffer, which is shown in the single window.
-For this the user needs to utilize locks as shown in second the example below.
+For this the user needs to utilize locks as shown in the second example below.
 
 ### A thread for each window
 
@@ -538,7 +538,7 @@ That's all we need to define a window with a fps display. Let's define it and ru
 ```julia
 win=Window(800,600)    # the window definition
 
-# we need a function/functor without parameter, that's what we create here:
+# we need a function without parameter, that's what we create here:
 let window=win
    global t_windowUpdateTask
    function t_windowUpdateTask()
@@ -551,7 +551,7 @@ spawnbg(t_windowUpdateTask)
 ```
 
 The window with a FPS display shows up. It runs in it's own thread so we can still
-use the REPL as create new threads which draw into this window. The most important
+use the REPL to create new threads which draw into this window. The most important
 special code here is:
 ```julia
 currentdrawing(win.d)
@@ -611,7 +611,7 @@ function stick(win)
     end
 end
 
-# again a functor for calling without parameter:
+# again a function for calling without parameter:
 let window=win
    global t_stick
    function t_stick()
