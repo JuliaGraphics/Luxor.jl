@@ -5,7 +5,7 @@ DocTestSetup = quote
 ```
 # Quick start: design a logo
 
-This section is a quick guide to getting started. Install the Luxor.jl package in the usual way:
+This page is a quick tutorial to help you get started. Install the Luxor.jl package in the usual way:
 
 ```julia
 julia> ] add Luxor

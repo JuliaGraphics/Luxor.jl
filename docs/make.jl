@@ -14,6 +14,7 @@ makedocs(
          "Tutorials" => [
              "Quick and short"              =>  "tutorial/quickstart.md",
              "A more in-depth tutorial"     =>  "tutorial/basictutorial.md",
+             "Playing with pixels"          =>  "tutorial/pixels.md",
              "Simple animation"             =>  "tutorial/simple-animation.md",
              ],
          "Examples" => [
@@ -31,8 +32,8 @@ makedocs(
              "Clip graphics"                =>  "howto/clipping.md",
              "Placing images"               =>  "howto/images.md",
              "Turtle graphics"              =>  "howto/turtle.md",
-             "Make animations"              =>  "howto/animation.md",
-             "Snapshots"                    =>  "howto/snapshots.md",
+            "Make animations"              =>  "howto/animation.md",
+            "Snapshots"                    =>  "howto/snapshots.md",
              "Interactive graphics and Threads"  =>  "howto/livegraphics.md",
              ],
          "Explanations" => [
@@ -46,8 +47,8 @@ makedocs(
              "Contributing"                 =>  "explanation/contributing.md",
              ],
          "Reference" => [
-             "Alphabetical function list"   =>  "reference/functionindex.md"
-             "Function reference"           =>  "reference/api.md"
+#             "Alphabetical function list"   =>  "reference/functionindex.md"
+#             "Function reference"           =>  "reference/api.md"
              ],
         ]
     )
