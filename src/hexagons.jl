@@ -357,14 +357,14 @@ Return an array of hexagons to spiral around a central hexagon forming `n` rings
 """
 function hexspiral(hex, nrings)
     result = Hexagon[]
-    ringn = 1
+    ringn = 0
     while ringn < nrings
+        ringn += 1
         hexes = collect(hexring(hex, ringn))
         # circshift!(hexes, 1) doesn't work on < v1.7 
         # replace with circshift! one day
         push!(hexes, popfirst!(hexes))
         append!(result, hexes)
-        ringn += 1
     end
     return result
 end

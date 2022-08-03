@@ -270,10 +270,11 @@ nothing # hide
 
 ## Hexagonal grids
 
-Use the hexagon types `HexagonOffsetOddR`, `HexagonOffsetEvenR`, `HexagonAxial`, and `HexagonCubic` to define a hexagonal tile on a grid, using index values to specify their location. 
-You can use `hexcenter()` to find the Cartesian coordinates of the center of a hexagonal tile on the grid, and `hextile()` to return the Cartesian coordinates of the vertices of the tile.
+Use the hexagon constructors `HexagonOffsetOddR`, `HexagonOffsetEvenR`, `HexagonAxial`, and `HexagonCubic` to define a hexagonal tile on a grid, using _hexagon index values_ to specify their location.
 
-For example, this code draws a hexagon with hexagonal indices `0 0` on a grid centred at the origin with grid spacing of 100 units:
+You can use [`hexcenter()`](@ref) to find the Cartesian coordinates of the center of a hexagonal tile on the grid, and [`hextile()`](@ref) to return the Cartesian coordinates of the vertices of the tile.
+
+For example, this code draws a hexagon with the hexagonal indices `0 0` on a grid centred at the origin with grid spacing of 100 units:
 
 ```@example
 using Luxor, Colors # hide
@@ -303,7 +304,7 @@ end 600 300  # hide
 
 ### Hexagonal grid indexing 
 
-Whereas rectangular grids can be indexed using x ("row") and y ("column") integers, hexagonal grids can be indexed in various ways. For example, odd-numbered "rows" can be shifted to the right:
+Whereas rectangular grids can be indexed using x ("column") and y ("row") integers, hexagonal grids can be indexed in various ways. For example, odd-numbered "rows" can be shifted to the right:
 
 ```@example
 using Luxor, Colors, Random  # hide
@@ -419,10 +420,9 @@ end # hide
 
 ### Spiralling hexagons
 
-```@example
-using Luxor # hide
-using Colors # hide
+The [`hexspiral()`](@ref) function generates a spiral of hexagons around a central hexagon to form `n` rings of hexagons.
 
+```@example
 @drawsvg begin # hide
 background("black")
 hexagon = HexagonOffsetEvenR(0, 0, 16)
@@ -431,6 +431,7 @@ for (n, h) in enumerate(hexspiral(hexagon, 10))
     sethue(HSB(mod1(5n, 360), 0.8, 0.8))
     poly(hextile(h), :fillpreserve)
     sethue("black")
+    text(string(n), hexcenter(h), halign=:center)
     strokepath()
 end
 end # hide
