@@ -423,6 +423,7 @@ end # hide
 The [`hexspiral()`](@ref) function generates a spiral of hexagons around a central hexagon to form `n` rings of hexagons.
 
 ```@example
+using Luxor, Colors
 @drawsvg begin # hide
 background("black")
 hexagon = HexagonOffsetEvenR(0, 0, 16)

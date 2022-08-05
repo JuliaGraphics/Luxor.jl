@@ -17,7 +17,7 @@ A = zeros(ARGB32, 400, 800)
 Drawing(A)
 ```
 
-The array `A` should be a matrix where each element is an ARGB32 value. ARGB32 is a way of fitting four integers (using 8 bits for alpha, 8 bits for Red, 8 for Green, and 8 for Blue) into a 32-bit number between 0 and 4,294,967,296 - a 32 bit unsigned integer. The ARGB32 type is provided by the Images.jl and Colors.jl packages.
+The array `A` should be a matrix where each element is an ARGB32 value. ARGB32 is a way of fitting four integers (using 8 bits for alpha, 8 bits for Red, 8 for Green, and 8 for Blue) into a 32-bit number between 0 and 4,294,967,296 - a 32 bit unsigned integer. The ARGB32 type is provided by the Images.jl package (or ColorTypes.jl).
 
 You can set and get the values of pixels by treating the drawing's array like a standard Julia array. So we can inspect pixels like this:
 
@@ -41,7 +41,7 @@ julia> A[300:350, 50:450] .= colorant"blue"
 julia> [A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800]
 ```
 
-Because this is an array rather than a PNG/SVG, we can use Images.jl to display it in a notebook or code editor such as VS-Code.
+Because this is an array rather than a PNG/SVG, we could either use Images.jl to display it in a notebook or code editor such as VS-Code.
 
 ```@example
 using Luxor, Colors, Images # hide
@@ -53,7 +53,7 @@ A[300:350, 50:450] .= colorant"blue" # hide
 A
 ```
 
-To display it in Luxor, you can use start a new drawing, and use [`placeimage()`](@ref) to position the array on the drawing:
+Or, to display it in Luxor, start a new drawing, and use [`placeimage()`](@ref) to position the array on the drawing:
 
 ```@example
 using Luxor, Colors # hide
@@ -63,7 +63,6 @@ A[200:250, 100:250] .= colorant"green"
 A[300:350, 50:450] .= colorant"blue" 
 [A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800] 
 finish()
-
 Drawing(800, 400, :png)
 background("brown")
 origin()

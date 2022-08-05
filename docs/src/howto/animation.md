@@ -90,22 +90,63 @@ FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 
 
 ### Passing information to the frame() function
 
-If you want to pass information to the frame function, such as an array of values, try these:
+If you want to pass information to the frame function, such as an array of values, try these two approaches.
+
+Either, call the enhanced `frame()` function with extra arguments with `(s, f) -> frame(s, f, databuffer)`:
 
 ```julia
-function frame(scene, framenumber, datapoints)
-...
+function frame(scene, framenumber, databuffer)
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, scene.framerange.stop - scene.framerange.start)
+    w = size(databuffer, 1)
+    h = size(databuffer, 2)
+    for c in 1:w, r in 1:h
+        rs = rescale(r, 1, h, 0, 2π)
+        cs = rescale(c, 1, h, 0, 2π)
+        databuffer[r, c] = HSV(360((sin(2rs) * cos(2cs)) * sin(eased_n * 2π)), 0.7, 0.7)
+    end
+    placeimage(databuffer, Point(-w / 2, -h / 2))
 end
 
-somedata = Datapoints[...]
+function main()
+    databuffer = zeros(ARGB32, 250, 250)
+    demo = Movie(250, 250, "buffer")
+    animate(demo, [
+            Scene(demo, (s, f) -> frame(s, f, databuffer),
+                0:100)
+        ],
+        tempdirectory="/tmp/tempdir",
+        creategif=true, 
+        pathname="/tmp/t.gif")
+end
+```
 
-animate(demo, [
-    Scene(demo, (s, f) -> frame(s, f, somedata),
-        0:100,
-        optarg=somedata)
-    ],
-    creategif=true,
-    pathname="...")
+Or, use the `optarg` keyword argument for `Scene()`, and access it using `scene.opts
+` keyword.
+
+```julia
+function frame(scene, framenumber)
+    databuffer = scene.opts
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, scene.framerange.stop - scene.framerange.start)
+    w = size(databuffer, 1)
+    h = size(databuffer, 2)
+    for c in 1:w, r in 1:h
+        rs = rescale(r, 1, h, 0, 2π)
+        cs = rescale(c, 1, h, 0, 2π)
+        databuffer[r, c] = HSV(360((sin(2rs) * cos(2cs)) * sin(eased_n * 2π)), 0.7, 0.7)
+    end
+    placeimage(databuffer, Point(-w / 2, -h / 2))
+end
+
+function main()
+    databuffer = zeros(ARGB32, 250, 250)
+    demo = Movie(250, 250, "buffer")
+    animate(demo, [Scene(demo, frame, optarg=databuffer, 0:100)],
+        tempdirectory="/tmp/tempdir",
+        creategif=true,
+        pathname="/tmp/t.gif")
+end
 ```
 
 ## Animating paths

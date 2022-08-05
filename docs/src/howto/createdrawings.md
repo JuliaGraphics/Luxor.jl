@@ -218,6 +218,22 @@ buffer
 
     This example uses standard Julian "column-major" array addressing, as used by Images.jl. So `buffer[1, 600]` addresses the pixel at the top right of the buffer when displayed by Images. When displayed by Luxor as a PNG, this pixel will appear at the bottom left of the drawing.
 
+You can also create a pixel array on a PNG drawing when saved as a file:
+
+```julia
+using Luxor
+using Images
+
+A = zeros(ARGB32, 50, 50)
+
+Drawing(A, "/tmp/t.png")
+for p in eachindex(A)
+    A[p] = RGBA(rand(), rand(), rand(), 1)
+end
+finish()
+preview()
+```
+
 ## Extracting the drawing as an image
 
 If you create a drawing using `Drawing(w, h, :png)`, you can use the [`image_as_matrix`](@ref) function at any stage in the drawing process to extract the drawing in its current state as a matrix of pixels.
