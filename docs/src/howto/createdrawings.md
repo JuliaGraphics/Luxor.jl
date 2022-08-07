@@ -189,19 +189,22 @@ end
 
 ## Drawing pixels
 
-The `Drawing()` function accepts an array of ARGB32 values as a drawing surface. You can use Images.jl to display the buffer when you've finished drawing.
+The `Drawing()` function accepts an array of ARGB32 values as a drawing surface.
+
+ARGB32 is a type of 32 bit unsigned integer that combines four values (8 bits for alpha, 8 bits for Red, 8 for Green, and 8 for Blue) into a 32-bit number between 0 and 4,294,967,296. ARGB32 is defined in ColorTypes.jl, and is available in Luxor.jl via Colors.jl, as `Luxor.Colors.ARGB32`, or, if you're using Colors.jl or Images.jl, directly as `ARGB32`.
 
 ```julia
-using Luxor, Colors, Images
+using Luxor
 
-buffer = zeros(ARGB32, 150, 600) # 150 rows, 600 columns
+A = zeros(Luxor.Colors.ARGB32, 150, 600) # 150 rows, 600 columns
 
-Drawing(buffer) # or Drawing(buffer, filename.png)
-origin()
+Drawing(A)
 
 for i in 1:15:150
-    buffer[i:i+10, 1:600] .= RGB(rand(), rand(), rand())
+    A[i:i+10, 1:600] .= Luxor.Colors.RGB(rand(), rand(), rand())
 end
+
+origin()
 
 for i in 1:100
     randomhue()
@@ -209,14 +212,15 @@ for i in 1:100
 end
 
 finish()
-buffer
 ```
 
 ![buffer drawing](../assets/figures/buffer-drawing.png)
 
+As a standard Julia array, `A` will be shown as an image in your notebook or editor if you're using Images.jl.
+
 !!! note
 
-    This example uses standard Julian "column-major" array addressing, as used by Images.jl. So `buffer[1, 600]` addresses the pixel at the top right of the buffer when displayed by Images. When displayed by Luxor as a PNG, this pixel will appear at the bottom left of the drawing.
+    In this example the array uses Julian "column-major" array addressing. Luxor functions use the `Point` type on a Cartesian coordinate system, where the origin is (by default) at the top left of the drawing. Locations along the x-axis correspond to the column indices of the array, locations along the y-axis correspond to the rows of the array (until you use the `origin()` function, for example).
 
 You can also create a pixel array on a PNG drawing when saved as a file:
 

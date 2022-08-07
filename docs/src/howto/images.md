@@ -166,11 +166,21 @@ nothing # hide
 ```
 ![transforming images](../assets/figures/transform-images.png)
 
-## Drawing on images
+## Combining images and vector graphics
 
-You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.
+You sometimes want to combine vector graphics and images, for example, to annotate them with text or vector graphics.
 
-In these examples, we'll annotate a PNG file.
+There are two ways you can do this: 
+
+- by adding the image with `placeimage()` and then drawing vector graphics on top. 
+
+- by opening the image as a drawing, and adding vector graphics into the image. 
+
+The things to be aware of are mostly to do with coordinates and transforms.
+
+### Adding graphics on top
+
+In this example, we'll annotate a PNG file.
 
 ```@example
 using Luxor # hide
@@ -221,7 +231,7 @@ nothing # hide
 
 ![drawing on images](../assets/figures/drawing_on_images.png)
 
-### Adding text to transformed images
+#### Adding text to transformed placed images
 
 The above approach works well, but suppose you want to locate the working origin
 at the lower left of the image, i.e. you want all coordinates to be relative to the
@@ -280,6 +290,59 @@ nothing # hide
 ```
 
 ![drawing on transformed images](../assets/figures/drawing_on_images_2.png)
+
+### Opening the image as drawing
+
+An alternative way to work with images is to open the image as a drawing. Let's open the well-known mandrill image in Luxor. (I'll call him Marvin, because I couldn't find out whether or not the model had a name, but I think he should have one.)
+
+```julia
+using Luxor, Colors, Images, TestImages
+
+marvin = testimage("mandrill")
+M = Luxor.Colors.ARGB32.(marvin)
+Drawing(M)
+```
+
+The current drawing is now a 512 × 512 array, where each pixel is an ARGB32 (an unsigned 32-bit integer holding 4 8-bit vaalues).
+
+Marvin's right eye (on the left side of the drawing) is located at about 60 rows down, 175 columns across. Let's fill in his pupil with a white square:
+
+```julia
+M[55:65, 170:180] .= colorant"white"
+M
+```
+
+![drawing into image](../assets/figures/marvin-1.png)
+
+Using `M` on its own should show the image in your notebook or code editor (but not the REPL). If you want to save it, using the standard Images.jl functions.
+
+We can use these indices as x and y coordinates, since the drawing origin is also currently at the top left.
+
+```julia
+sethue("white")
+circle(Point(60, 175), 20, :stroke)
+M
+```
+
+If we want to draw, say, a 10 by 10 numbered grid overlay on top of Marvin, and highlight four numbered cells, it's easier to just add a `transform()` function that flips the x/cols and y/rows convention, then create a table centered at the center of the drawing:
+
+```julia
+fontsize(15)
+sethue("white")
+setline(1)
+transform([0 1 1 0 0 0])
+cells = Table(10, 10, 512 / 10, 512 / 10, Point(512 / 2, 512 / 2))
+for (pos, n) in cells
+    text(string(n), pos, halign = :center, valign = :middle)
+    box(pos, 512 / 10, 512 / 10, :stroke)
+end
+setline(5)
+highlightcells(cells, collect(1:100)[[2, 4, 35, 69]], :stroke, 
+    color = colorant"blue")
+M
+```
+
+![drawing into image](../assets/figures/marvin-2.png)
 
 ## Image compositing
 
