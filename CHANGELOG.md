@@ -6,6 +6,7 @@
 
 ### Changed
 
+- changed precompile.jl to use SnoopPrecompile
 - hexspiral() counting from 1 not 0 (or 2)
 
 ### Removed
