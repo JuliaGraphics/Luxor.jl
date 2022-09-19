@@ -10,7 +10,15 @@ end
 """
 module Luxor
 
-using Juno, Cairo, Colors, FileIO, Base64, Dates, Rsvg, FFMPEG
+using Base64
+using Cairo
+using Colors
+using Dates
+using FFMPEG
+using FileIO
+using FreeTypeAbstraction
+using Juno
+using Rsvg
 
 using Requires
 
@@ -171,7 +179,7 @@ export Drawing,
     # experimental
     tidysvg,
 
-    # latex
+    # latex 
     latextextsize, latexboundingbox, rawlatexboundingbox
 
 # basic unit conversion to Cairo/PostScript points

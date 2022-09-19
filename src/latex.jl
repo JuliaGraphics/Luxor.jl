@@ -2,6 +2,41 @@ import .MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 using .LaTeXStrings
 
+# the fonts we're using
+mutable struct FontSpec
+    setfontname::String
+    fontfacename::String
+end
+
+mathbook = FontSpec("NewComputerModern Math", "NewCMMath-Book")
+italic10 = FontSpec("NewComputerModern Italic", "NewCM10-Italic")
+bold10 = FontSpec("NewComputerModern Bold", "NewCM10-Bold")
+italic12 = FontSpec("NewComputerModern Bold Italic", "NewCM10-BoldItalic")
+regular = FontSpec("NewComputerModern Regular", "NewCM10-Regular")
+mathreg = FontSpec("NewComputerModern Math", "NewCMMath-Regular")
+
+"""
+    _findlatexfont(t::FTFont)
+
+Given the FreeTypeAbstraction.FTFont in `ftf`, return a suitable FontSpec.
+"""
+function _findlatexfont(ftf::FTFont)
+    if ftf.style_name == "Regular" && ftf.family_name == "NewComputerModern Math"
+        f = mathbook
+    elseif ftf.style_name == "10 Italic" && ftf.family_name == "NewComputerModern"
+        f = italic10
+    elseif ftf.style_name == "12 Italic" && ftf.family_name == "NewComputerModern"
+        f = italic12
+    elseif ftf.style_name == "Bold"
+        f = bold10
+    elseif ftf.style_name == "BoldItalic"
+        f = italic12
+    else
+        f = regular
+    end
+    return f
+end
+
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
 
@@ -62,9 +97,8 @@ Returns the bounding box containing the latex text with
 `(Lower Left Point, Upper Right Point)`.
 Use `box(latex_bb(testext)...,:stroke)` to draw the bounding box.
 """
-function latexboundingbox(lstr::LaTeXString, font_size=get_fontsize();
-        halign=:left, valign=:right)
-
+function latexboundingbox(lstr::LaTeXString, font_size = get_fontsize();
+    halign = :left, valign = :right)
     bottom_pt, top_pt = rawlatexboundingbox(lstr)
 
     translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
@@ -86,6 +120,47 @@ function latextextsize(lstr::LaTeXString)
 end
 
 """
+    _writelatexchar(texchar, font_size)
+
+Draw the texchar as text.
+"""
+function _write_tex_element(texelement, font_size)
+    texchar = first(texelement)
+    fontspec = _findlatexfont(texchar.font)
+    ch = texchar.represented_char
+    fscale = last(texelement)
+    spt = Point(texelement[2]...)
+    fontface(fontspec.fontfacename)
+    fontsize(font_size * fscale)
+    if ch == '{' || ch == '}'
+        Luxor.text(string(ch), spt * font_size * (1, -1) + Point(0, -0.8) * font_size)
+    else
+        Luxor.text(string(ch), spt * font_size * (1, -1))
+    end
+end
+
+"""
+    _writelatexcharaspath(texchar, font_size)
+
+Add the texchar to the current path.
+"""
+function _write_tex_as_path(texelement, font_size)
+    texchar = first(texelement)
+    fontspec = _findlatexfont(texchar.font)
+    ch = texchar.represented_char
+    fscale = last(texelement)
+    spt = Point(texelement[2]...)
+    fontface(fontspec.fontfacename)
+    fontsize(font_size * fscale)
+    newsubpath()
+    move(spt * font_size * (1, -1))
+    Luxor.textoutlines(string(ch),
+        spt * font_size * (1, -1),
+        action = :path,
+        startnewpath = false)
+end
+
+"""
     text(lstr::LaTeXString, pt::Point;
         valign=:baseline,
         halign=:left,
@@ -94,7 +169,8 @@ end
         paths=false,
         kwargs...)
 
-Draws LaTeX string using `MathTexEngine.jl`. Hence, uses
+Another method for `text` that draws the LaTeX `lstr`,
+using `MathTexEngine.jl`. Uses
 ModernCMU as font family. When `rotationfixed = true`,
 the text will rotate around its own axis, instead of
 rotating around `pt`.
@@ -102,109 +178,66 @@ rotating around `pt`.
 If `paths` is true, text paths are added to the current
 path, rather than drawn.
 
-```
+```julia
 using Luxor
 using MathTeXEngine
 using LaTeXStrings
 @draw begin
     fontsize(70)
-    text(L"e^{i\\pi} + 1 = 0", halign=:center)
+    text(L"e^{i\\pi} + 1 = 0", halign = :center)
 end
 ```
 """
 function text(lstr::LaTeXString, pt::Point;
-        valign=:baseline,
-        halign=:left,
-        angle=0::Real,
-        rotationfixed=false,
-        paths=false,
+        valign = :baseline,
+        halign = :left,
+        angle = 0::Real,
+        rotationfixed = false,
+        paths = false,
         kwargs...)
-
-    # Function from MathTexEngine
-    sentence = generate_tex_elements(lstr)
-
-    # Get current font size.
+    # with MathTexEngine.generate_tex_elements
+    sentence = Luxor.generate_tex_elements(lstr)
+    # get current font size
     font_size = get_fontsize()
-
-    textw, texth = latextextsize(lstr)
+    textw, texth = Luxor.latextextsize(lstr)
     bottom_pt, top_pt = rawlatexboundingbox(lstr)
-
-    translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
-
-    # Writes text using ModernCMU font.
-    for text in sentence
+    translate_x, translate_y = Luxor.texalign(halign, valign, bottom_pt, top_pt, font_size)
+    for texelement in sentence
         @layer begin
             translate(pt)
             if !rotationfixed
                 rotate(angle)
                 translate(translate_x, translate_y)
             else
-                l_pt, r_pt = latexboundingbox(lstr, halign = halign, valign = valign)
-                translate((l_pt + r_pt)/2)
+                l_pt, r_pt = Luxor.latexboundingbox(lstr, halign = halign, valign = valign)
+                translate((l_pt + r_pt) / 2)
                 rotate(angle)
-                translate(Point(translate_x,translate_y)-(l_pt + r_pt)/2)
+                translate(Point(translate_x, translate_y) - (l_pt + r_pt) / 2)
             end
-
-            if text[1] isa TeXChar
-
+            if first(texelement) isa TeXChar
                 if paths == true
-                    fontface(text[1].font.family_name)
-                    fontsize(font_size * text[3])
-                    newsubpath()
-                    move(Point(text[2]...) * font_size * (1, -1))
-                    Luxor.textoutlines(string(text[1].represented_char),
-                        Point(text[2]...) * font_size * (1, -1),
-                        action=:path,
-                        startnewpath=false)
+                    _write_tex_as_path(texelement, font_size)
                 else
-                    writelatexchar(text, font_size)
+                    _write_tex_element(texelement, font_size)
                 end
-            elseif text[1] isa HLine
-                # text is eg (HLine{Float64}(0.7105, 0.009), [0.0, 0.2106], 1.0))
-                #                            width   thick    x     y      scale
+            elseif first(texelement) isa HLine
+                hline = texelement[1]
+                spt = Point(texelement[2]...)
+                fscale = texelement[3]
+                fontsize(font_size * fscale)
+                linestart = spt * font_size * (1, -1)
+                lineend = linestart + (hline.width * font_size, hline.thickness * font_size)
                 if paths == true
-                    pointstart = Point(text[2]...) * font_size * (1, -1)
-                    pointend = pointstart + Point(text[1].width, 0) * font_size
-                    poly([pointstart, pointend], :path)
-                    closepath()
+                    box(linestart, lineend, :path)
                     newsubpath()
                 else
-                    pointstart = Point(text[2]...) * font_size * (1, -1)
-                    pointend = pointstart + Point(text[1].width, 0) * font_size
-                    setline(0.5)
-                    line(pointstart, pointend, :stroke)
+                    box(linestart, lineend, :fill)
                 end
+            elseif first(texelement) isa VLine
+                # todo
             end
         end
     end
 end
 
-
-"""
-    writelatexchar(t::AbstractString)
-
-Helper function to handle extra chars that are not supported
-in MathTeXEngine.
-"""
-function writelatexchar(text, font_size)
-    # Extra chars not supported by MathTeXEngine
-    extrachars = ["⨟","{","}","𝔸","𝔹","ℂ","𝔻","𝔽", "𝔾", "ℍ", "𝕀", "𝕁", "𝕂", "𝕃", "𝕄", "ℕ", "𝕆", "ℙ", "ℚ", "ℝ", "𝕊", "𝕋", "𝕌", "𝕎", "𝕍", "𝕏", "ℤ", "𝔄", "𝔅", "ℭ", "𝔇", "𝔈", "𝔉", "𝔊", "ℌ", "ℑ", "𝔍", "𝔎", "𝔏", "𝔐", "𝔑", "𝔒", "𝔓", "𝔔", "ℜ", "𝔖", "𝔗", "𝔘", "𝔙", "𝔚", "𝔛", "𝔜", "ℨ", "𝕬", "𝕭", "𝕮", "𝕯", "𝕰", "𝕱", "𝕲", "𝕳", "𝕴", "𝕵", "𝕶", "𝕷", "𝕸", "𝕹", "𝕺", "𝕻", "𝕼", "𝕽", "𝕾", "𝕿", "𝖀", "𝖁", "𝖂", "𝖃", "𝖄", "𝖅", "𝒜", "ℬ", "𝒞", "𝒟", "ℰ", "ℱ", "𝒢", "ℋ", "ℐ", "𝒥", "𝒦", "ℒ", "ℳ", "𝒩", "𝒪", "𝒫", "𝒬", "ℛ", "𝒮", "𝒯", "𝒰", "𝒱", "𝒲", "𝒳", "𝒴", "𝒵","𝕒","𝕓" ,"𝕔" ,"𝕕" ,"𝕖" ,"𝕗","𝕘" ,"𝕙" ,"𝕚" ,"𝕛" ,"𝕜" ,"𝕝" ,"𝕞" ,"𝕟" ,"𝕠" ,"𝕡" ,"𝕢" ,"𝕣" ,"𝕤" ,"𝕥" ,"𝕦" ,"𝕧" ,"𝕩" ,"𝕨" ,"𝕪" ,"𝕫" ,"𝐚" ,"𝐛" ,"𝐜" ,"𝐝" ,"𝐞" ,"𝐟" ,"𝐠" ,"𝐡" ,"𝐢" ,"𝐣" ,"𝐤" ,"𝐥" ,"𝐦" ,"𝐧" ,"𝐨" ,"𝐩" ,"𝐪" ,"𝐫" ,"𝐬" ,"𝐭" ,"𝐮" ,"𝐯" ,"𝐱" ,"𝐰" ,"𝐲" ,"𝐳" ,"𝐀" ,"𝐁" ,"𝐂" ,"𝐃" ,"𝐄" ,"𝐅" ,"𝐆" ,"𝐇" ,"𝐈" ,"𝐉" ,"𝐊" ,"𝐋" ,"𝐌" ,"𝐍" ,"𝐎" ,"𝐏" ,"𝐐" ,"𝐑" ,"𝐒" ,"𝐓" ,"𝐔" ,"𝐕" ,"𝐗" ,"𝐖" ,"𝐘" ,"𝐙" ,"𝓐" ,"𝓑" ,"𝓒" ,"𝓓" ,"𝓔" ,"𝓕" ,"𝓖" ,"𝓗" ,"𝓘" ,"𝓙" ,"𝓚" ,"𝓛" ,"𝓜" ,"𝓝" ,"𝓞" ,"𝓟" ,"𝓠" ,"𝓡" ,"𝓢" ,"𝓣" ,"𝓤" ,"𝓥" ,"𝓧" ,"𝓦" ,"𝓨" ,"𝓩"]
-
-    fontface(text[1].font.family_name)
-    fontsize(font_size * text[3])
-
-    if string(text[1].represented_char) == "⨟"
-        setfont(text[1].font.family_name, font_size * text[3])
-        Luxor.settext(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0.25,0.3)*font_size)
-
-    elseif text[1].represented_char == '{' || text[1].represented_char == '}'
-        Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0,-0.8)*font_size)
-
-    elseif string(text[1].represented_char) in extrachars
-        setfont(text[1].font.family_name, 1.3font_size * text[3])
-        Luxor.settext(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0,0.3)*font_size)
-
-    else
-        Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1))
-    end
-end
+text(lstr::LaTeXString; kwargs...) =  text(lstr, O; kwargs...)

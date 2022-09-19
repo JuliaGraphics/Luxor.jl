@@ -28,7 +28,7 @@ This function uses Cairo's Toy text API.
 
 See also `textextents()`, `settext()`, `label()`.
 """
-function text(t, pt::Point;
+function text(t::T where T <: AbstractString, pt::Point;
         halign=:left,
         valign=:baseline,
         angle=0.0)
@@ -80,15 +80,15 @@ function text(t, pt::Point;
     return Point(textpointx, textpointy)
 end
 
-text(t; kwargs...) = text(t, O; kwargs...)
-text(t, xpos, ypos; kwargs...) = text(t, Point(xpos, ypos); kwargs...)
+text(t::String; kwargs...) = text(t, O; kwargs...)
+text(t::String, xpos, ypos; kwargs...) = text(t, Point(xpos, ypos); kwargs...)
 
 # deprecated probably
-textcentered(t, x=0, y=0) = text(t, x, y, halign=:center)
-textcentered(t, pt::Point) = textcentered(t, pt.x, pt.y)
+textcentered(t::String, x=0, y=0) = text(t, x, y, halign=:center)
+textcentered(t::String, pt::Point) = textcentered(t, pt.x, pt.y)
 textcentred = textcentered
-textright(t, x=0, y=0) = text(t, x, y, halign=:right)
-textright(t, pt::Point) = textright(t, pt.x, pt.y)
+textright(t::String, x=0, y=0) = text(t, x, y, halign=:right)
+textright(t::String, pt::Point) = textright(t, pt.x, pt.y)
 
 """
     fontface(fontname)
@@ -162,7 +162,7 @@ returns
 
     [1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]
 """
-textextents(str) = Cairo.text_extents(get_current_cr(), str)
+textextents(str::T where {T<:AbstractString}) = Cairo.text_extents(get_current_cr(), str)
 
 """
     textpath(t)
@@ -173,11 +173,11 @@ You can use `pathtopoly()` or `getpath()` or `getpathflat()` to convert the path
 
 See also `textoutlines()`. `textpath()` retains Bezier curves, whereas `textoutlines()` returns flattened curves.
 """
-function textpath(t)
+function textpath(t::T where T <: AbstractString)
     Cairo.text_path(get_current_cr(), t)
 end
 """
-    textpath(s::AbstractString, pos::Point;
+    textpath(s::String, pos::Point;
         action=:none,
         halign=:left,
         valign=:baseline,
@@ -187,7 +187,7 @@ Convert the text in string `s` to paths and apply the action.
 
 TODO Return something more useful than a Boolean.
 """
-function textpath(s::AbstractString, pos::Point;
+function textpath(s::T where T <: AbstractString, pos::Point;
         action=:none,
         halign=:left,
         valign=:baseline,
@@ -218,13 +218,13 @@ function textpath(s::AbstractString, pos::Point;
     do_action(action)
 end
 
-textpath(s::AbstractString, pos::Point, action::Symbol;
-        halign=:left,
-        valign=:baseline,
-        startnewpath=true) = textpath(s, pos, action=action, halign=halign, valign=valign, startnewpath=startnewpath)
+textpath(s::T where {T<:AbstractString}, pos::Point, action::Symbol;
+    halign = :left,
+    valign = :baseline,
+    startnewpath = true) = textpath(s, pos, action=action, halign=halign, valign=valign, startnewpath=startnewpath)
 
 """
-    textoutlines(s::AbstractString, pos::Point=O;
+    textoutlines(s::String, pos::Point=O;
         action=:none,
         halign=:left,
         valign=:baseline,
@@ -238,7 +238,7 @@ See also `textpath()`. `textpath()` retains Bezier curves, whereas `textoutlines
 
 TODO Return something more useful than a Boolean.
 """
-function textoutlines(s::AbstractString, pos::Point;
+function textoutlines(s::T where T <: AbstractString, pos::Point;
     action=:none,
     halign=:left,
     valign=:baseline,
@@ -280,7 +280,7 @@ function textoutlines(s::AbstractString, pos::Point;
     do_action(action)
 end
 
-textoutlines(s::AbstractString, pos::Point, action::Symbol;
+textoutlines(s::T where T <: AbstractString, pos::Point, action::Symbol;
     halign=:left,
     valign=:baseline,
     startnewpath=true) = textoutlines(s, pos;
@@ -289,7 +289,7 @@ textoutlines(s::AbstractString, pos::Point, action::Symbol;
         valign=valign,
         startnewpath=startnewpath)
 
-textoutlines(s::AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
+textoutlines(s::T where T <: AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
 
 """
     textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
@@ -305,7 +305,7 @@ Place a string of text on a curve. It can spiral in or out.
 `start_angle` is relative to +ve x-axis, arc/circle is centered on `(x_pos,y_pos)` with
 radius `start_radius`.
 """
-function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
+function textcurve(the_text::T where T <: AbstractString, start_angle, start_radius, x_pos=0, y_pos=0;
     spiral_ring_step = 0,
     letter_spacing = 0,
     spiral_in_out_shift = 0,
@@ -349,7 +349,7 @@ function textcurve(the_text, start_angle, start_radius, x_pos=0, y_pos=0;
     end
 end
 
-textcurve(the_text, start_angle, start_radius, center::Point; kwargs...) =
+textcurve(the_text::String, start_angle, start_radius, center::Point; kwargs...) =
     textcurve(the_text, start_angle, start_radius, center.x, center.y; kwargs...)
 
 """
@@ -368,7 +368,7 @@ baseline.
 
 `textcurvecentred` (UK spelling) is a synonym.
 """
-function textcurvecentered(the_text, the_angle, the_radius, center::Point;
+function textcurvecentered(the_text::T where T <: AbstractString, the_angle, the_radius, center::Point;
                            clockwise = true,
                            letter_spacing = 0,
                            baselineshift = 0
@@ -413,7 +413,7 @@ Example:
     setfont("Helvetica", 24)
     settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
 """
-function setfont(family::AbstractString, fontsize)
+function setfont(family::T where T <: AbstractString, fontsize)
     # output is set relative to 96dpi
     # so it needs to be rescaled
     fsize = fontsize * 72/96
@@ -448,13 +448,13 @@ The `<span>` tag can contains things like this:
 
     <span font='26' background='green' foreground='red'>unreadable text</span>
 """
-settext(text::AbstractString, pos::Point; kwargs...) =
+settext(text::T where T <: AbstractString, pos::Point; kwargs...) =
     Cairo.text(get_current_cr(), pos.x, pos.y, text; kwargs...)
 
-settext(text; kwargs...) = settext(text, O; kwargs...)
+settext(text::T where T <: AbstractString; kwargs...) = settext(text, O; kwargs...)
 
 """
-    label(txt::AbstractString, alignment::Symbol=:N, pos::Point=O;
+    label(txt::T where T <: AbstractString, alignment::Symbol=:N, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -480,7 +480,7 @@ start and end of the lines.
 
 TODO: Negative offsets don't give good results.
 """
-function label(txt::AbstractString, alignment::Symbol=:N, pos::Point=O;
+function label(txt::T where T <: AbstractString, alignment::Symbol=:N, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -516,7 +516,7 @@ function label(txt::AbstractString, alignment::Symbol=:N, pos::Point=O;
 end
 
 """
-    label(txt::AbstractString, rotation::Float64, pos::Point=O;
+    label(txt::T where T <: AbstractString, rotation::Float64, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -526,7 +526,7 @@ Add a text label at a point, positioned relative to that point, for example,
 
     label("text", pi)          # positions text to the left of the origin
 """
-function label(txt::AbstractString, rotation::Real, pos::Point=O;
+function label(txt::T where T <: AbstractString, rotation::Real, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -559,7 +559,7 @@ end
 Split the text in string `s` into an array, but keep all the separators
 attached to the preceding word.
 """
-function splittext(s)
+function splittext(s::T where T <: AbstractString)
     # split text into array, keeping all separators
     # hyphens stay with first word
     result = Array{String, 1}()
@@ -581,7 +581,7 @@ function splittext(s)
 end
 
 """
-    textlines(s::AbstractString, width::Real;
+    textlines(s::T where T <: AbstractString, width::Real;
          rightgutter=5)
 
 Split the text in `s` into lines up to `width` units wide (in the current font).
@@ -669,12 +669,12 @@ function textbox(lines::Array, pos::Point=O;
     return startpos
 end
 """
-    textbox(s::AbstractString, pos::Point=O;
+    textbox(s::T where T <: AbstractString, pos::Point=O;
         leading = 12,
         linefunc::Function = (linenumber, linetext, startpos, height) -> (),
         alignment=:left)
 """
-textbox(s::AbstractString, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s::T where {T<:AbstractString}, pos::Point = O; kwargs...) = textbox([s], pos; kwargs...)
 
 """
     textwrap(s::T where T<:AbstractString, width::Real, pos::Point;
@@ -771,7 +771,7 @@ and avoid resetting the clipping path for each character.
 
 TODO Is it possible to fix strings with combining characters such as "\u0308"?
 """
-function texttrack(txt, pos, tracking, fsize;
+function texttrack(txt::T where T <: AbstractString, pos, tracking, fsize;
             action=:fill,
             halign=:left,
             valign=:baseline,
@@ -832,18 +832,18 @@ function texttrack(txt, pos, tracking, fsize;
     end
 end
 
-texttrack(txt, pos, tracking;
-            action=:fill,
-            halign=:left,
-            valign=:baseline,
-            startnewpath=true) = texttrack(txt, pos, tracking, get_fontsize();
+texttrack(txt::T where T <: AbstractString, pos, tracking;
+    action=:fill,
+    halign=:left,
+    valign=:baseline,
+    startnewpath=true) = texttrack(txt, pos, tracking, get_fontsize();
                         action=action,
                         halign=halign,
                         valign=valign,
                         startnewpath=startnewpath)
 
 """
-    textplace(txt::AbstractString, pos::Point, params::Vector;
+    textplace(txt::T where T <: AbstractString, pos::Point, params::Vector;
         action = :fill,
         startnewpath = false)
 
@@ -900,7 +900,7 @@ txtpos = textplace("93—4!", O - (200, 0), [
     ])
 ```
 """
-function textplace(txt::AbstractString, pos::Point, params::Vector;
+function textplace(txt::T where T <: AbstractString, pos::Point, params::Vector;
         action = :fill,
         startnewpath = false)
     @layer begin
@@ -1084,7 +1084,7 @@ final value of the index, between 0.0 and 1.0. If the
 returned index value is less than 1, this means that the
 text supplied ran out before the end of the polygon was reached.
 """
-function textonpoly(str, pgon;
+function textonpoly(str::T where T <: AbstractString, pgon;
         tracking = 0,
         startoffset = 0.0,
         baselineshift = 0.0,

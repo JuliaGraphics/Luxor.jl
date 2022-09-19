@@ -1,13 +1,15 @@
 # Changelog
 
-## [v3.6.0] - some day sooner or later
+## [v3.6.0] - some day soon
 
 ### Added
 
 ### Changed
 
 - changed precompile.jl to use SnoopPrecompile
-- hexspiral() counting from 1 not 0 (or 2)
+- hexspiral() now counts from 1 not 0 (or 2)
+- rework LaTeX code a bit
+- add dependency on FreeTypeAbstraction
 
 ### Removed
 

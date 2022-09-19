@@ -1,6 +1,6 @@
 import SnoopPrecompile
 
-@info "SnoopPrecompile is looking at Luxor.jl code..."
+@info "SnoopPrecompile is analyzing Luxor.jl code..."
 
 SnoopPrecompile.@precompile_all_calls begin
     ngon(O, 100, 3, vertices=true)
@@ -13,11 +13,11 @@ SnoopPrecompile.@precompile_all_calls begin
     pgon = star(O, 201.9, 23, 0.8, π / 2, vertices = true)
     ps = polyportion(pgon, 3/10)
     pa = polydistances(pgon)
+    sethue("red")
     polysortbyangle(pgon)
     polysortbydistance(pgon, pgon[1])
     polysmooth(pgon, 5, :none)
     polyremovecollinearpoints(pgon)
     polytriangulate(pgon)
     randomhue()
-    sethue("red")
 end
