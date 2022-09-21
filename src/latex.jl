@@ -2,18 +2,18 @@ import .MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 using .LaTeXStrings
 
-# the fonts we're using
+# the fonts we're using 
 mutable struct FontSpec
     setfontname::String
     fontfacename::String
 end
 
 mathbook = FontSpec("NewComputerModern Math", "NewCMMath-Book")
-italic10 = FontSpec("NewComputerModern Italic", "NewCM10-Italic")
-bold10 = FontSpec("NewComputerModern Bold", "NewCM10-Bold")
-italic12 = FontSpec("NewComputerModern Bold Italic", "NewCM10-BoldItalic")
-regular = FontSpec("NewComputerModern Regular", "NewCM10-Regular")
-mathreg = FontSpec("NewComputerModern Math", "NewCMMath-Regular")
+italic10 = FontSpec("NewComputerModern10-Italic", "NewCM10-Italic")
+bold10   = FontSpec("NewComputerModern10-Bold", "NewCM10-Bold")
+italic12 = FontSpec("NewComputerModern10-BoldItalic", "NewCM10-BoldItalic")
+regular  = FontSpec("NewComputerModern10-Regular", "NewCM10-Regular")
+mathreg  = FontSpec("NewComputerModern Math", "NewCMMath-Regular")
 
 """
     _findlatexfont(t::FTFont)
@@ -130,7 +130,7 @@ function _write_tex_element(texelement, font_size)
     ch = texchar.represented_char
     fscale = last(texelement)
     spt = Point(texelement[2]...)
-    fontface(fontspec.fontfacename)
+    fontface(fontspec.setfontname)
     fontsize(font_size * fscale)
     if ch == '{' || ch == '}'
         Luxor.text(string(ch), spt * font_size * (1, -1) + Point(0, -0.8) * font_size)
@@ -150,7 +150,7 @@ function _write_tex_as_path(texelement, font_size)
     ch = texchar.represented_char
     fscale = last(texelement)
     spt = Point(texelement[2]...)
-    fontface(fontspec.fontfacename)
+    fontface(fontspec.setfontname)
     fontsize(font_size * fscale)
     newsubpath()
     move(spt * font_size * (1, -1))
@@ -189,12 +189,12 @@ end
 ```
 """
 function text(lstr::LaTeXString, pt::Point;
-        valign = :baseline,
-        halign = :left,
-        angle = 0::Real,
-        rotationfixed = false,
-        paths = false,
-        kwargs...)
+    valign = :baseline,
+    halign = :left,
+    angle = 0::Real,
+    rotationfixed = false,
+    paths = false,
+    kwargs...)
     # with MathTexEngine.generate_tex_elements
     sentence = Luxor.generate_tex_elements(lstr)
     # get current font size
@@ -240,4 +240,4 @@ function text(lstr::LaTeXString, pt::Point;
     end
 end
 
-text(lstr::LaTeXString; kwargs...) =  text(lstr, O; kwargs...)
+text(lstr::LaTeXString; kwargs...) = text(lstr, O; kwargs...)
