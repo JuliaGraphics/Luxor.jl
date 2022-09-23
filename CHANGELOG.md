@@ -8,8 +8,8 @@
 
 - changed precompile.jl to use SnoopPrecompile
 - hexspiral() now counts from 1 not 0 (or 2)
-- rework LaTeX code a bit
-- add dependency on FreeTypeAbstraction
+- rework LaTeX code - trying to get fonts working better
+- add dependency on FreeTypeAbstraction ... :( 
 
 ### Removed
 

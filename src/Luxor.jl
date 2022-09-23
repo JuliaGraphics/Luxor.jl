@@ -10,17 +10,17 @@ end
 """
 module Luxor
 
+using FileIO
 using Base64
 using Cairo
+using Requires
 using Colors
 using Dates
 using FFMPEG
-using FileIO
-using FreeTypeAbstraction
 using Juno
 using Rsvg
+using FreeTypeAbstraction
 
-using Requires
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,

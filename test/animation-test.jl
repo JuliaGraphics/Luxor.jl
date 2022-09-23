@@ -19,17 +19,17 @@ end
 function frame(scene, framenumber)
     sethue(Colors.HSV(framenumber, 1, 1))
     p = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
-    circle(polar(100, -pi/2 - p * 2pi), 80, :fill)
-    text(string("frame $framenumber of $(length(scene.movie.movieframerange))"), Point(O.x, O.y-190))
+    circle(polar(100, -pi / 2 - p * 2pi), 80, :fill)
+    text(string("frame $framenumber of $(length(scene.movie.movieframerange))"), Point(O.x, O.y - 190))
 end
 
 mktempdir() do tmpdir
-    @test animate(demomovie, [Scene(demomovie, backdrop), Scene(demomovie, frame, 0:359, easingfunction=easeinoutquad)], creategif=false) == true
+    @test animate(demomovie, [Scene(demomovie, backdrop), Scene(demomovie, frame, 0:359, easingfunction = easeinoutquad)], creategif = false) == true
 end
 
 demo = Movie(400, 100, "test")
 
-backdrop(scene, framenumber) =  background("black")
+backdrop(scene, framenumber) = background("black")
 
 function frame1(scene, framenumber)
     sethue("purple")
@@ -60,13 +60,13 @@ end
 
 mktempdir() do tmpdir
     @test animate(demo, [
-        Scene(demo, backdrop, 0:200),
-        Scene(demo, frame1,   0:200, easingfunction=easeinsine),
-        Scene(demo, frame2,   0:200, easingfunction=easeinoutcubic),
-        Scene(demo, frame3,   0:200, easingfunction=easeinoutquint),
-        Scene(demo, frame4,   0:200, easingfunction=easeinoutquint, optarg=42),
+            Scene(demo, backdrop, 0:200),
+            Scene(demo, frame1, 0:200, easingfunction = easeinsine),
+            Scene(demo, frame2, 0:200, easingfunction = easeinoutcubic),
+            Scene(demo, frame3, 0:200, easingfunction = easeinoutquint),
+            Scene(demo, frame4, 0:200, easingfunction = easeinoutquint, optarg = 42),
         ],
-        creategif=false) == true
+        creategif = false) == true
 end
 
 @testset "test pathname parameter of animate()" begin
@@ -79,8 +79,8 @@ end
         @test !isfile(testfile)
         =#
         @test animate(demo, Scene(demo, backdrop, 0:200),
-            creategif=false,
-            pathname=testfile) == true
+            creategif = false,
+            pathname = testfile) == true
 
         touch(testfile)
         @test isfile(testfile)
@@ -90,8 +90,8 @@ end
         @test isdir(tmpdir)
         @warn "This is about to error..."
         @test animate(demo, Scene(demo, backdrop, 0:200),
-            creategif=false,
-            pathname=tmpdir) == false
+            creategif = false,
+            pathname = tmpdir) == false
         @test isfile(testfile)
     end
 end
