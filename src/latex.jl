@@ -6,14 +6,15 @@ using .LaTeXStrings
 mutable struct FontSpec
     setfontname::String
     fontfacename::String
+    vshift::Float64 
 end
 
-mathbook = Luxor.FontSpec("NewComputerModern Math", "NewCMMath-Book")
-mathreg = Luxor.FontSpec("NewComputerModern Math", "NewCMMath-Regular")
-italic10 = Luxor.FontSpec("NewComputerModern Italic", "NewCM10-Italic")
-bold10 = Luxor.FontSpec("NewComputerModern Bold", "NewCM10-Bold")
-italic12 = Luxor.FontSpec("NewComputerModern Bold Italic", "NewCM10-BoldItalic")
-regular = Luxor.FontSpec("NewComputerModern Regular", "NewCM10-Regular")
+mathbook = Luxor.FontSpec("NewComputerModern Math", "NewCMMath-Book", -0.05)
+mathreg = Luxor.FontSpec("NewComputerModern Math", "NewCMMath-Regular", -0.05)
+italic10 = Luxor.FontSpec("NewComputerModern Italic", "NewCM10-Italic", 0.0)
+bold10 = Luxor.FontSpec("NewComputerModern Bold", "NewCM10-Bold", 0.0)
+italic12 = Luxor.FontSpec("NewComputerModern Bold Italic", "NewCM10-BoldItalic", 0.0)
+regular = Luxor.FontSpec("NewComputerModern Regular", "NewCM10-Regular", 0.0)
 
 """
     _findlatexfont(t::FTFont)
@@ -132,7 +133,7 @@ function _write_tex_element(texelement, font_size)
     fscale = last(texelement)
     spt = Point(texelement[2]...)
     setfont(fontspec.setfontname, font_size * fscale)
-    Luxor.settext(string(ch), spt * font_size * (1, -1))
+    Luxor.settext(string(ch), spt * font_size * (1, -1) + (0, fontspec.vshift * font_size)) 
 end
 
 """
