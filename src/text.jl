@@ -420,6 +420,13 @@ function setfont(family::T where T <: AbstractString, fontsize)
     set_font_face(get_current_cr(), string(family, " ", fsize))
 end
 
+function setfont(ftfont::FTFont, fontsize)
+    fsize = fontsize * 72/96
+    set_font_size(get_current_cr(), fsize)
+    set_font_face(get_current_cr(), ftfont)
+end
+
+
 """
     settext(text, pos;
         halign = "left",

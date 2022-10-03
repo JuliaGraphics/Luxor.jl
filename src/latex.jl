@@ -126,14 +126,13 @@ end
 Draw the texchar as text. This uses the
 Pro text API: `setfont()` and `settext()`
 """
-function _write_tex_element(texelement, font_size)
-    texchar = first(texelement)
-    fontspec = _findlatexfont(texchar.font)
-    ch = texchar.represented_char
-    fscale = last(texelement)
-    spt = Point(texelement[2]...)
-    setfont(fontspec.setfontname, font_size * fscale)
-    Luxor.settext(string(ch), spt * font_size * (1, -1) + (0, fontspec.vshift * font_size)) 
+function _write_tex_element((texchar, pos, fscale), font_size)
+    setfont(texchar.font, font_size * fscale)
+    x = pos[1] * font_size
+    y = -pos[2] * font_size
+    Cairo.show_glyph(
+        get_current_cr(),
+        Cairo.CairoGlyph(texchar.glyph_id, x, y))
 end
 
 """
