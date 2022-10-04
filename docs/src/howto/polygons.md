@@ -19,7 +19,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |[`polycross`](@ref)            |                               |                           |[`polycentroid`](@ref)     |[`polyremainder`](@ref)        |
 |[`offsetpoly`](@ref)           |                               |                           |[`BoundingBox`](@ref)      |[`polysortbyangle`](@ref)      |
 |[`hypotrochoid`](@ref)         |                               |                           |[`ispolyclockwise`](@ref)  |[`polysortbydistance`](@ref)   |
-|[`epitrochoid`](@ref)          |                               |                           |[`ispolyconvex`](@ref)     |[`polyintersections`](@ref)    |
+|[`epitrochoid`](@ref)          |                               |                           |[`ispolyconvex`](@ref)     |[`polyclip`](@ref)             |
 |[`polyrotate!`](@ref)          |                               |                           |[`ispointonpoly`](@ref)    |[`polymove!`](@ref)            |
 |[`polyfit`](@ref)              |                               |                           |                           |[`polyscale!`](@ref)           |
 |[`polyhull`](@ref)             |                               |                           |                           |                               |
@@ -1484,9 +1484,9 @@ end
 amovie = Movie(600, 400, "p to j")
 animate(amovie,
     Scene(amovie, frame, 1:200,
-    easingfunction = easeinoutsine),
-    creategif=true,
-    pathname="/tmp/python-julia.gif")
+        easingfunction = easeinoutsine),
+    creategif = true,
+    pathname = "/tmp/python-julia.gif")
 ```
 
 ![python julia animation](../assets/figures/python-julia.gif)
@@ -1496,6 +1496,36 @@ The "Python" path has 9 loops, whereas "Julia" has 8. The `polymorph()` function
 ## Other polygon operations
 
 These functions are still in development. Expect varying degrees of success when using them.
+
+[`polyclip()`](@ref) returns the region of a source polygon that lies inside a clipping polygon.
+
+```@example
+using Luxor
+
+@drawsvg begin
+    background("grey10")
+    polygon1 = star(O + (0, -40), 100, 10, 0.5, vertices=true)
+    polygon2 = ngon(O + (0,  40), 100, 40, vertices=true)
+    @layer begin
+        setopacity(0.5)
+        sethue("green")
+        poly(polygon1, :fill, close=true)
+        sethue("blue")
+        poly(polygon2, :fill, close=true)
+    end
+    sethue("white")
+    p = polyclip(polygon1, polygon2)
+    if !isnothing(p)
+        sethue("orange")
+        poly(p, :fillpreserve, close=true)
+        sethue("purple")
+        setline(3)
+        strokepath()
+    end
+end 600 300
+```
+
+The second, clipping, polygon (the blue shape in this example), must be a convex polygon, where every interior angle is less than or equal to 180°.
 
 ### Intersections
 
@@ -1530,33 +1560,6 @@ nothing # hide
 ```
 
 ![line/polygon intersections](../assets/figures/linepolyintersections.png)
-
-`polyintersect` calculates the intersection points of two polygons.
-
-```@example
-using Luxor # hide
-Drawing(600, 550, "../assets/figures/polyintersections.png") # hide
-
-origin() # hide
-background("white") # hide
-sethue("grey60") # hide
-setopacity(0.8) # hide
-pentagon = ngon(O, 250, 5, vertices=true)
-square = box(O + (80, 20), 280, 400, vertices=true)
-
-poly(pentagon, action = :stroke, close=true)
-poly(square, action = :stroke, close=true)
-
-sethue("orange")
-circle.(polyintersect(pentagon, square), 8, action = :fill)
-
-finish() # hide
-nothing # hide
-```
-
-![polygon intersections](../assets/figures/polyintersections.png)
-
-The returned polygon contains the points where one polygon crosses another.
 
 ### Triangulation
 

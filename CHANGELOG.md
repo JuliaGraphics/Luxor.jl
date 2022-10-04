@@ -10,6 +10,7 @@
 - hexspiral() now counts from 1 not 0 (or 2)
 - rework LaTeX code - trying to get fonts working better
 - add dependency on FreeTypeAbstraction ... :( 
+- polyclip() clips one poly with another -  replace polyintersections()
 
 ### Removed
 

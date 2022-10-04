@@ -11,9 +11,9 @@ Create a path with the points in `pointlist` and apply `action`.
 By default `poly()` doesn't close or fill the polygon.
 """
 function poly(pointlist::Array{Point,1};
-        action = :none,
-        close = false,
-        reversepath = false)
+    action = :none,
+    close = false,
+    reversepath = false)
     if action != :path
         newpath()
     end
@@ -998,7 +998,7 @@ function polyportion(p::Array{Point,1}, portion = 0.5; closed = true, pdist = []
             # include the last line from the end to the first point
             push!(p, p[1])
             return p
-        end 
+        end
     end
     ind, surplus = nearestindex(pdist, portion * pdist[end])
     if surplus > 0.0
@@ -1144,26 +1144,55 @@ function intersectlinepoly(pt1::Point, pt2::Point, C::Array{Point,1})
     return intersectingpoints
 end
 
-"""
-    polyintersections(S::Array{Point, 1}, C::Array{Point, 1})
-
-Return an array of the points in polygon S plus the points where polygon S crosses
-polygon C. Calls `intersectlinepoly()`.
-
-TODO This code is experimental...
-"""
-function polyintersections(S::Array{Point,1}, C::Array{Point,1})
-    Splusintersectionpoints = Point[]
-    sizehint!(Splusintersectionpoints, length(S) + length(C))
-    @inbounds for i in eachindex(S)
-        Spointpair = (S[i], S[mod1(i + 1, length(S))])
-        push!(Splusintersectionpoints, S[i])
-        for pt in intersectlinepoly(Spointpair..., C)
-            push!(Splusintersectionpoints, pt)
-        end
-    end
-    return Splusintersectionpoints
+# check if a point is on the LEFT side of an edge
+function _insideleft(p1::Point, p2::Point, p3::Point)
+    return ((p2.x - p1.x) * (p3.y - p1.y)) > ((p2.y - p1.y) * (p3.x - p1.x))
 end
+
+"""
+    polyclip(s, c)
+
+Return polygon that defines the intersection between an
+subject polygon and the clip polygon.
+
+Return nothing if function can't find one.
+
+Uses Sutherland-Hodgman clipping algorithm.
+
+S can be concave or convex.
+C must be convex.
+"""
+function polyclip(S::Array{Point,1}, C::Array{Point,1})
+    if !ispolyconvex(C)
+        @warn "polyclip(S, C): the second argument, C, must be a convex polygon."
+        return nothing
+    end 
+    outpoly = S
+    clippoint1 = C[end]
+    for clippoint2 in C
+        inarr = outpoly
+        outpoly = Point[]
+        if length(inarr) == 0
+            return nothing
+        end
+        startpoint = inarr[end]
+        for endpoint in inarr
+            if _insideleft(clippoint1, clippoint2, endpoint)
+                if !_insideleft(clippoint1, clippoint2, startpoint)
+                    push!(outpoly, last(intersectionlines(clippoint1, clippoint2, startpoint, endpoint)))
+                end
+                push!(outpoly, endpoint)
+            elseif _insideleft(clippoint1, clippoint2, startpoint)
+                push!(outpoly, last(intersectionlines(clippoint1, clippoint2, startpoint, endpoint)))
+            end
+            startpoint = endpoint
+        end
+        clippoint1 = clippoint2
+    end
+    return length(outpoly) > 0 ? outpoly : nothing
+end
+
+polyintersections(S::Array{Point,1}, C::Array{Point,1}) = polyclip(S, C)
 
 # TODO these experimental functions don't work all the time
 # use with caution... :)
@@ -1608,7 +1637,6 @@ function polyhull(points)
     end
     sortedpts = [sortedpts[i] for i in eachindex(sortedpts) if i ∉ to_remove]
 
-
     # initialize the convex hull with the anchor point
 
     convex_hull = [anchor]
@@ -1647,26 +1675,25 @@ Because `polysample()` can treat the polygon as open or
 closed (with different results), you can specify how the
 sampling is done here, with the `closed=` keyword:
 
-- closed = true
--> polygons are sampled as closed
+  - closed = true
+    -> polygons are sampled as closed
 
-- closed = false
--> polygons are sampled as open
-
-- closed = (true, false)
--> first polygon is sampled as closed, second as open
+  - closed = false
+    -> polygons are sampled as open
+  - closed = (true, false)
+    -> first polygon is sampled as closed, second as open
 """
 function _betweenpoly(loop1, loop2, k;
-        samples = 100,
-        easingfunction = easingflat,
-        closed = (true, true))
+    samples = 100,
+    easingfunction = easingflat,
+    closed = (true, true))
     if closed == true
         closed = (true, true)
     elseif closed == false
         closed = (false, false)
     end
-    l1 = polysample(loop1, samples, closed=first(closed))
-    l2 = polysample(loop2, samples, closed=last(closed))
+    l1 = polysample(loop1, samples, closed = first(closed))
+    l2 = polysample(loop2, samples, closed = last(closed))
     result = Point[]
     eased_k = easingfunction(k, 0.0, 1.0, 1.0)
     # don't skip first point like polysample() does :(
@@ -1691,8 +1718,7 @@ It returns an array of polygons, `[p_1, p_2, p_3, ... ]`,
 where each polygon `p_n` is the intermediate shape between
 the corresponding shape in `pgon1[1...n]` and `pgon2[1...n]`
 at `k`, where `0.0 < k < 1.0`. If `k ≈ 0.0`, the
-`pgon1[1...n]` is returned, and if ``k ≈ 1.0`,
-`pgon2[1...n]` is returned.
+`pgon1[1...n]` is returned, and if ``k ≈ 1.0`, `pgon2[1...n]` is returned.
 
 `pgon1` and `pgon2` can be either simple polygons or arrays
 of one or more polygonal shapes (eg as created by
@@ -1716,13 +1742,12 @@ Because `polysample()` can treat the polygon as open or
 closed (with different results), you can specify how the
 sampling is done here, with the `closed=` keyword:
 
-- closed = true
+  - closed = true
     -> polygons are sampled as closed
 
-- closed = false
+  - closed = false
     -> polygons are sampled as open
-
-- closed = (true, false)
+  - closed = (true, false)
     -> first polygon is sampled as closed, second as open
 
 This function isn't very efficient, because it copies the
@@ -1779,10 +1804,10 @@ end
 ```
 """
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
-    	samples = 100,
-    	easingfunction = easingflat,
-		kludge = true,
-        closed=true)
+    samples = 100,
+    easingfunction = easingflat,
+    kludge = true,
+    closed = true)
     isapprox(k, 0.0) && return pgon1
     isapprox(k, 1.0) && return pgon2
     loopcount1 = length(pgon1)
@@ -1804,7 +1829,7 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
             push!(result, Luxor._betweenpoly(pgon1[i], pgon2[i], k,
                 samples = samples,
                 easingfunction = easingfunction,
-                closed=closed))
+                closed = closed))
             centroid1 = polycentroid(pgon1[i])
             centroid2 = polycentroid(pgon2[i])
         elseif from_ok && !to_ok && kludge
@@ -1814,16 +1839,16 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
             push!(result, Luxor._betweenpoly(pgon1[i], loop2, k,
                 samples = samples,
                 easingfunction = easingfunction,
-                closed=closed))
+                closed = closed))
             centroid1 = polycentroid(pgon1[i])
         elseif !from_ok && to_ok && kludge
-           # nothing to morph from, so make something up
+            # nothing to morph from, so make something up
             pdir = !ispolyclockwise(pgon2[i])
             loop1 = ngon(centroid1, 0.1, reversepath = pdir, length(pgon2[i]), vertices = true)
             push!(result, Luxor._betweenpoly(loop1, pgon2[i], k,
                 samples = samples,
                 easingfunction = easingfunction,
-                closed=closed))
+                closed = closed))
             centroid2 = polycentroid(pgon2[i])
         end
     end
