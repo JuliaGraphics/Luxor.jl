@@ -208,7 +208,7 @@ function text(lstr::LaTeXString, pt::Point;
                     _write_tex_element(texelement, font_size)
                 elseif first(texelement) isa HLine
                     hline = texelement[1]
-                    spt = (Point(texelement[2]...) + (0, 0.25)) * font_size
+                    spt = Point(texelement[2]...) * font_size
                     fscale = last(texelement)
                     linestart = spt * (fscale, -fscale)
                     lineend = linestart + (hline.width * font_size, hline.thickness * font_size)
