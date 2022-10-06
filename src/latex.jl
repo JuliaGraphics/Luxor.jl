@@ -2,42 +2,6 @@ import .MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 using .LaTeXStrings
 
-# the fonts we're using 
-mutable struct FontSpec
-    setfontname::String
-    fontfacename::String
-    vshift::Float64 
-end
-
-mathbook = Luxor.FontSpec("NewComputerModern Math", "NewCMMath-Book", -0.05)
-mathreg = Luxor.FontSpec("NewComputerModern Math", "NewCMMath-Regular", -0.05)
-italic10 = Luxor.FontSpec("NewComputerModern Italic", "NewCM10-Italic", 0.0)
-bold10 = Luxor.FontSpec("NewComputerModern Bold", "NewCM10-Bold", 0.0)
-italic12 = Luxor.FontSpec("NewComputerModern Bold Italic", "NewCM10-BoldItalic", 0.0)
-regular = Luxor.FontSpec("NewComputerModern Regular", "NewCM10-Regular", 0.0)
-
-"""
-    _findlatexfont(t::FTFont)
-
-Given the FreeTypeAbstraction.FTFont in `ftf`, return a suitable FontSpec.
-"""
-function _findlatexfont(ftf::FTFont)
-    if ftf.style_name == "Regular" && ftf.family_name == "NewComputerModern Math"
-        f = mathbook
-    elseif ftf.style_name == "10 Italic" && ftf.family_name == "NewComputerModern"
-        f = italic10
-    elseif ftf.style_name == "12 Italic" && ftf.family_name == "NewComputerModern"
-        f = italic12
-    elseif ftf.style_name == "Bold"
-        f = bold10
-    elseif ftf.style_name == "BoldItalic"
-        f = italic12
-    else
-        f = regular
-    end
-    return f
-end
-
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
 
