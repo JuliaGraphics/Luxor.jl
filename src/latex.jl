@@ -85,40 +85,40 @@ function latextextsize(lstr::LaTeXString)
 end
 
 """
-    _write_tex_element(texchar, font_size)
+    _write_tex_element(texelement, font_size)
 
 Draw the texchar as text. This uses the
 Pro text API: `setfont()` and `settext()`
 """
-function _write_tex_element((texchar, pos, fscale), font_size)
+function _write_tex_element(texchar::TeXChar, pos, fscale, font_size ; paths=false)
     setfont(texchar.font, font_size * fscale)
     x = pos[1] * font_size
     y = -pos[2] * font_size
-    Cairo.show_glyph(
-        get_current_cr(),
-        Cairo.CairoGlyph(texchar.glyph_id, x, y))
+    cg = Cairo.CairoGlyph(texchar.glyph_id, x, y)
+
+    @show paths
+    @show texchar
+
+    if paths
+        newsubpath()
+        Cairo.glyph_path(get_current_cr(), cg)
+        do_action(:stroke)
+    else
+        Cairo.show_glyph(get_current_cr(), cg)
+    end
 end
 
-"""
-    _write_tex_as_path(texchar, font_size)
+function _write_tex_element(hline::HLine, pos, fscale, font_size ; paths=false)
+    spt = Point(pos...) * font_size
+    linestart = spt * (fscale, -fscale)
+    lineend = linestart + (hline.width * font_size, hline.thickness * font_size)
 
-Add the texchar to the current path. This
-uses the Toy text API: `fontface()` and `fontsize()`.
-"""
-function _write_tex_as_path(texelement, font_size)
-    texchar = first(texelement)
-    fontspec = _findlatexfont(texchar.font)
-    ch = texchar.represented_char
-    fscale = last(texelement)
-    spt = Point(texelement[2]...)
-
-    fontface(fontspec.fontfacename)
-    fontsize(font_size * fscale)
-    newsubpath()
-    Luxor.textoutlines(string(ch),
-        spt * font_size * (1, -1),
-        action = :path,
-        startnewpath = false)
+    if paths
+        box(linestart, lineend, :path)
+        newsubpath()
+    else
+        box(linestart, lineend, :fill)
+    end
 end
 
 """
@@ -156,67 +156,28 @@ function text(lstr::LaTeXString, pt::Point;
     rotationfixed = false,
     paths = false,
     kwargs...)
+    @show lstr
+    @show paths
     # with MathTexEngine.generate_tex_elements
     sentence = Luxor.generate_tex_elements(lstr)
     # get current font size
     font_size = get_fontsize()
-    textw, texth = Luxor.latextextsize(lstr)
     bottom_pt, top_pt = Luxor.rawlatexboundingbox(lstr)
     translate_x, translate_y = Luxor.texalign(halign, valign, bottom_pt, top_pt, font_size)
-    if paths == true
-        # TODO reduce repeated code ...
-        for texelement in sentence
-            @layer begin
-                translate(pt)
-                if !rotationfixed
-                    rotate(angle)
-                    translate(translate_x, translate_y)
-                else
-                    l_pt, r_pt = Luxor.latexboundingbox(lstr, halign = halign, valign = valign)
-                    translate((l_pt + r_pt) / 2)
-                    rotate(angle)
-                    translate(Point(translate_x, translate_y) - (l_pt + r_pt) / 2)
-                end
-                if first(texelement) isa TeXChar
-                    _write_tex_as_path(texelement, font_size)
-                elseif first(texelement) isa HLine
-                    hline = texelement[1]
-                    spt = Point(texelement[2]...)
-                    linestart = spt * font_size * (1, -1)
-                    lineend = linestart + (hline.width * font_size, hline.thickness * font_size)
-                    box(linestart, lineend, :path)
-                    newsubpath()
-                elseif first(texelement) isa VLine
-                    # todo
-                end
-            end # layer
-        end # for
-    else
-        for texelement in sentence
-            @layer begin
-                translate(pt)
-                if !rotationfixed
-                    rotate(angle)
-                    translate(translate_x, translate_y)
-                else
-                    l_pt, r_pt = Luxor.latexboundingbox(lstr, halign = halign, valign = valign)
-                    translate((l_pt + r_pt) / 2)
-                    rotate(angle)
-                    translate(Point(translate_x, translate_y) - (l_pt + r_pt) / 2)
-                end
-                if first(texelement) isa TeXChar
-                    _write_tex_element(texelement, font_size)
-                elseif first(texelement) isa HLine
-                    hline = texelement[1]
-                    spt = Point(texelement[2]...) * font_size
-                    fscale = last(texelement)
-                    linestart = spt * (fscale, -fscale)
-                    lineend = linestart + (hline.width * font_size, hline.thickness * font_size)
-                    box(linestart, lineend, :fill)
-                elseif first(texelement) isa VLine
-                    # todo
-                end
-            end # layer
+
+    for (texelement, pos, scale) in sentence
+        @layer begin
+            translate(pt)
+            if !rotationfixed
+                rotate(angle)
+                translate(translate_x, translate_y)
+            else
+                l_pt, r_pt = Luxor.latexboundingbox(lstr, halign = halign, valign = valign)
+                translate((l_pt + r_pt) / 2)
+                rotate(angle)
+                translate(Point(translate_x, translate_y) - (l_pt + r_pt) / 2)
+            end
+            _write_tex_element(texelement, pos, scale, font_size ; paths)
         end
     end
 end
