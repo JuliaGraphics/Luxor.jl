@@ -209,10 +209,10 @@ function textpath(s::T where T <: AbstractString, pos::Point;
     textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
     @layer begin
         translate(Point(textpointx, textpointy))
+        move(O)
         if startnewpath
            newpath() # forget any current path, start a new one
         end
-        te = textextents(s)
         textpath(s)
     end
     do_action(action)

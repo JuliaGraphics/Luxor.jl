@@ -11,6 +11,7 @@
 - rework LaTeX code - trying to get fonts working better
 - add dependency on FreeTypeAbstraction ... :( 
 - polyclip() clips one poly with another -  replace polyintersections()
+- fixed positioning bug in textpath()
 
 ### Removed
 
