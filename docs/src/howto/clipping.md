@@ -5,6 +5,30 @@ DocTestSetup = quote
 ```
 # Clipping
 
+There's two types of clipping in Luxor: polygon clipping and visual clipping.
+
+## Polygon clipping
+
+Use [`polyclip`](@ref) to clip one polygon by another. The clipping polygon must
+be convex (every interior angle is less than or equal to 180°). 
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+s = hypotrochoid(160, 48, 88, vertices=true)
+setline(0.5)
+sethue("grey60")
+poly(s, :stroke)
+c = box(O, 260, 250)
+poly(c, :stroke, close=true)
+sethue("gold")
+setline(2)
+poly(polyclip(s, c), :stroke, close=true)
+end 600 400  # hide
+```
+
+## Visual clipping
+
 Use [`clip`](@ref) to turn the current path into a clipping region, masking any graphics outside the path. [`clippreserve`](@ref) keeps the current path, but also uses it as a clipping region. [`clipreset`](@ref) resets it. `:clip` is also an action for drawing functions like [`circle`](@ref).
 
 ```@example

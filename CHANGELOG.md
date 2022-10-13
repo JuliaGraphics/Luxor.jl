@@ -4,13 +4,15 @@
 
 ### Added
 
+- polyclip() clips one poly with another -  replace polyintersections()
+- ispointonleftonline() used by ↑
+
 ### Changed
 
 - changed precompile.jl to use SnoopPrecompile
 - hexspiral() now counts from 1 not 0 (or 2)
 - rework LaTeX code - trying to get fonts working better
-- add dependency on FreeTypeAbstraction ... :( 
-- polyclip() clips one poly with another -  replace polyintersections()
+- add dependency on FreeTypeAbstraction ... ? :( 
 - fixed positioning bug in textpath()
 
 ### Removed

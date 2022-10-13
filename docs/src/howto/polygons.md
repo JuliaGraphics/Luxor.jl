@@ -1497,35 +1497,43 @@ The "Python" path has 9 loops, whereas "Julia" has 8. The `polymorph()` function
 
 These functions are still in development. Expect varying degrees of success when using them.
 
-[`polyclip()`](@ref) returns the region of a source polygon that lies inside a clipping polygon.
+[`polyclip()`](@ref) returns the region of a source polygon that lies inside a clipping polygon. In this example, each intersecting piece is created by clipping one of the "circles" with another (each circle is an 80-sided polygon).
 
 ```@example
-using Luxor
-
+using Luxor, Colors
 @drawsvg begin
-    background("grey10")
-    polygon1 = star(O + (0, -40), 100, 10, 0.5, vertices=true)
-    polygon2 = ngon(O + (0,  40), 100, 40, vertices=true)
-    @layer begin
-        setopacity(0.5)
-        sethue("green")
-        poly(polygon1, :fill, close=true)
-        sethue("blue")
-        poly(polygon2, :fill, close=true)
-    end
-    sethue("white")
-    p = polyclip(polygon1, polygon2)
-    if !isnothing(p)
-        sethue("orange")
-        poly(p, :fillpreserve, close=true)
-        sethue("purple")
-        setline(3)
-        strokepath()
-    end
-end 600 300
-```
+    background("black")
 
-The second, clipping, polygon (the blue shape in this example), must be a convex polygon, where every interior angle is less than or equal to 180°.
+    npoints = 80
+    D = 140
+    pts = ngon(O, 110, 3, π / 6, vertices=true)
+
+    circle1 = ngon(pts[1], D, npoints, vertices=true)
+    circle2 = ngon(pts[2], D, npoints, vertices=true)
+    circle3 = ngon(pts[3], D, npoints, vertices=true)
+    
+    sethue("cyan"); poly(circle1, :fill)
+    sethue("magenta"); poly(circle2, :fill)
+    sethue("yellow"); poly(circle3, :fill)
+
+    sethue("blue")
+    pc1 = polyclip(circle1, circle2)
+    poly(pc1, :fill, close=true)
+    
+    sethue("red")
+    pc2 = polyclip(circle1, circle3)
+    poly(pc2, :fill, close=true)
+    
+    sethue("green")
+    pc3 = polyclip(circle2, circle3)
+    poly(pc3, :fill, close=true)
+
+    pc4 = polyclip(pc1, pc2) # or polyclip(pc1, pc3) ... 
+    
+    sethue("white")
+    poly(pc4, :fill, close=true)
+end
+```
 
 ### Intersections
 

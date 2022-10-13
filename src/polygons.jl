@@ -1144,29 +1144,47 @@ function intersectlinepoly(pt1::Point, pt2::Point, C::Array{Point,1})
     return intersectingpoints
 end
 
-# check if a point is on the LEFT side of an edge
-function _insideleft(p1::Point, p2::Point, p3::Point)
-    return ((p2.x - p1.x) * (p3.y - p1.y)) > ((p2.y - p1.y) * (p3.x - p1.x))
+"""
+    ispointonleftofline(A::Point, B::Point, C::Point)
+
+Return true if point C is on the left of the line AB.
+
+Return true if the point C lies on the line AB.
+
+Return false if point C is on the right of the line AB.
+
+
+"""
+function ispointonleftofline(A::Point, B::Point, C::Point)
+    z = ((B.x - A.x) * (C.y - A.y)) - ((B.y - A.y) * (C.x - A.x))
+    if z > 10e-6
+        return true
+    elseif z < -10e-6
+        return false
+    else
+        return true # point is on the line 
+    end
 end
 
 """
     polyclip(s, c)
 
-Return polygon that defines the intersection between an
+Return a polygon that defines the intersection between an
 subject polygon and the clip polygon.
 
-Return nothing if function can't find one.
+Return `nothing` if the function can't find one.
 
-Uses Sutherland-Hodgman clipping algorithm.
+S - subject polygon - can be concave or convex.
 
-S can be concave or convex.
-C must be convex.
+C - clip polygon - must be convex.
+
+Uses the Sutherland-Hodgman clipping algorithm. Calls `ispointonleftofline()`.
 """
 function polyclip(S::Array{Point,1}, C::Array{Point,1})
     if !ispolyconvex(C)
         @warn "polyclip(S, C): the second argument, C, must be a convex polygon."
         return nothing
-    end 
+    end
     outpoly = S
     clippoint1 = C[end]
     for clippoint2 in C
@@ -1177,12 +1195,12 @@ function polyclip(S::Array{Point,1}, C::Array{Point,1})
         end
         startpoint = inarr[end]
         for endpoint in inarr
-            if _insideleft(clippoint1, clippoint2, endpoint)
-                if !_insideleft(clippoint1, clippoint2, startpoint)
+            if ispointonleftofline(clippoint1, clippoint2, endpoint)
+                if !ispointonleftofline(clippoint1, clippoint2, startpoint)
                     push!(outpoly, last(intersectionlines(clippoint1, clippoint2, startpoint, endpoint)))
                 end
                 push!(outpoly, endpoint)
-            elseif _insideleft(clippoint1, clippoint2, startpoint)
+            elseif ispointonleftofline(clippoint1, clippoint2, startpoint)
                 push!(outpoly, last(intersectionlines(clippoint1, clippoint2, startpoint, endpoint)))
             end
             startpoint = endpoint

@@ -21,7 +21,6 @@ using Juno
 using Rsvg
 using FreeTypeAbstraction
 
-
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
 #CairoPatternMesh, CairoSurface, CairoSVGSurface,
@@ -109,7 +108,7 @@ export Drawing,
     isarcclockwise, arc2sagitta, carc2sagitta, spiral,
     sector, intersection2circles, intersection_line_circle,
     intersectionlinecircle, intersectioncirclecircle,
-    ispointonline, ispointonpoly, intersectlinepoly,
+    ispointonline, ispointonleftofline, ispointonpoly, intersectlinepoly,
     polyintersect, polyintersections, polyclip, circlepointtangent,
     circletangent2circles, pointinverse, pointcircletangent,
     circlecircleoutertangents, circlecircleinnertangents,
