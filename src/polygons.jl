@@ -1145,28 +1145,6 @@ function intersectlinepoly(pt1::Point, pt2::Point, C::Array{Point,1})
 end
 
 """
-    ispointonleftofline(A::Point, B::Point, C::Point)
-
-Return true if point C is on the left of the line AB.
-
-Return true if the point C lies on the line AB.
-
-Return false if point C is on the right of the line AB.
-
-
-"""
-function ispointonleftofline(A::Point, B::Point, C::Point)
-    z = ((B.x - A.x) * (C.y - A.y)) - ((B.y - A.y) * (C.x - A.x))
-    if z > 10e-6
-        return true
-    elseif z < -10e-6
-        return false
-    else
-        return true # point is on the line 
-    end
-end
-
-"""
     polyclip(s, c)
 
 Return a polygon that defines the intersection between an

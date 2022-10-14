@@ -47,8 +47,8 @@ makedocs(
              "Contributing"                 =>  "explanation/contributing.md",
              ],
          "Reference" => [
-#             "Alphabetical function list"   =>  "reference/functionindex.md"
-#             "Function reference"           =>  "reference/api.md"
+             "Alphabetical function list"   =>  "reference/functionindex.md"
+             "Function reference"           =>  "reference/api.md"
              ],
         ]
     )

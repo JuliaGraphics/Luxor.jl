@@ -622,3 +622,25 @@ function rotate_point_around_point(targetpt, pt, angle)
     y2 = x1 * sin(angle) + y1 * cos(angle)
     return Point(x2 + pt.x, y2 + pt.y)
 end
+
+"""
+    ispointonleftofline(A::Point, B::Point, C::Point)
+
+For a line passing through points A and B:
+
+- return true if point C is on the left of the line
+
+- return false if point C lies on the line
+
+- return false if point C is on the right of the line
+"""
+function ispointonleftofline(A::Point, B::Point, C::Point)
+    z = ((B.x - A.x) * (C.y - A.y)) - ((B.y - A.y) * (C.x - A.x))
+    if z > 10e-6
+        return true
+    elseif z < -10e-6
+        return false
+    else
+        return false # point is on the line 
+    end
+end
