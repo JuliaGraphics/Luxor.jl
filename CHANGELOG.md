@@ -2,17 +2,19 @@
 
 ## [v3.6.0] - some day soon
 
+LaTeX support is still under development. 
+See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
+
 ### Added
 
 - polyclip() clips one poly with another -  replace polyintersections()
 - ispointonleftonline() used by ↑
+- bezigon()
 
 ### Changed
 
 - changed precompile.jl to use SnoopPrecompile
 - hexspiral() now counts from 1 not 0 (or 2)
-- rework LaTeX code - trying to get fonts working better
-- add dependency on FreeTypeAbstraction ... ? :( 
 - fixed positioning bug in textpath()
 
 ### Removed

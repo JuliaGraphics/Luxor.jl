@@ -35,7 +35,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 | *Bezier paths*                |                               |                           |                           |                               |
 |[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)    |[`drawbezierpath`](@ref)   |                           |[`trimbezier`](@ref)           |
 |[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)     |[`brush`](@ref)            |                           |[`splitbezier`](@ref)          |
-|`BezierPath`                   |[`bezierpathtopath`](@ref)     |                           |                           |                               |
+|`BezierPath`                   |[`bezierpathtopath`](@ref)     |[`bezigon`](@ref)          |                           |                               |
 |`BezierPathSegment`            |                               |                           |                           |                               |
 |[`beziersegmentangles`](@ref)  |                               |                           |                           |                               |
 
@@ -720,6 +720,29 @@ nothing # hide
 The [`pathtopoly`](@ref) function calls [`getpathflat`](@ref) to convert the current path to an array of polygons, with each curved section flattened to line segments.
 
 The [`getpath`](@ref) function gets the current path as an array of elements, lines, and unflattened curves.
+
+## Bezigons
+
+A bezigon is like a polygon, but the sides can be Bézier paths instead of straight lines. Supply the corners and sides to the [`bezigon`](@ref) function.
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin # hide
+background("black") # hide
+corners = [Point(10, 0), Point(200, 0)]
+sides = [
+    [Point(70, -40), Point(150, -50)],
+    [Point(150, 50), Point(70, 40)],
+]
+for i in 1:10
+    sethue(HSV(36i, .7, .7))
+    rotate(2π / 10)
+    bezigon(corners, sides, :fill)
+end
+sethue("white")
+circle.([corners..., sides[1]..., sides[2]...], 7, :fill)
+end 600 400 # hide
+```
 
 ## Polygons to Bézier paths and back again
 

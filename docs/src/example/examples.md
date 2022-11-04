@@ -305,6 +305,8 @@ finish()
 d
 ```
 
+![LaTeX text](../assets/figures/latexequation.svg)
+
 See the [Writing LaTeX](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
 
 ## Drawing pixels

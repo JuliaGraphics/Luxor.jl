@@ -20,7 +20,7 @@ There are four steps to creating an animation.
 
 3 Define one or more Scenes that call these functions for specific frames.
 
-4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. Optionally, you can ask for `ffmpeg` (if it's installed) to make an animated GIF for you.
+4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. `ffmpeg` can build an animated GIF from the frames.
 
 ## Example
 
@@ -59,7 +59,9 @@ In this example, the movie uses two scenes, each specifying a function to draw f
 
 ## Making the animation
 
-For best results, you'll have to learn how to use something like `ffmpeg`, with its hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. The `creategif` option for the `animate` function makes an attempt at running `ffmpeg` and assumes that it's already installed. Inside [`animate`](@ref), the first pass creates a GIF color palette, the second builds the file:
+You can build animations automatically using `ffmpeg`. The `creategif` option for the `animate` function runs `ffmpeg` when the frames have all been generated. 
+
+Inside [`animate`](@ref), the first pass creates a GIF color palette, the second builds the file:
 
 ```julia
 run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen
@@ -71,26 +73,30 @@ run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png
 
 Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.
 
-If you want to use a custom ffmpeg command, you can use code such as this:
+`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. If you want to use a custom `ffmpeg` command, you can use code such as this:
 
 ```julia
 using Luxor, FFMPEG
 
 ...
 
+# store the frames in a temp directory
 tempdirectory = "/tmp/temp/"
 
 animate(movie, [
         Scene(movie, frame, 1:50)
-    ], creategif=false, tempdirectory=tempdirectory)
+    ], 
+    creategif=false, # don't have to create the GIF here
+    tempdirectory=tempdirectory)
 
+# run a custom ffmpeg command
 FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
 
 ```
 
 ### Passing information to the frame() function
 
-If you want to pass information to the frame function, such as an array of values, try these two approaches.
+If you want to pass information to the `frame` function, such as an array of values, try these two approaches.
 
 Either, call the enhanced `frame()` function with extra arguments with `(s, f) -> frame(s, f, databuffer)`:
 
@@ -291,7 +297,7 @@ function moveobject(scene, framenumber)
 
 This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.
 
-In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing in the same time, but have different accelerations and decelerations.
+In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing extent in the same time, but have different accelerations and decelerations.
 
 ![animation easing example](../assets/figures/animation-easing.gif)
 

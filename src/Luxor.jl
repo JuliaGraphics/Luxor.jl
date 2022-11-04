@@ -19,7 +19,7 @@ using Dates
 using FFMPEG
 using Juno
 using Rsvg
-using FreeTypeAbstraction
+#using FreeTypeAbstraction
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
@@ -95,7 +95,7 @@ export Drawing,
     bezier′′, makebezierpath, drawbezierpath,
     bezierpathtopoly, beziertopoly, pathtobezierpaths,
     bezierfrompoints, beziercurvature, bezierstroke,
-    setbezierhandles, beziersegmentangles,
+    setbezierhandles, beziersegmentangles, bezigon, 
     shiftbezierhandles, brush, trimbezier, splitbezier, strokepath, fillpath, rect, box, cropmarks, setantialias, setline, setlinecap, setlinejoin, setdash,
     setstrokescale, move, rmove, line, rule, rline, arrow, arrowhead,
     dimension, tickline, BoundingBox, boxwidth, boxheight, boxdiagonal,
