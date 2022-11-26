@@ -292,7 +292,7 @@ textoutlines(s::T where T <: AbstractString, pos::Point, action::Symbol;
 textoutlines(s::T where T <: AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
 
 """
-    textcurve(the_text, start_angle, start_radius, x_pos = 0, y_pos = 0;
+    textcurve(the_text, start_angle, start_radius, pos;
           # optional keyword arguments:
           spiral_ring_step = 0,    # step out or in by this amount
           letter_spacing = 0,      # tracking/space between chars, tighter is (-), looser is (+)
@@ -302,10 +302,10 @@ textoutlines(s::T where T <: AbstractString; kwargs...) = textoutlines(s, O, kwa
 
 Place a string of text on a curve. It can spiral in or out.
 
-`start_angle` is relative to +ve x-axis, arc/circle is centered on `(x_pos,y_pos)` with
+`start_angle` is relative to +ve x-axis, arc/circle is centered on `pos` with
 radius `start_radius`.
 """
-function textcurve(the_text::T where T <: AbstractString, start_angle, start_radius, x_pos=0, y_pos=0;
+function textcurve(the_text::T where T <: AbstractString, start_angle, start_radius, pos=O;
     spiral_ring_step = 0,
     letter_spacing = 0,
     spiral_in_out_shift = 0,
@@ -334,8 +334,8 @@ function textcurve(the_text::T where T <: AbstractString, start_angle, start_rad
             refangle -= angle_step / current_radius
         end
         angle_step = (glyph_x_advance / 2.0) + letter_spacing/2.0
-        xx = cos(refangle) * current_radius + x_pos
-        yy = sin(refangle) * current_radius + y_pos
+        xx = cos(refangle) * current_radius + pos.x
+        yy = sin(refangle) * current_radius + pos.y
         gsave()
         translate(xx, yy)
         if clockwise
@@ -349,8 +349,8 @@ function textcurve(the_text::T where T <: AbstractString, start_angle, start_rad
     end
 end
 
-textcurve(the_text::String, start_angle, start_radius, center::Point; kwargs...) =
-    textcurve(the_text, start_angle, start_radius, center.x, center.y; kwargs...)
+textcurve(the_text::String, start_angle, start_radius, centerx, centery; kwargs...) =
+    textcurve(the_text, start_angle, start_radius, Point(centerx, centery); kwargs...)
 
 """
     textcurvecentered(the_text, the_angle, the_radius, center::Point;

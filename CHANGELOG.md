@@ -16,6 +16,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - changed precompile.jl to use SnoopPrecompile
 - hexspiral() now counts from 1 not 0 (or 2)
 - fixed positioning bug in textpath()
+- placing images now uses premultiplied alpha value
 
 ### Removed
 

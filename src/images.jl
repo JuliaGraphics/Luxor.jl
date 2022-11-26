@@ -1,6 +1,6 @@
-# PNG, SVG, matrix import
+# PNG, SVG, array placement
 
-# PNG
+# 1 PNG
 
 """
     readpng(pathname)
@@ -35,17 +35,17 @@ read using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered=false)
+function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered = false)
     if centered == true
         w, h = img.width, img.height
-        xpos, ypos = xpos - (w/2), ypos - (h/2)
+        xpos, ypos = xpos - (w / 2), ypos - (h / 2)
     end
     Cairo.set_source_surface(get_current_cr(), img, xpos, ypos)
     # no alpha
     Cairo.paint(get_current_cr())
 end
 
-placeimage(img::Cairo.CairoSurface, pt::Point=O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
+placeimage(img::Cairo.CairoSurface, pt::Point = O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
 
 """
     placeimage(img, pt::Point=O, alpha; centered=false)
@@ -57,19 +57,19 @@ previously loaded using `readpng()`.
 
 Use keyword `centered=true` to place the center of the image at the position.
 """
-function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered=false)
+function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered = false)
     if centered == true
         w, h = img.width, img.height
-        xpos, ypos = xpos - (w/2), ypos - (h/2)
+        xpos, ypos = xpos - (w / 2), ypos - (h / 2)
     end
     Cairo.set_source_surface(get_current_cr(), img, xpos, ypos)
     paint_with_alpha(get_current_cr(), alpha)
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha; kwargs...) =
-  placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha; kwargs...)
+    placeimage(img::Cairo.CairoSurface, pt.x, pt.y, alpha; kwargs...)
 
-# SVG
+# 2 SVG
 
 struct SVGimage
     im::RsvgHandle
@@ -81,7 +81,7 @@ end
 
 function _readsvgfile(fname)
     if Base.stat(fname).size == 0
-         throw(error("readsvg: file $fname not found"))
+        throw(error("readsvg: file $fname not found"))
     end
     r = Rsvg.handle_new_from_file(fname)
 
@@ -91,7 +91,7 @@ function _readsvgfile(fname)
 
     d = Rsvg.handle_get_dimensions(r)
     if iszero(d.width) || iszero(d.height)
-        throw(error("readsvg(): can't get dimensions of this SVG image in $(pathname). Perhaps it's not a valid SVG file."))
+        throw(error("readsvg(): can't get dimensions of this SVG image in $(fname). Perhaps it's not a valid SVG file."))
     end
 
     return Luxor.SVGimage(r, d.em, d.ex, d.width, d.height)
@@ -149,14 +149,14 @@ end
 function readsvg(str)
     # str is either pathname or pure SVG code
     # unfortunately ispath fails on Mac if the string is longer than 255 characters
-     if length(str) > 255 # don't check ispath, assume SVG string
-         _readsvgstring(str)
-     elseif ispath(str) # check is a file
-         _readsvgfile(str)
-     else
-         _readsvgstring(str)
-     end
- end
+    if length(str) > 255 # don't check ispath, assume SVG string
+        _readsvgstring(str)
+    elseif ispath(str) # check is a file
+        _readsvgfile(str)
+    else
+        _readsvgstring(str)
+    end
+end
 
 """
     placeimage(svgimg, pos=O; centered=false)
@@ -167,16 +167,35 @@ to read an SVG image from file, or from SVG code.
 Use keyword `centered=true` to place the center of the image
 at the position.
 """
-function placeimage(im::SVGimage, pos=O; centered=false)
+function placeimage(im::SVGimage, pos = O; centered = false)
     if centered == true
         w, h = im.width, im.height
-        pos = pos - ((w/2), (h/2))
+        pos = pos - ((w / 2), (h / 2))
     end
     @layer begin
         translate(pos)
         Rsvg.handle_render_cairo(Luxor.get_current_cr(), im.im)
     end
 end
+
+# 3 array
+
+#=
+premultiply alpha utilities
+
+In a premultiplied image array ARGB, a 50% transparent red pixel
+is stored as 0x80800000, rather than 0x80ff0000. This
+function multiplies each RGB value by the alpha value.
+=#
+
+_premultiplied_rgba(r::Luxor.Colors.RGBA) = Luxor.Colors.RGBA(r.r * r.alpha, r.g * r.alpha, r.b * r.alpha, r.alpha)
+_premultiplied_rgba(c::Luxor.Colors.Colorant) = _premultiplied_rgba(Luxor.Colors.RGBA(c))
+
+function _premultiplied_rgba(a::AbstractArray)
+    map(_premultiplied_rgba, a)
+end
+
+_to_uint32_color(c) = reinterpret(Luxor.Colors.UInt32, convert(Luxor.Colors.ARGB32, _premultiplied_rgba(c)))
 
 """
     placeimage(matrix::AbstractMatrix{UInt32}, pos=O;
@@ -187,20 +206,35 @@ Place an image matrix on the drawing at `pos` with opacity/transparency `alpha`.
 Use keyword `centered=true` to place the center of the image
 at the position.
 """
-function placeimage(buffer::AbstractMatrix{UInt32}, pt=O;
-        alpha=1, centered=false)
+function placeimage(buffer::AbstractMatrix{UInt32}, pt = O;
+    alpha = 1, centered = false)
     if centered == true
         w, h = size(buffer)
-        pt = Point(pt.x - (w/2), pt.y - (h/2))
+        pt = Point(pt.x - (w / 2), pt.y - (h / 2))
     end
     Cairo.set_source_surface(Luxor.get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
     paint_with_alpha(get_current_cr(), alpha)
 end
-placeimage(buffer::AbstractMatrix{ARGB32}, args...; kargs...) = placeimage(collect(reinterpret(UInt32, buffer)), args...; kargs...)
+
+"""
+    placeimage(buffer::AbstractMatrix{ARGB32}, args...; 
+        kargs...)
+
+Place an array of ARGB32 lements on the drawing at `pos` with opacity/transparency `alpha`.
+Values are "alpha-premultiplied" before being placed.
+
+Use keyword `centered=true` to place the center of the image
+at the position.
+"""
+function placeimage(buffer::AbstractMatrix{ARGB32}, args...; kargs...)
+    # premultiply alpha
+    placeimage(reinterpret(Luxor.Cairo.UInt32, _to_uint32_color.(buffer)), args...; kargs...)
+end
+
 placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
 
 function placeimage(buffer::Drawing, args...;
-        kargs...)
+    kargs...)
     if buffer.surfacetype == :svg
         placeimage(_readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
     else

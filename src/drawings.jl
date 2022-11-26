@@ -1047,67 +1047,6 @@ macro draw(body, width=600, height=600)
 end
 
 """
-    _argb32_to_rgba(i)
-
-Convert a 32bit ARGB Int to a four value array:
-
-```
-_argb32_to_rgba(0xFF800000)
-
-4-element Array{Float64,1}:
- 1.0
- 0.5019607843137255
- 0.0
- 0.0
-```
-
-"""
-function _argb32_to_rgba(k)
-    reverse(reinterpret(UInt8, [k]) ./ 0xFF)
-end
-
-"""
-    unpremultiplyalpha(a)
-
-Given an array of UInt32 values, divide each value by the
-alpha value. See alphadivide or reversing premultiplied
-alpha values.
-
-Returns an array of arrays, where each array has four
-Float64 values.
-
-In a premultiplied image array, a 50% transparent red pixel
-is stored as 0x80800000, rather than not 0x80ff0000. This
-function reverses the process,  dividing each RGB value by
-the alpha value.
-
-The highest two digits of each incoming element is
-interpreted as the alpha value.
-
-```
-unpremultiplyalpha([0x80800000])
- 1-element Array{Array{Float64,1},1}:
- [1.0, 0.0, 0.0, 0.5019607843137255]
-```
-
-Notice the arithmetic errors introduced as 0x80 gets
-converted to 0.5019.
-"""
-function unpremultiplyalpha(a)
-    af = _argb32_to_rgba.(a)
-    for i in eachindex(af)
-        af[i] = circshift(af[i], -1)
-        α = af[i][4]
-        if ! iszero(α) # don't ÷ by 0
-            af[i][1] /= α  # red
-            af[i][2] /= α  # green
-            af[i][3] /= α  # blue
-        end
-    end
-    return af
-end
-
-"""
     image_as_matrix()
 
 Return an Array of the current state of the picture as an
