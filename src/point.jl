@@ -610,19 +610,25 @@ function ispolyconvex(pts)
 end
 
 """
-    rotate_point_around_point(targetpt, pt, angle)
+    rotatepoint(targetpt::Point, originpt::Point, angle)
 
 Rotate a target point around another point by an angle specified in radians.
 Returns the new point.
 """
-function rotate_point_around_point(targetpt, pt, angle)
-    x1 = targetpt.x - pt.x
-    y1 = targetpt.y - pt.y
+function rotatepoint(targetpt::Point, originpt::Point, angle)
+    x1 = targetpt.x - originpt.x
+    y1 = targetpt.y - originpt.y
     x2 = x1 * cos(angle) - y1 * sin(angle)
     y2 = x1 * sin(angle) + y1 * cos(angle)
-    return Point(x2 + pt.x, y2 + pt.y)
+    return Point(x2 + originpt.x, y2 + originpt.y)
 end
-
+    
+"""
+   rotatepoint(targetpt::Point, angle)
+Rotate a target point around canvas origin by an angle specified in radians.
+Returns the new point.
+"""
+   rotatepoint(targetpt::Point, angle) = rotatepoint(targetpt,O,angle)
 """
     ispointonleftofline(A::Point, B::Point, C::Point)
 
