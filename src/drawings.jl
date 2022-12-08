@@ -417,6 +417,8 @@ problem when used in a notebook.
 example.
 
 A kludgy workround is to rename the elements...
+
+As of Luxor 3.6 this is done elsewhere.
 """
 function tidysvg(fname)
     # I pinched this from Simon's RCall.jl
@@ -443,9 +445,12 @@ end
 Base.showable(::MIME"image/svg+xml", d::Luxor.Drawing) = d.surfacetype == :svg
 Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
 
+# prefix all glyphids with a random number
 function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
     @debug "show MIME:svg "
-    write(f, d.bufferdata)
+    r = string(rand(100000:999999))    
+    smod = replace(String(d.bufferdata), r"glyph(?=\d+-\d+)" => "$r")
+    write(f, smod)
 end
 
 function Base.show(f::IO, ::MIME"image/png", d::Luxor.Drawing)

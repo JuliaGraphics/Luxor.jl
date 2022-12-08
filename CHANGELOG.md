@@ -1,12 +1,13 @@
 # Changelog
 
-## [v3.6.0] - some day soon
+## [v3.6.0] - 2022-12-?
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
+- SVG glyph ids modified to avoid Jupyter problems
 - polyclip() clips one poly with another -  replace polyintersections()
 - ispointonleftonline() used by ↑
 - bezigon()

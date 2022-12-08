@@ -7,7 +7,7 @@ DocTestSetup = quote
 
 ## Loading and placing PNG and SVG images
 
-Luxor lets you place PNG and SVG images on the drawing. First, load an image:
+Luxor lets you place existing PNG and SVG images on the drawing. First, load the image:
 
 - for PNG images, use `readpng(filename)`
 - for SVG images, use `readsvg(filename)` or `readsvg(string)`
@@ -41,6 +41,36 @@ nothing # hide
 PNG images can be placed with varying opacity or transparency.
 
 [`readsvg`](@ref) also lets you supply raw (or pure) SVG code in a string.
+
+You can also use `placeimage()` to place an array of RGB or RGBA pixels on a drawing.
+
+```@example
+using Luxor, Colors # hide
+N = 500
+i = reshape([RGBA(rand(4)...) for p in 1:N^2], N, N)
+# is is Matrix{RGBA{Float64}} 
+# (alias for Array{RGBA{Float64}, 2})
+@draw begin
+  origin()
+  sethue("orange")
+  box(O, N/2, N/2, :fill)
+  placeimage(i, O, centered=true, alpha=0.5)
+end 500 500
+```
+
+Or load an image as an array and place it on a drawing.
+
+```julia
+using Luxor, Colors, FileIO
+img = load(dirname(dirname(pathof(Luxor))) * "/docs/src/assets/figures/42.png")
+@draw begin
+    img[1:50, :] .= colorant"cyan"
+    img[200:end, :] .= colorant"magenta"
+    placeimage(img, O, centered=true, alpha=0.5)
+end 250 250
+```
+
+!["Images"](../assets/figures/42mod.png)
 
 ## SVG images
 
