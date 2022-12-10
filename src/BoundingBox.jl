@@ -531,7 +531,7 @@ Find and return the point where a line from the center of bounding box
 function pointcrossesboundingbox(pt, bbox::BoundingBox)
     minpt, maxpt = extrema(bbox)
     mp = midpoint(minpt, maxpt)
-    midX, midY = 0 * mp.x, 0 * mp.y
+    midX, midY = mp.x, mp.y
 
     m = (midY - pt.y) / (midX - pt.x)
     if pt.x <= midX # left

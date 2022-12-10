@@ -652,7 +652,6 @@ relevant to graphics at a particular position.
 using Luxor # hide
 Drawing(610, 610, "../assets/figures/mask.png") # hide
 origin() # hide
-println("generating mask.png now...")
 tiles = Tiler(600, 600, 15, 15, margin=0)
 bw = boxwidth(BoundingBox())
 for (pos, n) in tiles

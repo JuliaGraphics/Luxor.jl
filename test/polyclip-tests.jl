@@ -1,7 +1,8 @@
 using Luxor, Test
 
-function polycliptest()
-    Drawing(200, 150, :svg)
+function polycliptest(fname)
+    Drawing(1200, 800, fname)
+    background("black")
     origin()
     pgon1 = ngon(O, 100, 5, vertices = true)
     pgon2 = ngon(O, 150, 7, vertices = true)
@@ -19,10 +20,11 @@ function polycliptest()
     boxright = box(O + (50, 0), 50, 50, vertices = true)
 
     # boxes share edge
-    setline(0.5)
+    setline(2)
     @test boxleft[3].x == boxright[1].x
     @test boxleft[4].x == boxright[2].x
     
+    sethue("red")
     poly(boxleft, :stroke, close=true)
     poly(boxright, :stroke, close=true)
     
@@ -43,9 +45,16 @@ function polycliptest()
         poly(pc, :stroke, close=true)    
     end
 
+    sethue("magenta")
+    dough  = hypotrochoid(320, 230, 220, vertices=true)
+    cutter = ngon(O, 250, 6, vertices=true)
+    poly(dough, :stroke, close=true)
+    poly(cutter, :stroke, close=true)
+    sethue("cyan")
+    poly(polyclip(dough, cutter), :stroke, close=true)
+
     @test finish() == true
 end
 
-polycliptest()
-
+polycliptest("polycliptest.png")
 println("...finished polyclip test")

@@ -448,8 +448,9 @@ Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
 # prefix all glyphids with a random number
 function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
     @debug "show MIME:svg "
-    r = string(rand(100000:999999))    
-    smod = replace(String(d.bufferdata), r"glyph(?=\d+-\d+)" => "$r")
+    r = string(rand(100000:999999))
+    # regex is faster 
+    smod = replace(String(d.bufferdata), r"glyph" => "glyph-$r")
     write(f, smod)
 end
 

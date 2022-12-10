@@ -1,23 +1,24 @@
 # Changelog
 
-## [v3.6.0] - 2022-12-?
+## [v3.6.0] - 2022-12-1?
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
-- SVG glyph ids modified to avoid Jupyter problems
-- polyclip() clips one poly with another -  replace polyintersections()
-- ispointonleftonline() used by ↑
-- bezigon()
+- the `Base.show(f::IO, ::MIME"image/svg+xml")` method that displays SVGs in notebooks modifies the glyph ids to avoid the familiar "Jupyter cells leak" problem
+- `polyclip()` clips one poly with another
+- `ispointonleftonline()` used by ↑
+- `bezigon()`
 
 ### Changed
 
 - changed precompile.jl to use SnoopPrecompile
-- hexspiral() now counts from 1 not 0 (or 2)
-- fixed positioning bug in textpath()
+- `hexspiral()` now counts from 1 not 0 (or 2)
+- fixed positioning bug in `textpath()`
 - placing images now uses premultiplied alpha value
+- fixed bug in `pointcrossesboundingbox()`
 
 ### Removed
 
