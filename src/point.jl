@@ -613,6 +613,7 @@ end
     rotatepoint(targetpt::Point, originpt::Point, angle)
 
 Rotate a target point around another point by an angle specified in radians.
+
 Returns the new point.
 """
 function rotatepoint(targetpt::Point, originpt::Point, angle)
@@ -622,13 +623,16 @@ function rotatepoint(targetpt::Point, originpt::Point, angle)
     y2 = x1 * sin(angle) + y1 * cos(angle)
     return Point(x2 + originpt.x, y2 + originpt.y)
 end
-    
+
 """
-   rotatepoint(targetpt::Point, angle)
-Rotate a target point around canvas origin by an angle specified in radians.
+    rotatepoint(targetpt::Point, angle)
+
+Rotate a target point around the current origin by an angle specified in radians.
+
 Returns the new point.
 """
-   rotatepoint(targetpt::Point, angle) = rotatepoint(targetpt,O,angle)
+rotatepoint(targetpt::Point, angle) = rotatepoint(targetpt, O, angle)
+
 """
     ispointonleftofline(A::Point, B::Point, C::Point)
 

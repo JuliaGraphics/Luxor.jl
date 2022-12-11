@@ -1,16 +1,17 @@
 # Changelog
 
-## [v3.6.0] - 2022-12-1?
+## [v3.6.0] - 2022-12-11
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
-- the `Base.show(f::IO, ::MIME"image/svg+xml")` method that displays SVGs in notebooks modifies the glyph ids to avoid the familiar "Jupyter cells leak" problem
-- `polyclip()` clips one poly with another
-- `ispointonleftonline()` used by ↑
 - `bezigon()`
+- the `Base.show(f::IO, ::MIME"image/svg+xml")` method that displays SVGs in notebooks modifies the glyph ids to avoid the familiar "Jupyter cells leak" problem (described [here](https://github.com/MakieOrg/Makie.jl/issues/952#issuecomment-842413678))
+- `polyclip()` clips one poly with another convex polygon
+- `ispointonleftonline()` used by ↑
+- `rotatepoint()` is better name for `rotate_point_around_point()` (thanks @gantz-giraffe !)
 
 ### Changed
 
@@ -24,6 +25,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Deprecated
 
+- `rotate_point_around_point()` is now `rotatepoint()`
 # ────────────────────────────────────────────────────────────────────────────────────
 
 ## [v3.5.0] - 2022-07-28 10:15

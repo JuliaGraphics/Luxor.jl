@@ -173,35 +173,37 @@ nothing # hide
 
 ![angle three points](../assets/figures/anglethreepoints.png)
 
-Functions that help with geometry include:
+Other functions that help with geometry include:
 
-- [`distance`](@ref)
+- [`distance`](@ref) distance between two points
 
-- [`getnearestpointonline`](@ref)
+- [`getnearestpointonline`](@ref) drop perpendicular 
 
-- [`pointlinedistance`](@ref)
+- [`pointlinedistance`](@ref) distance of point from line between two points
 
-- [`slope`](@ref)
+- [`slope`](@ref) angle of line between two points
 
-- [`perpendicular`](@ref)
+- [`perpendicular`](@ref) find perpendicular
 
-- [`dotproduct`](@ref)
+- [`dotproduct`](@ref) scalar dot product of two points
 
-- [`@polar`](@ref)
+- [`@polar`](@ref) convert radius and angle to point
 
-- [`polar`](@ref)
+- [`polar`](@ref) convert radius and angle to point
 
-- [`ispointonline`](@ref)
+- [`ispointonline`](@ref) true if point lies on line
 
-- [`ispointonpoly`](@ref)
+- [`ispointonpoly`](@ref) true if point lies on any edge of polygon
 
-- [`isarcclockwise`](@ref)
+- [`isarcclockwise`](@ref) true if arc is clockwise
 
-- [`pointinverse`](@ref)
+- [`pointinverse`](@ref) inverse of point with respect to circle
 
-- [`anglethreepoints`](@ref)
+- [`anglethreepoints`](@ref) angle formed by two lines defined by three points
 
-- [`determinant3`](@ref)
+- [`determinant3`](@ref) find determinant of matrix of 3 points
+
+- [`rotatepoint`](@ref) rotate point around another by angle
 
 ## Triangle centers
 
