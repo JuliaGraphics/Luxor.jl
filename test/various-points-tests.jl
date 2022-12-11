@@ -10,7 +10,7 @@ function rotate_points_test(fname)
     circle.(pts, 10, :stroke)
 
     # rotate each point by 2π
-    pts1 = rotate_point_around_point.(pts, O, 2π)
+    pts1 = rotatepoint.(pts, O, 2π)
 
     sethue("blue")
     circle.(pts1, 20, :stroke)
@@ -21,7 +21,7 @@ function rotate_points_test(fname)
     end
 
     # now rotate each point by π
-    pts2 = rotate_point_around_point.(pts, O, π)
+    pts2 = rotatepoint.(pts, O, π)
     sethue("green")
     circle.(pts2, 30, :stroke)
 

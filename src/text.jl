@@ -68,7 +68,7 @@ function text(t::T where T <: AbstractString, pt::Point;
 
     # need to adjust for any rotation now
     # rotate around original point
-    finalpt = rotate_point_around_point(Point(textpointx, textpointy), pt, angle)
+    finalpt = rotatepoint(Point(textpointx, textpointy), pt, angle)
 
     gsave()
         translate(finalpt)

@@ -768,7 +768,7 @@ function tickline(startpos, finishpos;
         end # vertices = true
     end # layer
     # calculate where the tick locations would be in reality
-    majpts = map(pt -> rotate_point_around_point(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), majorticklocations)
-    minpts = map(pt -> rotate_point_around_point(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), minorticklocations)
+    majpts = map(pt -> rotatepoint(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), majorticklocations)
+    minpts = map(pt -> rotatepoint(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), minorticklocations)
     return (majpts, minpts)
 end
