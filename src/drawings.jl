@@ -62,7 +62,7 @@ mutable struct Drawing
         elseif stype == :image
             the_surface     = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
-            error("Unknown Luxor surface type" \"$stype\"")
+            error("Unknown Luxor surface type \"$stype\"")
         end
         the_cr  = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
