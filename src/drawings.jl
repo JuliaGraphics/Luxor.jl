@@ -62,7 +62,7 @@ mutable struct Drawing
         elseif stype == :image
             the_surface     = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
-            error("Unknown Luxor surface type \"$stype\"")
+            error("Unknown Luxor surface type" \"$stype\"")
         end
         the_cr  = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
@@ -614,6 +614,36 @@ function Drawing(paper_size::AbstractString, f="luxor-drawing.png"; strokescale=
   Drawing(w, h, f, strokescale=strokescale)
 end
 
+
+@doc raw"""
+    adjust_background_rects()
+
+See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.
+
+Setting a background in svg results in 
+
+<rect x="0" y="0" width="16777215" height="16777215" .../>
+
+independent of an existing transform matrix (e.g. set with origin(...) or snapshot with a crop bounding box).
+An existing transform matrix manifests in the svg file as
+
+<use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
+
+which is applied to every element including the background rects.
+This transformation needs to be inversed for the background rects which is added in this function.
+"""
+function adjust_background_rects(buffer)
+    adjusted_buffer=String(buffer)
+    m=match(r"<use.*xlink.*transform=\"matrix\((.+),(.+),(.+),(.+),(.+),(.+)\)\"/>",adjusted_buffer)
+    if !isnothing(m) && length(m)==6
+        transform=vcat(reshape([ parse(Float64,m[i]) for i in 1:6 ],2,3),[0.0 0.0 1.0])
+        it=inv(transform)
+        invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
+        adjusted_buffer=replace(adjusted_buffer,r"(<rect x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*)/>" => SubstitutionString("\\1 $(invtransformstring)/>") )
+    end
+    return adjusted_buffer
+end
+
 """
     finish()
 
@@ -621,6 +651,10 @@ Finish the drawing, and close the file. You may be able to open it in an
 external viewer application with `preview()`.
 """
 function finish()
+    do_svg_adjust=false
+    if current_surface_type() == :svg
+        do_svg_adjust=true
+    end
     if current_surface_ptr() == C_NULL
         # Already finished
         return false
@@ -642,7 +676,22 @@ function finish()
     Cairo.destroy(current_surface())
 
     if current_filename() != ""
-        write(current_filename(), current_bufferdata())
+        # next function call adresses the issue in
+        # https://github.com/JuliaGraphics/Luxor.jl/issues/150
+        #   short: setting a background in svg results in 
+        #          <rect x="0" y="0" width="16777215" height="16777215" .../>
+        #          independent of an existing transform matrix (e.g. set with origin(...)
+        #          or snapshot with a negative crop bounding box).
+        #          An existing transform matrix manifests in the svg file as
+        #          <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
+        #          which is applied to every element including the background rects.
+        #          This transformation needs to be inversed for the background rects
+        #          which is added in this function.
+        buffer=current_bufferdata()
+        if do_svg_adjust
+            buffer=adjust_background_rects(buffer)
+        end
+        write(current_filename(), buffer)
     end
 
     return true
