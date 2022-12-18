@@ -620,13 +620,13 @@ end
 
 See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.\
 
-Setting a background in svg results in
+Setting backgrounds in a recording surface (:rec) and creating a svg from it result in elements as
 
 ```
 <rect x="0" y="0" width="16777215" height="16777215" .../>
 ```
-independent of an existing transform matrix (e.g. set with origin(...) or snapshot with a crop bounding box).\
-An existing transform matrix manifests in the svg file as
+independent of an existing transformation matrix (e.g. set with origin(...) or snapshot with a crop bounding box).\
+An existing transformation matrix manifests in the svg file as
 
 ```
 <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
@@ -638,7 +638,7 @@ function adjust_background_rects(buffer)
     adjusted_buffer=String(buffer)
     # get SVG viewbox coordinates to replace the generic 16777215 values
     #   expected example:
-    #   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
+    #     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
     m=match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is,adjusted_buffer)
     adjust_vb=false
     if !isnothing(m) && length(m) == 4
@@ -647,10 +647,15 @@ function adjust_background_rects(buffer)
     end
     # do adjustment for all <use ...> elements (after <defs>) which have a transform attribute as matrix
     #   expected example:
-    #   </defs>...<use xlink:href="#surface5" transform="matrix(1,0,0,1,150,150)"/>...</svg>
-    #     xlink:href is deprecated and can be replaced by just href
-    #     a group block with id "surface5" must exist: <g id="surface5" clip-path="url(#clip1)">
-    #     in this group block adjust all background rects with inverse transform matrix
+    #     </defs>...<use xlink:href="#surface5" transform="matrix(1,0,0,1,150,150)"/>...</svg>
+    #       xlink:href is deprecated and can be replaced by just href
+    #       a group block with id "surface5" must exist: <g id="surface5" clip-path="url(#clip1)">
+    #       in this group block adjust all background rects with the inverse transform matrix like:
+    #       from:
+    #          <rect x="0" y="0" width="16777215" height="16777215" style="..."/>
+    #       to:
+    #          <rect class="luxor_adjusted" x="0" y="0" width="300" height="300" style="..." transform="matrix(1,0,0,1,-150,-150)"/>
+    #       adding class as verification that tweak was applied.
     m=findall(r"<defs\s*?>"is,adjusted_buffer)
     # check if there is exactly 1 <defs> element
     if length(m) == 1
@@ -667,20 +672,22 @@ function adjust_background_rects(buffer)
                     transform=vcat(reshape([ parse(Float64,m[i]) for i in 3:8 ],2,3),[0.0 0.0 1.0])
                     # inverse transform matrix must be applied to background rect to neutralize transform matrix
                     it=inv(transform)
-                    # get the group block with id in variable mid
-                    (head,mid,tail)=split_string_into_head_mid_tail(adjusted_buffer,id)
-                    # add inverse transform matrix to every background rect
-                    #   background rects look like:
-                    #     <rect x="0.0" y="0.0" width="300.0" height="300.0" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
-                    # add class="luxor_adjusted" too, for future debug purpose
-                    invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
-                    mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 class=\"luxor_adjusted\" \\2 $(invtransformstring)/>") )
-                    if adjust_vb
-                        # some SVG tools don't like this huge rects (e.g. inkscape)
-                        # => replace 0,0,16777215,16777215 with viewBox coordinates
-                        mid=replace(mid,r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
+                    # get the group block with id into mid::String
+                    (head,mid,tail,split_ok)=split_string_into_head_mid_tail(adjusted_buffer,id)
+                    if split_ok
+                        # add inverse transform matrix to every background rect
+                        #   background rects look like:
+                        #     <rect x="0" y="0" width="16777215" height="16777215" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
+                        # add class="luxor_adjusted" too, for future reference that element has been tweaked
+                        invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
+                        mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 class=\"luxor_adjusted\" \\2 $(invtransformstring)/>") )
+                        if adjust_vb
+                            # some SVG tools don't like this huge rects (e.g. inkscape)
+                            # => replace 0,0,16777215,16777215 with viewBox coordinates
+                            mid=replace(mid,r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
+                        end
+                        adjusted_buffer=head*mid*tail
                     end
-                    adjusted_buffer=head*mid*tail
                 end
             end
         end
@@ -692,8 +699,7 @@ end
 @doc raw"""
     split_string_into_head_mid_tail(s::String,id::String)
 
-splits s into head, mid and tail string.
-
+splits s into head, mid and tail string.\
 Example:\
 
 ```
@@ -711,14 +717,16 @@ function split_string_into_head_mid_tail(s,id)
     head=""
     mid=s
     tail=""
+    split_ok=false
     # find all group start elements <g ...>
     startgroups=findall(r"<g(?:>|\s+?.*?>)"is,s)
     # find all group end elements </g...>
     endgroups=findall(r"</g\s*>"is,s)
     # there must be as many start elements as end elements
-    if length(startgroups) != length(endgroups)
-        @warn "number of group starting tags <g ...> do not match number of closing tags </g> in SVG"
-    else
+    if length(startgroups) == length(endgroups)    
+    #if length(startgroups) != length(endgroups)
+    #    @warn "number of group starting tags <g ...> do not match number of closing tags </g> in SVG"
+    #else
         # find the group start element with the proper id
         first_group=findfirst(Regex("<g\\s+?[^>]*?id=\"$(id)\".*?>","is"),s)
         group_start_index=findfirst(e->e==first_group,startgroups)
@@ -727,27 +735,30 @@ function split_string_into_head_mid_tail(s,id)
             group_end_index=0
             # starting with group start element with the proper id traverse the end group elements
             # and the start group elements until the number traversed are equal the first time
-            while group_start_index-group_end_index !== 0
+            while group_start_index-group_end_index !== 0 && group_start_index < length(startgroups) && group_end_index <= length(endgroups)
                 group_end_index+=1
-                while endgroups[group_end_index][1] < startgroups[group_start_index][1]
+                while group_end_index <= length(endgroups) && endgroups[group_end_index][1] < startgroups[group_start_index][1]
                     group_end_index+=1
                 end
-                while startgroups[group_start_index+1][1] < endgroups[group_end_index][1]
+                while group_start_index < length(startgroups) && startgroups[group_start_index+1][1] < endgroups[group_end_index][1]
                     group_start_index+=1
                 end
             end
-            mid_end=endgroups[group_end_index][end]
-            # start and end character of mid is found, construct the substrings
-            if prevind(s,mid_start) > 0
-                head=s[1:prevind(s,mid_start)]
+            if group_start_index-group_end_index == 0
+                mid_end=endgroups[group_end_index][end]
+                # start and end character of mid is found, construct the substrings
+                if prevind(s,mid_start) > 0
+                    head=s[1:prevind(s,mid_start)]
+                end
+                if nextind(s,mid_end)>0
+                    tail=s[nextind(s,mid_end):end]
+                end
+                mid=s[mid_start:mid_end]
+                split_ok=true
             end
-            if nextind(s,mid_end)>0
-                tail=s[nextind(s,mid_end):end]
-            end
-            mid=s[mid_start:mid_end]
         end
     end
-    return (head,mid,tail)
+    return (head,mid,tail,split_ok)
 end
 
 """

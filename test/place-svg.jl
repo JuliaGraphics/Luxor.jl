@@ -42,9 +42,9 @@ function place_svgtest(fnamein, fnameout)
 end
 
 function svg_rec_format()
-    # checking for specific expectations when using recordings (:rec) and svg snapshots.
-    # these tests are especially intended to help in case cairo changes the svg elements
-    # which are tweaked by function adjust_background_rects(buffer) in drawings.jl
+    # Checking for specific expectations when using recordings (:rec) and svg snapshots.
+    # These tests are especially intended to help in case cairo changes the svg elements
+    # which are used to tweak the result by function adjust_background_rects(buffer) in drawings.jl
     Drawing(NaN, NaN, :rec)
     background("deepskyblue2")
     setcolor("grey")
@@ -53,7 +53,9 @@ function svg_rec_format()
     circle(O, 100, :stroke)
     circle(O, 100, :clip)
     background("magenta")
-    # snapshot(;fname="test.svg",cb=BoundingBox(Point(-150,-150),Point(150,150)))
+    # now doing what
+    #   snapshot(;fname="test.svg",cb=BoundingBox(Point(-150,-150),Point(150,150)))
+    # does without the adjust_background_rects(buffer) tweak
     fname="test.svg"
     cb=BoundingBox(Point(-150,-150),Point(150,150))
     scalefactor = 1.0
@@ -72,37 +74,57 @@ function svg_rec_format()
     setmatrix(nm)
     Luxor.set_source(nd.cr, rs, x, y)
     paint()
-    # finish()
+    # now doing what
+    #   finish()
+    # does without the adjust_background_rects(buffer) tweak
     Luxor.Cairo.finish(Luxor.current_surface())
     Luxor.Cairo.destroy(Luxor.current_surface())
     buffer=copy(Luxor.current_bufferdata())
-    #write(current_filename(), buffer)
     Luxor._current_drawing()[Luxor._current_drawing_index()] = rd
     finish()
 
     testsvg=String(buffer)
-    # check if SVG contains lines like
+    # check if the SVG contains lines like
     #   <use xlink:href="#surface31" transform="matrix(1,0,0,1,150,150)"/>
+    # or
     #   <use href="#surface31" transform="matrix(1,0,0,1,150,150)"/>
+    # after </defs>
     m=match(r"</defs\s*?>(.*)$"is,testsvg)
     @test length(m) == 1
-    testsvg_part=m[1]
-    m=match(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,testsvg_part)
-    @test !isnothing(m) && length(m) == 8
-    id=m[2]
-    # check if SVG contains line like
-    #   <g id="surface31" clip-path="url(#clip1)">
-    m=match(Regex("<g\\s+?[^>]*?id=\"($(id))\".*?>","is"),testsvg)
-    @test !isnothing(m) && m[1] == id
-    # check if <g id="$is">...</g> is extracted correct
-    group="<g id=\"other\"></g><g id=\""*id*"\"><g><g></g></g><g></g></g><g id=\"other\"></g>"
-    (head,mid,tail)=Luxor.split_string_into_head_mid_tail(group,id)
-    @test head=="<g id=\"other\"></g>"
-    @test mid=="<g id=\""*id*"\"><g><g></g></g><g></g></g>"
-    @test tail=="<g id=\"other\"></g>"
+    if length(m) == 1
+        testsvg_part=m[1]
+        m=match(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,testsvg_part)
+        @test !isnothing(m) && length(m) == 8
+        id=m[2]
+        # check if the SVG contains line like
+        #   <g id="surface31" clip-path="url(#clip1)">
+        m=match(Regex("<g\\s+?[^>]*?id=\"($(id))\".*?>","is"),testsvg)
+        @test !isnothing(m) && m[1] == id
+        # check if <g id="$id">...</g> is extracted correct
+        group="<g id=\"other\"></g><g id=\""*id*"\"><g><g></g></g><g></g></g><g id=\"other\"></g>"
+        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        @test split_ok == true
+        @test head == "<g id=\"other\"></g>"
+        @test mid == "<g id=\""*id*"\"><g><g></g></g><g></g></g>"
+        @test tail == "<g id=\"other\"></g>"
+        # split_string_into_head_mid_tail(group,id) needs to be robust
+        # do nothing if split fails
+        group="</g><g id=\"other\"></g><g id=\""*id*"\"><g><g></g></g>"
+        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        @test split_ok == false
+        group="</g></g><g><g id=\""*id*"\">"
+        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        @test split_ok == false
+        group="<g><g id=\"other\"></g></g>"
+        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        @test split_ok == false
+        group="<g><g><g id=\""*id*"\"></g></g>"
+        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        @test split_ok == false
+    end
     return
 end
 
 svgstring_test()
-#place_svgtest("polysample.svg", "place-svg.svg")
+place_svgtest("polysample.svg", "place-svg.svg")
 svg_rec_format()
