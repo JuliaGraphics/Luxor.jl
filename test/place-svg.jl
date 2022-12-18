@@ -84,12 +84,15 @@ function svg_rec_format()
     # check if SVG contains lines like
     #   <use xlink:href="#surface31" transform="matrix(1,0,0,1,150,150)"/>
     #   <use href="#surface31" transform="matrix(1,0,0,1,150,150)"/>
-    m=match(r"</defs>.*?<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>.*?</svg>"is,buffer)
+    m=match(r"</defs\s*?>(.*)$"is,testsvg)
+    @test length(m) == 1
+    testsvg_part=m[1]
+    m=match(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,testsvg_part)
     @test !isnothing(m) && length(m) == 8
     id=m[2]
     # check if SVG contains line like
     #   <g id="surface31" clip-path="url(#clip1)">
-    m=match(Regex("<g\\s+?[^>]*?id=\"($(id))\".*?>","is"),buffer)
+    m=match(Regex("<g\\s+?[^>]*?id=\"($(id))\".*?>","is"),testsvg)
     @test !isnothing(m) && m[1] == id
     # check if <g id="$is">...</g> is extracted correct
     group="<g id=\"other\"></g><g id=\""*id*"\"><g><g></g></g><g></g></g><g id=\"other\"></g>"
@@ -101,6 +104,5 @@ function svg_rec_format()
 end
 
 svgstring_test()
-place_svgtest("polysample.svg", "place-svg.svg")
-
-#svg_rec_format()
+#place_svgtest("polysample.svg", "place-svg.svg")
+svg_rec_format()
