@@ -641,7 +641,7 @@ function adjust_background_rects(buffer)
     #     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
     m=match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is,adjusted_buffer)
     adjust_vb=false
-    if !isnothing(m) && length(m) == 4
+    if !isnothing(m) && length(m.captures) == 4
         (vbx,vby,vbw,vbh)=string.([ parse(Float64,m[i]) for i in 1:4 ])
         adjust_vb=true
     end
@@ -662,10 +662,10 @@ function adjust_background_rects(buffer)
         # get SVG part after </defs> to search for <use ...>
         #   could be done in a single RegEx but can produce ERROR: PCRE.exec error: match limit exceeded
         m=match(r"</defs\s*?>(.*)$"is,adjusted_buffer)
-        if length(m) == 1
+        if length(m.captures) == 1
             adjusted_buffer_part=m[1]
             for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
-                if length(m) == 8
+                if length(m.captures) == 8
                     # id of group block
                     id=m[2]
                     # transform matrix applied to all elements in group block

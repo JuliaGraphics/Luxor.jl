@@ -90,11 +90,11 @@ function svg_rec_format()
     #   <use href="#surface31" transform="matrix(1,0,0,1,150,150)"/>
     # after </defs>
     m=match(r"</defs\s*?>(.*)$"is,testsvg)
-    @test length(m) == 1
-    if length(m) == 1
+    @test length(m.captures) == 1
+    if length(m.captures) == 1
         testsvg_part=m[1]
         m=match(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,testsvg_part)
-        @test !isnothing(m) && length(m) == 8
+        @test !isnothing(m) && length(m.captures) == 8
         id=m[2]
         # check if the SVG contains line like
         #   <g id="surface31" clip-path="url(#clip1)">
