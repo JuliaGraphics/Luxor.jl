@@ -616,7 +616,7 @@ end
 
 
 @doc raw"""
-    adjust_background_rects(buffer::UInt8[])
+    _adjust_background_rects(buffer::UInt8[])
 
 See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.\
 
@@ -634,7 +634,7 @@ An existing transformation matrix manifests in the svg file as
 which is applied to every element including the background rects.\
 This transformation needs to be inversed for the background rects which is added in this function.
 """
-function adjust_background_rects(buffer)
+function _adjust_background_rects(buffer)
     adjusted_buffer=String(buffer)
     # get SVG viewbox coordinates to replace the generic 16777215 values
     #   expected example:
@@ -673,7 +673,7 @@ function adjust_background_rects(buffer)
                     # inverse transform matrix must be applied to background rect to neutralize transform matrix
                     it=inv(transform)
                     # get the group block with id into mid::String
-                    (head,mid,tail,split_ok)=split_string_into_head_mid_tail(adjusted_buffer,id)
+                    (head,mid,tail,split_ok)=_split_string_into_head_mid_tail(adjusted_buffer,id)
                     if split_ok
                         # add inverse transform matrix to every background rect
                         #   background rects look like:
@@ -697,7 +697,7 @@ function adjust_background_rects(buffer)
 end
 
 @doc raw"""
-    split_string_into_head_mid_tail(s::String,id::String)
+    _split_string_into_head_mid_tail(s::String,id::String)
 
 splits s into head, mid and tail string.\
 Example:\
@@ -713,7 +713,7 @@ Example:\
   tail="...tail"
 ```
 """
-function split_string_into_head_mid_tail(s,id)
+function _split_string_into_head_mid_tail(s,id)
     head=""
     mid=s
     tail=""
@@ -768,10 +768,6 @@ Finish the drawing, and close the file. You may be able to open it in an
 external viewer application with `preview()`.
 """
 function finish()
-    do_svg_adjust=false
-    if current_surface_type() == :svg
-        do_svg_adjust=true
-    end
     if current_surface_ptr() == C_NULL
         # Already finished
         return false
@@ -793,24 +789,25 @@ function finish()
     Cairo.destroy(current_surface())
 
     if current_filename() != ""
-        # next function call adresses the issue in
-        # https://github.com/JuliaGraphics/Luxor.jl/issues/150
-        #   short: setting a background in svg results in 
-        #          <rect x="0" y="0" width="16777215" height="16777215" .../>
-        #          independent of an existing transform matrix (e.g. set with origin(...)
-        #          or snapshot with a negative crop bounding box).
-        #          An existing transform matrix manifests in the svg file as
-        #          <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
-        #          which is applied to every element including the background rects.
-        #          This transformation needs to be inversed for the background rects
-        #          which is added in this function.
-        buffer=copy(current_bufferdata())
-        if do_svg_adjust
-            buffer=adjust_background_rects(buffer)
+        if current_surface_type() != :svg
+            write(current_filename(), current_bufferdata())
+        else
+            # next function call adresses the issue in
+            # https://github.com/JuliaGraphics/Luxor.jl/issues/150
+            #   short: setting a background in svg results in 
+            #          <rect x="0" y="0" width="16777215" height="16777215" .../>
+            #          independent of an existing transform matrix (e.g. set with origin(...)
+            #          or snapshot with a negative crop bounding box).
+            #          An existing transform matrix manifests in the svg file as
+            #          <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
+            #          which is applied to every element including the background rects.
+            #          This transformation needs to be inversed for the background rects
+            #          which is added in this function.
+            buffer=_adjust_background_rects(copy(current_bufferdata()))
             # hopefully safe as we are at the end of finish:
             _current_drawing()[_current_drawing_index()].bufferdata=buffer
+            write(current_filename(), buffer)
         end
-        write(current_filename(), buffer)
     end
 
     return true

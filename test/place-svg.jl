@@ -44,7 +44,7 @@ end
 function svg_rec_format()
     # Checking for specific expectations when using recordings (:rec) and svg snapshots.
     # These tests are especially intended to help in case cairo changes the svg elements
-    # which are used to tweak the result by function adjust_background_rects(buffer) in drawings.jl
+    # which are used to tweak the result by function _adjust_background_rects(buffer) in drawings.jl
     Drawing(NaN, NaN, :rec)
     background("deepskyblue2")
     setcolor("grey")
@@ -55,7 +55,7 @@ function svg_rec_format()
     background("magenta")
     # now doing what
     #   snapshot(;fname="test.svg",cb=BoundingBox(Point(-150,-150),Point(150,150)))
-    # does without the adjust_background_rects(buffer) tweak
+    # does without the _adjust_background_rects(buffer) tweak
     fname="test.svg"
     cb=BoundingBox(Point(-150,-150),Point(150,150))
     scalefactor = 1.0
@@ -76,7 +76,7 @@ function svg_rec_format()
     paint()
     # now doing what
     #   finish()
-    # does without the adjust_background_rects(buffer) tweak
+    # does without the _adjust_background_rects(buffer) tweak
     Luxor.Cairo.finish(Luxor.current_surface())
     Luxor.Cairo.destroy(Luxor.current_surface())
     buffer=copy(Luxor.current_bufferdata())
@@ -102,24 +102,24 @@ function svg_rec_format()
         @test !isnothing(m) && m[1] == id
         # check if <g id="$id">...</g> is extracted correct
         group="<g id=\"other\"></g><g id=\""*id*"\"><g><g></g></g><g></g></g><g id=\"other\"></g>"
-        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        (head,mid,tail,split_ok)=Luxor._split_string_into_head_mid_tail(group,id)
         @test split_ok == true
         @test head == "<g id=\"other\"></g>"
         @test mid == "<g id=\""*id*"\"><g><g></g></g><g></g></g>"
         @test tail == "<g id=\"other\"></g>"
-        # split_string_into_head_mid_tail(group,id) needs to be robust
+        # _split_string_into_head_mid_tail(group,id) needs to be robust
         # do nothing if split fails
         group="</g><g id=\"other\"></g><g id=\""*id*"\"><g><g></g></g>"
-        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        (head,mid,tail,split_ok)=Luxor._split_string_into_head_mid_tail(group,id)
         @test split_ok == false
         group="</g></g><g><g id=\""*id*"\">"
-        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        (head,mid,tail,split_ok)=Luxor._split_string_into_head_mid_tail(group,id)
         @test split_ok == false
         group="<g><g id=\"other\"></g></g>"
-        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        (head,mid,tail,split_ok)=Luxor._split_string_into_head_mid_tail(group,id)
         @test split_ok == false
         group="<g><g><g id=\""*id*"\"></g></g>"
-        (head,mid,tail,split_ok)=Luxor.split_string_into_head_mid_tail(group,id)
+        (head,mid,tail,split_ok)=Luxor._split_string_into_head_mid_tail(group,id)
         @test split_ok == false
     end
     return
