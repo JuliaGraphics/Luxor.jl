@@ -62,7 +62,7 @@ mutable struct Drawing
         elseif stype == :image
             the_surface     = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
-            error("Unknown Luxor surface type \"$stype\"")
+            error("Unknown Luxor surface type" \"$stype\"")
         end
         the_cr  = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
@@ -614,6 +614,153 @@ function Drawing(paper_size::AbstractString, f="luxor-drawing.png"; strokescale=
   Drawing(w, h, f, strokescale=strokescale)
 end
 
+
+@doc raw"""
+    _adjust_background_rects(buffer::UInt8[])
+
+See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.\
+
+Setting backgrounds in a recording surface (:rec) and creating a svg from it result in elements as
+
+```
+<rect x="0" y="0" width="16777215" height="16777215" .../>
+```
+independent of an existing transformation matrix (e.g. set with origin(...) or snapshot with a crop bounding box).\
+An existing transformation matrix manifests in the svg file as
+
+```
+<use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
+```
+which is applied to every element including the background rects.\
+This transformation needs to be inversed for the background rects which is added in this function.
+"""
+function _adjust_background_rects(buffer)
+    adjusted_buffer=String(buffer)
+    # get SVG viewbox coordinates to replace the generic 16777215 values
+    #   expected example:
+    #     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
+    m=match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is,adjusted_buffer)
+    adjust_vb=false
+    if !isnothing(m) && length(m.captures) == 4
+        (vbx,vby,vbw,vbh)=string.([ parse(Float64,m[i]) for i in 1:4 ])
+        adjust_vb=true
+    end
+    # do adjustment for all <use ...> elements (after <defs>) which have a transform attribute as matrix
+    #   expected example:
+    #     </defs>...<use xlink:href="#surface5" transform="matrix(1,0,0,1,150,150)"/>...</svg>
+    #       xlink:href is deprecated and can be replaced by just href
+    #       a group block with id "surface5" must exist: <g id="surface5" clip-path="url(#clip1)">
+    #       in this group block adjust all background rects with the inverse transform matrix like:
+    #       from:
+    #          <rect x="0" y="0" width="16777215" height="16777215" style="..."/>
+    #       to:
+    #          <rect class="luxor_adjusted" x="0" y="0" width="300" height="300" style="..." transform="matrix(1,0,0,1,-150,-150)"/>
+    #       adding class as verification that tweak was applied.
+    m=findall(r"<defs\s*?>"is,adjusted_buffer)
+    # check if there is exactly 1 <defs> element
+    if length(m) == 1
+        # get SVG part after </defs> to search for <use ...>
+        #   could be done in a single RegEx but can produce ERROR: PCRE.exec error: match limit exceeded
+        m=match(r"</defs\s*?>(.*)$"is,adjusted_buffer)
+        if length(m.captures) == 1
+            adjusted_buffer_part=m[1]
+            for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
+                if length(m.captures) == 8
+                    # id of group block
+                    id=m[2]
+                    # transform matrix applied to all elements in group block
+                    transform=vcat(reshape([ parse(Float64,m[i]) for i in 3:8 ],2,3),[0.0 0.0 1.0])
+                    # inverse transform matrix must be applied to background rect to neutralize transform matrix
+                    it=inv(transform)
+                    # get the group block with id into mid::String
+                    (head,mid,tail,split_ok)=_split_string_into_head_mid_tail(adjusted_buffer,id)
+                    if split_ok
+                        # add inverse transform matrix to every background rect
+                        #   background rects look like:
+                        #     <rect x="0" y="0" width="16777215" height="16777215" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
+                        # add class="luxor_adjusted" too, for future reference that element has been tweaked
+                        invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
+                        mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 class=\"luxor_adjusted\" \\2 $(invtransformstring)/>") )
+                        if adjust_vb
+                            # some SVG tools don't like this huge rects (e.g. inkscape)
+                            # => replace 0,0,16777215,16777215 with viewBox coordinates
+                            mid=replace(mid,r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
+                        end
+                        adjusted_buffer=head*mid*tail
+                    end
+                end
+            end
+        end
+    end
+    adjusted_buffer=UInt8.(collect(adjusted_buffer))
+    return adjusted_buffer
+end
+
+@doc raw"""
+    _split_string_into_head_mid_tail(s::String,id::String)
+
+splits s into head, mid and tail string.\
+Example:\
+
+```
+  s="head...<g id="\$id">...</g>...tail"
+```
+  results in\
+
+```
+  head="head..."
+  mid="<g id="\$id">...</g>"
+  tail="...tail"
+```
+"""
+function _split_string_into_head_mid_tail(s,id)
+    head=""
+    mid=s
+    tail=""
+    split_ok=false
+    # find all group start elements <g ...>
+    startgroups=findall(r"<g(?:>|\s+?.*?>)"is,s)
+    # find all group end elements </g...>
+    endgroups=findall(r"</g\s*>"is,s)
+    # there must be as many start elements as end elements
+    if length(startgroups) == length(endgroups)    
+    #if length(startgroups) != length(endgroups)
+    #    @warn "number of group starting tags <g ...> do not match number of closing tags </g> in SVG"
+    #else
+        # find the group start element with the proper id
+        first_group=findfirst(Regex("<g\\s+?[^>]*?id=\"$(id)\".*?>","is"),s)
+        group_start_index=findfirst(e->e==first_group,startgroups)
+        if !isnothing(group_start_index) && !isempty(group_start_index)
+            mid_start=first_group[1]
+            group_end_index=0
+            # starting with group start element with the proper id traverse the end group elements
+            # and the start group elements until the number traversed are equal the first time
+            while group_start_index-group_end_index !== 0 && group_start_index < length(startgroups) && group_end_index <= length(endgroups)
+                group_end_index+=1
+                while group_end_index <= length(endgroups) && endgroups[group_end_index][1] < startgroups[group_start_index][1]
+                    group_end_index+=1
+                end
+                while group_start_index < length(startgroups) && startgroups[group_start_index+1][1] < endgroups[group_end_index][1]
+                    group_start_index+=1
+                end
+            end
+            if group_start_index-group_end_index == 0
+                mid_end=endgroups[group_end_index][end]
+                # start and end character of mid is found, construct the substrings
+                if prevind(s,mid_start) > 0
+                    head=s[1:prevind(s,mid_start)]
+                end
+                if nextind(s,mid_end)>0
+                    tail=s[nextind(s,mid_end):end]
+                end
+                mid=s[mid_start:mid_end]
+                split_ok=true
+            end
+        end
+    end
+    return (head,mid,tail,split_ok)
+end
+
 """
     finish()
 
@@ -642,7 +789,25 @@ function finish()
     Cairo.destroy(current_surface())
 
     if current_filename() != ""
-        write(current_filename(), current_bufferdata())
+        if current_surface_type() != :svg
+            write(current_filename(), current_bufferdata())
+        else
+            # next function call adresses the issue in
+            # https://github.com/JuliaGraphics/Luxor.jl/issues/150
+            #   short: setting a background in svg results in 
+            #          <rect x="0" y="0" width="16777215" height="16777215" .../>
+            #          independent of an existing transform matrix (e.g. set with origin(...)
+            #          or snapshot with a negative crop bounding box).
+            #          An existing transform matrix manifests in the svg file as
+            #          <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
+            #          which is applied to every element including the background rects.
+            #          This transformation needs to be inversed for the background rects
+            #          which is added in this function.
+            buffer=_adjust_background_rects(copy(current_bufferdata()))
+            # hopefully safe as we are at the end of finish:
+            _current_drawing()[_current_drawing_index()].bufferdata=buffer
+            write(current_filename(), buffer)
+        end
     end
 
     return true
