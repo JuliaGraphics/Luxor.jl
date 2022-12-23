@@ -9,7 +9,7 @@ function grid_test(fname)
     origin()
     background("white")
 
-    panes = Tiler(Luxor.current_width(), Luxor.current_height(), 1, 2)
+    panes = Tiler(Luxor._current_width(), Luxor._current_height(), 1, 2)
     @layer begin
         translate(first(panes[1]))
         circle(O, 10, :fill)

@@ -60,7 +60,7 @@ function svg_rec_format()
     cb=BoundingBox(Point(-150,-150),Point(150,150))
     scalefactor = 1.0
     rd = currentdrawing()
-    rs = Luxor.current_surface()
+    rs = Luxor._current_surface()
     Luxor.Cairo.flush(rs)
     rma = getmatrix()
     rmai = juliatocairomatrix(cairotojuliamatrix(rma)^-1)
@@ -77,10 +77,11 @@ function svg_rec_format()
     # now doing what
     #   finish()
     # does without the _adjust_background_rects(buffer) tweak
-    Luxor.Cairo.finish(Luxor.current_surface())
-    Luxor.Cairo.destroy(Luxor.current_surface())
-    buffer=copy(Luxor.current_bufferdata())
-    Luxor._current_drawing()[Luxor._current_drawing_index()] = rd
+    Luxor.Cairo.finish(Luxor._current_surface())
+    Luxor.Cairo.destroy(Luxor._current_surface())
+    buffer=copy(Luxor._current_bufferdata())
+    currentdrawing(rd)
+    #Luxor._current_drawing()[Luxor._current_drawing_index()] = rd
     finish()
 
     testsvg=String(buffer)

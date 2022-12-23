@@ -47,12 +47,12 @@ function BoundingBox(;
         # ignore current matrix
         r = BoundingBox(
             Point(
-                -current_width() / 2,
-                -current_height() / 2,
+                -_current_width() / 2,
+                -_current_height() / 2,
             ),
             Point(
-                current_width() / 2,
-                current_height() / 2,
+                _current_width() / 2,
+                _current_height() / 2,
             ),
         )
     else
@@ -60,7 +60,7 @@ function BoundingBox(;
         setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
         r = BoundingBox(
             Point(0, 0),
-            Point(current_width(), current_height()),
+            Point(_current_width(), _current_height()),
         )
         setmatrix(b)
     end

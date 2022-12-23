@@ -162,5 +162,5 @@ Select a mesh, previously created with `mesh()`, for filling
 and stroking subsequent graphics.
 """
 function setmesh(m::Mesh)
-    Cairo.set_source(Luxor.get_current_cr(), m)
+    Cairo.set_source(Luxor._get_current_cr(), m)
 end

@@ -521,7 +521,7 @@ end
 Return the current point.
 """
 function currentpoint()
-    x, y = Cairo.get_current_point(get_current_cr())
+    x, y = Cairo.get_current_point(_get_current_cr())
     return Point(x, y)
 end
 
@@ -532,7 +532,7 @@ Return true if there is a current point. Obtain the current point
 with `currentpoint()`.
 """
 function hascurrentpoint()
-    return Cairo.has_current_point(get_current_cr())
+    return Cairo.has_current_point(_get_current_cr())
 end
 
 """
@@ -558,7 +558,7 @@ function getworldposition(pt::Point = O;
         centered = true)
     x, y = cairotojuliamatrix(getmatrix()) * [pt.x, pt.y, 1]
     return Point(x, y) -
-           (centered ? (Luxor.current_width() / 2.0, Luxor.current_height() / 2.0) : (0, 0))
+           (centered ? (Luxor._current_width() / 2.0, Luxor._current_height() / 2.0) : (0, 0))
 end
 
 """
