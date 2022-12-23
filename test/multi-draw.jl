@@ -1,6 +1,8 @@
 using Luxor, Test
 
 function multi_draw()
+    @test Luxor._reset_all_drawings() == true
+    
     @test Luxor.drawing_indices() == 1:1
     @test Luxor.get_drawing_index() == 1
     @test Luxor.set_drawing_index(5) == 1

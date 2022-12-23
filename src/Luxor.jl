@@ -80,6 +80,7 @@ function __init__()
     @require MathTeXEngine = "0a4f8689-d25c-4efe-a92b-7142dfc1aa53" begin
         @require LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f" include("latex.jl")
     end
+    _reset_all_drawings()
 end
 
 export Drawing,

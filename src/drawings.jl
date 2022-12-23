@@ -107,7 +107,7 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 =>
     function _current_drawing_index()
         id = Threads.threadid()
         if ! haskey(_CURRENTDRAWINGINDICES[],id)
-            # ppredefine all needed Dict entries
+            # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
@@ -140,41 +140,60 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 =>
         # set and return the thread specific current index
         _CURRENTDRAWINGINDICES[][id] = i
     end
+    global _reset_all_drawings
+    function _reset_all_drawings()
+        empty!(_CURRENTDRAWINGS[])
+        empty!(_CURRENTDRAWINGINDICES[])
+        return true
+    end
 end
 
 # utility functions that access the internal current Cairo drawing object, which is
 # stored as item at index _current_drawing_index() in a constant global array
 
-function get_current_cr()
-    try
-        getfield(_current_drawing()[_current_drawing_index()], :cr)
-    catch
-        error("There is no current drawing.")
+function get_current_drawing_save()
+    # check if drawing is not corrupted (has been observed using SnoopPrecompile)
+    #   checking fields:
+    #     surface::CairoSurface
+    #     cr::CairoSurface
+    #   not checked but perhaps needed:
+    #     buffer::IOBuffer
+    #     bufferdata::Array{UInt8, 1}
+    if  _current_drawing_index() > 0 &&
+        getfield(getfield(_current_drawing()[_current_drawing_index()], :cr), :ptr) == C_NULL &&
+        getfield(getfield(_current_drawing()[_current_drawing_index()], :surface), :ptr) == C_NULL &&
+        1 == 1
+            error("Drawing not initialized. Did you call Drawing(...)?")
     end
+    return _current_drawing()[_current_drawing_index()]
 end
 
-get_current_redvalue()    = getfield(_current_drawing()[_current_drawing_index()], :redvalue)
-get_current_greenvalue()  = getfield(_current_drawing()[_current_drawing_index()], :greenvalue)
-get_current_bluevalue()   = getfield(_current_drawing()[_current_drawing_index()], :bluevalue)
-get_current_alpha()       = getfield(_current_drawing()[_current_drawing_index()], :alpha)
+function get_current_cr()
+    getfield(get_current_drawing_save(), :cr)
+end
 
-set_current_redvalue(r)   = setfield!(_current_drawing()[_current_drawing_index()], :redvalue, convert(Float64, r))
-set_current_greenvalue(g) = setfield!(_current_drawing()[_current_drawing_index()], :greenvalue, convert(Float64, g))
-set_current_bluevalue(b)  = setfield!(_current_drawing()[_current_drawing_index()], :bluevalue, convert(Float64, b))
-set_current_alpha(a)      = setfield!(_current_drawing()[_current_drawing_index()], :alpha, convert(Float64, a))
+get_current_redvalue()    = getfield(get_current_drawing_save(), :redvalue)
+get_current_greenvalue()  = getfield(get_current_drawing_save(), :greenvalue)
+get_current_bluevalue()   = getfield(get_current_drawing_save(), :bluevalue)
+get_current_alpha()       = getfield(get_current_drawing_save(), :alpha)
 
-current_filename()        = getfield(_current_drawing()[_current_drawing_index()], :filename)
-current_width()           = getfield(_current_drawing()[_current_drawing_index()], :width)
-current_height()          = getfield(_current_drawing()[_current_drawing_index()], :height)
-current_surface()         = getfield(_current_drawing()[_current_drawing_index()], :surface)
-current_surface_ptr()     = getfield(getfield(_current_drawing()[_current_drawing_index()], :surface), :ptr)
-current_surface_type()    = getfield(_current_drawing()[_current_drawing_index()], :surfacetype)
+set_current_redvalue(r)   = setfield!(get_current_drawing_save(), :redvalue, convert(Float64, r))
+set_current_greenvalue(g) = setfield!(get_current_drawing_save(), :greenvalue, convert(Float64, g))
+set_current_bluevalue(b)  = setfield!(get_current_drawing_save(), :bluevalue, convert(Float64, b))
+set_current_alpha(a)      = setfield!(get_current_drawing_save(), :alpha, convert(Float64, a))
 
-current_buffer()          = getfield(_current_drawing()[_current_drawing_index()], :buffer)
-current_bufferdata()      = getfield(_current_drawing()[_current_drawing_index()], :bufferdata)
+current_filename()        = getfield(get_current_drawing_save(), :filename)
+current_width()           = getfield(get_current_drawing_save(), :width)
+current_height()          = getfield(get_current_drawing_save(), :height)
+current_surface()         = getfield(get_current_drawing_save(), :surface)
+current_surface_ptr()     = getfield(getfield(get_current_drawing_save(), :surface), :ptr)
+current_surface_type()    = getfield(get_current_drawing_save(), :surfacetype)
 
-get_current_strokescale() = getfield(_current_drawing()[_current_drawing_index()], :strokescale)
-set_current_strokescale(s)= setfield!(_current_drawing()[_current_drawing_index()], :strokescale, s)
+current_buffer()          = getfield(get_current_drawing_save(), :buffer)
+current_bufferdata()      = getfield(get_current_drawing_save(), :bufferdata)
+
+get_current_strokescale() = getfield(get_current_drawing_save(), :strokescale)
+set_current_strokescale(s)= setfield!(get_current_drawing_save(), :strokescale, s)
 
 """
     Luxor.drawing_indices()
@@ -956,7 +975,7 @@ Otherwise:
 """
 function preview()
     @debug "preview()"
-    return _current_drawing()[_current_drawing_index()]
+    return get_current_drawing_save()
 end
 
 # for filenames, the @pdf/png/svg macros may pass either
