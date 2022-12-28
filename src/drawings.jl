@@ -107,7 +107,7 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 =>
     function _current_drawing_index()
         id = Threads.threadid()
         if ! haskey(_CURRENTDRAWINGINDICES[],id)
-            # ppredefine all needed Dict entries
+            # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
@@ -140,57 +140,105 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 =>
         # set and return the thread specific current index
         _CURRENTDRAWINGINDICES[][id] = i
     end
+    global _reset_all_drawings
+    function _reset_all_drawings()
+        empty!(_CURRENTDRAWINGS[])
+        empty!(_CURRENTDRAWINGINDICES[])
+        return true
+    end
 end
 
 # utility functions that access the internal current Cairo drawing object, which is
 # stored as item at index _current_drawing_index() in a constant global array
 
-function get_current_cr()
-    try
-        getfield(_current_drawing()[_current_drawing_index()], :cr)
-    catch
-        error("There is no current drawing.")
+function _get_current_drawing_save()
+    # check if drawing is not corrupted (has been observed using SnoopPrecompile)
+    #   checking fields:
+    #     surface::CairoSurface
+    #     cr::CairoSurface
+    #   not checked but perhaps needed:
+    #     buffer::IOBuffer
+    #     bufferdata::Array{UInt8, 1}
+    if  _current_drawing_index() <= 0 || 
+        (
+            _current_drawing_index() > 0 &&
+            getfield(getfield(_current_drawing()[_current_drawing_index()], :cr), :ptr) == C_NULL &&
+            getfield(getfield(_current_drawing()[_current_drawing_index()], :surface), :ptr) == C_NULL &&
+            1 == 1
+        )
+            error("Drawing not initialized. Did you call Drawing(...)?")
     end
+    return _current_drawing()[_current_drawing_index()]
 end
 
-get_current_redvalue()    = getfield(_current_drawing()[_current_drawing_index()], :redvalue)
-get_current_greenvalue()  = getfield(_current_drawing()[_current_drawing_index()], :greenvalue)
-get_current_bluevalue()   = getfield(_current_drawing()[_current_drawing_index()], :bluevalue)
-get_current_alpha()       = getfield(_current_drawing()[_current_drawing_index()], :alpha)
+function _get_current_cr()
+    getfield(_get_current_drawing_save(), :cr)
+end
 
-set_current_redvalue(r)   = setfield!(_current_drawing()[_current_drawing_index()], :redvalue, convert(Float64, r))
-set_current_greenvalue(g) = setfield!(_current_drawing()[_current_drawing_index()], :greenvalue, convert(Float64, g))
-set_current_bluevalue(b)  = setfield!(_current_drawing()[_current_drawing_index()], :bluevalue, convert(Float64, b))
-set_current_alpha(a)      = setfield!(_current_drawing()[_current_drawing_index()], :alpha, convert(Float64, a))
+_get_current_redvalue()    = getfield(_get_current_drawing_save(), :redvalue)
+_get_current_greenvalue()  = getfield(_get_current_drawing_save(), :greenvalue)
+_get_current_bluevalue()   = getfield(_get_current_drawing_save(), :bluevalue)
+_get_current_alpha()       = getfield(_get_current_drawing_save(), :alpha)
+function _get_current_color()
+    d = _get_current_drawing_save()
+    return (
+        getfield(d, :redvalue),
+        getfield(d, :greenvalue),
+        getfield(d, :bluevalue),
+        getfield(d, :alpha)
+    )
+end
+function _get_current_cr_color()
+    d = _get_current_drawing_save()
+    return (
+        getfield(d, :cr),
+        getfield(d, :redvalue),
+        getfield(d, :greenvalue),
+        getfield(d, :bluevalue),
+        getfield(d, :alpha)
+    )
+end
 
-current_filename()        = getfield(_current_drawing()[_current_drawing_index()], :filename)
-current_width()           = getfield(_current_drawing()[_current_drawing_index()], :width)
-current_height()          = getfield(_current_drawing()[_current_drawing_index()], :height)
-current_surface()         = getfield(_current_drawing()[_current_drawing_index()], :surface)
-current_surface_ptr()     = getfield(getfield(_current_drawing()[_current_drawing_index()], :surface), :ptr)
-current_surface_type()    = getfield(_current_drawing()[_current_drawing_index()], :surfacetype)
+_set_current_redvalue(r)   = setfield!(_get_current_drawing_save(), :redvalue, convert(Float64, r))
+_set_current_greenvalue(g) = setfield!(_get_current_drawing_save(), :greenvalue, convert(Float64, g))
+_set_current_bluevalue(b)  = setfield!(_get_current_drawing_save(), :bluevalue, convert(Float64, b))
+_set_current_alpha(a)      = setfield!(_get_current_drawing_save(), :alpha, convert(Float64, a))
+function _set_current_color(r,g,b,a=1.0)
+    d = _get_current_drawing_save()
+    setfield!(d, :redvalue, convert(Float64, r))
+    setfield!(d, :greenvalue, convert(Float64, g))
+    setfield!(d, :bluevalue, convert(Float64, b))
+    setfield!(d, :alpha, convert(Float64, a))
+end
 
-current_buffer()          = getfield(_current_drawing()[_current_drawing_index()], :buffer)
-current_bufferdata()      = getfield(_current_drawing()[_current_drawing_index()], :bufferdata)
+_current_filename()        = getfield(_get_current_drawing_save(), :filename)
+_current_width()           = getfield(_get_current_drawing_save(), :width)
+_current_height()          = getfield(_get_current_drawing_save(), :height)
+_current_surface()         = getfield(_get_current_drawing_save(), :surface)
+_current_surface_ptr()     = getfield(getfield(_get_current_drawing_save(), :surface), :ptr)
+_current_surface_type()    = getfield(_get_current_drawing_save(), :surfacetype)
 
-get_current_strokescale() = getfield(_current_drawing()[_current_drawing_index()], :strokescale)
-set_current_strokescale(s)= setfield!(_current_drawing()[_current_drawing_index()], :strokescale, s)
+_current_buffer()          = getfield(_get_current_drawing_save(), :buffer)
+_current_bufferdata()      = getfield(_get_current_drawing_save(), :bufferdata)
+
+_get_current_strokescale() = getfield(_get_current_drawing_save(), :strokescale)
+_set_current_strokescale(s)= setfield!(_get_current_drawing_save(), :strokescale, s)
 
 """
-    Luxor.drawing_indices()
+    Luxor._drawing_indices()
 
 Get a UnitRange over all available indices of drawings.
 
 With Luxor you can work on multiple drawings simultaneously. Each drawing is stored 
 in an internal array. The first drawing is stored at index 1 when you start a 
-drawing with `Drawing(...)`. To start a second drawing you call `Luxor.set_next_drawing_index()`,
+drawing with `Drawing(...)`. To start a second drawing you call `Luxor._set_next_drawing_index()`,
 which returns the new index. Calling another `Drawing(...)` stores the second drawing
-at this new index. `Luxor.set_next_drawing_index()` will return and set the next available index
+at this new index. `Luxor._set_next_drawing_index()` will return and set the next available index
 which is available for a new drawing. This can be a new index at the end of drawings, or,
 if you already finished a drawing with `finish()`, the index of this finished drawing.
 To specify on which drawing the next graphics command should be applied you call
-`Luxor.set_drawing_index(i)`. All successive Luxor commands work on this drawing.
-With `Luxor.get_drawing_index()` you get the current active drawing index.
+`Luxor._set_drawing_index(i)`. All successive Luxor commands work on this drawing.
+With `Luxor._get_drawing_index()` you get the current active drawing index.
 
 Multiple drawings is especially helpful for interactive graphics with live windows
 like MiniFB.
@@ -203,23 +251,23 @@ Example:
     setcolor("red")
     circle(Point(0, 0), 100, action = :fill)
     
-    Luxor.drawing_indices()               # returns 1:1
+    Luxor._drawing_indices()               # returns 1:1
     
-    Luxor.get_next_drawing_index()        # returns 2 but doesn't change current drawing
-    Luxor.set_next_drawing_index()        # returns 2 and sets current drawing to it
+    Luxor._get_next_drawing_index()        # returns 2 but doesn't change current drawing
+    Luxor._set_next_drawing_index()        # returns 2 and sets current drawing to it
     Drawing(500, 500, "2.svg")
     origin()
     setcolor("green")
     circle(Point(0, 0), 100, action = :fill)
 
-    Luxor.drawing_indices()               # returns 1:2
-    Luxor.set_drawing_index(1)            # returns 1
+    Luxor._drawing_indices()               # returns 1:2
+    Luxor._set_drawing_index(1)            # returns 1
 
     finish()
     preview()                             # presents the red circle 1.svg
 
-    Luxor.drawing_indices()               # returns 1:2
-    Luxor.set_next_drawing_index()        # returns 1 because drawing 1 was finished before
+    Luxor._drawing_indices()               # returns 1:2
+    Luxor._set_next_drawing_index()        # returns 1 because drawing 1 was finished before
 
     Drawing(500, 500, "3.svg")
     origin()
@@ -229,31 +277,31 @@ Example:
     finish()
     preview()                             # presents the blue circle 3.svg
 
-    Luxor.set_drawing_index(2)            # returns 2
+    Luxor._set_drawing_index(2)            # returns 2
     finish()
     preview()                             # presents the green circle 2.svg
 
-    Luxor.drawing_indices()               # returns 1:2, but all are finished
-    Luxor.set_drawing_index(1)            # returns 1
+    Luxor._drawing_indices()               # returns 1:2, but all are finished
+    Luxor._set_drawing_index(1)            # returns 1
 
     preview()                             # presents the blue circle 3.svg again
     
-    Luxor.set_drawing_index(10)           # returns 1 as 10 does not existing    
-    Luxor.get_drawing_index()             # returns 1
-    Luxor.get_next_drawing_index()        # returns 1, because 1 was finished
+    Luxor._set_drawing_index(10)           # returns 1 as 10 does not existing    
+    Luxor._get_drawing_index()             # returns 1
+    Luxor._get_next_drawing_index()        # returns 1, because 1 was finished
 
 """
-drawing_indices() = length(_current_drawing()) == 0 ? (1:1) : (1:length(_current_drawing()))
+_drawing_indices() = length(_current_drawing()) == 0 ? (1:1) : (1:length(_current_drawing()))
 
 """
-    Luxor.get_drawing_index()
+    Luxor._get_drawing_index()
 
 Returns the index of the current drawing. If there isn't any drawing yet returns 1.
 """
-get_drawing_index() = _current_drawing_index() == 0 ? 1 : _current_drawing_index()
+_get_drawing_index() = _current_drawing_index() == 0 ? 1 : _current_drawing_index()
 
 """
-    Luxor.set_drawing_index(i::Int)
+    Luxor._set_drawing_index(i::Int)
 
 Set the active drawing for successive graphic commands to index i if exist. if index i doesn't exist, 
 the current drawing is unchanged.
@@ -263,7 +311,7 @@ Returns the current drawing index.
 Example:
     
     next_index=5
-    if Luxor.set_drawing_index(next_index) == next_index
+    if Luxor._set_drawing_index(next_index) == next_index
         # do some additional graphics on the existing drawing
         ...
     else
@@ -271,20 +319,20 @@ Example:
     endif
 
 """
-function set_drawing_index(i::Int)
+function _set_drawing_index(i::Int)
     if isassigned(_current_drawing(),i)
         _current_drawing_index(i)
     end
-    return get_drawing_index()
+    return _get_drawing_index()
 end
 
 """
-    Luxor.get_next_drawing_index()
+    Luxor._get_next_drawing_index()
 
 Returns the next available drawing index. This can either be a new index or an existing
 index where a finished (`finish()`) drawing was stored before.
 """
-function get_next_drawing_index() 
+function _get_next_drawing_index() 
     i = 1
     if isempty(_current_drawing())
         return i
@@ -298,28 +346,28 @@ function get_next_drawing_index()
 end
 
 """
-    Luxor.set_next_drawing_index()
+    Luxor._set_next_drawing_index()
 
 Set the current drawing to the next available drawing index. This can either be a new index or an existing
 index where a finished (`finish()`) drawing was stored before.
 
 Returns the current drawing index.
 """
-function set_next_drawing_index()
-    if has_drawing()
-        _current_drawing_index(get_next_drawing_index())
+function _set_next_drawing_index()
+    if _has_drawing()
+        _current_drawing_index(_get_next_drawing_index())
     else
-        return get_next_drawing_index()
+        return _get_next_drawing_index()
     end
     return _current_drawing_index()
 end
 
 """
-    Luxor.has_drawing()
+    Luxor._has_drawing()
 
 returns true if there is a current drawing available or finished, otherwise false.
 """
-function has_drawing()
+function _has_drawing()
     return _current_drawing_index() != 0
 end
 
@@ -346,7 +394,7 @@ Return the current Luxor drawing, if there currently is one.
 function currentdrawing()
     if  ! isassigned(_current_drawing(), _current_drawing_index()) || 
         isempty(_current_drawing()) || 
-        current_surface_ptr() == C_NULL ||
+        _current_surface_ptr() == C_NULL ||
         false
             # Already finished or not even started
             @info "There is no current drawing"
@@ -768,29 +816,29 @@ Finish the drawing, and close the file. You may be able to open it in an
 external viewer application with `preview()`.
 """
 function finish()
-    if current_surface_ptr() == C_NULL
+    if _current_surface_ptr() == C_NULL
         # Already finished
         return false
     end
-    if current_surface_type() == :png
-        Cairo.write_to_png(current_surface(), current_buffer())
+    if _current_surface_type() == :png
+        Cairo.write_to_png(_current_surface(), _current_buffer())
     end
 
-    if  current_surface_type() == :image &&
+    if  _current_surface_type() == :image &&
         ( 
-            typeof(current_surface()) == Cairo.CairoSurfaceImage{ARGB32} || 
-            typeof(current_surface()) == Cairo.CairoSurfaceImage{RGB24}
+            typeof(_current_surface()) == Cairo.CairoSurfaceImage{ARGB32} || 
+            typeof(_current_surface()) == Cairo.CairoSurfaceImage{RGB24}
         ) &&
-        endswith(current_filename(), r"\.png"i)
-            Cairo.write_to_png(current_surface(), current_buffer())
+        endswith(_current_filename(), r"\.png"i)
+            Cairo.write_to_png(_current_surface(), _current_buffer())
     end
 
-    Cairo.finish(current_surface())
-    Cairo.destroy(current_surface())
+    Cairo.finish(_current_surface())
+    Cairo.destroy(_current_surface())
 
-    if current_filename() != ""
-        if current_surface_type() != :svg
-            write(current_filename(), current_bufferdata())
+    if _current_filename() != ""
+        if _current_surface_type() != :svg
+            write(_current_filename(), _current_bufferdata())
         else
             # next function call adresses the issue in
             # https://github.com/JuliaGraphics/Luxor.jl/issues/150
@@ -803,10 +851,10 @@ function finish()
             #          which is applied to every element including the background rects.
             #          This transformation needs to be inversed for the background rects
             #          which is added in this function.
-            buffer=_adjust_background_rects(copy(current_bufferdata()))
+            buffer=_adjust_background_rects(copy(_current_bufferdata()))
             # hopefully safe as we are at the end of finish:
             _current_drawing()[_current_drawing_index()].bufferdata=buffer
-            write(current_filename(), buffer)
+            write(_current_filename(), buffer)
         end
     end
 
@@ -879,9 +927,9 @@ function snapshot(fname, cb, scalefactor)
     # User coordinates, user space: (x_u,y_u ) = ctm⁻¹ * (x_d, y_d)
     rd = currentdrawing()
     isbits(rd) && return false  # currentdrawing provided 'info'
-    rs = current_surface()
+    rs = _current_surface()
     @assert rd isa Drawing
-    @assert current_surface_type() == :rec
+    @assert _current_surface_type() == :rec
     # The check for an 'alive' drawing should be performed by currentdrawing()
     # Working on a dead drawing causes ugly crashes.
     # Empty the working buffer to the recording surface:
@@ -956,7 +1004,7 @@ Otherwise:
 """
 function preview()
     @debug "preview()"
-    return _current_drawing()[_current_drawing_index()]
+    return _get_current_drawing_save()
 end
 
 # for filenames, the @pdf/png/svg macros may pass either
@@ -1243,14 +1291,14 @@ function image_as_matrix()
     if ! isassigned(_current_drawing(),_current_drawing_index())
         error("no current drawing")
     end
-    w = Int(current_surface().width)
-    h = Int(current_surface().height)
+    w = Int(_current_surface().width)
+    h = Int(_current_surface().height)
     z = zeros(UInt32, w, h)
     # create a new image surface to receive the data from the current drawing
     # flipxy: see issue https://github.com/Wikunia/Javis.jl/pull/149
     imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32, flipxy=false)
     cr = Cairo.CairoContext(imagesurface)
-    Cairo.set_source_surface(cr, current_surface(), 0, 0)
+    Cairo.set_source_surface(cr, _current_surface(), 0, 0)
     Cairo.paint(cr)
     data = imagesurface.data
     Cairo.finish(imagesurface)
@@ -1398,7 +1446,7 @@ function image_as_matrix!(buffer)
     # flipxy: see issue https://github.com/Wikunia/Javis.jl/pull/149
     imagesurface = Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32, flipxy=false)
     cr = Cairo.CairoContext(imagesurface)
-    Cairo.set_source_surface(cr, Luxor.current_surface(), 0, 0)
+    Cairo.set_source_surface(cr, Luxor._current_surface(), 0, 0)
     Cairo.paint(cr)
     data = imagesurface.data
     Cairo.finish(imagesurface)
@@ -1489,8 +1537,8 @@ run(`svgo txt.svg -o txt-min.svg`)
 ```
 """
 function svgstring()
-    if Luxor.current_surface_type() == :svg
-        svgsource = String(Luxor.current_bufferdata())
+    if Luxor._current_surface_type() == :svg
+        svgsource = String(Luxor._current_bufferdata())
         return svgsource
     else
         @warn "Drawing is not SVG"

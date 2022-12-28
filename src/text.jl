@@ -74,7 +74,7 @@ function text(t::T where T <: AbstractString, pt::Point;
         translate(finalpt)
         rotate(angle)
         newpath()
-        Cairo.show_text(get_current_cr(), t)
+        Cairo.show_text(_get_current_cr(), t)
     grestore()
 
     return Point(textpointx, textpointy)
@@ -96,7 +96,7 @@ textright(t::String, pt::Point) = textright(t, pt.x, pt.y)
 Select a font to use. (Toy API)
 """
 fontface(f) =
-    Cairo.select_font_face(get_current_cr(), f,
+    Cairo.select_font_face(_get_current_cr(), f,
                            Cairo.FONT_SLANT_NORMAL,
                            Cairo.FONT_WEIGHT_NORMAL)
 
@@ -105,7 +105,7 @@ fontface(f) =
 
 Set the font size to `n` units. The default size is 10 units. (Toy API)
 """
-fontsize(n) = Cairo.set_font_size(get_current_cr(), n)
+fontsize(n) = Cairo.set_font_size(_get_current_cr(), n)
 
 
 """
@@ -118,7 +118,7 @@ if `Cairo.set_font_matrix` is used directly. (Toy API)
 """
 function get_fontsize()
     if @isdefined get_font_matrix
-        m = get_font_matrix(get_current_cr())
+        m = get_font_matrix(_get_current_cr())
         font_size = sign(m.yy)*sqrt(m.yx^2+m.yy^2)
         return font_size
     else
@@ -162,7 +162,7 @@ returns
 
     [1.18652; -9.68335; 8.04199; 9.68335; 9.74927; 0.0]
 """
-textextents(str::T where {T<:AbstractString}) = Cairo.text_extents(get_current_cr(), str)
+textextents(str::T where {T<:AbstractString}) = Cairo.text_extents(_get_current_cr(), str)
 
 """
     textpath(t)
@@ -174,7 +174,7 @@ You can use `pathtopoly()` or `getpath()` or `getpathflat()` to convert the path
 See also `textoutlines()`. `textpath()` retains Bezier curves, whereas `textoutlines()` returns flattened curves.
 """
 function textpath(t::T where T <: AbstractString)
-    Cairo.text_path(get_current_cr(), t)
+    Cairo.text_path(_get_current_cr(), t)
 end
 """
     textpath(s::String, pos::Point;
@@ -417,7 +417,7 @@ function setfont(family::T where T <: AbstractString, fontsize)
     # output is set relative to 96dpi
     # so it needs to be rescaled
     fsize = fontsize * 72/96
-    set_font_face(get_current_cr(), string(family, " ", fsize))
+    set_font_face(_get_current_cr(), string(family, " ", fsize))
 end
 
 """
@@ -449,7 +449,7 @@ The `<span>` tag can contains things like this:
     <span font='26' background='green' foreground='red'>unreadable text</span>
 """
 settext(text::T where T <: AbstractString, pos::Point; kwargs...) =
-    Cairo.text(get_current_cr(), pos.x, pos.y, text; kwargs...)
+    Cairo.text(_get_current_cr(), pos.x, pos.y, text; kwargs...)
 
 settext(text::T where T <: AbstractString; kwargs...) = settext(text, O; kwargs...)
 

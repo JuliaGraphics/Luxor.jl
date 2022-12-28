@@ -13,7 +13,7 @@ function offset_poly_test(fname)
     background("white")
     setline(1.5)
 
-    tiles = Tiler(Luxor.current_width(), Luxor.current_height(), 6, 6, margin=20)
+    tiles = Tiler(Luxor._current_width(), Luxor._current_height(), 6, 6, margin=20)
     randomoffset = 18
     for (pos, n) in tiles
         gsave()

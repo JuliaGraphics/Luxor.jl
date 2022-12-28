@@ -18,7 +18,7 @@ function rect(xmin::Real, ymin::Real, w::Real, h::Real;
     if action != :path
         newpath()
     end
-    Cairo.rectangle(get_current_cr(), xmin, ymin, w, h)
+    Cairo.rectangle(_get_current_cr(), xmin, ymin, w, h)
     do_action(action)
     return Point(xmin, ymin), Point(xmin + w, ymin + h)
 end

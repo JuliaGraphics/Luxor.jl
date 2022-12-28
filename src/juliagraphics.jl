@@ -70,10 +70,10 @@ function julialogo(;
     end
 
     # save current color
-    r, g, b, a = Luxor.get_current_redvalue(),
-                    Luxor.get_current_greenvalue(),
-                    Luxor.get_current_bluevalue(),
-                    Luxor.get_current_alpha()
+    r, g, b, a = Luxor._get_current_redvalue(),
+                    Luxor._get_current_greenvalue(),
+                    Luxor._get_current_bluevalue(),
+                    Luxor._get_current_alpha()
 
     # "j" without dot
     _j  =  [

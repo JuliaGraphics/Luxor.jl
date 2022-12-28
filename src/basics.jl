@@ -8,12 +8,12 @@ You can refer to the 0/0 point as `O`. (O = `Point(0, 0)`),
 """
 function origin()
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-    Cairo.translate(get_current_cr(), current_width()/2.0, current_height()/2.0)
+    Cairo.translate(_get_current_cr(), _current_width()/2.0, _current_height()/2.0)
 end
 
 function origin(x, y)
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-    Cairo.translate(get_current_cr(), x, y)
+    Cairo.translate(_get_current_cr(), x, y)
 end
 
 """
@@ -23,7 +23,7 @@ Reset the current matrix, then move the `0/0` position to `pt`.
 """
 function origin(pt)
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-    Cairo.translate(get_current_cr(), pt.x, pt.y)
+    Cairo.translate(_get_current_cr(), pt.x, pt.y)
 end
 
 """
@@ -101,7 +101,7 @@ function background(col::Colors.Colorant)
     gsave()
     setcolor(col)
     paint()
-    r, g, b, a = get_current_redvalue(), get_current_greenvalue(), get_current_bluevalue(), get_current_alpha()
+    r, g, b, a = _get_current_redvalue(), _get_current_greenvalue(), _get_current_bluevalue(), _get_current_alpha()
     grestore()
     return (r, g, b, a)
 end
@@ -130,7 +130,7 @@ Set the current antialiasing to a value between 0 and 6:
 This affects subsequent graphics, but not text, and it
 doesn't apply to all types of output file.
 """
-setantialias(n) = Cairo.set_antialias(get_current_cr(), n)
+setantialias(n) = Cairo.set_antialias(_get_current_cr(), n)
 
 """
     newpath()
@@ -138,21 +138,21 @@ setantialias(n) = Cairo.set_antialias(get_current_cr(), n)
 Create a new path, after clearing the current path. After
 this there's no path and no current point.
 """
-newpath() = Cairo.new_path(get_current_cr())
+newpath() = Cairo.new_path(_get_current_cr())
 
 """
     newsubpath()
 
 Start a new subpath, keeping the current path. After this there's no current point.
 """
-newsubpath() = Cairo.new_sub_path(get_current_cr())
+newsubpath() = Cairo.new_sub_path(_get_current_cr())
 
 """
     closepath()
 
 Close the current path. This is Cairo's `close_path()` function.
 """
-closepath() = Cairo.close_path(get_current_cr())
+closepath() = Cairo.close_path(_get_current_cr())
 
 abstract type LDispatcher  end
 # Packages which want to override strokepath/fillpath/strokepreserve/fillpreserve
@@ -172,7 +172,7 @@ Stroke the current path with the current line width, line join, line cap, dash,
 and stroke scaling settings. The current path is then cleared.
 """
 strokepath() = strokepath(DISPATCHER[1])
-strokepath(::DefaultLuxor) = get_current_strokescale() ? Cairo.stroke_transformed(get_current_cr()) : Cairo.stroke(get_current_cr())
+strokepath(::DefaultLuxor) = _get_current_strokescale() ? Cairo.stroke_transformed(_get_current_cr()) : Cairo.stroke(_get_current_cr())
 strokepath(::LDispatcher) = strokepath(DefaultLuxor())
 
 """
@@ -181,7 +181,7 @@ strokepath(::LDispatcher) = strokepath(DefaultLuxor())
 Fill the current path according to the current settings. The current path is then cleared.
 """
 fillpath() = fillpath(DISPATCHER[1])
-fillpath(::DefaultLuxor) = Cairo.fill(get_current_cr())
+fillpath(::DefaultLuxor) = Cairo.fill(_get_current_cr())
 fillpath(::LDispatcher) = fillpath(DefaultLuxor())
 
 """
@@ -190,7 +190,7 @@ fillpath(::LDispatcher) = fillpath(DefaultLuxor())
 Paint the current clip region with the current settings.
 """
 paint() = paint(DISPATCHER[1])
-paint(::DefaultLuxor) = Cairo.paint(get_current_cr())
+paint(::DefaultLuxor) = Cairo.paint(_get_current_cr())
 paint(::LDispatcher) = paint(DefaultLuxor())
 
 """
@@ -200,7 +200,7 @@ Stroke the current path with current line width, line join, line cap, dash, and
 stroke scaling settings, but then keep the path current.
 """
 strokepreserve() = strokepreserve(DISPATCHER[1])
-strokepreserve(::DefaultLuxor)    = get_current_strokescale() ? Cairo.stroke_preserve_transformed(get_current_cr()) : Cairo.stroke_preserve(get_current_cr())
+strokepreserve(::DefaultLuxor)    = _get_current_strokescale() ? Cairo.stroke_preserve_transformed(_get_current_cr()) : Cairo.stroke_preserve(_get_current_cr())
 strokepreserve(::LDispatcher) = strokepreserve(DefaultLuxor())
 
 """
@@ -209,7 +209,7 @@ strokepreserve(::LDispatcher) = strokepreserve(DefaultLuxor())
 Fill the current path with current settings, but then keep the path current.
 """
 fillpreserve() = fillpreserve(DISPATCHER[1])
-fillpreserve(::DefaultLuxor)      = Cairo.fill_preserve(get_current_cr())
+fillpreserve(::DefaultLuxor)      = Cairo.fill_preserve(_get_current_cr())
 fillpreserve(::LDispatcher) = fillpreserve(DefaultLuxor())
 
 """
@@ -258,7 +258,7 @@ An existing clipping region is enforced through and after a `gsave()`-`grestore(
 a `gsave()`-`grestore()` block is lost after `grestore()`. [?]
 """
 clip() = clip(DISPATCHER[1])
-clip(::DefaultLuxor) = Cairo.clip(get_current_cr())
+clip(::DefaultLuxor) = Cairo.clip(_get_current_cr())
 clip(::LDispatcher) = clip(DefaultLuxor())
 
 """
@@ -268,7 +268,7 @@ Establish a new clipping region by intersecting the current clipping region with
 path, but keep the current path.
 """
 clippreserve() = clippreserve(DISPATCHER[1])
-clippreserve(::DefaultLuxor) = Cairo.clip_preserve(get_current_cr())
+clippreserve(::DefaultLuxor) = Cairo.clip_preserve(_get_current_cr())
 clippreserve(::LDispatcher) = clippreserve(DefaultLuxor())
 
 """
@@ -276,14 +276,14 @@ clippreserve(::LDispatcher) = clippreserve(DefaultLuxor())
 
 Reset the clipping region to the current drawing's extent.
 """
-clipreset() = Cairo.reset_clip(get_current_cr())
+clipreset() = Cairo.reset_clip(_get_current_cr())
 
 """
     setline(n)
 
 Set the line width, in points.
 """
-setline(n) = Cairo.set_line_width(get_current_cr(), n)
+setline(n) = Cairo.set_line_width(_get_current_cr(), n)
 
 """
     setlinecap(s)
@@ -293,21 +293,21 @@ default), "square" or `:square`, or "round" or `:round`.
 """
 function setlinecap(str::String="butt")
     if str == "round"
-        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
+        Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
     elseif str == "square"
-        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_SQUARE)
+        Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_SQUARE)
     else
-        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_BUTT)
+        Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_BUTT)
     end
 end
 
 function setlinecap(sym::Symbol)
     if sym == :round
-        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
+        Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
     elseif sym == :square
-        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_SQUARE)
+        Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_SQUARE)
     else
-        Cairo.set_line_cap(get_current_cr(), Cairo.CAIRO_LINE_CAP_BUTT)
+        Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_BUTT)
     end
 end
 
@@ -320,11 +320,11 @@ Set the line join style, or how to render the junction of two lines when strokin
 """
 function setlinejoin(str="miter")
     if str == "round"
-        Cairo.set_line_join(get_current_cr(), Cairo.CAIRO_LINE_JOIN_ROUND)
+        Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_ROUND)
     elseif str == "bevel"
-        Cairo.set_line_join(get_current_cr(), Cairo.CAIRO_LINE_JOIN_BEVEL)
+        Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_BEVEL)
     else
-        Cairo.set_line_join(get_current_cr(), Cairo.CAIRO_LINE_JOIN_MITER)
+        Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_MITER)
     end
 end
 
@@ -338,7 +338,7 @@ Set the dash pattern to one of: "solid", "dotted", "dot", "dotdashed",
 Use `setdash(dashes::Vector)` to specify the pattern numerically.
 """
 function setdash(dashing::AbstractString)
-    Cairo.set_line_type(get_current_cr(), dashing)
+    Cairo.set_line_type(_get_current_cr(), dashing)
 end
 
 """
@@ -352,7 +352,7 @@ Or use `setdash("dot")` etc.
 """
 function setdash(dashes::Vector, offset=0.0)
     # no negative dashes
-    Cairo.set_dash(get_current_cr(), abs.(Float64.(dashes)), offset)
+    Cairo.set_dash(_get_current_cr(), abs.(Float64.(dashes)), offset)
 end
 
 
@@ -361,7 +361,7 @@ end
 
 Return the current stroke scaling setting.
 """
-setstrokescale() = get_current_strokescale()
+setstrokescale() = _get_current_strokescale()
 
 
 """
@@ -369,7 +369,7 @@ setstrokescale() = get_current_strokescale()
 
 Enable/disable stroke scaling for the current drawing.
 """
-setstrokescale(state::Bool) = set_current_strokescale(state)
+setstrokescale(state::Bool) = _set_current_strokescale(state)
 
 
 """
@@ -377,7 +377,7 @@ setstrokescale(state::Bool) = set_current_strokescale(state)
 
 Move to a point.
 """
-move(x, y)      = Cairo.move_to(get_current_cr(), x, y)
+move(x, y)      = Cairo.move_to(_get_current_cr(), x, y)
 move(pt)        = move(pt.x, pt.y)
 
 """
@@ -385,7 +385,7 @@ move(pt)        = move(pt.x, pt.y)
 
 Move relative to current position by the `pt`'s x and y:
 """
-rmove(x, y)     = Cairo.rel_move_to(get_current_cr(), x, y)
+rmove(x, y)     = Cairo.rel_move_to(_get_current_cr(), x, y)
 rmove(pt)       = rmove(pt.x, pt.y)
 
 """
@@ -393,7 +393,7 @@ rmove(pt)       = rmove(pt.x, pt.y)
 
 Draw a line from the current position to the `pt`.
 """
-line(x, y)      = Cairo.line_to(get_current_cr(), x, y)
+line(x, y)      = Cairo.line_to(_get_current_cr(), x, y)
 line(pt)        = line(pt.x, pt.y)
 
 """
@@ -416,7 +416,7 @@ line(pt1::Point, pt2::Point, action::Symbol) = line(pt1, pt2, action=action)
 
 Draw a line relative to the current position to the `pt`.
 """
-rline(x, y)     = Cairo.rel_line_to(get_current_cr(), x, y)
+rline(x, y)     = Cairo.rel_line_to(_get_current_cr(), x, y)
 rline(pt)       = rline(pt.x, pt.y)
 
 """
@@ -539,11 +539,11 @@ end
 Save the current color settings on the stack.
 """
 function gsave()
-    Cairo.save(get_current_cr())
-    r, g, b, a = (get_current_redvalue(),
-                  get_current_greenvalue(),
-                  get_current_bluevalue(),
-                  get_current_alpha()
+    Cairo.save(_get_current_cr())
+    r, g, b, a = (_get_current_redvalue(),
+                  _get_current_greenvalue(),
+                  _get_current_bluevalue(),
+                  _get_current_alpha()
                  )
     push!(_saved_colors(), (r, g, b, a))
     return (r, g, b, a)
@@ -555,13 +555,13 @@ end
 Replace the current graphics state with the one on top of the stack.
 """
 function grestore()
-    Cairo.restore(get_current_cr())
+    Cairo.restore(_get_current_cr())
     try
         (r, g, b, a) =  pop!(_saved_colors())
-        set_current_redvalue(r)
-        set_current_greenvalue(g)
-        set_current_bluevalue(b)
-        set_current_alpha(a)
+        _set_current_redvalue(r)
+        _set_current_greenvalue(g)
+        _set_current_bluevalue(b)
+        _set_current_alpha(a)
     catch err
          println("$err Not enough colors on the stack to restore.")
     end
@@ -590,21 +590,21 @@ scale(0.2, 0.3)
 ```
 
 """
-scale(sx::Real, sy::Real) = Cairo.scale(get_current_cr(), sx, sy)
+scale(sx::Real, sy::Real) = Cairo.scale(_get_current_cr(), sx, sy)
 
 """
     scale(f)
 
 Scale workspace by `f` in both `x` and `y`.
 """
-scale(f::Real) = Cairo.scale(get_current_cr(), f, f)
+scale(f::Real) = Cairo.scale(_get_current_cr(), f, f)
 
 """
     rotate(a::Float64)
 
 Rotate workspace by `a` radians clockwise (from positive x-axis to positive y-axis).
 """
-rotate(a) = Cairo.rotate(get_current_cr(), a)
+rotate(a) = Cairo.rotate(_get_current_cr(), a)
 
 """
     translate(point)
@@ -612,7 +612,7 @@ rotate(a) = Cairo.rotate(get_current_cr(), a)
 
 Translate the workspace to `x` and `y` or to `pt`.
 """
-translate(tx::Real, ty::Real)        = Cairo.translate(get_current_cr(), tx, ty)
+translate(tx::Real, ty::Real)        = Cairo.translate(_get_current_cr(), tx, ty)
 translate(pt::Point)     = translate(pt.x, pt.y)
 
 """
@@ -653,7 +653,7 @@ for e in o
   end
 ```
 """
-getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(get_current_cr()))
+getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(_get_current_cr()))
 
 """
     getpathflat()
@@ -662,7 +662,7 @@ Get the current path, like `getpath()` but flattened so that there are no Bèzie
 
 Returns a CairoPath which is an array of `element_type` and `points` objects.
 """
-getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(get_current_cr()))
+getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(_get_current_cr()))
 
 """
     rulers()

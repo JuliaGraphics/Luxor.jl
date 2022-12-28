@@ -5,7 +5,7 @@ function circle(x::Real, y::Real, r::Real;
     if action != :path
         newpath()
     end
-    Cairo.arc(get_current_cr(), x, y, r, 0, 2pi)
+    Cairo.arc(_get_current_cr(), x, y, r, 0, 2pi)
     do_action(action)
     return (Point(x, y) - (r, r), Point(x, y) + (r, r))
 end
@@ -174,7 +174,7 @@ squircle(center::Point, hradius::Real, vradius::Real, action::Symbol;
 
 function arc(xc, yc, radius, angle1, angle2;
         action=:none)
-    Cairo.arc(get_current_cr(), xc, yc, radius, angle1, angle2)
+    Cairo.arc(_get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
@@ -199,7 +199,7 @@ arc(centerpoint::Point, radius, angle1, angle2, action::Symbol) =
 
 function carc(xc, yc, radius, angle1, angle2;
         action=:none)
-    Cairo.arc_negative(get_current_cr(), xc, yc, radius, angle1, angle2)
+    Cairo.arc_negative(_get_current_cr(), xc, yc, radius, angle1, angle2)
     do_action(action)
 end
 
@@ -479,7 +479,7 @@ Add a Bézier curve to the current path..
 The spline starts at the current position, finishing at `x3/y3` (`p3`),
 following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`).
 """
-curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(get_current_cr(), x1, y1, x2, y2, x3, y3)
+curve(x1, y1, x2, y2, x3, y3) = Cairo.curve_to(_get_current_cr(), x1, y1, x2, y2, x3, y3)
 curve(pt1, pt2, pt3)          = curve(pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y)
 
 """

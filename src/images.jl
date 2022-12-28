@@ -23,7 +23,7 @@ function readpng(pathname)
 end
 
 function paint_with_alpha(ctx::Cairo.CairoContext, a = 0.5)
-    Cairo.paint_with_alpha(get_current_cr(), a)
+    Cairo.paint_with_alpha(_get_current_cr(), a)
 end
 
 """
@@ -40,9 +40,9 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered = false)
         w, h = img.width, img.height
         xpos, ypos = xpos - (w / 2), ypos - (h / 2)
     end
-    Cairo.set_source_surface(get_current_cr(), img, xpos, ypos)
+    Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
     # no alpha
-    Cairo.paint(get_current_cr())
+    Cairo.paint(_get_current_cr())
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point = O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
@@ -62,8 +62,8 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered = false
         w, h = img.width, img.height
         xpos, ypos = xpos - (w / 2), ypos - (h / 2)
     end
-    Cairo.set_source_surface(get_current_cr(), img, xpos, ypos)
-    paint_with_alpha(get_current_cr(), alpha)
+    Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
+    paint_with_alpha(_get_current_cr(), alpha)
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha; kwargs...) =
@@ -174,7 +174,7 @@ function placeimage(im::SVGimage, pos = O; centered = false)
     end
     @layer begin
         translate(pos)
-        Rsvg.handle_render_cairo(Luxor.get_current_cr(), im.im)
+        Rsvg.handle_render_cairo(Luxor._get_current_cr(), im.im)
     end
 end
 
@@ -212,8 +212,8 @@ function placeimage(buffer::AbstractMatrix{UInt32}, pt = O;
         w, h = size(buffer)
         pt = Point(pt.x - (w / 2), pt.y - (h / 2))
     end
-    Cairo.set_source_surface(Luxor.get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
-    paint_with_alpha(get_current_cr(), alpha)
+    Cairo.set_source_surface(Luxor._get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
+    paint_with_alpha(_get_current_cr(), alpha)
 end
 
 """
