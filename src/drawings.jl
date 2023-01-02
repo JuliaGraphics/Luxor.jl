@@ -706,35 +706,39 @@ function _adjust_background_rects(buffer)
     #       adding class as verification that tweak was applied.
     m=findall(r"<defs\s*?>"is,adjusted_buffer)
     # check if there is exactly 1 <defs> element
-    if length(m) == 1
+    if !isnothing(m) && length(m) == 1
         # get SVG part after </defs> to search for <use ...>
         #   could be done in a single RegEx but can produce ERROR: PCRE.exec error: match limit exceeded
         m=match(r"</defs\s*?>(.*)$"is,adjusted_buffer)
-        if length(m.captures) == 1
+        if !isnothing(m) && length(m.captures) == 1
             adjusted_buffer_part=m[1]
-            for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
-                if length(m.captures) == 8
-                    # id of group block
-                    id=m[2]
-                    # transform matrix applied to all elements in group block
-                    transform=vcat(reshape([ parse(Float64,m[i]) for i in 3:8 ],2,3),[0.0 0.0 1.0])
-                    # inverse transform matrix must be applied to background rect to neutralize transform matrix
-                    it=inv(transform)
-                    # get the group block with id into mid::String
-                    (head,mid,tail,split_ok)=_split_string_into_head_mid_tail(adjusted_buffer,id)
-                    if split_ok
-                        # add inverse transform matrix to every background rect
-                        #   background rects look like:
-                        #     <rect x="0" y="0" width="16777215" height="16777215" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
-                        # add class="luxor_adjusted" too, for future reference that element has been tweaked
-                        invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
-                        mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 class=\"luxor_adjusted\" \\2 $(invtransformstring)/>") )
-                        if adjust_vb
-                            # some SVG tools don't like this huge rects (e.g. inkscape)
-                            # => replace 0,0,16777215,16777215 with viewBox coordinates
-                            mid=replace(mid,r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
+            # check if there is any transform= part, if not we do not need the next heavy regex
+            m=match(r"transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
+            if !isnothing(m) && length(m.captures) > 0
+                for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
+                    if !isnothing(m) && length(m.captures) == 8
+                        # id of group block
+                        id=m[2]
+                        # transform matrix applied to all elements in group block
+                        transform=vcat(reshape([ parse(Float64,m[i]) for i in 3:8 ],2,3),[0.0 0.0 1.0])
+                        # inverse transform matrix must be applied to background rect to neutralize transform matrix
+                        it=inv(transform)
+                        # get the group block with id into mid::String
+                        (head,mid,tail,split_ok)=_split_string_into_head_mid_tail(adjusted_buffer,id)
+                        if split_ok
+                            # add inverse transform matrix to every background rect
+                            #   background rects look like:
+                            #     <rect x="0" y="0" width="16777215" height="16777215" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
+                            # add class="luxor_adjusted" too, for future reference that element has been tweaked
+                            invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
+                            mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 class=\"luxor_adjusted\" \\2 $(invtransformstring)/>") )
+                            if adjust_vb
+                                # some SVG tools don't like this huge rects (e.g. inkscape)
+                                # => replace 0,0,16777215,16777215 with viewBox coordinates
+                                mid=replace(mid,r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
+                            end
+                            adjusted_buffer=head*mid*tail
                         end
-                        adjusted_buffer=head*mid*tail
                     end
                 end
             end
