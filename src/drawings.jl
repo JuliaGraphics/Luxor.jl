@@ -664,7 +664,7 @@ end
 
 
 @doc raw"""
-    _adjust_background_rects(buffer::UInt8[])
+    _adjust_background_rects(buffer::UInt8[]; addmarker = true)
 
 See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.\
 
@@ -681,40 +681,45 @@ An existing transformation matrix manifests in the svg file as
 ```
 which is applied to every element including the background rects.\
 This transformation needs to be inversed for the background rects which is added in this function.
+
+If `addmarker` is not set to false, a class property is set as marker:
+```
+<rect class="luxor_adjusted" x="0" y="0" width="16777215" height="16777215" .../>
+```
 """
-function _adjust_background_rects(buffer)
+function _adjust_background_rects(buffer; addmarker = true)
     adjusted_buffer=String(buffer)
-    # get SVG viewbox coordinates to replace the generic 16777215 values
-    #   expected example:
-    #     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
-    m=match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is,adjusted_buffer)
-    adjust_vb=false
-    if !isnothing(m) && length(m.captures) == 4
-        (vbx,vby,vbw,vbh)=string.([ parse(Float64,m[i]) for i in 1:4 ])
-        adjust_vb=true
-    end
-    # do adjustment for all <use ...> elements (after <defs>) which have a transform attribute as matrix
-    #   expected example:
-    #     </defs>...<use xlink:href="#surface5" transform="matrix(1,0,0,1,150,150)"/>...</svg>
-    #       xlink:href is deprecated and can be replaced by just href
-    #       a group block with id "surface5" must exist: <g id="surface5" clip-path="url(#clip1)">
-    #       in this group block adjust all background rects with the inverse transform matrix like:
-    #       from:
-    #          <rect x="0" y="0" width="16777215" height="16777215" style="..."/>
-    #       to:
-    #          <rect class="luxor_adjusted" x="0" y="0" width="300" height="300" style="..." transform="matrix(1,0,0,1,-150,-150)"/>
-    #       adding class as verification that tweak was applied.
-    m=findall(r"<defs\s*?>"is,adjusted_buffer)
-    # check if there is exactly 1 <defs> element
-    if !isnothing(m) && length(m) == 1
-        # get SVG part after </defs> to search for <use ...>
-        #   could be done in a single RegEx but can produce ERROR: PCRE.exec error: match limit exceeded
-        m=match(r"</defs\s*?>(.*)$"is,adjusted_buffer)
-        if !isnothing(m) && length(m.captures) == 1
-            adjusted_buffer_part=m[1]
-            # check if there is any transform= part, if not we do not need the next heavy regex
-            m=match(r"transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
-            if !isnothing(m) && length(m.captures) > 0
+    # check if there is any transform= part, if not we do not need the next heavy regex
+    m=match(r"transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer)
+    if !isnothing(m) && length(m.captures) == 6
+        # get SVG viewbox coordinates to replace the generic 16777215 values
+        #   expected example:
+        #     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
+        m=match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is,adjusted_buffer)
+        adjust_vb=false
+        if !isnothing(m) && length(m.captures) == 4
+            (vbx,vby,vbw,vbh)=string.([ parse(Float64,m[i]) for i in 1:4 ])
+            adjust_vb=true
+        end
+        # do adjustment for all <use ...> elements (after <defs>) which have a transform attribute as matrix
+        #   expected example:
+        #     </defs>...<use xlink:href="#surface5" transform="matrix(1,0,0,1,150,150)"/>...</svg>
+        #       xlink:href is deprecated and can be replaced by just href
+        #       a group block with id "surface5" must exist: <g id="surface5" clip-path="url(#clip1)">
+        #       in this group block adjust all background rects with the inverse transform matrix like:
+        #       from:
+        #          <rect x="0" y="0" width="16777215" height="16777215" style="..."/>
+        #       to:
+        #          <rect class="luxor_adjusted" x="0" y="0" width="300" height="300" style="..." transform="matrix(1,0,0,1,-150,-150)"/>
+        #       adding class as verification that tweak was applied.
+        m=findall(r"<defs\s*?>"is,adjusted_buffer)
+        # check if there is exactly 1 <defs> element
+        if !isnothing(m) && length(m) == 1
+            # get SVG part after </defs> to search for <use ...>
+            #   could be done in a single RegEx but can produce ERROR: PCRE.exec error: match limit exceeded
+            m=match(r"</defs\s*?>(.*)$"is,adjusted_buffer)
+            if !isnothing(m) && length(m.captures) == 1
+                adjusted_buffer_part=m[1]
                 for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
                     if !isnothing(m) && length(m.captures) == 8
                         # id of group block
@@ -731,7 +736,11 @@ function _adjust_background_rects(buffer)
                             #     <rect x="0" y="0" width="16777215" height="16777215" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
                             # add class="luxor_adjusted" too, for future reference that element has been tweaked
                             invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
-                            mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 class=\"luxor_adjusted\" \\2 $(invtransformstring)/>") )
+                            marker=""
+                            if addmarker
+                                marker="class=\"luxor_adjusted\""
+                            end
+                            mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 $(marker)\\2 $(invtransformstring)/>") )
                             if adjust_vb
                                 # some SVG tools don't like this huge rects (e.g. inkscape)
                                 # => replace 0,0,16777215,16777215 with viewBox coordinates
@@ -813,13 +822,19 @@ function _split_string_into_head_mid_tail(s,id)
     return (head,mid,tail,split_ok)
 end
 
-"""
+@doc raw"""
     finish()
 
 Finish the drawing, and close the file. You may be able to open it in an
 external viewer application with `preview()`.
+
+    finish(;svgpostprocess = false, addmarker = true)
+
+For more information about `svgpostprocess` and `addmarker` see help for `Luxor._adjust_background_rects`
+
+    ?Luxor._adjust_background_rects
 """
-function finish()
+function finish(;svgpostprocess = false, addmarker = true)
     if _current_surface_ptr() == C_NULL
         # Already finished
         return false
@@ -841,7 +856,7 @@ function finish()
     Cairo.destroy(_current_surface())
 
     if _current_filename() != ""
-        if _current_surface_type() != :svg
+        if _current_surface_type() != :svg || ! svgpostprocess
             write(_current_filename(), _current_bufferdata())
         else
             # next function call adresses the issue in
@@ -855,7 +870,7 @@ function finish()
             #          which is applied to every element including the background rects.
             #          This transformation needs to be inversed for the background rects
             #          which is added in this function.
-            buffer=_adjust_background_rects(copy(_current_bufferdata()))
+            buffer=_adjust_background_rects(copy(_current_bufferdata()); addmarker = addmarker)
             # hopefully safe as we are at the end of finish:
             _current_drawing()[_current_drawing_index()].bufferdata=buffer
             write(_current_filename(), buffer)
@@ -865,11 +880,12 @@ function finish()
     return true
 end
 
-"""
+@doc raw"""
     snapshot(;
         fname = :png,
         cb = missing,
-        scalefactor = 1.0)
+        scalefactor = 1.0,
+        addmarker = true)
 
     snapshot(fname, cb, scalefactor)
     -> finished snapshot drawing, for display
@@ -885,6 +901,10 @@ on the same recording surface.
 `cb` crop box::BoundingBox - what's inside is copied to snapshot
 
 `scalefactor` snapshot width/crop box width. Same for height.
+
+`addmarker` for more information about `addmarker` see help for `Luxor._adjust_background_rects`
+
+    ?Luxor._adjust_background_rects
 
 ### Examples
 
@@ -902,7 +922,8 @@ The last example would return and also write a png drawing with 1024 x 960 pixel
 function snapshot(;
         fname = :png,
         cb = missing,
-        scalefactor = 1.0)
+        scalefactor = 1.0,
+        addmarker = true)
     rd = currentdrawing()
     isbits(rd) && return false  # currentdrawing provided 'info'
     if ismissing(cb)
@@ -915,15 +936,16 @@ function snapshot(;
         # regardless of recording surface current scaling and rotation.
         gsave()
         origin()
-        sn = snapshot(fname, BoundingBox(), scalefactor)
+        sn = snapshot(fname, BoundingBox(), scalefactor; addmarker = addmarker)
         grestore()
     else
         @assert cb isa BoundingBox
-        sn = snapshot(fname, cb, scalefactor)
+        sn = snapshot(fname, cb, scalefactor; addmarker = addmarker)
     end
     sn
 end
-function snapshot(fname, cb, scalefactor)
+
+function snapshot(fname, cb, scalefactor; addmarker = true)
     # Prefix r: recording
     # Prefix n: new snapshot
     # Device coordinates, device space: (x_d, y_d), origin at top left for Luxor implemented types
@@ -980,7 +1002,7 @@ function snapshot(fname, cb, scalefactor)
     paint()
 
     # Even in-memory drawings are finished, since such drawings are displayed.
-    finish()
+    finish(;svgpostprocess = true, addmarker = addmarker)
 
     # Switch back to continue recording
     _current_drawing()[_current_drawing_index()] = rd
