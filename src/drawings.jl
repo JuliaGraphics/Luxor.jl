@@ -738,7 +738,7 @@ function _adjust_background_rects(buffer; addmarker = true)
                             invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
                             marker=""
                             if addmarker
-                                marker="class=\"luxor_adjusted\""
+                                marker="class=\"luxor_adjusted\" "
                             end
                             mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 $(marker)\\2 $(invtransformstring)/>") )
                             if adjust_vb
