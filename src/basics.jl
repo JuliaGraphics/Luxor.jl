@@ -286,6 +286,16 @@ Set the line width, in points.
 setline(n) = Cairo.set_line_width(_get_current_cr(), n)
 
 """
+    getline()
+
+Get the current line width, in points.
+"""
+function getline()
+    ccall((:cairo_get_line_width, Cairo.libcairo),
+        Float64, (Ptr{Nothing},), Luxor._get_current_cr().ptr)
+end
+
+"""
     setlinecap(s)
 
 Set the line ends. `s` can be "butt" or `:butt` (the

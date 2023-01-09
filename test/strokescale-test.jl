@@ -1,7 +1,8 @@
 using Luxor, Test, Colors
 
 function strokescale()
-    Drawing(10, 10, :png, strokescale=true)
+    Drawing(10, 10, :png, strokescale = true)
+    @test getline() == 2 # default linewidth is 2.0    
 
     # was the scale set correctly when the Drawing was created?
     @test setstrokescale() == true
@@ -14,6 +15,8 @@ function strokescale()
 
     # set our stroke width to the width of the canvas
     setline(1)
+
+    @test getline() == 1
 
     # a line the width of the canvas drawn at 0 should cover 50% of the canvas
     line(Point(0, 0), Point(0, 1), :stroke)
@@ -28,6 +31,7 @@ function strokescale()
 
     # set our stroke width to size 1, independent of scaling
     setline(1)
+    @test getline() == 1
 
     # An unscaled line of size 1 will not cover 50% of the canvas
     line(Point(0, 0), Point(0, 1), :stroke)

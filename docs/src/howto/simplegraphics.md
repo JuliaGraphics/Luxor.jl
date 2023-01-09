@@ -14,6 +14,10 @@ items:
 
 - You can combine these two approaches: create a path from lines and curves (and jumps), then store the path, ready for drawing later on.
 
+## Line width
+
+The default line width in Luxor is 2 points. (Typically 1 point is 0.352777mm, 1/72.0inch.) Set the line width with [`setline`](@ref). Find the current line width with [`getline`](@ref). By default, line widths don't vary depending on the current drawing scale, but you can ask for them to be scaled - see [Scaling-of-line-thickness](@ref).
+
 ## Rectangles and boxes
 
 Simple rectangle and box shapes can be made in different ways.

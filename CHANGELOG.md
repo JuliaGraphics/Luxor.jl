@@ -1,5 +1,24 @@
 # Changelog
 
+## [v3.7.0] - forthcoming
+
+LaTeX support is still under development. 
+See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
+
+### Added
+
+- code to handle svg backgrounds (thanks oheil and hustf!) https://github.com/JuliaGraphics/Luxor.jl/issues/150
+
+- `getline()` gets current line width
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v3.6.0] - 2022-12-11
 
 LaTeX support is still under development. 
