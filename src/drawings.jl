@@ -203,12 +203,19 @@ _set_current_redvalue(r)   = setfield!(_get_current_drawing_save(), :redvalue, c
 _set_current_greenvalue(g) = setfield!(_get_current_drawing_save(), :greenvalue, convert(Float64, g))
 _set_current_bluevalue(b)  = setfield!(_get_current_drawing_save(), :bluevalue, convert(Float64, b))
 _set_current_alpha(a)      = setfield!(_get_current_drawing_save(), :alpha, convert(Float64, a))
-function _set_current_color(r,g,b,a=1.0)
+function _set_current_color(r,g,b,a)
+    _set_current_color(r,g,b)
     d = _get_current_drawing_save()
     setfield!(d, :redvalue, convert(Float64, r))
     setfield!(d, :greenvalue, convert(Float64, g))
     setfield!(d, :bluevalue, convert(Float64, b))
     setfield!(d, :alpha, convert(Float64, a))
+end
+function _set_current_color(r,g,b)
+    d = _get_current_drawing_save()
+    setfield!(d, :redvalue, convert(Float64, r))
+    setfield!(d, :greenvalue, convert(Float64, g))
+    setfield!(d, :bluevalue, convert(Float64, b))
 end
 
 _current_filename()        = getfield(_get_current_drawing_save(), :filename)
