@@ -9,6 +9,53 @@ using Test
 using Random
 Random.seed!(42)
 
+function pointmatrix(fname)
+    # transform points using 3 by 3 matrix
+
+    identitym = [1 0 0; 0 1 0; 0 0 1]
+    tm = [1 0 50; 0 1 250; 0 0 1] # translate 50 in x, 250 in y
+    sm = [2 0 0; 0 0.5 0; 0 0 1] # scale 2 in x 0.5 in y
+    θ = π / 4
+    rm = [cos(θ) sin(θ) 0; -sin(θ) cos(θ) 0; 0 0 1] # rotate clockwise by θ
+    shx = [1 3 0; 0 1 0; 0 0 1] # shear by 3 in x
+    shy = [1 0 0; 2 1 0; 0 0 1] # shear by 2 in y
+    ro = [-1 0 0; 0 -1 0; 0 0 1] # reflect about origin
+    rx = [1 0 0; 0 -1 0; 0 0 1] # reflect in x
+    ry = [-1 0 0; 0 1 0; 0 0 1] # reflect in y
+
+    Drawing(1000, 1000, fname)
+    origin()
+    fontsize(200)
+    setopacity(0.6)
+    tiles = Tiler(1000, 1000, 3, 3)
+
+    mnames = ["identitym", "tm", "sm", "rm", "shx", "shy", "ro", "rx", "ry"]
+
+    textoutlines("t")
+    pts = pathtopoly()[1]
+    for (n, mat) in enumerate([identitym, tm, sm, rm, shx, shy, ro, rx, ry])
+        @layer begin
+            translate(first(tiles[n]))
+            pts1 = map(pt -> mat * pt, pts)
+            sethue(Luxor.HSB(35n, 0.8, 0.8))
+            poly(pts1, :fill, close = true)
+            sethue("white")
+            fontsize(20)
+            text(mnames[n], halign = :center)
+        end
+    end
+
+    sethue("white")
+    # compose matrix multiplications ? 
+    poly(map(pt -> sm * tm * ro * shy * pt, pts), :fill)
+    poly(map(pt -> sm * inv(tm) * ro * inv(shy) * pt, pts), :fill)
+
+    @test finish() == true
+    println("...finished test: output in $(fname)")
+end
+
+
+
 function matrix_tests(fname)
     # matrix tests
 
@@ -23,35 +70,35 @@ function matrix_tests(fname)
 
     # get rotation
     @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), 0.0)
-    rotate(pi/2)
-    @test isapprox(getrotation(), pi/2)
-    @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), pi/2)
+    rotate(pi / 2)
+    @test isapprox(getrotation(), pi / 2)
+    @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), pi / 2)
     origin()
     @test isapprox(getrotation(cairotojuliamatrix(getmatrix())), 0.0)
 
     # get translation
-    tx, ty =  gettranslation(cairotojuliamatrix(getmatrix()))
+    tx, ty = gettranslation(cairotojuliamatrix(getmatrix()))
     @test tx == 500.0
     @test ty == 500.0
     translate(5, 10)
-    tx, ty =  gettranslation()
+    tx, ty = gettranslation()
     @test tx == 505.0
     @test ty == 510.0
     origin()
-    tx, ty =  gettranslation(cairotojuliamatrix(getmatrix()))
+    tx, ty = gettranslation(cairotojuliamatrix(getmatrix()))
     @test tx == 500.0
     @test ty == 500.0
 
     # get scale
-    sx, sy =  getscale(cairotojuliamatrix(getmatrix()))
+    sx, sy = getscale(cairotojuliamatrix(getmatrix()))
     @test sx == 1.0
     @test sy == 1.0
     scale(5, 10)
-    sx, sy =  getscale()
+    sx, sy = getscale()
     @test sx == 5.0
     @test sy == 10.0
     origin()
-    sx, sy =  getscale(cairotojuliamatrix(getmatrix()))
+    sx, sy = getscale(cairotojuliamatrix(getmatrix()))
     @test sx == 1.0
     @test sy == 1.0
 
@@ -97,7 +144,7 @@ function matrix_tests(fname)
     sethue("brown")
     for i in 1:4
         # rotate by pi/2 radians
-        rotate(pi/2)
+        rotate(pi / 2)
         text("hello world")
     end
 
@@ -107,7 +154,7 @@ function matrix_tests(fname)
     fontsize(20)
     sethue("cyan")
     n = 10
-    angle = 2pi/n
+    angle = 2pi / n
     for i in 1:n
         # rotate another 'angle' radians
         transform([cos(angle), sin(angle), -sin(angle), cos(angle), 0, 0])
@@ -144,7 +191,7 @@ function matrix_tests(fname)
     fx = 1
     fy = -1
     cx = cy = 50
-    transform([fx, 0, 0, fy, cx * (1-fx), cy * (fy-1)])
+    transform([fx, 0, 0, fy, cx * (1 - fx), cy * (fy - 1)])
     text("hello world")
 
     setmatrix(original_matrix)
@@ -155,3 +202,5 @@ function matrix_tests(fname)
 end
 
 matrix_tests("matrix-tests.pdf")
+
+pointmatrix("matrix-point-tests.png")

@@ -55,6 +55,24 @@ Base.eltype(::Point) = Float64
 Base.iterate(p::Point, state = 1) = state > length(p) ? nothing : (p[state], state + 1)
 Base.length(::Point) = 2
 
+# matrix
+
+"""
+*(m::Matrix, pt::Point)
+
+"""
+function Base.:*(m::AbstractMatrix, pt::Point)
+    if size(m) != (3, 3)
+        throw(error("matrix should be (3, 3), not $(size(m))"))
+    end
+    x, y, _ = m * [pt.x, pt.y, 1]
+    return Point(x, y)
+end
+
+function Base.:*(pt::Point, m::AbstractMatrix)
+    return m * pt
+end
+
 """
     dotproduct(a::Point, b::Point)
 
