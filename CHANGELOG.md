@@ -7,9 +7,14 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
-- code to handle svg backgrounds (thanks oheil and hustf!) https://github.com/JuliaGraphics/Luxor.jl/issues/150
+- code to handle svg backgrounds (thanks @oheil and @hustf!) 
+  https://github.com/JuliaGraphics/Luxor.jl/issues/150
 
 - `getline()` gets current line width
+
+- `getcolor()` gets current color
+
+-  multiply Point by 3×3 matrix using `*` 
 
 ### Changed
 
