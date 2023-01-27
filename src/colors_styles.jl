@@ -57,9 +57,9 @@ Examples:
 See also [`sethue`](@ref).
 """
 function setcolor(col::Colors.Colorant)
-  temp = convert(RGBA, col)
-  setcolor(temp.r, temp.g, temp.b, temp.alpha)
-  return (temp.r, temp.g, temp.b, temp.alpha)
+    temp = convert(RGBA, col)
+    setcolor(temp.r, temp.g, temp.b, temp.alpha)
+    return (temp.r, temp.g, temp.b, temp.alpha)
 end
 
 function setcolor(r, g, b, a = 1.0)
@@ -99,7 +99,7 @@ alpha opacity.
 See also [`setcolor`](@ref).
 """
 function sethue(col::AbstractString)
-    temp = parse(RGBA,  col)
+    temp = parse(RGBA, col)
     _set_current_color(temp.r, temp.g, temp.b)
     # use current alpha, not incoming one
     (cr, _, _, _, a) = _get_current_cr_color()
@@ -113,7 +113,7 @@ end
 Set the color without changing the current alpha/opacity:
 """
 function sethue(col::Colors.Colorant)
-    temp = convert(RGBA,  col)
+    temp = convert(RGBA, col)
     _set_current_color(temp.r, temp.g, temp.b)
     # use current alpha
     (cr, _, _, _, a) = _get_current_cr_color()
@@ -139,28 +139,28 @@ end
 
 Set the color to the tuple's values.
 """
-sethue(col::NTuple{3, Number}) = sethue(col...)
+sethue(col::NTuple{3,Number}) = sethue(col...)
 
 """
     sethue((r, g, b, a))
 
 Set the color to the tuple's values.
 """
-sethue(col::NTuple{4, Number}) = sethue(col...)
+sethue(col::NTuple{4,Number}) = sethue(col...)
 
 """
     setcolor((r, g, b))
 
 Set the color to the tuple's values.
 """
-setcolor(col::NTuple{3, Number}) = setcolor(col...)
+setcolor(col::NTuple{3,Number}) = setcolor(col...)
 
 """
     setcolor((r, g, b, a))
 
 Set the color to the tuple's values.
 """
-setcolor(col::NTuple{4, Number}) = setcolor(col...)
+setcolor(col::NTuple{4,Number}) = setcolor(col...)
 
 """
     setopacity(alpha)
@@ -191,9 +191,9 @@ setgrey(n) = setgray(n)
 Set a random hue, without changing the current alpha opacity.
 """
 function randomhue()
-  rrand, grand, brand = rand(3)
-  sethue(rrand, grand, brand)
-  return (rrand, grand, brand)
+    rrand, grand, brand = rand(3)
+    sethue(rrand, grand, brand)
+    return (rrand, grand, brand)
 end
 
 """
@@ -202,9 +202,9 @@ end
 Set a random color. This may change the current alpha opacity too.
 """
 function randomcolor()
-  rrand, grand, brand, arand = rand(4)
-  setcolor(rrand, grand, brand, arand)
-  return (rrand, grand, brand, arand)
+    rrand, grand, brand, arand = rand(4)
+    setcolor(rrand, grand, brand, arand)
+    return (rrand, grand, brand, arand)
 end
 
 # compositing operators
@@ -223,25 +223,25 @@ Cairo.OPERATOR_COLOR_DODGE, Cairo.OPERATOR_COLOR_BURN, Cairo.OPERATOR_HARD_LIGHT
 
 Set the compositing/blending mode. `mode` can be one of:
 
-- `"clear"` Where the second object is drawn, the first is completely removed.
-- `"source"` The second object is drawn as if nothing else were below.
-- `"over"` The default mode: like two transparent slides overlapping.
-- `"in"` The first object is removed completely, the second is only drawn where the first was.
-- `"out"` The second object is drawn only where the first one wasn't.
-- `"atop"` The first object is mostly intact, but mixes both objects in the overlapping area. The second object is not drawn elsewhere.
-- `"dest"` Discard the second object completely.
-- `"dest_over"` Like "over" but draw second object below the first
-- `"dest_in"` Keep the first object whereever the second one overlaps.
-- `"dest_out"` The second object is used to reduce the visibility of the first where they overlap.
-- `"dest_atop"` Like "over" but draw second object below the first.
-- `"xor"` XOR where the objects overlap
-- `"add"` Add the overlapping areas together
-- `"saturate"` Increase Saturation where objects overlap
-- `"multiply"` Multiply where objects overlap
-- `"screen"` Input colors are complemented and multiplied, the product is complemented again. The result is at least as light as the lighter of the input colors.
-- `"overlay"` Multiplies or screens colors, depending on the lightness of the destination color.
-- `"darken"` Selects the darker of the color values in each component.
-- `"lighten"` Selects the lighter of the color values in each component.
+  - `"clear"` Where the second object is drawn, the first is completely removed.
+  - `"source"` The second object is drawn as if nothing else were below.
+  - `"over"` The default mode: like two transparent slides overlapping.
+  - `"in"` The first object is removed completely, the second is only drawn where the first was.
+  - `"out"` The second object is drawn only where the first one wasn't.
+  - `"atop"` The first object is mostly intact, but mixes both objects in the overlapping area. The second object is not drawn elsewhere.
+  - `"dest"` Discard the second object completely.
+  - `"dest_over"` Like "over" but draw second object below the first
+  - `"dest_in"` Keep the first object whereever the second one overlaps.
+  - `"dest_out"` The second object is used to reduce the visibility of the first where they overlap.
+  - `"dest_atop"` Like "over" but draw second object below the first.
+  - `"xor"` XOR where the objects overlap
+  - `"add"` Add the overlapping areas together
+  - `"saturate"` Increase Saturation where objects overlap
+  - `"multiply"` Multiply where objects overlap
+  - `"screen"` Input colors are complemented and multiplied, the product is complemented again. The result is at least as light as the lighter of the input colors.
+  - `"overlay"` Multiplies or screens colors, depending on the lightness of the destination color.
+  - `"darken"` Selects the darker of the color values in each component.
+  - `"lighten"` Selects the lighter of the color values in each component.
 
 See the [Cairo documentation](https://www.cairographics.org/operators/) for details.
 """
@@ -272,9 +272,9 @@ defined by `focus` and `radius`. The value will approach `max` (1.0) at the
 center of the circular area, and `min` (0.0) at the circumference.
 """
 function mask(point::Point, focus::Point, radius;
-        max = 1.0,
-        min = 0.0,
-        easingfunction = easingflat)
+    max = 1.0,
+    min = 0.0,
+    easingfunction = easingflat)
     angle = slope(focus, point)
     d = distance(focus, point)
     dref = distance(focus, focus + polar(radius, angle))
@@ -301,8 +301,7 @@ function mask(point::Point, focus::Point, width, height;
     max = 1.0,
     min = 0.0,
     easingfunction = easingflat)
-
-    bb = BoundingBox(box(focus, width, height, vertices=true))
+    bb = BoundingBox(box(focus, width, height, vertices = true))
     ptcross = pointcrossesboundingbox(point, bb)
     d = distance(focus, point)
     dref = distance(focus, ptcross)
@@ -328,9 +327,18 @@ end
 """
 get_current_color()
 
-As set by eg `setcolor()`. Return an RGBA colorant.
+Return an RGBA colorant, the current color, as set by `setcolor` etc...
 """
 function get_current_color()
     (r, g, b, a) = _get_current_color()
     return RGBA(r, g, b, a)
+end
+
+"""
+getcolor()
+
+Return an RGBA colorant, the current color, as set by `setcolor` etc...
+"""
+function getcolor()
+    Luxor.get_current_color()
 end
