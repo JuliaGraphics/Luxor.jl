@@ -10,18 +10,18 @@ mutable struct Drawing
     bluevalue::Float64
     alpha::Float64
     buffer::IOBuffer # Keeping both buffer and data because I think the buffer might get GC'ed otherwise
-    bufferdata::Array{UInt8, 1} # Direct access to data
+    bufferdata::Array{UInt8,1} # Direct access to data
     strokescale::Bool
 
-    function Drawing(img::Matrix{T}, f::AbstractString=""; strokescale=false) where {T<:Union{RGB24,ARGB32}}
-        w,h = size(img)
+    function Drawing(img::Matrix{T}, f::AbstractString = ""; strokescale = false) where {T<:Union{RGB24,ARGB32}}
+        w, h = size(img)
         bufdata = UInt8[]
-        iobuf = IOBuffer(bufdata, read=true, write=true)
+        iobuf = IOBuffer(bufdata, read = true, write = true)
         the_surfacetype = :image
         the_surface = Cairo.CairoImageSurface(img)
-        the_cr  = Cairo.CairoContext(the_surface)
+        the_cr = Cairo.CairoContext(the_surface)
         currentdrawing = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
-        if ! isassigned(_current_drawing(), _current_drawing_index())
+        if !isassigned(_current_drawing(), _current_drawing_index())
             push!(_current_drawing(), currentdrawing)
             _current_drawing_index(lastindex(_current_drawing()))
         else
@@ -30,25 +30,25 @@ mutable struct Drawing
         return currentdrawing
     end
 
-    function Drawing(w, h, stype::Symbol, f::AbstractString=""; strokescale=false)
+    function Drawing(w, h, stype::Symbol, f::AbstractString = ""; strokescale = false)
         bufdata = UInt8[]
-        iobuf = IOBuffer(bufdata, read=true, write=true)
+        iobuf = IOBuffer(bufdata, read = true, write = true)
         the_surfacetype = stype
         if stype == :pdf
-            the_surface     = Cairo.CairoPDFSurface(iobuf, w, h)
+            the_surface = Cairo.CairoPDFSurface(iobuf, w, h)
         elseif stype == :png # default to PNG
-            the_surface     = Cairo.CairoARGBSurface(w, h)
+            the_surface = Cairo.CairoARGBSurface(w, h)
         elseif stype == :eps
-            the_surface     = Cairo.CairoEPSSurface(iobuf, w, h)
+            the_surface = Cairo.CairoEPSSurface(iobuf, w, h)
         elseif stype == :svg
-            the_surface     = Cairo.CairoSVGSurface(iobuf, w, h)
+            the_surface = Cairo.CairoSVGSurface(iobuf, w, h)
         elseif stype == :rec
             if isnan(w) || isnan(h)
-                the_surface     = Cairo.CairoRecordingSurface()
+                the_surface = Cairo.CairoRecordingSurface()
             else
                 extents = Cairo.CairoRectangle(0.0, 0.0, w, h)
                 bckg = Cairo.CONTENT_COLOR_ALPHA
-                the_surface     = Cairo.CairoRecordingSurface(bckg, extents)
+                the_surface = Cairo.CairoRecordingSurface(bckg, extents)
                 # Both the CairoSurface and the Drawing stores w and h in mutable structures.
                 # Cairo.RecordingSurface does not set the w and h properties,
                 # probably because that could be misinterpreted (width and height
@@ -60,14 +60,14 @@ mutable struct Drawing
                 the_surface.height = h
             end
         elseif stype == :image
-            the_surface     = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
+            the_surface = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
-            error("Unknown Luxor surface type" \"$stype\"")
+            error("Unknown Luxor surface type" \ "$stype\"")
         end
-        the_cr  = Cairo.CairoContext(the_surface)
+        the_cr = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
-        currentdrawing      = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
-        if ! isassigned(_current_drawing(), _current_drawing_index() )
+        currentdrawing = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
+        if !isassigned(_current_drawing(), _current_drawing_index())
             push!(_current_drawing(), currentdrawing)
             _current_drawing_index(lastindex(_current_drawing()))
         else
@@ -82,17 +82,18 @@ end
 #   - predefine all needed Dict entries in a thread safe way
 #   - each thread has it's own stack, separated by threadid
 # this is not enough for Threads.@spawn (TODO, but no solution yet)
-let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 => nothing)),
+let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing,1},Nothing}}}(Dict(0 => nothing)),
     _CURRENTDRAWINGINDICES = Ref{Dict{Int,Int}}(Dict(0 => 0))
+
     global _current_drawing
     function _current_drawing()
         id = Threads.threadid()
-        if ! haskey(_CURRENTDRAWINGS[],id)
+        if !haskey(_CURRENTDRAWINGS[], id)
             # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                _CURRENTDRAWINGS[][preID] = Array{Drawing, 1}()
+                _CURRENTDRAWINGS[][preID] = Array{Drawing,1}()
             end
             unlock(lc)
         end
@@ -106,7 +107,7 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 =>
     global _current_drawing_index
     function _current_drawing_index()
         id = Threads.threadid()
-        if ! haskey(_CURRENTDRAWINGINDICES[],id)
+        if !haskey(_CURRENTDRAWINGINDICES[], id)
             # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
@@ -124,7 +125,7 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing, 1},Nothing}}}(Dict(0 =>
     end
     function _current_drawing_index(i::Int)
         id = Threads.threadid()
-        if ! haskey(_CURRENTDRAWINGINDICES[],id)
+        if !haskey(_CURRENTDRAWINGINDICES[], id)
             # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
@@ -159,14 +160,14 @@ function _get_current_drawing_save()
     #   not checked but perhaps needed:
     #     buffer::IOBuffer
     #     bufferdata::Array{UInt8, 1}
-    if  _current_drawing_index() <= 0 || 
-        (
-            _current_drawing_index() > 0 &&
-            getfield(getfield(_current_drawing()[_current_drawing_index()], :cr), :ptr) == C_NULL &&
-            getfield(getfield(_current_drawing()[_current_drawing_index()], :surface), :ptr) == C_NULL &&
-            1 == 1
-        )
-            error("Drawing not initialized. Did you call Drawing(...)?")
+    if _current_drawing_index() <= 0 ||
+       (
+        _current_drawing_index() > 0 &&
+        getfield(getfield(_current_drawing()[_current_drawing_index()], :cr), :ptr) == C_NULL &&
+        getfield(getfield(_current_drawing()[_current_drawing_index()], :surface), :ptr) == C_NULL &&
+        1 == 1
+    )
+        error("There isn't a current drawing. Create one with `Drawing()` or one of the `@draw`/`@png` etc macros.")
     end
     return _current_drawing()[_current_drawing_index()]
 end
@@ -175,17 +176,17 @@ function _get_current_cr()
     getfield(_get_current_drawing_save(), :cr)
 end
 
-_get_current_redvalue()    = getfield(_get_current_drawing_save(), :redvalue)
-_get_current_greenvalue()  = getfield(_get_current_drawing_save(), :greenvalue)
-_get_current_bluevalue()   = getfield(_get_current_drawing_save(), :bluevalue)
-_get_current_alpha()       = getfield(_get_current_drawing_save(), :alpha)
+_get_current_redvalue()   = getfield(_get_current_drawing_save(), :redvalue)
+_get_current_greenvalue() = getfield(_get_current_drawing_save(), :greenvalue)
+_get_current_bluevalue()  = getfield(_get_current_drawing_save(), :bluevalue)
+_get_current_alpha()      = getfield(_get_current_drawing_save(), :alpha)
 function _get_current_color()
     d = _get_current_drawing_save()
     return (
         getfield(d, :redvalue),
         getfield(d, :greenvalue),
         getfield(d, :bluevalue),
-        getfield(d, :alpha)
+        getfield(d, :alpha),
     )
 end
 function _get_current_cr_color()
@@ -195,7 +196,7 @@ function _get_current_cr_color()
         getfield(d, :redvalue),
         getfield(d, :greenvalue),
         getfield(d, :bluevalue),
-        getfield(d, :alpha)
+        getfield(d, :alpha),
     )
 end
 
@@ -203,41 +204,41 @@ _set_current_redvalue(r)   = setfield!(_get_current_drawing_save(), :redvalue, c
 _set_current_greenvalue(g) = setfield!(_get_current_drawing_save(), :greenvalue, convert(Float64, g))
 _set_current_bluevalue(b)  = setfield!(_get_current_drawing_save(), :bluevalue, convert(Float64, b))
 _set_current_alpha(a)      = setfield!(_get_current_drawing_save(), :alpha, convert(Float64, a))
-function _set_current_color(r,g,b,a)
-    _set_current_color(r,g,b)
+function _set_current_color(r, g, b, a)
+    _set_current_color(r, g, b)
     d = _get_current_drawing_save()
     setfield!(d, :redvalue, convert(Float64, r))
     setfield!(d, :greenvalue, convert(Float64, g))
     setfield!(d, :bluevalue, convert(Float64, b))
     setfield!(d, :alpha, convert(Float64, a))
 end
-function _set_current_color(r,g,b)
+function _set_current_color(r, g, b)
     d = _get_current_drawing_save()
     setfield!(d, :redvalue, convert(Float64, r))
     setfield!(d, :greenvalue, convert(Float64, g))
     setfield!(d, :bluevalue, convert(Float64, b))
 end
 
-_current_filename()        = getfield(_get_current_drawing_save(), :filename)
-_current_width()           = getfield(_get_current_drawing_save(), :width)
-_current_height()          = getfield(_get_current_drawing_save(), :height)
-_current_surface()         = getfield(_get_current_drawing_save(), :surface)
-_current_surface_ptr()     = getfield(getfield(_get_current_drawing_save(), :surface), :ptr)
-_current_surface_type()    = getfield(_get_current_drawing_save(), :surfacetype)
+_current_filename()     = getfield(_get_current_drawing_save(), :filename)
+_current_width()        = getfield(_get_current_drawing_save(), :width)
+_current_height()       = getfield(_get_current_drawing_save(), :height)
+_current_surface()      = getfield(_get_current_drawing_save(), :surface)
+_current_surface_ptr()  = getfield(getfield(_get_current_drawing_save(), :surface), :ptr)
+_current_surface_type() = getfield(_get_current_drawing_save(), :surfacetype)
 
-_current_buffer()          = getfield(_get_current_drawing_save(), :buffer)
-_current_bufferdata()      = getfield(_get_current_drawing_save(), :bufferdata)
+_current_buffer()     = getfield(_get_current_drawing_save(), :buffer)
+_current_bufferdata() = getfield(_get_current_drawing_save(), :bufferdata)
 
 _get_current_strokescale() = getfield(_get_current_drawing_save(), :strokescale)
-_set_current_strokescale(s)= setfield!(_get_current_drawing_save(), :strokescale, s)
+_set_current_strokescale(s) = setfield!(_get_current_drawing_save(), :strokescale, s)
 
 """
     Luxor._drawing_indices()
 
 Get a UnitRange over all available indices of drawings.
 
-With Luxor you can work on multiple drawings simultaneously. Each drawing is stored 
-in an internal array. The first drawing is stored at index 1 when you start a 
+With Luxor you can work on multiple drawings simultaneously. Each drawing is stored
+in an internal array. The first drawing is stored at index 1 when you start a
 drawing with `Drawing(...)`. To start a second drawing you call `Luxor._set_next_drawing_index()`,
 which returns the new index. Calling another `Drawing(...)` stores the second drawing
 at this new index. `Luxor._set_next_drawing_index()` will return and set the next available index
@@ -251,15 +252,15 @@ Multiple drawings is especially helpful for interactive graphics with live windo
 like MiniFB.
 
 Example:
-    
+
     using Luxor
     Drawing(500, 500, "1.svg")
     origin()
     setcolor("red")
     circle(Point(0, 0), 100, action = :fill)
-    
+
     Luxor._drawing_indices()               # returns 1:1
-    
+
     Luxor._get_next_drawing_index()        # returns 2 but doesn't change current drawing
     Luxor._set_next_drawing_index()        # returns 2 and sets current drawing to it
     Drawing(500, 500, "2.svg")
@@ -292,11 +293,10 @@ Example:
     Luxor._set_drawing_index(1)            # returns 1
 
     preview()                             # presents the blue circle 3.svg again
-    
+
     Luxor._set_drawing_index(10)           # returns 1 as 10 does not existing    
     Luxor._get_drawing_index()             # returns 1
     Luxor._get_next_drawing_index()        # returns 1, because 1 was finished
-
 """
 _drawing_indices() = length(_current_drawing()) == 0 ? (1:1) : (1:length(_current_drawing()))
 
@@ -310,13 +310,13 @@ _get_drawing_index() = _current_drawing_index() == 0 ? 1 : _current_drawing_inde
 """
     Luxor._set_drawing_index(i::Int)
 
-Set the active drawing for successive graphic commands to index i if exist. if index i doesn't exist, 
+Set the active drawing for successive graphic commands to index i if exist. if index i doesn't exist,
 the current drawing is unchanged.
 
 Returns the current drawing index.
 
 Example:
-    
+
     next_index=5
     if Luxor._set_drawing_index(next_index) == next_index
         # do some additional graphics on the existing drawing
@@ -324,10 +324,9 @@ Example:
     else
         @warn "Drawing "*string(next_index)*" doesn't exist"
     endif
-
 """
 function _set_drawing_index(i::Int)
-    if isassigned(_current_drawing(),i)
+    if isassigned(_current_drawing(), i)
         _current_drawing_index(i)
     end
     return _get_drawing_index()
@@ -339,14 +338,14 @@ end
 Returns the next available drawing index. This can either be a new index or an existing
 index where a finished (`finish()`) drawing was stored before.
 """
-function _get_next_drawing_index() 
+function _get_next_drawing_index()
     i = 1
     if isempty(_current_drawing())
         return i
     end
-    i = findfirst(x->getfield(getfield(x,:surface),:ptr) == C_NULL,_current_drawing())
+    i = findfirst(x -> getfield(getfield(x, :surface), :ptr) == C_NULL, _current_drawing())
     if isnothing(i)
-        return _current_drawing_index()+1
+        return _current_drawing_index() + 1
     else
         return i
     end
@@ -372,7 +371,7 @@ end
 """
     Luxor._has_drawing()
 
-returns true if there is a current drawing available or finished, otherwise false.
+Returns true if there is a current drawing available or finished, otherwise false.
 """
 function _has_drawing()
     return _current_drawing_index() != 0
@@ -384,7 +383,7 @@ end
 Sets and returns the current Luxor drawing overwriting an existing drawing if exists.
 """
 function currentdrawing(d::Drawing)
-    if ! isassigned(_current_drawing(), _current_drawing_index())
+    if !isassigned(_current_drawing(), _current_drawing_index())
         push!(_current_drawing(), d)
         _current_drawing_index(lastindex(_current_drawing()))
     else
@@ -399,13 +398,13 @@ end
 Return the current Luxor drawing, if there currently is one.
 """
 function currentdrawing()
-    if  ! isassigned(_current_drawing(), _current_drawing_index()) || 
-        isempty(_current_drawing()) || 
-        _current_surface_ptr() == C_NULL ||
-        false
-            # Already finished or not even started
-            @info "There is no current drawing"
-            return false
+    if !isassigned(_current_drawing(), _current_drawing_index()) ||
+       isempty(_current_drawing()) ||
+       _current_surface_ptr() == C_NULL ||
+       false
+        # Already finished or not even started
+        @info "There is no current drawing"
+        return false
     else
         return _current_drawing()[_current_drawing_index()]
     end
@@ -433,12 +432,12 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     # the image MIME and a second time for the text/plain MIME.
     # We check if this is such a 'second call':
     if (get(io, :jupyter, false) || Juno.isactive()) &&
-            (d.surfacetype == :svg || d.surfacetype == :png)
+       (d.surfacetype == :svg || d.surfacetype == :png)
         return d.filename
     end
 
     if (isdefined(Main, :VSCodeServer) && Main.VSCodeServer.PLOT_PANE_ENABLED[]) && (d.surfacetype == :svg || d.surfacetype == :png)
-       return d.filename
+        return d.filename
     end
 
     # perhaps drawing hasn't started yet, eg in the REPL
@@ -484,8 +483,8 @@ function tidysvg(fname)
         open(fname) do f
             r = string(rand(100000:999999))
             d = read(f, String)
-            d = replace(d, "id=\"glyph" => "id=\"glyph"*r)
-            d = replace(d, "href=\"#glyph" => "href=\"#glyph"*r)
+            d = replace(d, "id=\"glyph" => "id=\"glyph" * r)
+            d = replace(d, "href=\"#glyph" => "href=\"#glyph" * r)
             open(outfile, "w") do out
                 write(out, d)
             end
@@ -537,22 +536,22 @@ The `paper_sizes` Dictionary holds a few paper sizes, width is first, so default
 "E"       => (3168, 2448))
 ```
 """
-const paper_sizes = Dict{String, Tuple}(
-  "A0"     => (2384, 3370),
-  "A1"     => (1684, 2384),
-  "A2"     => (1191, 1684),
-  "A3"     => (842, 1191),
-  "A4"     => (595, 842),
-  "A5"     => (420, 595),
-  "A6"     => (298, 420),
-  "A"      => (612, 792),
-  "Letter" => (612, 792),
-  "Legal"  => (612, 1008),
-  "Ledger" => (792, 1224),
-  "B"      => (612, 1008),
-  "C"      => (1584, 1224),
-  "D"      => (2448, 1584),
-  "E"      => (3168, 2448))
+const paper_sizes = Dict{String,Tuple}(
+    "A0"     => (2384, 3370),
+    "A1"     => (1684, 2384),
+    "A2"     => (1191, 1684),
+    "A3"     => (842, 1191),
+    "A4"     => (595, 842),
+    "A5"     => (420, 595),
+    "A6"     => (298, 420),
+    "A"      => (612, 792),
+    "Letter" => (612, 792),
+    "Legal"  => (612, 1008),
+    "Ledger" => (792, 1224),
+    "B"      => (612, 1008),
+    "C"      => (1584, 1224),
+    "D"      => (2448, 1584),
+    "E"      => (3168, 2448))
 
 """
 Create a new drawing, and optionally specify file type (PNG, PDF, SVG, EPS),
@@ -647,28 +646,28 @@ Drawing(img, strokescale=true)
 ```
 
 creates the drawing from an existing image buffer of type `Matrix{Union{RGB24,ARGB32}}`, e.g.:
+
 ```
 using Luxor, Colors
 buffer=zeros(ARGB32, 100, 100)
 d=Drawing(buffer)
 ```
 """
-function Drawing(w=800.0, h=800.0, f::AbstractString="luxor-drawing.png"; strokescale=false)
-    (path, ext)         = splitext(f)
-    currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f, strokescale=strokescale)
+function Drawing(w = 800.0, h = 800.0, f::AbstractString = "luxor-drawing.png"; strokescale = false)
+    (path, ext) = splitext(f)
+    currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f, strokescale = strokescale)
     return currentdrawing
 end
 
-function Drawing(paper_size::AbstractString, f="luxor-drawing.png"; strokescale=false)
-  if occursin("landscape", paper_size)
-    psize = replace(paper_size, "landscape" => "")
-    h, w = paper_sizes[psize]
-  else
-    w, h = paper_sizes[paper_size]
-  end
-  Drawing(w, h, f, strokescale=strokescale)
+function Drawing(paper_size::AbstractString, f = "luxor-drawing.png"; strokescale = false)
+    if occursin("landscape", paper_size)
+        psize = replace(paper_size, "landscape" => "")
+        h, w = paper_sizes[psize]
+    else
+        w, h = paper_sizes[paper_size]
+    end
+    Drawing(w, h, f, strokescale = strokescale)
 end
-
 
 @doc raw"""
     _adjust_background_rects(buffer::UInt8[]; addmarker = true)
@@ -695,18 +694,18 @@ If `addmarker` is not set to false, a class property is set as marker:
 ```
 """
 function _adjust_background_rects(buffer; addmarker = true)
-    adjusted_buffer=String(buffer)
+    adjusted_buffer = String(buffer)
     # check if there is any transform= part, if not we do not need the next heavy regex
-    m=match(r"transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer)
+    m = match(r"transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is, adjusted_buffer)
     if !isnothing(m) && length(m.captures) == 6
         # get SVG viewbox coordinates to replace the generic 16777215 values
         #   expected example:
         #     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="300pt" viewBox="0 0 300 300" version="1.1">
-        m=match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is,adjusted_buffer)
-        adjust_vb=false
+        m = match(r"<svg\s+?[^>]*?viewBox=\"(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\".*?>"is, adjusted_buffer)
+        adjust_vb = false
         if !isnothing(m) && length(m.captures) == 4
-            (vbx,vby,vbw,vbh)=string.([ parse(Float64,m[i]) for i in 1:4 ])
-            adjust_vb=true
+            (vbx, vby, vbw, vbh) = string.([parse(Float64, m[i]) for i in 1:4])
+            adjust_vb = true
         end
         # do adjustment for all <use ...> elements (after <defs>) which have a transform attribute as matrix
         #   expected example:
@@ -719,48 +718,48 @@ function _adjust_background_rects(buffer; addmarker = true)
         #       to:
         #          <rect class="luxor_adjusted" x="0" y="0" width="300" height="300" style="..." transform="matrix(1,0,0,1,-150,-150)"/>
         #       adding class as verification that tweak was applied.
-        m=findall(r"<defs\s*?>"is,adjusted_buffer)
+        m = findall(r"<defs\s*?>"is, adjusted_buffer)
         # check if there is exactly 1 <defs> element
         if !isnothing(m) && length(m) == 1
             # get SVG part after </defs> to search for <use ...>
             #   could be done in a single RegEx but can produce ERROR: PCRE.exec error: match limit exceeded
-            m=match(r"</defs\s*?>(.*)$"is,adjusted_buffer)
+            m = match(r"</defs\s*?>(.*)$"is, adjusted_buffer)
             if !isnothing(m) && length(m.captures) == 1
-                adjusted_buffer_part=m[1]
-                for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is,adjusted_buffer_part)
+                adjusted_buffer_part = m[1]
+                for m in eachmatch(r"<use[^>]*?(xlink:)*?href=\"#(.*?)\"[^>]*?transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is, adjusted_buffer_part)
                     if !isnothing(m) && length(m.captures) == 8
                         # id of group block
-                        id=m[2]
+                        id = m[2]
                         # transform matrix applied to all elements in group block
-                        transform=vcat(reshape([ parse(Float64,m[i]) for i in 3:8 ],2,3),[0.0 0.0 1.0])
+                        transform = vcat(reshape([parse(Float64, m[i]) for i in 3:8], 2, 3), [0.0 0.0 1.0])
                         # inverse transform matrix must be applied to background rect to neutralize transform matrix
-                        it=inv(transform)
+                        it = inv(transform)
                         # get the group block with id into mid::String
-                        (head,mid,tail,split_ok)=_split_string_into_head_mid_tail(adjusted_buffer,id)
+                        (head, mid, tail, split_ok) = _split_string_into_head_mid_tail(adjusted_buffer, id)
                         if split_ok
                             # add inverse transform matrix to every background rect
                             #   background rects look like:
                             #     <rect x="0" y="0" width="16777215" height="16777215" style="fill:rgb(0%,69.803922%,93.333333%);fill-opacity:1;stroke:none;"/>
                             # add class="luxor_adjusted" too, for future reference that element has been tweaked
-                            invtransformstring="transform=\"matrix("*join(string.(it[1:2,1:3][:]),",")*")\""
-                            marker=""
+                            invtransformstring = "transform=\"matrix(" * join(string.(it[1:2, 1:3][:]), ",") * ")\""
+                            marker = ""
                             if addmarker
-                                marker="class=\"luxor_adjusted\" "
+                                marker = "class=\"luxor_adjusted\" "
                             end
-                            mid=replace(mid,r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 $(marker)\\2 $(invtransformstring)/>") )
+                            mid = replace(mid, r"(<rect) (x=\"0\" y=\"0\" width=\"16777215\" height=\"16777215\".*?)/>"is => SubstitutionString("\\1 $(marker)\\2 $(invtransformstring)/>"))
                             if adjust_vb
                                 # some SVG tools don't like this huge rects (e.g. inkscape)
                                 # => replace 0,0,16777215,16777215 with viewBox coordinates
-                                mid=replace(mid,r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
+                                mid = replace(mid, r"(?<a><rect\s+?.*?\s+?x=\")0(?<b>\" y=\")0(?<c>\" width=\")16777215(?<d>\" height=\")16777215(?<e>\".*?/>)"is => SubstitutionString("\\g<a>$(vbx)\\g<b>$(vby)\\g<c>$(vbw)\\g<d>$(vbh)\\g<e>"))
                             end
-                            adjusted_buffer=head*mid*tail
+                            adjusted_buffer = head * mid * tail
                         end
                     end
                 end
             end
         end
     end
-    adjusted_buffer=UInt8.(collect(adjusted_buffer))
+    adjusted_buffer = UInt8.(collect(adjusted_buffer))
     return adjusted_buffer
 end
 
@@ -781,67 +780,64 @@ Example:\
   tail="...tail"
 ```
 """
-function _split_string_into_head_mid_tail(s,id)
-    head=""
-    mid=s
-    tail=""
-    split_ok=false
+function _split_string_into_head_mid_tail(s, id)
+    head = ""
+    mid = s
+    tail = ""
+    split_ok = false
     # find all group start elements <g ...>
-    startgroups=findall(r"<g(?:>|\s+?.*?>)"is,s)
+    startgroups = findall(r"<g(?:>|\s+?.*?>)"is, s)
     # find all group end elements </g...>
-    endgroups=findall(r"</g\s*>"is,s)
+    endgroups = findall(r"</g\s*>"is, s)
     # there must be as many start elements as end elements
-    if length(startgroups) == length(endgroups)    
-    #if length(startgroups) != length(endgroups)
-    #    @warn "number of group starting tags <g ...> do not match number of closing tags </g> in SVG"
-    #else
+    if length(startgroups) == length(endgroups)
+        #if length(startgroups) != length(endgroups)
+        #    @warn "number of group starting tags <g ...> do not match number of closing tags </g> in SVG"
+        #else
         # find the group start element with the proper id
-        first_group=findfirst(Regex("<g\\s+?[^>]*?id=\"$(id)\".*?>","is"),s)
-        group_start_index=findfirst(e->e==first_group,startgroups)
+        first_group = findfirst(Regex("<g\\s+?[^>]*?id=\"$(id)\".*?>", "is"), s)
+        group_start_index = findfirst(e -> e == first_group, startgroups)
         if !isnothing(group_start_index) && !isempty(group_start_index)
-            mid_start=first_group[1]
-            group_end_index=0
+            mid_start = first_group[1]
+            group_end_index = 0
             # starting with group start element with the proper id traverse the end group elements
             # and the start group elements until the number traversed are equal the first time
-            while group_start_index-group_end_index !== 0 && group_start_index < length(startgroups) && group_end_index <= length(endgroups)
-                group_end_index+=1
+            while group_start_index - group_end_index !== 0 && group_start_index < length(startgroups) && group_end_index <= length(endgroups)
+                group_end_index += 1
                 while group_end_index <= length(endgroups) && endgroups[group_end_index][1] < startgroups[group_start_index][1]
-                    group_end_index+=1
+                    group_end_index += 1
                 end
-                while group_start_index < length(startgroups) && startgroups[group_start_index+1][1] < endgroups[group_end_index][1]
-                    group_start_index+=1
+                while group_start_index < length(startgroups) && startgroups[group_start_index + 1][1] < endgroups[group_end_index][1]
+                    group_start_index += 1
                 end
             end
-            if group_start_index-group_end_index == 0
-                mid_end=endgroups[group_end_index][end]
+            if group_start_index - group_end_index == 0
+                mid_end = endgroups[group_end_index][end]
                 # start and end character of mid is found, construct the substrings
-                if prevind(s,mid_start) > 0
-                    head=s[1:prevind(s,mid_start)]
+                if prevind(s, mid_start) > 0
+                    head = s[1:prevind(s, mid_start)]
                 end
-                if nextind(s,mid_end)>0
-                    tail=s[nextind(s,mid_end):end]
+                if nextind(s, mid_end) > 0
+                    tail = s[nextind(s, mid_end):end]
                 end
-                mid=s[mid_start:mid_end]
-                split_ok=true
+                mid = s[mid_start:mid_end]
+                split_ok = true
             end
         end
     end
-    return (head,mid,tail,split_ok)
+    return (head, mid, tail, split_ok)
 end
 
 @doc raw"""
-    finish()
-
-Finish the drawing, and close the file. You may be able to open it in an
-external viewer application with `preview()`.
-
     finish(;svgpostprocess = false, addmarker = true)
+    
+Finish the drawing, close any related files. You may be able to view the drawing
+in another application with `preview()`.
 
-For more information about `svgpostprocess` and `addmarker` see help for `Luxor._adjust_background_rects`
-
-    ?Luxor._adjust_background_rects
+For more information about `svgpostprocess` and `addmarker` see help for
+`Luxor._adjust_background_rects`
 """
-function finish(;svgpostprocess = false, addmarker = true)
+function finish(; svgpostprocess = false, addmarker = true)
     if _current_surface_ptr() == C_NULL
         # Already finished
         return false
@@ -850,20 +846,20 @@ function finish(;svgpostprocess = false, addmarker = true)
         Cairo.write_to_png(_current_surface(), _current_buffer())
     end
 
-    if  _current_surface_type() == :image &&
-        ( 
-            typeof(_current_surface()) == Cairo.CairoSurfaceImage{ARGB32} || 
-            typeof(_current_surface()) == Cairo.CairoSurfaceImage{RGB24}
-        ) &&
-        endswith(_current_filename(), r"\.png"i)
-            Cairo.write_to_png(_current_surface(), _current_buffer())
+    if _current_surface_type() == :image &&
+       (
+           typeof(_current_surface()) == Cairo.CairoSurfaceImage{ARGB32} ||
+           typeof(_current_surface()) == Cairo.CairoSurfaceImage{RGB24}
+       ) &&
+       endswith(_current_filename(), r"\.png"i)
+        Cairo.write_to_png(_current_surface(), _current_buffer())
     end
 
     Cairo.finish(_current_surface())
     Cairo.destroy(_current_surface())
 
     if _current_filename() != ""
-        if _current_surface_type() != :svg || ! svgpostprocess
+        if _current_surface_type() != :svg || !svgpostprocess
             write(_current_filename(), _current_bufferdata())
         else
             # next function call adresses the issue in
@@ -877,9 +873,9 @@ function finish(;svgpostprocess = false, addmarker = true)
             #          which is applied to every element including the background rects.
             #          This transformation needs to be inversed for the background rects
             #          which is added in this function.
-            buffer=_adjust_background_rects(copy(_current_bufferdata()); addmarker = addmarker)
+            buffer = _adjust_background_rects(copy(_current_bufferdata()); addmarker = addmarker)
             # hopefully safe as we are at the end of finish:
-            _current_drawing()[_current_drawing_index()].bufferdata=buffer
+            _current_drawing()[_current_drawing_index()].bufferdata = buffer
             write(_current_filename(), buffer)
         end
     end
@@ -927,16 +923,16 @@ pngdrawing = snapshot(fname = "temp.png", cb = cb, scalefactor = 10)
 The last example would return and also write a png drawing with 1024 x 960 pixels to storage.
 """
 function snapshot(;
-        fname = :png,
-        cb = missing,
-        scalefactor = 1.0,
-        addmarker = true)
+    fname = :png,
+    cb = missing,
+    scalefactor = 1.0,
+    addmarker = true)
     rd = currentdrawing()
     isbits(rd) && return false  # currentdrawing provided 'info'
     if ismissing(cb)
         if isnan(rd.width) || isnan(rd.height)
-             @info "The current recording surface has no bounds. Define a crop box for snapshot."
-             return false
+            @info "The current recording surface has no bounds. Define a crop box for snapshot."
+            return false
         end
         # When no cropping box is given, we take the intention
         # to be a snapshot of the entire rectangular surface,
@@ -992,7 +988,7 @@ function snapshot(fname, cb, scalefactor; addmarker = true)
     nh = Float64(round(scalefactor * boxheight(cb)))
 
     # New drawing ctm - user space origin and device space origin at top left
-    nm = scalefactor.* [rmai[1], rmai[2], rmai[3], rmai[4], 0.0, 0.0]
+    nm = scalefactor .* [rmai[1], rmai[2], rmai[3], rmai[4], 0.0, 0.0]
 
     # Create new drawing, to which we'll project a snapshot
     nd = Drawing(round(nw), round(nh), fname)
@@ -1009,7 +1005,7 @@ function snapshot(fname, cb, scalefactor; addmarker = true)
     paint()
 
     # Even in-memory drawings are finished, since such drawings are displayed.
-    finish(;svgpostprocess = true, addmarker = addmarker)
+    finish(; svgpostprocess = true, addmarker = addmarker)
 
     # Switch back to continue recording
     _current_drawing()[_current_drawing_index()] = rd
@@ -1017,23 +1013,23 @@ function snapshot(fname, cb, scalefactor; addmarker = true)
     nd
 end
 
-
 """
     preview()
 
-If working in a notebook (eg Jupyter/IJulia), display a PNG or SVG file in the notebook.
+If you're working in a notebook (eg Jupyter/IJulia), display a PNG or SVG file
+in the notebook.
 
-If working in Juno, display a PNG or SVG file in the Plot pane.
+If you're working in VS-Code, display a PNG or SVG file in the Plots pane.
 
 Drawings of type :image should be converted to a matrix with `image_as_matrix()`
 before calling `finish()`.
 
 Otherwise:
 
-- on macOS, open the file in the default application, which is probably the Preview.app for
-  PNG and PDF, and Safari for SVG
-- on Unix, open the file with `xdg-open`
-- on Windows, refer to `COMSPEC`.
+  - on macOS, open the file in the default application, which is probably the
+    Preview.app for PNG and PDF, and Safari for SVG
+  - on Unix, open the file with `xdg-open`
+  - on Windows, refer to `COMSPEC`.
 """
 function preview()
     @debug "preview()"
@@ -1089,19 +1085,19 @@ default is 600 by 600). The file is saved in the current working directory as
 @svg circle(O, 20, :fill) 400 1200 "/tmp/test.svg"
 
 @svg begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end
 
 @svg begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end 1200 1200
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end 1200 1200
 ```
 """
-macro svg(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
+macro svg(body, width = 600, height = 600, fname = "luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).svg")
     quote
         local lfname = _add_ext($(esc(fname)), :svg)
         Drawing($(esc(width)), $(esc(height)), lfname)
@@ -1135,20 +1131,19 @@ default is 600 by 600). The file is saved in the current working directory as
 @png circle(O, 20, :fill) 400 1200 "/tmp/round.png"
 
 @png begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
-
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end
 
 @png begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end 1200 1200
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end 1200 1200
 ```
 """
-macro png(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
+macro png(body, width = 600, height = 600, fname = "luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).png")
     quote
         local lfname = _add_ext($(esc(fname)), :png)
         Drawing($(esc(width)), $(esc(height)), lfname)
@@ -1168,7 +1163,6 @@ Create and preview an PDF drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename` if supplied, or `luxor-drawing(timestamp).pdf`.
 
-
 ### Examples
 
 ```julia
@@ -1183,20 +1177,20 @@ default is 600 by 600). The file is saved in the current working directory as
 @pdf circle(O, 20, :fill) 400 1200 "/tmp/A0-version.pdf"
 
 @pdf begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end
 
 @pdf begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end 1200 1200
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end 1200 1200
 ```
 """
-macro pdf(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
-     quote
+macro pdf(body, width = 600, height = 600, fname = "luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).pdf")
+    quote
         local lfname = _add_ext($(esc(fname)), :pdf)
         Drawing($(esc(width)), $(esc(height)), lfname)
         origin()
@@ -1231,21 +1225,21 @@ On some platforms, EPS files are converted automatically to PDF when previewed.
 @eps circle(O, 20, :fill) 400 1200 "/tmp/A0-version.eps"
 
 @eps begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end
 
 @eps begin
-        setline(10)
-        sethue("purple")
-        circle(O, 20, :fill)
-     end 1200 1200
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end 1200 1200
 ```
 """
-macro eps(body, width=600, height=600, fname="luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).eps")
+macro eps(body, width = 600, height = 600, fname = "luxor-drawing-$(Dates.format(Dates.now(), "HHMMSS_s")).eps")
     quote
-       local lfname = _add_ext($(esc(fname)), :eps)
+        local lfname = _add_ext($(esc(fname)), :eps)
         Drawing($(esc(width)), $(esc(height)), lfname)
         origin()
         background("white")
@@ -1271,22 +1265,20 @@ default is 600 by 600). The drawing is stored in memory, not in a file on disk.
 
 @draw circle(O, 20, :fill) 400 1200
 
+@draw begin
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end
 
 @draw begin
-         setline(10)
-         sethue("purple")
-         circle(O, 20, :fill)
-      end
-
-
-@draw begin
-         setline(10)
-         sethue("purple")
-         circle(O, 20, :fill)
-      end 1200 1200
+    setline(10)
+    sethue("purple")
+    circle(O, 20, :fill)
+end 1200 1200
 ```
 """
-macro draw(body, width=600, height=600)
+macro draw(body, width = 600, height = 600)
     quote
         Drawing($(esc(width)), $(esc(height)), :png)
         origin()
@@ -1321,7 +1313,7 @@ finish()
 ```
 """
 function image_as_matrix()
-    if ! isassigned(_current_drawing(),_current_drawing_index())
+    if !isassigned(_current_drawing(), _current_drawing_index())
         error("no current drawing")
     end
     w = Int(_current_surface().width)
@@ -1329,7 +1321,7 @@ function image_as_matrix()
     z = zeros(UInt32, w, h)
     # create a new image surface to receive the data from the current drawing
     # flipxy: see issue https://github.com/Wikunia/Javis.jl/pull/149
-    imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32, flipxy=false)
+    imagesurface = CairoImageSurface(z, Cairo.FORMAT_ARGB32, flipxy = false)
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, _current_surface(), 0, 0)
     Cairo.paint(cr)
@@ -1351,6 +1343,7 @@ function.
 The default drawing is 256 by 256 points.
 
 You don't need `finish()` (the macro calls it), and it's not previewed by `preview()`.
+
 ```
 m = @imagematrix begin
         sethue("red")
@@ -1440,7 +1433,7 @@ julia> @imagematrix begin
 
 picks up the default alpha of 1.0.
 """
-macro imagematrix(body, width=256, height=256)
+macro imagematrix(body, width = 256, height = 256)
     quote
         Drawing($(esc(width)), $(esc(height)), :image)
         origin()
@@ -1472,12 +1465,12 @@ Images.RGB.(m)
 ```
 """
 function image_as_matrix!(buffer)
-    if ! isassigned(_current_drawing(),_current_drawing_index())
+    if !isassigned(_current_drawing(), _current_drawing_index())
         error("no current drawing")
     end
     # create a new image surface to receive the data from the current drawing
     # flipxy: see issue https://github.com/Wikunia/Javis.jl/pull/149
-    imagesurface = Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32, flipxy=false)
+    imagesurface = Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32, flipxy = false)
     cr = Cairo.CairoContext(imagesurface)
     Cairo.set_source_surface(cr, Luxor._current_surface(), 0, 0)
     Cairo.paint(cr)
@@ -1500,7 +1493,7 @@ m = @imagematrix! buffer juliacircles(40) 200 150;
 Images.RGB.(m)
 ```
 """
-macro imagematrix!(buffer, body, width=256, height=256)
+macro imagematrix!(buffer, body, width = 256, height = 256)
     quote
         Drawing($(esc(width)), $(esc(height)), :image)
         origin()
@@ -1537,7 +1530,8 @@ PlutoUI.Show(MIME"image/svg+xml"(), svgstring())
 
 ## Example
 
-This example manipulates the raw SVG code representing the Julia logo:
+This example examines the generated SVG code produced by drawing
+the Julia logo.
 
 ```
 Drawing(500, 500, :svg)
@@ -1554,6 +1548,8 @@ eachmatch(r"rgb.*?;", s) |> collect
     RegexMatch("rgb(58.4%,34.5%,69.8%);")
     RegexMatch("rgb(22%,59.6%,14.9%);")
 ```
+
+Here's another example, post-processing the SVG file with the `svgo` optimizer.
 
 ```
 @drawsvg begin
@@ -1588,7 +1584,7 @@ Create and preview an SVG drawing. Like `@draw` but using SVG format.
 
 Unlike `@draw` (PNG), there is no background, by default.
 """
-macro drawsvg(body, width=600, height=600)
+macro drawsvg(body, width = 600, height = 600)
     quote
         Drawing($(esc(width)), $(esc(height)), :svg)
         origin()
@@ -1600,7 +1596,6 @@ macro drawsvg(body, width=600, height=600)
     end
 end
 """
-
     @savesvg begin
         body
     end w h
@@ -1609,8 +1604,26 @@ Like `@drawsvg` but returns the raw SVG code of the drawing in a
 string. Uses `svgstring`.
 
 Unlike `@draw` (PNG), there is no background, by default.
+
+THis example scans the generated SVG for color values:
+
+```julia
+s = @savesvg begin
+    julialogo()
+end
+
+eachmatch(r"rgb.*?;", s) |> collect
+
+5-element Vector{RegexMatch}:
+ RegexMatch("rgb(0%,0%,0%);")
+ RegexMatch("rgb(25.1%,38.8%,84.7%);")
+ RegexMatch("rgb(22%,59.6%,14.9%);")
+ RegexMatch("rgb(58.4%,34.5%,69.8%);")
+ RegexMatch("rgb(79.6%,23.5%,20%);")
+
+```
 """
-macro savesvg(body, width=600, height=600)
+macro savesvg(body, width = 600, height = 600)
     quote
         Drawing($(esc(width)), $(esc(height)), :svg)
         origin()

@@ -220,7 +220,19 @@ nothing # hide
 
 [`gsave`](@ref) saves a copy of the current graphics settings (current axis rotation, position, scale, line and text settings, color, and so on). When the next [`grestore`](@ref) is called, all changes you've made to the graphics settings will be discarded, and the previous settings are restored, so things return to how they were when you last used [`gsave`](@ref). [`gsave`](@ref) and [`grestore`](@ref) should always be balanced in pairs, enclosing the functions.
 
-The `@layer` macro is a synonym for a [`gsave`](@ref)...[`grestore`](@ref) pair.
+```julia
+@svg begin
+    circle(Point(0, 0), 100, action = :stroke)
+    gsave()
+        sethue("red")
+        rule(Point(0, 0))
+        rule(Point(0, 0), pi/2)
+    grestore()
+    circle(Point(0, 0), 200, action = :stroke)
+end
+```
+
+The `@layer` macro is a shorter synonym for a [`gsave`](@ref)...[`grestore`](@ref) pair.
 
 ```julia
 @svg begin

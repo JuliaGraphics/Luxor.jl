@@ -44,7 +44,7 @@ So, we've constructed a path. The final job is to decide what to do with it, unl
 
 At this point, the current path is empty again, and there is no current point.
 
-And that's how you draw paths in Luxor. However, you'd be right if you think it will be a bit tedious to construct all shapes like this. This is why there are so many other functions in Luxor, such as `circle()`, `ngon()`, `star()`, `rect()`, `box()`, to name just a few!
+And that's how you draw paths in Luxor. However, you'd be right if you think it will be a bit tedious to construct every single shape like this. This is why there are so many other functions in Luxor, such as `circle()`, `ngon()`, `star()`, `rect()`, `box()`, to name just a few.
 
 ## Arcs
 
@@ -167,11 +167,115 @@ strokepath()
 end 
 ```
 
+## Translate, scale, rotate
+
+Suppose you want to repeat a path in various places on the drawing. Obviously you don't want to repeat the steps in the path over and over again.
+
+```@example
+using Luxor
+function t()
+    move(Point(100, 0))
+    line(Point(0, -100))
+    line(Point(-100, 0))
+    closepath()
+    strokepath()
+end
+
+@drawsvg begin
+background("black")
+sethue("white")
+t()
+end
+```
+
+The triangle is drawn when you call the `t()` function. The coordinates are interpreted relative to the current (0, 0) position, scale, and orientation.
+
+To draw the triangle in another location, you can use `translate()` to move the (0, 0) to another location.
+
+```@example
+using Luxor
+function t()
+    move(Point(100, 0))
+    line(Point(0, -100))
+    line(Point(-100, 0))
+    closepath()
+    strokepath()
+end
+
+@drawsvg begin
+background("black")
+sethue("white")
+t()
+translate(Point(150, 150))
+t()
+end
+```
+
+Similarly, you could use `scale()` and `rotate()` which further modify the current state.
+
+```@example
+using Luxor
+function t()
+    move(Point(100, 0))
+    line(Point(0, -100))
+    line(Point(-100, 0))
+    closepath()
+    strokepath()
+end
+
+@drawsvg begin
+background("black")
+sethue("white")
+t()
+translate(Point(150, 150))
+t()
+translate(Point(30, 30))
+scale(0.5)
+t()
+translate(Point(120, 120))
+rotate(π/3)
+t()
+end
+```
+
+But, if you experiment with these three functions, you'll notice that the changes are always relative to the previous state. How do you return to a default initial state? You could undo every transformation (in the right order). But a better way is to enclose a set of changes of position, scale, and orientation in a pair of functions (`gsave()` and `grestore()`) that isolate the modifications.
+
+The following code generates a grid of points in a nested loop. At each iteration, `gsave()` saves the current position, scale, and orientation, the graphics are drawn, and then `grestore()` restores the previously saved state.
+
+```@example
+using Luxor
+
+function t()
+    move(Point(100, 0))
+    line(Point(0, -100))
+    line(Point(-100, 0))
+    closepath()
+    strokepath()
+end
+
+@drawsvg begin
+    background("black")
+    sethue("white")
+    for x in -250:20:250, y in -250:20:250
+            gsave()
+             translate(Point(x, y))
+             scale(0.1)
+             rotate(rand() * 2π)
+             t()
+            grestore()
+    end
+end
+```
+
+!!! note
+
+    As an alternative to `gsave()` and `grestore()` you can use the `@layer begin ... end` macro, which does the same thing.
+
 ## Useful tools
 
 You can use `currentpoint()` to get the current point. 
 
-`rulers()` is useful for displaying the current x and y axes.
+`rulers()` is useful for drawing the current x and y axes before you start a path.
 
 `storepath()` grabs the current path and saves it as a Path object. You can draw a stored path using `drawpath()`.
 
@@ -189,9 +293,9 @@ line(Point(100, 100))
 strokepath()
 ```
 
-## The straight line alternative
+## Polygonal thinking
 
-If you just want to draw straight lines, you might also like to know about Luxor polygons. A polygon is just an array (a Julia Vector) of points, and you can draw it (as many times as you like) using functions such as `poly()`.
+In Luxor, a polygon is an array (a Julia Vector) of Points. You can treat it like any standard array, and then eventually draw it using the `poly()` function. It's all straight lines, no curves, so you might have to draw a lot of them to get shapes that look like curves.
 
 ```@example
 using Luxor
@@ -207,4 +311,6 @@ using Luxor
 end 
 ```
 
-Curves are nice, but eventually they'll have to be converted to line segments...
+It's probably easier to generate polygons using Julia code than it is to generate paths. But, no curves. If you need arcs and Bezier curves, stick to paths.
+
+The `poly()` function simply builds a path with straight lines, and then does the `:fill` or `:stroke` action, depending on which you provide.

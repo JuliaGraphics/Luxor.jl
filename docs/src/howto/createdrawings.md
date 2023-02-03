@@ -4,13 +4,13 @@ In Luxor you always work with a current drawing, so the first thing to do is to 
 
 To create a drawing, and optionally specify the filename, type, and dimensions, use the [`Drawing`](@ref) constructor function.
 
-To finish a drawing and close the file, use [`finish`](@ref), and, if the drawing doesn't appear in your notebook, you can launch an external application to view it using [`preview`](@ref).
+To finish a drawing and close the file, use [`finish`](@ref).
 
-To finish a drawing and close the file, use [`finish`](@ref), and, to launch an external application to view it, use [`preview`](@ref).
+Ff the drawing doesn't appear automatically in your notebook or editing environment, you can type [`preview`](@ref) to see it.
 
 ![jupyter](../assets/figures/jupyter.png)
 
-If you're using VS Code, then PNG and SVG drawings should appear in the Plots pane, if it's enabled. In a Pluto notebook, output appears above the cell. In a notebook environment, output appears in the next notebook cell.
+If you're using VS Code, then PNG and SVG drawings should automatically appear in the Plots pane, if it's enabled. In a Pluto notebook, output appears above the cell. In a notebook environment, output appears in the next notebook cell.
 
 ![juno](../assets/figures/juno.png)
 
@@ -20,19 +20,19 @@ If you're using VS Code, then PNG and SVG drawings should appear in the Plots pa
 
 ## Quick drawings with macros
 
-The [`@draw`](@ref), [`@svg`](@ref), [`@png`](@ref), and [`@pdf`](@ref) macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions.
+The [`@draw`](@ref), [`@svg`](@ref), [`@drawsvg`](@ref), [`@png`](@ref), and [`@pdf`](@ref) macros are designed to let you quickly create graphics without having to provide the usual boiler-plate functions.
 
 !!! note
 
-    The macros are shortcuts, designed to make it quick and easy to get started. You can save a few keystrokes and some time, but, for full control over all parameters, use [`Drawing`](@ref).
+    The macros are shortcuts, designed to make it quick and easy to get started. You can save keystrokes and time, but, for full control over all parameters, use [`Drawing`](@ref).
 
-For example, the Julia code:
+For example, this:
 
 ```julia
 @svg circle(Point(0, 0), 20, action = :stroke) 50 50
 ```
 
-expands to
+is equivalent to this:
 
 ```julia
 Drawing(50, 50, "luxor-drawing-(timestamp).svg")
@@ -44,7 +44,7 @@ finish()
 preview()
 ```
 
-They're just short-cuts. You can omit the width and height (thus defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
+You can omit the width and height (thus defaulting to 600 by 600, except for `@imagematrix`), and you don't have to specify a filename (you'll get time-stamped files in the current working directory). For multiple lines, use either:
 
 ```julia
 @svg begin
@@ -86,7 +86,7 @@ preview()
 
 ### In-memory drawings
 
-You can choose to store drawings in memory. The advantage is that in-memory drawings are quicker, and the results can be passed as Julia data. Also, it's useful in some environments to not have to worry about writing files. 
+You can choose to store drawings in memory rather than use files. The advantage is that in-memory drawings are quicker, and the results can be passed as Julia data. Also, it's useful in some restricted environments to not have to worry about writing files.
 
 This syntax for the [`Drawing`](@ref) function:
 
@@ -100,9 +100,9 @@ The [`@draw`](@ref) macro (equivalent to `Drawing(..., :png)` creates a PNG draw
 
 The SVG equivalent of `@draw` is [`@drawsvg`](@ref).
 
-Use [`svgstring()`](@ref) to extract the SVG source for a finished SVG drawing.
+Use [`svgstring()`](@ref) to extract the SVG drawing's source as text.
 
-If you want to generate SVG without making a drawing, use `@savesvg` instead of `@drawsvg`.
+If you want to generate SVG code without making a drawing, use `@savesvg` instead of `@drawsvg`.
 
 ### Concatenating SVG drawings
 
@@ -246,4 +246,4 @@ See the [Drawings as image matrices](@ref) section for more information.
 
 ## Recordings
 
-The `:rec` option for `Drawing()` creates a recording surface in memory. You can then use `snapshot(filename, ...)` to copy the drawing into a file.
+The `:rec` option for `Drawing()` creates a recording surface in memory. You can then use `snapshot(filename, ...)` to copy the drawing into a file. See [Snapshots](@ref).

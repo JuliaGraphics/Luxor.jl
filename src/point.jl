@@ -60,6 +60,21 @@ Base.length(::Point) = 2
 """
 *(m::Matrix, pt::Point)
 
+Transform a point `pt` by the 3×3 matrix `m`.
+
+```julia
+julia> M = [2 0 0; 0 2 0; 0 0 1]
+3×3 Matrix{Int64}:
+ 2  0  0
+ 0  2  0
+ 0  0  1
+
+julia> M * Point(20, 20)
+Point(40.0, 40.0)
+```
+
+To convert between Cairo matrices (6-element Vector{Float64}) to a 3×3 Matrix,
+use `cairotojuliamatrix()` and `juliatocairomatrix()`.
 """
 function Base.:*(m::AbstractMatrix, pt::Point)
     if size(m) != (3, 3)
@@ -106,12 +121,24 @@ end
 
 # comparisons
 
+"""
+isequal(p1::Point, p2::Point) =
+    isapprox(p1.x, p2.x, atol = 0.00000001) &&
+   (isapprox(p1.y, p2.y, atol = 0.00000001))
+
+Compare points.
+"""
 isequal(p1::Point, p2::Point) =
     isapprox(p1.x, p2.x, atol = 0.00000001) && (isapprox(p1.y, p2.y, atol = 0.00000001))
 
 # allow kwargs
+"""
+isapprox(p1::Point, p2::Point; atol = 1e-6, kwargs...)
+
+Compare points.
+"""
 function Base.isapprox(p1::Point, p2::Point;
-        atol = 1e-6, kwargs...)
+    atol = 1e-6, kwargs...)
     return isapprox(p1.x, p2.x, atol = atol, kwargs...) &&
            isapprox(p1.y, p2.y, atol = atol, kwargs...)
 end
@@ -210,7 +237,7 @@ is perpendicular to `p3`.
 """
 function perpendicular(p1::Point, p2::Point, p3::Point)
     v2 = p2 - p1
-    return p1 + (dotproduct(p3 - p1, v2)/dotproduct(v2, v2)) * v2
+    return p1 + (dotproduct(p3 - p1, v2) / dotproduct(v2, v2)) * v2
 end
 
 """
@@ -280,7 +307,7 @@ If `extended` is false (the default) the point must lie on the line segment betw
 either direction.
 """
 function ispointonline(pt::Point, pt1::Point, pt2::Point;
-        atol = 10E-5, extended = false)
+    atol = 10E-5, extended = false)
     dxc = pt.x - pt1.x
     dyc = pt.y - pt1.y
     dxl = pt2.x - pt1.x
@@ -312,8 +339,8 @@ end
 Return `true` if `pt` lies on the polygon `pgon.`
 """
 function ispointonpoly(pt::Point, pgon::Array{Point,1};
-        atol = 10E-5)
-    @inbounds for i = 1:length(pgon)
+    atol = 10E-5)
+    @inbounds for i in 1:length(pgon)
         p1 = pgon[i]
         p2 = pgon[mod1(i + 1, end)]
         if ispointonline(pt, p1, p2, atol = atol)
@@ -383,9 +410,9 @@ Return a tuple of `(n, pt1, pt2)`
 
 where
 
-- `n` is the number of intersections, `0`, `1`, or `2`
-- `pt1` is first intersection point, or `Point(0, 0)` if none
-- `pt2` is the second intersection point, or `Point(0, 0)` if none
+  - `n` is the number of intersections, `0`, `1`, or `2`
+  - `pt1` is first intersection point, or `Point(0, 0)` if none
+  - `pt2` is the second intersection point, or `Point(0, 0)` if none
 
 The calculated intersection points won't necessarily lie on the line segment between `p1` and `p2`.
 """
@@ -399,6 +426,7 @@ Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.
 
     @polar (10, pi/4)
     @polar [10, pi/4]
+    @polar 10, pi/4
 
 produces
 
@@ -413,7 +441,7 @@ end
 """
     polar(r, theta)
 
-Convert point in polar form (radius and angle) to a Point.
+Convert a point specified in polar form (radius and angle) to a Point.
 
     polar(10, pi/4)
 
@@ -427,7 +455,7 @@ polar(r, theta) = Point(r * cos(theta), r * sin(theta))
     intersectionlines(p0, p1, p2, p3;
         crossingonly=false)
 
-Find point where two lines intersect.
+Find the point where two lines intersect.
 
 If `crossingonly == true` the point of intersection must lie on both lines.
 
@@ -444,7 +472,7 @@ If the lines are collinear and share a point in common, that
 is the intersection point.
 """
 function intersectionlines(p0::Point, p1::Point, p2::Point, p3::Point;
-        crossingonly = false)
+    crossingonly = false)
     resultflag = false
     resultip = Point(0.0, 0.0)
     if p0 == p1 # no lines at all
@@ -536,7 +564,11 @@ end
 """
     currentpoint()
 
-Return the current point.
+Return the current point. This is the most recent point in the current path, as
+defined by one of the path building functions such as `move()`, `line()`,
+`curve()`, `arc()`, `rline()`, and `rmove()`.
+
+To see if there is a current point, use `hascurrentpoint()`.
 """
 function currentpoint()
     x, y = Cairo.get_current_point(_get_current_cr())
@@ -546,8 +578,13 @@ end
 """
     hascurrentpoint()
 
-Return true if there is a current point. Obtain the current point
-with `currentpoint()`.
+Return true if there is a current point. This is the most recent point in the
+current path, as defined by one of the path building functions such as `move()`,
+`line()`, `curve()`, `arc()`, `rline()`, and `rmove()`.
+
+To obtain the current point, use `currentpoint()`.
+
+There's no current point after `strokepath()` and `strokepath()` calls.
 """
 function hascurrentpoint()
     return Cairo.has_current_point(_get_current_cr())
@@ -559,13 +596,14 @@ end
 
 Return the world coordinates of `pt`.
 
-The default coordinate system for Luxor/Cairo is that the top left corner is 0/0.
-If you use `origin()`, everything moves to the center of the drawing, and this function
-with the default `centered` option assumes an `origin()` function. If you choose
-`centered=false`, the returned coordinates will be relative to the top left corner of
-the drawing.
+The default coordinate system for Luxor drawings is that the top left corner is
+0/0. If you use `origin()` (or the various `@-` macro shortcuts), everything
+moves to the center of the drawing, and this function with the default
+`centered` option assumes an `origin()` function. If you choose
+`centered=false`, the returned coordinates will be relative to the top left
+corner of the drawing.
 
-```
+```julia
 origin()
 translate(120, 120)
 @show currentpoint()      # => Point(0.0, 0.0)
@@ -573,7 +611,7 @@ translate(120, 120)
 ```
 """
 function getworldposition(pt::Point = O;
-        centered = true)
+    centered = true)
     x, y = cairotojuliamatrix(getmatrix()) * [pt.x, pt.y, 1]
     return Point(x, y) -
            (centered ? (Luxor._current_width() / 2.0, Luxor._current_height() / 2.0) : (0, 0))
@@ -656,11 +694,10 @@ rotatepoint(targetpt::Point, angle) = rotatepoint(targetpt, O, angle)
 
 For a line passing through points A and B:
 
-- return true if point C is on the left of the line
+  - return true if point C is on the left of the line
 
-- return false if point C lies on the line
-
-- return false if point C is on the right of the line
+  - return false if point C lies on the line
+  - return false if point C is on the right of the line
 """
 function ispointonleftofline(A::Point, B::Point, C::Point)
     z = ((B.x - A.x) * (C.y - A.y)) - ((B.y - A.y) * (C.x - A.x))

@@ -476,7 +476,7 @@ Notice that this function doesn't define anything about what color it is, or whe
 @png begin
     setopacity(0.7)
     for θ in range(0, step=π/6, length=12)
-        @layer begin
+        gsave()
             rotate(θ)
             translate(0, -150)
             egg(50, :path)
@@ -486,7 +486,7 @@ Notice that this function doesn't define anything about what color it is, or whe
 
             randomhue()
             strokepath()
-        end
+        grestore()
     end
 end 800 800 "eggstravaganza.png"
 ```
@@ -527,7 +527,7 @@ background("white")
 origin()
 setopacity(0.7)
 for θ in range(0, step=π/6, length=12)
-    @layer begin
+    gsave()
         rotate(θ)
         translate(0, -150)
         egg(50, :path)
@@ -537,7 +537,7 @@ for θ in range(0, step=π/6, length=12)
 
         randomhue()
         strokepath()
-    end
+    grestore()
 end
 finish()
 ```
@@ -545,7 +545,7 @@ finish()
 
 The loop runs 12 times, with `theta` increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated by `theta` radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so, before any rotation takes place, a shift of -150 looks like an upwards shift). The [`randomhue`](@ref) function does what you expect, and the `egg` function is passed the `:fill` action and the radius.
 
-Notice that the four drawing instructions are encased in a `@layer begin...end` shell. Any change made to the drawing environment inside this shell is discarded after the `end`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
+Notice that the four drawing instructions are encased in a `gsave()`/`grestore()` pair. Any change made to the drawing environment inside this pair is discarded after the `grestore()`. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.
 
 Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and the y-axis due south, and positive angles are clockwise (ie from the positive x-axis towards the positive y-axis). So the second egg in the previous example was drawn after the axes were rotated by π/6 radians clockwise.
 
@@ -736,13 +736,13 @@ using Luxor, Colors
     sethue("gold")
     eg(:fill)
     eg(:clip)
-    @layer begin
+    gsave()
        for i in 360:-4:1
            sethue(Colors.HSV(i, 1.0, 0.8))
            rotate(π/30)
            ngon(O, i, 5, 0, action = :stroke)
        end
-    end
+    grestore()
     clipreset()
     sethue("red")
     eg(:stroke)
@@ -787,13 +787,13 @@ eg(a) = egg(150, a)
 sethue("gold")
 eg(:fill)
 eg(:clip)
-@layer begin
+gsave()
    for i in 360:-4:1
        sethue(Colors.HSV(i, 1.0, 0.8))
        rotate(π/30)
        ngon(O, i, 5, 0, action = :stroke)
    end
-end
+grestore()
 clipreset()
 sethue("red")
 eg(:stroke)

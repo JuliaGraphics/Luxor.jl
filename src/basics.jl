@@ -1,14 +1,14 @@
 """
     origin()
 
-Reset the current matrix, and then set the 0/0 origin to the center of the drawing
+Reset the current position, scale, and orientation, and then set the 0/0 origin to the center of the drawing
 (otherwise it will stay at the top left corner, the default).
 
 You can refer to the 0/0 point as `O`. (O = `Point(0, 0)`),
 """
 function origin()
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
-    Cairo.translate(_get_current_cr(), _current_width()/2.0, _current_height()/2.0)
+    Cairo.translate(_get_current_cr(), _current_width() / 2.0, _current_height() / 2.0)
 end
 
 function origin(x, y)
@@ -19,7 +19,7 @@ end
 """
     origin(pt:Point)
 
-Reset the current matrix, then move the `0/0` position to `pt`.
+Reset the current position, scale, and orientation, then move the `0/0` position to `pt`.
 """
 function origin(pt)
     setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
@@ -59,11 +59,10 @@ julia> rescale(15, (0, 100), (1000, 0))
 850.0
 
 ```
-
 """
-rescale(x, from_min, from_max, to_min=0.0, to_max=1.0) =
+rescale(x, from_min, from_max, to_min = 0.0, to_max = 1.0) =
     ((x - from_min) / (from_max - from_min)) * (to_max - to_min) + to_min
-rescale(x, from::NTuple{2, Number}, to::NTuple{2, Number}) =
+rescale(x, from::NTuple{2,Number}, to::NTuple{2,Number}) =
     ((x - from[1]) / (from[2] - from[1])) * (to[2] - to[1]) + to[1]
 
 """
@@ -76,8 +75,9 @@ Examples:
     background("antiquewhite")
     background(1, 0.0, 1.0)
     background(1, 0.0, 1.0, .5)
+    background(Luxor.Colors.RGB(0, 1, 0))
 
-If Colors.jl is installed:
+If Colors.jl has been imported:
 
     background(RGB(0, 1, 0))
     background(RGBA(0, 1, 0))
@@ -106,7 +106,7 @@ function background(col::Colors.Colorant)
     return (r, g, b, a)
 end
 
-function background(col::T) where T <: AbstractString
+function background(col::T) where {T<:AbstractString}
     return background(parse(Colorant, col))
 end
 
@@ -135,26 +135,27 @@ setantialias(n) = Cairo.set_antialias(_get_current_cr(), n)
 """
     newpath()
 
-Create a new path, after clearing the current path. After
-this there's no path and no current point.
+Discard the current path's contents. After this, the current path is empty, and there's
+no current point.
 """
 newpath() = Cairo.new_path(_get_current_cr())
 
 """
     newsubpath()
 
-Start a new subpath, keeping the current path. After this there's no current point.
+Start a new subpath in the current path. After this, there's no current point.
 """
 newsubpath() = Cairo.new_sub_path(_get_current_cr())
 
 """
     closepath()
 
-Close the current path. This is Cairo's `close_path()` function.
+Draw a line from the current point to the first point of the current subpath.
+This is Cairo's `close_path()` function.
 """
 closepath() = Cairo.close_path(_get_current_cr())
 
-abstract type LDispatcher  end
+abstract type LDispatcher end
 # Packages which want to override strokepath/fillpath/strokepreserve/fillpreserve
 # can subtype an empty struct from this abstract type and dispatch on them .
 # Make sure Luxor.DISPATCHER[1] is set to an instance of the struct you want to
@@ -169,7 +170,7 @@ const DISPATCHER = Array{LDispatcher}([DefaultLuxor()])
     strokepath()
 
 Stroke the current path with the current line width, line join, line cap, dash,
-and stroke scaling settings. The current path is then cleared.
+and stroke scaling settings. The current path is then emptied.
 """
 strokepath() = strokepath(DISPATCHER[1])
 strokepath(::DefaultLuxor) = _get_current_strokescale() ? Cairo.stroke_transformed(_get_current_cr()) : Cairo.stroke(_get_current_cr())
@@ -178,7 +179,7 @@ strokepath(::LDispatcher) = strokepath(DefaultLuxor())
 """
     fillpath()
 
-Fill the current path according to the current settings. The current path is then cleared.
+Fill the current path according to the current settings. The current path is then emptied.
 """
 fillpath() = fillpath(DISPATCHER[1])
 fillpath(::DefaultLuxor) = Cairo.fill(_get_current_cr())
@@ -200,7 +201,7 @@ Stroke the current path with current line width, line join, line cap, dash, and
 stroke scaling settings, but then keep the path current.
 """
 strokepreserve() = strokepreserve(DISPATCHER[1])
-strokepreserve(::DefaultLuxor)    = _get_current_strokescale() ? Cairo.stroke_preserve_transformed(_get_current_cr()) : Cairo.stroke_preserve(_get_current_cr())
+strokepreserve(::DefaultLuxor) = _get_current_strokescale() ? Cairo.stroke_preserve_transformed(_get_current_cr()) : Cairo.stroke_preserve(_get_current_cr())
 strokepreserve(::LDispatcher) = strokepreserve(DefaultLuxor())
 
 """
@@ -209,13 +210,14 @@ strokepreserve(::LDispatcher) = strokepreserve(DefaultLuxor())
 Fill the current path with current settings, but then keep the path current.
 """
 fillpreserve() = fillpreserve(DISPATCHER[1])
-fillpreserve(::DefaultLuxor)      = Cairo.fill_preserve(_get_current_cr())
+fillpreserve(::DefaultLuxor) = Cairo.fill_preserve(_get_current_cr())
 fillpreserve(::LDispatcher) = fillpreserve(DefaultLuxor())
 
 """
     fillstroke()
 
 Fill and stroke the current path.
+After this, the current path is empty, and there is no current point.
 """
 function fillstroke()
     fillpreserve()
@@ -254,8 +256,9 @@ end
 Establish a new clipping region by intersecting the current clipping region with the
 current path and then clearing the current path.
 
-An existing clipping region is enforced through and after a `gsave()`-`grestore()` block, but a clipping region set inside
-a `gsave()`-`grestore()` block is lost after `grestore()`. [?]
+An existing clipping region is enforced through and after a
+`gsave()`-`grestore()` block, but a clipping region set inside a
+`gsave()`-`grestore()` block is lost after `grestore()`. [?]
 """
 clip() = clip(DISPATCHER[1])
 clip(::DefaultLuxor) = Cairo.clip(_get_current_cr())
@@ -282,6 +285,8 @@ clipreset() = Cairo.reset_clip(_get_current_cr())
     setline(n)
 
 Set the line width, in points.
+
+Use `getline()` to get the current value.
 """
 setline(n) = Cairo.set_line_width(_get_current_cr(), n)
 
@@ -289,6 +294,8 @@ setline(n) = Cairo.set_line_width(_get_current_cr(), n)
     getline()
 
 Get the current line width, in points.
+
+Use `setline()` to set the value.
 """
 function getline()
     ccall((:cairo_get_line_width, Cairo.libcairo),
@@ -301,7 +308,7 @@ end
 Set the line ends. `s` can be "butt" or `:butt` (the
 default), "square" or `:square`, or "round" or `:round`.
 """
-function setlinecap(str::String="butt")
+function setlinecap(str::String = "butt")
     if str == "round"
         Cairo.set_line_cap(_get_current_cr(), Cairo.CAIRO_LINE_CAP_ROUND)
     elseif str == "square"
@@ -326,9 +333,11 @@ end
     setlinejoin("round")
     setlinejoin("bevel")
 
-Set the line join style, or how to render the junction of two lines when stroking.
+Set the way line segments are joined when the path is stroked.
+
+The default joining style is "mitered".
 """
-function setlinejoin(str="miter")
+function setlinejoin(str = "miter")
     if str == "round"
         Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_ROUND)
     elseif str == "bevel"
@@ -341,7 +350,7 @@ end
 """
     setdash("dot")
 
-Set the dash pattern to one of: "solid", "dotted", "dot", "dotdashed",
+Set the dash pattern of lines to one of: "solid", "dotted", "dot", "dotdashed",
 "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed",
 "dotdotdotdashed".
 
@@ -354,17 +363,19 @@ end
 """
     setdash(dashes::Vector, offset=0.0)
 
-Set the dash pattern to the values in `dashes`. The first number is the length of the ink, the second the gap, and so on.
+Set the dash pattern for lines to the values in `dashes`. The first number is the length
+of the inked portion, the second the space, and so on.
 
-The `offset` specifies an offset into the pattern at which the stroke begins. So an offset of 10 means that the stroke starts at `dashes[1] + 10` into the pattern.
+The `offset` specifies an offset into the pattern at which the stroke begins. So
+an offset of 10 means that the stroke starts at `dashes[1] + 10` into the
+pattern.
 
 Or use `setdash("dot")` etc.
 """
-function setdash(dashes::Vector, offset=0.0)
+function setdash(dashes::Vector, offset = 0.0)
     # no negative dashes
     Cairo.set_dash(_get_current_cr(), abs.(Float64.(dashes)), offset)
 end
-
 
 """
     setstrokescale()
@@ -373,7 +384,6 @@ Return the current stroke scaling setting.
 """
 setstrokescale() = _get_current_strokescale()
 
-
 """
     setstrokescale(state::Bool)
 
@@ -381,53 +391,68 @@ Enable/disable stroke scaling for the current drawing.
 """
 setstrokescale(state::Bool) = _set_current_strokescale(state)
 
-
 """
     move(pt)
 
-Move to a point.
+Begin a new subpath in the current path, and set the current path's current point
+to `pt`, without drawing anything.
+
+Other path-building functions are `line()`, `curve()`, `arc()`, `rline()`, and
+`rmove()`.
+
+`hascurrentpoint()` returns true if there is a current point.
 """
-move(x, y)      = Cairo.move_to(_get_current_cr(), x, y)
-move(pt)        = move(pt.x, pt.y)
+move(x, y) = Cairo.move_to(_get_current_cr(), x, y)
+move(pt) = move(pt.x, pt.y)
 
 """
     rmove(pt)
 
-Move relative to current position by the `pt`'s x and y:
+Begin a new subpath in the current path, and add `pt` to the current path's current point.
+
+There must be a current point before you call this function.
+
+See also `currentpoint()` and `hascurrentpoint()`.
 """
-rmove(x, y)     = Cairo.rel_move_to(_get_current_cr(), x, y)
-rmove(pt)       = rmove(pt.x, pt.y)
+rmove(x, y) = Cairo.rel_move_to(_get_current_cr(), x, y)
+rmove(pt) = rmove(pt.x, pt.y)
 
 """
-    line(pt)
+    line(pt::Point)
 
-Draw a line from the current position to the `pt`.
+Add a straight line to the current path that joins the path's current point to `pt`. The
+current point is then updated to `pt`.
+
+Other path-building functions are `line()`, `curve()`, `arc()`, `rline()`, and
+`rmove()`.
+
+See also `currentpoint()` and `hascurrentpoint()`.
 """
-line(x, y)      = Cairo.line_to(_get_current_cr(), x, y)
-line(pt)        = line(pt.x, pt.y)
+line(x, y) = Cairo.line_to(_get_current_cr(), x, y)
+line(pt) = line(pt.x, pt.y)
 
 """
     line(pt1::Point, pt2::Point; action=:path)
     line(pt1::Point, pt2::Point, action=:path)
 
-Make a line between two points, `pt1` and `pt2` and do an action.
+Add a straight line between two points `pt1` and `pt2`, and do the action.
 """
 function line(pt1::Point, pt2::Point;
-        action=:path)
+    action = :path)
     move(pt1)
     line(pt2)
     do_action(action)
 end
 
-line(pt1::Point, pt2::Point, action::Symbol) = line(pt1, pt2, action=action)
+line(pt1::Point, pt2::Point, action::Symbol) = line(pt1, pt2, action = action)
 
 """
     rline(pt)
 
-Draw a line relative to the current position to the `pt`.
+Add a line relative to the current position to the `pt`.
 """
-rline(x, y)     = Cairo.rel_line_to(_get_current_cr(), x, y)
-rline(pt)       = rline(pt.x, pt.y)
+rline(x, y) = Cairo.rel_line_to(_get_current_cr(), x, y)
+rline(pt) = rline(pt.x, pt.y)
 
 """
     rule(pos, theta;
@@ -452,13 +477,13 @@ rule(O, pi/2, boundingbox=BoundingBox()/2)
 
 draws a line that spans a bounding box half the width and height of the drawing, and returns a Set of end points. If you just want the vertices and don't want to draw anything, use `vertices=true`.
 """
-function rule(pos, theta=0.0;
-        boundingbox=BoundingBox(),
-        vertices=false)
+function rule(pos, theta = 0.0;
+    boundingbox = BoundingBox(),
+    vertices = false)
     #TODO interaction with clipping regions needs work
 
     #TODO which boundingbox is providing the default???
-    bbox       = box(boundingbox, vertices=true)
+    bbox       = box(boundingbox, vertices = true)
     topside    = bbox[2:3]
     rightside  = bbox[3:4]
     bottomside = vcat(bbox[4], bbox[1])
@@ -470,10 +495,10 @@ function rule(pos, theta=0.0;
     rsina = r * sin(theta)
     ruledline = (pos - (rcosa, rsina), pos + (rcosa, rsina))
 
-    interpoints = Array{Point, 1}()
+    interpoints = Array{Point,1}()
 
     # check for intersection with top of bounding box
-    flag, ip = intersectionlines(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly = true)
     if flag
         if !(ip.x > topside[2].x || ip.x < topside[1].x)
             push!(interpoints, ip)
@@ -481,7 +506,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for right intersection
-    flag, ip = intersectionlines(ruledline[1], ruledline[2], rightside[1], rightside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], rightside[1], rightside[2], crossingonly = true)
     if flag
         if !(ip.y > rightside[2].y || ip.y < rightside[1].y)
             push!(interpoints, ip)
@@ -489,7 +514,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for bottom intersection
-    flag, ip = intersectionlines(ruledline[1], ruledline[2], bottomside[1], bottomside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], bottomside[1], bottomside[2], crossingonly = true)
     if flag
         if !(ip.x < bottomside[2].x || ip.x > bottomside[1].x)
             push!(interpoints, ip)
@@ -497,7 +522,7 @@ function rule(pos, theta=0.0;
     end
 
     # check for left intersection
-    flag, ip = intersectionlines(ruledline[1], ruledline[2], leftside[1], leftside[2], crossingonly=true)
+    flag, ip = intersectionlines(ruledline[1], ruledline[2], leftside[1], leftside[2], crossingonly = true)
     if flag
         if !(ip.y > leftside[1].y || ip.y < leftside[2].y)
             push!(interpoints, ip)
@@ -519,16 +544,16 @@ end
 #   - predefine all needed Dict entries in a thread safe way
 #   - each thread has it's own stack, separated by threadid
 # this is not enough for Threads.@spawn (TODO, but no solution yet)
-let _SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64, Float64, Float64, Float64},1}}}(Dict(0 => Array{Tuple{Float64, Float64, Float64, Float64},1}()))
+let _SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64,Float64,Float64,Float64},1}}}(Dict(0 => Array{Tuple{Float64,Float64,Float64,Float64},1}()))
     global _saved_colors
     function _saved_colors()
         id = Threads.threadid()
-        if ! haskey(_SAVED_COLORS_STACK[],id)
+        if !haskey(_SAVED_COLORS_STACK[], id)
             # predefine all needed Dict entries
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                _SAVED_COLORS_STACK[][preID] = Array{Tuple{Float64, Float64, Float64, Float64},1}()
+                _SAVED_COLORS_STACK[][preID] = Array{Tuple{Float64,Float64,Float64,Float64},1}()
             end
             unlock(lc)
         end
@@ -546,15 +571,15 @@ end
 """
     gsave()
 
-Save the current color settings on the stack.
+Save the current graphics environment, including current color settings.
 """
 function gsave()
     Cairo.save(_get_current_cr())
     r, g, b, a = (_get_current_redvalue(),
-                  _get_current_greenvalue(),
-                  _get_current_bluevalue(),
-                  _get_current_alpha()
-                 )
+        _get_current_greenvalue(),
+        _get_current_bluevalue(),
+        _get_current_alpha(),
+    )
     push!(_saved_colors(), (r, g, b, a))
     return (r, g, b, a)
 end
@@ -562,18 +587,19 @@ end
 """
     grestore()
 
-Replace the current graphics state with the one on top of the stack.
+Replace the current graphics state with the one previously saved by the most recent
+`gsave()`.
 """
 function grestore()
     Cairo.restore(_get_current_cr())
     try
-        (r, g, b, a) =  pop!(_saved_colors())
+        (r, g, b, a) = pop!(_saved_colors())
         _set_current_redvalue(r)
         _set_current_greenvalue(g)
         _set_current_bluevalue(b)
         _set_current_alpha(a)
     catch err
-         println("$err Not enough colors on the stack to restore.")
+        println("$err Not enough colors on the stack to restore.")
     end
 end
 
@@ -591,28 +617,32 @@ end
 """
     scale(x, y)
 
-Scale workspace by `x` and `y`.
+Scale the current workspace by different values in `x` and `y`.
 
+Values are relative to the current scale.
 Example:
 
 ```
 scale(0.2, 0.3)
 ```
-
 """
 scale(sx::Real, sy::Real) = Cairo.scale(_get_current_cr(), sx, sy)
 
 """
     scale(f)
 
-Scale workspace by `f` in both `x` and `y`.
+Scale the current workspace by `f` in both `x` and `y` directions.
+
+Values are relative to the current scale.
 """
 scale(f::Real) = Cairo.scale(_get_current_cr(), f, f)
 
 """
     rotate(a::Float64)
 
-Rotate workspace by `a` radians clockwise (from positive x-axis to positive y-axis).
+Rotate the current workspace by `a` radians clockwise (from positive x-axis to positive y-axis).
+
+Values are relative to the current orientation.
 """
 rotate(a) = Cairo.rotate(_get_current_cr(), a)
 
@@ -620,16 +650,18 @@ rotate(a) = Cairo.rotate(_get_current_cr(), a)
     translate(point)
     translate(x::Real, y::Real)
 
-Translate the workspace to `x` and `y` or to `pt`.
+Translate the current workspace to `x` and `y` or to `pt`.
+
+Values are relative to the current location.
 """
-translate(tx::Real, ty::Real)        = Cairo.translate(_get_current_cr(), tx, ty)
-translate(pt::Point)     = translate(pt.x, pt.y)
+translate(tx::Real, ty::Real) = Cairo.translate(_get_current_cr(), tx, ty)
+translate(pt::Point) = translate(pt.x, pt.y)
 
 """
     getpath()
 
 Get the current path and return a CairoPath object, which is an array of `element_type` and
-`points` objects. With the results you can step through and examine each entry:
+`points` objects. With the results you can step through and examine each entry like this:
 
 ```
 o = getpath()
@@ -663,21 +695,21 @@ for e in o
   end
 ```
 """
-getpath()      = Cairo.convert_cairo_path_data(Cairo.copy_path(_get_current_cr()))
+getpath() = Cairo.convert_cairo_path_data(Cairo.copy_path(_get_current_cr()))
 
 """
     getpathflat()
 
-Get the current path, like `getpath()` but flattened so that there are no Bèzier curves.
+Get the current path, like `getpath()` but flattened so that there are no Bézier curves.
 
 Returns a CairoPath which is an array of `element_type` and `points` objects.
 """
-getpathflat()  = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(_get_current_cr()))
+getpathflat() = Cairo.convert_cairo_path_data(Cairo.copy_path_flat(_get_current_cr()))
 
 """
     rulers()
 
-Draw and label two rulers starting at `O`, the current 0/0, and continuing out
+Draw and label two CAD-style rulers starting at `O`, the current 0/0, and continuing out
 along the current positive x and y axes.
 """
 function rulers()
@@ -693,22 +725,22 @@ function rulers()
         box(O - (w, 0), O + (0, n), :fillstroke)
         sethue(0.722, 0.525, 0.043) # darkgoldenrod
         setopacity(1)
-        [line(Point(x, 0), Point(x, -w/4), :stroke) for x in 0:10:n]
-        [line(Point(-w/4, y), Point(0, y), :stroke) for y in 0:10:n]
-        [line(Point(x, 0), Point(x, -w/6), :stroke) for x in 0:5:n]
-        [line(Point(-w/6, y), Point(0, y), :stroke) for y in 0:5:n]
+        [line(Point(x, 0), Point(x, -w / 4), :stroke) for x in 0:10:n]
+        [line(Point(-w / 4, y), Point(0, y), :stroke) for y in 0:10:n]
+        [line(Point(x, 0), Point(x, -w / 6), :stroke) for x in 0:5:n]
+        [line(Point(-w / 6, y), Point(0, y), :stroke) for y in 0:5:n]
         fontsize(2)
-        [text(string(x), Point(x, -w/3), halign=:right) for x in 10:10:n]
+        [text(string(x), Point(x, -w / 3), halign = :right) for x in 10:10:n]
         @layer begin
-                rotate(pi/2)
-                [text(string(x), Point(x, w/3), halign=:right) for x in 10:10:n]
+            rotate(pi / 2)
+            [text(string(x), Point(x, w / 3), halign = :right) for x in 10:10:n]
         end
         fontsize(15)
-        text("X", O + (n-w/2, w), halign=:right, valign=:middle)
-        text("Y", O + (-3w/2, n-w), halign=:right, valign=:middle, angle=pi/2)
+        text("X", O + (n - w / 2, w), halign = :right, valign = :middle)
+        text("Y", O + (-3w / 2, n - w), halign = :right, valign = :middle, angle = pi / 2)
         sethue(1.0, 1.0, 1.0)
-        text("X", O + (w, -w/2), halign=:right, valign=:middle)
-        text("Y", O + (-w/3, w/3), halign=:right, valign=:middle, angle=pi/2)
+        text("X", O + (w, -w / 2), halign = :right, valign = :middle)
+        text("Y", O + (-w / 3, w / 3), halign = :right, valign = :middle, angle = pi / 2)
         #center
         circle(O, 2, :strokepreserve)
         setopacity(0.5)
@@ -720,7 +752,7 @@ end
 """
     hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
 
-Creates a new SVG drawing by horizontal concatenation of SVG drawings. If drawings
+Create a new SVG drawing by horizontal concatenation of SVG drawings. If drawings
 have different height, the `valign` option can be used in order to define
 how to align. The `hpad` argument can be used to add padding between
 concatenated images.
@@ -734,25 +766,25 @@ argument ensures that these elements are not drawn in the concatenated drawing.
 Example:
 
 ```julia
-d1 = Drawing(200,100,:svg)
+d1 = Drawing(200, 100, :svg)
 origin()
-circle(O,60,:fill)
+circle(O, 60, :fill)
 finish()
 
-d2 = Drawing(200,200,:svg)
-rect(O,200,200,:fill)
+d2 = Drawing(200, 200, :svg)
+rect(O, 200, 200, :fill)
 finish()
-hcat(d1,d2; hpad=10, valign=:top, clip = true)
+hcat(d1, d2; hpad = 10, valign = :top, clip = true)
 ```
 """
-function Base.hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
-    dheight, dwidth = 0,-hpad
+function Base.hcat(D::Drawing...; valign = :top, hpad = 0, clip = true)
+    dheight, dwidth = 0, -hpad
     for d in D
         dheight = max(dheight, d.height)
         dwidth += d.width + hpad
         @assert d.surfacetype === :svg "Drawings must be SVG."
     end
-    dcat = Drawing(dwidth,dheight,:svg)
+    dcat = Drawing(dwidth, dheight, :svg)
     @layer begin
         for d in D
             if valign === :top
@@ -760,18 +792,18 @@ function Base.hcat(D::Drawing...; valign=:top, hpad=0, clip=true)
                 clip ? rect(pt, d.width, d.height, :clip) : nothing
                 placeimage(d, pt)
             elseif valign === :bottom
-                pt = Point(0,dheight-d.height)
+                pt = Point(0, dheight - d.height)
                 clip ? rect(pt, d.width, d.height, :clip) : nothing
-                placeimage(d,pt)
+                placeimage(d, pt)
             elseif valign === :middle
-                pt = Point(0,dheight-d.height)/2
+                pt = Point(0, dheight - d.height) / 2
                 clip ? rect(pt, d.width, d.height, :clip) : nothing
-                placeimage(d,pt)
+                placeimage(d, pt)
             else
                 throw("`valign` option not valid. Use either `:top`, `:bottom` or `:middle`.")
             end
             clipreset()
-            translate(Point(d.width+hpad,0))
+            translate(Point(d.width + hpad, 0))
         end
     end
     finish()
@@ -795,25 +827,25 @@ argument ensures that these elements are not drawn in the concatenated drawing.
 Example:
 
 ```julia
-d1 = Drawing(200,100,:svg)
+d1 = Drawing(200, 100, :svg)
 origin()
-circle(O,60,:fill)
+circle(O, 60, :fill)
 finish()
 
-d2 = Drawing(200,200,:svg)
-rect(O,200,200,:fill)
+d2 = Drawing(200, 200, :svg)
+rect(O, 200, 200, :fill)
 finish()
-vcat(d1,d2; vpad=10, halign=:left, clip = true)
+vcat(d1, d2; vpad = 10, halign = :left, clip = true)
 ```
 """
-function Base.vcat(D::Drawing...; halign=:left, vpad=0, clip=true)
+function Base.vcat(D::Drawing...; halign = :left, vpad = 0, clip = true)
     dheight, dwidth = -vpad, 0
     for d in D
         dwidth = max(dwidth, d.width)
         dheight += d.height + vpad
         @assert d.surfacetype === :svg "Drawings must be SVG."
     end
-    dcat = Drawing(dwidth,dheight,:svg)
+    dcat = Drawing(dwidth, dheight, :svg)
     @layer begin
         for d in D
             if halign === :left
@@ -821,18 +853,18 @@ function Base.vcat(D::Drawing...; halign=:left, vpad=0, clip=true)
                 clip ? rect(pt, d.width, d.height, :clip) : nothing
                 placeimage(d, pt)
             elseif halign === :right
-                pt = Point(dwidth-d.width, 0)
+                pt = Point(dwidth - d.width, 0)
                 clip ? rect(pt, d.width, d.height, :clip) : nothing
-                placeimage(d,pt)
+                placeimage(d, pt)
             elseif halign === :center
-                pt = Point(dwidth-d.width, 0)/2
+                pt = Point(dwidth - d.width, 0) / 2
                 clip ? rect(pt, d.width, d.height, :clip) : nothing
-                placeimage(d,pt)
+                placeimage(d, pt)
             else
                 throw("`halign` option not valid. Use either `:left`, `:right` or `:center`.")
             end
             clipreset()
-            translate(Point(0, d.height+vpad))
+            translate(Point(0, d.height + vpad))
         end
     end
     finish()

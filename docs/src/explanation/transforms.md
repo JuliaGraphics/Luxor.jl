@@ -165,7 +165,7 @@ Line thicknesses are not scaled by default. For example, with a current line thi
 
 ## Matrices
 
-In Luxor, there's always a *current matrix* that determines how coordinates are interpreted in the current workspace. It's a six element array:
+In Luxor, there's always a *current matrix* that determines how coordinates are interpreted in the current workspace. In Cairo, it's a six element array:
 
 ```math
 \begin{bmatrix}
@@ -174,7 +174,7 @@ In Luxor, there's always a *current matrix* that determines how coordinates are 
 \end{bmatrix}
 ```
 
-which is usually handled in Julia/Cairo/Luxor as a simple vector (array):
+and Luxor/Cairo matrix functions accept and return simple 6-element vectors:
 
 ```julia
 julia> getmatrix()
@@ -186,6 +186,10 @@ julia> getmatrix()
    0.0
    0.0
 ```
+
+!!! note
+
+    You can convert between the 6-element and 3x3 versions of a transformation matrix using the functions [`cairotojuliamatrix`](@ref) and [`juliatocairomatrix`](@ref).
 
 [`transform(a)`](@ref) transforms the current workspace by ‘multiplying’ the current matrix with matrix `a`. For example, `transform([1, 0, xskew, 1, 50, 0])` skews the current matrix by `xskew` radians and moves it 50 in x and 0 in y.
 
@@ -224,8 +228,6 @@ Other functions include [`getmatrix`](@ref),
 
 Use the [`getscale`](@ref), [`gettranslation`](@ref), and [`getrotation`](@ref) functions to find the current values of the current matrix. These can also find the values of arbitrary 3x3 matrices.
 
-You can convert between the 6-element and 3x3 versions of a transformation matrix using the functions [`cairotojuliamatrix`](@ref)
-and [`juliatocairomatrix`](@ref).
 
 ## World position
 

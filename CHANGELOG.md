@@ -14,9 +14,11 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 - `getcolor()` gets current color
 
--  multiply Point by 3×3 matrix using `*` 
+-  multiply Point by 3×3 matrix using `*`
 
 ### Changed
+
+- added more information to doc strings
 
 ### Removed
 
