@@ -119,7 +119,9 @@ which is an array of PathElements.
 
 Returns the Path object.
 
-See also getpath() and getpathflat().
+You can draw stored paths using `drawpath()`.
+
+See also `getpath()`, `getpathflat()`, and `textpath()`.
 """
 function storepath()
     path = PathElement[]

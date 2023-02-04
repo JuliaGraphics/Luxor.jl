@@ -1277,14 +1277,11 @@ end
 """
     polymove!(pgon, frompoint::Point, topoint::Point)
 
-Move (permanently) a polygon from `frompoint` to `topoints`.
+Move (permanently) a polygon from `frompoint` to `topoint`.
 """
 function polymove!(pgon, frompoint::Point, topoint::Point)
     d = topoint - frompoint
-    @inbounds for i in eachindex(pgon)
-        pgon[i] = Point(pgon[i].x + d.x, pgon[i].y + d.y)
-    end
-    return pgon
+    return pgon .+= d
 end
 
 """
@@ -1294,11 +1291,8 @@ end
 Scale (permanently) a polygon by `s`, relative to `center`.
 """
 function polyscale!(pgon, s;
-    center = O)
-    @inbounds for i in eachindex(pgon)
-        pgon[i] = between(center, pgon[i], s)
-    end
-    return pgon
+        center = O)
+    return pgon .= between.(center, pgon, s)
 end
 
 """
@@ -1309,11 +1303,8 @@ Scale (permanently) a polygon by `sh` horizontally and `sv` vertically,
 relative to `center`.
 """
 function polyscale!(pgon, sh, sv;
-    center = O)
-    @inbounds for i in eachindex(pgon)
-        pgon[i] = (pgon[i] - center) * (sh, sv)
-    end
-    return pgon
+        center = O)
+    return pgon .= (pgon .- center) .* Ref((sh, sv))
 end
 
 """

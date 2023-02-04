@@ -408,7 +408,10 @@ move(pt) = move(pt.x, pt.y)
 """
     rmove(pt)
 
-Begin a new subpath in the current path, and add `pt` to the current path's current point.
+Begin a new subpath in the current path, add `pt` to the current path's current
+point, then update the current point.
+
+Other path-building functions are `move()`, `line()`, `curve()`, `arc()`, and `rline()`.
 
 There must be a current point before you call this function.
 
@@ -423,7 +426,7 @@ rmove(pt) = rmove(pt.x, pt.y)
 Add a straight line to the current path that joins the path's current point to `pt`. The
 current point is then updated to `pt`.
 
-Other path-building functions are `line()`, `curve()`, `arc()`, `rline()`, and
+Other path-building functions are `move()`, `curve()`, `arc()`, `rline()`, and
 `rmove()`.
 
 See also `currentpoint()` and `hascurrentpoint()`.

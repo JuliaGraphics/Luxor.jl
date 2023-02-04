@@ -12,7 +12,7 @@ makedocs(
     pages    = [
     "Introduction to Luxor" => "index.md",
     "Tutorials" => [
-    "The Hello World bit" => "tutorial/helloworld.md",
+    "Hello World" => "tutorial/helloworld.md",
     "Basic path building" => "tutorial/basicpath.md",
     "Design a logo"       => "tutorial/quickstart.md",
     "Geometry tutorial"   => "tutorial/basictutorial.md",

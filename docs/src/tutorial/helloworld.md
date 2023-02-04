@@ -3,9 +3,9 @@ DocTestSetup = quote
     using Luxor, Colors
     end
 ```
-# The Hello World bit
+# Hello World
 
-Experienced Julia users and programmers fluent in other graphics systems should have no problem using Luxor by referring to the rest of the documentation.
+If you're familiar with the basics of Cairo, PostScript, Processing, or similar graphics applications, you can probably glance at these tutorials, then move on to the How To sections.
 
 ## What you need
 
@@ -27,7 +27,7 @@ $ julia
 
 then you're ready to start.
 
-You can work in a Jupyter or Pluto notebook, or perhaps use the VSCode editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
+You can work in a Jupyter or Pluto notebook, or use the VSCode editor/development environment. It's also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.
 
 Ready? Let's begin.
 
@@ -69,7 +69,7 @@ If you're using VS-Code, the image should appear in the Plots window. If you're 
     
     In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref) and [`@pdf`](@ref) macros, which do a similar thing. 
 
-PNGs and SVGs are good because they show up in VS-Code, Jupyter, and Plutp. SVGs are usually higher quality too, but they're text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.
+PNGs and SVGs are good because they show up in VS-Code, Jupyter, and Pluto. SVGs are usually higher quality too, but they're text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.
 
 This example illustrates a few things about Luxor drawings:
 

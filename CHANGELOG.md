@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.7.0] - forthcoming
+## [v3.7.0] - 2023-02-04
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
@@ -18,7 +18,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Changed
 
-- added more information to doc strings
+- added more information to doc strings and tutorials
 
 ### Removed
 

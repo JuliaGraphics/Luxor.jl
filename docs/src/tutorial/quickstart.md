@@ -173,15 +173,9 @@ svgimage # hide
 The flat circles are a bit dull, so let's write a function that draws the
 circles as ‘particles’. 
 
-The `drawcircle()` function draws lots of circles on top of each other, but each
+The `drawcircle()` function draws lots of circular disks on top of each other, but each
 one is drawn with a slightly smaller radius and a slightly lighter shade of the
-incoming color.
-
-The [`rescale`](@ref) function in Luxor provides an easy way to map or adjust
-values from one range to another. Here, numbers between 5 and 1 are mapped to
-numbers between 0.5 and 3. 
-
-The radius is scaled to run between `radius` and `radius/6`. 
+incoming color. The [`rescale`](@ref) function in Luxor provides an easy way to map or adjust values from one range to another. Here, it's used to change both the color and the size of the disks as the loop counter goes from 5 down to 1.
 
 Also, let's make them get larger as they spiral outwards, by adding `4i` to the
 radius when called by `drawcircle()`.
@@ -212,7 +206,9 @@ end 500 500
 function drawcircle(pos, radius, n)
     c = colors[mod1(n, end)]
     for i in 5:-0.1:1
+        # increase color from 0.5 to 3 as i drops from 5 to 1
         setcolor(rescale(i, 5, 1, 0.5, 3) .* c)
+        # decrease radius from radius to radius/6
         diskradius = rescale(i, 5, 1, radius, radius/6)
         circle(pos + (i/2, i/2), diskradius, action = :fill)
     end
@@ -287,8 +283,6 @@ svgimage # hide
 ```
 
 To tidy up, it's a good idea to move the code into functions (to avoid running too much in global scope), and do a bit of housekeeping.
-
-The `rescale()` function takes an input value and two min/max values, and returns the input value lying between the first min/max pair adjusted to match the second min/max pair.
 
 Also, a background for the icon would look good. [`squircle`](@ref) is useful for drawing shapes that occupy the space between pointy dull rectangles and space-inefficient circles.
 
