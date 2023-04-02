@@ -549,6 +549,23 @@ nothing # hide
 
 These last two functions can return 0, 1, or 2 points (since there are often two solutions to a specific geometric layout).
 
+[`circlering`](@ref) constructs `n` circles inside an outer circle and tangent to it. It returns both an array of 'circles' (`(pt, radius)` tuples), and details of the circle that fits inside them.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+    background("grey10")
+    sethue("rebeccapurple")
+    setline(3)
+    circle(Point(0, 0), 200, :stroke)
+    cs, ic = circlering(Point(0, 0), 200, 10)
+    for c in cs
+        circle(first(c), last(c), :stroke)
+    end 
+    circle(first(ic), last(ic), :stroke)
+end 800 450 # hide
+```
+
 ## Crescents
 
 Use [`crescent`](@ref) to construct crescent shapes. There are two methods.

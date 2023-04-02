@@ -69,14 +69,14 @@ If you don't specify a size, the defaults are usually 600 by 600. If you don't s
 @svg juliacircles(150) 400 400 "test" # saves in "test.svg"
 ```
 
-If you want to create drawings with transparent backgrounds, or use variables to specify filenames, you have to use the longer form, rather than the macros:
+If you want to create drawings with transparent backgrounds, or work with the (0, 0) point at the top left, use the longer form, rather than the macros.
 
 ```julia
 Drawing()
 background(1, 1, 1, 0)
 origin()
 setline(30)
-sethue("green") # assumes current opacity
+sethue("green")
 box(BoundingBox() - 50, action = :stroke)
 finish()
 preview()
@@ -122,6 +122,23 @@ d2 = @drawsvg begin
     end 200 100
 
 vcat(d1, d2)
+```
+
+### Creating many drawings
+
+You can create many drawings in a loop by specifying the filenames. For example, this creates PNG drawings of every glyph in the Unicode range 0x33 to 0xff.
+
+```julia
+
+for glyph in 0x33:0xff
+    @png begin
+        background("white")
+        fontsize(300)
+        fontface("JuliaMono-Black")
+        text(string(Char(glyph)), 
+            halign=:center, valign=:middle)
+    end 512 512 "/tmp/glyph-0x$(string(glyph, base=16)).png"
+end
 ```
 
 ## Interactive drawings

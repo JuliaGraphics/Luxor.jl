@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3.8.0] - 
+
+### Added
+
+- circlering()
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v3.7.0] - 2023-02-04
 
 LaTeX support is still under development. 
