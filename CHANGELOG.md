@@ -5,6 +5,7 @@
 ### Added
 
 - circlering()
+- polysuper()
 
 ### Changed
 

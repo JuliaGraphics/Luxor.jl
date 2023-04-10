@@ -53,6 +53,7 @@ function run_all_tests()
         include("various-points-tests.jl")
         include("polyhull-test.jl")
         include("polymorph-test.jl")
+        include("polysuper-test.jl")
     end
 
     @testset "text" begin

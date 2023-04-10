@@ -1446,3 +1446,56 @@ crescent(cp1::Point, r1::Real, cp2::Point, r2::Real, action::Symbol;
     vertices = vertices,
     reversepath = reversepath)
 # eof
+
+"""
+    polysuper(center::Point = Point(0, 0);
+        n1 = 1,
+        n2 = 1,
+        n3 = 1,
+        m = 2,
+        a = 1,
+        b = 1,
+        radius = 100,
+        action = :none,
+        vertices = false,
+        reversepath = false,
+        stepby = π / 120)
+
+Build a supershape, a generalization of the superellipse, and apply `action`. 
+
+Based upon equations by Johan Gielis.
+"""
+function polysuper(center::Point = Point(0, 0);
+        n1 = 1,
+        n2 = 1,
+        n3 = 1,
+        m = 2,
+        a = 1,
+        b = 1,
+        radius = 100,
+        action = :none,
+        vertices = false,
+        reversepath = false,
+        stepby = π / 120)
+
+    points = Point[]
+    for theta in 0:stepby:(2π - stepby)
+        t1 = abs(cos((m / 4) * theta) / a)
+        t1 = t1^n2
+        t2 = abs(sin((m / 4) * theta) / b)
+        t2 = t2^n3
+        r = min(10e12, (t1 + t2)^(1 / n1)) # clip
+        if abs(r) < 10e-3
+            pt = center + Point(0, 0)
+        else
+            r = 1 / r
+            pt = center + Point(radius * r * cos(theta), radius * r * sin(theta))
+        end
+        push!(points, pt)
+    end
+    result = reversepath ? reverse(points) : points
+    if !vertices
+        poly(result, action, close = true)
+    end
+    return result
+end
