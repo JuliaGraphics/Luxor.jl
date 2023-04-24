@@ -1,8 +1,8 @@
-import SnoopPrecompile
+import PrecompileTools
 
-@info "SnoopPrecompile is analyzing Luxor.jl code..."
+@info "PrecompileTools is analyzing Luxor.jl code..."
 
-SnoopPrecompile.@precompile_all_calls begin
+PrecompileTools.@compile_workload begin
     ngon(O, 100, 3, vertices=true)
     @draw circle(1.0, 1.2, 1.9, action=:fill)
     noise(1)
