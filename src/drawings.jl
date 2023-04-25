@@ -153,7 +153,7 @@ end
 # stored as item at index _current_drawing_index() in a constant global array
 
 function _get_current_drawing_save()
-    # check if drawing is not corrupted (has been observed using SnoopPrecompile)
+    # check if drawing is not corrupted (has been observed using PrecompileTools)
     #   checking fields:
     #     surface::CairoSurface
     #     cr::CairoSurface
