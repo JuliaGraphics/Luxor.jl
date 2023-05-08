@@ -6,6 +6,7 @@
 
 - circlering()
 - polysuper()
+- setfillrule()
 
 ### Changed
 

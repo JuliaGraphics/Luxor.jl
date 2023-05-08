@@ -201,6 +201,51 @@ finish() # hide
 d # hide
 ```
 
+### Fill rule
+
+You can have more control over the hole business by using the `setfillrule()` function. This allows you to set the fill rule for paths to either `:winding` or `:even_odd`. The fill rule is used to select how paths that contain others are filled. The default rule (which determines the behaviour we usually see for the current drawing) is `:winding`.
+
+See the wikipedia entry for [Even–odd_rule](https://en.wikipedia.org/wiki/Even–odd_rule) for more details.
+
+In the following example, the default `:winding` rule is shown in cyan, on the left, and the `reverse` flag controls whether the path is reversed or not. Without it, the polygons would just be drawn on top of each other. 
+
+The `:even_odd` rule is shown in operation in magenta, on the right. The results are the same, but the code can be simpler, because `reverse`-ing every other path is not required.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+fontsize(69)
+panes = Tiler(800, 400, 1, 2)
+
+setfillrule(:winding)
+sethue("cyan")
+
+@layer begin
+    translate(first(panes[1]))
+    let
+        reverse = false
+        for s in 300:-20:30
+            box(O, s, s, reversepath=reverse, :path)
+            reverse = !reverse
+        end
+    end
+    fillpath()
+end
+
+setfillrule(:even_odd)
+sethue("magenta")
+
+@layer begin
+    translate(first(panes[2]))
+    for s in 300:-20:30
+        box(O, s, s, :path)
+    end
+    fillpath()
+end
+
+end 800 400 # hide
+```
+
 ### Pretty polygons
 
 The [`prettypoly`](@ref) function can place graphics at each vertex of a polygon. After the polygon action, the supplied `vertexfunction` function is evaluated at each vertex. For example, to mark each vertex of a polygon with a randomly-colored circle:
@@ -640,11 +685,11 @@ This method generates offset widths using the supplied function. The value of th
 This example uses a simple sine curve in `f()` to vary the width of the spiral from beginning to end.
 
 ```@example
-using Luxor, Colors
+using Luxor, Colors # hide
 
 f(x, θ) =  10 + 40sin(x * π)
 
-@drawsvg begin
+@drawsvg begin # hide 
 
 spine = spiral(30, 1.3, vertices=true)
 ps = polysample(spine, 250, include_first=true, closed=false)
@@ -660,7 +705,7 @@ setmesh(mesh(box(BoundingBox(pgon)),
     ]))
 poly(pgon, action = :fill)
 
-end
+end # hide
 ```
 
 ### Fitting splines

@@ -37,7 +37,7 @@ using Rsvg
 #pattern_create_radial, pattern_set_extend, read_from_png,
 #rectangle, rel_line_to, rel_move_to, reset_clip, restore,
 #rotate, save, scale, select_font_face, set_antialias,
-#set_font_face, set_font_size, set_line_cap, set_line_join,
+#set_fill_type, set_font_face, set_font_size, set_line_cap, set_line_join,
 #set_dash, set_line_type, set_line_width, set_matrix,
 #set_operator, set_source, set_source_rgba,
 #set_source_surface, show_text, status, stroke,
@@ -174,7 +174,7 @@ export Drawing,
     # paths
     Path, PathClose, PathCurve, PathElement, PathLine,
     PathMove, bezierpathtopath, drawpath, storepath,
-    polytopath, pathlength, pathsample,
+    polytopath, pathlength, pathsample, setfillrule,
 
     # experimental
     tidysvg,
