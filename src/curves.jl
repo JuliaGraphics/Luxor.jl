@@ -1461,9 +1461,36 @@ crescent(cp1::Point, r1::Real, cp2::Point, r2::Real, action::Symbol;
         reversepath = false,
         stepby = π / 120)
 
-Build a supershape, a generalization of the superellipse, and apply `action`. 
+Build a supershape, a generalization of the superellipse, and apply `action`.
 
 Based upon equations by Johan Gielis.
+
+## Example
+
+```julia
+polysuper(m=4, 
+    n1=13, n2=11, n3=3,
+    a=3, b=4,
+    action=:fill, 
+    radius=200)
+
+produces this weird eye/lemon shape:
+
+
+                        @@@@@@S                       
+                  @@@@@@@@@@@@@@@@@@                  
+               @@@@@@@@@@@@@@@@@@@@@@@@               
+            R@@@@@@@@@@@@@@@@@@@@@@@@@@@@@            
+          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         
+      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@      
+   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   
+     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@     
+         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         
+            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@            
+              E@@@@@@@@@@@@@@@@@@@@@@@@@              
+                  @@@@@@@@@@@@@@@@@@o                 
+                      @@@@@@@@@@                      
+```                                                    
 """
 function polysuper(center::Point = Point(0, 0);
         n1 = 1,

@@ -94,6 +94,7 @@ for r in 1:size(A, 1), c in 1:size(A, 2)
     A[r, c] = pixelcolor(r, c, rows = 400, cols = 800)
 end
 A
+finish()
 ```
 
 ## Rows and columns, height and width
@@ -106,7 +107,9 @@ Locations on plots and Luxor drawings are typically specified as Cartesian x and
 
 The origin point of an array or image is the first pixel - usually drawn at the top left. In Luxor, the origin point (0/0) of a drawing (if created by `Drawing()`) is also at the top left, until you move it, or use the `origin()` function. (The `@draw` macros also set the origin at the centre of the drawing, for your convenience.)
 
-When you're working on a pixel array drawing, you might find it useful to define a transformation matrix that converts vector graphics coordinates from the conventional `x/across/width` - `y/down/height` to the pixel array's `row/down/height`, `column/across/width` convention, as used for array access. Here, the [`transform()`](@ref) function defines a matrix that flips the x and y coordinates, and shifts the origin to the "center" of the array. 
+When you're working on a pixel array drawing, you might find it useful to define a transformation matrix that converts vector graphics coordinates from the conventional `x/across/width` - `y/down/height` to the pixel array's `row/down/height`, `column/across/width` convention, as used for array access. 
+
+In this next example, the [`transform()`](@ref) function defines a matrix that flips the x and y coordinates, and shifts the origin to the "center" of the array. 
 
 Now you can specify the location of text and graphics using more typical vector-graphics coordinates - the text is placed at `Point(0, h/2 - 30)`, ie centered, 30 units above the bottom edge.
 
@@ -142,6 +145,7 @@ A disadvantage is that `BoundingBox()` functions don't work, because they're not
 ## Array as image
 
 An alternative way of using pixel arrays is to add them to a PNG or SVG drawing using [`placeimage`](@ref).
+
 For example, create a new drawing, and this time add the array A to the drawing. You can use it like any other image, such as clipping it by the Julia logo:
 
 ```julia

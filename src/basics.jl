@@ -877,11 +877,11 @@ end
 """
     setfillrule(rule::Symbol)
 
-Set the fill rule for paths for the current drawing. 
-    
+Set the fill rule for paths for the current drawing.
+
 `rule` can be `:winding` or `:even_odd`
 
-The fill rule is used to select how paths are filled. For both fill rules,
+The fill rule is used to select how subpaths are filled. For both fill rules,
 whether or not a point is included in the fill is determined by taking a ray
 from that point to infinity and looking at intersections with the path. The ray
 can be in any direction, as long as it doesn't pass through the end point of a
@@ -894,16 +894,39 @@ The default fill rule is `:winding`.
 `:winding`: If the path crosses the ray from left-to-right, counts +1. If the
 path crosses the ray from right to left, counts -1. (Left and right are
 determined from the perspective of looking along the ray from the starting
-point.) If the total count is non-zero, the point will be filled. 
+point.) If the total count is non-zero, the point will be filled.
 
 `even_odd`: counts the total number of intersections, without regard to the
 orientation of the contour. If the total number of intersections is odd, the
 point will be filled. (Since 1.0)
+
+See [`getfillrule`](@ref).
 """
-function setfillrule(rule::Symbol=:winding)
-    if rule === :winding
-        Cairo.set_fill_type(_get_current_cr(), Cairo.CAIRO_FILL_RULE_WINDING)
-    else    
+function setfillrule(rule::Symbol = :winding)
+    if rule === :even_odd
         Cairo.set_fill_type(_get_current_cr(), Cairo.CAIRO_FILL_RULE_EVEN_ODD)
+    else
+        Cairo.set_fill_type(_get_current_cr(), Cairo.CAIRO_FILL_RULE_WINDING)
+    end
+end
+
+"""
+    getfillrule()
+
+Get the current fill rule for paths for the current drawing.
+
+The `rule` can be `:winding` or `:even_odd`.
+
+See [`setfillrule`](@ref).
+"""
+function getfillrule()
+    c = ccall((:cairo_get_fill_rule, Luxor.Cairo.libcairo),
+        Int64, (Ptr{Nothing},), Luxor._get_current_cr().ptr)
+    if c == 0
+        return Symbol(:winding)
+    elseif c == 1
+        return Symbol(:even_odd)
+    else
+        throw(error("getfillrule(): no information available"))
     end
 end

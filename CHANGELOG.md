@@ -1,14 +1,17 @@
 # Changelog
 
-## [v3.8.0] - 
+## [v3.8.0] - 2023-05-
 
 ### Added
 
-- circlering()
-- polysuper()
-- setfillrule()
+- `circlering()`
+- `polysuper()`
+- `setfillrule()`
+- `getfillrule()`
 
 ### Changed
+
+- rejigged benchmarks folder a bit
 
 ### Removed
 

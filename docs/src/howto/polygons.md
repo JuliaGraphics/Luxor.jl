@@ -23,6 +23,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |[`polyrotate!`](@ref)          |                               |                           |[`ispointonpoly`](@ref)    |[`polymove!`](@ref)            |
 |[`polyfit`](@ref)              |                               |                           |                           |[`polyscale!`](@ref)           |
 |[`polyhull`](@ref)             |                               |                           |                           |                               |
+|[`polysuper`](@ref)            |                               |                           |                           |                               |
 |                               |                               |                           |                           |[`polyreflect!`](@ref)         |
 |                               |                               |                           |                           |[`polysample`](@ref)           |
 |                               |                               |                           |                           |[`polytriangulate`](@ref)      |
@@ -203,13 +204,13 @@ d # hide
 
 ### Fill rule
 
-You can have more control over the hole business by using the `setfillrule()` function. This allows you to set the fill rule for paths to either `:winding` or `:even_odd`. The fill rule is used to select how paths that contain others are filled. The default rule (which determines the behaviour we usually see for the current drawing) is `:winding`.
+You can have more control over the hole business by using the `setfillrule()` function. This allows you to set the fill rule for subpaths to either `:winding` or `:even_odd`. The fill rule is used to select how paths that contain subpaths are filled. The default rule (which determines the behaviour we usually see for the current drawing) is `:winding`.
 
 See the wikipedia entry for [Even–odd_rule](https://en.wikipedia.org/wiki/Even–odd_rule) for more details.
 
-In the following example, the default `:winding` rule is shown in cyan, on the left, and the `reverse` flag controls whether the path is reversed or not. Without it, the polygons would just be drawn on top of each other. 
+In the following example, the default `:winding` rule is shown in cyan, on the left, and the `reverse` flag controls whether the subpath is reversed or not. Without it, the boxes would just be drawn on top of each other and you'd just see a big cyan box.
 
-The `:even_odd` rule is shown in operation in magenta, on the right. The results are the same, but the code can be simpler, because `reverse`-ing every other path is not required.
+The `:even_odd` rule is shown in operation in magenta, on the right. The results are the same, but the code can be simpler, because `reverse`-ing every other subpath is not required.
 
 ```@example
 using Luxor # hide
