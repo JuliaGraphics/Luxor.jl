@@ -948,6 +948,9 @@ than `value`, and the difference value. Array is assumed to be sorted.
 """
 function nearestindex(a::Array{T,1} where {T<:Real}, val)
     ind = findlast(v -> (v < val), a)
+    if isnothing(ind)
+        throw(error("nearestindex: no index"))
+    end
     surplus = 0.0
     if ind > 0.0
         surplus = val - a[ind]
@@ -958,7 +961,9 @@ function nearestindex(a::Array{T,1} where {T<:Real}, val)
 end
 
 """
-    polyportion(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
+    polyportion(p::Array{Point, 1}, portion=0.5; 
+        closed=true, 
+        pdist = Array{Real, 1}[])
 
 Return a portion of a polygon, starting at a value between
 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first
@@ -976,7 +981,9 @@ using `polydistances(p, closed=closed)`.
 Use the complementary `polyremainder()` function to return
 the other part.
 """
-function polyportion(p::Array{Point,1}, portion = 0.5; closed = true, pdist = [])
+function polyportion(p::Array{Point,1}, portion = 0.5; 
+        closed = true, 
+        pdist = Array{Real,1}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)
@@ -1011,7 +1018,9 @@ function polyportion(p::Array{Point,1}, portion = 0.5; closed = true, pdist = []
 end
 
 """
-    polyremainder(p::Array{Point, 1}, portion=0.5; closed=true, pdist=[])
+    polyremainder(p::Array{Point, 1}, portion=0.5; 
+        closed=true, 
+        pdist=Array{Real, 1}[])
 
 Return the rest of a polygon, starting at a value between 0.0 (the beginning)
 and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three
@@ -1026,7 +1035,9 @@ calculated afresh, using `polydistances(p, closed=closed)`.
 
 Use the complementary `polyportion()` function to return the other part.
 """
-function polyremainder(p::Array{Point,1}, portion = 0.5; closed = true, pdist = [])
+function polyremainder(p::Array{Point,1}, portion = 0.5; 
+        closed = true, 
+        pdist = Array{Real, 1}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)

@@ -457,6 +457,8 @@ polar(r, theta) = Point(r * cos(theta), r * sin(theta))
 
 Find the point where two lines intersect.
 
+Return `(resultflag, resultip)`, where `resultflag` is a Boolean, and `resultip` is a Point.
+
 If `crossingonly == true` the point of intersection must lie on both lines.
 
 If `crossingonly == false` the point of intersection can be where the lines meet

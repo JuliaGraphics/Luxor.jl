@@ -93,8 +93,8 @@ end
 for r in 1:size(A, 1), c in 1:size(A, 2)
     A[r, c] = pixelcolor(r, c, rows = 400, cols = 800)
 end
-A
 finish()
+A
 ```
 
 ## Rows and columns, height and width

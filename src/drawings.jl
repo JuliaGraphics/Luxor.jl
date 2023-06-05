@@ -62,7 +62,7 @@ mutable struct Drawing
         elseif stype == :image
             the_surface = Cairo.CairoImageSurface(w, h, Cairo.FORMAT_ARGB32)
         else
-            error("Unknown Luxor surface type" \ "$stype\"")
+            error("Unknown Luxor surface type \"$stype\"")
         end
         the_cr = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
@@ -672,20 +672,20 @@ end
 @doc raw"""
     _adjust_background_rects(buffer::UInt8[]; addmarker = true)
 
-See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.\
+See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion details.
 
 Setting backgrounds in a recording surface (:rec) and creating a svg from it result in elements as
 
 ```
 <rect x="0" y="0" width="16777215" height="16777215" .../>
 ```
-independent of an existing transformation matrix (e.g. set with origin(...) or snapshot with a crop bounding box).\
+independent of an existing transformation matrix (e.g. set with origin(...) or snapshot with a crop bounding box).
 An existing transformation matrix manifests in the svg file as
 
 ```
 <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
 ```
-which is applied to every element including the background rects.\
+which is applied to every element including the background rects.
 This transformation needs to be inversed for the background rects which is added in this function.
 
 If `addmarker` is not set to false, a class property is set as marker:
@@ -766,13 +766,13 @@ end
 @doc raw"""
     _split_string_into_head_mid_tail(s::String,id::String)
 
-splits s into head, mid and tail string.\
-Example:\
+splits s into head, mid and tail string.
+Example:
 
 ```
   s="head...<g id="\$id">...</g>...tail"
 ```
-  results in\
+  results in
 
 ```
   head="head..."
