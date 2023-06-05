@@ -1,7 +1,5 @@
 import PrecompileTools
 
-@info "PrecompileTools is analyzing Luxor.jl code..."
-
 PrecompileTools.@compile_workload begin
     ngon(O, 100, 3, vertices=true)
     @draw circle(1.0, 1.2, 1.9, action=:fill)
