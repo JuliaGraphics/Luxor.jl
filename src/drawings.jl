@@ -465,14 +465,12 @@ Read the SVG image in `fname` and write it to a file
 
 Return the name of the modified file.
 
-SVG images use named defs for text, which cause errors
-problem when used in a notebook.
-[See](https://github.com/jupyter/notebook/issues/333) for
-example.
+SVG images use 'named defs' for text, which cause errors
+problem when used in browsers and notebooks.
+See [this github issue](https://github.com/jupyter/notebook/issues/333) for
+details.
 
-A kludgy workround is to rename the elements...
-
-As of Luxor 3.6 this is done elsewhere.
+A kludgy workround is to rename the elements.
 """
 function tidysvg(fname)
     # I pinched this from Simon's RCall.jl
@@ -481,17 +479,40 @@ function tidysvg(fname)
     if ext == ".svg"
         outfile = "$(path * "-tidy" * ext)"
         open(fname) do f
-            r = string(rand(100000:999999))
+            # random alpha strings
+            r = join(Char.(append!(rand(65:90, 6), rand(97:122, 6))))
             d = read(f, String)
             d = replace(d, "id=\"glyph" => "id=\"glyph" * r)
             d = replace(d, "href=\"#glyph" => "href=\"#glyph" * r)
             open(outfile, "w") do out
                 write(out, d)
             end
-            @info "modified SVG file copied to $(outfile)"
+            @debug "modified SVG file copied to $(outfile)"
         end
     end
     return outfile
+end
+
+"""
+    tidysvg(fromfile, tofile)
+
+Read the SVG image in `fromfile` and write it to `tofile` with modified glyph names.
+"""
+function tidysvg(fromfile, tofile)
+    path, ext = splitext(fromfile)
+    if ext == ".svg"
+        open(fromfile) do f
+            r = join(Char.(append!(rand(65:90, 6), rand(97:122, 6))))
+            d = read(f, String)
+            d = replace(d, "id=\"glyph" => "id=\"glyph" * r)
+            d = replace(d, "href=\"#glyph" => "href=\"#glyph" * r)
+            open(tofile, "w") do out
+                write(out, d)
+            end
+            @debug "modified SVG file copied to $(tofile)"
+        end
+    end
+    return tofile
 end
 
 # in memory:

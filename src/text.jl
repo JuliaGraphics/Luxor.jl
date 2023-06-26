@@ -516,7 +516,7 @@ function label(txt::T where T <: AbstractString, alignment::Symbol=:N, pos::Poin
 end
 
 """
-    label(txt::T where T <: AbstractString, rotation::Float64, pos::Point=O;
+    label(txt::T where T <: AbstractString, direction::Float64, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
@@ -526,27 +526,27 @@ Add a text label at a point, positioned relative to that point, for example,
 
     label("text", pi)          # positions text to the left of the origin
 """
-function label(txt::T where T <: AbstractString, rotation::Real, pos::Point=O;
+function label(txt::T where T <: AbstractString, direction::Real, pos::Point=O;
         offset=5,
         leader=false,
         leaderoffsets=[0.0, 1.0])
-    if 0 < rotation <= pi/4
+    if 0 < direction <= pi/4
         vertalign  = :middle
         horizalign = :left
-    elseif pi/4 < rotation <= 3pi/4
+    elseif pi/4 < direction <= 3pi/4
         vertalign  = :top
         horizalign = :center
-    elseif 3pi/4 < rotation <= 5pi/4
+    elseif 3pi/4 < direction <= 5pi/4
         vertalign  = :middle
         horizalign = :right
-    elseif 5pi/4 < rotation <= 7pi/4
+    elseif 5pi/4 < direction <= 7pi/4
         vertalign  = :bottom
         horizalign = :center
     else
         vertalign  = :middle
         horizalign = :left
     end
-    pt = pos + polar(offset, rotation)
+    pt = pos + polar(offset, direction)
     if leader
         line(between(pos, pt, leaderoffsets[1]), between(pos, pt, leaderoffsets[2]), :stroke)
     end

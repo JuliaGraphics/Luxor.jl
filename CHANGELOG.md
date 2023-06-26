@@ -4,10 +4,11 @@
 
 ### Added
 
-- `circlering()`
-- `polysuper()`
-- `setfillrule()`
+- `circlering()`, creates ring of circles inside a circle
+- `polysuper()`, creates superellipse-basd polygons
+- `setfillrule()`, access Cairo's fill rule parameter
 - `getfillrule()`
+- `tidysvg(fromfile, tofile)`, munge those SVG glyphs
 
 ### Changed
 

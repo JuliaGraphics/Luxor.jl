@@ -180,6 +180,7 @@ function run_all_tests()
         include("place-svg.jl")
         include("strokescale-test.jl")
         include("dispatcher.jl")
+        include("tidy-svg.jl")
     end
 end
 

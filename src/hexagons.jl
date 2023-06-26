@@ -1,6 +1,24 @@
 # algorithms from https://www.redblobgames.com/grids/hexagons/
 # first adapted by GiovineItalia/Hexagons.jl
 # then further tweaked for Julia v1 compatibility, Luxor use, etc.
+"""
+    Hexagon
+
+To create a hexagon, use one of the types:
+
+- HexagonOffsetOddR q r origin w h
+- HexagonOffsetEvenR q r origin w h
+- HexagonAxial q r origin w h
+- HexagonCubic q r s origin w h
+
+Functions:
+
+- hextile(hex::Hexagon) - calculate the six vertices
+- hexcenter(hex::Hexagon) - center
+- hexring(n::Int, hex::Hexagon) - array of hexagons surrounding hex
+- hexspiral(hex::Hexagon, n) - arry of hexagons in spiral
+- hexneighbors(hex::Hexagon) - array of neighbors of hexagon
+"""
 abstract type Hexagon end
 
 """
@@ -290,8 +308,9 @@ end
 """
     hexagons_within(n::Int, hex::Hexagon)
 
-Return all the hexagons within index distance `n` of `hex`. If `n` is 0, only the `hex` itself is returned.
-If `n` is 1, `hex` and the six hexagons one index away are returned. If `n` is 2, 19 hexagons surrounding `hex` are returned.
+Return all the hexagons within index distance `n` of `hex`. If `n` is 0, only
+the `hex` itself is returned. If `n` is 1, `hex` and the six hexagons one index
+away are returned. If `n` is 2, 19 hexagons surrounding `hex` are returned.
 """
 function hexagons_within(n::Int, hex::Hexagon)
     cubic_hex = convert(HexagonCubic, hex)
@@ -327,7 +346,8 @@ end
 """
     hexring(n::Int, hex::Hexagon)
 
-Return the ring of hexagons that surround `hex`. If `n` is 1, the hexagons immediately surrounding `hex` are returned.
+Return the ring of hexagons that surround `hex`. If `n` is 1, the hexagons
+immediately surrounding `hex` are returned.
 """
 function hexring(n::Int, hex::Hexagon)
     cubic_hex = convert(HexagonCubic, hex)
