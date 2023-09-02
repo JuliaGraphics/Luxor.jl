@@ -73,6 +73,7 @@ include("deprecations.jl")
 include("randompoints.jl")
 include("Path.jl")
 include("precompile.jl")
+include("placeeps.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 

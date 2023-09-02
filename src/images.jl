@@ -40,9 +40,11 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered = false)
         w, h = img.width, img.height
         xpos, ypos = xpos - (w / 2), ypos - (h / 2)
     end
-    Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
-    # no alpha
-    Cairo.paint(_get_current_cr())
+    @layer begin
+        Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
+        # no alpha
+        Cairo.paint(_get_current_cr())
+    end  
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point = O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
@@ -62,8 +64,10 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos, alpha; centered = false
         w, h = img.width, img.height
         xpos, ypos = xpos - (w / 2), ypos - (h / 2)
     end
-    Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
-    paint_with_alpha(_get_current_cr(), alpha)
+    @layer begin
+        Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
+        paint_with_alpha(_get_current_cr(), alpha)
+    end
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point, alpha; kwargs...) =
@@ -173,8 +177,14 @@ function placeimage(im::SVGimage, pos = O; centered = false)
         pos = pos - ((w / 2), (h / 2))
     end
     @layer begin
-        translate(pos)
-        Rsvg.handle_render_cairo(Luxor._get_current_cr(), im.im)
+        @layer begin
+            translate(pos)
+            @layer begin
+                # hack - do these extra saves prevent the UTM breakage? (#267)
+                # no, I think they don't
+                Rsvg.handle_render_cairo(Luxor._get_current_cr(), im.im)
+            end
+        end
     end
 end
 
@@ -212,8 +222,10 @@ function placeimage(buffer::AbstractMatrix{UInt32}, pt = O;
         w, h = size(buffer)
         pt = Point(pt.x - (w / 2), pt.y - (h / 2))
     end
-    Cairo.set_source_surface(Luxor._get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
-    paint_with_alpha(_get_current_cr(), alpha)
+    @layer begin
+        Cairo.set_source_surface(Luxor._get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
+        paint_with_alpha(_get_current_cr(), alpha)
+    end 
 end
 
 """
@@ -228,7 +240,9 @@ at the position.
 """
 function placeimage(buffer::AbstractMatrix{ARGB32}, args...; kargs...)
     # premultiply alpha
-    placeimage(reinterpret(Luxor.Cairo.UInt32, _to_uint32_color.(buffer)), args...; kargs...)
+    @layer begin
+        placeimage(reinterpret(Luxor.Cairo.UInt32, _to_uint32_color.(buffer)), args...; kargs...)
+    end
 end
 
 placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
@@ -236,7 +250,9 @@ placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(c
 function placeimage(buffer::Drawing, args...;
     kargs...)
     if buffer.surfacetype == :svg
-        placeimage(_readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
+        @layer begin
+            placeimage(_readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
+        end
     else
         throw(error("surfacetype `$(buffer.surfacetype)` is not supported. Use `image` instead."))
     end

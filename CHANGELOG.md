@@ -5,10 +5,11 @@
 ### Added
 
 - `circlering()`, creates ring of circles inside a circle
-- `polysuper()`, creates superellipse-basd polygons
+- `polysuper()`, creates superellipse-based polygons
 - `setfillrule()`, access Cairo's fill rule parameter
 - `getfillrule()`
 - `tidysvg(fromfile, tofile)`, munge those SVG glyphs
+- dependency on DataStructures.jl added
 
 ### Changed
 
