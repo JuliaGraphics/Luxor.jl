@@ -5,7 +5,10 @@ function circle(x::Real, y::Real, r::Real;
     if action != :path
         newpath()
     end
-    Cairo.arc(_get_current_cr(), x, y, r, 0, 2pi)
+    Cairo.arc(_get_current_cr(), x, y, r, 0, pi/2)
+    Cairo.arc(_get_current_cr(), x, y, r, pi/2, pi)
+    Cairo.arc(_get_current_cr(), x, y, r, pi, 3pi/2)
+    Cairo.arc(_get_current_cr(), x, y, r, 3pi/2, 2pi)
     do_action(action)
     return (Point(x, y) - (r, r), Point(x, y) + (r, r))
 end
