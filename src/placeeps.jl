@@ -3,24 +3,33 @@ using DataStructures: Stack
 """
     Luxor.placeeps(epsfile; log=false)
 
-Currently not exported or supported.
+Currently not exported...
 
 This function loads and interprets an EPS file previously exported by
-Cairo. This is intended mainly to get the geometry - the points and curves,
-etc. - from a file. It ignores quite a few EPS features...
+Cairo. Commands are 'applied' to the current drawing.
 
-- it reads only Cairo-written EPS files. Each EPS file defines its own
-  set of PostScript functions in a prolog. The Cairo EPS prolog is hard-coded into EPS files
-  created by Cairo so it's fairly predictable, other EPS files define their own prologs, so who
-  knows what PostScript functions are called...
+The primary intention is to extract some geometry  - points and curves,
+etc. - from an EPS vector graphic. 
+
+!!! warn
+
+    This function reads only 'Cairo-flavoured' EPS files. Every application that
+    exports EPS files defines its own chosen set of PostScript functions in a
+    prolog. There's no standard. The 'Cairo-flavoured' EPS prolog is hard-coded into
+    EPS files exported from Cairo so it's predictable, but other EPS exporters
+    define their own flavour, defining and calling who knows what PostScript
+    functions. So it's unlikely that EPS files from other sources will be
+    successfully processed with this function.
+
+Also note:
 
 - ignores clipping for now; I'm not sure how the Cairo->EPS->Cairo transformations work yet
 
-- ignores `rectfill`` commands for now - I think these are often used just for the initial BoundingBoxes/clipping
+- ignores `rectfill`` commands for now - I think these are often used just for the initial BoundingBoxes/clipping, but if they're used matrix transforms they'll need interpreting somehow
 
-- ignores blends, gradients, images, fonts, among many other things...
+- ignores blends and gradients, embedded images, embedded fonts, among many other things...
 
-Use `log` to print the Luxor commands as well as execute them. 
+Use `log` to print the commands to the REPL as well as execute them. 
 
 ## Examples
 
@@ -44,6 +53,27 @@ end 800 500 "/tmp/julia.eps"
     Luxor.placeeps("/tmp/julia.eps")
 end
 ```
+
+If you want to put the list of Luxor commands in a text file for pasting into another file, you could try this (Julia v.1.7 and up). Let's say you have an SVG called `julia.svg`.
+
+```julia
+# load an SVG and save as EPS
+@eps begin
+    svgf = readsvg("julia.svg")
+    placeimage(svgf, centered = true)
+end 500 500 "/tmp/t.eps"
+
+# convert EPS to Luxor commands
+redirect_stdio(stdout = "/tmp/output.jl") do
+    _placeeps("/tmp/t.eps", log = true)
+end
+
+# include Luxor commands and save as a new SVG:
+@svg begin
+    translate(boxtopleft())
+    include("/tmp/output.jl")
+end 500 500 "/tmp/julia.svg"
+```
 """
 function placeeps(epsfile;
         log = false)
@@ -61,7 +91,7 @@ function placeeps(epsfile;
         end
         if startswith(i, "%%Creator")
             if !occursin("cairo", i)
-                @warn "EPS file was not created with Cairo. Expect failure."
+                @warn "This EPS file was not created with Cairo. Expect disappointment and failure in equal measure."
             end
         end 
         if startswith(i, "%!PS-Adobe-3.0")
@@ -77,13 +107,13 @@ function placeeps(epsfile;
         for tkn in tkns
             if length(tkn) > 32
                 # long tokens are probably image or font data
-                # so we'll ignore it
+                # so ignore them
                 continue
             end
-            # hopefully there are some numbers in this file
+            # hopefully there are some numbers in this file?
             n = tryparse(Float64, tkn)
             if !isnothing(tryparse(Float64, tkn))
-                # push any numbers onto stack
+                # push numbers onto stack
                 push!(s, parse(Float64, tkn))
             elseif tkn == "m"
                 p1 = pop!(s)
@@ -133,7 +163,7 @@ function placeeps(epsfile;
                 log && println("gsave()")
             elseif tkn == "Q" # grestore
                 grestore()
-                clipreset() # does clipping get reset by grestore !!!
+                clipreset() # does clipping get reset by grestore ?
                 log && println("grestore(); clipreset()")
             elseif tkn == "cm" # matrix
                 p1 = pop!(s)
@@ -161,10 +191,10 @@ function placeeps(epsfile;
                 p1 = convert(Int, pop!(s) + 1)
                 sym = [:miter, :round, :bevel][p1]
                 setlinejoin(Symbol(sym))
-            elseif tkn == "[]" # empty array
+            elseif tkn == "[]" # tis an empty array
                 push!(s, "[")
                 push!(s, "]")
-            elseif tkn == "d"  # dash, array of numbers
+            elseif tkn == "d"  # dash patterns are an array of numbers
                 darray = Float64[]
                 for e in Iterators.reverse(s)
                     if e isa Number
@@ -179,7 +209,7 @@ function placeeps(epsfile;
                 clip()
             elseif tkn == "M"  # miterlimit
                 p1 = pop!(s)
-                # setmiterlimit($p1)") # is this in Cairo?
+                # setmiterlimit($p1)") # is this in Luxor or Cairo yet?
                 log && println("# setmiterlimit($(p1))")
             elseif tkn == "re" # ????
                 # 0 0 500 174 re W n
@@ -216,12 +246,12 @@ function placeeps(epsfile;
                 p2 = pop!(s)
                 p3 = pop!(s)
                 p4 = pop!(s)
-                # this rectclip ignored:
+                # a rectclip, will be ignored for now:
                 # rect(Point($(p4), $(p3)), $(p2), $(p1), action=:clip)
                 log && println("# rectclip ignored ")
                 log && println("# rect(Point($(p4), $(p3)), $(p2), $(p1), action=:clip) ")
             elseif tkn == "showpage" || tkn == "end"
-                
+                #
             elseif tkn == "cairo_image"
                 # AAARGH! file contains image and binary data ...
                 log && println("# file contains image data, ignoring... ")
@@ -231,5 +261,5 @@ function placeeps(epsfile;
         end
     end
     log && println("# end EPS import")
-    return true # anything better?
+    return true # anything better to return?
 end

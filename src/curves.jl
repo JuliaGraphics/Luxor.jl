@@ -9,6 +9,7 @@ function circle(x::Real, y::Real, r::Real;
     Cairo.arc(_get_current_cr(), x, y, r, pi/2, pi)
     Cairo.arc(_get_current_cr(), x, y, r, pi, 3pi/2)
     Cairo.arc(_get_current_cr(), x, y, r, 3pi/2, 2pi)
+    closepath()
     do_action(action)
     return (Point(x, y) - (r, r), Point(x, y) + (r, r))
 end
@@ -19,11 +20,21 @@ end
 
 Make a circle of radius `r` centered at 'centerpoint', and add it to the current path.
 
-`action` is one of the actions applied by `do_action`, defaulting to `:none`.
+`action` is one of the actions applied by `do_action()`, defaulting to `:none`.
 
 Returns a tuple of two points, the corners of a bounding box that encloses the circle.
 
 You can also use `ellipse()` to draw circles and place them by their centerpoint.
+
+`circlepath()` builds a circle using Bézier curves, and add it to the current path.
+
+`squircle()` builds a superellipse. `polysuper()` build a 'supershape', a
+generalization of the superellipse.
+
+`juliacircles()` draws three circles in a familiar formation.
+
+See also: `arc()`, `arc2r()`, `arc2sagitta()`, `carc()`, `carc2r()`,
+`carc2sagitta()`, `circlering()`, `crescent()`, `curve()`, `spiral()`, etc.
 """
 circle(centerpoint::Point, r::Real; action = :none) =
     circle(centerpoint.x, centerpoint.y, r, action = action)
@@ -186,6 +197,9 @@ ellipse(xc::Real, yc::Real, w::Real, h::Real, action::Symbol) =
 Make an ellipse, centered at `centerpoint`, with width `w`, and height `h`, and add it to the current path.
 
 Returns a tuple of two points, the corners of a bounding box that encloses the ellipse.
+
+See also: `circle()`, `squircle()`, `ellipseinquad()`...
+
 """
 ellipse(c::Point, w::Real, h::Real; action = :none) = ellipse(c.x, c.y, w, h, action = action)
 
@@ -198,15 +212,16 @@ ellipse(c::Point, w::Real, h::Real, action::Symbol) = ellipse(c, w, h, action = 
     squircle(center::Point, hradius, vradius, action;
         rt = 0.5, stepby = pi/40, vertices=false)
 
-Make a squircle or superellipse (basically a rectangle with
-rounded corners), and add it to the current path. Specify
-the center position, horizontal radius (distance from center
-to a side), and vertical radius (distance from center to top
-or bottom):
+Make a squircle or superellipse (basically a rectangle with rounded corners),
+and add it to the current path. Specify the center position, horizontal radius
+(distance from center to a side), and vertical radius (distance from center to
+top or bottom):
 
 The root (`rt`) option defaults to 0.5, and gives an intermediate shape. Values
 less than 0.5 make the shape more rectangular. Values above make the shape more
 round. The horizontal and vertical radii can be different.
+
+See also: `polysuper()`.
 """
 function squircle(center::Point, hradius::Real, vradius::Real;
     action = :none,
@@ -256,6 +271,8 @@ Add an arc to the current path from `angle1` to `angle2` going clockwise, center
 at `centerpoint`.
 
 Angles are defined relative to the x-axis, positive clockwise.
+
+See also: `carc()`, `arc2r()`, `arc2sagitta()`, ...
 """
 arc(centerpoint::Point, radius, angle1, angle2; action = :none) =
     arc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action = action)
@@ -277,6 +294,8 @@ Add an arc centered at `centerpoint` to the current path from `angle1` to
 `angle2`, going counterclockwise.
 
 Angles are defined relative to the x-axis, positive clockwise.
+
+See also: `arc()`, `carc2r()`, `carc2sagitta()`, ...
 """
 carc(centerpoint::Point, radius, angle1, angle2; action = :none) =
     carc(centerpoint.x, centerpoint.y, radius, angle1, angle2, action = action)
@@ -353,6 +372,8 @@ end
 Make an annular sector centered at `centerpoint`, and add it to the current path.
 
 TODO - return something more useful than a Boolean
+
+See also: `pie()`.
 """
 function sector(centerpoint::Point, innerradius::Real, outerradius::Real,
     startangle::Real, endangle::Real;
@@ -497,6 +518,8 @@ sector(innerradius::Real, outerradius::Real, startangle::Real, endangle::Real, c
 Make a pie shape centered at `x`/`y`. Angles start at the positive x-axis and
 are measured clockwise, and add it to the current path.
 
+See also `sector()`.
+
 TODO - return something more useful than a Boolean
 """
 function pie(x::Real, y::Real, radius::Real, startangle::Real, endangle::Real;
@@ -540,7 +563,7 @@ pie(radius::Real, startangle::Real, endangle::Real, action::Symbol) =
     curve(x1, y1, x2, y2, x3, y3)
     curve(p1, p2, p3)
 
-Add a Bézier curve to the current path..
+Add a Bézier curve to the current path.
 
 The spline starts at the current position, finishing at `x3/y3` (`p3`),
 following two control points `x1/y1` (`p1`) and `x2/y2` (`p2`).
@@ -1468,6 +1491,8 @@ Build a supershape, a generalization of the superellipse, and apply `action`.
 
 Based upon equations by Johan Gielis.
 
+See also: `squircle()`...
+
 ## Example
 
 ```julia
@@ -1477,7 +1502,7 @@ polysuper(m=4,
     action=:fill, 
     radius=200)
 
-produces this weird eye/lemon shape:
+produces a weird eye/lemon shape, a bit like this:
 
 
                         @@@@@@S                       

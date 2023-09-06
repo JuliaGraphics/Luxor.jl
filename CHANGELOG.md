@@ -9,11 +9,14 @@
 - `setfillrule()`, access Cairo's fill rule parameter
 - `getfillrule()`
 - `tidysvg(fromfile, tofile)`, munge those SVG glyphs
-- dependency on DataStructures.jl added
+- dependency on DataStructures.jl added 
+- `Luxor.placeeps` experimental
 
 ### Changed
 
 - rejigged benchmarks folder a bit
+- `circle()` constructed more carefully with four arc (thanks @hyrodium) #268
+- Point arithmetic fix #270 (thanks @j-maffe)
 
 ### Removed
 

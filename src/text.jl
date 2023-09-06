@@ -26,7 +26,35 @@ The default alignment is `:left`, `:baseline`.
 
 This function uses Cairo's Toy text API.
 
-See also `textextents()`, `settext()`, `label()`.
+Other text functions:
+
+`textextents()` - find the dimensions of some text in the current font
+
+`settext()` - like `text()` but using the Pro Api
+
+`setfont()` - like `fontface()` but using the Pro Api
+
+`label()` - draw text relative to a point with offset and leader lines
+
+`textbox()` - draw an array of strings vertically downwards 
+
+`textcurve()` - draw text on a circular arc
+
+`textfit()` - fit text into a BoundingBox by resizing it
+
+`textlines()` - splits text into an array of strings so as to fit width
+
+`textonpoly()` - draw text that sits on the edges of a polygon
+
+`textpath()` - convert text to paths (straight lines and Bezier segments)
+
+`textoutlines()` - Convert text to polygons (straight lines of varying lengths)
+
+`textplace()` - draw text character by character with font/size/position specs
+
+`texttrack()` - draw text tracked (tight or loose)
+
+`textwrap()` - draw text to fit a box after re-justifying the lines to fit nicely
 """
 function text(t::T where T <: AbstractString, pt::Point;
         halign=:left,

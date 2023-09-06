@@ -1,30 +1,36 @@
 using Luxor, Test
 
-f1 = "f1.svg"
+f1 = "tidy_svg_testing_1.svg"
 @svg begin
+    fontsize(100)
     text("hello")
-    text("world")
+    text("world", O + (0, 100))
 end 500 500 f1
 
-f2 = "f2.svg"
+f2 = "tidy_svg_testing_2.svg"
 @svg begin
+    fontsize(100)
     text("hello")
-    text("world")
+    text("world", O + (0, 100))
 end 500 500 f2
 
-tidysvg(f1, "f3.svg")
-tidysvg(f2, "f4.svg")
+tidysvg(f1, "tidy_svg_testing_3.svg")
 
-lines_1 = open("f1.svg") do f
+tidysvg(f2, "tidy_svg_testing_4.svg")
+
+lines_1 = open("tidy_svg_testing_1.svg") do f
     readlines(f)
 end
-lines_2 = open("f2.svg") do f
+
+lines_2 = open("tidy_svg_testing_2.svg") do f
     readlines(f)
 end
-lines_3 = open("f3.svg") do f
+
+lines_3 = open("tidy_svg_testing_3.svg") do f
     readlines(f)
 end
-lines_4 = open("f4.svg") do f
+
+lines_4 = open("tidy_svg_testing_4.svg") do f
     readlines(f)
 end
 
@@ -35,7 +41,7 @@ for i in eachindex(lines_1)
     end
 end
 
-# with after running tidysvg(), symbols should be different
+# after running tidysvg(), symbols should be different
 for i in eachindex(lines_3)
     if occursin("<symbol", lines_3[i])
         @test lines_3[i] != lines_4[i]

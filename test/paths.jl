@@ -65,10 +65,12 @@ end
 
 function path_test(path)
     # path info
-    @test size(path) == 10
-    @test length(path) == 10
+    @show size(path)
+    @test size(path) == 12
+    @test length(path) == 12
     @test typeof(path[1]) == PathMove
-    @test typeof(path[end]) == PathCurve
+    @test typeof(path[end - 1]) == PathClose
+    @test typeof(path[end]) == PathMove
     @test findfirst(pe -> pe isa PathClose, path) == 6
     @test findfirst(pe -> pe isa PathCurve, path) == 8
     @test findfirst(pe -> pe isa PathMove, path) == 1
@@ -85,8 +87,8 @@ function path_test(path)
     @test isapprox(pathlength(path, steps = 500), 2142.611, atol = 0.1)
 
     # resample path
-    @test 219 < length(pathsample(path, 10)) < 221
-    @test 27 < length(pathsample(path, 100)) < 29
+    @test 210 < length(pathsample(path, 10)) < 225
+    @test 28 < length(pathsample(path, 100)) < 32
 end
 
 function path_test_2(fname)

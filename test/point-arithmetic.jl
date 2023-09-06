@@ -8,6 +8,10 @@ Random.seed!(42)
 function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)
 
+    # number - Point (#270)
+    @test 10 - Point(1, 1) == Point(10 - 1, 10 - 1) == Point(9, 9) == -Point(1, 1) + 10
+    @test Point(1, 1) - 10 == Point(1 - 10, 1 - 10) == Point(1, 1) + -10 == -10 + Point(1, 1)
+
     # arithmetic with tuples
     @test pt1 + (5, 8) == Point(pt1.x + 5, pt1.y + 8)
     @test pt1 * (5, 8) == Point(pt1.x * 5, pt1.y * 8)
