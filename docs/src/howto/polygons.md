@@ -1125,7 +1125,9 @@ findfirst(pt -> isequal(pt.y, first(extrema(pt -> pt.y, pts))), pts)
 
 A convex hull of a polygon is the subset of points such that, when connected with straight lines, the resulting shape contains every point of the polygon.
 
-Use [`polyhull`](@ref) to find the convex hull of an array of points.
+Use [`polyhull`](@ref) to find the convex hull of an array of points. 
+
+This code obtains all the points in the Julia logo's circles, converts them to points on polygons, combines them into a single array, and then calculates the hull that encloses them all.
 
 ```@example
 using Luxor # hide
@@ -1135,9 +1137,9 @@ setline(4)
 
 juliacircles(130) # draw in color
 
-# get points
+# get all the points
 juliacircles(130, action=:path)
-points  = simplify(pathtopoly()[1], 2)
+points = collect(Iterators.flatten(vcat(pathtopoly())))
 
 hull = polyhull(points)
 
@@ -1148,8 +1150,6 @@ poly(hull, close=true, action = :stroke)
 finish() # hide
 d # hide
 ```
-
-In this example, the points forming the Julia logo (converted from a path to a polygon) are contained inside the convex hull.
 
 ## Polygon selection and modification
 

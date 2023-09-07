@@ -5,12 +5,13 @@ DocTestSetup = quote
 ```
 # Placing images
 
-## Loading and placing PNG and SVG images
+## Loading and placing images on drawings
 
-Luxor lets you place existing PNG and SVG images on the drawing. First, load the image:
+Luxor lets you place existing images on the drawing. First, load the image:
 
 - for PNG images, use `readpng(filename)`
 - for SVG images, use `readsvg(filename)` or `readsvg(string)`
+- for EPS images, use `placeeps(filename)`
 
 (JPEGs aren't supported.)
 
@@ -100,6 +101,68 @@ eachmatch(r"rgb\\(.*?\\)", s) |> collect
 ```
 
 To display the image in a Jupyter or Pluto notebook, use the `HTML` function, or you can use the [`readsvg`](@ref) and [`placeimage`](@ref) functions in combination.
+
+## EPS images
+
+EPS (Encapsulated PostScript) files created by Luxor (or any Cairo-based package) can be re-imported and placed on the current drawing with the [`placeeps`](@ref) function. The EPS commands are converted to the equivalent Luxor commands and evaluated immediately in the context of the current drawing and context.
+
+!!! warning
+    
+    This function is designed to extract just the coordinates of paths from an EPS
+    file. An EPS file can contain much more information about an image than just the
+    coordinates: there's image and pixel data, font data, linear color gradients,
+    and so on. These are not translated into Luxor functions. This function
+    interprets some of the EPS commands in a Cairo-generated EPS "Prolog"; EPS files created
+    by other applications will likely not contain this Cairo-generated Prolog, and
+    so won't be interpreted at all (or will go wrong in interesting ways).
+
+In the next example, an SVG file is placed and exported to an EPS file, then the EPS file is imported and placed on a new drawing with Luxor functions instead of EPS commands. It's placed at an angle for no good reason. When saved as SVG, the graphics will be in SVG format again. Some losses are to be expected!
+
+```@example
+using Luxor
+
+svgfile = dirname(@__FILE__) * "../assets/figures/linux.svg"
+epsfile = dirname(@__FILE__) * "../assets/figures/linux.eps"
+
+@eps begin
+    img = readsvg(svgfile)
+    placeimage(img, centered = true)
+end 500 500 epsfile
+    
+@drawsvg begin
+    translate(boxtopleft())
+    scale(0.5)
+    rotate(π/12)
+    placeeps("/tmp/linux.eps")
+end 
+```
+
+If you want to obtain the paths and coordinates for use elsewhere, you can use the `log=true` function, which sends the commands to the REPL as well:
+
+```julia
+placeeps("/tmp/linux.eps", log=true)
+
+# start EPS import
+gsave()
+setgray(1.0)
+move(Point(70.801, -6.0))
+line(Point(429.199, -6.0))
+curve(Point(471.617, -6.0), Point(506.0, 28.383), Point(506.0, 70.801))
+line(Point(506.0, 429.199))
+curve(Point(506.0, 471.617), Point(471.617, 506.0), Point(429.199, 506.0))
+line(Point(70.801, 506.0))
+curve(Point(28.383, 506.0), Point(-6.0, 471.617), Point(-6.0, 429.199))
+line(Point(-6.0, 70.801))
+curve(Point(-6.0, 28.383), Point(28.383, -6.0), Point(70.801, -6.0))
+closepath()
+move(Point(70.801, -6.0))
+fillpath()
+...
+```
+
+Once you have the Luxor commands, you can edit them into new creations:
+
+!["Linux penguin animation"](../assets/figures/linux.gif)
 
 ## Placing an image matrix
 

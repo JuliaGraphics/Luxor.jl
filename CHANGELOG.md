@@ -1,21 +1,24 @@
 # Changelog
 
-## [v3.8.0] - 2023-05-
+## [v3.8.0] - 2023-09-08
+
+LaTeX support is still under development. 
+See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
 - `circlering()`, creates ring of circles inside a circle
 - `polysuper()`, creates superellipse-based polygons
 - `setfillrule()`, access Cairo's fill rule parameter
-- `getfillrule()`
+- `getfillrule()` ...
 - `tidysvg(fromfile, tofile)`, munge those SVG glyphs
 - dependency on DataStructures.jl added 
-- `Luxor.placeeps` experimental
+- `placeeps()`, place EPS files
 
 ### Changed
 
 - rejigged benchmarks folder a bit
-- `circle()` constructed more carefully with four arc (thanks @hyrodium) #268
+- `circle()` constructed more carefully with four arcs (thanks @hyrodium) #268
 - Point arithmetic fix #270 (thanks @j-maffe)
 
 ### Removed

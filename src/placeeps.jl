@@ -1,9 +1,7 @@
 using DataStructures: Stack
 
 """
-    Luxor.placeeps(epsfile; log=false)
-
-Currently not exported...
+    placeeps(epsfile; log=false)
 
 This function loads and interprets an EPS file previously exported by
 Cairo. Commands are 'applied' to the current drawing.
@@ -11,7 +9,7 @@ Cairo. Commands are 'applied' to the current drawing.
 The primary intention is to extract some geometry  - points and curves,
 etc. - from an EPS vector graphic. 
 
-!!! warn
+!!! warning
 
     This function reads only 'Cairo-flavoured' EPS files. Every application that
     exports EPS files defines its own chosen set of PostScript functions in a
@@ -50,7 +48,7 @@ svgfile = readsvg("julia.svg")
 end 800 500 "/tmp/julia.eps"
 @draw begin
     translate(boxtopleft())
-    Luxor.placeeps("/tmp/julia.eps")
+    placeeps("/tmp/julia.eps")
 end
 ```
 
@@ -65,7 +63,7 @@ end 500 500 "/tmp/t.eps"
 
 # convert EPS to Luxor commands
 redirect_stdio(stdout = "/tmp/output.jl") do
-    _placeeps("/tmp/t.eps", log = true)
+    placeeps("/tmp/t.eps", log = true)
 end
 
 # include Luxor commands and save as a new SVG:
@@ -183,14 +181,15 @@ function placeeps(epsfile;
             elseif tkn == "J"
                 # 0 (butt caps), 1 (round caps), or 2 (extended butt caps)
                 p1 = convert(Int, pop!(s) + 1)
-                sym = [:butt, :round, :square][p1]
-                setlinecap(Symbol(sym))
-                log && println("setlinecap(Symbol($sym))")
+                v = ["butt", "round", "square"][p1]
+                setlinecap("\"$(v)\"")
+                log && println("setlinecap(\"$(v)\")")
             elseif tkn == "j"
                 # 0 (miter join), 1 (round join), or 2 (bevel join)
                 p1 = convert(Int, pop!(s) + 1)
-                sym = [:miter, :round, :bevel][p1]
-                setlinejoin(Symbol(sym))
+                v = ["miter", "round", "bevel"][p1]
+                setlinejoin("\"$(v)\"")
+                log && println("setlinejoin(\"$(v)\")")
             elseif tkn == "[]" # tis an empty array
                 push!(s, "[")
                 push!(s, "]")

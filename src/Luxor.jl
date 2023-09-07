@@ -19,7 +19,6 @@ using Dates
 using FFMPEG
 using Juno
 using Rsvg
-#using FreeTypeAbstraction
 
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
@@ -137,7 +136,9 @@ export Drawing,
     blendmatrix, setblendextend, rotationmatrix, scalingmatrix,
     translationmatrix, cairotojuliamatrix,
     juliatocairomatrix, getrotation, getscale,
-    gettranslation, setmode, getmode, GridHex, GridRect, nextgridpoint, Table, highlightcells, readpng, readsvg, placeimage, svgstring, julialogo, juliacircles, barchart, mesh, setmesh, add_mesh_patch, mask,
+    gettranslation, setmode, getmode, GridHex, GridRect, nextgridpoint, Table, 
+    highlightcells, readpng, readsvg, placeimage, placeeps, 
+    svgstring, julialogo, juliacircles, barchart, mesh, setmesh, add_mesh_patch, mask,
 
     # animation
     Movie, Scene, animate, lineartween, easeinquad, easeoutquad, easeinoutquad,
