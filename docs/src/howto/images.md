@@ -133,7 +133,7 @@ end 500 500 epsfile
     translate(boxtopleft())
     scale(0.5)
     rotate(π/12)
-    placeeps("/tmp/linux.eps")
+    placeeps(epsfile)
 end 
 ```
 
