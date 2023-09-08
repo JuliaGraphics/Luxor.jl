@@ -7,18 +7,18 @@ DocTestSetup = quote
 
 ## Loading and placing images on drawings
 
-Luxor lets you place existing images on the drawing. First, load the image:
+Luxor lets you place existing images on the drawing. You can place PNG, SVG, and EPS images. (JPEGs aren't supported.)
 
-- for PNG images, use `readpng(filename)`
-- for SVG images, use `readsvg(filename)` or `readsvg(string)`
-- for EPS images, use `placeeps(filename)`
+For PNG and SVG, first load the image and create a reference to it. For example:
 
-(JPEGs aren't supported.)
+- for PNG images, use `img = readpng(filename)`
+- for SVG images, use `img = readsvg(filename)` or `img = readsvg(string)`
 
-Then use [`placeimage`](@ref) to place the image by its top
-left corner at point `pt`, or use the `centered=true`
-keyword to place the image's center point there. Access the
-image's dimensions with `.width` and `.height`.
+You can access this image's dimensions with `img.width` and `img.height`.
+
+Use [`placeimage(img)`](@ref) to place the image by its top
+left corner at point `pt`. Use the `centered=true`
+keyword to place the image's center point there. 
 
 ```@example
 using Luxor # hide
@@ -39,17 +39,23 @@ nothing # hide
 ```
 !["Images"](../assets/figures/images.png)
 
-PNG images can be placed with varying opacity or transparency.
+PNG images can be placed with varying opacity or transparency. For example, the image is placed with 0.5 opacity with:
+
+```julia
+placeimage(img, Point(100, 100), 0.5)
+```
+
+SVG images do their own thing in terms of opacity.
 
 [`readsvg`](@ref) also lets you supply raw (or pure) SVG code in a string.
 
-You can also use `placeimage()` to place an array of RGB or RGBA pixels on a drawing.
+You can use `placeimage()` to place an array of RGB or RGBA pixels on a drawing.
 
 ```@example
 using Luxor, Colors # hide
 N = 500
 i = reshape([RGBA(rand(4)...) for p in 1:N^2], N, N)
-# is is Matrix{RGBA{Float64}} 
+# i is Matrix{RGBA{Float64}} 
 # (alias for Array{RGBA{Float64}, 2})
 @draw begin
   origin()
@@ -59,7 +65,7 @@ i = reshape([RGBA(rand(4)...) for p in 1:N^2], N, N)
 end 500 500
 ```
 
-Or load an image as an array and place it on a drawing.
+Or you can load an image as an array and place it on a drawing.
 
 ```julia
 using Luxor, Colors, FileIO
@@ -75,10 +81,10 @@ end 250 250
 
 ## SVG images
 
-To create an SVG image, using the `Drawing(... :svg)` or specify an SVG filename.
-To obtain the SVG source of a completed drawing, use [`svgstring`](@ref).
+To output a drawing as an SVG image, using the `Drawing(... :svg)` or specify an SVG filename.
+To obtain the SVG source of a _completed_ SVG drawing, use [`svgstring`](@ref).
 
-For example, draw the Julia logo:
+For example, if you draw the Julia logo like this:
 
 ```julia
 Drawing(500, 500, :svg)
@@ -88,7 +94,7 @@ finish()
 s = svgstring()
 ```
 
-The SVG source code is now stored in `s`. You can examine or process it further:
+You'll get the SVG source code stored, as a string, in `s`. You can examine or process it further. For example, the five colors used for the logo were:
 
 ```julia
 eachmatch(r"rgb\\(.*?\\)", s) |> collect
@@ -104,19 +110,20 @@ To display the image in a Jupyter or Pluto notebook, use the `HTML` function, or
 
 ## EPS images
 
-EPS (Encapsulated PostScript) files created by Luxor (or any Cairo-based package) can be re-imported and placed on the current drawing with the [`placeeps`](@ref) function. The EPS commands are converted to the equivalent Luxor commands and evaluated immediately in the context of the current drawing and context.
+EPS (Encapsulated PostScript) files created by Luxor (or any Cairo-based package) can be re-imported and placed on the current drawing with the [`placeeps`](@ref) function. This function converts the EPS commands to the equivalent Luxor commands and evaluates them immediately in the context of the current drawing.
 
 !!! warning
     
     This function is designed to extract just the coordinates of paths from an EPS
-    file. An EPS file can contain much more information about an image than just the
-    coordinates: there's image and pixel data, font data, linear color gradients,
-    and so on. These are not translated into Luxor functions. This function
-    interprets some of the EPS commands in a Cairo-generated EPS "Prolog"; EPS files created
-    by other applications will likely not contain this Cairo-generated Prolog, and
-    so won't be interpreted at all (or will go wrong in interesting ways).
+    file. An EPS file can contain much more information about an image than
+    coordinates: there migth be image and pixel data, font data, linear color
+    gradients, and so on. These are _not_ translated into equivalent Luxor
+    functions. This function interprets the EPS commands in a Cairo-generated EPS
+    "Prolog"; EPS files created by other applications will likely not contain this
+    Cairo-generated Prolog, and so won't be interpreted at all (or will go wrong in
+    interesting ways).
 
-In the next example, an SVG file is placed and exported to an EPS file, then the EPS file is imported and placed on a new drawing with Luxor functions instead of EPS commands. It's placed at an angle for no good reason. When saved as SVG, the graphics will be in SVG format again. Some losses are to be expected!
+In this example, an SVG file `linnux.svg` is placed and exported to an EPS file `linux.eps`, then this EPS file is imported and placed on a new SVG drawing using Luxor functions instead of EPS commands, respecting the current scale and orientation. Finally, when the SVG document is finished, the graphics will be in SVG format again.
 
 ```@example
 using Luxor
@@ -130,10 +137,11 @@ epsfile = dirname(@__FILE__) * "../assets/figures/linux.eps"
 end 500 500 epsfile
     
 @drawsvg begin
-    translate(boxtopleft())
+    translate(midpoint(boxtopleft(), O))
     scale(0.5)
     rotate(π/12)
     placeeps(epsfile)
+    rulers()
 end 
 ```
 
@@ -160,13 +168,35 @@ fillpath()
 ...
 ```
 
-Once you have the Luxor commands, you can edit them into new creations:
+Once you have a sequence of Luxor commands, you can edit them into new creations:
 
-!["Linux penguin animation"](../assets/figures/linux.gif)
+!["drawing a penguin animation"](../assets/figures/linux.gif)
 
 ## Placing an image matrix
 
-You can also use [`placeimage`](@ref) to put image matrices on a drawing.
+You can use [`placeimage`](@ref) to put pixel images on a drawing.
+
+This example uses noise to define the RGB values in a matrix of ARGB32 color values:
+
+```@example
+using Luxor # hide
+
+D = 600
+mat = [Luxor.ARGB32(
+    noise(0.01r, 0.01c), 
+    noise(0.1r, 0.02c),
+    noise(0.1r, 0.01c)) for r in 1:D, c in 1:D]
+
+@drawsvg begin
+    placeimage(mat, centered=true)
+    fontsize(80)
+    sethue("white")
+    setopacity(0.5)
+    text("woah", halign=:center)
+end D D÷2 
+```
+
+The next example saves vector graphics into an image matrix, then places that matrix at random on another drawing.
 
 ```julia
 using Luxor
