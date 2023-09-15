@@ -328,17 +328,17 @@ drawing it. If you want to draw a large path more than once,
 it might be more efficient to calculate the length of the
 path first, and provide it to the `pathlength` keyword.
 
-The `steps` parameter is used when approximating the length of any curve (Bezier) sections.
+The `steps` parameter is used when approximating the length of any curve (Bezier) sections. Higher values will be more accurate.
 """
 function drawpath(path::Path, k::Real;
-    steps = 10, # used when approximating Bezier curve segments
-    action = :none,
-    startnewpath = true,
-    pathlength = 0.0)
+        steps = 20, # used when approximating Bezier curve segments
+        action = :none,
+        startnewpath = true,
+        pathlength = 0.0)
     if iszero(pathlength)
         pathlength = Luxor.pathlength(path)
     end
-    requiredlength = k * pathlength
+    requiredlength = clamp(k, 0.0, 1.0) * pathlength
     currentlength = 0
     startnewpath && newpath()
     # firstpoint is the point we will return to for a Close
@@ -346,26 +346,31 @@ function drawpath(path::Path, k::Real;
     # mostrecentpoint is the point we last visited
     currentposition = mostrecentpoint = firstpoint = O
     for pathelement in path
+        currentlength > requiredlength && break
         if pathelement isa PathMove # pt1
             currentposition = firstpoint = pathelement.pt1
             drawpath(pathelement)
             mostrecentpoint = Luxor.currentpoint() # remember how far we've got
         elseif pathelement isa PathCurve # pt1 pt2  pt3
             plength = Luxor.get_bezier_length(BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3), steps = steps)
-            currentlength += plength
-            if currentlength > requiredlength
+            if currentlength + plength > requiredlength
                 # we mustn't draw all of this curve, since it overshoots
-                overshoot = (currentlength - requiredlength) / pathlength
                 # just draw the overshoot fraction of the curve
+                overshoot = (requiredlength - currentlength) / plength
                 bps = BezierPathSegment(currentposition, pathelement.pt1, pathelement.pt2, pathelement.pt3)
-                newbezier = bezier.(range(0.0, overshoot, length = steps), bps...)
+                newbezier = trimbezier(bps, 0, overshoot)
                 # using the last three, currentposition is the first pt
                 drawpath(PathCurve(newbezier[2], newbezier[3], newbezier[4]))
+                mostrecentpoint = newbezier[4]
+                # add this length
+                currentlength += Luxor.get_bezier_length(newbezier)
             else
                 drawpath(pathelement)
+                mostrecentpoint = pathelement.pt3
+                currentlength += plength
             end
-            mostrecentpoint = Luxor.currentpoint() # remember how far we've got
-            currentposition = pathelement.pt3 # update currentposition
+            currentposition = mostrecentpoint # update currentposition
+            mostrecentpoint == Luxor.currentpoint()
         elseif pathelement isa PathLine  # pt1
             plength = distance(currentposition, pathelement.pt1)
             currentlength += plength
@@ -394,7 +399,6 @@ function drawpath(path::Path, k::Real;
             end
             mostrecentpoint = Luxor.currentpoint()
         end
-        currentlength > requiredlength && break
     end
     do_action(action)
     return mostrecentpoint
@@ -404,10 +408,10 @@ drawpath(path::Path, k::Real, act::Symbol;
     steps = 10, # used when approximating Bezier curve segments
     startnewpath = true,
     pathlength = 0.0) = drawpath(path, k;
-    steps = steps,
-    action = act,
-    startnewpath = startnewpath,
-    pathlength = pathlength)
+        steps = steps,
+        action = act,
+        startnewpath = startnewpath,
+        pathlength = pathlength)
 
 """
     pathsample(path::Path, spacing;

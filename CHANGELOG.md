@@ -1,5 +1,21 @@
 # Changelog
 
+## [v3.9.0] - forthcoming
+
+LaTeX support is still under development. 
+See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
+
+### Added
+
+### Changed
+
+- fixed `drawpath(p, f)` to segment Bezier curves better
+
+### Removed
+
+### Deprecated
+
+# ────────────────────────────────────────────────────────────────────────────────────
 ## [v3.8.0] - 2023-09-08
 
 LaTeX support is still under development. 
