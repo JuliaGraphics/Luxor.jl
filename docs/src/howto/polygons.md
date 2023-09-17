@@ -66,7 +66,7 @@ for (pos, n) in tiles
         sethue(cols[n])
 
         poly(p, action = :fill, close=true)
-        sethue("black")
+        sethue("grey10")
         poly(p, action = :stroke, close=true)
 
         circle(Point(0, 0), 4, action = :fill)
@@ -96,7 +96,7 @@ setline(2) # hide
 for i in 20:-1:3
     sethue(i/20, 0.5, 0.7)
     ngonside(Point(0, 0), 75, i, 0, action = :fill)
-    sethue("black")
+    sethue("grey10")
     ngonside(Point(0, 0), 75, i, 0, action = :stroke)
 end
 
@@ -328,7 +328,7 @@ using Luxor # hide
 Drawing(600, 500, "../assets/figures/simplify.png") # hide
 background("white") # hide
 origin() # hide
-sethue("black") # hide
+sethue("grey10") # hide
 setline(1) # hide
 fontsize(20) # hide
 translate(0, -120) # hide
@@ -432,7 +432,7 @@ Drawing(400, 150, "../assets/figures/polysplit.png") # hide
 origin() # hide
 setopacity(0.7) # hide
 Random.seed!(42) # hide
-sethue("black") # hide
+sethue("grey10") # hide
 s = squircle(O, 60, 60, vertices=true)
 pt1 = Point(0, -120)
 pt2 = Point(0, 120)
@@ -466,7 +466,7 @@ for (pos, n) in tiles
     p = star(pos, tiles.tilewidth/2 - 2, 5, 0.3, 0, vertices=true)
     sethue("red")
     poly(p, close=true, action = :stroke)
-    sethue("black")
+    sethue("grey10")
     polysmooth(p, n * 2, action = :fill)
 end
 
@@ -491,7 +491,7 @@ setdash("dot")
 sethue("red")
 prettypoly(p, close=true, action = :stroke)
 setdash("solid")
-sethue("black")
+sethue("grey10")
 polysmooth(p, 40, action = :fill, debug=true)
 finish() # hide
 nothing # hide
@@ -774,7 +774,7 @@ A bezigon is like a polygon, but the sides can be Bézier paths instead of strai
 ```@example
 using Luxor, Colors # hide
 @drawsvg begin # hide
-background("black") # hide
+background("grey10") # hide
 corners = [Point(10, 0), Point(200, 0)]
 sides = [
     [Point(70, -40), Point(150, -50)],
@@ -1409,7 +1409,8 @@ nothing # hide
 
 You supply two polygons and a value `k` between 0 and 1. For example, if the value of `k` is 0.5, the shape is about halfway between the two polygons.
 
-`polymorph()` always returns an array of polygons.
+!!! note
+    `polymorph()` always returns an array of polygons. Both arguments are arrays of polygons.
 
 By default, the polygons are assumed to be closed, suitable for filling.
 
@@ -1418,7 +1419,7 @@ But in this example, each of the two wavy-line polygons are open rather than clo
 ```@example
 using Luxor # hide
 @drawsvg begin # hide
-background("black") # hide
+background("grey10") # hide
 setline(1.5) # hide
 rotate(π/2)
 fromshape  = [Point(90x, -230 + 50sin(3x)) for x in range(-π, π, length=250)]
@@ -1435,12 +1436,38 @@ end # hide
 
 Sometimes polygons consist of two or more loops - this is how holes work. So `polymorph()` accepts both simple polygons and arrays of polygons, but always returns an array of polygons.
 
+`polymorph()` accepts easing functions that determine the 'speed' and 'acceleration' of the changes. These are the same functions that are described in more detail in the Animation section, [Easing-functions](@ref). In the previous example, the `easeinoutcubic` function made the earlier and later changes small (lines closer together), but the changes at the middle of the morph were larger.
+
+Here are all the easing functions used to `polymorph()` between two polygons:
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin # hide
+background("grey10")
+setline(1)
+w, h = 450, 20
+a = [[Point(-w / 2, -h / 2), Point(-w / 2, 0), Point(-w / 2, h / 2)]]
+b = [[Point(w / 2, -h / 2), Point(w / 2, 0), Point(w / 2, h / 2)]]
+translate(boxtopcenter() + (50, 30))
+for (i, ef) in enumerate(Luxor.easingfunctions)
+    sethue(HSB(12i, .7, .8))
+    for i in range(0, 1, length=20)
+        pm = polymorph(a, b, i, easingfunction=ef)
+        poly(pm[1], :stroke)
+    end
+    sethue("white")
+    text(string(ef), Point(-w/2 - 20, 0), halign=:right, valign=:middle)
+    translate(0, 22)
+end
+end # hide
+```
+
 In the next example, `fromshape`, the circle, is an array holding a single vector of Points (`pathtopoly()` returns an array of polygons), and `toshape`, the line, is a simple vector of points (the minimum of three points). In this case, with just simple polygons, only the first element of the result of the `polymorph()` function is needed.
 
 ```@example
 using Luxor # hide
 @drawsvg begin # hide
-background("black") # hide
+background("grey10") # hide
 setline(0.5) # hide
 circlepath(O, 200, action = :path)
 fromshape = pathtopoly()
@@ -1452,6 +1479,7 @@ for i in 0:0.015:1
 end
 end # hide
 ```
+
 
 In the next example, a square morphs into a hexagon.
 
@@ -1512,7 +1540,7 @@ The next example animates a morph between two programming languages.
 using Luxor, Colors
 
 function frame(scene, framenumber)
-    background("black")
+    background("grey10")
 
     fontface("JuliaMono")
     fontsize(120)
@@ -1571,7 +1599,7 @@ These functions are still in development. Expect varying degrees of success when
 ```@example
 using Luxor, Colors
 @drawsvg begin
-    background("black")
+    background("grey10")
 
     npoints = 80
     D = 140

@@ -1718,12 +1718,11 @@ the corresponding shape in `pgon1[1...n]` and `pgon2[1...n]`
 at `k`, where `0.0 < k < 1.0`. If `k ≈ 0.0`, the
 `pgon1[1...n]` is returned, and if ``k ≈ 1.0`, `pgon2[1...n]` is returned.
 
-`pgon1` and `pgon2` can be either simple polygons or arrays
-of one or more polygonal shapes (eg as created by
-`pathtopoly()`). For example, `pgon1` might consist of two
-polygonal shapes, a square and a triangular shaped
-hole inside; `pgon2` might be a triangular shape with a
-square hole.
+`pgon1` and `pgon2` can be either simple polygons with three or more points
+each, or arrays of one or more polygonal shapes (eg as created by
+`pathtopoly()`). For example, `pgon1` might consist of two polygonal shapes, a
+square and a triangular shaped hole inside; `pgon2` might be a triangular shape
+with a square hole.
 
 It makes sense for both arguments to have the same number of
 polygonal shapes. If one has more than another, some shapes
@@ -1802,10 +1801,10 @@ end
 ```
 """
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
-    samples = 100,
-    easingfunction = easingflat,
-    kludge = true,
-    closed = true)
+        samples = 100,
+        easingfunction = easingflat,
+        kludge = true,
+        closed = true)
     isapprox(k, 0.0) && return pgon1
     isapprox(k, 1.0) && return pgon2
     loopcount1 = length(pgon1)
@@ -1816,6 +1815,7 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
         from_ok = to_ok = false
         not_empty1 = i <= loopcount1
         not_empty2 = i <= loopcount2
+        # ideally both arrays are good, but we'll copy somehow if they're not
         if (not_empty1 && length(pgon1[i]) >= 3)
             from_ok = true
         end
