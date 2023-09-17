@@ -6,6 +6,6 @@ MathTeXEngine = "0a4f8689-d25c-4efe-a92b-7142dfc1aa53"
 Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
 
 [compat]
-Documenter = "0.27"
+Documenter = "1"
 MathTeXEngine = "0.5"
-Images = "0.25"
+Images = "0.25, 0.26"
