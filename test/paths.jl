@@ -71,10 +71,10 @@ function path_test(path)
     @test typeof(path[1]) == PathMove
     @test typeof(path[end - 1]) == PathClose
     @test typeof(path[end]) == PathMove
-    @test findfirst(pe -> pe isa PathClose, path) == 6
-    @test findfirst(pe -> pe isa PathCurve, path) == 8
+    @test findfirst(pe -> pe isa PathClose, path) == 5
+    @test findfirst(pe -> pe isa PathCurve, path) == 7
     @test findfirst(pe -> pe isa PathMove, path) == 1
-    @test findfirst(pe -> pe isa PathLine, path) == 3
+    @test findfirst(pe -> pe isa PathLine, path) == 2
 
     # BoundingBox of path
     bbox = BoundingBox(path)

@@ -9,7 +9,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Changed
 
-- fixed `drawpath(p, f)` to segment Bezier curves better
+- fixes for `drawpath(p, f)` to do the Bezier curve truncation better
 
 ### Removed
 
