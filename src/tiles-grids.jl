@@ -106,6 +106,11 @@ function Base.getindex(pt::Tiler, i::Int)
     return (Point(xcoord, ycoord), i)
 end
 
+function Base.getindex(t::Tiler, r::Int, c::Int)
+    n = ((r - 1) * t.ncols) + c
+    return first(t[n])
+end
+
 function Base.size(pt::Tiler)
     return (pt.nrows, pt.ncols)
 end
@@ -387,3 +392,162 @@ Return the Bounding Box enclosing the tile at row `r` column `c`.
 function BoundingBox(t::Tiler, r, c)
     return BoundingBox(t, ((r - 1) * t.ncols) + c)
 end
+
+"""
+    markcells(t::Union{Tiler, Table}, cells;
+        action = :stroke,
+        func = nothing)
+
+Mark the cells of Tiler/Table `t` in the `cells`.
+
+By default a box is drawn around the cell using the current settings and filled or stroked according to `action`.
+
+You can supply a function for the `func` keyword that can do anything you want. The function should accept four arguments, `position`, `width`, `height`, and `number`.
+
+## Example
+
+This code draws 30 circles in 5 rows and 6 columns, numbered and
+colored sequentially in four colors. `getcells()` obtains a selection of the cells from the Tiler.
+
+```julia
+@draw begin
+    fontsize(30)
+    #t = Table(5, 6, 60, 60)
+    t = Tiler(400, 400, 5, 6)
+    markcells(t, getcells(t, 1:30),
+        func = (pos, w, h, n) -> begin
+            sethue(["red", "green", "blue", "purple"][mod1(n, end)])
+            circle(pos, w / 2, :fill)
+            sethue("white")
+            text(string(n), pos, halign = :center, valign = :middle)
+        end)
+end
+```
+"""
+function markcells(t::Union{Tiler,Table}, cells;
+        action = :stroke,
+        func = nothing)
+    @layer begin
+        for cell in cells
+            pos, n = cell
+            row, col = (1 + div(n - 1, t.ncols)), mod1(n, t.ncols)
+            if t isa Table
+                w = t.colwidths[col]
+                h = t.rowheights[row]
+            else
+                w = t.tilewidth
+                h = t.tileheight
+            end
+            if isnothing(func)
+                # just draw a box with current settings
+                box(pos, w, h, action)
+            else
+                func(pos, w, h, n)
+            end
+        end
+    end
+end
+
+"""
+    getcells(t, rows, columns)
+
+Get the Tiler or Table cells in `t` corresponding to `rows` and `columns`.
+
+- `t` is a Tiler or Table
+
+- `rows` is an array or range of row numbers
+- `cols` is an array or range of column numbers
+
+Use `:` for "all rows" or "all columns".
+
+Returns an array of Tuples, where each Tuple is `(Point, Number)`.
+
+`markcells()` can use the result of this function to mark selected cells.
+
+    ## Example
+
+```julia
+@draw begin
+    chessboard = Tiler(600, 600, 8, 8)
+    # odd rows odd columns
+    s = getcells(chessboard, 1:2:12, 1:2:12)
+    markcells(chessboard, s, action = :fill)
+    # even rows even columns
+    s = getcells(chessboard, 2:2:12, 2:2:12)
+    markcells(chessboard, s, action = :fill)
+end
+```
+"""
+function getcells(t::Union{Table,Tiler}, rows, columns)
+    result = Tuple[]
+    for r in rows
+        r < 1 && continue
+        r > t.nrows && continue
+        for c in columns
+            c < 1 && continue
+            c > t.ncols && continue
+            n = ((r - 1) * t.ncols) + c
+            push!(result, (t[r, c], n))
+        end
+    end
+    return result
+end
+
+getcells(t::Table, ::Colon, ::Colon) = getcells(t, 1:(t.nrows), 1:(t.ncols))
+getcells(t::Table, ::Colon, columns) = getcells(t, 1:(t.nrows), columns)
+getcells(t::Table, rows, ::Colon) = getcells(t, rows, 1:(t.ncols))
+
+getcells(t::Tiler, ::Colon, ::Colon) = getcells(t, 1:(t.nrows), 1:(t.ncols))
+getcells(t::Tiler, ::Colon, columns) = getcells(t, 1:(t.nrows), columns)
+getcells(t::Tiler, rows, ::Colon) = getcells(t, rows, 1:(t.ncols))
+
+"""
+    getcells(t, n::T) where T <: AbstractRange
+
+Get the Tiler/Table cells with numbers in range `n`.
+
+Returns an array of Tuples, where each Tuple is `(Point, Number)`.
+"""
+function getcells(t, n::T) where {T<:AbstractRange}
+    result = Tuple[]
+    for i in n
+        append!(result, getcells(t, i))
+    end
+    return result
+end
+
+"""
+    getcells(t, a::T) where T <: AbstractArray
+
+Get the Tiler/Table cells with numbers in array `a`.
+
+Returns an array of Tuples, where each Tuple is `(Point, Number)`.
+"""
+function getcells(t, a::T) where {T<:AbstractArray}
+    result = Tuple[]
+    for i in a
+        append!(result, getcells(t, i))
+    end
+    return result
+end
+
+"""
+    getcells(t, n::Int)
+
+Get the cell `n` in Tiler or Table `t`.
+
+Returns an array of Tuples, where each Tuple is `(Point, Number)`.
+
+!!! note
+
+    Luxor Tables and Tilers are numbered by row then column, rather than the usual Julia column-major numbering:
+
+```
+ 1  2  3  4  5
+ 6  7  8  9 10
+11 12 13 14 15
+16 17 18 19 20
+```
+"""
+getcells(t::Table, n::Int) = [(t[n], n)] # array of tuples
+getcells(t::Tiler, n::Int) = [(t[n])] # array of tuples

@@ -241,6 +241,34 @@ nothing # hide
 
 ![array table](../assets/figures/arraytable.svg)
 
+## Selecting and highlighting cells
+
+With `getcells()` and `markcells()` you can mark particular cells of Tables and Tilers. By default the `markcells()` function draws a box around each cell. You can choose the `:fill` action, or supply a four-argument function that adds graphics relevant to the cell's position, width, height, and number.
+
+```@example
+using Luxor # hide
+@drawsvg begin
+background("antiquewhite")
+t = Tiler(600, 300, 12, 12)
+
+sethue("purple")
+markcells(t, getcells(t, [1, 6:12, 24, 24:6:96, 144]))
+
+sethue("red")
+setopacity(0.5)
+markcells(t, getcells(t, 10:80), action=:fill)
+
+setcolor("black")
+fontsize(12)
+markcells(t, getcells(t, 1:144), func = (pt, w, h, n) -> begin
+    sethue("white") 
+    circle(pt, h/2, :fill)
+    sethue("black")
+    text(string(n), pt, halign=:center, valign=:middle)
+end)
+end 600 300
+```
+
 ## Grids
 
 You might also find a use for a grid. Luxor provides a simple grid utility. Grids are lazy: they'll supply the next point on the grid when you ask for it.

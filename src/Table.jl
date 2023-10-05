@@ -282,18 +282,7 @@ end
 
 box(t::Table, cellnumber::Int; action = :none, vertices = false) = box(t, cellnumber, action, vertices = vertices)
 
-"""
-    highlightcells(t::Table, cellnumbers, action::Symbol=:stroke;
-            color::Colorant=colorant"red",
-            offset = 0)
-
-Highlight (draw or fill) one or more cells of table `t`. `cellnumbers` is a range,
-array, or an array of row/column tuples.
-
-    highlightcells(t, 1:10, :fill, color=colorant"blue")
-    highlightcells(t, vcat(1:5, 150), :stroke, color=colorant"magenta")
-    highlightcells(t, [(4, 5), (3, 6)])
-"""
+# superseded, will be deprecated
 function highlightcells(t::Table, cellnumbers, action::Symbol = :stroke;
     color::Colorant = colorant"red",
     offset = 0)

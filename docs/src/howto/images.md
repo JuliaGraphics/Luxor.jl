@@ -454,14 +454,14 @@ fontsize(15)
 sethue("white")
 setline(1)
 transform([0 1 1 0 0 0])
-cells = Table(10, 10, 512 / 10, 512 / 10, Point(512 / 2, 512 / 2))
-for (pos, n) in cells
+t = Table(10, 10, 512 / 10, 512 / 10, Point(512 / 2, 512 / 2))
+for (pos, n) in t
     text(string(n), pos, halign = :center, valign = :middle)
     box(pos, 512 / 10, 512 / 10, :stroke)
 end
 setline(5)
-highlightcells(cells, collect(1:100)[[2, 4, 35, 69]], :stroke, 
-    color = colorant"blue")
+sethue("blue")
+markcells(t, getcells(t, [2, 4, 35, 69]))
 M
 ```
 

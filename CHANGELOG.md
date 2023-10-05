@@ -7,6 +7,8 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
+- `markcells()` and `getcells()`
+
 ### Changed
 
 - fixes for `drawpath(p, f)` to do the Bezier curve truncation better

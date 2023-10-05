@@ -49,6 +49,7 @@ include("basics.jl")
 include("Turtle.jl")
 include("shapes.jl")
 include("BoundingBox.jl")
+include("Table.jl")
 include("polygons.jl")
 include("triangles.jl")
 include("hexagons.jl")
@@ -65,7 +66,6 @@ include("animate.jl")
 include("bars.jl")
 include("bezierpath.jl")
 include("mesh.jl")
-include("Table.jl")
 include("Boxmaptile.jl")
 include("noise.jl")
 include("deprecations.jl")
@@ -137,7 +137,7 @@ export Drawing,
     translationmatrix, cairotojuliamatrix,
     juliatocairomatrix, getrotation, getscale,
     gettranslation, setmode, getmode, GridHex, GridRect, nextgridpoint, Table, 
-    highlightcells, readpng, readsvg, placeimage, placeeps, 
+    highlightcells, getcells, markcells, readpng, readsvg, placeimage, placeeps, 
     svgstring, julialogo, juliacircles, barchart, mesh, setmesh, add_mesh_patch, mask,
 
     # animation

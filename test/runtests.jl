@@ -146,6 +146,7 @@ function run_all_tests()
     @testset "tilerstables" begin
         include("pagetiler-test.jl")
         include("table-tests.jl")
+        include("getcell-test.jl")
     end
     @testset "matrix" begin
         include("matrix-tests.jl")
