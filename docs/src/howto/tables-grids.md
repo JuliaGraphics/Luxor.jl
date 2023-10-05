@@ -78,7 +78,7 @@ Unlike a `Tiler`, the `Table` iterator lets you have columns with different widt
 !!! note
 
     Luxor generally tries to keep to the Julia convention of
-    ‘width’ -> ‘height’, ‘row’ -> ‘column’. This flavour of
+    ‘width’ then ‘height’, ‘row’ then ‘column’. This flavour of
     consistency can sometimes be confusing if you’re
     expecting other kinds of consistency, such as ‘x before
     y’ or ‘column major’.)
@@ -243,29 +243,43 @@ nothing # hide
 
 ## Selecting and highlighting cells
 
-With `getcells()` and `markcells()` you can mark particular cells of Tables and Tilers. By default the `markcells()` function draws a box around each cell. You can choose the `:fill` action, or supply a four-argument function that adds graphics relevant to the cell's position, width, height, and number.
+With [`getcells()`](@ref) and [`markcells()`](@ref) you can apply graphics to certain cells of Tables and Tilers.
+
+`getcells()` has two ways to select cells: either by their single index value, or by specifying rows and columns. It returns an array of cells in Tuples, each Tuple holding the coordinate of the cell center and its index number. (Remember, in a 2 row by 4 column table, the cell at row 1, column 4 will be numbered 4, not 7, which is more of a "row-major" type of indexing.) 
+
+The `markcells()` function takes a Table or Tiler, and an array of cells made by `getcells()`, and, by default, draws a box around each one. You can instead choose the `:fill` action, or supply a four-argument function that adds graphics relevant to the cell's position, width, height, and number.
 
 ```@example
 using Luxor # hide
 @drawsvg begin
-background("antiquewhite")
-t = Tiler(600, 300, 12, 12)
+    background("grey10")
+    fontsize(10)
 
-sethue("purple")
-markcells(t, getcells(t, [1, 6:12, 24, 24:6:96, 144]))
+    t = Tiler(600, 300, 6, 6)
 
-sethue("red")
-setopacity(0.5)
-markcells(t, getcells(t, 10:80), action=:fill)
+    sethue("cyan")
+    # mark even cells
+    markcells(t, getcells(t, 2:2:36))
 
-setcolor("black")
-fontsize(12)
-markcells(t, getcells(t, 1:144), func = (pt, w, h, n) -> begin
-    sethue("white") 
-    circle(pt, h/2, :fill)
-    sethue("black")
-    text(string(n), pt, halign=:center, valign=:middle)
-end)
+    sethue("orange")
+    setopacity(0.5)
+    # fill odd cells orange
+    markcells(t, getcells(t, 1:2:35), action=:fill)
+
+    sethue("blue")
+    setopacity(0.5)
+    # fill cells in rows 2:5, columns 3:4 blue
+    markcells(t, getcells(t, 2:5, 3:4), action=:fill)
+    setopacity(1)
+
+    # draw circles and index numbers for primes
+    primes = filter(n -> all(i -> n % i != 0, 2:floor(Int, sqrt(n))), 2:36)
+    markcells(t, getcells(t, primes), func=(pt, w, h, n) -> begin
+        sethue("purple")
+        circle(pt, h / 2, :fill)
+        sethue("white")
+        text(string(n), pt, halign=:center, valign=:middle)
+    end)
 end 600 300
 ```
 
