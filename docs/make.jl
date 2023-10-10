@@ -22,7 +22,8 @@ makedocs(
         ],
         "Examples" => [
         "Simple examples" => "example/examples.md",
-        "More examples"   => "example/moreexamples.md"
+        "More examples"   => "example/moreexamples.md",
+        "Gallery"   => "example/gallery.md",
         ],
         "How to guides" => [
         "Create drawings" => "howto/createdrawings.md",

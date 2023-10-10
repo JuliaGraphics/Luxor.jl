@@ -315,9 +315,11 @@ function mask(point::Point, focus::Point, width, height;
 end
 
 """
-get_current_hue()
+    get_current_hue()
 
 As set by eg `sethue()`. Return an RGB colorant.
+
+See also [`getcolor`](@ref), [`get_current_color`](@ref).
 """
 function get_current_hue()
     (r, g, b, _) = _get_current_color()
@@ -325,9 +327,11 @@ function get_current_hue()
 end
 
 """
-get_current_color()
+    get_current_color()
 
-Return an RGBA colorant, the current color, as set by `setcolor` etc...
+Return an RGBA colorant, the current color, as set by `setcolor()` etc.
+
+See also [`getcolor`](@ref), [`get_current_hue`](@ref).
 """
 function get_current_color()
     (r, g, b, a) = _get_current_color()
@@ -335,9 +339,11 @@ function get_current_color()
 end
 
 """
-getcolor()
+    getcolor()
 
-Return an RGBA colorant, the current color, as set by `setcolor` etc...
+Return an RGBA colorant, the current color, as set by `setcolor()` etc.
+
+Calls [`get_current_color`](@ref). See also [`get_current_hue`](@ref).
 """
 function getcolor()
     Luxor.get_current_color()
