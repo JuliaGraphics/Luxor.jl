@@ -1,6 +1,12 @@
-import .MathTeXEngine:
+import MathTeXEngine
+# We don't add new methods to functions from MathTeXEngine. Hence, we 'use' these:
+using MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
-using .LaTeXStrings
+using LaTeXStrings
+using Luxor
+# Exports from LuxorExt to Luxor:
+latextextsize, latexboundingbox, rawlatexboundingbox
+
 
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
