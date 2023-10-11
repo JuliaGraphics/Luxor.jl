@@ -72,6 +72,7 @@ include("randompoints.jl")
 include("Path.jl")
 include("precompile.jl")
 include("placeeps.jl")
+include("placeholders_for_extensions.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
@@ -173,7 +174,7 @@ export Drawing,
     # experimental
     tidysvg,
 
-    # latex 
+    # latex. These always throw errors if Base.get_extension(Luxor, :LuxorExtLatex) isa Nothing
     latextextsize, latexboundingbox, rawlatexboundingbox
 
 # basic unit conversion to Cairo/PostScript points

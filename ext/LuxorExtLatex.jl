@@ -3,7 +3,7 @@ This extension is loaded and used by Luxor if both LaTeXStrings and MathTeXEngin
 
 The functions are accessed through Luxor as usual.
 """
-module LuxorExt
+module LuxorExtLatex
 
 include("latex.jl")
 

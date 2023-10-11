@@ -3,10 +3,11 @@ import MathTeXEngine
 using MathTeXEngine:
     generate_tex_elements, inkwidth, inkheight, bottominkbound, TeXChar, HLine
 using LaTeXStrings
-using Luxor
-# Exports from LuxorExt to Luxor:
-latextextsize, latexboundingbox, rawlatexboundingbox
-
+import Luxor
+import Luxor: text, latextextsize, latexboundingbox, rawlatexboundingbox
+using Luxor: Point, @layer, translate, rotate, move,
+    fontface, fontsize, get_fontsize, setfont,
+    setline, line, poly, closepath, newsubpath
 
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
