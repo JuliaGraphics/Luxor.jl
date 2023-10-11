@@ -150,7 +150,7 @@ function get_fontsize()
         font_size = sign(m.yy)*sqrt(m.yx^2+m.yy^2)
         return font_size
     else
-        throw(MethodError(get_fontsize, "Please use Cairo v1.0.5 or later to use this feature."))
+        throw(ErrorException("Please use Cairo v1.0.5 or later to use this feature."))
     end
 end
 
