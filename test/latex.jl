@@ -1,7 +1,31 @@
 using Luxor
 using Test
+
+@testset "nolatexextension" begin
+    @test ! @isdefined LaTeXStrings
+    @test Base.get_extension(Luxor, :LuxorExtLatex) isa Nothing
+    @test length(methods(text)) == 3
+    @test length(methods(latextextsize)) == 1
+    @test length(methods(latexboundingbox)) == 1
+    @test length(methods(rawlatexboundingbox)) == 1
+    @test_throws ErrorException latextextsize(14.0)
+    @test_throws ErrorException latexboundingbox("14.0")
+    @test_throws ErrorException rawlatexboundingbox(:fourteen)
+end
+
+
 using LaTeXStrings
 using MathTeXEngine
+@testset "latexextension" begin
+    @test Base.get_extension(Luxor, :LuxorExtLatex) isa Module
+    @test length(methods(text)) == 4
+    @test length(methods(latextextsize)) == 2
+    @test length(methods(latexboundingbox)) == 3
+    @test length(methods(rawlatexboundingbox)) == 2
+    @test_throws MethodError latextextsize(14.0)
+    @test_throws MethodError latexboundingbox("14.0")
+    @test_throws MethodError rawlatexboundingbox(:fourteen)
+end
 
 @testset "latex" begin
     d = Drawing(200, 200, :svg)
@@ -14,28 +38,28 @@ using MathTeXEngine
     for halign in [:left, :right, :center], valign in [:baseline, :bottom, :top, :middle]
         text(t, O, halign=halign, valign=valign)
 
-        @test round.(Luxor.latextextsize(t); digits=2) == (36.99, 46.69)
+        @test round.(latextextsize(t); digits=2) == (36.99, 46.69)
 
         if halign === :left
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[1][1]; digits=2) == 0.0
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[2][1]; digits=2) == 36.99
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[1][1]; digits=2) == 0.0
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[2][1]; digits=2) == 36.99
         elseif halign === :right
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[1][1]; digits=2) == -36.99
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[2][1]; digits=2) == 0.0
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[1][1]; digits=2) == -36.99
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[2][1]; digits=2) == 0.0
         elseif halign === :center
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[1][1]; digits=2) == -36.98 / 2
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[2][1]; digits=2) == 36.98 / 2
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[1][1]; digits=2) == -36.98 / 2
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[2][1]; digits=2) == 36.98 / 2
         end
 
         if valign === :baseline || valign === :bottom
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[1][2]; digits=2) == 18.72
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[2][2]; digits=2) == -27.97
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[1][2]; digits=2) == 18.72
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[2][2]; digits=2) == -27.97
         elseif valign === :top
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[1][2]; digits=2) == 46.69
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[2][2]; digits=2) == 0.0
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[1][2]; digits=2) == 46.69
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[2][2]; digits=2) == 0.0
         elseif valign === :middle
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[1][2]; digits=2) == 46.70 / 2
-            @test round(Luxor.latexboundingbox(t, halign=halign, valign=valign)[2][2]; digits=2) == -46.70 / 2
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[1][2]; digits=2) == 46.70 / 2
+            @test round(latexboundingbox(t, halign=halign, valign=valign)[2][2]; digits=2) == -46.70 / 2
         end
     end
 
