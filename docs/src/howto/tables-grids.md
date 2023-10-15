@@ -137,7 +137,7 @@ The next example creates a table with 10 rows and 10 columns, where each cell is
 
 ```@example
 using Luxor, Random # hide
-Drawing(600, 400, "../assets/figures/table2.png") # hide
+@drawsvg begin # hide
 background("white") # hide
 origin() # hide
 Random.seed!(42) # hide
@@ -155,15 +155,15 @@ end
 
 setopacity(0.5)
 sethue("thistle")
-circle.(t[3, :], 20, action=:fill) # row 3, every column
+# row 3, every column
+markcells(t, getcells(t, 3, :), func = (args...) -> (
+        circle(args[1], args[2]/2, :fill)
+    ), action=:stroke)
 
-finish() # hide
-nothing # hide
+end 800 400 # hide
 ```
 
-![table 2](../assets/figures/table2.png)
-
-You can access rows or columns in the usual Julian way.
+You can access rows or columns in the usual Julian way. See [Selecting and highlighting cells](@ref) for details about how to select and mark cells.
 
 Notice that the table is drawn row by row, whereas 2D Julia arrays are usually accessed column by column.
 
@@ -243,43 +243,54 @@ nothing # hide
 
 ## Selecting and highlighting cells
 
-With [`getcells()`](@ref) and [`markcells()`](@ref) you can apply graphics to certain cells of Tables and Tilers.
+With [`getcells()`](@ref) and [`markcells()`](@ref) you can select and apply graphics to cells of Tables and Tilers.
 
-`getcells()` has two ways to select cells: either by their single index value, or by specifying rows and columns. It returns an array of cells in Tuples, each Tuple holding the coordinate of the cell center and its index number. (Remember, in a 2 row by 4 column table, the cell at row 1, column 4 will be numbered 4, not 7, which is more of a "row-major" type of indexing.) 
+`getcells()` has two ways to select cells: either by their single index value, or by specifying rows and columns. 
+Remember, unlike with typical Julia arrays, in a 2 row by 4 column table, the cell at row 1, column 4 will have the index number 4, not 7:
 
-The `markcells()` function takes a Table or Tiler, and an array of cells made by `getcells()`, and, by default, draws a box around each one. You can instead choose the `:fill` action, or supply a four-argument function that adds graphics relevant to the cell's position, width, height, and number.
+```plain
+ ┌───┬───┬───┬───┐
+ │ 1 │ 2 │ 3 │ 4 │
+ ├───┼───┼───┼───┤
+ │ 5 │ 6 │ 7 │ 8 │
+ └───┴───┴───┴───┘
+```
+
+The function returns an array of cells in Tuples, each Tuple holding the coordinate of the cell center and its index number.
+
+The `markcells()` function takes a Table or Tiler, and the selected cells made by `getcells()`, and, by default, draws a box around each one. You can instead choose the `:fill` action, or supply a four-argument function that adds graphics relevant to the cell's position, width, height, and number.
 
 ```@example
 using Luxor # hide
 @drawsvg begin
-    background("grey10")
-    fontsize(10)
+background("grey10")
+fontsize(10)
 
-    t = Tiler(600, 300, 6, 6)
+t = Tiler(600, 300, 6, 6)
 
-    sethue("cyan")
-    # mark even cells
-    markcells(t, getcells(t, 2:2:36))
+sethue("cyan")
+# mark even cells
+markcells(t, getcells(t, 2:2:36))
 
-    sethue("orange")
-    setopacity(0.5)
-    # fill odd cells orange
-    markcells(t, getcells(t, 1:2:35), action=:fill)
+sethue("orange")
+setopacity(0.5)
+# fill odd cells orange
+markcells(t, getcells(t, 1:2:35), action=:fill)
 
-    sethue("blue")
-    setopacity(0.5)
-    # fill cells in rows 2:5, columns 3:4 blue
-    markcells(t, getcells(t, 2:5, 3:4), action=:fill)
-    setopacity(1)
+sethue("blue")
+setopacity(0.5)
+# fill cells in rows 2:5, columns 3:4 blue
+markcells(t, getcells(t, 2:5, 3:4), action=:fill)
+setopacity(1)
 
-    # draw circles and index numbers for primes
-    primes = filter(n -> all(i -> n % i != 0, 2:floor(Int, sqrt(n))), 2:36)
-    markcells(t, getcells(t, primes), func=(pt, w, h, n) -> begin
-        sethue("purple")
-        circle(pt, h / 2, :fill)
-        sethue("white")
-        text(string(n), pt, halign=:center, valign=:middle)
-    end)
+# draw circles and index numbers for primes
+primes = filter(n -> all(i -> n % i != 0, 2:floor(Int, sqrt(n))), 2:36)
+markcells(t, getcells(t, primes), func=(pt, w, h, n) -> begin
+    sethue("purple")
+    circle(pt, h / 2, :fill)
+    sethue("white")
+    text(string(n), pt, halign=:center, valign=:middle)
+end)
 end 600 300
 ```
 

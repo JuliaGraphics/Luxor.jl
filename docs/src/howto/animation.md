@@ -10,7 +10,7 @@ DocTestSetup = quote
 
     [Javis.jl](https://github.com/JuliaAnimators/Javis.jl) is the best way to make animated graphics  with Julia.
 
-Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.
+Luxor provides some functions to help you create simple animations. It provides some assistance in creating lots of individual frames, and you have the option of stitching these together to form a moving animation in the animated GIF format.
 
 There are four steps to creating an animation.
 
@@ -20,7 +20,9 @@ There are four steps to creating an animation.
 
 3 Define one or more Scenes that call these functions for specific frames.
 
-4 Call the `animate(movie::Movie, scenes)` function, passing in the scenes. This creates all the frames and saves them in a temporary directory. `ffmpeg` can build an animated GIF from the frames.
+4 Call the [`animate()`](@ref) function, passing in the movie and the scenes. This creates all the frames and saves them in a temporary directory.
+
+You can use the `creategif = true` option to make an animated GIF. But if you want to generate many thousands of frames, you might want to keep the `creategif` option set to the default value of false, and build the animation later. 
 
 ## Example
 
@@ -59,7 +61,7 @@ In this example, the movie uses two scenes, each specifying a function to draw f
 
 ## Making the animation
 
-You can build animations automatically using `ffmpeg`. The `creategif` option for the `animate` function runs `ffmpeg` when the frames have all been generated. 
+You can request that GIF animations are made automatically. The `creategif` keyword argument for the `animate` function, when set to `true`, runs `ffmpeg` when the frames have all been generated. The `pathname` keyword argument lets you specify a pathname for the animated GIF; if you don't provide one, it will be saved in a temporary folder (and listed in the REPL). 
 
 Inside [`animate`](@ref), the first pass creates a GIF color palette, the second builds the file:
 
@@ -73,7 +75,7 @@ run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png
 
 Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.
 
-`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. If you want to use a custom `ffmpeg` command, you can use code such as this:
+If you want to use a custom `ffmpeg` command, you can use load the FFMPEG module, and write code such as this:
 
 ```julia
 using Luxor, FFMPEG
@@ -93,6 +95,8 @@ animate(movie, [
 FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
 
 ```
+
+`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. 
 
 ### Passing information to the frame() function
 

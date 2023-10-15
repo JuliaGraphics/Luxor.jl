@@ -1407,14 +1407,34 @@ nothing # hide
 
 "morph" means to make one thing turn into another. The experimental [`polymorph`](@ref) function can gradually turn one polygon into another.
 
-You supply two polygons and a value `k` between 0 and 1. For example, if the value of `k` is 0.5, the shape is about halfway between the two polygons.
+You supply two polygons and a value between 0 and 1. For example, if the value is 0.5, the shape is about halfway between the two polygons.
 
 !!! note
-    `polymorph()` always returns an array of polygons. Both arguments are arrays of polygons.
+    `polymorph()` always returns an array of polygons. Arguments can be arrays of polygons, or single polygons.
 
 By default, the polygons are assumed to be closed, suitable for filling.
 
-But in this example, each of the two wavy-line polygons are open rather than closed, so you can pass `false` values to the `closed` argument, and the polygons won't be treated as closed shapes.
+```@example
+using Luxor, Colors # hide
+@drawsvg begin # hide
+background("grey10") # hide
+
+fromshape = ngon(O, 50, 4, vertices=true)
+toshape = ngon(O, 350, 4, π/4, vertices=true)
+
+setline(8)
+for i in range(0, 1, length=10)
+    @show i
+    sethue(HSB(360i, 0.8, 0.8))
+    morph = polymorph(fromshape, toshape, i)
+    for p in morph
+        poly(p, close=true, action=:stroke)
+    end
+end
+end 800 600 # hide
+```
+
+In the next example, each of the two wavy-line polygons are open rather than closed, so you can pass `false` values to the `closed` argument, and the polygons won't be treated as closed shapes.
 
 ```@example
 using Luxor # hide
@@ -1479,7 +1499,6 @@ for i in 0:0.015:1
 end
 end # hide
 ```
-
 
 In the next example, a square morphs into a hexagon.
 

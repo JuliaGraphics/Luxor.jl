@@ -88,7 +88,7 @@ function initial(scene, framenumber)
 end
 
 animate(poolmovie, [
-    Scene(poolmovie, initial, optarg=balls,   1:20),
+    Scene(poolmovie, initial, optarg=balls, 1:20),
     ...
     ])
 ```
@@ -130,11 +130,10 @@ end
 Create the movie defined in `movie` by rendering the frames define in the array of scenes
 in `scenelist`.
 
-If `creategif` is `true`, the function attempts to call the `ffmpeg` utility on
-the resulting frames to build a GIF animation. This will be stored in `pathname`
-(an existing file will be overwritten; use a ".gif" suffix), or in
-`(movietitle).gif` in a temporary directory. `ffmpeg` should be installed and
-available, of course, if this is to work.
+If `creategif` is `true`, the function runs the `ffmpeg` utility on the
+resulting frames to build a GIF animation. This will be stored in the `pathname`
+keyword argument (an existing file will be overwritten; use a ".gif" suffix), or
+in `(movietitle).gif` in a temporary directory. The FFMPEG package is loaded with Luxor,
 
 In suitable environments, the resulting animation is displayed in the Plots window.
 
@@ -153,9 +152,11 @@ generation and more complex filtering provided by recent versions of the
 `ffmpeg` utility, mainly to cope with transparent backgrounds. If set to
 `false`, the behavior is the same as in previous versions of Luxor.
 
-If you prefer to use the FFMPEG package, use code such as this:
+If you prefer to use the FFMPEG.jl package and run `ffmpeg` with your own options - 
+to create an MPF file, for exxample - use code like this:
 
 ```julia
+using Luxor
 using FFMPEG
 
 ...
@@ -164,7 +165,9 @@ tempdirectory = "/tmp/temp/"
 
 animate(movie, [
         Scene(movie, frame, 1:50)
-    ], creategif=false, tempdirectory=tempdirectory)
+    ], 
+    creategif=false, 
+    tempdirectory=tempdirectory)
 
 FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i \$(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
 
