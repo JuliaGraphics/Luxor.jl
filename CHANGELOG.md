@@ -8,16 +8,20 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 ### Added
 
 - `markcells()` and `getcells()`
+- package extensions for LaTeX
+- CompatHelper git workflow
 
 ### Changed
 
 - fixes for `drawpath(p, f)` to do the Bezier curve truncation better
+- minimum Julia version 1.9
 
 ### Removed
 
 ### Deprecated
 
 # ────────────────────────────────────────────────────────────────────────────────────
+
 ## [v3.8.0] - 2023-09-08
 
 LaTeX support is still under development. 
