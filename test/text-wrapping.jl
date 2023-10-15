@@ -24,7 +24,7 @@ function text_wrap_tests(fname)
             @test received_fsize == fsize
         catch
             # should throw with Cairo < 1.0.5
-            @test_throws MethodError get_fontsize()
+            @test_throws ErrorException get_fontsize()
         end
         @layer begin
             translate(pos)
