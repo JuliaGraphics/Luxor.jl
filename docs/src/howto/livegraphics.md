@@ -324,7 +324,7 @@ preview()
 
 ## Threads
 
-Luxor is thread safe. To run the examples below, [start Julia with more than 1 thread](https://docs.julialang.org/en/v1/manual/multi-threading/#Starting-Julia-with-multiple-threads):
+Luxor is thread safe. To run the examples below, [start Julia with more than 1 thread](https://docs.julialang.org/en/v1/manual/multi-threading/#Starting-Julia-with-multiple-threads). To see how many threads you have available, ask Julia:
 
 ```julia
 julia> Threads.nthreads()
@@ -334,22 +334,32 @@ julia> Threads.nthreads()
 As a first example, we'll produce multiple PNG files in parallel:
 
 ```julia
-using Luxor, Colors
+using Luxor # hide
 
-tempdir = mktempdir(;cleanup=false)
+tempdir = mktempdir(; cleanup=false)
 cd(tempdir)
 
 function make_drawings(i::Int)
-    println(Threads.threadid())
-    colors = ["red", "green", "blue", "yellow", "pink"]
+    println("Working on thread ", Threads.threadid())
     w = 300
     h = 300
     filename = "sample" * string(i) * ".png"
-    Drawing(w, h, :png, filename)
+    Drawing(w, h, filename)
     origin()
-    setcolor(colors[1 + i % 5])
-    background(0.0, 0.0, 0.0, 1.0)
-    circle(0, 0, 100, :fill)
+    background("black")
+    setopacity(0.5)
+    fontsize(250)
+    sethue("grey40")
+    text(string(i), halign=:center, valign=:middle)
+    for k in 1:50
+        pg1 = polycross(rand(BoundingBox()), rand(60:120), 4, vertices=true)
+        pg2 = polycross(rand(BoundingBox()), rand(60:120), 4, vertices=true)
+        pg3 = polyintersect(pg1, pg2)
+        for p in pg3
+            randomhue()
+            poly(p, :fill)
+        end
+    end
     finish()
     return
 end
@@ -357,7 +367,18 @@ end
 Threads.@threads for i = 1:(2*Threads.nthreads())
     make_drawings(i)
 end
+
+Working on thread 2
+Working on thread 3
+Working on thread 4
+Working on thread 2
+Working on thread 1
+Working on thread 3
+Working on thread 1
+Working on thread 4
 ```
+
+![threads drawing](../assets/figures/threads.png)
 
 ## Advanced threads with live view
 

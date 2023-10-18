@@ -300,12 +300,12 @@ fontsize(35)
     poly(20f.(range(0, 2π, length=160)), action = :stroke)
 end
 sethue("grey5")
-text(L"f(t) = [4\cos(t) + 2\cos(5t), 4\sin(t) + 2\sin(5t)]", halign=:center)
+text(L"f(t) = [4\cos(t) + 2\cos(5t), 4\sin(t) + 2\sin(5t)]", O, halign=:center)
 finish()
 d
 ```
 
-![LaTeX text](../assets/figures/latexequation.svg)
+<!-- ![LaTeX text](../assets/figures/latexequation.svg) -->
 
 See the [Writing LaTeX](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
 

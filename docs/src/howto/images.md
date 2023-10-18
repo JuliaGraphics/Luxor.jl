@@ -180,20 +180,20 @@ This example uses noise to define the RGB values in a matrix of ARGB32 color val
 
 ```@example
 using Luxor # hide
-
 D = 600
 mat = [Luxor.ARGB32(
     noise(0.01r, 0.01c), 
     noise(0.1r, 0.02c),
-    noise(0.1r, 0.01c)) for r in 1:D, c in 1:D]
+    noise(0.1r, 0.01c)) for r in 1:D ÷ 2, c in 1:D]
 
-@drawsvg begin
-    placeimage(mat, centered=true)
+@draw begin
+    background("grey60")
+    placeimage(mat, boxtopleft())
     fontsize(80)
     sethue("white")
     setopacity(0.5)
     text("woah", halign=:center)
-end D D÷2 
+end D D ÷ 2 
 ```
 
 The next example saves vector graphics into an image matrix, then places that matrix at random on another drawing.

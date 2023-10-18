@@ -10,35 +10,35 @@ You can store a path in a Path type, which contains path elements.
 
 Luxor also provides a BezierPath type, which is an array of four-point tuples, each of which is a Bézier cubic curve section.
 
-|create                         |convert                        |draw                       |info                       |edit                           |
-|:---                           |:---                           |:---                       |:---                       |:---                           |
-| *polygons*                    |                               |                           |                           |                               |
-|[`ngon`](@ref)                 |[`polysmooth`](@ref)           |[`poly`](@ref)             |[`isinside`](@ref)         |[`simplify`](@ref)             |
-|[`ngonside`](@ref)             |[`polytopath`](@ref)           |[`prettypoly`](@ref)       |[`polyperimeter`](@ref)    |[`polysplit`](@ref)            |
-|[`star`](@ref)                 |                               |[`polysmooth`](@ref)       |[`polyarea`](@ref)         |[`polyportion`](@ref)          |
-|[`polycross`](@ref)            |                               |                           |[`polycentroid`](@ref)     |[`polyremainder`](@ref)        |
-|[`offsetpoly`](@ref)           |                               |                           |[`BoundingBox`](@ref)      |[`polysortbyangle`](@ref)      |
-|[`hypotrochoid`](@ref)         |                               |                           |[`ispolyclockwise`](@ref)  |[`polysortbydistance`](@ref)   |
-|[`epitrochoid`](@ref)          |                               |                           |[`ispolyconvex`](@ref)     |[`polyclip`](@ref)             |
-|[`polyrotate!`](@ref)          |                               |                           |[`ispointonpoly`](@ref)    |[`polymove!`](@ref)            |
-|[`polyfit`](@ref)              |                               |                           |                           |[`polyscale!`](@ref)           |
-|[`polyhull`](@ref)             |                               |                           |                           |                               |
-|[`polysuper`](@ref)            |                               |                           |                           |                               |
-|                               |                               |                           |                           |[`polyreflect!`](@ref)         |
-|                               |                               |                           |                           |[`polysample`](@ref)           |
-|                               |                               |                           |                           |[`polytriangulate`](@ref)      |
-|                               |                               |                           |                           |[`insertvertices!`](@ref)      |
-|                               |                               |                           |                           |[`polymorph`](@ref)            |
-| *paths*                       |                               |                           |                           |                               |
-|[`storepath`](@ref)            |                               |                           |                           |                               |
-|[`getpath`](@ref)              |[`pathtopoly`](@ref)           |[`drawpath`](@ref)         |[`pathlength`](@ref)       |[`pathsample`](@ref)           |
-|[`getpathflat`](@ref)          |                               |                           |                           |                               |
-| *Bezier paths*                |                               |                           |                           |                               |
-|[`makebezierpath`](@ref)       |[`pathtobezierpaths`](@ref)    |[`drawbezierpath`](@ref)   |                           |[`trimbezier`](@ref)           |
-|[`pathtobezierpaths`](@ref)    |[`bezierpathtopoly`](@ref)     |[`brush`](@ref)            |                           |[`splitbezier`](@ref)          |
-|`BezierPath`                   |[`bezierpathtopath`](@ref)     |[`bezigon`](@ref)          |                           |                               |
-|`BezierPathSegment`            |                               |                           |                           |                               |
-|[`beziersegmentangles`](@ref)  |                               |                           |                           |                               |
+|create                        |convert                    |draw                     |info                     |edit                        |
+|:---                          |:---                       |:---                     |:---                     |:---                        |
+| *polygons*                   |                           |                         |                         |                            |
+|[`ngon`](@ref)                |[`polysmooth`](@ref)       |[`poly`](@ref)           |[`isinside`](@ref)       |[`simplify`](@ref)          |
+|[`ngonside`](@ref)            |[`polytopath`](@ref)       |[`prettypoly`](@ref)     |[`polyperimeter`](@ref)  |[`polysplit`](@ref)         |
+|[`star`](@ref)                |[`polyintersect`](@ref)    |[`polysmooth`](@ref)     |[`polyarea`](@ref)       |[`polyportion`](@ref)       |
+|[`polycross`](@ref)           |                           |                         |[`polycentroid`](@ref)   |[`polyremainder`](@ref)     |
+|[`offsetpoly`](@ref)          |                           |                         |[`BoundingBox`](@ref)    |[`polysortbyangle`](@ref)   |
+|[`hypotrochoid`](@ref)        |                           |                         |[`ispolyclockwise`](@ref)|[`polysortbydistance`](@ref)|
+|[`epitrochoid`](@ref)         |                           |                         |[`ispolyconvex`](@ref)   |[`polyclip`](@ref)          |
+|[`polyrotate!`](@ref)         |                           |                         |[`ispointonpoly`](@ref)  |[`polymove!`](@ref)         |
+|[`polyfit`](@ref)             |                           |                         |                         |[`polyscale!`](@ref)        |
+|[`polyhull`](@ref)            |                           |                         |                         |                            |
+|[`polysuper`](@ref)           |                           |                         |                         |                            |
+|                              |                           |                         |                         |[`polyreflect!`](@ref)      |
+|                              |                           |                         |                         |[`polysample`](@ref)        |
+|                              |                           |                         |                         |[`polytriangulate`](@ref)   |
+|                              |                           |                         |                         |[`insertvertices!`](@ref)   |
+|                              |                           |                         |                         |[`polymorph`](@ref)         |
+| *paths*                      |                           |                         |                         |                            |
+|[`storepath`](@ref)           |                           |                         |                         |                            |
+|[`getpath`](@ref)             |[`pathtopoly`](@ref)       |[`drawpath`](@ref)       |[`pathlength`](@ref)     |[`pathsample`](@ref)        |
+|[`getpathflat`](@ref)         |                           |                         |                         |                            |
+| *Bezier paths*               |                           |                         |                         |                            |
+|[`makebezierpath`](@ref)      |[`pathtobezierpaths`](@ref)|[`drawbezierpath`](@ref) |                         |[`trimbezier`](@ref)        |
+|[`pathtobezierpaths`](@ref)   |[`bezierpathtopoly`](@ref) |[`brush`](@ref)          |                         |[`splitbezier`](@ref)       |
+|`BezierPath`                  |[`bezierpathtopath`](@ref) |[`bezigon`](@ref)        |                         |                            |
+|`BezierPathSegment`           |                           |                         |                         |                            |
+|[`beziersegmentangles`](@ref) |                           |                         |                         |                            |
 
 ## Regular polygons ("ngons")
 
@@ -351,25 +351,6 @@ finish() # hide
 nothing # hide
 ```
 ![simplify](../assets/figures/simplify.png)
-
-The [`isinside`](@ref) function returns true if a point is inside a polygon.
-
-```@example
-using Luxor # hide
-Drawing(500, 500, "../assets/figures/isinside.png") # hide
-background("white") # hide
-origin() # hide
-
-apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
-for pt in collect(first.(Table(30, 30, 15, 15)))
-    sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))
-    isinside(pt, apolygon, allowonedge=true) ? circle(pt, 8, action = :fill) : circle(pt, 3, action = :fill)
-end
-
-finish() # hide
-nothing # hide
-```
-![isinside](../assets/figures/isinside.png)
 
 ### Quickly changing polygons
 
@@ -1121,13 +1102,36 @@ findfirst(pt -> isequal(pt.y, first(extrema(pt -> pt.y, pts))), pts)
 # 13
 ```
 
+### Point inside polygon
+
+The [`isinside`](@ref) function returns true if a point is inside a polygon.
+
+```@example
+using Luxor # hide
+Drawing(500, 500, "../assets/figures/isinside.png") # hide
+background("white") # hide
+origin() # hide
+
+apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
+for pt in collect(first.(Table(30, 30, 15, 15)))
+    sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))
+    isinside(pt, apolygon, allowonedge=true) ? 
+        circle(pt, 8, action = :fill) : circle(pt, 3, action = :fill)
+end
+
+finish() # hide
+nothing # hide
+```
+
+![isinside](../assets/figures/isinside.png)
+
 ### Convex hull
 
 A convex hull of a polygon is the subset of points such that, when connected with straight lines, the resulting shape contains every point of the polygon.
 
 Use [`polyhull`](@ref) to find the convex hull of an array of points. 
 
-This code obtains all the points in the Julia logo's circles, converts them to points on polygons, combines them into a single array, and then calculates the hull that encloses them all.
+This code obtains all the points in the Julia logo's circles, combines them into a single array, and then calculates the convex hull that encloses them all.
 
 ```@example
 using Luxor # hide
@@ -1145,7 +1149,7 @@ hull = polyhull(points)
 
 sethue("gold2")
 
-poly(hull, close=true, action = :stroke)
+prettypoly(hull, close=true, action = :stroke)
 
 finish() # hide
 d # hide
@@ -1651,7 +1655,7 @@ using Luxor, Colors
 end
 ```
 
-### Intersections
+## Polygon/line Intersections
 
 `intersectlinepoly(pt1, pt2, polygon)` returns an array containing the points where a line from `pt1` to `pt2` crosses the perimeter of the `polygon`.
 
@@ -1685,7 +1689,61 @@ nothing # hide
 
 ![line/polygon intersections](../assets/figures/linepolyintersections.png)
 
-### Triangulation
+## Polygon intersections
+
+Use [`polyintersect()`](@ref) to find the areas where two polygons intersect.
+
+In the following illustration, the annular sector polygon and a varying rectangular polygons are passed to `polyintersect()`.
+
+In each case, the returned result is an array of polygons. The number of
+polygons in the array depends on how the two polygons intersect - there could be
+anything from 0 to a lot. Then we iterate through the array, drawing each
+polygon in different colors. 
+
+```@example 
+using Luxor, Colors # hide
+@drawsvg begin
+    background("grey10")
+
+    tiles = Tiler(800, 300, 1, 3)
+
+    for (pos, n) in tiles
+        @layer begin
+            translate(pos)
+
+            sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
+            pg1 = pathtopoly()[1]
+
+            pg2 = box(O, 
+                    [250, 80, 250][n], 
+                    [120, 250, 80][n])
+
+            setopacity(0.6)
+
+            sethue("lightpink")
+            poly(pg1, :fill)
+
+            sethue("yellowgreen")
+            poly(pg2, :fill)
+            
+            pintersection = polyintersect(pg1, pg2)
+            
+            for (i, p) in enumerate(pintersection)
+                setcolor(HSB([0, 180, 310][i], 0.9, 0.9))
+                poly(p, :fill)
+                sethue("grey90")
+                poly(p, :stroke, close=true)
+            end
+        end
+    end
+end 800 300
+```
+
+In case there's no intersection, the returned result is empty: `Vector{Point}[]`.
+
+The algorithm used is the [Weiler-Atherton algorithm](https://liorsinai.github.io/mathematics/2023/09/30/polygon-clipping.html).
+
+## Triangulation
 
 Use [`polytriangulate`](@ref) to join the vertices of a polygon to form triangles. It returns an array of triangular polygons.
 

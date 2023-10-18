@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.9.0] - forthcoming
+## forthcoming release
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
@@ -15,6 +15,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 - fixes for `drawpath(p, f)` to do the Bezier curve truncation better
 - minimum Julia version 1.9
+- added dependency PolygonAlgorithms.jl and use code from there
 
 ### Removed
 

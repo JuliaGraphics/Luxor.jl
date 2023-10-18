@@ -38,54 +38,6 @@ poly(pointlist::Array{Point,1}, a::Symbol;
     close = false,
     reversepath = false) = poly(pointlist, action = action, close = close, reversepath = reversepath)
 
-"""
-Find the centroid of a simple polygon.
-
-    polycentroid(pointlist)
-
-Returns a point. This only works for simple (non-intersecting) polygons.
-
-You could test the point using `isinside()`.
-"""
-function polycentroid(pointlist::Array{Point,1})
-    # Points are immutable, use separate variables for these calculations
-    centroid_x = 0.0
-    centroid_y = 0.0
-    signedarea = 0.0
-    vertexcount = length(pointlist)
-    x0 = 0.0 # Current vertex X
-    y0 = 0.0 # Current vertex Y
-    x1 = 0.0 # Next vertex X
-    y1 = 0.0 # Next vertex Y
-    a = 0.0  # Partial signed area
-
-    # For all vertices except last
-    i = 1
-    @inbounds for i in 1:(vertexcount - 1)
-        x0 = pointlist[i].x
-        y0 = pointlist[i].y
-        x1 = pointlist[i + 1].x
-        y1 = pointlist[i + 1].y
-        a = x0 * y1 - x1 * y0
-        signedarea += a
-        centroid_x += (x0 + x1) * a
-        centroid_y += (y0 + y1) * a
-    end
-    # Do last vertex separately to avoid performing an expensive
-    # modulus operation in each iteration.
-    x0 = pointlist[vertexcount].x
-    y0 = pointlist[vertexcount].y
-    x1 = pointlist[1].x
-    y1 = pointlist[1].y
-    a = x0 * y1 - x1 * y0
-    signedarea += a
-    centroid_x += (x0 + x1) * a
-    centroid_y += (y0 + y1) * a
-    signedarea *= 0.5
-    centroid_x /= (6.0 * signedarea)
-    centroid_y /= (6.0 * signedarea)
-    return Point(centroid_x, centroid_y)
-end
 
 """
 Sort the points of a polygon into order. Points are sorted according to the angle they make
@@ -173,59 +125,6 @@ Simplify a polygon:
 """
 function simplify(pointlist::Array{Point,1}, detail = 0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
-end
-
-"""
-    isinside(p, pol; allowonedge=false)
-
-Is a point `p` inside a polygon `pol`? Returns true if it does, or false.
-
-This is an implementation of the Hormann-Agathos (2001) Point in Polygon algorithm.
-
-The classification of points lying on the edges of the target polygon, or coincident with
-its vertices is not clearly defined, due to rounding errors or arithmetical
-inadequacy. By default these will generate errors, but you can suppress these by setting
-`allowonedge` to `true`.
-"""
-function isinside(p::Point, pointlist::Array{Point,1};
-    allowonedge::Bool = false)
-    c = false
-    @inbounds for counter in eachindex(pointlist)
-        q1 = pointlist[counter]
-        # if reached last point, set "next point" to first point
-        if counter == length(pointlist)
-            q2 = pointlist[1]
-        else
-            q2 = pointlist[counter + 1]
-        end
-        if q1 == p
-            allowonedge || error("isinside(): VertexException a")
-            continue
-        end
-        if q2.y == p.y
-            if q2.x == p.x
-                allowonedge || error("isinside(): VertexException b")
-                continue
-            elseif (q1.y == p.y) && ((q2.x > p.x) == (q1.x < p.x))
-                allowonedge || error("isinside(): EdgeException")
-                continue
-            end
-        end
-        if (q1.y < p.y) != (q2.y < p.y) # crossing
-            if q1.x >= p.x
-                if q2.x > p.x
-                    c = !c
-                elseif ((determinant3(q1, q2, p) > 0) == (q2.y > q1.y))
-                    c = !c
-                end
-            elseif q2.x > p.x
-                if ((determinant3(q1, q2, p) > 0) == (q2.y > q1.y))
-                    c = !c
-                end
-            end
-        end
-    end
-    return c
 end
 
 """
@@ -1119,24 +1018,6 @@ function polysample(p::Array{Point,1}, npoints::T where {T<:Integer};
 end
 
 """
-    polyarea(p::Array)
-
-Find the area of a simple polygon. It works only for polygons that don't
-self-intersect. See also `polyorientation()`.
-"""
-function polyarea(plist::Array{Point,1})
-    l = length(plist)
-    area = 0.0
-    @inbounds for i in eachindex(plist)
-        j = mod1(i + 1, l)
-        area += plist[i].x * plist[j].y
-        area -= plist[j].x * plist[i].y
-    end
-    area = abs(area) / 2.0
-    return area
-end
-
-"""
     intersectlinepoly(pt1::Point, pt2::Point, C)
 
 Return an array of the points where a line between pt1 and pt2 crosses polygon C.
@@ -1168,6 +1049,8 @@ S - subject polygon - can be concave or convex.
 C - clip polygon - must be convex.
 
 Uses the Sutherland-Hodgman clipping algorithm. Calls `ispointonleftofline()`.
+
+To find where two polygon intersections, use `polyintersect()`.
 """
 function polyclip(S::Array{Point,1}, C::Array{Point,1})
     if !ispolyconvex(C)
@@ -1198,8 +1081,6 @@ function polyclip(S::Array{Point,1}, C::Array{Point,1})
     end
     return length(outpoly) > 0 ? outpoly : nothing
 end
-
-polyintersections(S::Array{Point,1}, C::Array{Point,1}) = polyclip(S, C)
 
 # TODO these experimental functions don't work all the time
 # use with caution... :)
@@ -1376,40 +1257,6 @@ function insertvertices!(pgon;
     return pgon
 end
 
-"""
-    polyintersect(p1::AbstractArray{Point, 1}, p2::AbstractArray{Point, 1};
-        closed=true)
-
-TODO: Fix/test/improve this experimental polygon intersection routine.
-
-Return the points where polygon p1 and polygon p2 cross.
-
-If `closed` is false, the intersection points must lie on the first `n - 1` lines of each polygon.
-"""
-function polyintersect(p1::AbstractArray{Point,1}, p2::AbstractArray{Point,1};
-    closed = true)
-    length(p1) < 3 || length(p2) < 3 && error("polyintersect(): not enough points")
-    temp = Point[]
-    @inbounds for i in eachindex(p1)
-        Spointpair = (p1[i], p1[mod1(i + 1, length(p1))])
-        for pt in intersectlinepoly(Spointpair..., p2)
-            push!(temp, pt)
-        end
-    end
-    # if not closed polygons, remove ipts that are on close side
-    if closed == false
-        ripts = Point[]
-        for ipt in temp
-            if !(ispointonline(ipt, p1[end], p1[1]) || ispointonline(ipt, p2[end], p2[1]))
-                push!(ripts, ipt)
-            end
-        end
-        return ripts
-    else
-        return temp
-    end
-end
-
 # triangulation functions
 
 function _smallesttriangle(bb::BoundingBox)
@@ -1575,82 +1422,6 @@ function _polarsortpoints(anchor, pt1, pt2)
     else
         return false
     end
-end
-
-"""
-    polyhull(pts)
-
-Find all points in `pts` that form a convex hull around the
-points in `pts`, and return them.
-
-This uses the Graham Scan algorithm.
-
-TODO : experimental, can be improved.
-"""
-function polyhull(points)
-    if length(points) == 3
-        return points
-    end
-    if length(points) < 3
-        throw(error("polyhull(): not enough points"))
-    end
-    # find a point with the highest Y coordinate value
-
-    if VERSION ≥ v"1.7.0"
-        _, anchorindex = findmax(pt -> pt.y, points)
-    else
-        anchorindex = let
-            maxyindex = 1
-            maxpt = boxtopcenter(BoundingBox(points))
-            for (n, pt) in enumerate(points)
-                if pt.y > maxpt.y
-                    maxyindex = n
-                    maxpt = pt
-                end
-            end
-            maxyindex
-        end
-    end
-
-    anchor = points[anchorindex]
-
-    # sort the points based on the polar angle they make
-    # with the anchor point
-
-    sortedpts = sort(points,
-        lt = (pt1, pt2) -> _polarsortpoints(anchor, pt1, pt2))
-
-    # remove collinear points
-    # TODO this breaks occasionally
-    to_remove = Int64[]
-    for i in 1:length(sortedpts)
-        d = anglethreepoints(
-            sortedpts[i],
-            sortedpts[mod1(i + 1, end)],
-            sortedpts[mod1(i + 2, end)],
-        )
-        if isapprox(d, π, atol = 10e-3)
-            push!(to_remove, i + 1)
-        end
-    end
-    sortedpts = [sortedpts[i] for i in eachindex(sortedpts) if i ∉ to_remove]
-
-    # initialize the convex hull with the anchor point
-
-    convex_hull = [anchor]
-
-    # see if traversing to a point from the previous two points is
-    # clockwise; reject and backtrack or continue
-
-    for point in sortedpts[2:end]
-        if length(convex_hull) > 2
-            while determinant3(convex_hull[end - 1], convex_hull[end], point) <= 0.0
-                pop!(convex_hull) # backtrack
-            end
-        end
-        push!(convex_hull, point)
-    end
-    return convex_hull
 end
 
 """

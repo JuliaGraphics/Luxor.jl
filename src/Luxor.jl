@@ -19,6 +19,8 @@ using FFMPEG
 using Juno
 using Rsvg
 
+import PolygonAlgorithms as PA
+
 #= from Cairo use: CairoARGBSurface, CairoEPSSurface,
 #CairoMatrix, CairoPDFSurface, CairoPattern,
 #CairoPatternMesh, CairoSurface, CairoSVGSurface,
@@ -49,6 +51,7 @@ include("Turtle.jl")
 include("shapes.jl")
 include("BoundingBox.jl")
 include("Table.jl")
+include("polygonalgorithms.jl")
 include("polygons.jl")
 include("triangles.jl")
 include("hexagons.jl")

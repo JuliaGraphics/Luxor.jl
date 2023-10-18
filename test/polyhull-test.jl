@@ -2,9 +2,9 @@ using Luxor
 using Test
 
 function checkpoints(points, hull)
-    flag  = true
-    for pt in points
-        if ! isinside(pt, offsetpoly(hull, 0.1), allowonedge=true)
+    flag = true
+    for hullpoint in hull
+        if hullpoint ∉ points
             flag = false
         end
     end

@@ -126,18 +126,17 @@ vcat(d1, d2)
 
 ### Creating many drawings
 
-You can create many drawings in a loop by specifying the filenames. For example, this creates PNG drawings of every glyph in the Unicode range 0x33 to 0xff.
+You can create many drawings in a loop by specifying the filenames. For example, this creates separate PNG drawings of every glyph in the Unicode range 0x20 to 0xff.
 
 ```julia
-
-for glyph in 0x33:0xff
+for (i, glyph) in enumerate(0x20:0xff)
     @png begin
         background("white")
         fontsize(300)
         fontface("JuliaMono-Black")
-        text(string(Char(glyph)), 
+        text(string(Char(glyph)),
             halign=:center, valign=:middle)
-    end 512 512 "/tmp/glyph-0x$(string(glyph, base=16)).png"
+    end 512 512 "/tmp/glyph-$(string(i))-0x$(string(glyph, base=16)).png"
 end
 ```
 
