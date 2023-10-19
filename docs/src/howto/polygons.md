@@ -2,7 +2,7 @@
 
 For drawing shapes, Luxor provides polygons and paths.
 
-A polygon is an ordered collection of Points stored in an array.
+A polygon is an ordered collection of Points stored in an array. To draw a polygon, you can use the [`poly()`](@ref) function, which converts the points to a path.
 
 A path is a sequence of one or more straight and curved (circular arc or Bézier curve) segments. Paths can consist of subpaths. Luxor maintains a 'current path', to which you can add lines and curves until you finish with a stroke or fill instruction.
 
@@ -1693,7 +1693,7 @@ nothing # hide
 
 Use [`polyintersect()`](@ref) to find the areas where two polygons intersect.
 
-In the following illustration, the annular sector polygon and a varying rectangular polygons are passed to `polyintersect()`.
+In the following illustration, the annular sector polygon and a varying rectangular polygon are passed to `polyintersect()`.
 
 In each case, the returned result is an array of polygons. The number of
 polygons in the array depends on how the two polygons intersect - there could be

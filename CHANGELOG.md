@@ -8,14 +8,14 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 ### Added
 
 - `markcells()` and `getcells()`
-- package extensions for LaTeX
+- package extension for LaTeX
 - CompatHelper git workflow
 
 ### Changed
 
-- fixes for `drawpath(p, f)` to do the Bezier curve truncation better
 - minimum Julia version 1.9
-- added dependency PolygonAlgorithms.jl and use code from there
+- fixes for `drawpath(p, f)` to do the Bezier curve truncation better
+- added dependency PolygonAlgorithms.jl and replace poly intersection routines with new ones
 
 ### Removed
 

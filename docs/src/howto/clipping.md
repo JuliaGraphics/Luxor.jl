@@ -27,6 +27,8 @@ poly(polyclip(s, c), :stroke, close=true)
 end 600 400  # hide
 ```
 
+See also `[polyintersect()](@ref)`.
+
 ## Visual clipping
 
 Use [`clip`](@ref) to turn the current path into a clipping region, masking any graphics outside the path. [`clippreserve`](@ref) keeps the current path, but also uses it as a clipping region. [`clipreset`](@ref) resets it. `:clip` is also an action for drawing functions like [`circle`](@ref).
