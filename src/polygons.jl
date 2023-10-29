@@ -359,8 +359,8 @@ function drawroundedcorner(cornerpoint::Point, p1::Point, p2::Point, radius, pat
 end
 
 """
-    polysmooth(points, radius, action=:action; debug=false)
-    polysmooth(points, radius; action=:none, debug=false)
+    polysmooth(points, radius, action=:action; debug=false, close=true)
+    polysmooth(points, radius; action=:none, debug=false, close=true)
 
 Make a closed path from the `points` and round the corners by making them arcs with the
 given radius. Execute the action when finished.
@@ -373,14 +373,14 @@ The `debug` option also draws the construction circles at each corner.
 
 TODO Return something more useful than a Boolean.
 """
-function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = false)
+function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = false, close = true)
     temppath = Tuple[]
     l = length(points)
     if l < 3
         # there are less than three points to smooth
         return nothing
     else
-        @inbounds for i in 1:l
+        @inbounds for i in 1:(close ? l : l-2)
             p1 = points[mod1(i, l)]
             p2 = points[mod1(i + 1, l)]
             p3 = points[mod1(i + 2, l)]
@@ -391,7 +391,12 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
         end
     end
     # need to close by joining to first point
-    push!(temppath, temppath[1])
+    if close
+        push!(temppath, temppath[1])
+    else
+        pushfirst!(temppath, (:line, points[1]))
+        push!(temppath, (:line, points[end]))
+    end
     # draw the path
     for (c, p) in temppath
         if c == :line
@@ -405,8 +410,8 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
     do_action(action)
 end
 
-polysmooth(points::Array{Point,1}, radius; action = :none, debug = false) =
-    polysmooth(points, radius, action; debug = debug)
+polysmooth(points::Array{Point,1}, radius; action = :none, debug = false, close = true) =
+    polysmooth(points, radius, action; debug = debug, close = close)
 
 """
     offsetpoly(plist::Array{Point, 1}, d) where T<:Number
