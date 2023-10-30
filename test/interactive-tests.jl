@@ -2,7 +2,7 @@
 
 # this test isn't run by Pkg.test
 
-# it can be run to test Juno/Jupyter integration...
+# it can be run to test Jupyter integration...
 
 using Luxor
 

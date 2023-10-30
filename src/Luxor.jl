@@ -16,7 +16,6 @@ using Cairo
 using Colors
 using Dates
 using FFMPEG
-using Juno
 using Rsvg
 
 import PolygonAlgorithms as PA
