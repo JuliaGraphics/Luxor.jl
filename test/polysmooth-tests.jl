@@ -23,6 +23,7 @@ function star_test(fname)
            p = star(pos, tiles.tilewidth/2 - 10, randomsides, randomratio, 0, vertices=true)
            prettypoly(p, close=true, :stroke)
            polysmooth(p, randomsmoothing, :fill, debug=true)
+           polysmooth(p, randomsmoothing, :fill, debug=true, close=false)
      end
     @test finish() == true
     println("...finished test: output in $(fname)")
