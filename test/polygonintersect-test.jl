@@ -32,7 +32,6 @@ function polygon_intersection_test(fname)
         end
     end
     @test finish() == true
-    preview()
 end
 
 function polygon_intersection_test_2(fname)

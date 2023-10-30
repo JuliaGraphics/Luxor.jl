@@ -845,7 +845,7 @@ than `value`, and the difference value. Array is assumed to be sorted.
 
 (Designed for use with `polydistances()`).
 """
-function nearestindex(a::Array{T,1} where {T<:Real}, val)
+function nearestindex(a::Array{Float64, 1}, val)
     ind = findlast(v -> (v < val), a)
     if isnothing(ind)
         throw(error("nearestindex: no index"))
@@ -862,7 +862,7 @@ end
 """
     polyportion(p::Array{Point, 1}, portion=0.5; 
         closed=true, 
-        pdist = Array{Real, 1}[])
+        pdist = Array{Union{Float64, Int}, 1}[])
 
 Return a portion of a polygon, starting at a value between
 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first
@@ -882,7 +882,7 @@ the other part.
 """
 function polyportion(p::Array{Point,1}, portion = 0.5; 
         closed = true, 
-        pdist = Array{Real,1}[])
+        pdist = Array{Float64, 1}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)
@@ -919,7 +919,7 @@ end
 """
     polyremainder(p::Array{Point, 1}, portion=0.5; 
         closed=true, 
-        pdist=Array{Real, 1}[])
+        pdist=Array{Union{Float64, Int}, 1}[])
 
 Return the rest of a polygon, starting at a value between 0.0 (the beginning)
 and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three
@@ -936,7 +936,7 @@ Use the complementary `polyportion()` function to return the other part.
 """
 function polyremainder(p::Array{Point,1}, portion = 0.5; 
         closed = true, 
-        pdist = Array{Real, 1}[])
+        pdist = Array{Union{Float64, Int}, 1}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)

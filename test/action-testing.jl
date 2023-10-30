@@ -3,7 +3,7 @@ using Test
 
 # testing that functions that accept eg `:fill` also can be used with keyword `action=:fill`
 
-expressions = [
+const expressions = [
 :(arc(O, 70, 0, π/2, :stroke)),
 :(arc(O, 70, 0, π/2, action=:stroke)),
 

@@ -16,6 +16,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - minimum Julia version 1.9
 - fixes for `drawpath(p, f)` to do the Bezier curve truncation better
 - added dependency PolygonAlgorithms.jl and replace poly intersection routines with new ones
+- Aqua says TOML deps must be in alphabetical order :) 
 
 ### Removed
 

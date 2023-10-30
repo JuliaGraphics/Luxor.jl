@@ -71,7 +71,7 @@ Use `polyintersect()`.
 function polyintersectconvex(p1::AbstractArray{Point,1}, p2::AbstractArray{Point,1})
     # `alg` can either be `ChasingEdgesAlg()`, `PointSearchAlg()` or `WeilerAthertonAlg()`.
     return _tuples_to_points(
-        PA.intersect_convex(_points_to_tuples(pgon1), _points_to_tuples(pgon2)))
+        PA.intersect_convex(_points_to_tuples(p1), _points_to_tuples(p2)))
 end
 
 """

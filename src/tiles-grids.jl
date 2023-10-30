@@ -46,16 +46,16 @@ first.(collect(Tiler(800, 800, 4, 4)))
 which returns an array of points that are the center points of the grid.
 """
 mutable struct Tiler
-    areawidth::Real
-    areaheight::Real
-    tilewidth::Real
-    tileheight::Real
+    areawidth::Union{Float64, Int}
+    areaheight::Union{Float64, Int}
+    tilewidth::Union{Float64, Int}
+    tileheight::Union{Float64, Int}
     nrows::Int
     ncols::Int
     currentrow::Int
     currentcol::Int
-    margin::Real
-    function Tiler(areawidth, areaheight, nrows::Int, ncols::Int; margin = 10)
+    margin::Union{Float64,Int}
+    function Tiler(areawidth, areaheight, nrows::Int, ncols::Int; margin = 10.0)
         tilewidth = (areawidth - 2margin) / ncols
         tileheight = (areaheight - 2margin) / nrows
         currentrow = 1
@@ -291,10 +291,10 @@ Unless the tilewidth and tileheight are exact multiples of the area width and he
 see a border at the right and bottom where the tiles won't fit.
 """
 mutable struct Partition
-    areawidth::Real
-    areaheight::Real
-    tilewidth::Real
-    tileheight::Real
+    areawidth::Union{Float64, Int}
+    areaheight::Union{Float64, Int}
+    tilewidth::Union{Float64, Int}
+    tileheight::Union{Float64, Int}
     nrows::Int
     ncols::Int
     currentrow::Int
