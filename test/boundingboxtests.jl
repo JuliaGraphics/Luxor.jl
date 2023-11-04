@@ -7,7 +7,7 @@ using Test
 using Random
 Random.seed!(42)
 
-function test_bboxes(fname)
+function test_bboxes_1(fname)
     pagewidth, pageheight = 1200, 1400
 
     Drawing(pagewidth, pageheight, fname)
@@ -100,4 +100,4 @@ Random.seed!(42)
 
 fname = "bounding-box-test.png"
 
-test_bboxes(fname)
+test_bboxes_1(fname)

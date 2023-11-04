@@ -7,13 +7,6 @@ using Test
 using Random
 Random.seed!(42)
 
-function drawdot(pos)
-    gsave()
-    sethue("red")
-    circle(pos, 5, :fill)
-    grestore()
-end
-
 function text_rotation_tests(fname)
     Drawing(800, 800, fname)
     origin()

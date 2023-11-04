@@ -22,7 +22,7 @@ function test_lux_bb(; center = O)
     snapshot()
 end
 
-function test1(fname)
+function point_bb_test1(fname)
     Drawing(800, 400, :rec)
     background("brown")
     origin(200, 200)
@@ -33,7 +33,7 @@ function test1(fname)
     println("...finished point crosses bounding box test 1, saved in $(fname)")
 end
 
-function test2(fname)
+function point_bb_test2(fname)
     Drawing(1200, 1200, fname)
     background("black")
     origin()
@@ -60,7 +60,7 @@ function test2(fname)
 end
 
 fname = "point-crosses-bounding-box-test-1.png"
-test1(fname)
+point_bb_test1(fname)
 
 fname = "point-crosses-bounding-box-test-2.png"
-test2(fname)
+point_bb_test2(fname)

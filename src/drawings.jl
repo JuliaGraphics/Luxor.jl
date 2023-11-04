@@ -963,7 +963,9 @@ function snapshot(;
         sn = snapshot(fname, BoundingBox(), scalefactor; addmarker = addmarker)
         grestore()
     else
-        @assert cb isa BoundingBox
+        if typeof(cb) !== BoundingBox
+            throw(error("Luxor.snapshot(): $(cb) is not a BoundingBox"))
+        end 
         sn = snapshot(fname, cb, scalefactor; addmarker = addmarker)
     end
     sn
@@ -978,8 +980,14 @@ function snapshot(fname, cb, scalefactor; addmarker = true)
     rd = currentdrawing()
     isbits(rd) && return false  # currentdrawing provided 'info'
     rs = _current_surface()
-    @assert rd isa Drawing
-    @assert _current_surface_type() == :rec
+    if typeof(rd) !== Drawing
+        throw(error("Luxor.snapshot(): there is not current drawing"))
+    end 
+
+    if _current_surface_type() !== :rec
+        throw(error("Luxor.snapshot(): drawing type should be :rec"))
+    end 
+
     # The check for an 'alive' drawing should be performed by currentdrawing()
     # Working on a dead drawing causes ugly crashes.
     # Empty the working buffer to the recording surface:

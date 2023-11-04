@@ -785,7 +785,9 @@ function Base.hcat(D::Drawing...; valign = :top, hpad = 0, clip = true)
     for d in D
         dheight = max(dheight, d.height)
         dwidth += d.width + hpad
-        @assert d.surfacetype === :svg "Drawings must be SVG."
+        if d.surfacetype !== :svg
+            throw(error("hcat(): Drawing must be SVG, not $(d.surfacetype)"))
+        end 
     end
     dcat = Drawing(dwidth, dheight, :svg)
     @layer begin
@@ -846,7 +848,9 @@ function Base.vcat(D::Drawing...; halign = :left, vpad = 0, clip = true)
     for d in D
         dwidth = max(dwidth, d.width)
         dheight += d.height + vpad
-        @assert d.surfacetype === :svg "Drawings must be SVG."
+        if d.surfacetype !== :svg
+            throw(error("vcat(): Drawing must be SVG, not $(d.surfacetype)"))
+        end
     end
     dcat = Drawing(dwidth, dheight, :svg)
     @layer begin

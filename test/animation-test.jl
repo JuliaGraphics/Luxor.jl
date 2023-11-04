@@ -29,8 +29,6 @@ end
 
 demo = Movie(400, 100, "test")
 
-backdrop(scene, framenumber) = background("black")
-
 function frame1(scene, framenumber)
     sethue("purple")
     eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)

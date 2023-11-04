@@ -8,7 +8,7 @@ using Random
 
 Random.seed!(42)
 
-function test_bboxes(fname)
+function test_bboxes_2(fname)
     pagewidth, pageheight = 800, 800
     Drawing(pagewidth, pageheight, fname)
     origin() # move 0/0 to center
@@ -35,4 +35,4 @@ end
 
 fname = "bounding-box-point-test.png"
 
-test_bboxes(fname)
+test_bboxes_2(fname)

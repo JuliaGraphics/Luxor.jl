@@ -87,7 +87,6 @@ function run_all_tests()
         include("circletangent-test.jl")
         include("arc-sagitta-test.jl")
         include("circlecircletangent-test.jl")
-        include("pointcircletangent-test.jl")
         include("crescent-test.jl")
     end
 

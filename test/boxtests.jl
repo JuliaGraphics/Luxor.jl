@@ -7,7 +7,7 @@ using Test
 using Random
 Random.seed!(42)
 
-function test_circles(fname)
+function test_boxes(fname)
     pagewidth, pageheight = 1200, 1400
 
     Drawing(pagewidth, pageheight, fname)
@@ -22,10 +22,6 @@ function test_circles(fname)
         randomhue()
         rotate(2pi * rand())
         strokepath()
-        # p = pathtopoly()
-        # for pl in p
-        #     prettypoly(pl, :fill, () -> circle(O, 1, :fill))
-        # end
     end
 
     grestore()
@@ -54,4 +50,4 @@ function test_circles(fname)
 end
 
 fname = "box-test.png"
-test_circles(fname)
+test_boxes(fname)

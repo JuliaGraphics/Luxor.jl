@@ -190,10 +190,11 @@ end
 """
     getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)
 
-Given a line from `pt1` to `pt2`, and `startpt` is the start of a perpendicular heading
-to meet the line, at what point does it hit the line?
+Given a line passing through `pt1` and `pt2`, return the point where a line
+starting at `startpt` would meet the line at right angles. The point may or may
+not lie on the line between `pt1` and `pt2` - use `ispointonline()` to see if it does.
 
-See `perpendicular()`.
+See aalso `perpendicular()`.
 """
 function getnearestpointonline(pt1::Point, pt2::Point, startpt::Point)
     perpendicular(pt1, pt2, startpt)

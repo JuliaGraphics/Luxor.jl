@@ -90,7 +90,7 @@ function boxes_and_rectangles(pt::Point)
     end
 end
 
-function draw_julia_logos(fname)
+function draw_julia_logos_1(fname)
     Drawing(1600, 1600, fname)
     origin()
     background("white")
@@ -311,7 +311,7 @@ function test6()
     )
 end
 
-function draw_julia_logos(fname)
+function draw_julia_logos_2(fname)
     Drawing(1600, 1600, fname)
     origin()
     background("white")
@@ -333,6 +333,6 @@ function draw_julia_logos(fname)
     finish()
 end
 
-draw_julia_logos("julia-logo-draw.png")
+draw_julia_logos_1("julia-logo-draw.png")
 julialogodims("julia-logo-dims.png")
-draw_julia_logos("julia-logo-draw-table.png")
+draw_julia_logos_2("julia-logo-draw-table.png")

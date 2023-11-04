@@ -7,7 +7,7 @@ using Test
 using Random
 Random.seed!(42)
 
-function arrow_test(fname)
+function arrow_line_test(fname)
   pagewidth, pageheight = 2000, 2000
   Drawing(pagewidth, pageheight, fname)
   origin() # move 0/0 to center
@@ -39,5 +39,5 @@ end
 
 Random.seed!(42)
 fname = "arrow-line-test.pdf"
-arrow_test(fname)
+arrow_line_test(fname)
 println("...finished test: output in $(fname)")

@@ -12,7 +12,7 @@ function drawbbox(apoly)
     grestore()
 end
 
-function test1(p, x, y)
+function pretty_test1(p, x, y)
     prettypoly(p, :fill,
         vertexlabels = (n, l) -> (text(string(n, " of ", l))),
         # all these commands are executed for each vertex of the polygon
@@ -29,7 +29,7 @@ function test1(p, x, y)
     )
 end
 
-function test2(p)
+function pretty_test2(p)
     prettypoly(p,
         :fill,
         () ->
@@ -89,9 +89,9 @@ function draw_lots_of_polys(pagewidth, pageheight)
         setline(1)
         randomhue()
         if n % 3  == 0
-            test1(p, pos.x, pos.y)
+            pretty_test1(p, pos.x, pos.y)
         elseif n % 3 == 1
-            test2(p)
+            pretty_test2(p)
         elseif n % 3 == 2
             test3(p)
         end
