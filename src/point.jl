@@ -327,9 +327,9 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
 
     # point on the line
     if (abs(dxl) >= abs(dyl))
-        return dxl > 0 ? pt1.x <= pt.x && pt.x <= pt2.x : pt2.x <= pt.x && pt.x <= pt1.x
+        return dxl > 0 ? pt1.x <= pt.x+atol && pt.x <= pt2.x+atol : pt2.x <= pt.x+atol && pt.x <= pt1.x+atol
     else
-        return dyl > 0 ? pt1.y <= pt.y && pt.y <= pt2.y : pt2.y <= pt.y && pt.y <= pt1.y
+        return dyl > 0 ? pt1.y <= pt.y+atol && pt.y <= pt2.y+atol : pt2.y <= pt.y+atol && pt.y <= pt1.y+atol
     end
 end
 

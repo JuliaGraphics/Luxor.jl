@@ -393,13 +393,16 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
     # need to close by joining to first point
     if close
         push!(temppath, temppath[1])
+        temppath[1] = (:move, temppath[1][2])
     else
-        pushfirst!(temppath, (:line, points[1]))
+        pushfirst!(temppath, (:move, points[1]))
         push!(temppath, (:line, points[end]))
     end
     # draw the path
     for (c, p) in temppath
-        if c == :line
+        if c == :move
+            move(p)
+        elseif c == :line
             line(p)    # add line segment
         elseif c == :arc
             arc(p...)  # add clockwise arc segment
