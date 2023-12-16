@@ -266,10 +266,10 @@ Next we'll create three Luxor drawings that connect to these buffers.
 ```julia
 d1 = Drawing(buffer1)    
 
-Luxor.set_next_drawing_index()   
+Luxor._set_next_drawing_index()   
 d2 = Drawing(buffer2)
 
-Luxor.set_next_drawing_index()   
+Luxor._set_next_drawing_index()   
 d3 = Drawing(buffer3, "julia.png")
 ```
 
@@ -277,7 +277,7 @@ We now have three drawings which are continuously updated and visible in three s
 Let's start by drawing on drawing 1.
 
 ```julia
-Luxor.set_drawing_index(1) 
+Luxor._set_drawing_index(1) 
 origin()
 setopacity(0.4)
 foregroundcolors = Colors.diverging_palette(
