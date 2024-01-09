@@ -56,10 +56,10 @@ Other text functions:
 
 `textwrap()` - draw text to fit a box after re-justifying the lines to fit nicely
 """
-function text(t::T where T <: AbstractString, pt::Point;
-        halign=:left,
-        valign=:baseline,
-        angle=0.0)
+function text(t::T where {T<:AbstractString}, pt::Point;
+    halign=:left,
+    valign=:baseline,
+    angle=0.0)
     #= text can aligned by one of the following points
         top/left       top/center       top/right
         middle/left    middle/center    middle/right
@@ -83,7 +83,7 @@ function text(t::T where T <: AbstractString, pt::Point;
     end
 
     # was textpointx = pt.x - [0, textwidth/2, textwidth][halignment]
-    textpointx = pt.x - [0, xadvance/2, textwidth + xbearing][halignment]
+    textpointx = pt.x - [0, xadvance / 2, textwidth + xbearing][halignment]
 
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
 
@@ -92,17 +92,17 @@ function text(t::T where T <: AbstractString, pt::Point;
         valignment = 3
     end
 
-    textpointy = pt.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+    textpointy = pt.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
 
     # need to adjust for any rotation now
     # rotate around original point
     finalpt = rotatepoint(Point(textpointx, textpointy), pt, angle)
 
     gsave()
-        translate(finalpt)
-        rotate(angle)
-        newpath()
-        Cairo.show_text(_get_current_cr(), t)
+    translate(finalpt)
+    rotate(angle)
+    newpath()
+    Cairo.show_text(_get_current_cr(), t)
     grestore()
 
     return Point(textpointx, textpointy)
@@ -125,8 +125,8 @@ Select a font to use. (Toy API)
 """
 fontface(f) =
     Cairo.select_font_face(_get_current_cr(), f,
-                           Cairo.FONT_SLANT_NORMAL,
-                           Cairo.FONT_WEIGHT_NORMAL)
+        Cairo.FONT_SLANT_NORMAL,
+        Cairo.FONT_WEIGHT_NORMAL)
 
 """
     fontsize(n)
@@ -147,7 +147,7 @@ if `Cairo.set_font_matrix` is used directly. (Toy API)
 function get_fontsize()
     if @isdefined get_font_matrix
         m = get_font_matrix(_get_current_cr())
-        font_size = sign(m.yy)*sqrt(m.yx^2+m.yy^2)
+        font_size = sign(m.yy) * sqrt(m.yx^2 + m.yy^2)
         return font_size
     else
         throw(ErrorException("Please use Cairo v1.0.5 or later to use this feature."))
@@ -201,7 +201,7 @@ You can use `pathtopoly()` or `getpath()` or `getpathflat()` to convert the path
 
 See also `textoutlines()`. `textpath()` retains Bezier curves, whereas `textoutlines()` returns flattened curves.
 """
-function textpath(t::T where T <: AbstractString)
+function textpath(t::T where {T<:AbstractString})
     Cairo.text_path(_get_current_cr(), t)
 end
 """
@@ -215,11 +215,11 @@ Convert the text in string `s` to paths and apply the action.
 
 TODO Return something more useful than a Boolean.
 """
-function textpath(s::T where T <: AbstractString, pos::Point;
-        action=:none,
-        halign=:left,
-        valign=:baseline,
-        startnewpath=true)
+function textpath(s::T where {T<:AbstractString}, pos::Point;
+    action=:none,
+    halign=:left,
+    valign=:baseline,
+    startnewpath=true)
 
     # TODO this duplicates text() too much; re-factor needed
     xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(s)
@@ -229,17 +229,17 @@ function textpath(s::T where T <: AbstractString, pos::Point;
     elseif halignment == 4
         halignment = 2
     end
-    textpointx = pos.x - [0, xadvance/2, textwidth + xbearing][halignment]
+    textpointx = pos.x - [0, xadvance / 2, textwidth + xbearing][halignment]
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
     if valignment == nothing
         valignment = 3
     end
-    textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+    textpointy = pos.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
     @layer begin
         translate(Point(textpointx, textpointy))
         move(O)
         if startnewpath
-           newpath() # forget any current path, start a new one
+            newpath() # forget any current path, start a new one
         end
         textpath(s)
     end
@@ -247,9 +247,9 @@ function textpath(s::T where T <: AbstractString, pos::Point;
 end
 
 textpath(s::T where {T<:AbstractString}, pos::Point, action::Symbol;
-    halign = :left,
-    valign = :baseline,
-    startnewpath = true) = textpath(s, pos, action=action, halign=halign, valign=valign, startnewpath=startnewpath)
+    halign=:left,
+    valign=:baseline,
+    startnewpath=true) = textpath(s, pos, action=action, halign=halign, valign=valign, startnewpath=startnewpath)
 
 """
     textoutlines(s::String, pos::Point=O;
@@ -266,7 +266,7 @@ See also `textpath()`. `textpath()` retains Bezier curves, whereas `textoutlines
 
 TODO Return something more useful than a Boolean.
 """
-function textoutlines(s::T where T <: AbstractString, pos::Point;
+function textoutlines(s::T where {T<:AbstractString}, pos::Point;
     action=:none,
     halign=:left,
     valign=:baseline,
@@ -280,16 +280,16 @@ function textoutlines(s::T where T <: AbstractString, pos::Point;
     elseif halignment == 4
         halignment = 2
     end
-    textpointx = pos.x - [0, xadvance/2, textwidth + xbearing][halignment]
+    textpointx = pos.x - [0, xadvance / 2, textwidth + xbearing][halignment]
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
     if valignment == nothing
         valignment = 3
     end
-    textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+    textpointy = pos.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
     @layer begin
         translate(Point(textpointx, textpointy))
         if startnewpath
-           newpath() # forget any current path, start a new one
+            newpath() # forget any current path, start a new one
         end
         te = textextents(s)
         textpath(s)
@@ -308,16 +308,16 @@ function textoutlines(s::T where T <: AbstractString, pos::Point;
     do_action(action)
 end
 
-textoutlines(s::T where T <: AbstractString, pos::Point, action::Symbol;
+textoutlines(s::T where {T<:AbstractString}, pos::Point, action::Symbol;
     halign=:left,
     valign=:baseline,
     startnewpath=true) = textoutlines(s, pos;
-        action=action,
-        halign=halign,
-        valign=valign,
-        startnewpath=startnewpath)
+    action=action,
+    halign=halign,
+    valign=valign,
+    startnewpath=startnewpath)
 
-textoutlines(s::T where T <: AbstractString; kwargs...) = textoutlines(s, O, kwargs...)
+textoutlines(s::T where {T<:AbstractString}; kwargs...) = textoutlines(s, O, kwargs...)
 
 """
     textcurve(the_text, start_angle, start_radius, pos;
@@ -333,12 +333,12 @@ Place a string of text on a curve. It can spiral in or out.
 `start_angle` is relative to +ve x-axis, arc/circle is centered on `pos` with
 radius `start_radius`.
 """
-function textcurve(the_text::T where T <: AbstractString, start_angle, start_radius, pos=O;
-    spiral_ring_step = 0,
-    letter_spacing = 0,
-    spiral_in_out_shift = 0,
-    clockwise = true
-    )
+function textcurve(the_text::T where {T<:AbstractString}, start_angle, start_radius, pos=O;
+    spiral_ring_step=0,
+    letter_spacing=0,
+    spiral_in_out_shift=0,
+    clockwise=true
+)
     # TODO this is all very hacky and out of date...
     refangle = start_angle
     current_radius = start_radius
@@ -355,21 +355,21 @@ function textcurve(the_text::T where T <: AbstractString, start_angle, start_rad
         cnter = (2pi * current_radius) / spiral_space_step
         radius_step = (spiral_ring_step + spiral_in_out_shift) / cnter
         current_radius += radius_step
-        angle_step += (glyph_x_advance / 2.0) + letter_spacing/2.0
+        angle_step += (glyph_x_advance / 2.0) + letter_spacing / 2.0
         if clockwise
             refangle += angle_step / current_radius
         else
             refangle -= angle_step / current_radius
         end
-        angle_step = (glyph_x_advance / 2.0) + letter_spacing/2.0
+        angle_step = (glyph_x_advance / 2.0) + letter_spacing / 2.0
         xx = cos(refangle) * current_radius + pos.x
         yy = sin(refangle) * current_radius + pos.y
         gsave()
         translate(xx, yy)
         if clockwise
-            rotate(pi/2 + refangle)
+            rotate(pi / 2 + refangle)
         else
-            rotate(-pi/2 + refangle)
+            rotate(-pi / 2 + refangle)
         end
         text(glyph, O, halign=:center)
         grestore()
@@ -396,11 +396,11 @@ baseline.
 
 `textcurvecentred` (UK spelling) is a synonym.
 """
-function textcurvecentered(the_text::T where T <: AbstractString, the_angle, the_radius, center::Point;
-                           clockwise = true,
-                           letter_spacing = 0,
-                           baselineshift = 0
-      )
+function textcurvecentered(the_text::T where {T<:AbstractString}, the_angle, the_radius, center::Point;
+    clockwise=true,
+    letter_spacing=0,
+    baselineshift=0
+)
     atextbox = textextents(the_text)
     atextwidth = atextbox[3]                         # width of text
     if clockwise
@@ -415,16 +415,16 @@ function textcurvecentered(the_text::T where T <: AbstractString, the_angle, the
     lspaced = length(the_text) * letter_spacing
     lspacedangle = atan(lspaced, baselineradius)
 
-    theta = atextwidth/baselineradius               # find angle
+    theta = atextwidth / baselineradius               # find angle
     if clockwise
-        starttextangle = the_angle - (theta/2) - lspacedangle/2
+        starttextangle = the_angle - (theta / 2) - lspacedangle / 2
     else
-        starttextangle = the_angle + (theta/2) + lspacedangle/2
+        starttextangle = the_angle + (theta / 2) + lspacedangle / 2
     end
     starttextxpos = baselineradius * cos(starttextangle)
     starttextypos = baselineradius * sin(starttextangle)
     textcurve(the_text, starttextangle, baselineradius, center,
-              clockwise=clockwise, letter_spacing=letter_spacing)
+        clockwise=clockwise, letter_spacing=letter_spacing)
 end
 
 textcurvecentred = textcurvecentered
@@ -441,10 +441,10 @@ Example:
     setfont("Helvetica", 24)
     settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
 """
-function setfont(family::T where T <: AbstractString, fontsize)
+function setfont(family::T where {T<:AbstractString}, fontsize)
     # output is set relative to 96dpi
     # so it needs to be rescaled
-    fsize = fontsize * 72/96
+    fsize = fontsize * 72 / 96
     set_font_face(_get_current_cr(), string(family, " ", fsize))
 end
 
@@ -476,10 +476,10 @@ The `<span>` tag can contains things like this:
 
     <span font='26' background='green' foreground='red'>unreadable text</span>
 """
-settext(text::T where T <: AbstractString, pos::Point; kwargs...) =
+settext(text::T where {T<:AbstractString}, pos::Point; kwargs...) =
     Cairo.text(_get_current_cr(), pos.x, pos.y, text; kwargs...)
 
-settext(text::T where T <: AbstractString; kwargs...) = settext(text, O; kwargs...)
+settext(text::T where {T<:AbstractString}; kwargs...) = settext(text, O; kwargs...)
 
 """
     label(txt::T where T <: AbstractString, alignment::Symbol=:N, pos::Point=O;
@@ -508,35 +508,35 @@ start and end of the lines.
 
 TODO: Negative offsets don't give good results.
 """
-function label(txt::T where T <: AbstractString, alignment::Symbol=:N, pos::Point=O;
-        offset=5,
-        leader=false,
-        leaderoffsets=[0.0, 1.0])
+function label(txt::T where {T<:AbstractString}, alignment::Symbol=:N, pos::Point=O;
+    offset=5,
+    leader=false,
+    leaderoffsets=[0.0, 1.0])
     # alignment one of :N, :S, :E, ;W, ;NE; :SE, :SW, :NW
     if in(alignment, [:N, :n])
         pt = Point(pos.x, pos.y - offset)
-        text(txt, pt, halign = :center, valign = :bottom)
+        text(txt, pt, halign=:center, valign=:bottom)
     elseif in(alignment, [:E, :e])
         pt = Point(pos.x + offset, pos.y)
-        text(txt, pt, halign = :left, valign = :middle)
+        text(txt, pt, halign=:left, valign=:middle)
     elseif in(alignment, [:S, :s])
         pt = Point(pos.x, pos.y + offset)
-        text(txt, pt, halign = :center, valign = :top)
+        text(txt, pt, halign=:center, valign=:top)
     elseif in(alignment, [:W, :w])
         pt = Point(pos.x - offset, pos.y)
-        text(txt, pt, halign = :right, valign = :middle)
+        text(txt, pt, halign=:right, valign=:middle)
     elseif in(alignment, [:NE, :ne])
-        pt = Point(pos.x + (offset * cos(pi/4)), pos.y - (offset * sin(pi/4)))
-        text(txt, pt, halign = :left, valign = :bottom)
+        pt = Point(pos.x + (offset * cos(pi / 4)), pos.y - (offset * sin(pi / 4)))
+        text(txt, pt, halign=:left, valign=:bottom)
     elseif in(alignment, [:SE, :se])
-        pt = Point(pos.x + (offset * cos(pi/4)), pos.y + (offset * sin(pi/4)))
-        text(txt, pt, halign = :left, valign = :top)
+        pt = Point(pos.x + (offset * cos(pi / 4)), pos.y + (offset * sin(pi / 4)))
+        text(txt, pt, halign=:left, valign=:top)
     elseif in(alignment, [:SW, :sw])
-        pt = Point(pos.x - (offset * cos(pi/4)), pos.y + (offset * sin(pi/4)))
-        text(txt, pt, halign = :right, valign = :top)
+        pt = Point(pos.x - (offset * cos(pi / 4)), pos.y + (offset * sin(pi / 4)))
+        text(txt, pt, halign=:right, valign=:top)
     elseif in(alignment, [:NW, :nw])
-        pt = Point(pos.x - (offset * cos(pi/4)), pos.y - (offset * sin(pi/4)))
-        text(txt, pt, halign = :right, valign = :bottom)
+        pt = Point(pos.x - (offset * cos(pi / 4)), pos.y - (offset * sin(pi / 4)))
+        text(txt, pt, halign=:right, valign=:bottom)
     end
     if leader
         line(between(pos, pt, leaderoffsets[1]), between(pos, pt, leaderoffsets[2]), :stroke)
@@ -554,31 +554,31 @@ Add a text label at a point, positioned relative to that point, for example,
 
     label("text", pi)          # positions text to the left of the origin
 """
-function label(txt::T where T <: AbstractString, direction::Real, pos::Point=O;
-        offset=5,
-        leader=false,
-        leaderoffsets=[0.0, 1.0])
-    if 0 < direction <= pi/4
-        vertalign  = :middle
+function label(txt::T where {T<:AbstractString}, direction::Real, pos::Point=O;
+    offset=5,
+    leader=false,
+    leaderoffsets=[0.0, 1.0])
+    if 0 < direction <= pi / 4
+        vertalign = :middle
         horizalign = :left
-    elseif pi/4 < direction <= 3pi/4
-        vertalign  = :top
+    elseif pi / 4 < direction <= 3pi / 4
+        vertalign = :top
         horizalign = :center
-    elseif 3pi/4 < direction <= 5pi/4
-        vertalign  = :middle
+    elseif 3pi / 4 < direction <= 5pi / 4
+        vertalign = :middle
         horizalign = :right
-    elseif 5pi/4 < direction <= 7pi/4
-        vertalign  = :bottom
+    elseif 5pi / 4 < direction <= 7pi / 4
+        vertalign = :bottom
         horizalign = :center
     else
-        vertalign  = :middle
+        vertalign = :middle
         horizalign = :left
     end
     pt = pos + polar(offset, direction)
     if leader
         line(between(pos, pt, leaderoffsets[1]), between(pos, pt, leaderoffsets[2]), :stroke)
     end
-    text(txt, pt, halign = horizalign, valign=vertalign)
+    text(txt, pt, halign=horizalign, valign=vertalign)
 end
 
 """
@@ -587,10 +587,10 @@ end
 Split the text in string `s` into an array, but keep all the separators
 attached to the preceding word.
 """
-function splittext(s::T where T <: AbstractString)
+function splittext(s::T where {T<:AbstractString})
     # split text into array, keeping all separators
     # hyphens stay with first word
-    result = Array{String, 1}()
+    result = Array{String,1}()
     iobuffer = IOBuffer()
     for c in s
         if isspace(c)
@@ -620,7 +620,7 @@ TODO: A `rightgutter` optional keyword adds some padding to the right hand side
 of the column. This appears to be needed sometimes -— perhaps the algorithm
 needs improving to take account of the interaction of `textextents` and spaces?
 """
-function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
+function textlines(s::T where {T<:AbstractString}, width::Real; rightgutter=5)
     result = String[]
     fields = splittext(s)
     textwidth = width - rightgutter
@@ -640,7 +640,7 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
         if (widthofword + spacewidth) > spaceleft
             # start a new line
             push!(result, strip(join(currentline)))
-            currentline=[]
+            currentline = []
             spaceleft = textwidth
         end
         if endswith(word, "-")
@@ -654,7 +654,7 @@ function textlines(s::T where T<:AbstractString, width::Real; rightgutter=5)
 
     # strip trailing spaces
     for i in eachindex(result)
-       result[i] = strip(result[i])
+        result[i] = strip(result[i])
     end
     return result
 end
@@ -678,9 +678,9 @@ See also `textwrap()`, which modifies the text so that the lines fit into a
 specified width.
 """
 function textbox(lines::Array, pos::Point=O;
-        leading = 0,
-        linefunc::Function = (linenumber, linetext, startpos, leading) -> (),
-        alignment=:left)
+    leading=0,
+    linefunc::Function=(linenumber, linetext, startpos, leading) -> (),
+    alignment=:left)
 
     # find height of first non-empty line
     firstrealline = filter(!isempty, lines)[1]
@@ -702,7 +702,7 @@ end
         linefunc::Function = (linenumber, linetext, startpos, height) -> (),
         alignment=:left)
 """
-textbox(s::T where {T<:AbstractString}, pos::Point = O; kwargs...) = textbox([s], pos; kwargs...)
+textbox(s::T where {T<:AbstractString}, pos::Point=O; kwargs...) = textbox([s], pos; kwargs...)
 
 """
     textwrap(s::T where T<:AbstractString, width::Real, pos::Point;
@@ -749,16 +749,16 @@ line at the end of the line.
 
 Returns the position of what would have been the next line.
 """
-function textwrap(s::T where T<:AbstractString, width::Real, pos::Point, linefunc::Function;
-        rightgutter=5,
-        leading=0)
+function textwrap(s::T where {T<:AbstractString}, width::Real, pos::Point, linefunc::Function;
+    rightgutter=5,
+    leading=0)
     lines = textlines(s, width; rightgutter=rightgutter)
     textbox(lines, pos, linefunc=linefunc, leading=leading)
 end
 
-textwrap(s::T where T<:AbstractString, width::Real, pos::Point; kwargs...) =
+textwrap(s::T where {T<:AbstractString}, width::Real, pos::Point; kwargs...) =
     textwrap(s, width, pos, (linenumber, linetext, startpos, height) -> ();
-             kwargs...)
+        kwargs...)
 
 """
     texttrack(txt, pos, tracking;
@@ -799,16 +799,16 @@ and avoid resetting the clipping path for each character.
 
 TODO Is it possible to fix strings with combining characters such as "\u0308"?
 """
-function texttrack(txt::T where T <: AbstractString, pos, tracking, fsize;
-            action=:fill,
-            halign=:left,
-            valign=:baseline,
-            startnewpath=true)
+function texttrack(txt::T where {T<:AbstractString}, pos, tracking, fsize;
+    action=:fill,
+    halign=:left,
+    valign=:baseline,
+    startnewpath=true)
 
     advances = []
     emspacewidth = textextents(" ")[5]
     for c in txt
-        xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
+        xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(string(c))
         if c == ' '
             textwidth = emspacewidth
         end
@@ -828,8 +828,8 @@ function texttrack(txt::T where T <: AbstractString, pos, tracking, fsize;
 
     # calculate width of the final tracked string
     # need this to do alignment
-    total_textwidth = sum(advances) + length(advances) * ((tracking/1000) * fsize)
-    textpointx = pos.x - [0, total_textwidth/2, total_textwidth][halignment]
+    total_textwidth = sum(advances) + length(advances) * ((tracking / 1000) * fsize)
+    textpointx = pos.x - [0, total_textwidth / 2, total_textwidth][halignment]
     # next vertical alignment
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
     # if unspecified or wrong, default to baseline
@@ -837,7 +837,7 @@ function texttrack(txt::T where T <: AbstractString, pos, tracking, fsize;
         valignment = 3
     end
     ybearing, textheight = textextents(txt)[[2, 4]]
-    textpointy = pos.y - [ybearing, ybearing/2, 0, textheight + ybearing][valignment]
+    textpointy = pos.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
 
     # this is the first point of the text string
     newpos = Point(textpointx, textpointy)
@@ -853,22 +853,22 @@ function texttrack(txt::T where T <: AbstractString, pos, tracking, fsize;
     for (n, c) in enumerate(txt)
         textpath(string(c), newpos, _action, halign=:left, startnewpath=startnewpath)
         # calculate new position based on precalculated widths plus the tracking
-        newpos = Point(newpos.x + advances[n] + ((tracking/1000) * fsize), newpos.y)
+        newpos = Point(newpos.x + advances[n] + ((tracking / 1000) * fsize), newpos.y)
     end
     if action == :clip
         do_action(:clip)
     end
 end
 
-texttrack(txt::T where T <: AbstractString, pos, tracking;
+texttrack(txt::T where {T<:AbstractString}, pos, tracking;
     action=:fill,
     halign=:left,
     valign=:baseline,
     startnewpath=true) = texttrack(txt, pos, tracking, get_fontsize();
-                        action=action,
-                        halign=halign,
-                        valign=valign,
-                        startnewpath=startnewpath)
+    action=action,
+    halign=halign,
+    valign=valign,
+    startnewpath=startnewpath)
 
 """
     textplace(txt::T where T <: AbstractString, pos::Point, params::Vector;
@@ -928,12 +928,12 @@ txtpos = textplace("93—4!", O - (200, 0), [
     ])
 ```
 """
-function textplace(txt::T where T <: AbstractString, pos::Point, params::Vector;
-        action = :fill,
-        startnewpath = false)
+function textplace(txt::T where {T<:AbstractString}, pos::Point, params::Vector;
+    action=:fill,
+    startnewpath=false)
     @layer begin
         textpos = Point(pos.x, pos.y)
-        currentparams = (face = "", size = 12, color = colorant"black", kern=0, shift=0, advance=true,)
+        currentparams = (face="", size=12, color=colorant"black", kern=0, shift=0, advance=true,)
         for (n, c) in enumerate(txt)
             currentparams = merge(currentparams, (kern=0, shift=0, advance=true,))
             if n <= length(params)
@@ -942,9 +942,9 @@ function textplace(txt::T where T <: AbstractString, pos::Point, params::Vector;
             fontface(currentparams.face)
             fontsize(currentparams.size)
             sethue(currentparams.color)
-            xbearing, ybearing, textwidth, textheight, xadvance, yadvance  = textextents(string(c))
+            xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(string(c))
             temp_text_pos = Point(textpos.x + currentparams.kern, textpos.y - currentparams.shift)
-            textoutlines(string(c), temp_text_pos, action=action, halign=:left, startnewpath = startnewpath)
+            textoutlines(string(c), temp_text_pos, action=action, halign=:left, startnewpath=startnewpath)
             if currentparams.advance == true
                 textpos += (xadvance + currentparams.kern, 0)
             end
@@ -987,11 +987,11 @@ the calculated values:
     improvements welcome!
 
 """
-function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 800;
-        horizontalmargin=3,
-        leading=110)
+function textfit(s::T where {T<:AbstractString}, bbox::BoundingBox, maxfontsize=800;
+    horizontalmargin=3,
+    leading=110)
     @layer begin
-        bbox  = bbox - horizontalmargin
+        bbox = bbox - horizontalmargin
         width = boxwidth(bbox)
         requiredheight = boxheight(bbox)
 
@@ -1026,7 +1026,7 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
             # estimate the finish height with our current fontsize
             # since we don't know the height well enough, just hope that putting leading
             # between every line will work
-            estimatedfinishheight = (fsize + (100/leading)) * length(lines)
+            estimatedfinishheight = (fsize + (100 / leading)) * length(lines)
 
             # estimate finish width
             widestline = 0
@@ -1050,7 +1050,7 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
         end # while
 
         # use the most recent font size
-        fontsize(fsize * (100/leading))
+        fontsize(fsize * (100 / leading))
         lines = filter!(!isempty, textlines(s, width))
 
         # start below the top of the box
@@ -1065,7 +1065,7 @@ function textfit(s::T where T<:AbstractString, bbox::BoundingBox, maxfontsize = 
         for (linenumber, linetext) in enumerate(lines)
             text(linetext, textpos)
             te = textextents(linetext)
-            textpos = Point(textpos.x, textpos.y + (max(te[4], fontheight) * (leading/100)))
+            textpos = Point(textpos.x, textpos.y + (max(te[4], fontheight) * (leading / 100)))
         end
         # return top position, bottom position
     end
@@ -1112,20 +1112,20 @@ final value of the index, between 0.0 and 1.0. If the
 returned index value is less than 1, this means that the
 text supplied ran out before the end of the polygon was reached.
 """
-function textonpoly(str::T where T <: AbstractString, pgon;
-        tracking = 0,
-        startoffset = 0.0,
-        baselineshift = 0.0,
-        closed=false)
-    pdist = polydistances(pgon, closed = closed)
-    pgondist = polyperimeter(pgon, closed = closed)
+function textonpoly(str::T where {T<:AbstractString}, pgon;
+    tracking=0,
+    startoffset=0.0,
+    baselineshift=0.0,
+    closed=false)
+    pdist = polydistances(pgon, closed=closed)
+    pgondist = polyperimeter(pgon, closed=closed)
     currentindex = startoffset
     characters_drawn = 1
 
     # hack: we can't find the slope of the line at its end
     # kludge: extend last segment
     if !closed
-        push!(pgon, between(pgon[end - 1], pgon[end], 1.0001))
+        push!(pgon, between(pgon[end-1], pgon[end], 1.0001))
     end
     for (n, c) in enumerate(str)
         glyph = string(c)
@@ -1154,13 +1154,13 @@ function textonpoly(str::T where T <: AbstractString, pgon;
             last(polyportion(
                 pgon,
                 mod(currentindex - 0.0001, 1.0),
-                closed = false,
+                closed=false,
                 pdist=pdist
             )),
             last(polyportion(
                 pgon,
                 mod(currentindex + 0.0001, 1.0),
-                closed = false,
+                closed=false,
                 pdist=pdist
             )),
         )
@@ -1169,11 +1169,11 @@ function textonpoly(str::T where T <: AbstractString, pgon;
             translate(last(polyportion(
                 pgon,
                 currentindex,
-                closed = closed,
+                closed=closed,
             )))
             rotate(θ)
             # draw the glyph
-            text(glyph, O + (0, -baselineshift), halign = :center)
+            text(glyph, O + (0, -baselineshift), halign=:center)
         end
         # move on
         currentindex +=
@@ -1186,4 +1186,171 @@ function textonpoly(str::T where T <: AbstractString, pgon;
         end
     end
     return (characters_drawn, currentindex)
+end
+
+function _textformat(str::String, pos::Point, defaultparams)
+    for wd in split(str)
+        @layer begin
+            tx = textextents(wd)
+            text(wd, Point(pos.x, pos.y + -defaultparams.baseline))
+            if isapprox(defaultparams.advance, 1.0)
+                space = textextents(" ")
+                pos = Point(pos.x + tx[5] + space[5], pos.y)
+            else
+                space = [0, 0, 0, 0, defaultparams.advance, 0]
+                pos = Point(pos.x + tx[5] + space[5], pos.y)
+            end
+            # newline required?
+            if pos.x > (defaultparams.position.x + defaultparams.width) - tx[3]
+                # return to left edge of text block but one line down
+                pos = Point(defaultparams.position.x, pos.y + defaultparams.fontsize * defaultparams.leading)
+            end
+        end
+    end # split
+    return pos
+end
+
+function _textformat_tuple(str::String, pos::Point, tempparams, defaultparams)
+    if tempparams.prolog isa Function
+        tx = textextents(str)
+        # remember to use baseline shift when passing details to prolog function
+        tempparams.prolog(Point(pos.x, pos.y + -tempparams.baseline), tx)
+    end
+    for wd in split(str) # split the string into words
+        tx = textextents(wd)
+        text(wd, Point(pos.x, pos.y + -tempparams.baseline))
+        if isapprox(tempparams.advance, 1.0)
+            space = textextents(" ")
+            pos = Point(pos.x + tx[5] + space[5], pos.y)
+        else
+            space = [0, 0, 0, 0, tempparams.advance, 0]
+            pos = Point(pos.x + tx[5] + space[5], pos.y)
+        end
+        # newline required?
+        if pos.x > (defaultparams.position.x + defaultparams.width) - tx[3]
+            # return to left edge of text block but one line down
+            pos = Point(defaultparams.position.x, pos.y + tempparams.fontsize * (tempparams.leading/100))
+        end
+    end
+    return pos
+end
+
+"""
+    textformat(e1, e2, e3...; 
+        color=getcolor(),
+        fontsize=get_fontsize(),
+        fontface="Helvetica",
+        leading=120,
+        baseline=0,
+        prolog=nothing,
+        advance=1.0,
+        position=Point(0, 0),
+        width=300)
+
+Draw the text in elements `e1`, `e2`, ... Each element can be either:
+
+- a string
+
+- a named tuple containing text and formatting parameters:
+
+Text starts at `position` and is constrained by the `width`.
+
+A named tuple element can be something like this:
+
+```julia
+( 
+    text= "a string",
+    color = "blue",
+    fontsize = 12,
+    fontface = "JuliaMono-Italic",
+    leading = 100,
+    baseline = 0,
+    advance = 1.0,
+    prolog = nothing
+)
+```
+
+If `advance` is 1.0, elements are separated by a space; otherwise by `advance` units (positive shifts to the right).
+
+`baseline` is usually 0, but positive values move the text upwards.
+
+`leading` is a percentage; the default is 120%.
+
+## Example
+
+This example draws a bold heading in red, and a paragraph below in monospaced text, in orange.
+
+```julia
+@draw begin
+    background("black")
+    fontsize(20)
+    textformat(
+        (text="Heading",
+            fontface="AvenirNext-Heavy",
+            fontsize=40,
+            leading=100,
+            color = "red",
+        ),
+        (text="The first paragraph.",
+            fontface = "JuliaMono-Light",
+            fontsize = 20,
+            color="orange"
+        ),
+    position = boxtopleft() + (100, 100),
+    width = 150
+    )
+end
+```
+"""
+function textformat(args...; kwargs...)
+    # add any keywords to the defaults
+    defaultparams = merge((color=getcolor(),
+            fontsize=get_fontsize(),
+            fontface="Helvetica",
+            leading=120,
+            baseline=0, # shift upwards if positive
+            prolog=nothing,
+            advance=1.0, # always advance after string if 1.0
+            position=Point(0, 0),
+            width=300,), values(kwargs))
+    @layer begin
+        pos = defaultparams.position
+        width = defaultparams.width
+        leading = defaultparams.leading
+        fontface(defaultparams.fontface)
+        fontsize(defaultparams.fontsize)
+        sethue(defaultparams.color)
+        for arg in args
+            # arg is either a string or a named tuple
+            if arg isa NamedTuple
+                # get the temporary parameters, use defaults for the others
+                # righmost value takes priority
+                tempparams = merge((color=defaultparams.color, 
+                        advance=defaultparams.advance, 
+                        prolog=defaultparams.prolog, 
+                        leading=defaultparams.leading, 
+                        baseline=defaultparams.baseline, 
+                        fontsize=defaultparams.fontsize, 
+                        fontface=defaultparams.fontface,), 
+                    arg)
+                if !haskey(tempparams, :text)
+                    throw(error("textformat(): there's no `text` field in the tuple $(arg)"))
+                end
+                str = tempparams.text
+                # draw text according to the temporary params
+                @layer begin
+                    fontface(tempparams.fontface)
+                    fontsize(tempparams.fontsize)
+                    sethue(tempparams.color)
+                    pos = _textformat_tuple(str, pos, tempparams, defaultparams)
+                end # layer
+            else
+                str = arg
+                @layer begin
+                    pos = _textformat(str, pos, defaultparams)
+                end
+            end
+        end # args
+    end # layer
+    return pos
 end

@@ -67,13 +67,15 @@ If you're using VS-Code, the image should appear in the Plots window. If you're 
 
 !!! note
     
-    In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref) and [`@pdf`](@ref) macros, which do a similar thing. 
+    In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`background`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref), [`@pdf`](@ref), and [`@drawsvg`](@ref) macros, which do similar things. 
 
 PNGs and SVGs are good because they show up in VS-Code, Jupyter, and Pluto. SVGs are usually higher quality too, but they're text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.
 
 This example illustrates a few things about Luxor drawings:
 
 - There are default values which you don't have to set if you don't want to (file names, colors, font sizes, and so on).
+
+- With the short-cut macros, the default is to draw black graphics on a solid white background.
 
 - Positions on the drawing are specified with x and y coordinates stored in the Point type, and you can sometimes omit positions altogether.
 

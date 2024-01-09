@@ -15,10 +15,25 @@ Consider the following drawing. (We'll use the quick `@drawsvg ...end` macro syn
 
     Mathematicians and people who like making plots say that the y axis goes up the page. Most graphics software is written with the assumption that the y axis goes downwards.
 
-```@example 
+```@setup example_2
 using Luxor
-@drawsvg begin
+svgimage = @drawsvg begin
 background("black")
+
+@layer begin
+    setopacity(0.8)
+    setline(0.5)
+    sethue(Luxor.Colors.colorant"green")
+    circle(O, 5, :stroke)
+    dimension(O, Point(200, 0), offset=0,textgap=0, textrotation = -π/2, texthorizontaloffset=5)
+    dimension(Point(200, 0), Point(200, 100), offset=0,textgap=0, textrotation = -π/2, texthorizontaloffset=5)
+    dimension(Point(200, 0), Point(250, 0), offset=0,textgap=0, textrotation = -π/2, texthorizontaloffset=5)
+    dimension(Point(0, -200), Point(-200, -200), offset=0,textgap=0, textrotation = π/2, texthorizontaloffset=5)
+    dimension(Point(-220, 0), Point(-220, -200), offset=0,textgap=10, textrotation = 0, texthorizontaloffset=5)
+    circle.([Point(150, 150), Point(0, 100), Point(-200, -200)], 2, :fill)
+    line(Point(150, 150), Point(250, 100), :stroke)
+    line(Point(0, 100), Point(-200, -200), :stroke)
+end
 sethue("white")
 move(Point(200, 0))
 line(Point(250, 100))
@@ -26,28 +41,49 @@ curve(Point(150, 150), Point(0, 100), Point(-200, -200))
 closepath()
 
 strokepath()
+end 520 520
+```
+
+```julia
+using Luxor
+@drawsvg begin
+    background("black")
+
+    sethue("white")
+    move(Point(200, 0))
+    line(Point(250, 100))
+    curve(Point(150, 150), Point(0, 100), Point(-200, -200))
+    closepath()
+
+    strokepath()
 end
 ```
 
+```@example example_2
+svgimage # hide
+```
+
+(Some annotations have been added (in green) to help you visualize the coordinate system.)
+
 This drawing constructs and renders a path, using basic building blocks.
 
-In Luxor, there's always a current path. At the start, just after we set the color to white, the current path is empty. The `move()` function call starts the path by moving to (200, 0), ie 200 units in x (right). This sets the *current point* to `Point(200, 0)`. 
+In Luxor, there's always a current path. At the start, just after we set the color to white, the current path is empty. The `move()` function call starts the path by moving  from (0, 0) to (200, 0), ie 200 units in x (right). This sets the *current point* to `Point(200, 0)`.
 
-The `line(Point(250, 100))` function call adds a straight line from the current point down to the point (250, 100). The current point is now set to (250, 100), and the current path now has two entries. We've reached the bottom right corner of this particular path.
+Next, the `line(Point(250, 100))` function call adds a straight line from the current point down to the point (250, 100). The current point is now set to (250, 100), and the current path now has two entries. We've reached the bottom right corner of this particular path.
 
-The `curve()` function takes three point arguments, and adds a cubic Bézier curve to the current path. The curve runs from the current point to the third point argument, with the first and second point arguments defining the Bézier curve's control points. These influence the shape of the curve. Finally, the current point is updated to the point defined by the third argument.
+The `curve()` function takes three point arguments, and adds a cubic Bézier curve to the current path. The curve runs from the current point to the third point argument, with the first and second point arguments defining the Bézier curve's control points. These don't lie on the curve, they just 'influence' the shape of the curve. Finally, the current point is updated to the point supplied as the third argument. We're now at the top left of the path.
 
 !!! note
     
     To learn about Bézier curves, read [A Primer on Bézier Curves](https://pomax.github.io/Bézierinfo/).
 
-The `closepath()` function adds a straight line to the path, joining the current point to the beginning of the path (more specifically, to the most recent point `move`d to). The current point is then updated to this point.
+Finally, the `closepath()` function adds a straight line to the path, joining the current point to the beginning of the path. (More precisely, it goes to the most recent point that you `move`d to). The current point is then updated to this point.
 
-We could have used `line(Point(200, 0))` rather than `closepath()`, but `closepath()` is better here because it will make a mitred join between the two line segments.
+We could have used `line(Point(200, 0))` rather than `closepath()`, but `closepath()` is usually better than just drawing to the same point, because it will make a mitred join between the two line segments.
 
-So, now we've constructed a path. The final job is to decide what to do with it. We used `strokepath()` to draw the path using a line with the current settings (width, color, etc). But an alternative is to use `fillpath()` to fill the shape with the current color. `fillstroke()` does both. To change colors and styles, see [Colors and styles](@ref).
+So, now we've constructed and finished a path - but now we must decide what to do with it. Above, we used `strokepath()` to draw the path using a line with the current settings (width, color, etc). But an alternative is to use `fillpath()` to fill the shape with the current color. `fillstroke()` does both. To change colors and styles, see [Colors and styles](@ref).
 
-After you've rendered the path, the current path is empty again, and there is no current point.
+After you've rendered the path by stroking or filling it, the current path is empty again.
 
 And that's how you draw paths in Luxor. 
 
@@ -60,18 +96,18 @@ There are `arc()` and `carc()` (counterclockwise arc) functions that provide the
 ```@example 
 using Luxor
 @drawsvg begin
-background("black")
-sethue("white")
-move(Point(100, 200))
-arc(Point(0, 0), 70, 0, 3π / 2)
-line(Point(-200, -200))
-strokepath()
+    background("black")
+    sethue("white")
+    move(Point(100, 200))
+    arc(Point(0, 0), 70, 0, 3π / 2)
+    line(Point(-200, -200))
+    strokepath()
 end
 ```
 
 The `arc()` function arguments are: the center point, the radius, the start angle, and the end angle.
 
-But you'll notice that there are two straight lines, not just one. After moving down to (100, 200), the calculated start point for the arc isn't (100, 200), but (70, 0). So an additional straight line from the current point (100, 200) to the arc's starting point (70, 0) was automatically inserted into the path.
+But you'll notice that there are two straight lines, not just one. After moving down to (100, 200), the calculated start point for the arc isn't (100, 200), but (70, 0). So a straight line is drawn from the current point (100, 200) back up to the arc's starting point (70, 0) - this was automatically added to the path, even though you didn't specify a line.
 
 Internally, circular arcs are converted to Bézier curves.
 
@@ -263,15 +299,17 @@ As you experiment with these three functions, you'll notice that the changes are
 
 So how do you return to a default initial state? You could of course keep a record of each transformation and apply the opposites, making sure you do this in the right order.
 
-But a better way is to enclose a sequence of changes of position, scale, and orientation in a pair of functions (`gsave()` and `grestore()`). The following code generates a grid of points in a nested loop. At each iteration:
+But a better way is to enclose a sequence of changes of position, scale, and orientation in a pair of functions (`gsave()` and `grestore()`). After `gsave()`, you can change position, scale, orientation, and set styling information, draw and render as many paths as you want, but then all the changes to position, scale, orientation, etc. will be discarded when you call `grestore()`. 
+
+The following code generates a grid of points in a nested loop. At each iteration:
 
 1. `gsave()` saves the current position, scale, and orientation on an internal stack.
 
 2. The graphics state is translated, scaled, and rotated. 
 
-3. The `t()` function is called, and draws the triangle with the new settings.
+3. The `t()` function is called, and draws the triangular path with the new settings - scaled, rotated, and translated relative to the current values of the `x` and `y` coordinates defined by the loop variables.
 
-4. `grestore()` throws away any changes to position, scale, and rotation, then restores the previous state that was saved with `gsave()`.
+4. `grestore()` discards any changes to position, scale, and rotation, and restores them to the values they had just before the most recent `gsave()`.
 
 ```@example
 using Luxor
@@ -288,12 +326,12 @@ end
     background("black")
     sethue("white")
     for x in -250:20:250, y in -250:20:250
-            gsave()
-             translate(Point(x, y))
-             scale(0.1)
-             rotate(rand() * 2π)
-             t()
-            grestore()
+        gsave()
+            translate(Point(x, y))
+            scale(0.1)
+            rotate(rand() * 2π)
+            t()
+        grestore()
     end
 end
 ```

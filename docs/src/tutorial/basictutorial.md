@@ -557,7 +557,7 @@ If you look closely you can tell which egg was drawn first — it's overlapped o
 
 2. What would happen if the translation was `translate(150, 0)` rather than `translate(0, -150)`?
 
-3. What would happen if you translated each egg *before* you rotated the drawing environment?
+3. What would happen if you translated each egg *before* you rotated the drawing context?
 
 Some useful tools for investigating the important aspects of coordinates and transformations include:
 

@@ -7,6 +7,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 
 ### Added
 
+- `textformat()`
 - `polysmooth()` has `close` option
 - `markcells()` and `getcells()`
 - package extension for LaTeX

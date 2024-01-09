@@ -791,7 +791,7 @@ function trimbezier(bps::BezierPathSegment, lowpt, highpt)
 end
 
 """
-    bezigon(pts::Array{Point,1}, sides;
+    bezigon(corners::Array{Point,1}, sides;
         close = false,
         action = :none))
 

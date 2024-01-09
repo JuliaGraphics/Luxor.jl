@@ -88,7 +88,7 @@ Notice the "." after `circle`. This broadcasts the `circle()` function over the 
 
 The arguments to `ngon` are usually centerpoint, radius, and the number of sides. Try changing the third argument from 3 (triangle) to 4 (square) or 31 (traikontagon?).
 
-To create a spiral of circles, we want to repeat this "draw a circle at each vertex of a triangle" procedure more than once. A simple loop will do: we'll rotate the drawing by `i * ` 5° (`deg2rad(5)` radians) each time (so 5°, 10°, 15°, 20°, 25°, and 30°), and at the same time increase the size of the polygon by multiples of 10:
+To create a spiral of circles, we want to repeat this "draw a circle at each vertex of a triangle" procedure more than once. A simple loop will do: we'll rotate the current drawing context by `i * ` 5° (`deg2rad(5)` radians) each time (so 5°, 10°, 15°, 20°, 25°, and 30°), and at the same time increase the size of the polygon by multiples of 10:
 
 ```@setup example_3
 using Luxor

@@ -7,7 +7,8 @@ import Luxor
 import Luxor: text, latextextsize, latexboundingbox, rawlatexboundingbox
 using Luxor: Point, @layer, translate, rotate, move,
     fontface, fontsize, get_fontsize, setfont,
-    setline, line, poly, closepath, newsubpath
+    setline, line, poly, closepath, newsubpath, BoundingBox, newpath, 
+    currentpoint, pathtopoly, boxbottomleft, boxwidth, boxheight
 
 """
     texalign(halign, valign, bottom_pt, top_pt, font_size)
@@ -214,4 +215,49 @@ function writelatexchar(text, font_size)
     else
         Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1))
     end
+end
+
+# versions of _textformat that accept LaTeXString
+
+function Luxor._textformat(str::LaTeXString, pos::Point, defaultparams)
+    text(str, Point(pos.x, pos.y + -defaultparams.baseline))
+    pos = Luxor.currentpoint()
+    if isapprox(defaultparams.advance, 1.0)
+        space = Luxor.textextents(" ")
+        pos = Point(pos.x + space[5], pos.y)
+    else
+        space = [0, 0, 0, 0, defaultparams.advance, 0]
+        pos = Point(pos.x + space[5], pos.y)
+    end
+    return pos
+end 
+
+function Luxor._textformat_tuple(str::LaTeXString, pos::Point, tempparams, defaultparams)
+    # if there's a prolog function defined, do it now
+    if tempparams.prolog isa Function
+        # how do we calculate the box extents of a LaTeX string?
+        # get all the paths and find their bounding box, that's how
+        # TODO one day we can do better than this
+        Luxor.newpath()
+        text(str, Point(pos.x, pos.y + -tempparams.baseline), paths=true)
+        paths = Luxor.pathtopoly()
+        bbx = BoundingBox(first(paths))
+        Luxor.newpath()
+        for path in paths
+            bbx += BoundingBox(path)
+        end
+        # fabricate some faux textextents from this box
+        tx = [0, -tempparams.baseline, boxwidth(bbx), boxheight(bbx), boxwidth(bbx), boxheight(bbx)]
+        tempparams.prolog(pos + (boxbottomleft(bbx).x, boxbottomleft(bbx).y), tx)
+    end
+    text(str, Point(pos.x, pos.y + -tempparams.baseline))
+    pos = Luxor.currentpoint()
+    if isapprox(tempparams.advance, 1.0)
+        space = Luxor.textextents(" ")
+        pos = Point(pos.x + space[5], pos.y)
+    else
+        space = [0, 0, 0, 0, tempparams.advance, 0]
+        pos = Point(pos.x + space[5], pos.y)
+    end
+    return pos
 end

@@ -628,7 +628,7 @@ high. Only for PNG files must the dimensions be integers.
 Drawing("A4", "my-drawing.pdf")
 ```
 
-creates a drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf".
+creates a PDF drawing in ISO A4 size (595 wide by 842 high) in the file "my-drawing.pdf".
 Other sizes available are: "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal",
 "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
@@ -638,8 +638,8 @@ Drawing("A4landscape")
 
 creates the drawing A4 landscape size.
 
-PDF files default to a white background, but PNG defaults to transparent, unless you specify
-one using `background()`.
+PNG and PDF default to transparent backgrounds, unless you specify one using
+`background()`.
 
 ```
 Drawing(width, height, :image)
@@ -1146,6 +1146,22 @@ Create and preview an PNG drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename`, if supplied, or `luxor-drawing(timestamp).png`.
 
+These 'short-cut' macros are designed for convenience and to save typing. 
+The macro `@png ⟦ body ⟧ width height` expands to:
+
+```julia
+Drawing(width, height, :png)
+origin()
+background("white")
+sethue("black")
+⟦ body ⟧ 
+finish()
+preview()
+```
+
+For full control of the drawing construction, use these functions directly
+rather than the short-cut macros.
+
 ### Examples
 
 ```julia
@@ -1191,6 +1207,22 @@ end
 Create and preview an PDF drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename` if supplied, or `luxor-drawing(timestamp).pdf`.
+
+These 'short-cut' macros are designed for convenience and to save typing. 
+The macro `@pdf ⟦ body ⟧ width height` expands to:
+
+```julia
+Drawing(width, height, :pdf)
+origin()
+background("white")
+sethue("black")
+⟦ body ⟧ 
+finish()
+preview()
+```
+
+For full control of the drawing construction, use these functions directly
+rather than the short-cut macros.
 
 ### Examples
 
@@ -1240,6 +1272,22 @@ default is 600 by 600). The file is saved in the current working directory as
 
 On some platforms, EPS files are converted automatically to PDF when previewed.
 
+These 'short-cut' macros are designed for convenience and to save typing. 
+The macro `@draw ⟦ body ⟧ width height filename` expands to:
+
+```julia
+Drawing(width, height, filename)
+origin()
+background("white")
+sethue("black")
+⟦ body ⟧ 
+finish()
+preview()
+```
+
+For full control of the drawing construction, use these functions directly
+rather than the short-cut macros.
+
 ### Examples
 
 ```julia
@@ -1282,8 +1330,24 @@ end
 """
     @draw drawing-instructions [width] [height]
 
-Preview an PNG drawing, optionally specifying width and height (the
+Create and preview an PNG drawing, optionally specifying width and height (the
 default is 600 by 600). The drawing is stored in memory, not in a file on disk.
+
+These 'short-cut' macros are designed for convenience and to save typing. 
+The macro `@draw ⟦ body ⟧ width height` expands to:
+
+```julia
+Drawing(width, height, :png)
+origin()
+background("white")
+sethue("black")
+⟦ body ⟧ 
+finish()
+preview()
+```
+
+For full control of the drawing construction, use these functions directly
+rather than the short-cut macros.
 
 ### Examples
 
@@ -1609,9 +1673,7 @@ end
         body
     end w h
 
-Create and preview an SVG drawing. Like `@draw` but using SVG format.
-
-Unlike `@draw` (PNG), there is no background, by default.
+Create and preview an SVG drawing. Like `@draw` but using SVG format, but unlike `@draw` (PNG), there is no background, by default.
 """
 macro drawsvg(body, width = 600, height = 600)
     quote
@@ -1624,6 +1686,7 @@ macro drawsvg(body, width = 600, height = 600)
         preview()
     end
 end
+
 """
     @savesvg begin
         body

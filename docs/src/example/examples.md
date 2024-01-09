@@ -194,6 +194,74 @@ preview()
 
 The Point type is an immutable composite type containing `x` and `y` fields that specify a 2D point.
 
+## Formatted text
+
+Use [`textformat()`](@ref) to display text with formatting:
+
+```@example
+using Luxor, Colors
+function textbackground(pos, tx)
+    @layer begin
+        bxwidth = tx[5] + 5
+        bxheight = tx[4] - tx[2]
+        hpos = pos.x + tx[5] / 2
+        vpos = pos.y - tx[6] / 2 + tx[2] / 2
+        bxcenter = Point(hpos, vpos)
+        box(bxcenter, bxwidth, bxheight, :stroke)
+    end
+end
+@drawsvg begin
+background("black")
+sethue("white")
+fontsize(30)
+textformat(
+    (text="We", fontsize=40), 
+    "want a language that’s",
+    (text="open source", 
+        prolog = textbackground, 
+        color = HSV(10, 0.8, 0.8)),
+    (text="with a liberal license.", 
+        fontface="Georgia-Bold"),
+    (text="We want the speed of", 
+        color = "orange", 
+        fontface = "Georgia-Italic"),
+    (text="C", 
+        color="cyan", fontsize=30),
+    (text="with the",),
+    (text="d y n a m i s m", 
+        baseline=10, 
+        prolog=textbackground,),
+    "of", 
+    (text="Ruby", 
+        advance=0, 
+        fontface="Courier", 
+        fontsize=40),
+    ".",
+    (text="We want a language that's", 
+        color="grey80", 
+        fontface="Georgia-Bold", 
+        advance=30),
+    (text="homoiconic", 
+        fontface="Courier-Bold", 
+        color="red", 
+        fontsize=35, 
+        baseline=10),
+    (text="with true macros like", 
+        color="green"), 
+    (text="Lisp,", 
+        fontface="CourierNewPS-BoldItalicMT", 
+        fontsize=40),
+    (text="but with obvious, familiar mathematical notation like", color="magenta"),
+    (text="Matlab.", 
+        color="grey70"),
+    position=boxtopleft() * 0.75,
+    width=650,
+    leading=200)
+end 800 400
+```
+
+(but hopefully not quite as garish as this!)
+
 ## Simple numberlines
 
 [`tickline()`](@ref) is useful for generating spaced points along a line:

@@ -178,7 +178,7 @@ The [`origin`](@ref) function moves the 0/0 point to the center of the drawing. 
 
 You can use functions like [`scale`](@ref), [`rotate`](@ref), and [`translate`](@ref) to change the coordinate system.
 
-[`background`](@ref) usually fills the drawing with a color, covering any previous contents. By default, PDF drawings have a white background, whereas PNG drawings have no background so that the background appears transparent in other applications. 
+[`background`](@ref) fills the drawing with a color, covering any previous contents. By default, drawings have no backgrounds - they're transparent - but the short-cut macros `@draw`, `@svg`, `@eps`, and `@pdf` add a white background before drawing starts.  Use `Drawing()` to generate drawings with transparent backgrounds.
 
 If there is a current clipping region, [`background`](@ref) fills just that region. In the next example, the first [`background`](@ref) fills the entire drawing with magenta, but the calls in the loop fill only the active clipping region, a table cell defined by the `Table` iterator:
 
