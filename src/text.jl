@@ -1203,7 +1203,7 @@ function _textformat(str::String, pos::Point, defaultparams)
             # newline required?
             if pos.x > (defaultparams.position.x + defaultparams.width) - tx[3]
                 # return to left edge of text block but one line down
-                pos = Point(defaultparams.position.x, pos.y + defaultparams.fontsize * defaultparams.leading)
+                pos = Point(defaultparams.position.x, pos.y + defaultparams.fontsize * (defaultparams.leading/100))
             end
         end
     end # split
@@ -1270,15 +1270,23 @@ A named tuple element can be something like this:
 )
 ```
 
-If `advance` is 1.0, elements are separated by a space; otherwise by `advance` units (positive shifts to the right).
+If `advance` is 1.0, elements are separated by a space; otherwise by `advance`
+units (positive shifts to the right).
 
 `baseline` is usually 0, but positive values move the text upwards.
 
-`leading` is a percentage; the default is 120%.
+`leading` here is a percentage, relative to the font size; the default is 120%.
+
+`prolog` calls a function with arguments `(position::Point,
+textextents::Array)`, which is called before the text is drawn. This uses the
+Toy API (it has to use `textextents()`).
+
+Returns the point where the next text would be placed.
 
 ## Example
 
-This example draws a bold heading in red, and a paragraph below in monospaced text, in orange.
+This example draws a bold heading in red, and a paragraph below in monospaced
+text, in orange.
 
 ```julia
 @draw begin

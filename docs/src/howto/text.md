@@ -467,6 +467,75 @@ text(string(counter(0), " characters"), finishpos)
 
 ![textbox](../assets/figures/textbox.png)
 
+## Text formatting
+
+Use [`textformat`](@ref) to draw text with inline formatting. You can specify the color and font of strings as they're displayed in a block.
+
+`textformat()` accepts any number of arguments, each of which can be either a plain string or a named tuple containing both text and formatting information. The arguments are drawn, separated with spaces.
+
+```@example
+using Luxor
+@drawsvg begin
+    background("black")
+    sethue("white")
+    textformat("to be,", "or", "not", "to", "be", fontsize=30)
+end 800 200
+```
+
+Mix strings and tuples as required:
+
+```@example
+using Luxor
+@drawsvg begin
+    background("black")
+    sethue("white")
+    fontsize(30)
+    textformat(
+        (text="that", fontsize=60), 
+        "is the", 
+        (text="question", color="magenta"))
+end 800 200
+```
+
+The `advance` and `baseline` keywords can determine the position of the text  horizontally and vertically.
+
+```@example
+using Luxor
+@drawsvg begin
+    background("grey10")
+    setopacity(0.5)
+    textformat(
+        (text="R", 
+            color="red", 
+            advance=-80,
+            ),
+        (text="G", 
+            color="green", 
+            advance=-80,
+            baseline =  50,
+            ),
+            (text="B", 
+            color="blue", 
+            advance=-80,
+            baseline =  -50,
+            ),
+    fontsize=200,
+    position=midpoint(boxmiddleleft(), boxbottomcenter())
+    )
+end 800 300
+```
+
+With named tuples, remember to insert the trailing `,` where necessary:
+
+```julia
+textformat((text="oops"))
+
+textformat((text="yes",)) 
+```
+
+
+
+
 ## Text tracking
 
 Use [`texttrack`](@ref) to track or letter-space text, i.e.
