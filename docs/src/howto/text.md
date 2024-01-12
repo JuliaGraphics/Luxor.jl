@@ -533,8 +533,41 @@ textformat((text="oops"))
 textformat((text="yes",)) 
 ```
 
+A `prolog` keyword lets you specify a function `(pos, str)` that will be called before the text is drawn. You can use this, for example, to draw colored boxes and other graphics relative to the text.
 
+```@example
+using Luxor, Colors # hide
+function bullet(pos, str::String)
+    @layer begin
+        translate(pos + (-80, -15))
+        juliacircles(15)
+    end
+    @layer begin
+        tx = textextents(str)
+        bxwidth = tx[5] + 5
+        bxheight = tx[4] - tx[2]
+        hpos = pos.x + tx[5] / 2
+        vpos = pos.y - tx[6] / 2 + tx[2] / 2
+        bxcenter = Point(hpos, vpos)
+        sethue("blue")
+        box(bxcenter, bxwidth, bxheight, :stroke)
+    end
+end
 
+@drawsvg begin
+    background("black")
+    sethue("white")
+    fontsize(50)
+    textformat(
+        (text="programming", prolog=bullet),
+        (text="in Julia", prolog=bullet),
+        (text="is fun", prolog=bullet),
+        (text="for all", prolog=bullet),
+        width=150,
+        leading=150,
+        position=Point(-100, -100))
+end 800 400
+```
 
 ## Text tracking
 

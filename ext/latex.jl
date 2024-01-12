@@ -235,20 +235,8 @@ end
 function Luxor._textformat_tuple(str::LaTeXString, pos::Point, tempparams, defaultparams)
     # if there's a prolog function defined, do it now
     if tempparams.prolog isa Function
-        # how do we calculate the box extents of a LaTeX string?
-        # get all the paths and find their bounding box, that's how
-        # TODO one day we can do better than this
-        Luxor.newpath()
-        text(str, Point(pos.x, pos.y + -tempparams.baseline), paths=true)
-        paths = Luxor.pathtopoly()
-        bbx = BoundingBox(first(paths))
-        Luxor.newpath()
-        for path in paths
-            bbx += BoundingBox(path)
-        end
-        # fabricate some faux textextents from this box
-        tx = [0, -tempparams.baseline, boxwidth(bbx), boxheight(bbx), boxwidth(bbx), boxheight(bbx)]
-        tempparams.prolog(pos + (boxbottomleft(bbx).x, boxbottomleft(bbx).y), tx)
+        # remember to use baseline shift when passing details to prolog function
+        tempparams.prolog(Point(pos.x, pos.y + -tempparams.baseline), str)
     end
     text(str, Point(pos.x, pos.y + -tempparams.baseline))
     pos = Luxor.currentpoint()

@@ -1212,9 +1212,8 @@ end
 
 function _textformat_tuple(str::String, pos::Point, tempparams, defaultparams)
     if tempparams.prolog isa Function
-        tx = textextents(str)
         # remember to use baseline shift when passing details to prolog function
-        tempparams.prolog(Point(pos.x, pos.y + -tempparams.baseline), tx)
+        tempparams.prolog(Point(pos.x, pos.y + -tempparams.baseline), str)
     end
     for wd in split(str) # split the string into words
         tx = textextents(wd)
@@ -1228,8 +1227,8 @@ function _textformat_tuple(str::String, pos::Point, tempparams, defaultparams)
         end
         # newline required?
         if pos.x > (defaultparams.position.x + defaultparams.width) - tx[3]
-            # return to left edge of text block but one line down
-            pos = Point(defaultparams.position.x, pos.y + tempparams.fontsize * (tempparams.leading/100))
+            # return to left edge of text block but one 'line' down
+            pos = Point(defaultparams.position.x, pos.y + (tempparams.fontsize * (tempparams.leading/100)))
         end
     end
     return pos
@@ -1278,10 +1277,11 @@ units (positive shifts to the right).
 `leading` here is a percentage, relative to the font size; the default is 120%.
 
 `prolog` calls a function with arguments `(position::Point,
-textextents::Array)`, which is called before the text is drawn. This uses the
-Toy API (it has to use `textextents()`).
+str::String)`, which is called before the text is drawn.
 
 Returns the point where the next text would be placed.
+
+This function uses the Toy text API.
 
 ## Example
 

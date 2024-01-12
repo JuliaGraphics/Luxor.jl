@@ -67,6 +67,7 @@ function run_all_tests()
         include("label-tests.jl")
         include("textfit-tests.jl")
         include("latex.jl")
+        include("textformat.jl")
     end
 
     @testset "curves" begin
