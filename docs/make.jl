@@ -46,6 +46,7 @@ makedocs(
         "Perfect pixels and antialising" => "explanation/perfectpixels.md",
         "Transforms and matrices" => "explanation/transforms.md",
         "Image matrix" => "explanation/imagematrix.md",
+        "Fonts on Linux" => "explanation/fonts.md",
         "Luxor and Cairo" => "explanation/luxorcairo.md",
         "Customize strokepath/fillpath" => "explanation/strokepathdispatch.md",
         "Contributing" => "explanation/contributing.md"
