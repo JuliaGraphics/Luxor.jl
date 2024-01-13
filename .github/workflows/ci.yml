@@ -68,7 +68,7 @@ jobs:
           sudo cp ~/.julia/packages/MathTeXEngine/*/assets/fonts/ComputerModern/*.ttf /usr/local/share/fonts/ &&
           sudo cp ~/.julia/packages/MathTeXEngine/*/assets/fonts/NewComputerModern/NewCM* /usr/local/share/fonts/ &&
           fc-cache -rv &&
-          fc-list
+          fc-list -v | grep postscriptname
       - run: |
           julia --project=docs -e '
             using Documenter: doctest
