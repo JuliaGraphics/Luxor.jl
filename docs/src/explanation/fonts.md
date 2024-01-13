@@ -130,19 +130,58 @@ fonts = [
 function drawfonts()
     d = @drawsvg begin
         background("black")
-        fontsize(20)
-        sethue("white")
-        table = Table(length(fonts), 2, 50, 30)
-        n = 1
-        for font in fonts
-            text(font, table[n], halign=:right)
-            @layer begin
-                fontface(font)
-                text(font, table[n+1])
+        @layer begin
+            translate(-150, 0)
+            sethue("white")
+            tableheader = Table([5], [400, 400, 400], boxtopcenter() + (0, 50))
+            fontsize(30)
+            text("fontname", tableheader[1])
+            text("Toy API", tableheader[2])
+            text("Pro APi", tableheader[3])
+            table = Table(fill(30, length(fonts)), [400, 400, 400])
+            fsize = 20
+            fontsize(fsize)
+            n = 1
+            for font in fonts
+                text(font, table[n], halign=:left)
+                @layer begin
+                    fontface(font)
+                    text(font, table[n+1])
+                end
+                @layer begin
+                    fface = replace(font, "Serif" => " Serif", 
+                        "Bold" => " Bold",
+                        "Semibold" => " Semibold",
+                        "Black" => " Black",
+                        "Heavy" => " Heavy",
+                        "Medium" => " Medium",
+                        "Light" => " Light",
+                        "Thin" => " Thin",
+                        "Hairline" => " Hairline",
+                        "Narrow" => " Narrow",
+                        "Regular" => " Regular",
+                        "Sans" => " Sans",
+                        "Mono" => " Mono",
+                        "Italic" => " Italic",
+                        "Oblique" => " Oblique",
+                        "Condensed" => " Condensed",
+                        "Extra" => " Extra",
+                        "-" => " ",
+                        )
+                    setfont(fface, fsize)
+                    settext(fface, table[n+2])
+                end
+                @layer begin
+                    setopacity(0.5)
+                    line(table[n] + (0, 8), table[n+2] + (table.colwidths[3], 8), :stroke)
+                end
+                n += 3
             end
-            n += 2
         end
-    end 900 3500
+        sethue("white")
+        fontsize(40)
+        text("--------:--------", boxbottomcenter() + (0, -30), halign=:center)
+    end 1200 3400
     return d
 end
 ```
