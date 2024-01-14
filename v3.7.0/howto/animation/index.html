@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Make animations · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.045/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.24/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/helloworld/">Hello World</a></li><li><a class="tocitem" href="../../tutorial/basicpath/">Basic path building</a></li><li><a class="tocitem" href="../../tutorial/quickstart/">Design a logo</a></li><li><a class="tocitem" href="../../tutorial/basictutorial/">Geometry tutorial</a></li><li><a class="tocitem" href="../../tutorial/pixels/">Playing with pixels</a></li><li><a class="tocitem" href="../../tutorial/simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox" checked/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../polygons/">Work with polygons</a></li><li><a class="tocitem" href="../text/">Add text</a></li><li><a class="tocitem" href="../clipping/">Clip graphics</a></li><li><a class="tocitem" href="../images/">Placing images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li class="is-active"><a class="tocitem" href>Make animations</a><ul class="internal"><li><a class="tocitem" href="#Example"><span>Example</span></a></li><li><a class="tocitem" href="#Making-the-animation"><span>Making the animation</span></a></li><li><a class="tocitem" href="#Animating-paths"><span>Animating paths</span></a></li><li><a class="tocitem" href="#Easing-functions"><span>Easing functions</span></a></li></ul></li><li><a class="tocitem" href="../snapshots/">Snapshots</a></li><li><a class="tocitem" href="../livegraphics/">Interactive graphics and Threads</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../explanation/basics/">Basic concepts</a></li><li><a class="tocitem" href="../../explanation/pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../../explanation/perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../../explanation/transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../../explanation/imagematrix/">Image matrix</a></li><li><a class="tocitem" href="../../explanation/luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../../explanation/strokepathdispatch/">Customize strokepath/fillpath</a></li><li><a class="tocitem" href="../../explanation/contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">How to guides</a></li><li class="is-active"><a href>Make animations</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Make animations</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/howto/animation.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Animation-helper-functions"><a class="docs-heading-anchor" href="#Animation-helper-functions">Animation helper functions</a><a id="Animation-helper-functions-1"></a><a class="docs-heading-anchor-permalink" href="#Animation-helper-functions" title="Permalink"></a></h1><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p><a href="https://github.com/JuliaAnimators/Javis.jl">Javis.jl</a> is the best way to make animated graphics  with Julia.</p></div></div><p>Luxor provides some functions to help you create animations—at least, it provides some assistance in creating lots of individual frames that can later be stitched together to form a moving animation, such as a GIF or MP4.</p><p>There are four steps to creating an animation.</p><p>1 Use <code>Movie</code> to create a Movie object which determines the title and dimensions.</p><p>2 Define some functions that draw the graphics for specific frames.</p><p>3 Define one or more Scenes that call these functions for specific frames.</p><p>4 Call the <code>animate(movie::Movie, scenes)</code> function, passing in the scenes. This creates all the frames and saves them in a temporary directory. <code>ffmpeg</code> can build an animated GIF from the frames.</p><h2 id="Example"><a class="docs-heading-anchor" href="#Example">Example</a><a id="Example-1"></a><a class="docs-heading-anchor-permalink" href="#Example" title="Permalink"></a></h2><pre><code class="language-julia hljs">demo = Movie(400, 400, &quot;test&quot;)
+
+function backdrop(scene, framenumber)
+    background(&quot;black&quot;)
+end
+
+function frame(scene, framenumber)
+    sethue(Colors.HSV(framenumber, 1, 1))
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(polar(100, -π/2 - (eased_n * 2π)), 80, :fill)
+    text(string(&quot;frame $framenumber of $(scene.framerange.stop)&quot;),
+        Point(O.x, O.y-190),
+        halign=:center)
+    text(scene.opts,
+        boxbottomcenter(BoundingBox()),
+        halign=:center,
+        valign=:bottom)
+end
+
+animate(demo, [
+    Scene(demo, backdrop, 0:359),
+    Scene(demo, frame, 0:359,
+        easingfunction=easeinoutcubic,
+        optarg=&quot;made with Julia&quot;)
+    ],
+    creategif=true)</code></pre><p><img src="../../assets/figures/animation.gif" alt="animation example"/></p><p>In this example, the movie uses two scenes, each specifying a function to draw frames from 0 to 359. For each frame numbered 0 to 359, the graphics are drawn by both the <code>backdrop</code> and <code>frame</code> functions, in that order. A drawing is automatically created (in PNG format) and centered (<a href="../../reference/api/#Luxor.origin-Tuple{Any}"><code>origin</code></a>) so you can start drawing immediately. The <a href="../../reference/api/#Luxor.finish-Tuple{}"><code>finish</code></a> function is automatically called when all the drawing functions in the scenes have completed, and the process starts afresh for the next frame. The second scene, calling the <code>frame</code> function, shows how you can pass optional information to the function.</p><h2 id="Making-the-animation"><a class="docs-heading-anchor" href="#Making-the-animation">Making the animation</a><a id="Making-the-animation-1"></a><a class="docs-heading-anchor-permalink" href="#Making-the-animation" title="Permalink"></a></h2><p>You can build animations automatically using <code>ffmpeg</code>. The <code>creategif</code> option for the <code>animate</code> function runs <code>ffmpeg</code> when the frames have all been generated. </p><p>Inside <a href="../../reference/api/#Luxor.animate-Tuple{Movie, Scene}"><code>animate</code></a>, the first pass creates a GIF color palette, the second builds the file:</p><pre><code class="language-julia hljs">run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen
+    -y $(seq.stitle)-palette.png`)
+
+run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png
+    -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)</code></pre><p>Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.</p><p><code>ffmpeg</code> has literally hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. If you want to use a custom <code>ffmpeg</code> command, you can use code such as this:</p><pre><code class="language-julia hljs">using Luxor, FFMPEG
+
+...
+
+# store the frames in a temp directory
+tempdirectory = &quot;/tmp/temp/&quot;
+
+animate(movie, [
+        Scene(movie, frame, 1:50)
+    ], 
+    creategif=false, # don&#39;t have to create the GIF here
+    tempdirectory=tempdirectory)
+
+# run a custom ffmpeg command
+FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
+</code></pre><h3 id="Passing-information-to-the-frame()-function"><a class="docs-heading-anchor" href="#Passing-information-to-the-frame()-function">Passing information to the frame() function</a><a id="Passing-information-to-the-frame()-function-1"></a><a class="docs-heading-anchor-permalink" href="#Passing-information-to-the-frame()-function" title="Permalink"></a></h3><p>If you want to pass information to the <code>frame</code> function, such as an array of values, try these two approaches.</p><p>Either, call the enhanced <code>frame()</code> function with extra arguments with <code>(s, f) -&gt; frame(s, f, databuffer)</code>:</p><pre><code class="language-julia hljs">function frame(scene, framenumber, databuffer)
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, scene.framerange.stop - scene.framerange.start)
+    w = size(databuffer, 1)
+    h = size(databuffer, 2)
+    for c in 1:w, r in 1:h
+        rs = rescale(r, 1, h, 0, 2π)
+        cs = rescale(c, 1, h, 0, 2π)
+        databuffer[r, c] = HSV(360((sin(2rs) * cos(2cs)) * sin(eased_n * 2π)), 0.7, 0.7)
+    end
+    placeimage(databuffer, Point(-w / 2, -h / 2))
+end
+
+function main()
+    databuffer = zeros(ARGB32, 250, 250)
+    demo = Movie(250, 250, &quot;buffer&quot;)
+    animate(demo, [
+            Scene(demo, (s, f) -&gt; frame(s, f, databuffer),
+                0:100)
+        ],
+        tempdirectory=&quot;/tmp/tempdir&quot;,
+        creategif=true, 
+        pathname=&quot;/tmp/t.gif&quot;)
+end</code></pre><p>Or, use the <code>optarg</code> keyword argument for <code>Scene()</code>, and access it using <code>scene.opts</code> keyword.</p><pre><code class="language-julia hljs">function frame(scene, framenumber)
+    databuffer = scene.opts
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, scene.framerange.stop - scene.framerange.start)
+    w = size(databuffer, 1)
+    h = size(databuffer, 2)
+    for c in 1:w, r in 1:h
+        rs = rescale(r, 1, h, 0, 2π)
+        cs = rescale(c, 1, h, 0, 2π)
+        databuffer[r, c] = HSV(360((sin(2rs) * cos(2cs)) * sin(eased_n * 2π)), 0.7, 0.7)
+    end
+    placeimage(databuffer, Point(-w / 2, -h / 2))
+end
+
+function main()
+    databuffer = zeros(ARGB32, 250, 250)
+    demo = Movie(250, 250, &quot;buffer&quot;)
+    animate(demo, [Scene(demo, frame, optarg=databuffer, 0:100)],
+        tempdirectory=&quot;/tmp/tempdir&quot;,
+        creategif=true,
+        pathname=&quot;/tmp/t.gif&quot;)
+end</code></pre><h2 id="Animating-paths"><a class="docs-heading-anchor" href="#Animating-paths">Animating paths</a><a id="Animating-paths-1"></a><a class="docs-heading-anchor-permalink" href="#Animating-paths" title="Permalink"></a></h2><p>A useful function to help with animations is <a href="../../reference/api/#Luxor.drawpath-Tuple{Path, Real}"><code>drawpath</code></a>. This has a method that accepts a value between 0 and 1 that draws a portion of a Path object.</p><p>For example, the purple stroke is about half the length of the path.</p><pre><code class="language-julia hljs">fontsize(300)
+textpath(&quot;s&quot;, O, halign=:center, valign=:middle)
+s = storepath()
+drawpath(s, action=:stroke)
+
+sethue(&quot;purple&quot;)
+setline(10)
+setopacity(0.5)
+pt = drawpath(s, 0.5, action=:stroke) # return final pt
+
+setcolor(&quot;red&quot;)
+circle(pt, 5, :fill)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="250pt" viewBox="0 0 600 250" version="1.1">
+<g id="surface269">
+<rect x="0" y="0" width="600" height="250" style="fill:rgb(98.039216%25,92.156863%25,84.313725%25);fill-opacity:1;stroke:none;"/>
+<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 344.992188 75.871094 C 343.59375 78.277344 341.648438 79.480469 339.148438 79.480469 C 337.542969 79.480469 335.765625 78.929688 333.820312 77.824219 C 331.871094 76.722656 329.546875 75.496094 326.851562 74.152344 C 324.152344 72.800781 320.929688 71.574219 317.179688 70.480469 C 313.429688 69.378906 309 68.824219 303.898438 68.824219 C 299.59375 68.824219 295.695312 69.378906 292.195312 70.480469 C 288.695312 71.574219 285.71875 73.074219 283.273438 74.980469 C 280.824219 76.878906 278.921875 79.101562 277.570312 81.652344 C 276.226562 84.207031 275.554688 86.980469 275.554688 89.980469 C 275.554688 93.773438 276.679688 96.945312 278.929688 99.496094 C 281.179688 102.050781 284.125 104.253906 287.773438 106.105469 C 291.417969 107.949219 295.589844 109.601562 300.289062 111.058594 C 304.996094 112.507812 309.796875 114.035156 314.695312 115.636719 C 319.601562 117.230469 324.402344 119.054688 329.101562 121.105469 C 333.796875 123.148438 337.96875 125.667969 341.617188 128.667969 C 345.273438 131.667969 348.226562 135.347656 350.476562 139.699219 C 352.726562 144.054688 353.851562 149.277344 353.851562 155.371094 C 353.851562 162.476562 352.574219 169.027344 350.023438 175.027344 C 347.46875 181.027344 343.71875 186.230469 338.773438 190.636719 C 333.824219 195.035156 327.746094 198.480469 320.539062 200.980469 C 313.339844 203.480469 305.042969 204.730469 295.648438 204.730469 C 285.042969 204.730469 275.367188 202.980469 266.617188 199.480469 C 257.867188 195.980469 250.492188 191.527344 244.492188 186.121094 L 251.101562 175.324219 C 251.902344 173.929688 252.902344 172.855469 254.101562 172.105469 C 255.296875 171.355469 256.796875 170.980469 258.601562 170.980469 C 260.496094 170.980469 262.445312 171.679688 264.445312 173.074219 C 266.445312 174.472656 268.867188 175.996094 271.710938 177.652344 C 274.5625 179.300781 278.015625 180.824219 282.070312 182.230469 C 286.121094 183.628906 291.148438 184.324219 297.148438 184.324219 C 302.25 184.324219 306.679688 183.675781 310.429688 182.371094 C 314.179688 181.070312 317.304688 179.347656 319.804688 177.199219 C 322.304688 175.054688 324.152344 172.535156 325.351562 169.636719 C 326.546875 166.730469 327.148438 163.679688 327.148438 160.480469 C 327.148438 156.378906 326.023438 152.976562 323.773438 150.277344 C 321.523438 147.582031 318.570312 145.285156 314.914062 143.386719 C 311.265625 141.480469 307.09375 139.832031 302.398438 138.433594 C 297.699219 137.027344 292.871094 135.527344 287.914062 133.933594 C 282.964844 132.332031 278.140625 130.503906 273.445312 128.449219 C 268.746094 126.398438 264.570312 123.773438 260.914062 120.574219 C 257.265625 117.378906 254.320312 113.503906 252.070312 108.949219 C 249.820312 104.398438 248.695312 98.824219 248.695312 92.230469 C 248.695312 86.324219 249.890625 80.675781 252.289062 75.277344 C 254.695312 69.871094 258.21875 65.121094 262.867188 61.027344 C 267.523438 56.925781 273.246094 53.675781 280.039062 51.277344 C 286.839844 48.871094 294.59375 47.667969 303.304688 47.667969 C 313.304688 47.667969 322.375 49.246094 330.523438 52.402344 C 338.667969 55.550781 345.59375 59.925781 351.304688 65.527344 Z M 365.101562 202.324219 "/>
+<path style="fill:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(50.196078%25,0%25,50.196078%25);stroke-opacity:0.5;stroke-miterlimit:10;" d="M 344.992188 75.871094 C 343.59375 78.277344 341.648438 79.480469 339.148438 79.480469 C 337.542969 79.480469 335.765625 78.929688 333.820312 77.824219 C 331.871094 76.722656 329.546875 75.496094 326.851562 74.152344 C 324.152344 72.800781 320.929688 71.574219 317.179688 70.480469 C 313.429688 69.378906 309 68.824219 303.898438 68.824219 C 299.59375 68.824219 295.695312 69.378906 292.195312 70.480469 C 288.695312 71.574219 285.71875 73.074219 283.273438 74.980469 C 280.824219 76.878906 278.921875 79.101562 277.570312 81.652344 C 276.226562 84.207031 275.554688 86.980469 275.554688 89.980469 C 275.554688 93.773438 276.679688 96.945312 278.929688 99.496094 C 281.179688 102.050781 284.125 104.253906 287.773438 106.105469 C 291.417969 107.949219 295.589844 109.601562 300.289062 111.058594 C 304.996094 112.507812 309.796875 114.035156 314.695312 115.636719 C 319.601562 117.230469 324.402344 119.054688 329.101562 121.105469 C 333.796875 123.148438 337.96875 125.667969 341.617188 128.667969 C 345.273438 131.667969 348.226562 135.347656 350.476562 139.699219 C 352.726562 144.054688 353.851562 149.277344 353.851562 155.371094 C 353.851562 162.476562 352.574219 169.027344 350.023438 175.027344 C 347.46875 181.027344 343.71875 186.230469 338.773438 190.636719 C 333.824219 195.035156 327.746094 198.480469 320.539062 200.980469 C 313.339844 203.480469 305.042969 204.730469 295.648438 204.730469 C 285.042969 204.730469 275.367188 202.980469 266.617188 199.480469 C 257.867188 195.980469 250.492188 191.527344 244.492188 186.121094 L 251.101562 175.324219 C 251.101562 175.320312 251.105469 175.320312 251.105469 175.316406 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,0%25,0%25);fill-opacity:1;" d="M 256.105469 175.316406 C 256.105469 181.984375 246.105469 181.984375 246.105469 175.316406 C 246.105469 168.648438 256.105469 168.648438 256.105469 175.316406 "/>
+</g>
+</svg>
+'/><p>It&#39;s also useful for animating text paths.</p><p><img src="../../assets/figures/textanimation.gif" alt="text animation"/></p><p>which uses code like this:</p><pre><code class="language-julia hljs">...
+f =  # a value between 0 and 1
+textpath(&quot;Thank you for using&quot;, pt, halign=:center)
+tp = storepath()
+drawpath(tp, f, :stroke)
+...</code></pre><h2 id="Easing-functions"><a class="docs-heading-anchor" href="#Easing-functions">Easing functions</a><a id="Easing-functions-1"></a><a class="docs-heading-anchor-permalink" href="#Easing-functions" title="Permalink"></a></h2><p>Transitions for animations often use non-constant and non-linear motions, and these are usually provided by <em>easing</em> functions. Luxor defines some of the basic easing functions and they&#39;re listed in the (unexported) array <code>Luxor.easingfunctions</code>. Each scene can have one easing function.</p><table><tr><th style="text-align: left">List of easing functions</th></tr><tr><td style="text-align: left">easingflat</td></tr><tr><td style="text-align: left">lineartween</td></tr><tr><td style="text-align: left">easeinquad</td></tr><tr><td style="text-align: left">easeoutquad</td></tr><tr><td style="text-align: left">easeinoutquad</td></tr><tr><td style="text-align: left">easeincubic</td></tr><tr><td style="text-align: left">easeoutcubic</td></tr><tr><td style="text-align: left">easeinoutcubic</td></tr><tr><td style="text-align: left">easeinquart</td></tr><tr><td style="text-align: left">easeoutquart</td></tr><tr><td style="text-align: left">easeinoutquart</td></tr><tr><td style="text-align: left">easeinquint</td></tr><tr><td style="text-align: left">easeoutquint</td></tr><tr><td style="text-align: left">easeinoutquint</td></tr><tr><td style="text-align: left">easeinsine</td></tr><tr><td style="text-align: left">easeoutsine</td></tr><tr><td style="text-align: left">easeinoutsine</td></tr><tr><td style="text-align: left">easeinexpo</td></tr><tr><td style="text-align: left">easeoutexpo</td></tr><tr><td style="text-align: left">easeinoutexpo</td></tr><tr><td style="text-align: left">easeincirc</td></tr><tr><td style="text-align: left">easeoutcirc</td></tr><tr><td style="text-align: left">easeinoutcirc</td></tr><tr><td style="text-align: left">easeinoutinversequad</td></tr><tr><td style="text-align: left">easeinoutbezier</td></tr></table><p>Most easing functions have names constructed like this:</p><pre><code class="language-julia hljs">ease[in|out|inout][expo|circ|quad|cubic|quart|quint]</code></pre><p>and there&#39;s an <a href="../../reference/api/#Luxor.easingflat-NTuple{4, Any}"><code>easingflat</code></a> linear transition.</p><pre><code class="language-julia hljs">function draweasingfunction(f, pos, w, h)
+    @layer begin
+        translate(pos)
+        setline(0.5)
+        sethue(&quot;black&quot;)
+        box(O, w, h, :stroke)
+        sethue(&quot;purple&quot;)
+        for i in 0:0.005:1.0
+            circle(Point(-w/2, h/2) + Point(w * i, -f(i, 0, h, 1)), 1, :fill)
+        end
+        sethue(&quot;black&quot;)
+        text(replace(string(f), &quot;Luxor.&quot; =&gt; &quot;&quot;), Point(0, h/2 - 20), halign=:center)
+    end
+end
+
+t = Tiler(650, 650, 5, 5)
+margin=5
+fontsize(10)
+fontface(&quot;JuliaMono-Regular&quot;)
+for (pos, n) in t
+    n &gt; length(Luxor.easingfunctions) &amp;&amp; continue
+    draweasingfunction(Luxor.easingfunctions[n], pos,
+        t.tilewidth-margin, t.tileheight-margin)
+end</code></pre><p>In these graphs, the horizontal axis is time (between 0 and 1), and the vertical axis is the parameter value (between 0 and 1).</p><p><img src="../../assets/figures/easingfunctions.png" alt="easing function summary"/></p><p>One way to use an easing function in a frame-making function is like this:</p><pre><code class="language-julia hljs">function moveobject(scene, framenumber)
+    background(&quot;white&quot;)
+    ...
+    easedframenumber = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    ...</code></pre><p>This takes the current frame number, compares it with the end frame number of the scene, then adjusts it.</p><p>In the next example, the purple dot has sinusoidal easing motion, the green has cubic, and the red has quintic. They all traverse the drawing extent in the same time, but have different accelerations and decelerations.</p><p><img src="../../assets/figures/animation-easing.gif" alt="animation easing example"/></p><pre><code class="language-julia hljs">fastandfurious = Movie(400, 100, &quot;easingtests&quot;)
+backdrop(scene, framenumber) =  background(&quot;black&quot;)
+function frame1(scene, framenumber)
+    sethue(&quot;purple&quot;)
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), -20), 10, :fill)
+end
+function frame2(scene, framenumber)
+    sethue(&quot;green&quot;)
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 0), 10, :fill)
+end
+function frame3(scene, framenumber)
+    sethue(&quot;red&quot;)
+    eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+    circle(Point(-180 + (360 * eased_n), 20), 10, :fill)
+end
+animate(fastandfurious, [
+    Scene(fastandfurious, backdrop, 0:200),
+    Scene(fastandfurious, frame1,   0:200, easingfunction=easeinsine),
+    Scene(fastandfurious, frame2,   0:200, easingfunction=easeinoutcubic),
+    Scene(fastandfurious, frame3,   0:200, easingfunction=easeinoutquint)
+    ],
+    creategif=true)</code></pre><p>Here&#39;s the definition of one of the easing functions:</p><pre><code class="language-julia hljs">function easeoutquad(t, b, c, d)
+    t /= d
+    return -c * t * (t - 2) + b
+end</code></pre><p>Here:</p><ul><li><p><code>t</code> is the current time (framenumber) of the transition</p></li><li><p><code>b</code> is the beginning value of the property</p></li><li><p><code>c</code> is the change between the beginning and destination value of the property</p></li><li><p><code>d</code> is the total length of the transition</p></li></ul><p>The <a href="../../reference/api/#Luxor.easeinoutbezier"><code>easeinoutbezier</code></a> function accepts two additional arguments, two normalized control points of a normalized Bezier curve from Point(0, 0) to Point(1, 1). You can use these to define the shape of a custom easing transition. The Bezier curve&#39;s <code>y</code> coordinate determines the acceleration. [?]</p><p><img src="../../assets/figures/animation-bezier-easing.gif" alt="animation of bezier easing"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../turtle/">« Turtle graphics</a><a class="docs-footer-nextpage" href="../snapshots/">Snapshots »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Saturday 4 February 2023 11:59">Saturday 4 February 2023</span>. Using Julia version 1.8.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

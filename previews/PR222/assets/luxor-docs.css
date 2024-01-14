@@ -1,0 +1,41 @@
+@font-face {
+	font-family: JuliaMono;
+	src:
+		local('JuliaMono'),
+		url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
+}
+
+pre, code {
+	font-family: JuliaMono !important;
+    font-feature-settings: "calt" 1;
+}
+
+p > a:after {
+    content: "→";
+    font-size: 50%;
+}
+
+.schemename {
+    font-family: "JuliaMono";
+}
+
+.swatch {
+
+}
+
+.category {
+    font-size: 0.8em;
+}
+
+html.theme--documenter-dark p > code {
+	  	color: #eff !important;
+}
+
+html.theme--documenter-dark li > code {
+	  	color: #eff !important;
+}
+
+
+html.theme--documenter-dark a > code {
+	  	color: #eff !important;
+}

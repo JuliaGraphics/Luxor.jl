@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Placing images · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/quickstart/">Quick and short</a></li><li><a class="tocitem" href="../../tutorial/basictutorial/">A more in-depth tutorial</a></li><li><a class="tocitem" href="../../tutorial/simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox" checked/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../polygons/">Work with polygons</a></li><li><a class="tocitem" href="../text/">Add text</a></li><li><a class="tocitem" href="../clipping/">Clip graphics</a></li><li class="is-active"><a class="tocitem" href>Placing images</a><ul class="internal"><li><a class="tocitem" href="#Loading-and-placing-PNG-and-SVG-images"><span>Loading and placing PNG and SVG images</span></a></li><li><a class="tocitem" href="#SVG-images"><span>SVG images</span></a></li><li><a class="tocitem" href="#Placing-an-image-matrix"><span>Placing an image matrix</span></a></li><li><a class="tocitem" href="#Clipping-images"><span>Clipping images</span></a></li><li><a class="tocitem" href="#Transforming-images"><span>Transforming images</span></a></li><li><a class="tocitem" href="#Drawing-on-images"><span>Drawing on images</span></a></li><li><a class="tocitem" href="#Image-compositing"><span>Image compositing</span></a></li></ul></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Make animations</a></li><li><a class="tocitem" href="../livegraphics/">Live graphics and snapshots</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../explanation/basics/">Basic concepts</a></li><li><a class="tocitem" href="../../explanation/pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../../explanation/perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../../explanation/transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../../explanation/imagematrix/">Image matrix</a></li><li><a class="tocitem" href="../../explanation/luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../../explanation/contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">How to guides</a></li><li class="is-active"><a href>Placing images</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Placing images</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/howto/images.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Placing-images"><a class="docs-heading-anchor" href="#Placing-images">Placing images</a><a id="Placing-images-1"></a><a class="docs-heading-anchor-permalink" href="#Placing-images" title="Permalink"></a></h1><h2 id="Loading-and-placing-PNG-and-SVG-images"><a class="docs-heading-anchor" href="#Loading-and-placing-PNG-and-SVG-images">Loading and placing PNG and SVG images</a><a id="Loading-and-placing-PNG-and-SVG-images-1"></a><a class="docs-heading-anchor-permalink" href="#Loading-and-placing-PNG-and-SVG-images" title="Permalink"></a></h2><p>Luxor lets you place PNG and SVG images on the drawing. First, load an image:</p><ul><li>for PNG images, use <code>readpng(filename)</code></li><li>for SVG images, use <code>readsvg(filename)</code> or <code>readsvg(string)</code></li></ul><p>(JPEGs aren&#39;t supported.)</p><p>Then use <a href="../../reference/api/#Luxor.placeimage"><code>placeimage</code></a> to place the image by its top left corner at point <code>pt</code>, or use the <code>centered=true</code> keyword to place the image&#39;s center point there. Access the image&#39;s dimensions with <code>.width</code> and <code>.height</code>.</p><pre><code class="language-julia hljs">img = readpng(&quot;../assets/figures/julia-logo-mask.png&quot;)
+w = img.width
+h = img.height
+rulers()
+scale(0.3, 0.3)
+rotate(π/4)
+placeimage(img, Point(-w/2, -h/2), .5)
+sethue(&quot;red&quot;)
+circle(-w/2, -h/2, 15, :fill)</code></pre><p><img src="../../assets/figures/images.png" alt="&quot;Images&quot;"/></p><p>PNG images can be placed with varying opacity or transparency.</p><p><a href="../../reference/api/#Luxor.readsvg-Tuple{Any}"><code>readsvg</code></a> also lets you supply raw (or pure) SVG code in a string.</p><h2 id="SVG-images"><a class="docs-heading-anchor" href="#SVG-images">SVG images</a><a id="SVG-images-1"></a><a class="docs-heading-anchor-permalink" href="#SVG-images" title="Permalink"></a></h2><p>To create an SVG image, using the <code>Drawing(... :svg)</code> or specify an SVG filename. To obtain the SVG source of a completed drawing, use <a href="../../reference/api/#Luxor.svgstring-Tuple{}"><code>svgstring</code></a>.</p><p>For example, draw the Julia logo:</p><pre><code class="language-julia hljs">Drawing(500, 500, :svg)
+origin()
+julialogo()
+finish()
+s = svgstring()</code></pre><p>The SVG source code is now stored in <code>s</code>. You can examine or process it further:</p><pre><code class="language-julia hljs">eachmatch(r&quot;rgb\\(.*?\\)&quot;, s) |&gt; collect
+5-element Vector{RegexMatch}:
+ RegexMatch(&quot;rgb(0%,0%,0%)&quot;)
+ RegexMatch(&quot;rgb(79.6%,23.5%,20%)&quot;)
+ RegexMatch(&quot;rgb(25.1%,38.8%,84.7%)&quot;)
+ RegexMatch(&quot;rgb(58.4%,34.5%,69.8%)&quot;)
+ RegexMatch(&quot;rgb(22%,59.6%,14.9%)&quot;)</code></pre><p>To display the image in a Jupyter or Pluto notebook, use the <code>HTML</code> function, or you can use the <a href="../../reference/api/#Luxor.readsvg-Tuple{Any}"><code>readsvg</code></a> and <a href="../../reference/api/#Luxor.placeimage"><code>placeimage</code></a> functions in combination.</p><h2 id="Placing-an-image-matrix"><a class="docs-heading-anchor" href="#Placing-an-image-matrix">Placing an image matrix</a><a id="Placing-an-image-matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Placing-an-image-matrix" title="Permalink"></a></h2><p>You can also use <a href="../../reference/api/#Luxor.placeimage"><code>placeimage</code></a> to put image matrices on a drawing.</p><pre><code class="language-julia hljs">using Luxor
+
+mat = @imagematrix begin    
+    juliacircles(6)
+end 40 40
+
+@draw begin
+    for i in 1:500
+        pos = rand(BoundingBox())
+        @layer begin
+            translate(pos)
+            rotate(rand() * 2π)
+            placeimage(mat, centered = rand(Bool))
+        end
+    end
+end</code></pre><p><img src="../../assets/figures/place-image-matrix.png" alt="place image matrix"/></p><p><a href="../../reference/api/#Luxor.placeimage"><code>placeimage</code></a> can also take in an optional argument <code>alpha</code> to change the opacity of the image matrix.</p><p><img src="../../assets/figures/place-image-matrix-alpha.png" alt="place image matrix alpha"/></p><h2 id="Clipping-images"><a class="docs-heading-anchor" href="#Clipping-images">Clipping images</a><a id="Clipping-images-1"></a><a class="docs-heading-anchor-permalink" href="#Clipping-images" title="Permalink"></a></h2><p>You can clip images. The following script repeatedly places the image using a circle to define a clipping path:</p><p><img src="../../assets/figures/test-image.png" alt="&quot;Images&quot;"/></p><pre><code class="language-julia hljs">using Luxor
+
+width, height = 4000, 4000
+margin = 500
+
+fname = &quot;test-image.pdf&quot;
+Drawing(width, height, fname)
+origin()
+background(&quot;grey25&quot;)
+
+setline(5)
+sethue(&quot;green&quot;)
+
+image = readpng(dirname(@__FILE__) * &quot;../assets/figures/julia-logo-mask.png&quot;)
+
+w = image.width
+h = image.height
+
+pagetiles = Tiler(width, height, 7, 9)
+tw = pagetiles.tilewidth/2
+for (pos, n) in pagetiles
+    circle(pos, tw, :stroke)
+    circle(pos, tw, :clip)
+    gsave()
+    translate(pos)
+    scale(.95, .95)
+    rotate(rand(0.0:π/8:2π))
+    placeimage(image, O, centered=true)
+    grestore()
+    clipreset()
+end
+
+finish()</code></pre><h2 id="Transforming-images"><a class="docs-heading-anchor" href="#Transforming-images">Transforming images</a><a id="Transforming-images-1"></a><a class="docs-heading-anchor-permalink" href="#Transforming-images" title="Permalink"></a></h2><p>You can transform images by setting the current matrix, either with <a href="../../reference/api/#Luxor.scale-Tuple{Real, Real}"><code>scale</code></a> and <a href="../../reference/api/#Luxor.rotate-Tuple{Any}"><code>rotate</code></a> and similar, or by modifying it directly. This code scales and rotates an image made in an earlier chapter of this document around in a circle:</p><pre><code class="language-julia hljs">img = readpng(dirname(dirname(pathof(Luxor))) * &quot;/docs/src/assets/figures/textoutlines.png&quot;)
+w = img.width
+h = img.height
+for θ in 0:π/6:2π-π/6
+    gsave()
+    scale(.4, .4)
+    rotate(θ)
+    translate(300, 0)
+    placeimage(img, -w/2, -h/2, 0.9)
+    grestore()
+end</code></pre><p><img src="../../assets/figures/transform-images.png" alt="transforming images"/></p><h2 id="Drawing-on-images"><a class="docs-heading-anchor" href="#Drawing-on-images">Drawing on images</a><a id="Drawing-on-images-1"></a><a class="docs-heading-anchor-permalink" href="#Drawing-on-images" title="Permalink"></a></h2><p>You sometimes want to draw over images, for example to annotate them with text or vector graphics. The things to be aware of are mostly to do with coordinates and transforms.</p><p>In these examples, we&#39;ll annotate a PNG file.</p><pre><code class="language-julia hljs">image = readpng(&quot;../assets/figures/julia-logo-mask.png&quot;)
+
+w = image.width
+h = image.height
+
+# create a drawing surface of the same size
+
+fname = &quot;../assets/figures/drawing_on_images.png&quot;
+Drawing(w, h, fname)
+
+# place the image on the Drawing - it&#39;s positioned by its top/left corner
+
+placeimage(image, 0, 0)
+
+# now you can annotate the image. The (0/0) is at the top left.
+
+sethue(&quot;red&quot;)
+setline(1)
+fontsize(16)
+circle(Point(150, 50), 2, :fill)
+label(&quot;(150/50)&quot;, :NE, Point(150, 50), leader=true, offset=25)
+
+arrow(Point(w/2, 90), Point(0, 90))
+arrow(Point(w/2, 90), Point(w, 90))
+text(&quot;width $w&quot;, Point(w/2, 70), halign=:center)
+
+# to divide up the image into rectangular areas and number them,
+# temporarily position the axes at the center:
+
+@layer begin
+  setline(0.5)
+  sethue(&quot;green&quot;)
+  fontsize(12)
+  translate(w/2, h/2)
+  tiles = Tiler(w, h, 8, 8, margin=0)
+  for (pos, n) in tiles
+      box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
+      text(string(n-1), pos, halign=:center)
+  end
+end</code></pre><p><img src="../../assets/figures/drawing_on_images.png" alt="drawing on images"/></p><h3 id="Adding-text-to-transformed-images"><a class="docs-heading-anchor" href="#Adding-text-to-transformed-images">Adding text to transformed images</a><a id="Adding-text-to-transformed-images-1"></a><a class="docs-heading-anchor-permalink" href="#Adding-text-to-transformed-images" title="Permalink"></a></h3><p>The above approach works well, but suppose you want to locate the working origin at the lower left of the image, i.e. you want all coordinates to be relative to the bottom left corner of the image?</p><p>To do this, use <a href="../../reference/api/#Luxor.translate-Tuple{Real, Real}"><code>translate</code></a> and <a href="../../reference/api/#Luxor.transform-Tuple{Array}"><code>transform</code></a> to modify the drawing space:</p><pre><code class="language-julia hljs">image = readpng(&quot;../assets/figures/julia-logo-mask.png&quot;)
+w = image.width
+h = image.height
+fname = &quot;../assets/figures/drawing_on_images_2.png&quot;
+Drawing(w, h, fname)
+placeimage(image, 0, 0)
+
+# Move the axes to the bottom:
+
+translate(0, h)
+
+# and reflect in the x-axis
+
+transform([1 0 0 -1 0 0])
+
+# now 0/0 is at the bottom left corner, and 100/100 is up and to the right.
+
+sethue(&quot;blue&quot;)
+arrow(Point(200, 300), Point(160, 300))
+
+# However, don&#39;t draw text while flipped, because it will be reversed!
+
+fontsize(20)
+sethue(&quot;black&quot;)
+text(&quot;Oh no!&quot;, Point(30, 250))
+
+# To work around this, define a text function
+# that flips the workspace over the x-axis just for the text:
+
+function textoverlay(t, pos; kwargs...)
+    @layer begin
+        translate(pos)
+        transform([1 0 0 -1 0 0])
+        text(t, O; kwargs...)
+    end
+end
+
+textoverlay(&quot;a tittle!&quot;, Point(200, 300), halign=:left, valign=:middle)
+textoverlay(&quot;0/0&quot;, O)
+arrow(Point(130, 400), Point(130, 340))</code></pre><p><img src="../../assets/figures/drawing_on_images_2.png" alt="drawing on transformed images"/></p><h2 id="Image-compositing"><a class="docs-heading-anchor" href="#Image-compositing">Image compositing</a><a id="Image-compositing-1"></a><a class="docs-heading-anchor-permalink" href="#Image-compositing" title="Permalink"></a></h2><p>You should be using <a href="https://github.com/JuliaImages">Images.jl</a> for most tasks involving image editing. But if you just need to composite images together, you can use the blending modes provided by <a href="../../reference/api/#Luxor.setmode-Tuple{AbstractString}"><code>setmode</code></a>.</p><pre><code class="language-julia hljs">img = readpng(&quot;../assets/figures/textoutlines.png&quot;)
+w = img.width
+h = img.height
+
+placeimage(img, -w/2, -h/2, .5)
+setmode(&quot;saturate&quot;)
+translate(50, 0)
+placeimage(img, -w/2, -h/2, .5)</code></pre><p><img src="../../assets/figures/image-compositing.png" alt="transforming images"/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../clipping/">« Clip graphics</a><a class="docs-footer-nextpage" href="../turtle/">Turtle graphics »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 5 April 2022 09:01">Tuesday 5 April 2022</span>. Using Julia version 1.7.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

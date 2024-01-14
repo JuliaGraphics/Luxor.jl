@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Image matrix · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/quickstart/">Quick and short</a></li><li><a class="tocitem" href="../../tutorial/basictutorial/">A more in-depth tutorial</a></li><li><a class="tocitem" href="../../tutorial/simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../howto/createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../../howto/simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../../howto/geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../../howto/tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../../howto/colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../../howto/polygons/">Work with polygons</a></li><li><a class="tocitem" href="../../howto/text/">Add text</a></li><li><a class="tocitem" href="../../howto/clipping/">Clip graphics</a></li><li><a class="tocitem" href="../../howto/images/">Placing images</a></li><li><a class="tocitem" href="../../howto/turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../../howto/animation/">Make animations</a></li><li><a class="tocitem" href="../../howto/livegraphics/">Live graphics and snapshots</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox" checked/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../basics/">Basic concepts</a></li><li><a class="tocitem" href="../pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../transforms/">Transforms and matrices</a></li><li class="is-active"><a class="tocitem" href>Image matrix</a><ul class="internal"><li class="toplevel"><a class="tocitem" href="#Images-as-matrices"><span>Images as matrices</span></a></li></ul></li><li><a class="tocitem" href="../luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Explanations</a></li><li class="is-active"><a href>Image matrix</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Image matrix</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/explanation/imagematrix.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Drawing-as-image-matrix"><a class="docs-heading-anchor" href="#Drawing-as-image-matrix">Drawing as image matrix</a><a id="Drawing-as-image-matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Drawing-as-image-matrix" title="Permalink"></a></h1><h1 id="Images-as-matrices"><a class="docs-heading-anchor" href="#Images-as-matrices">Images as matrices</a><a id="Images-as-matrices-1"></a><a class="docs-heading-anchor-permalink" href="#Images-as-matrices" title="Permalink"></a></h1><p>While drawing, you can copy the current graphics in a drawing as a matrix of colored pixels, using the <a href="../../reference/api/#Luxor.image_as_matrix-Tuple{}"><code>image_as_matrix</code></a> function. And with the <a href="../../reference/api/#Luxor.@imagematrix"><code>@imagematrix</code></a> macro, you can create your drawing with vector graphics in the usual way, and then return the result as a matrix of colored pixels.</p><p>The next example draws an ampersand and then processes the pixels further in Images.jl.</p><pre><code class="nohighlight hljs">using Luxor, Colors, Images, ImageFiltering
+
+m = @imagematrix begin
+        background(&quot;black&quot;)
+        sethue(&quot;white&quot;)
+        fontface(&quot;Georgia&quot;)
+        fontsize(180)
+        text(&quot;&amp;&quot;, halign=:center, valign=:middle)
+end 200 200
+
+function convertmatrixtocolors(m)
+    return convert.(Colors.RGBA, m)
+end
+
+img = convertmatrixtocolors(m)
+
+imfilter(img, Kernel.gaussian(10))</code></pre><p><img src="../../assets/figures/ampersand-matrix.png" alt="image matrix"/></p><p><a href="../../reference/api/#Luxor.image_as_matrix-Tuple{}"><code>image_as_matrix</code></a> returns a array of ARGB32 (AlphaRedGreenBlue) values. Each ARGB value encodes the Red, Green, Blue, and Alpha 8-bit values of a pixel into a single 32 bit integer.</p><p>You can display the matrix using, for example, Images.jl.</p><pre><code class="nohighlight hljs">using Luxor, Images
+
+# in Luxor
+
+Drawing(250, 250, :png)
+origin()
+background(randomhue()...)
+sethue(&quot;red&quot;)
+fontsize(200)
+fontface(&quot;Georgia&quot;)
+text(&quot;42&quot;, halign=:center, valign=:middle)
+mat = image_as_matrix()
+finish()
+
+# in Images
+
+img = RGB.(mat)
+# img = Gray.(mat) # for greyscale
+
+imfilter(img, Kernel.gaussian(10))</code></pre><p>In Luxor:</p><p><img src="../../assets/figures/42.png" alt="42 image array"/></p><p>In Images:</p><p><img src="../../assets/figures/42gaussian.png" alt="42 image array"/></p><p>The next example makes two drawings. The first draws a red rectangle, then copies the drawing in its current state into a matrix called <code>mat1</code>. Next it adds a blue triangle, and copies the updated drawing state into <code>mat2</code>.</p><p>In the second drawing, values from these two matrices are tested, and table cells are randomly colored depending on the corresponding values ... this is a primitive Boolean operation.</p><pre><code class="language-julia hljs"># first drawing
+
+Drawing(40, 40, :png)
+origin()
+background(&quot;black&quot;)
+sethue(&quot;red&quot;)
+box(Point(0, 0), 40, 15, :fill)
+mat1 = image_as_matrix()
+sethue(&quot;blue&quot;)
+setline(10)
+setopacity(0.6)
+ngon(Point(0, 0), 10, 3, 0, :stroke)
+mat2 = image_as_matrix()
+finish()
+
+# second drawing
+
+Drawing(400, 400, &quot;../assets/figures/image-drawings.svg&quot;)
+background(&quot;grey20&quot;)
+origin()
+t = Table(40, 40, 4, 4)
+sethue(&quot;white&quot;)
+rc = CartesianIndices(mat1)
+for i in rc
+    r, c = Tuple(i)
+    pixel1 = convert(Colors.RGBA, mat1[r, c])
+    pixel2 = convert(Colors.RGBA, mat2[r, c])
+    if red(pixel1) &gt; .5 &amp;&amp; blue(pixel2) &gt; .5
+        randomhue()
+        box(t, r, c, :fillstroke)
+    end
+end</code></pre><p>The first image (enlarged) shows the <code>mat1</code> matrix as red, <code>mat2</code> as blue.</p><p><img src="../../assets/figures/image-drawing-intermediate.png" alt="intermediate"/></p><p>In the second drawing, a table with 1600 squares is colored according to the values in the matrices.</p><p><img src="../../assets/figures/image-drawings.svg" alt="image drawings"/></p><p>(You can use <code>collect</code> to gather the re-interpreted values together.)</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../transforms/">« Transforms and matrices</a><a class="docs-footer-nextpage" href="../luxorcairo/">Luxor and Cairo »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 5 April 2022 09:01">Tuesday 5 April 2022</span>. Using Julia version 1.7.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

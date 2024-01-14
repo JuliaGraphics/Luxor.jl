@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>A more in-depth tutorial · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox" checked/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../quickstart/">Quick and short</a></li><li class="is-active"><a class="tocitem" href>A more in-depth tutorial</a><ul class="internal"><li><a class="tocitem" href="#What-you-need"><span>What you need</span></a></li><li><a class="tocitem" href="#First-steps"><span>First steps</span></a></li><li><a class="tocitem" href="#Euclidean-eggs"><span>Euclidean eggs</span></a></li><li><a class="tocitem" href="#Egg-stroke"><span>Egg stroke</span></a></li><li><a class="tocitem" href="#Polyeggs"><span>Polyeggs</span></a></li><li><a class="tocitem" href="#Clipping"><span>Clipping</span></a></li></ul></li><li><a class="tocitem" href="../simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../howto/createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../../howto/simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../../howto/geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../../howto/tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../../howto/colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../../howto/polygons/">Work with polygons</a></li><li><a class="tocitem" href="../../howto/text/">Add text</a></li><li><a class="tocitem" href="../../howto/clipping/">Clip graphics</a></li><li><a class="tocitem" href="../../howto/images/">Placing images</a></li><li><a class="tocitem" href="../../howto/turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../../howto/animation/">Make animations</a></li><li><a class="tocitem" href="../../howto/livegraphics/">Live graphics and snapshots</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../explanation/basics/">Basic concepts</a></li><li><a class="tocitem" href="../../explanation/pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../../explanation/perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../../explanation/transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../../explanation/imagematrix/">Image matrix</a></li><li><a class="tocitem" href="../../explanation/luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../../explanation/contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>A more in-depth tutorial</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>A more in-depth tutorial</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/tutorial/basictutorial.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="A-tutorial"><a class="docs-heading-anchor" href="#A-tutorial">A tutorial</a><a id="A-tutorial-1"></a><a class="docs-heading-anchor-permalink" href="#A-tutorial" title="Permalink"></a></h1><p>Experienced Julia users and programmers fluent in other languages and graphics systems should have no problem using Luxor by referring to the rest of the documentation. For others, here is a tutorial to help you get started.</p><h2 id="What-you-need"><a class="docs-heading-anchor" href="#What-you-need">What you need</a><a id="What-you-need-1"></a><a class="docs-heading-anchor-permalink" href="#What-you-need" title="Permalink"></a></h2><p>If you&#39;ve already downloaded Julia, and have added the Luxor package successfully (using <code>] add Luxor</code>):</p><pre><code class="nohighlight hljs">$ julia
+                   _
+       _       _ _(_)_     |  Documentation: https://docs.julialang.org
+      (_)     | (_) (_)    |
+       _ _   _| |_  __ _   |  Type &quot;?&quot; for help, &quot;]?&quot; for Pkg help.
+      | | | | | | |/ _` |  |
+      | | |_| | | | (_| |  |  Version 1.6.0 (2021-03-24)
+     _/ |\__&#39;_|_|_|\__&#39;_|  |  Official https://julialang.org/ release
+    |__/                   |
+
+(v1.6) pkg&gt; add Luxor</code></pre><p>then you&#39;re ready to start.</p><p>You can work in a Jupyter or Pluto notebook, or perhaps use the Atom/Juno or VSCode editor/development environment. It&#39;s also possible to work in a text editor (make sure you know how to run a file of Julia code), or, at a pinch, you could use the Julia REPL directly.</p><p>Ready? Let&#39;s begin. The goal of this tutorial is to do a bit of basic &#39;compass and ruler&#39; Euclidean geometry, to introduce the basic concepts of Luxor drawings.</p><h2 id="First-steps"><a class="docs-heading-anchor" href="#First-steps">First steps</a><a id="First-steps-1"></a><a class="docs-heading-anchor-permalink" href="#First-steps" title="Permalink"></a></h2><p>We&#39;ll have to load just one package for this tutorial:</p><pre><code class="language-julia hljs">using Luxor</code></pre><p>Here&#39;s an easy shortcut for making drawings in Luxor. It&#39;s a Julia macro, and it&#39;s a good way to test that your system&#39;s working. Evaluate this code:</p><pre><code class="language-julia hljs">@png begin
+    text(&quot;Hello world&quot;)
+    circle(Point(0, 0), 200, :stroke)
+end</code></pre><p>What happened? Can you see this image somewhere?</p><p><img src="../../assets/figures/tutorial-hello-world.png" alt="point example"/></p><p>If you&#39;re using Juno, the image should appear in the Plots window. If you&#39;re working in a Jupyter or Pluto notebook, the image should appear below or above the code. If you&#39;re using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as <code>luxor-drawing-(time stamp).png</code>). If nothing happened, or if something bad happened, we&#39;ve got some set-up or installation issues probably unrelated to Luxor...</p><p>Let&#39;s press on. The <a href="../../reference/api/#Luxor.@png"><code>@png</code></a> macro is an easy way to make a drawing; all it does is save a bit of typing. (The macro expands to enclose your drawing commands with calls to the <a href="../../reference/api/#Luxor.Drawing"><code>Drawing()</code></a>, <a href="../../reference/api/#Luxor.origin-Tuple{Any}"><code>origin</code></a>, <a href="../../reference/api/#Luxor.finish-Tuple{}"><code>finish</code></a>, and <a href="../../reference/api/#Luxor.preview-Tuple{}"><code>preview</code></a> functions.) There are also <a href="../../reference/api/#Luxor.@svg"><code>@svg</code></a> and <a href="../../reference/api/#Luxor.@pdf"><code>@pdf</code></a> macros, which do a similar thing. PNGs and SVGs are good because they show up in Juno and Jupyter. SVGs are usually higher quality too, but they&#39;re text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.</p><p>This example illustrates a few things about Luxor drawings:</p><ul><li><p>There are default values which you don&#39;t have to set if you don&#39;t want to (file names, colors, font sizes, and so on).</p></li><li><p>Positions on the drawing are specified with x and y coordinates stored in the Point type, and you can sometimes omit positions altogether.</p></li><li><p>The text was placed at the origin point (0/0), and by default it&#39;s left aligned.</p></li><li><p>The circle wasn&#39;t filled, but <code>stroked</code>. We passed the <code>:stroke</code> symbol as an action to the <a href="../../reference/api/#Luxor.circle-Tuple{Point, Point, Point}"><code>circle</code></a> function. Many drawing functions expect some action, such as <code>:fill</code> or <code>:stroke</code>, and sometimes <code>:clip</code> or <code>:fillstroke</code>. This works either as an argument (<code>:fill</code>) or as a keyword argument (<code>action=:fill</code>).</p></li><li><p>Did the first drawing takes a few seconds to appear? The Cairo drawing engine takes a little time to warm up. Once it&#39;s running, drawings appear much faster.</p></li></ul><p>Once more, with more black, and some rulers:</p><pre><code class="language-julia hljs">@png begin
+    text(&quot;Hello again, world!&quot;, Point(0, 250))
+    circle(Point(0, 0), 200, :fill)
+    rulers()
+end</code></pre><p><img src="../../assets/figures/tutorial-hello-world-2.png" alt="point example"/></p><p>The x-coordinates usually run from left to right, the y-coordinates from top to bottom. So here, <code>Point(0, 250)</code> is a point at the left/right center, but at the bottom of the drawing.</p><h2 id="Euclidean-eggs"><a class="docs-heading-anchor" href="#Euclidean-eggs">Euclidean eggs</a><a id="Euclidean-eggs-1"></a><a class="docs-heading-anchor-permalink" href="#Euclidean-eggs" title="Permalink"></a></h2><p>For the main section of this tutorial, we&#39;ll attempt to draw Euclid&#39;s egg, which involves a bit of geometry.</p><p>For now, you can continue to store all the drawing instructions between the <code>@png</code> macro&#39;s <code>begin</code> and <code>end</code> markers. Technically, however, working like this at the top-level in Julia (ie without storing instructions in functions which Julia can compile) isn&#39;t considered to be &#39;best practice&#39;, because the unit of compilation in Julia is the function. (Look up &#39;global scope&#39; in the documentation.)</p><pre><code class="language-julia hljs">@png begin</code></pre><p>and first define the variable <code>radius</code> to hold a value of 80 units (there are 72 units in a traditional inch):</p><pre><code class="language-julia hljs">    radius=80</code></pre><p>Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB or LUV) values or use named colors, such as &quot;red&quot; or &quot;green&quot;. &quot;gray0&quot; is black, and &quot;gray100&quot; is white. (For more information about colors, see <a href="https://github.com/JuliaGraphics/Colors.jl">Colors.jl</a>.)</p><pre><code class="language-julia hljs">    setdash(&quot;dot&quot;)
+    sethue(&quot;gray30&quot;)</code></pre><p>(You can use <a href="../../reference/api/#Luxor.setcolor-Tuple{AbstractString}"><code>setcolor</code></a> instead of <a href="../../reference/api/#Luxor.sethue-Tuple{AbstractString}"><code>sethue</code></a> — the latter doesn&#39;t affect the current opacity setting.)</p><p>Next, make two points, A and B, which will lie either side of the origin point. This line uses an array comprehension - notice the square brackets enclosing a <code>for</code> loop.</p><pre><code class="language-julia hljs">    A, B = [Point(x, 0) for x in [-radius, radius]]</code></pre><p><code>x</code> uses two values from the inner array, and a Point using each value is created and stored in its own variable. It seems hardly worth doing for two points, but it shows how you can assign more than one variable at the same time, and also how to generate points.</p><p>With two points defined, draw a line from A to B, and stroke it.</p><pre><code class="language-julia hljs">    line(A, B, :stroke)</code></pre><p>Draw a stroked circle too. The center of the circle is placed at the origin. You can use the letter <strong>O</strong> as a short cut for Origin, ie the <code>Point(0, 0)</code>.</p><pre><code class="language-julia hljs">    circle(O, radius, :stroke)
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-1.png" alt="point example"/></p><h3 id="Labels-and-dots"><a class="docs-heading-anchor" href="#Labels-and-dots">Labels and dots</a><a id="Labels-and-dots-1"></a><a class="docs-heading-anchor-permalink" href="#Labels-and-dots" title="Permalink"></a></h3><p>It&#39;s a good idea to label points in geometrical constructions, and to draw small dots to indicate their location clearly. For the latter task, small filled circles will do. For labels, there&#39;s a special <a href="../../reference/api/#Luxor.label"><code>label</code></a> function we can use, which positions a text string close to a point, using angles or points of the compass, so <code>:N</code> places the label to the north of a point.</p><p>Edit your previous code by adding instructions to draw some labels and circles:</p><pre><code class="language-julia hljs">@png begin
+    radius=80
+    setdash(&quot;dot&quot;)
+    sethue(&quot;gray30&quot;)
+    A, B = [Point(x, 0) for x in [-radius, radius]]
+    line(A, B, :stroke)
+    circle(Point(0, 0), radius, :stroke)
+# &gt;&gt;&gt;&gt;
+    label(&quot;A&quot;, :NW, A)
+    label(&quot;O&quot;, :N,  O)
+    label(&quot;B&quot;, :NE, B)
+
+    circle.([A, O, B], 2, :fill)
+    circle.([A, B], 2radius, :stroke)
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-2.png" alt="point example"/></p><p>While we could have drawn all the circles as usual, we&#39;ve taken the opportunity to introduce a powerful Julia feature called <em>broadcasting</em>. The dot (<code>.</code>) just after the function name in the last two <a href="../../reference/api/#Luxor.circle-Tuple{Point, Point, Point}"><code>circle</code></a> function calls tells Julia to apply the function to all the arguments. We supplied an array of three points, and filled circles were placed at each one. Then we supplied an array of two points and stroked circles were placed there. Notice that we didn&#39;t have to supply an array of radius values or an array of actions — in each case Julia did the necessary broadcasting (from scalar to vector) for us.</p><h3 id="Intersect-this"><a class="docs-heading-anchor" href="#Intersect-this">Intersect this</a><a id="Intersect-this-1"></a><a class="docs-heading-anchor-permalink" href="#Intersect-this" title="Permalink"></a></h3><p>We&#39;re now ready to tackle the job of finding the coordinates of the two points where two circles intersect. There&#39;s a Luxor function called <a href="../../reference/api/#Luxor.intersectionlinecircle-Tuple{Point, Point, Point, Any}"><code>intersectionlinecircle</code></a> that finds the point or points where a line intersects a circle. So we can find the two points where one of the circles crosses an imaginary vertical line drawn through O. Because of the symmetry, we&#39;ll only have to do circle A.</p><pre><code class="language-julia hljs">@png begin
+    # as before
+    radius=80
+    setdash(&quot;dot&quot;)
+    sethue(&quot;gray30&quot;)
+    A, B = [Point(x, 0) for x in [-radius, radius]]
+    line(A, B, :stroke)
+    circle(O, radius, :stroke) # use letter O for Point(0, 0)
+
+    label(&quot;A&quot;, :NW, A)
+    label(&quot;O&quot;, :N,  O)
+    label(&quot;B&quot;, :NE, B)
+
+    circle.([A, O, B], 2, :fill)
+    circle.([A, B], 2radius, :stroke)</code></pre><p>The <a href="../../reference/api/#Luxor.intersectionlinecircle-Tuple{Point, Point, Point, Any}"><code>intersectionlinecircle</code></a> takes four arguments: two points to define the line and a point/radius pair to define the circle. It returns the number of intersections (probably 0, 1, or 2), followed by the two points.</p><p>The line is specified with two points with an x value of 0 and y values of ± twice the radius, written in Julia&#39;s math-friendly style. The circle is centered at A and has a radius of AB (which is <code>2radius</code>). Assuming that there are two intersections, we feed these to <a href="../../reference/api/#Luxor.circle-Tuple{Point, Point, Point}"><code>circle</code></a> and <a href="../../reference/api/#Luxor.label"><code>label</code></a> for drawing and labeling using our new broadcasting superpowers.</p><pre><code class="language-julia hljs"># &gt;&gt;&gt;&gt;
+    nints, C, D =
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+
+    if nints == 2
+        circle.([C, D], 2, :fill)
+        label.([&quot;D&quot;, &quot;C&quot;], :N, [D, C])
+    end
+
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-3.png" alt="point example"/></p><h3 id="The-upper-circle"><a class="docs-heading-anchor" href="#The-upper-circle">The upper circle</a><a id="The-upper-circle-1"></a><a class="docs-heading-anchor-permalink" href="#The-upper-circle" title="Permalink"></a></h3><p>Now for the trickiest part of this construction: a small circle whose center point sits on top of the inner circle and that meets the two larger circles near the point D.</p><p>Finding this new center point C1 is easy enough, because we can again use <a href="../../reference/api/#Luxor.intersectionlinecircle-Tuple{Point, Point, Point, Any}"><code>intersectionlinecircle</code></a> to find the point where the central circle crosses a line from O to D.</p><p>Add some more lines to your code:</p><pre><code class="language-julia hljs">@png begin
+
+# &gt;&gt;&gt;&gt;
+
+    nints, C1, C2 = intersectionlinecircle(O, D, O, radius)
+    if nints == 2
+        circle(C1, 3, :fill)
+        label(&quot;C1&quot;, :N, C1)
+    end
+
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-4.png" alt="point example"/></p><p>The two other points that define this circle lie on the intersections of the large circles with imaginary lines through points A and B passing through the center point C1. We&#39;re looking for the lines <code>A-C1-ip</code>, where <code>ip</code> is somewhere on the circle between D and B, and <code>B-C1-ip</code>, where <code>ip</code> is somewhere between A and D.</p><p>To find (and draw) these points is straightforward. We&#39;ll mark these as intermediate for now, because there are in fact four intersection points but we want just the two nearest the top:</p><pre><code class="language-julia hljs"># &gt;&gt;&gt;&gt;
+
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
+
+    circle.([I1, I2, I3, I4], 2, :fill)</code></pre><p>So we can use the <a href="../../reference/api/#Luxor.distance-Tuple{Point, Point}"><code>distance</code></a> function to find the distance between two points, and it&#39;s simple enough to compare the values and choose the shortest.</p><pre><code class="language-julia hljs">
+# &gt;&gt;&gt;&gt;
+
+    if distance(C1, I1) &lt; distance(C1, I2)
+       ip1 = I1
+    else
+       ip1 = I2
+    end
+    if distance(C1, I3) &lt; distance(C1, I4)
+       ip2 = I3
+    else
+       ip2 = I4
+    end
+
+    label(&quot;ip1&quot;, :N, ip1)
+    label(&quot;ip2&quot;, :N, ip2)
+    circle(C1, distance(C1, ip1), :stroke)
+
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-5.png" alt="point example"/></p><h3 id="Eggs-at-the-ready"><a class="docs-heading-anchor" href="#Eggs-at-the-ready">Eggs at the ready</a><a id="Eggs-at-the-ready-1"></a><a class="docs-heading-anchor-permalink" href="#Eggs-at-the-ready" title="Permalink"></a></h3><p>We now know all the points on the egg&#39;s perimeter, and the centers of the circular arcs. To draw the outline, we&#39;ll use the <a href="../../reference/api/#Luxor.arc2r-Tuple{Point, Point, Point}"><code>arc2r</code></a> function four times. This function takes: a center point and two points that together define a circular arc, plus an action.</p><p>The shape consists of four curves, so we&#39;ll use the <code>:path</code> action. Instead of immediately drawing the shape, like the <code>:fill</code> and <code>:stroke</code> actions do, this action adds a section to the current path.</p><pre><code class="language-julia hljs">
+    label(&quot;ip1&quot;, :N, ip1)
+    label(&quot;ip2&quot;, :N, ip2)
+    circle(C1, distance(C1, ip1), :stroke)
+
+# &gt;&gt;&gt;&gt;
+
+    setline(5)
+    setdash(&quot;solid&quot;)
+
+    arc2r(B,    A,  ip1, :path) # centered at B, from A to ip1
+    arc2r(C1, ip1,  ip2, :path)
+    arc2r(A,  ip2,    B, :path)
+    arc2r(O,    B,    A, :path)</code></pre><p>Finally, once we&#39;ve added all four sections to the path we can stroke and fill it. If you want to use separate styles for the stroke and fill, you can use a <code>preserve</code> version of the first action. This applies the action but keeps the path available for more actions.</p><pre><code class="language-julia hljs">    strokepreserve()
+    setopacity(0.8)
+    sethue(&quot;ivory&quot;)
+    fillpath()
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-6.png" alt="point example"/></p><h2 id="Egg-stroke"><a class="docs-heading-anchor" href="#Egg-stroke">Egg stroke</a><a id="Egg-stroke-1"></a><a class="docs-heading-anchor-permalink" href="#Egg-stroke" title="Permalink"></a></h2><p>To be more generally useful, the above code can be boiled into a single function.</p><pre><code class="language-julia hljs">function egg(radius, action=:none)
+    A, B = [Point(x, 0) for x in [-radius, radius]]
+    nints, C, D =
+        intersectionlinecircle(Point(0, -2radius), Point(0, 2radius), A, 2radius)
+
+    flag, C1 = intersectionlinecircle(C, D, O, radius)
+    nints, I3, I4 = intersectionlinecircle(A, C1, A, 2radius)
+    nints, I1, I2 = intersectionlinecircle(B, C1, B, 2radius)
+
+    if distance(C1, I1) &lt; distance(C1, I2)
+        ip1 = I1
+    else
+        ip1 = I2
+    end
+    if distance(C1, I3) &lt; distance(C1, I4)
+        ip2 = I3
+    else
+        ip2 = I4
+    end
+
+    newpath()
+    arc2r(B, A, ip1, :path)
+    arc2r(C1, ip1, ip2, :path)
+    arc2r(A, ip2, B, :path)
+    arc2r(O, B, A, :path)
+    closepath()
+
+    do_action(action)
+end</code></pre><p>This keeps all the intermediate code and calculations safely hidden away, and it&#39;s now possible to draw a Euclidean egg by calling <code>egg(100, :stroke)</code>, for example, where <code>100</code> is the required width (radius), and <code>:stroke</code> is the required action.</p><p>(Of course, there&#39;s no error checking. This should be added if the function is to be used for any serious applications...!)</p><p>Notice that this function doesn&#39;t define anything about what color it is, or where it&#39;s placed. When called, the function inherits the current drawing environment: scale, rotation, position of the origin, line thickness, color, style, and so on. This lets us write code like this:</p><pre><code class="language-julia hljs">@png begin
+    setopacity(0.7)
+    for θ in range(0, step=π/6, length=12)
+        @layer begin
+            rotate(θ)
+            translate(0, -150)
+            egg(50, :path)
+            setline(10)
+            randomhue()
+            fillpreserve()
+
+            randomhue()
+            strokepath()
+        end
+    end
+end 800 800 &quot;eggstravaganza.png&quot;</code></pre><p><img src="../../assets/figures/tutorial-egg-7.png" alt="point example"/></p><p>The loop runs 12 times, with <code>theta</code> increasing from 0 upwards in steps of π/6. But before each egg is drawn, the entire drawing environment is rotated by <code>theta</code> radians and then shifted along the y-axis away from the origin by -150 units (the y-axis values usually increase downwards, so, before any rotation takes place, a shift of -150 looks like an upwards shift). The <a href="../../reference/api/#Luxor.randomhue-Tuple{}"><code>randomhue</code></a> function does what you expect, and the <code>egg</code> function is passed the <code>:fill</code> action and the radius.</p><p>Notice that the four drawing instructions are encased in a <code>@layer begin...end</code> shell. Any change made to the drawing environment inside this shell is discarded after the <code>end</code>. This allows us to make temporary changes to the scale and rotation, etc. and discard them easily once the shapes have been drawn.</p><p>Rotations and angles are typically specified in radians. The positive x-axis (a line from the origin increasing in x) starts off heading due east from the origin, and the y-axis due south, and positive angles are clockwise (ie from the positive x-axis towards the positive y-axis). So the second egg in the previous example was drawn after the axes were rotated by π/6 radians clockwise.</p><p>If you look closely you can tell which egg was drawn first — it&#39;s overlapped on each side by subsequent eggs.</p><h4 id="Thought-experiments"><a class="docs-heading-anchor" href="#Thought-experiments">Thought experiments</a><a id="Thought-experiments-1"></a><a class="docs-heading-anchor-permalink" href="#Thought-experiments" title="Permalink"></a></h4><ol><li><p>What would happen if the translation was <code>translate(0, 150)</code> rather than <code>translate(0, -150)</code>?</p></li><li><p>What would happen if the translation was <code>translate(150, 0)</code> rather than <code>translate(0, -150)</code>?</p></li><li><p>What would happen if you translated each egg <em>before</em> you rotated the drawing environment?</p></li></ol><p>Some useful tools for investigating the important aspects of coordinates and transformations include:</p><ul><li><a href="../../reference/api/#Luxor.rulers-Tuple{}"><code>rulers</code></a> to draw the current x and y axes</li><li><a href="../../reference/api/#Luxor.getrotation-Tuple{Matrix}"><code>getrotation</code></a> to get the current rotation</li><li><a href="../../reference/api/#Luxor.getscale-Tuple{Matrix}"><code>getscale</code></a> to get the current scale</li></ul><h2 id="Polyeggs"><a class="docs-heading-anchor" href="#Polyeggs">Polyeggs</a><a id="Polyeggs-1"></a><a class="docs-heading-anchor-permalink" href="#Polyeggs" title="Permalink"></a></h2><p>As well as stroke and fill actions, you can use the path as a clipping region (<code>:clip</code>), or as the basis for more shape shifting.</p><p>The <code>egg</code> function creates a path and lets you apply an action to it. It&#39;s also possible to convert the path into a polygon (an array of points), which lets you do more things with it. The following code converts the egg&#39;s path into a polygon, and then moves every other point of the polygon halfway towards the centroid.</p><pre><code class="language-julia hljs">@png begin
+    egg(160, :path)
+    pgon = first(pathtopoly())</code></pre><p>The <a href="../../reference/api/#Luxor.pathtopoly-Tuple{}"><code>pathtopoly</code></a> function converts the current path made by <code>egg(160, :path)</code> into a polygon. Those smooth curves have been approximated by a series of straight line segments. The <code>first</code> function is used because <a href="../../reference/api/#Luxor.pathtopoly-Tuple{}"><code>pathtopoly</code></a> returns an array of one or more polygons (paths can consist of a series of loops), and we know that we need only the single path here.</p><pre><code class="language-julia hljs">    pc = polycentroid(pgon)
+    circle(pc, 5, :fill)</code></pre><p><a href="../../reference/api/#Luxor.polycentroid-Tuple{Vector{Point}}"><code>polycentroid</code></a> finds the centroid of the new polygon.</p><p>This loop steps through the points and moves every odd-numbered one halfway towards the centroid. <a href="../../reference/api/#Luxor.between"><code>between</code></a> finds a point midway between two specified points. Finally the <a href="../../reference/api/#Luxor.poly"><code>poly</code></a> function draws the array of points.</p><pre><code class="language-julia hljs">    for pt in 1:2:length(pgon)
+        pgon[pt] = between(pc, pgon[pt], 0.5)
+    end
+    poly(pgon, :stroke)
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-8.png" alt="point example"/></p><p>The uneven appearance of the interior points here looks to be a result of the default line join settings. Experiment with <code>setlinejoin(&quot;round&quot;)</code> to see if this makes the geometry look tidier.</p><p>For a final experiment with our <code>egg</code> function, here&#39;s Luxor&#39;s <a href="../../reference/api/#Luxor.offsetpoly-Tuple{Any, Function}"><code>offsetpoly</code></a> function struggling to draw around the spiky egg-based polygon.</p><pre><code class="language-julia hljs">@png begin
+    egg(80, :path)
+    pgon = first(pathtopoly()) |&gt; unique
+    pc = polycentroid(pgon)
+
+    for pt in 1:2:length(pgon)
+        pgon[pt] = between(pc, pgon[pt], 0.8)
+    end
+
+    for i in 30:-3:-8
+        randomhue()
+        op = offsetpoly(pgon, i)
+        poly(op, :stroke, close=true)
+    end
+end 800 800 &quot;spike-egg.png&quot;</code></pre><p><img src="../../assets/figures/tutorial-egg-9.png" alt="point example"/></p><p>The small changes in the regularity of the points created by the path-to-polygon conversion and the varying number of samples it made are continually amplified in successive outlinings.</p><h2 id="Clipping"><a class="docs-heading-anchor" href="#Clipping">Clipping</a><a id="Clipping-1"></a><a class="docs-heading-anchor-permalink" href="#Clipping" title="Permalink"></a></h2><p>A useful feature of Luxor is that you can use shapes as a clipping mask. Graphics can be hidden when they stray outside the boundaries of the mask.</p><p>In this example, the egg (assuming you&#39;re still in the same Julia session in which you&#39;ve defined the <code>egg</code> function) isn&#39;t drawn, but is defined to act as a clipping mask. Every graphic shape that you draw now is clipped where it crosses the mask. This is specified by the <code>:clip</code> action which is passed to the <a href="../../reference/api/#Luxor.do_action-Tuple{Any}"><code>do_action</code></a> function at the end of the <code>egg</code>.</p><p>Here, the graphics are provided by the <a href="../../reference/api/#Luxor.ngon"><code>ngon</code></a> function, which draws regular <code>n</code>-sided polygons.</p><pre><code class="language-julia hljs">using Luxor, Colors
+@svg begin
+    setopacity(0.5)
+    eg(a) = egg(150, a)
+    sethue(&quot;gold&quot;)
+    eg(:fill)
+    eg(:clip)
+    @layer begin
+       for i in 360:-4:1
+           sethue(Colors.HSV(i, 1.0, 0.8))
+           rotate(π/30)
+           ngon(O, i, 5, 0, :stroke)
+       end
+    end
+    clipreset()
+    sethue(&quot;red&quot;)
+    eg(:stroke)
+end</code></pre><p><img src="../../assets/figures/tutorial-egg-10.png" alt="clip example"/></p><p>It&#39;s good practice to add a matching <a href="../../reference/api/#Luxor.clipreset-Tuple{}"><code>clipreset</code></a> after the clipping has been completed. Unbalanced clipping can lead to unpredictable results.</p><p>Good luck with your explorations!</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quickstart/">« Quick and short</a><a class="docs-footer-nextpage" href="../simple-animation/">Simple animation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 5 April 2022 09:01">Tuesday 5 April 2022</span>. Using Julia version 1.7.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

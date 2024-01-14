@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Fonts on Linux · Luxor</title><meta name="title" content="Fonts on Linux · Luxor"/><meta property="og:title" content="Fonts on Linux · Luxor"/><meta property="twitter:title" content="Fonts on Linux · Luxor"/><meta name="description" content="Documentation for Luxor."/><meta property="og:description" content="Documentation for Luxor."/><meta property="twitter:description" content="Documentation for Luxor."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/helloworld/">Hello World</a></li><li><a class="tocitem" href="../../tutorial/basicpath/">Basic path building</a></li><li><a class="tocitem" href="../../tutorial/quickstart/">Design a logo</a></li><li><a class="tocitem" href="../../tutorial/basictutorial/">Geometry tutorial</a></li><li><a class="tocitem" href="../../tutorial/pixels/">Playing with pixels</a></li><li><a class="tocitem" href="../../tutorial/simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li><li><a class="tocitem" href="../../example/gallery/">Gallery</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../howto/createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../../howto/simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../../howto/geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../../howto/tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../../howto/colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../../howto/polygons/">Work with polygons</a></li><li><a class="tocitem" href="../../howto/text/">Add text</a></li><li><a class="tocitem" href="../../howto/clipping/">Clip graphics</a></li><li><a class="tocitem" href="../../howto/images/">Placing images</a></li><li><a class="tocitem" href="../../howto/turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../../howto/animation/">Make animations</a></li><li><a class="tocitem" href="../../howto/snapshots/">Snapshots</a></li><li><a class="tocitem" href="../../howto/livegraphics/">Interactive graphics and Threads</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox" checked/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../basics/">Basic concepts</a></li><li><a class="tocitem" href="../pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../imagematrix/">Image matrix</a></li><li class="is-active"><a class="tocitem" href>Fonts on Linux</a></li><li><a class="tocitem" href="../luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../strokepathdispatch/">Customize strokepath/fillpath</a></li><li><a class="tocitem" href="../contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Explanations</a></li><li class="is-active"><a href>Fonts on Linux</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Fonts on Linux</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaGraphics/Luxor.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/explanation/fonts.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Fonts-available-on-Linux-CI-systems"><a class="docs-heading-anchor" href="#Fonts-available-on-Linux-CI-systems">Fonts available on Linux CI systems</a><a id="Fonts-available-on-Linux-CI-systems-1"></a><a class="docs-heading-anchor-permalink" href="#Fonts-available-on-Linux-CI-systems" title="Permalink"></a></h1><p>When this docmnent is built on Github CI, the following fonts are available.</p><details closed><summary>Code for this figure</summary><p>This code generates the figure below.</p><pre><code class="language-julia hljs">using Luxor
+fonts = [
+    &quot;DejaVuMathTeXGyre Regular&quot;,
+    &quot;DejaVuMathTeXGyre&quot;,
+    &quot;DejaVuSans Bold&quot;,
+    &quot;DejaVuSans BoldOblique&quot;,
+    &quot;DejaVuSans ExtraLight&quot;,
+    &quot;DejaVuSans Oblique&quot;,
+    &quot;DejaVuSans&quot;,
+    &quot;DejaVuSans Bold&quot;,
+    &quot;DejaVuSans Bold Oblique&quot;,
+    &quot;DejaVuSans Condensed Bold&quot;,
+    &quot;DejaVuSans Condensed BoldOblique&quot;,
+    &quot;DejaVuSans Condensed Oblique&quot;,
+    &quot;DejaVuSans Condensed&quot;,
+    &quot;DejaVuSans Condensed Bold&quot;,
+    &quot;DejaVuSans Condensed Bold Oblique&quot;,
+    &quot;DejaVuSans Condensed Oblique&quot;,
+    &quot;DejaVuSans ExtraLight&quot;,
+    &quot;DejaVuSansMono Bold&quot;,
+    &quot;DejaVuSansMono Bold Oblique&quot;,
+    &quot;DejaVuSansMono Oblique&quot;,
+    &quot;DejaVuSansMono&quot;,
+    &quot;DejaVuSansMono Bold&quot;,
+    &quot;DejaVuSansMono Bold Oblique&quot;,
+    &quot;DejaVuSansMono Oblique&quot;,
+    &quot;DejaVuSans Oblique&quot;,
+    &quot;DejaVuSerif Bold&quot;,
+    &quot;DejaVuSerif Bold Italic&quot;,
+    &quot;DejaVuSerif Italic&quot;,
+    &quot;DejaVuSerif&quot;,
+    &quot;DejaVuSerif Bold&quot;,
+    &quot;DejaVuSerif Bold Italic&quot;,
+    &quot;DejaVuSerif Condensed Bold&quot;,
+    &quot;DejaVuSerif Condensed Bold Italic&quot;,
+    &quot;DejaVuSerif Condensed Italic&quot;,
+    &quot;DejaVuSerif Condensed&quot;,
+    &quot;DejaVuSerif Condensed Bold&quot;,
+    &quot;DejaVuSerif Condensed Bold Italic&quot;,
+    &quot;DejaVuSerif Condensed Italic&quot;,
+    &quot;DejaVuSerif Italic&quot;,
+    &quot;Lato Black&quot;,
+    &quot;Lato BlackItalic&quot;,
+    &quot;Lato Bold&quot;,
+    &quot;Lato BoldItalic&quot;,
+    &quot;Lato Hairline&quot;,
+    &quot;Lato HairlineItalic&quot;,
+    &quot;Lato Heavy&quot;,
+    &quot;Lato HeavyItalic&quot;,
+    &quot;Lato Italic&quot;,
+    &quot;Lato Light&quot;,
+    &quot;Lato LightItalic&quot;,
+    &quot;Lato Medium&quot;,
+    &quot;Lato MediumItalic&quot;,
+    &quot;Lato Regular&quot;,
+    &quot;Lato Semibold&quot;,
+    &quot;Lato Semibold Italic&quot;,
+    &quot;Lato Thin&quot;,
+    &quot;Lato Thin Italic&quot;,
+    &quot;Lato Black&quot;,
+    &quot;Lato Black Italic&quot;,
+    &quot;Lato Bold&quot;,
+    &quot;Lato Bold Italic&quot;,
+    &quot;Lato Hairline&quot;,
+    &quot;Lato Hairline Italic&quot;,
+    &quot;Lato Heavy&quot;,
+    &quot;Lato Heavy Italic&quot;,
+    &quot;Lato Italic&quot;,
+    &quot;Lato Light&quot;,
+    &quot;Lato Light Italic&quot;,
+    &quot;Lato Medium&quot;,
+    &quot;Lato Medium Italic&quot;,
+    &quot;Lato Regular&quot;,
+    &quot;Lato Regular Italic&quot;,
+    &quot;Lato Semibold&quot;,
+    &quot;Lato Semibold Italic&quot;,
+    &quot;Lato Thin&quot;,
+    &quot;Lato Thin Italic&quot;,
+    &quot;LiberationMono Bold&quot;,
+    &quot;LiberationMono Bold Italic&quot;,
+    &quot;LiberationMono Italic&quot;,
+    &quot;LiberationMono&quot;,
+    &quot;LiberationMono Bold&quot;,
+    &quot;LiberationMono Bold Italic&quot;,
+    &quot;LiberationMono Italic&quot;,
+    &quot;LiberationMono Regular&quot;,
+    &quot;LiberationSans Bold&quot;,
+    &quot;LiberationSans Bold Italic&quot;,
+    &quot;LiberationSans Italic&quot;,
+    &quot;LiberationSans&quot;,
+    &quot;LiberationSans Bold&quot;,
+    &quot;LiberationSans Bold Italic&quot;,
+    &quot;LiberationSans Italic&quot;,
+    &quot;LiberationSansNarrow Bold&quot;,
+    &quot;LiberationSansNarrow Bold Italic&quot;,
+    &quot;LiberationSansNarrow Italic&quot;,
+    &quot;LiberationSansNarrow&quot;,
+    &quot;LiberationSansNarrow Bold&quot;,
+    &quot;LiberationSansNarrow Bold Italic&quot;,
+    &quot;LiberationSansNarrow Italic&quot;,
+    &quot;LiberationSansNarrow Regular&quot;,
+    &quot;LiberationSans Regular&quot;,
+    &quot;LiberationSerif Bold&quot;,
+    &quot;LiberationSerif Bold Italic&quot;,
+    &quot;LiberationSerif Italic&quot;,
+    &quot;LiberationSerif&quot;,
+    &quot;LiberationSerif Bold&quot;,
+    &quot;LiberationSerif Bold Italic&quot;,
+    &quot;LiberationSerif Italic&quot;,
+    &quot;LiberationSerif Regular&quot;,
+]
+function drawfonts()
+    d = @drawsvg begin
+        background(&quot;black&quot;)
+        @layer begin
+            translate(-150, 0)
+            sethue(&quot;white&quot;)
+            tableheader = Table([5], [400, 400], boxtopcenter() + (0, 50))
+            fontsize(30)
+            text(&quot;Toy API&quot;, tableheader[1])
+            text(&quot;Pro APi&quot;, tableheader[2])
+            table = Table(fill(30, length(fonts)), [400, 400])
+            fsize = 20
+            fontsize(fsize)
+            n = 1
+            for font in fonts
+                @layer begin
+                    fontface(font)
+                    text(font, table[n])
+                end
+                @layer begin
+                    fface = replace(font, &quot;Serif&quot; =&gt; &quot; Serif&quot;,
+                        &quot;Bold&quot; =&gt; &quot; Bold&quot;,
+                        &quot;Semibold&quot; =&gt; &quot; Semibold&quot;,
+                        &quot;Black&quot; =&gt; &quot; Black&quot;,
+                        &quot;Heavy&quot; =&gt; &quot; Heavy&quot;,
+                        &quot;Medium&quot; =&gt; &quot; Medium&quot;,
+                        &quot;Light&quot; =&gt; &quot; Light&quot;,
+                        &quot;Thin&quot; =&gt; &quot; Thin&quot;,
+                        &quot;Hairline&quot; =&gt; &quot; Hairline&quot;,
+                        &quot;Narrow&quot; =&gt; &quot; Narrow&quot;,
+                        &quot;Regular&quot; =&gt; &quot; Regular&quot;,
+                        &quot;Sans&quot; =&gt; &quot; Sans&quot;,
+                        &quot;Mono&quot; =&gt; &quot; Mono&quot;,
+                        &quot;Italic&quot; =&gt; &quot; Italic&quot;,
+                        &quot;Oblique&quot; =&gt; &quot; Oblique&quot;,
+                        &quot;Condensed&quot; =&gt; &quot; Condensed&quot;,
+                        &quot;Extra&quot; =&gt; &quot; Extra&quot;,
+                        &quot;-&quot; =&gt; &quot; &quot;,
+                        )
+                    setfont(fface, fsize)
+                    settext(fface, table[n+1])
+                end
+                @layer begin
+                    setopacity(0.5)
+                    line(table[n] + (0, 8), table[n+1] + (table.colwidths[2], 8), :stroke)
+                end
+                n += 2
+            end
+        end
+        sethue(&quot;white&quot;)
+        fontsize(40)
+        text(&quot;--------:--------&quot;, boxbottomcenter() + (0, -30), halign=:center)
+    end 1200 3400
+    return d
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">drawfonts (generic function with 1 method)</code></pre></details><pre><code class="language-julia hljs">drawfonts()</code></pre><img src="5aa6a49b.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../imagematrix/">« Image matrix</a><a class="docs-footer-nextpage" href="../luxorcairo/">Luxor and Cairo »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Sunday 14 January 2024 10:15">Sunday 14 January 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

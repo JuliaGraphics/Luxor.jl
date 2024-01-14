@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Interactive graphics and Threads · Luxor</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.045/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.24/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/luxor-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="Luxor logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Luxor</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction to Luxor</a></li><li><input class="collapse-toggle" id="menuitem-2" type="checkbox"/><label class="tocitem" for="menuitem-2"><span class="docs-label">Tutorials</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../tutorial/helloworld/">Hello World</a></li><li><a class="tocitem" href="../../tutorial/basicpath/">Basic path building</a></li><li><a class="tocitem" href="../../tutorial/quickstart/">Design a logo</a></li><li><a class="tocitem" href="../../tutorial/basictutorial/">Geometry tutorial</a></li><li><a class="tocitem" href="../../tutorial/pixels/">Playing with pixels</a></li><li><a class="tocitem" href="../../tutorial/simple-animation/">Simple animation</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-3" type="checkbox"/><label class="tocitem" for="menuitem-3"><span class="docs-label">Examples</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../example/examples/">Simple examples</a></li><li><a class="tocitem" href="../../example/moreexamples/">More examples</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox" checked/><label class="tocitem" for="menuitem-4"><span class="docs-label">How to guides</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../createdrawings/">Create drawings</a></li><li><a class="tocitem" href="../simplegraphics/">Draw simple shapes</a></li><li><a class="tocitem" href="../geometrytools/">Use geometry tools</a></li><li><a class="tocitem" href="../tables-grids/">Work with tables and grids</a></li><li><a class="tocitem" href="../colors-styles/">Use colors and styles</a></li><li><a class="tocitem" href="../polygons/">Work with polygons</a></li><li><a class="tocitem" href="../text/">Add text</a></li><li><a class="tocitem" href="../clipping/">Clip graphics</a></li><li><a class="tocitem" href="../images/">Placing images</a></li><li><a class="tocitem" href="../turtle/">Turtle graphics</a></li><li><a class="tocitem" href="../animation/">Make animations</a></li><li><a class="tocitem" href="../snapshots/">Snapshots</a></li><li class="is-active"><a class="tocitem" href>Interactive graphics and Threads</a><ul class="internal"><li><a class="tocitem" href="#Continuous-display"><span>Continuous display</span></a></li><li><a class="tocitem" href="#Live-coding-with-MiniFB"><span>Live coding with MiniFB</span></a></li><li><a class="tocitem" href="#Threads"><span>Threads</span></a></li><li><a class="tocitem" href="#Advanced-threads-with-live-view"><span>Advanced threads with live view</span></a></li></ul></li></ul></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Explanations</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../explanation/basics/">Basic concepts</a></li><li><a class="tocitem" href="../../explanation/pathspolygons/">Paths vs Polygon</a></li><li><a class="tocitem" href="../../explanation/perfectpixels/">Perfect pixels and antialising</a></li><li><a class="tocitem" href="../../explanation/transforms/">Transforms and matrices</a></li><li><a class="tocitem" href="../../explanation/imagematrix/">Image matrix</a></li><li><a class="tocitem" href="../../explanation/luxorcairo/">Luxor and Cairo</a></li><li><a class="tocitem" href="../../explanation/strokepathdispatch/">Customize strokepath/fillpath</a></li><li><a class="tocitem" href="../../explanation/contributing/">Contributing</a></li></ul></li><li><input class="collapse-toggle" id="menuitem-6" type="checkbox"/><label class="tocitem" for="menuitem-6"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="../../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">How to guides</a></li><li class="is-active"><a href>Interactive graphics and Threads</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Interactive graphics and Threads</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/JuliaGraphics/Luxor.jl/blob/master/docs/src/howto/livegraphics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Interactive-graphics-and-Threads"><a class="docs-heading-anchor" href="#Interactive-graphics-and-Threads">Interactive graphics and Threads</a><a id="Interactive-graphics-and-Threads-1"></a><a class="docs-heading-anchor-permalink" href="#Interactive-graphics-and-Threads" title="Permalink"></a></h1><h2 id="Continuous-display"><a class="docs-heading-anchor" href="#Continuous-display">Continuous display</a><a id="Continuous-display-1"></a><a class="docs-heading-anchor-permalink" href="#Continuous-display" title="Permalink"></a></h2><p>With the help of an external appication to manage windows, it&#39;s possible to use Luxor to create continuously changing graphics in a window.</p><h3 id="The-@play-macro"><a class="docs-heading-anchor" href="#The-@play-macro">The <code>@play</code> macro</a><a id="The-@play-macro-1"></a><a class="docs-heading-anchor-permalink" href="#The-@play-macro" title="Permalink"></a></h3><p>This example uses the <a href="https://github.com/aviks/MiniFB.jl">MiniFB</a> package, which you can add using <code>] add MiniFB</code>.</p><p>The file <code>play.jl</code> defines a simple macro, <code>@play</code>, which continuously evaluates and draws the graphics in a window. For example, this code:</p><pre><code class="language-julia hljs">using Luxor
+
+include(dirname(pathof(Luxor)) * &quot;/play.jl&quot;)
+
+let θ = 0
+    @play 400 400 begin
+    #
+        background(&quot;black&quot;)
+        sethue(&quot;white&quot;)
+        rotate(θ)
+        hypotrochoid(200, 110, 37, :stroke)
+        θ += π/120
+        sleep(0.01)
+    #
+    end
+end</code></pre><p>draws a continuously rotating hypotrochoid.</p><p><img src="../../assets/figures/live-hypo.gif" alt="live hypo"/></p><h3 id="Clock"><a class="docs-heading-anchor" href="#Clock">Clock</a><a id="Clock-1"></a><a class="docs-heading-anchor-permalink" href="#Clock" title="Permalink"></a></h3><p>This code also imports the <code>@play</code> macro.</p><p>The call to <code>sleep</code> reduces the CPU time, and allows other processes to run, but the millisecond animation will be less smooth as a result.</p><p><img src="../../assets/figures/clock.gif" alt="clock"/></p><pre><code class="language-julia hljs">using Luxor, Colors, Dates, ColorSchemes
+
+include(dirname(pathof(Luxor)) * &quot;/play.jl&quot;)
+
+function clock(cscheme=ColorSchemes.leonardo)
+    @play 400 600 begin
+
+        # background
+        sethue(get(cscheme, .0))
+        paint()
+
+        # 24hour sector
+        fontsize(30)
+        sethue(get(cscheme, .2))
+        h = Dates.hour(now())
+        sector(O, 180, 200, π/2, π/2 + rescale(h, 0, 24, 0, 2pi), :fill)
+
+        @layer begin
+            fontsize(12)
+            sethue(&quot;white&quot;)
+            @. text([&quot;0&quot;, &quot;6&quot;, &quot;12&quot;, &quot;18&quot;], polar(190, [i * π/2 for i in 1:4]),
+                halign=:center,
+                valign=:middle)
+        end
+
+        # minute sector
+        sethue(get(cscheme, .4))
+        m = Dates.minute(now())
+        sector(O, 160, 180, 3π/2, 3π/2 + rescale(m, 0, 60, 0, 2pi), :fill)
+
+        # second sector
+        sethue(get(cscheme, .6))
+        s = Dates.second(now())
+        sector(O, 140, 160, 3π/2, 3π/2 + rescale(s, 0, 60, 0, 2pi), :fill)
+
+        # millisecond indicator
+        @layer begin
+            setopacity(0.5)
+            sethue(get(cscheme, .8))
+            ms = Dates.value(Dates.Millisecond(Dates.now()))
+            circle(polar(120, 3π/2 + rescale(ms, 0, 1000, 0, 2pi)), 20, :fill)
+        end
+
+        # central text
+        fontface(&quot;JuliaMono-Black&quot;)
+        sethue(get(cscheme, 1.0))
+        text(Dates.format(Dates.now(), &quot;HH:MM:SS&quot;), halign=:center)
+
+        sleep(0.05)
+    end
+end
+
+clock(ColorSchemes.klimt)</code></pre><h2 id="Live-coding-with-MiniFB"><a class="docs-heading-anchor" href="#Live-coding-with-MiniFB">Live coding with MiniFB</a><a id="Live-coding-with-MiniFB-1"></a><a class="docs-heading-anchor-permalink" href="#Live-coding-with-MiniFB" title="Permalink"></a></h2><p>Here are some examples of how to use Luxor with MiniFB as the display window, without using the simple <code>@play</code> macro.</p><h3 id="Interactivity"><a class="docs-heading-anchor" href="#Interactivity">Interactivity</a><a id="Interactivity-1"></a><a class="docs-heading-anchor-permalink" href="#Interactivity" title="Permalink"></a></h3><p>This example lets you type graphic commands at the REPL and see the results instantly displayed in a window.</p><p>First, run this code to connect a Luxor drawing to a MiniFB buffer:</p><pre><code class="language-julia hljs">using Luxor
+using Colors
+using MiniFB
+
+function window_update_task(window, buffer, showFPS=false)
+    state = mfb_update(window, buffer)
+    updateCount = 0
+    startTime = floor(Int, time())
+    fps = &quot;0&quot;
+    while state == MiniFB.STATE_OK
+        if showFPS
+            elapsedTime = floor(Int, time()) - startTime
+            if elapsedTime &gt; 1
+                fps = string(round(Int, updateCount / elapsedTime))
+                startTime = floor(Int, time())
+                updateCount = 0
+            end
+            @layer begin
+                setcolor(&quot;black&quot;)
+                circle(boxtopleft() + (15, 15), 15, :fill)
+                setcolor(&quot;white&quot;)
+                fontsize(20)
+                text(fps, boxtopleft() + (15, 15), halign=:center, valign=:middle)
+            end
+        end
+        state = mfb_update(window, buffer)
+        sleep(1.0 / 120.0)
+        updateCount += 1
+    end
+    println(&quot;\nWindow closed\n&quot;)
+end
+
+const WIDTH = 800
+const HEIGHT = 600
+
+buffer = zeros(ARGB32, WIDTH, HEIGHT)
+d = Drawing(buffer)
+window = mfb_open_ex(&quot;MiniFB&quot;, WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+@async window_update_task(window, buffer, true)</code></pre><p>Now, the window will display the results of any expressions you type at the REPL:</p><p><img src="../../assets/figures/live-coding-1.png" alt="live graphics 1"/></p><h3 id="Live-animations"><a class="docs-heading-anchor" href="#Live-animations">Live animations</a><a id="Live-animations-1"></a><a class="docs-heading-anchor-permalink" href="#Live-animations" title="Permalink"></a></h3><p>If you want to do live animations in the window in a &quot;while&quot; loop, you need to call <code>sleep()</code> for a while to allow the <code>window_update_task()</code> to get some execution time. </p><p>In this example you can enter &quot;q&quot; and &quot;return&quot; in the REPL to stop the animation&#39;s while loop. Using &quot;ctrl-c&quot; to stop the animation could also stop the window update task by chance.</p><p><img src="../../assets/figures/livegraphics.gif" alt="live graphics 2"/></p><details closed><summary>Code for this example</summary><pre><code class="language-julia hljs">mutable struct Ball
+    position::Point
+    velocity::Point
+end
+function sticks(w, h)
+    channel = Channel(10)
+    #enter &quot;q&quot; and &quot;return&quot; to stop the while loop
+    @async while true
+        kb = readline(stdin)
+        if contains(kb, &quot;q&quot;)
+            put!(channel, 1)
+            break
+        end
+    end
+    colors = [ rand(1:255), rand(1:255), rand(1:255) ]
+    newcolors  = [ rand(1:255), rand(1:255), rand(1:255) ]
+    c = ARGB(colors[1]/255, colors[2]/255, colors[3]/255, 1.0)
+    balls = [ Ball( rand(BoundingBox(Point(-w/2, -h/2), Point(w/2, h/2))), rand(BoundingBox(Point(-10, -10), Point(10, 10))) ) for _ in 1:2 ] 
+    while true
+        background(0, 0, 0, 0.05)
+        if colors == newcolors
+            newcolors = [ rand(1:255), rand(1:255), rand(1:255) ]
+        end
+        for (index, (col, newcol)) in enumerate(zip(colors, newcolors))
+            if col != newcol
+                col &gt; newcol ? col -= 1 : col += 1
+                colors[index] = col
+            end
+        end
+        c = ARGB(colors[1]/255, colors[2]/255, colors[3]/255, 1.0)
+        for ball in balls
+            if !(-w/2 &lt; ball.position.x &lt; w/2)
+                ball.velocity = Point(-ball.velocity.x, ball.velocity.y)
+            end
+            if !(-h/2 &lt; ball.position.y &lt; h/2)
+                ball.velocity = Point(ball.velocity.x, -ball.velocity.y)
+            end
+            ball.position = ball.position + ball.velocity
+        end
+        setcolor(c)
+        line(balls[1].position, balls[2].position, :stroke)
+        sleep(1.0/120.0)
+        if isready(channel)
+            break
+        end
+    end
+end
+
+origin()
+sticks(WIDTH, HEIGHT)</code></pre></details><h3 id="Interactive-graphics-with-multiple-drawings"><a class="docs-heading-anchor" href="#Interactive-graphics-with-multiple-drawings">Interactive graphics with multiple drawings</a><a id="Interactive-graphics-with-multiple-drawings-1"></a><a class="docs-heading-anchor-permalink" href="#Interactive-graphics-with-multiple-drawings" title="Permalink"></a></h3><p>This next example shows how to work with multiple drawings. We&#39;ll create three windows, then combine (<code>AND</code>) the contents of the first two and display them in the third.</p><p><img src="../../assets/figures/multiple-drawings.png" alt="multiple drawings"/></p><p>First, we&#39;ll setup our display buffers and MiniFB windows, one for each Luxor drawing:</p><pre><code class="language-julia hljs">using MiniFB, Luxor, Colors, FixedPointNumbers
+
+WIDTH=500
+HEIGHT=500
+
+function window_update_task(window,buffer)
+    state=mfb_update(window,buffer)
+    while state == MiniFB.STATE_OK
+        state=mfb_update(window,buffer)
+        sleep(1.0/120.0)
+    end
+    println(&quot;\nWindow closed\n&quot;)
+end
+
+window1 = mfb_open_ex(&quot;1&quot;, WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+buffer1 = zeros(ARGB32, WIDTH, HEIGHT)
+@async window_update_task(window1,buffer1)
+
+window2 = mfb_open_ex(&quot;2&quot;, WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+buffer2 = zeros(ARGB32, WIDTH, HEIGHT)
+@async window_update_task(window2,buffer2)
+
+window3 = mfb_open_ex(&quot;3=1+2&quot;, WIDTH, HEIGHT, MiniFB.WF_RESIZABLE)
+buffer3 = zeros(ARGB32, WIDTH, HEIGHT)
+@async window_update_task(window3,buffer3)</code></pre><p>Buffers 1, 2, and 3 are the buffers for the three MiniFB windows. They&#39;ll appear on your display.</p><p>Next we&#39;ll create three Luxor drawings that connect to these buffers.</p><pre><code class="language-julia hljs">d1 = Drawing(buffer1)    
+
+Luxor.set_next_drawing_index()   
+d2 = Drawing(buffer2)
+
+Luxor.set_next_drawing_index()   
+d3 = Drawing(buffer3, &quot;julia.png&quot;)</code></pre><p>We now have three drawings which are continuously updated and visible in three separate windows. Let&#39;s start by drawing on drawing 1.</p><pre><code class="language-julia hljs">Luxor.set_drawing_index(1) 
+origin()
+setopacity(0.4)
+foregroundcolors = Colors.diverging_palette(
+    rand(0:360), 
+    rand(0:360), 
+    200, s=0.99, b=0.8)
+gsave()
+for i in 1:500
+    sethue(foregroundcolors[rand(1:end)])
+    circle(Point(rand(-300:300), rand(-300:300)), 15, :fill)
+end
+grestore()</code></pre><p>Now let&#39;s switch to drawing 2 and draw the Julia logo:</p><pre><code class="language-julia hljs">Luxor.set_drawing_index(2)
+origin()
+setopacity(1.0)
+gsave()
+julialogo(centered=true, bodycolor=colorant&quot;white&quot;)
+grestore()</code></pre><p>Finally, we&#39;ll switch to drawing 3, and set its contents by ANDing the buffers of drawings 1 and 2:</p><pre><code class="language-julia hljs">Luxor.set_drawing_index(3)  
+background(&quot;black&quot;)
+buffer3 .= reinterpret(ARGB{N0f8}, 
+    (reinterpret.(UInt32,buffer1) .&amp; 
+     reinterpret.(UInt32,buffer2)))</code></pre><p>To finish, we&#39;ll set the opacity of each pixel to 1.0:</p><pre><code class="language-julia hljs">buffer3.=ARGB32.(RGB24.(buffer3))
+
+finish()
+preview()</code></pre><h2 id="Threads"><a class="docs-heading-anchor" href="#Threads">Threads</a><a id="Threads-1"></a><a class="docs-heading-anchor-permalink" href="#Threads" title="Permalink"></a></h2><p>Luxor is thread safe. To run the examples below, <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#Starting-Julia-with-multiple-threads">start Julia with more than 1 thread</a>:</p><pre><code class="language-julia hljs">julia&gt; Threads.nthreads()
+4</code></pre><p>As a first example, we&#39;ll produce multiple PNG files in parallel:</p><pre><code class="language-julia hljs">using Luxor, Colors
+
+tempdir = mktempdir(;cleanup=false)
+cd(tempdir)
+
+function make_drawings(i::Int)
+    println(Threads.threadid())
+    colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;yellow&quot;, &quot;pink&quot;]
+    w = 300
+    h = 300
+    filename = &quot;sample&quot; * string(i) * &quot;.png&quot;
+    Drawing(w, h, :png, filename)
+    origin()
+    setcolor(colors[1 + i % 5])
+    background(0.0, 0.0, 0.0, 1.0)
+    circle(0, 0, 100, :fill)
+    finish()
+    return
+end
+
+Threads.@threads for i = 1:(2*Threads.nthreads())
+    make_drawings(i)
+end</code></pre><h2 id="Advanced-threads-with-live-view"><a class="docs-heading-anchor" href="#Advanced-threads-with-live-view">Advanced threads with live view</a><a id="Advanced-threads-with-live-view-1"></a><a class="docs-heading-anchor-permalink" href="#Advanced-threads-with-live-view" title="Permalink"></a></h2><p>To demonstrate what is possible, we again show live graphics in MiniFB windows,  but this time in different threads.</p><p>There are two ways to use threads with Luxor. </p><p>One way is to use a single thread for each window we want to show, i.e each window we spawn and the Luxor graphics inside is a different thread. </p><p>The other way to use threads is e.g. a single window, with several threads all drawing into the same buffer, which is shown in the single window. For this you need to utilize locks as shown in the second example below.</p><h3 id="A-thread-for-each-window"><a class="docs-heading-anchor" href="#A-thread-for-each-window">A thread for each window</a><a id="A-thread-for-each-window-1"></a><a class="docs-heading-anchor-permalink" href="#A-thread-for-each-window" title="Permalink"></a></h3><p>First, here&#39;s an example where each window and its graphics is a single thread. No locks or channels are needed.</p><p>Let&#39;s start with the header and a helper function for our animation:</p><pre><code class="language-julia hljs">using ThreadPools
+# the low level Threads.@spawn macro can not be used, because threads are scheduled
+# randomly into available threadids. If a thread is spawned into an already running 
+# threadid, the former thread # is closed by the scheduler. So we use the better 
+# ThreadPools.spawnbg to spawn the threads.
+
+using MiniFB, Luxor, Colors, FixedPointNumbers
+
+mutable struct Ball
+    position::Point
+    velocity::Point
+end
+
+function step_ball(ball, w, h, r)
+    if ball.position.x - r &lt; -w / 2 || ball.position.x + r &gt; w / 2
+        ball.velocity = Point(-ball.velocity.x, ball.velocity.y)
+    end
+    if ball.position.y - r &lt; -h / 2 || ball.position.y + r &gt; h / 2
+        ball.velocity = Point(ball.velocity.x, -ball.velocity.y)
+    end
+    ball.position = ball.position + ball.velocity
+    return ball
+end</code></pre><p>Open and run the first window in its own thread:</p><pre><code class="language-julia hljs">function window_ball()
+    w=500
+    h=500
+    r=50
+    buffer = zeros(RGB24, w, h)
+    ball=Ball(Point(0, 0), rand(BoundingBox(Point(-10, -10), Point(10, 10))))
+    Drawing(buffer)
+    origin()
+    window = mfb_open_ex(&quot;Ball&quot;, w, h, MiniFB.WF_RESIZABLE)
+    state = MiniFB.STATE_OK
+    while state == MiniFB.STATE_OK
+        ball=step_ball(ball, w, h, r)
+        background(0.0, 0.0, 0.0, 1.0)
+        setcolor(&quot;red&quot;)
+        circle(ball.position.x, ball.position.y, r, :fill)
+        state=mfb_update(window, buffer)
+        sleep(1.0/120.0)
+    end
+    println(&quot;\nWindow closed\n&quot;)
+end
+spawnbg(window_ball)</code></pre><p>Open and run a second window in its own thread:</p><pre><code class="language-julia hljs">function window_stick()
+    w=500
+    h=500
+    r=0
+    buffer = zeros(RGB24, w, h)
+    balls=[Ball(rand(BoundingBox(Point(-w/2, -h/2), 
+        Point(w/2, h/2))), 
+        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) for _ in 1:2] 
+    Drawing(buffer)
+    origin()
+    background(0.0,0.0,0.0,1.0)
+    window = mfb_open_ex(&quot;Sticks&quot;, w, h, MiniFB.WF_RESIZABLE)
+    state = MiniFB.STATE_OK
+    while state == MiniFB.STATE_OK
+        background(0.0, 0.0, 0.0, 0.05)
+        setcolor(&quot;green&quot;)
+        for ball in balls
+            ball=step_ball(ball, w, h, r)
+        end
+        line(balls[1].position, balls[2].position, :stroke)
+        state=mfb_update(window, buffer)
+        sleep(1.0/120.0)
+    end
+    println(&quot;\nWindow closed\n&quot;)
+end
+spawnbg(window_stick)</code></pre><p>If you have threads left you can start another thread with a third window:</p><pre><code class="language-julia hljs">spawnbg(window_stick)</code></pre><p>If you run out of threadids, the command <code>spawnbg(window_stick)</code> will block the REPL until a thread is freed, e.g. by closing one of the windows.</p><h3 id="A-single-window-with-graphics-of-several-threads"><a class="docs-heading-anchor" href="#A-single-window-with-graphics-of-several-threads">A single window with graphics of several threads</a><a id="A-single-window-with-graphics-of-several-threads-1"></a><a class="docs-heading-anchor-permalink" href="#A-single-window-with-graphics-of-several-threads" title="Permalink"></a></h3><p>The next example shows a single window/buffer where several threads are drawing into it. This needs some extra caution by utilizing locks, because every thread uses the same drawing buffer. Therefore all drawing commands needs to be synchronized with <code>lock</code>/<code>unlock</code>:</p><pre><code class="language-julia hljs">using ThreadPools
+
+using MiniFB, Luxor, Colors
+
+struct Window
+    c::ReentrantLock
+    w::Int
+    h::Int
+    d::Drawing
+    buffer::Matrix{ARGB32}
+    function Window(w,h)
+        c=ReentrantLock()
+        b=zeros(ARGB32, w, h)
+        d=Drawing(b)
+        origin()
+        new(c,w,h,d,b)
+    end
+end
+
+function window_update_task(win::Window, showFPS=true)
+    w=win.w
+    h=win.h
+    updateCount=0
+    startTime=floor(Int, time())
+    fps=&quot;0&quot;
+    sb=zeros(ARGB32, 105, 55)
+    window = mfb_open_ex(&quot;MiniFB&quot;, w, h, MiniFB.WF_RESIZABLE)
+    state=MiniFB.STATE_OK
+    set_drawing = true
+    while state == MiniFB.STATE_OK
+        lock(win.c)
+        if set_drawing
+            currentdrawing(win.d)
+            set_drawing = false
+        end
+        if showFPS
+            elapsedTime=floor(Int,time())-startTime
+            if elapsedTime &gt; 1
+                fps=string(round(Int,updateCount/elapsedTime))
+                startTime=floor(Int,time())
+                updateCount=0
+            end
+            sb.=win.buffer[1:105, 1:55]
+            @layer begin
+                (dx,dy) = Point(0.0, 0.0) - getworldposition(Point(0.0, 0.0);centered=false)
+                setcolor(1.0, 0, 0, 0.5)
+                fontsize(50)
+                text(fps, Point(5+dx, 5+dy), halign=:left, valign = :top)
+            end
+        end
+        state=mfb_update(window,win.buffer)
+        if showFPS
+            win.buffer[1:105, 1:55].=sb
+        end
+        background(0, 0, 0, 0.05)
+        unlock(win.c)
+        sleep(1.0/120.0)
+        updateCount+=1
+    end
+    println(&quot;\nWindow closed\n&quot;)
+end</code></pre><p>That&#39;s all we need to define a window with a fps display. Let&#39;s define it and run it as a new thread:</p><pre><code class="language-julia hljs">win = Window(800, 600)    # the window definition
+
+# we need a function without parameter, that&#39;s what we create here:
+let window=win
+   global t_window_update_task
+   function t_window_update_task()
+       window_update_task(window)
+   end
+end
+
+# run the task as a new thread:
+spawnbg(t_window_update_task)</code></pre><p>The window with a FPS display shows up. It runs in its own thread so we can still use the REPL to create new threads which draw into this window. The most important special code here is:</p><pre><code class="language-julia hljs">currentdrawing(win.d)</code></pre><p>We start a new thread for every drawing and because the Luxor drawings of different threads are separated from each other to ensure thread safety, we overwrite the drawing in each thread with the drawing started with</p><pre><code class="language-julia hljs">win=Window(800, 600)</code></pre><p>and stored in the <code>win</code>-object. See the constructor in <code>struct Window</code>.</p><p>Let&#39;s show it:</p><pre><code class="language-julia hljs">mutable struct Ball
+    position::Point
+    velocity::Point
+end
+
+function stick(win)
+    w = win.w
+    h = win.h
+    colors = [rand(1:255), rand(1:255), rand(1:255)]
+    newcolors = [rand(1:255), rand(1:255), rand(1:255)]
+    c = ARGB(colors[1] / 255, colors[2] / 255, colors[3] / 255, 1.0)
+    balls = [Ball(
+        rand(BoundingBox(Point(-w / 2, -h / 2), Point(w / 2, h / 2))), 
+        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) 
+            for _ in 1:2]
+    set_drawing = true
+    while true
+        if colors == newcolors
+            newcolors = [rand(1:255), rand(1:255), rand(1:255)]
+        end
+        for (index, (col, newcol)) in enumerate(zip(colors, newcolors))
+            if col != newcol
+                col &gt; newcol ? col -= 1 : col += 1
+                colors[index] = col
+            end
+        end
+        c = ARGB(colors[1] / 255, colors[2] / 255, colors[3] / 255, 1.0)
+        for ball in balls
+            if !(-w / 2 &lt; ball.position.x &lt; w / 2)
+                ball.velocity = Point(-ball.velocity.x, ball.velocity.y)
+            end
+            if !(-h / 2 &lt; ball.position.y &lt; h / 2)
+                ball.velocity = Point(ball.velocity.x, -ball.velocity.y)
+            end
+            ball.position = ball.position + ball.velocity
+        end
+        lock(win.c)
+        if set_drawing
+            currentdrawing(win.d)
+            set_drawing = false
+        end
+        setcolor(c)
+        line(balls[1].position, balls[2].position, :stroke)
+        unlock(win.c)
+        sleep(1.0 / 60.0)
+    end
+end
+
+# again a function for calling without parameter:
+let window=win
+   global t_stick
+   function t_stick()
+       stick(window)
+   end
+end
+
+# run the thread and let the sticks fly:
+spawnbg(t_stick)</code></pre><p>Because our threads are synchronized via <code>lock</code>/<code>unlock</code> we can spawn low-level threads as much as we want and our machine allows:</p><pre><code class="language-julia hljs">function spawn_many()
+    tid=1:Threads.nthreads()
+    for i in tid
+        t=Task(t_stick)
+        ccall(:jl_set_task_tid, Cvoid, (Any, Cint), t, i-1)
+        schedule(t)
+    end
+end</code></pre><p>Now you can repeat it as much as you dare:</p><pre><code class="language-julia hljs">spawn_many()</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../snapshots/">« Snapshots</a><a class="docs-footer-nextpage" href="../../explanation/basics/">Basic concepts »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.25 on <span class="colophon-date" title="Friday 8 September 2023 10:13">Friday 8 September 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

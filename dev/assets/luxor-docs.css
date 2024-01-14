@@ -1,19 +1,83 @@
-@font-face {
-	font-family: JuliaMono-Regular;
-	src:
-		local('JuliaMono'),
-		url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Regular.woff2");
+/* change Bulma Dark styles  */
+
+/* disclaimer - I hate CSS */
+
+:root {
+	--signage: hsl(193, 46%, 60%);
+	--verydark: hsl(237, 20%, 10%);
+	--quitedark: hsl(237, 20%, 13%);
+	--lessdark: hsl(237, 20%, 16%);
 }
 
-pre, code {
-	font-family: JuliaMono-Regular !important;
-    font-feature-settings: "calt" 1;
+html.theme--documenter-dark body {
+	background-color: var(--verydark);
+	color: #eff;
+	font-size: 1.1em;
+	font-weight: 400;
+	line-height: 1.5rem;
 }
 
-p > a:after {
-    content: "→";
-    font-size: 50%;
+html.theme--documenter-dark a {
+	color: var(--signage);
 }
+
+html.theme--documenter-dark p > a:after {
+	padding-left:0.2rem;
+	font-family: "JuliaMono";
+	content: "⮻";
+	color: var(--signage);
+	background-color: inherit;
+	font-size: 120%;
+}
+
+html.theme--documenter-light p > a:after {
+	padding-left:0.2rem;
+	font-family: "JuliaMono";
+	content: "⮻";
+	background-color: inherit;
+	font-size: 120%;
+}
+
+html.theme--documenter-dark .has-text-left,
+html.theme--documenter-dark body, 
+html.theme--documenter-dark #documenter .docs-sidebar, 
+html.theme--documenter-dark .documenter-example-output,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu .tocitem,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu .tocitem:hover,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem:hover, 
+html.theme--documenter-dark #documenter .docs-main header.docs-navbar {
+	background-color: var(--verydark);
+	border: 0.5px solid hsla(237, 20%, 10%, 0.3) !important;
+}
+
+html.theme--documenter-dark .modal-card-body ,
+html.theme--documenter-dark .modal-card-head ,
+html.theme--documenter-dark .modal-card-foot ,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu ,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active {
+	background-color: var(--verydark);
+}
+
+html.theme--documenter-dark .docstring ,
+html.theme--documenter-dark .docstring>header {
+	background-color: var(--lessdark);
+}
+
+html.theme--documenter-dark .content pre, 
+html.theme--documenter-dark pre {
+	background-color: var(--lessdark);
+	border: 0.5px solid hsla(237, 20%, 10%, 0.3) !important;
+}
+
+html.theme--documenter-dark a {
+	color: var(--signage);
+}
+
+html.theme--documenter-dark .modal-card-head {
+	border: none;
+}
+
 
 .schemename {
     font-family: "JuliaMono";
@@ -24,6 +88,7 @@ p > a:after {
 }
 
 .category {
+	font-family: "JuliaMono";
     font-size: 0.8em;
 }
 
@@ -31,11 +96,35 @@ html.theme--documenter-dark p > code {
 	  	color: #eff !important;
 }
 
+
 html.theme--documenter-dark li > code {
-	  	color: #eff !important;
+	color: #eff !important;
 }
 
 
 html.theme--documenter-dark a > code {
+	color: #eff !important;
+}
+
+html.theme--documenter-dark p > a {
 	  	color: #eff !important;
+	}
+
+html.theme--documenter-dark .select select:focus,
+html.theme--documenter-dark .textarea:focus,
+html.theme--documenter-dark .input:focus,
+html.theme--documenter-dark #documenter .docs-sidebar form.docs-search>input:focus,
+html.theme--documenter-dark .select select.is-focused,
+html.theme--documenter-dark .is-focused.textarea,
+html.theme--documenter-dark .is-focused.input,
+html.theme--documenter-dark #documenter .docs-sidebar form.docs-search>input.is-focused,
+html.theme--documenter-dark .select select:active,
+html.theme--documenter-dark .textarea:active,
+html.theme--documenter-dark .input:active,
+html.theme--documenter-dark #documenter .docs-sidebar form.docs-search>input:active,
+html.theme--documenter-dark .select select.is-active,
+html.theme--documenter-dark .is-active.textarea,
+html.theme--documenter-dark .is-active.input,
+html.theme--documenter-dark #documenter .docs-sidebar form.docs-search>input.is-active {
+	border-color: var(--signage);
 }
