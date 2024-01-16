@@ -58,9 +58,13 @@ makedocs(
     ],
 )
 
-deploydocs(
-    repo = "github.com/JuliaGraphics/Luxor.jl.git",
-    target = "build",
-    push_preview = true,
-    forcepush = true,
-)
+repo = "github.com/JuliaGraphics/LuxorManual.git"
+withenv("GITHUB_REPOSITORY" => repo) do
+    deploydocs(
+      repo = repo,
+      target = "build",
+      push_preview = true,
+      forcepush = true,
+    )
+end
+
