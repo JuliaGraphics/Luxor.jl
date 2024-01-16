@@ -20,6 +20,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - added dependency PolygonAlgorithms.jl and replace poly intersection routines with new ones
 - Aqua says TOML deps must be in alphabetical order :) 
 - remove @assert statements
+- documents now built to https://github.com/JuliaGraphics/LuxorManual
 
 ### Removed
 
