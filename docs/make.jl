@@ -58,7 +58,7 @@ makedocs(
     ],
 )
 
-repo = "JuliaGraphics/LuxorManual"
+repo = "github.com/JuliaGraphics/LuxorManual.git"
 withenv("GITHUB_REPOSITORY" => repo) do
     deploydocs(
       repo = repo,
@@ -67,4 +67,3 @@ withenv("GITHUB_REPOSITORY" => repo) do
       forcepush = true,
     )
 end
-

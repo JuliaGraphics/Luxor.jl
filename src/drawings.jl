@@ -855,6 +855,8 @@ end
 Finish the drawing, close any related files. You may be able to view the drawing
 in another application with `preview()`.
 
+Returns `true` if successful.
+
 For more information about `svgpostprocess` and `addmarker` see help for
 `Luxor._adjust_background_rects`
 """
@@ -917,6 +919,8 @@ end
 Take a snapshot and save to 'fname' name and suffix. This requires
 that the current drawing is a recording surface. You can continue drawing
 on the same recording surface.
+
+Returns the snapshot as a drawing.
 
 ### Arguments
 
@@ -1059,6 +1063,8 @@ Otherwise:
     Preview.app for PNG and PDF, and Safari for SVG
   - on Unix, open the file with `xdg-open`
   - on Windows, refer to `COMSPEC`.
+
+Returns the drawing.
 """
 function preview()
     @debug "preview()"

@@ -1,6 +1,6 @@
 # Changelog
 
-## forthcoming release
+## [v3.9.0] -forthcoming release
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
