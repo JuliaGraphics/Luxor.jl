@@ -29,10 +29,10 @@ Luxor is designed primarily for drawing static pictures and simple animations. I
 Luxor isn't interactive: for building interactivity, look at [Pluto.jl](https://github.com/fonsp/Pluto.jl) and [Makie](https://docs.makie.org/stable/).
 
 [docs-development-img]: https://img.shields.io/badge/docs-development-blue
-[docs-development-url]: http://juliagraphics.github.io/Luxor.jl/dev/
+[docs-development-url]: https://juliagraphics.github.io/LuxorManual/dev/
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: http://juliagraphics.github.io/Luxor.jl/stable/
+[docs-stable-url]: https://juliagraphics.github.io/Luxor.jl/stable/
 
 [travis-img]: https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master
 [travis-url]: https://travis-ci.org/JuliaGraphics/Luxor.jl
