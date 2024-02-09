@@ -30,7 +30,7 @@ If `allowonedge` is false, a point lying on the polygon is not inside.
 Returns true if it does, or false.
 """
 isinside(pt::Point, pgon::Array{Point,1}; allowonedge = false) = 
-    PA.point_in_polygon(_point_to_tuple(pt), _points_to_tuples(pgon);
+    PA.contains(_points_to_tuples(pgon), _point_to_tuple(pt);
         on_border_is_inside = allowonedge)
 
 """
