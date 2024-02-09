@@ -21,6 +21,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - Aqua says TOML deps must be in alphabetical order :) 
 - remove @assert statements
 - documents now built to https://github.com/JuliaGraphics/LuxorManual
+- fixed bug in `box(pt, w, h, cr, :path)` (don't create new path)
 
 ### Removed
 

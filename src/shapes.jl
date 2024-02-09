@@ -15,7 +15,7 @@ dimensions.
 """
 function rect(xmin::Real, ymin::Real, w::Real, h::Real;
         action = :none)
-    if action != :path
+    if action ∉ [:path, :none]
         newpath()
     end
     Cairo.rectangle(_get_current_cr(), xmin, ymin, w, h)
@@ -262,7 +262,9 @@ function box(centerpoint::Point, width, height, cornerradii::Array;
     p4end    = Point(O.x + width/2 - cornerradii[4], O.y + height/2)
 
     #  start at bottom center then bottomleft→topleft→topright→bottomright
-    newpath()
+    if action ∉ [:path, :none]
+        newpath()
+    end
     move(Point(O.x, O.y + height/2))
 
     line(p1start)
