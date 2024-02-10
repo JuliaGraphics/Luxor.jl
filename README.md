@@ -5,6 +5,8 @@
 | [![][docs-stable-img]][docs-stable-url] | [![Build Status][ci-img]][ci-url]         | [![][codecov-img]][codecov-url] |
 | [![][docs-development-img]][docs-development-url] | [![Build Status][appvey-img]][appvey-url] |                                 |
 
+PkgEval: [![PkgEval][pkgeval-img]][pkgeval-url]
+
 ## Luxor
 
 Luxor is a Julia package for drawing simple static 2D vector graphics. It provides basic drawing functions and utilities for working with shapes, polygons, clipping masks, PNG and SVG images, turtle graphics, and simple animations.
@@ -45,3 +47,6 @@ Luxor isn't interactive: for building interactivity, look at [Pluto.jl](https://
 
 [ci-img]: https://github.com/cormullion/Luxor.jl/workflows/CI/badge.svg
 [ci-url]: https://github.com/cormullion/Luxor.jl/actions?query=workflow%3ACI
+
+[pkgeval-img]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/L/Luxor.svg
+[pkgeval-url]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/L/Luxor.html
