@@ -47,6 +47,23 @@ Point((x, y)::Tuple{Real,Real}) = Point(x, y)
 # for broadcasting
 Base.size(::Point) = (2,)
 Base.getindex(p::Point, i) = (p.x, p.y)[i]
+Broadcast.broadcastable(x::Point) = x
+Broadcast.BroadcastStyle(::Type{Point}) = Broadcast.Style{Point}()
+Broadcast.BroadcastStyle(::Broadcast.AbstractArrayStyle{0}, s::Broadcast.Style{Point}) = s
+Broadcast.BroadcastStyle(s::Broadcast.AbstractArrayStyle, ::Broadcast.Style{Point}) = s
+Broadcast.BroadcastStyle(s::Broadcast.Style{Point}, ::Broadcast.Style{Tuple}) = s
+Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}, Nothing}) = bc
+function Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}})
+    Broadcast.check_broadcast_axes(bc.axes, bc.args...)
+    return bc
+end
+_point2tuple(p::Point) = (p.x,p.y)
+_point2tuple(x) = x
+@inline function Base.copy(bc_p::Broadcast.Broadcasted{Broadcast.Style{Point}})
+    args = _point2tuple.(bc_p.args)
+    bc_t = Broadcast.Broadcasted(Broadcast.Style{Tuple}(), bc_p.f, args, bc_p.axes)
+    return Point(copy(bc_t))
+end
 
 # for iteration
 Base.eltype(::Type{Point}) = Float64
