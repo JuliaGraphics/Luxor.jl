@@ -65,7 +65,10 @@ d = @drawsvg begin
     make_path()
     clip()
     sethue("green")
-    rule.(between.(O - (250, 0), O + (250, 0), 0:0.01:1), -π/3)
+    # -> 3.9
+    # rule.(between.(O - (250, 0), O + (250, 0), 0:0.01:1), -π/3)
+    # 4.0
+    rule.(between.(Ref(O - (250, 0)), Ref(O + (250, 0)), 0:0.01:1), -π/3)
     end 800 500
 ```
 

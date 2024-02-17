@@ -120,13 +120,17 @@ circle(O, radius + 20, action = :stroke)
 points = polycross(O, radius, 7, vertices=true)
 poly(points, action = :stroke, close=true)
 
-antipoints = last.(pointinverse.(points, O, radius+20))
+antipoints = last.([pointinverse(pt, O, radius + 20) for pt in points])
 
-for (n, pt) in enumerate(zip(points, antipoints))
+#antipoints = last.(pointinverse.(points, O, radius+20))
+
+for (n, ptpair) in enumerate(zip(points, antipoints))
+    pt1, pt2, = ptpair
     sethue(HSB(length(points) * n, 0.8, 0.8))
-    @. circle(pt, distance(O, pt)/6, action = :fill)
+    circle(pt1, distance(O, pt1)/6, action = :fill)
+    circle(pt2, distance(O, pt2)/6, action = :fill)
     sethue("black")
-    arrow(pt...)
+    arrow(pt1, pt2)
 end
 end 800 500
 d # hide

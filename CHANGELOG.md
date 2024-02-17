@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.9.0] -forthcoming release
+## [v4.0] - 2024-02-17
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
@@ -22,6 +22,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - remove @assert statements
 - documents now built to https://github.com/JuliaGraphics/LuxorManual
 - fixed bug in `box(pt, w, h, cr, :path)` (don't create new path)
+- removed some invalid Point methods (#294)
 
 ### Removed
 

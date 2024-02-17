@@ -663,9 +663,9 @@ function brush(pt1, pt2, width = 10;
         for j in 1:strokes
             shiftedline = [O + (0, 0), O + (0, n)]
             if tidystart
-                shiftedline .+= Point(rand((-width / 2):(width / 2)), 0)
+                shiftedline .+= Ref(Point(rand((-width/2):(width/2)), 0))
             else
-                shiftedline .+= Point(rand((-width / 2):(width / 2)), rand((-width / 2):(width / 2)))
+                shiftedline .+= Ref(Point(rand((-width/2):(width/2)), rand((-width/2):(width/2))))
             end
             pbp = bezierstroke(shiftedline[1],
                 shiftedline[2],

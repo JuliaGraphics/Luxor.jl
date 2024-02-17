@@ -1,7 +1,7 @@
 name = "Luxor"
 uuid = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
 authors = ["cormullion <cormullion@mac.com>"]
-version = "3.9.0"
+version = "4.0.0"
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -27,7 +27,7 @@ LuxorExtLatex = ["LaTeXStrings", "MathTeXEngine"]
 
 [compat]
 Cairo = "1.0"
-Colors = "0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 1.0"
+Colors = "0.11, 0.12"
 DataStructures = "0.18"
 FFMPEG = "0.4"
 FileIO = "1"

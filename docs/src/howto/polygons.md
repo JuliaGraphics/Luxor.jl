@@ -61,17 +61,17 @@ for (pos, n) in tiles
     @layer begin
         translate(pos)
 
-        p = ngon(Point(0, 0), 80, n, vertices=true)
+        plist = ngon(Point(0, 0), 80, n, vertices=true)
 
         sethue(cols[n])
 
-        poly(p, action = :fill, close=true)
+        poly(plist, action=:fill, close=true)
         sethue("grey10")
-        poly(p, action = :stroke, close=true)
+        poly(plist, action=:stroke, close=true)
 
-        circle(Point(0, 0), 4, action = :fill)
+        circle(Point(0, 0), 4, action=:fill)
 
-        label.([string(i) for i in 1:n], slope.(O, p), p, offset=5)
+        label.([string(i) for i in 1:n], slope.(Ref(O), plist), plist, offset=5)
     end
 end
 
@@ -614,7 +614,7 @@ background("white") # hide
 setline(2) # hide
 setlinejoin("round") # hide
 
-spine = between.(O - (200, 0), O + (200, 0), 0:0.025:1)
+spine = between.(Ref(O - (200, 0)), Ref(O + (200, 0)), 0:0.025:1)
 
 sethue("red")
 prettypoly(spine, action = :stroke)
@@ -935,10 +935,10 @@ Drawing(600, 400, "../assets/figures/beziersegmentangles.svg") # hide
 background("ivory") # hide
 origin() # hide
 
-setline(.5)
+setline(0.5)
 
 @layer begin
-    rule.(O, (0, (π/2)))
+    rule.(Ref(O), (0, (π / 2)))
 end
 
 P = O
@@ -946,21 +946,21 @@ Q = O + (200, 0)
 sethue("black")
 
 pts = beziersegmentangles(P, Q,
-    out = deg2rad(60),
-    in  = 2π - deg2rad(45))
+    out=deg2rad(60),
+    in=2π - deg2rad(45))
 
 @layer begin
     setline(2)
     sethue("purple")
-    drawbezierpath(pts, action = :stroke)
+    drawbezierpath(pts, action=:stroke)
 end
 
 sethue("grey50")
-line(O, pts[2], action = :stroke)
-line(Q, pts[3], action = :stroke)
+line(O, pts[2], action=:stroke)
+line(Q, pts[3], action=:stroke)
 fontsize(15)
-circle.((P, pts[2], pts[3], Q), 5, action = :fill)
-label.(("P", "Q"), :ne, (P, Q))
+circle.((P, pts[2], pts[3], Q), 5, action=:fill)
+label.(("P", "Q"), Ref(:ne), (P, Q))
 text("60°", P + (40, 20))
 text("135°", Q + (10, 20))
 finish() # hide
