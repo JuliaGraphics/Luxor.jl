@@ -92,10 +92,6 @@ function Base.:*(m::AbstractMatrix, pt::Point)
     return Point(x, y)
 end
 
-function Base.:*(pt::Point, m::AbstractMatrix)
-    return m * pt
-end
-
 """
     dotproduct(a::Point, b::Point)
 
