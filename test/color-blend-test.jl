@@ -44,9 +44,9 @@ function color_blend_test(fname)
         blendrad = blend(O, 1, O, 25, RGBA(0, 1, 1, 0.5), RGBA(0, 1, 0, 0.0))
         blendlin = blend(O, Point(O.x + tiles.tilewidth/2, O.y), "orange", "magenta")
         setblend(blendlin)
-        text("linear", O+5)
+        text("linear", O.+5)
         setblend(blendrad)
-        text("radial", O-5)
+        text("radial", O.-5)
         grestore()
     end
 

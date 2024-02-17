@@ -13,26 +13,19 @@ struct Point <: AbstractPoint
 end
 
 """
-O is a shortcut for the current origin, `0/0`
+`O` is a shortcut for the current origin, `0/0`
 """
 const O = Point(0, 0)
 Base.zero(::Type{Point}) = O
 Base.zero(::Point) = O
 
 # basics
-+(z::Number, p1::Point) = Point(p1.x + z, p1.y + z)
-+(p1::Point, z::Number) = Point(p1.x + z, p1.y + z)
 +(p1::Point, p2::Point) = Point(p1.x + p2.x, p1.y + p2.y)
 -(p1::Point, p2::Point) = Point(p1.x - p2.x, p1.y - p2.y)
 -(p::Point) = Point(-p.x, -p.y)
--(z::Number, p1::Point) = Point(z - p1.x, z - p1.y)
--(p1::Point, z::Number) = Point(p1.x - z, p1.y - z)
 *(k::Number, p2::Point) = Point(k * p2.x, k * p2.y)
 *(p2::Point, k::Number) = Point(k * p2.x, k * p2.y)
 /(p2::Point, k::Number) = Point(p2.x / k, p2.y / k)
-*(p1::Point, p2::Point) = Point(p1.x * p2.x, p1.y * p2.y)
-^(p::Point, e::Integer) = Point(p.x^e, p.y^e)
-^(p::Point, e::Float64) = Point(p.x^e, p.y^e)
 
 # some refinements
 # modifying points with tuples
@@ -45,13 +38,30 @@ Base.zero(::Point) = O
 Point((x, y)::Tuple{Real,Real}) = Point(x, y)
 
 # for broadcasting
-Base.size(::Point) = 2
+Base.size(::Point) = (2,)
 Base.getindex(p::Point, i) = (p.x, p.y)[i]
-
-Base.broadcastable(x::Point) = Ref(x)
+Broadcast.broadcastable(x::Point) = x
+Broadcast.BroadcastStyle(::Type{Point}) = Broadcast.Style{Point}()
+Broadcast.BroadcastStyle(::Broadcast.AbstractArrayStyle{0}, s::Broadcast.Style{Point}) = s
+Broadcast.BroadcastStyle(s::Broadcast.AbstractArrayStyle, ::Broadcast.Style{Point}) = s
+Broadcast.BroadcastStyle(s::Broadcast.Style{Point}, ::Broadcast.Style{Tuple}) = s
+Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}, Nothing}) = bc
+function Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}})
+    Broadcast.check_broadcast_axes(bc.axes, bc.args...)
+    return bc
+end
+_point2tuple(p::Point) = (p.x,p.y)
+_point2tuple(x) = x
+_tuple2point(x::Tuple{Real, Real}) = Point(x)
+_tuple2point(x::Tuple{Bool, Bool}) = x
+@inline function Base.copy(bc_p::Broadcast.Broadcasted{Broadcast.Style{Point}})
+    args = _point2tuple.(bc_p.args)
+    bc_t = Broadcast.Broadcasted(bc_p.f, args, bc_p.axes)
+    return _tuple2point(copy(bc_t))
+end
 
 # for iteration
-Base.eltype(::Point) = Float64
+Base.eltype(::Type{Point}) = Float64
 Base.iterate(p::Point, state = 1) = state > length(p) ? nothing : (p[state], state + 1)
 Base.length(::Point) = 2
 
@@ -82,10 +92,6 @@ function Base.:*(m::AbstractMatrix, pt::Point)
     end
     x, y, _ = m * [pt.x, pt.y, 1]
     return Point(x, y)
-end
-
-function Base.:*(pt::Point, m::AbstractMatrix)
-    return m * pt
 end
 
 """

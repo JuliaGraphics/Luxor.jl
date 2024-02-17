@@ -9,8 +9,8 @@ function general_tests()
     pt1 = Point(rand() * 4, rand() * 4)
 
     # number - Point (#270)
-    @test 10 - Point(1, 1) == Point(10 - 1, 10 - 1) == Point(9, 9) == -Point(1, 1) + 10
-    @test Point(1, 1) - 10 == Point(1 - 10, 1 - 10) == Point(1, 1) + -10 == -10 + Point(1, 1)
+    @test 10 .- Point(1, 1) == Point(10 - 1, 10 - 1) == Point(9, 9) == -Point(1, 1) .+ 10
+    @test Point(1, 1) .- 10 == Point(1 - 10, 1 - 10) == Point(1, 1) .+ -10 == -10 .+ Point(1, 1)
 
     # arithmetic with tuples
     @test pt1 + (5, 8) == Point(pt1.x + 5, pt1.y + 8)
@@ -44,8 +44,8 @@ function general_tests()
     @test all(Ref(Point(10, 10))  .> box(O, 10, 10, vertices=true)) == true
 
     # ? do these need Ref()?
-    @test .>=(Point(5, 5),  Point(5, 5))
-    @test .>=(Point(5, 5),  Point(5, 5))
+    @test all(.>=(Point(5, 5),  Point(5, 5)))
+    @test all(.>=(Point(5, 5),  Point(5, 5)))
 
     @test perpendicular(Point(10, 5)) == Point(5.0, -10.0)
     @test perpendicular(Point(-10, -5)) == Point(-5.0,10.0)
@@ -85,12 +85,12 @@ function general_tests()
     pt4 = Point(6, 6)
     @test intersectionlines(pt1, pt2, pt3, pt4)[1] == false
 
-    @test pt1 * pt2 == Luxor.Point(25.0, 30.0)
-    @test pt1 ^ 2 == Luxor.Point(25.0, 25.0)
-    @test pt1 ^ 3 == Luxor.Point(125.0,125.0)
+    @test pt1 .* pt2 == Luxor.Point(25.0, 30.0)
+    @test pt1 .^ 2 == Luxor.Point(25.0, 25.0)
+    @test pt1 .^ 3 == Luxor.Point(125.0,125.0)
 
-    @test pt1 ^ 1.5 < pt1 ^ 1.6
-    @test pt1 ^ 1.6 > pt1 ^ 1.5
+    @test all(pt1 .^ 1.5 < pt1 .^ 1.6)
+    @test all(pt1 .^ 1.6 > pt1 .^ 1.5)
 
     # test between interpolation
     @test isequal(midpoint(pt1, pt3), between(pt1, pt3, 0.5))
@@ -146,12 +146,12 @@ function point_arithmetic_test(fname, npoints=20)
     randompoints = randompointarray(Point(-600, -600), Point(600, 600), npoints)
 
     # +
-    pl1 = map(pt -> pt + 2, randompoints)
-    pl1a = map(pt -> 2 + pt, randompoints)
+    pl1 = map(pt -> pt .+ 2, randompoints)
+    pl1a = map(pt -> 2 .+ pt, randompoints)
 
     # -
-    pl2 = map(pt -> pt - 2, randompoints)
-    pl2a = map(pt -> 2 - pt, randompoints)
+    pl2 = map(pt -> pt .- 2, randompoints)
+    pl2a = map(pt -> 2 .- pt, randompoints)
 
     # *
     pl3 = map(pt -> pt * rand(), randompoints)
@@ -170,7 +170,7 @@ function point_arithmetic_test(fname, npoints=20)
     pl6a =  [1.03, 0.97, -1.05] .* randompoints[1:3]
 
     # ^
-    pl7 = map(pt -> ^(pt/2, 2), randompoints)
+    pl7 = map(pt -> .^(pt/2, 2), randompoints)
 
     # ^ FAILS
     # pl8 = map(pt -> ^(pt, 1.2), randompoints)
@@ -191,7 +191,7 @@ function point_arithmetic_test(fname, npoints=20)
             if f(randompoints[i], randompoints[i+1])
                 circle(randompoints[i], 18, :fill)
                 circle(randompoints[i+1], 7, :fill)
-                text(string("$f"), randompoints[i] - 12)
+                text(string("$f"), randompoints[i] .- 12)
             end
         end
     end
@@ -202,7 +202,7 @@ function point_arithmetic_test(fname, npoints=20)
         for i in 1:length(randompoints)-1
             if f.(randompoints[1:npoints], randompoints[npoints:-1:1]) != true
                 ellipse(randompoints[i], 19, 32, :fill)
-                text(string("v6"), randompoints[i] - 6)
+                text(string("v6"), randompoints[i] .- 6)
             end
         end
     end
@@ -210,7 +210,7 @@ function point_arithmetic_test(fname, npoints=20)
     sethue("purple")
     for i in 1:length(randompoints)-1
         v = cmp(randompoints[i], randompoints[i+1])
-        text(string(round(v, digits=1)), randompoints[i] + 15)
+        text(string(round(v, digits=1)), randompoints[i] .+ 15)
     end
 
     sethue("cyan")
@@ -231,7 +231,7 @@ function point_arithmetic_test(fname, npoints=20)
     if any(randompoints .!= randompoints)
         error("elementwise comparison failed")
     else
-        text("the points really do compare elementwise", O + 15)
+        text("the points really do compare elementwise", O .+ 15)
     end
 
     @test finish() == true

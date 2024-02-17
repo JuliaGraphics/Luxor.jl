@@ -955,7 +955,7 @@ Find the area of intersection between two circles, the first centered at `pt1` w
 
 If one circle is entirely within another, that circle's area is returned.
 """
-function intersection2circles(pt1, rad1, pt2, rad2)
+function intersection2circles(pt1::Point, rad1::Real, pt2::Point, rad2::Real)
     # via casey and jùlio on slack
     # squared radii
     rr1, rr2 = rad1 * rad1, rad2 * rad2
