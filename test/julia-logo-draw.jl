@@ -78,7 +78,7 @@ function boxes_and_rectangles(pt::Point)
     for i = 1:20
         randomhue()
         poly(
-            box(pt + i, 10i, 10i, vertices = true),
+            box(pt .+ i, 10i, 10i, vertices = true),
             :stroke,
             close = true,
         )

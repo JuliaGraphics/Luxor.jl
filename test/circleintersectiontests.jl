@@ -44,7 +44,7 @@ function testcircleintersections(fname)
     occultations  = []
     for (pt, n) in Table(10, 10, 120, 120)
         c1 = (O, rand(5:40))
-        c2 = (O + (rand(-20:20, 2)...), rand(10:50))
+        c2 = (O + tuple(rand(-20:20, 2)...), rand(10:50))
         cia = intersection2circles(c1..., c2...)
         push!(occultations, (c1, c2, cia))
     end

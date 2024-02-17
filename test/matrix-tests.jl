@@ -195,7 +195,7 @@ function matrix_tests(fname)
     text("hello world")
 
     setmatrix(original_matrix)
-    text("0/0", O + 15)
+    text("0/0", O .+ 15)
 
     @test finish() == true
     println("...finished test: output in $(fname)")
