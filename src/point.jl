@@ -20,19 +20,12 @@ Base.zero(::Type{Point}) = O
 Base.zero(::Point) = O
 
 # basics
-+(z::Number, p1::Point) = Point(p1.x + z, p1.y + z)
-+(p1::Point, z::Number) = Point(p1.x + z, p1.y + z)
 +(p1::Point, p2::Point) = Point(p1.x + p2.x, p1.y + p2.y)
 -(p1::Point, p2::Point) = Point(p1.x - p2.x, p1.y - p2.y)
 -(p::Point) = Point(-p.x, -p.y)
--(z::Number, p1::Point) = Point(z - p1.x, z - p1.y)
--(p1::Point, z::Number) = Point(p1.x - z, p1.y - z)
 *(k::Number, p2::Point) = Point(k * p2.x, k * p2.y)
 *(p2::Point, k::Number) = Point(k * p2.x, k * p2.y)
 /(p2::Point, k::Number) = Point(p2.x / k, p2.y / k)
-*(p1::Point, p2::Point) = Point(p1.x * p2.x, p1.y * p2.y)
-^(p::Point, e::Integer) = Point(p.x^e, p.y^e)
-^(p::Point, e::Float64) = Point(p.x^e, p.y^e)
 
 # some refinements
 # modifying points with tuples
