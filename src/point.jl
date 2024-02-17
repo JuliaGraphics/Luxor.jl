@@ -52,10 +52,12 @@ function Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}}
 end
 _point2tuple(p::Point) = (p.x,p.y)
 _point2tuple(x) = x
+_tuple2point(x::Tuple{Real, Real}) = Point(x)
+_tuple2point(x::Tuple{Bool, Bool}) = x
 @inline function Base.copy(bc_p::Broadcast.Broadcasted{Broadcast.Style{Point}})
     args = _point2tuple.(bc_p.args)
     bc_t = Broadcast.Broadcasted(Broadcast.Style{Tuple}(), bc_p.f, args, bc_p.axes)
-    return Point(copy(bc_t))
+    return _tuple2point(copy(bc_t))
 end
 
 # for iteration
