@@ -255,7 +255,7 @@ determine the accuracy.
 """
 function get_bezier_points(bps::BezierPathSegment;
     steps = 10)
-    return bezier.(range(0.0, 1.0, length = steps), bps...)
+    return bezier.(range(0.0, 1.0, length = steps), Ref.(tuple(bps...))...)
 end
 
 """

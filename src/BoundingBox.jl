@@ -155,15 +155,15 @@ end
 # basics
 # adding a number to a box makes the box larger all round
 +(z::Number, bb1::BoundingBox) =
-    BoundingBox(bb1.corner1 - z, bb1.corner2 + z)
+    BoundingBox(bb1.corner1 .- z, bb1.corner2 .+ z)
 +(bb1::BoundingBox, z::Number) =
-    BoundingBox(bb1.corner1 - z, bb1.corner2 + z)
+    BoundingBox(bb1.corner1 .- z, bb1.corner2 .+ z)
 
 # subtracting a number makes the box smaller all round
 -(z::Number, bb1::BoundingBox) =
-    BoundingBox(bb1.corner1 + z, bb1.corner2 - z)
+    BoundingBox(bb1.corner1 .+ z, bb1.corner2 .- z)
 -(bb1::BoundingBox, z::Number) =
-    BoundingBox(bb1.corner1 + z, bb1.corner2 - z)
+    BoundingBox(bb1.corner1 .+ z, bb1.corner2 .- z)
 
 function (*)(bb::BoundingBox, s::Real)
     c = midpoint(bb...)

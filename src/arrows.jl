@@ -719,13 +719,13 @@ function tickline(startpos, finishpos;
         # 1 major/minor division means 3 ticks (beginning, middle, end)
 
         if log == true
-            majorticklocations = between.(O, newfinishpos, log10.(range(1, 10, length=(major+2))))
+            majorticklocations = between.(Ref(O), Ref(newfinishpos), log10.(range(1, 10, length=(major+2))))
             n_minorticks = ((major + 1) * (minor + 1)) + 1
-            minorticklocations = between.(O, newfinishpos, log10.(range(1, 10, length=n_minorticks)))
+            minorticklocations = between.(Ref(O), Ref(newfinishpos), log10.(range(1, 10, length=n_minorticks)))
         else
-            majorticklocations = between.(O, newfinishpos, range(0, 1, length=(major+2)))
+            majorticklocations = between.(Ref(O), Ref(newfinishpos), range(0, 1, length=(major+2)))
             n_minorticks = ((major + 1) * (minor + 1)) + 1
-            minorticklocations = between.(O, newfinishpos, range(0, 1, length=n_minorticks))
+            minorticklocations = between.(Ref(O), Ref(newfinishpos), range(0, 1, length=n_minorticks))
         end
         if vertices == true
         else

@@ -1181,7 +1181,7 @@ Move (permanently) a polygon from `frompoint` to `topoint`.
 """
 function polymove!(pgon, frompoint::Point, topoint::Point)
     d = topoint - frompoint
-    return pgon .+= d
+    return pgon .+= Ref(d)
 end
 
 """
@@ -1190,9 +1190,8 @@ end
 
 Scale (permanently) a polygon by `s`, relative to `center`.
 """
-function polyscale!(pgon, s;
-        center = O)
-    return pgon .= between.(center, pgon, s)
+function polyscale!(pgon, s; center::Point = O)
+    return pgon .= between.(Ref(center), pgon, s)
 end
 
 """

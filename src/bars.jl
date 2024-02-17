@@ -88,8 +88,8 @@ function barchart(values;
     maxbarrange = maxvalue + abs(maxvalue)
     basepoint = boundingbox - (0, margin)
     hpositions = between.(
-        boxbottomleft(basepoint),
-        boxbottomright(basepoint),
+        Ref(boxbottomleft(basepoint)),
+        Ref(boxbottomright(basepoint)),
         # skip first and last, then take every other one, which is at halfway
         range(0.0, stop=1.0, length=2length(values) + 1))[2:2:end-1]
     @layer begin
