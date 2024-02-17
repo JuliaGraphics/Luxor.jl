@@ -45,7 +45,7 @@ Base.zero(::Point) = O
 Point((x, y)::Tuple{Real,Real}) = Point(x, y)
 
 # for broadcasting
-Base.size(::Point) = 2
+Base.size(::Point) = (2,)
 Base.getindex(p::Point, i) = (p.x, p.y)[i]
 
 # for iteration
