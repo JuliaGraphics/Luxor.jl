@@ -1,5 +1,8 @@
 using Documenter, Luxor
 
+# Setup for doctests in docstrings
+DocMeta.setdocmeta!(Luxor, :DocTestSetup, :(using Luxor))
+
 makedocs(
     modules  = [Luxor],
     sitename = "Luxor",
