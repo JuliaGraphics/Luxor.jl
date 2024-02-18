@@ -41,13 +41,13 @@ using Luxor
 
 To test:
 
-```julia
+```julia-repl
 julia> @svg juliacircles()
 ```
 
 or
 
-```julia
+```julia-repl
 julia> @png juliacircles()
 ```
 

@@ -326,7 +326,7 @@ preview()
 
 Luxor is thread safe. To run the examples below, [start Julia with more than 1 thread](https://docs.julialang.org/en/v1/manual/multi-threading/#Starting-Julia-with-multiple-threads). To see how many threads you have available, ask Julia:
 
-```julia
+```julia-repl
 julia> Threads.nthreads()
 4
 ```

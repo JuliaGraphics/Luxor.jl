@@ -228,7 +228,7 @@ the top left, and so on.
 
 ## Example
 
-```
+```julia
 @draw begin
     box(O, 120, 120, [0, 20, 40, 60], :fill)
 end
@@ -353,7 +353,7 @@ Luxor.Point(4.0, -9.797174393178826e-16)
 
 whereas
 
-```
+```julia
 ngon(0, 0, 4, 4, 0, :close) # draws a polygon
 ```
 """

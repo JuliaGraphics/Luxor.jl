@@ -361,7 +361,7 @@ If `flat` is true, use `getpathflat()` rather than `getpath()`.
 This code draws the BezierPathSegments and shows the control points as "handles", like
 a vector-editing program might.
 
-```
+```julia
 @svg begin
     fontface("MyanmarMN-Bold")
     st = "goo"
@@ -709,7 +709,7 @@ BezierPathSegment that passes through four points.
 
 ### Example
 
-```
+```julia
 drawbezierpath(beziersegmentangles(O, O + (100, 0),
     out = deg2rad(45),
     in  = 2π - deg2rad(45)),
@@ -746,18 +746,23 @@ Returns a tuple of two BezierPathSegments, the 'lower' one
 
 ## Example
 
-```julia
-julia> l
-bps = BezierPathSegment(ngon(O, 200, 4, vertices=true)...)
-l, h = splitbezier(bps::BezierPathSegment, 0.5)
+```jldoctest
+julia> bps = BezierPathSegment(ngon(O, 200, 4, vertices=true)...)
+4-element BezierPathSegment:
+ Point(1.2246467991473532e-14, 200.0)
+ Point(-200.0, 2.4492935982947064e-14)
+ Point(-3.6739403974420595e-14, -200.0)
+ Point(200.0, -4.898587196589413e-14)
+
+julia> l, h = splitbezier(bps::BezierPathSegment, 0.5)
+(Point[Point(1.2246467991473532e-14, 200.0), Point(-100.0, 100.00000000000001), Point(-100.0, 1.4210854715202004e-14), Point(-50.00000000000001, -49.99999999999999)], Point[Point(-50.00000000000001, -49.99999999999999), Point(-1.4210854715202004e-14, -100.0), Point(99.99999999999999, -100.00000000000003), Point(200.0, -4.898587196589413e-14)])
 
 julia> h
 4-element BezierPathSegment:
- Point(1.2246467991473532e-14, 200.0)
- Point(-100.0, 100.00000000000001)
- Point(-100.0, 1.4210854715202004e-14)
  Point(-50.00000000000001, -49.99999999999999)
-```
+ Point(-1.4210854715202004e-14, -100.0)
+ Point(99.99999999999999, -100.00000000000003)
+ Point(200.0, -4.898587196589413e-14)
 
 julia> l.p2 == h.p1
 true
@@ -799,18 +804,18 @@ Construct a bezigon, a path made of Bezier curves.
 
 `corners` is an array of points, the corners of the bezigon, eg this triangle:
 
-```
+```julia
 [Point(0, 0), Point(50, 50), Point(100, 0)]
 ```
 
 `sides` is an array of arrays of points, where each array contains two control
 points, eg:
 
-```
-    sides = [
-        [Point(-10, -20), Point(40, -120)], # control points for first side
-        [Point(120, -120), Point(180, -20)],
-    ]
+```julia
+sides = [
+    [Point(-10, -20), Point(40, -120)], # control points for first side
+    [Point(120, -120), Point(180, -20)],
+]
 ```
 
 The first pair of `sides` (two points) are control points, which combine with

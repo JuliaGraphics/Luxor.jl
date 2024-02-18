@@ -726,13 +726,13 @@ If you don't supply a value for `leading`, the font's built-in extents are used.
 Text with no whitespace characters won't wrap. You can write a simple chunking function
 to split a string or array into chunks:
 
-```
+```julia
 chunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]
 ```
 
 For example:
 
-```
+```julia
 textwrap(the_text, 300, boxtopleft(BoundingBox()) + 20,
     (ln, lt, sp, ht) -> begin
         c = count(t -> occursin(r"[[:punct:]]", t), split(lt, ""))

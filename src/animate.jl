@@ -12,7 +12,7 @@ create the frames that can be used to make an animated GIF or movie.
 
 Example
 
-```
+```julia
 bang = Movie(400, 100, "bang")
 
 backdrop(scene, framenumber) =  background("black")
@@ -29,7 +29,6 @@ animate(bang, [
     Scene(bang, frame1, 0:200, easingfunction=easeinsine)],
     creategif=true,
     pathname="/tmp/animationtest.gif")
-
 ```
 """
 struct Movie
@@ -81,7 +80,7 @@ easing function, and other information, in `optarg`, which can be accessed as
 
 ### Example
 
-```
+```julia
 function initial(scene, framenumber)
     balls = scene.opts
     ...
@@ -96,13 +95,13 @@ animate(poolmovie, [
 To use an easing function inside the frame-generating function, you can create a normalized
 value with, for example:
 
-```
+```julia
 eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
 ```
 
 Or, if the scene doesn't start at frame 1, calculate normalized easing function like this:
 
-```
+```julia
 eased_n = scene.easingfunction(framenumber - scene.framerange.start,
     0, 1, scene.framerange.stop - scene.framerange.start)
 ```
@@ -139,7 +138,7 @@ In suitable environments, the resulting animation is displayed in the Plots wind
 
 ### Example
 
-```
+```julia
 animate(bang, [
     Scene(bang, backdrop, 0:200),
     Scene(bang, frame1, 0:200, easingfunction=easeinsine)],
@@ -566,7 +565,7 @@ eased value for `t`.
 
 In your `frame()` generating function, if a Scene specifies the `easeinoutbezier` easing function, you can use this:
 
-```
+```julia
 ...
 lineareasing = rescale(framenumber, 1, scene.framerange.stop)
 beziereasing = scene.easingfunction(lineareasing, 0, 1, 1,
@@ -580,7 +579,7 @@ However, in the next example, the two control points define a wave-like curve
 that changes direction before changing back. When animating with this easing
 function, an object will 'go retrograde' for a while.
 
-```
+```julia
 lineareasing = rescale(framenumber, 1, scene.framerange.stop)
 beziereasing = scene.easingfunction(lineareasing, 0, 1, 1,
     Point(0.01, 1.99), Point(0.99, -1.5))

@@ -104,7 +104,7 @@ https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
 
 ## Example
 
-```
+```julia
 for pt in randompointarray(BoundingBox(), 20)
     randomhue()
     circle(pt, 10, :fill)

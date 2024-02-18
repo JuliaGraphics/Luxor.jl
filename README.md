@@ -34,7 +34,7 @@ Luxor isn't interactive: for building interactivity, look at [Pluto.jl](https://
 [docs-development-url]: https://juliagraphics.github.io/LuxorManual/dev/
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: https://juliagraphics.github.io/Luxor.jl/stable/
+[docs-stable-url]: https://juliagraphics.github.io/LuxorManual/stable/
 
 [travis-img]: https://travis-ci.org/JuliaGraphics/Luxor.jl.svg?branch=master
 [travis-url]: https://travis-ci.org/JuliaGraphics/Luxor.jl

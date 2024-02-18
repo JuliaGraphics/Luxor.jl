@@ -714,7 +714,7 @@ circle at the midpoint of an arrow's shaft, you can define a
 function that draws text `t` in a circle of radius `r` like
 this:
 
-```
+```julia
 function marker(r, t)
     @layer begin
         sethue("purple")
@@ -1148,7 +1148,7 @@ nothing # hide
 
 It's possible to store the current path in a Path object. For example, this code:
 
-```
+```julia
 fontsize(160)
 fontface("Bodoni-Poster")
 textpath("†", O, halign=:center, valign=:middle)
@@ -1159,7 +1159,7 @@ stores the instructions to build the current path (which describe the dagger sym
 
 The `dagger` is a Luxor Path type, and contains:
 
-```
+```julia
 PathMove(Point(2.0, 90.5625)),
 PathCurve(Point(4.08203125, 68.16015625), Point(11.28125, 45.28125), Point(24.8828125, 26.40234375)),
 PathCurve(Point(17.51953125, 22.87890625), Point(2.0, 14.71875), Point(2.0, 5.12109375)),
@@ -1298,7 +1298,7 @@ There are various options for `julialogo()` to control coloring and positioning.
 
 The four standard Julia colors are available as RGB tuples as `Luxor.julia_blue`, `Luxor.julia_green`, `Luxor.julia_purple`,  `Luxor.julia_red`:
 
-```julia
+```julia-repl
 julia> Luxor.julia_red
 (0.796, 0.235, 0.2)
 ```

@@ -64,7 +64,7 @@ arrowhead.
 
 ### Example
 
-```
+```julia
 function redbluearrow(shaftendpoint, endpoint, shaftangle)
     @layer begin
         sethue("red")
@@ -308,7 +308,7 @@ point.
 
 This code draws an arrow head that's filled with orange and outlined in green.
 
-```
+```julia
 function myarrowheadfunction(originalendpoint, newendpoint, shaftangle)
     @layer begin
         setline(5)
@@ -429,7 +429,7 @@ Keyword arguments are the same as [`arrow(pt1, pt2, pt3, pt4)`](@ref).
 
 ### Example
 
-```
+```julia
 arrow(pts[1], pts[end], [15, 15],
     decoration = 0.5,
     decorate = () -> text(string(pts[1])))
@@ -592,7 +592,7 @@ each major tick.
 
 ## Examples
 
-```
+```julia
 tickline(Point(0, 0), Point(100, 0))
 tickline(Point(0, 0), Point(100, 0), major = 4)
 majorticks, minorticks = tickline(Point(0, 0), Point(100, 0), axis=false)
@@ -603,7 +603,7 @@ majorticks, minorticks = tickline(Point(0, 0), Point(100, 0), axis=false)
 Supply functions to make custom ticks. Custom tick functions
 should have arguments as follows:
 
-```
+```julia
 function mtick(n, pos;
         startnumber         = 0,
         finishnumber        = 1,
@@ -612,7 +612,7 @@ function mtick(n, pos;
 ```
 and
 
-```
+```julia
 function mntick(n, pos;
         startnumber        = 0,
         finishnumber       = 1,
@@ -623,7 +623,7 @@ function mntick(n, pos;
 
 For example:
 
-```
+```julia
 tickline(O - (300, 0), Point(300, 0),
     startnumber  = -10,
     finishnumber = 10,

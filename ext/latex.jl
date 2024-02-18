@@ -110,7 +110,7 @@ rotating around `pt`.
 If `paths` is true, text paths are added to the current
 path, rather than drawn.
 
-```
+```julia
 using Luxor
 using MathTeXEngine
 using LaTeXStrings

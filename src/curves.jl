@@ -1379,7 +1379,7 @@ See also `crescent(pos1, innerradius, pos2, outeradius...)`.
 
 Create a filled crescent shape with outer radius of 200, inner radius of 130.
 
-```
+```julia
 crescent(O, 130, 200, :fill) # or
 crescent(O, 130, 200, action=:fill)
 ```
@@ -1387,7 +1387,7 @@ crescent(O, 130, 200, action=:fill)
 Create a stroked crescent shape - the inner radius of 0
 produces a semicircle - and add it to the current path.
 
-```
+```julia
 crescent(O, 0, 200, :stroke) # or
 crescent(O, 0, 200, action=:stroke)
 ```
@@ -1441,7 +1441,7 @@ See also `crescent(point, innerradius, outeradius...)`.
 
 Create a filled crescent shape from two circles.
 
-```
+```julia
 crescent(O, 100, O + (60, 0), 150, :fill) # or
 crescent(O, 100, O + (60, 0), 150, action=:fill)
 ```

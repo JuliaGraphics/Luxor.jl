@@ -80,7 +80,7 @@ You can reposition the origin at any time, using [`origin`](@ref). The 'user spa
 
 The Point type holds two coordinates, `x` and `y`. For example:
 
-```julia
+```julia-repl
 julia> P = Point(12.0, 13.0)
 Luxor.Point(12.0, 13.0)
 
@@ -95,7 +95,7 @@ Points are immutable, so you can't change P's x or y values directly. But it's e
 
 Points can be added together:
 
-```julia
+```julia-repl
 julia> Q = Point(4, 5)
 Luxor.Point(4.0, 5.0)
 
@@ -105,7 +105,7 @@ Luxor.Point(16.0, 18.0)
 
 You can add and multiply Points and scalars:
 
-```julia
+```julia-repl
 julia> 10P
 Luxor.Point(120.0, 130.0)
 
@@ -115,7 +115,7 @@ Luxor.Point(112.0, 113.0)
 
 You can also make new points by mixing Points and tuples:
 
-```julia
+```julia-repl
 julia> P + (10, 0)
 Luxor.Point(22.0, 13.0)
 
@@ -125,7 +125,7 @@ Luxor.Point(2.0, 2.5)
 
 You can also create points from tuples:
 
-```julia
+```julia-repl
 julia> Point((1.0, 14))
 Point(1.0, 14.0)
 

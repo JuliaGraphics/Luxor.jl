@@ -350,13 +350,13 @@ You can use `currentpoint()` to get the current point.
 
 There's another method for `line()` which takes two points and a rendering instruction. For example:
 
-```
+```julia
 line(Point(0, 0), Point(100, 100), :stroke)
 ```
 
 is just a quicker way of typing:
 
-```
+```julia
 move(Point(0, 0))
 line(Point(100, 100))
 strokepath()

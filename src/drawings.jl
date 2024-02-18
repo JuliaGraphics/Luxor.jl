@@ -582,7 +582,7 @@ file-based or in-memory, and dimensions.
 
 # Extended help
 
-```
+```julia
 Drawing()
 ```
 
@@ -591,40 +591,40 @@ default size 800 pixels square.
 
 You can specify dimensions, and assume the default output filename:
 
-```
+```julia
 Drawing(400, 300)
 ```
 
 creates a drawing 400 pixels wide by 300 pixels high, defaulting to PNG format, default
 filename "luxor-drawing.png".
 
-```
+```julia
 Drawing(400, 300, "my-drawing.pdf")
 ```
 
 creates a PDF drawing in the file "my-drawing.pdf", 400 by 300 pixels.
 
-```
+```julia
 Drawing(1200, 800, "my-drawing.svg")
 ```
 
 creates an SVG drawing in the file "my-drawing.svg", 1200 by 800 pixels.
 
-```
+```julia
 Drawing(width, height, surfacetype | filename)
 ```
 
 creates a new drawing of the given surface type (e.g. :svg, :png), storing the picture
 only in memory if no filename is provided.
 
-```
+```julia
 Drawing(1200, 1200/Base.Mathconstants.golden, "my-drawing.eps")
 ```
 
 creates an EPS drawing in the file "my-drawing.eps", 1200 wide by 741.8 pixels (= 1200 ÷ ϕ)
 high. Only for PNG files must the dimensions be integers.
 
-```
+```julia
 Drawing("A4", "my-drawing.pdf")
 ```
 
@@ -632,7 +632,7 @@ creates a PDF drawing in ISO A4 size (595 wide by 842 high) in the file "my-draw
 Other sizes available are: "A0", "A1", "A2", "A3", "A4", "A5", "A6", "Letter", "Legal",
 "A", "B", "C", "D", "E". Append "landscape" to get the landscape version.
 
-```
+```julia
 Drawing("A4landscape")
 ```
 
@@ -641,34 +641,34 @@ creates the drawing A4 landscape size.
 PNG and PDF default to transparent backgrounds, unless you specify one using
 `background()`.
 
-```
+```julia
 Drawing(width, height, :image)
 ```
 
 creates the drawing in an image buffer in memory. You can obtain the data as a matrix with
 `image_as_matrix()`.
 
-```
+```julia
 Drawing(width, height, :rec)
 ```
 
 creates the drawing in a recording surface in memory. `snapshot(fname, ...)` to any file format and bounding box,
 or render as pixels with `image_as_matrix()`.
 
-```
+```julia
 Drawing(width, height, strokescale=true)
 ```
 
 creates the drawing and enables stroke scaling (strokes will be scaled according to the current transformation).
 (Stroke scaling is disabled by default.)
 
-```
+```julia
 Drawing(img, strokescale=true)
 ```
 
 creates the drawing from an existing image buffer of type `Matrix{Union{RGB24,ARGB32}}`, e.g.:
 
-```
+```julia
 using Luxor, Colors
 buffer=zeros(ARGB32, 100, 100)
 d=Drawing(buffer)
@@ -697,20 +697,20 @@ See issue  https://github.com/JuliaGraphics/Luxor.jl/issues/150 for discussion d
 
 Setting backgrounds in a recording surface (:rec) and creating a svg from it result in elements as
 
-```
+```xml
 <rect x="0" y="0" width="16777215" height="16777215" .../>
 ```
 independent of an existing transformation matrix (e.g. set with origin(...) or snapshot with a crop bounding box).
 An existing transformation matrix manifests in the svg file as
 
-```
+```xml
 <use xlink:href="#surface199" transform="matrix(3 1 -1 3 30 40)"/>
 ```
 which is applied to every element including the background rects.
 This transformation needs to be inversed for the background rects which is added in this function.
 
 If `addmarker` is not set to false, a class property is set as marker:
-```
+```xml
 <rect class="luxor_adjusted" x="0" y="0" width="16777215" height="16777215" .../>
 ```
 """
@@ -790,12 +790,12 @@ end
 splits s into head, mid and tail string.
 Example:
 
-```
+```julia
   s="head...<g id="\$id">...</g>...tail"
 ```
   results in
 
-```
+```julia
   head="head..."
   mid="<g id="\$id">...</g>"
   tail="...tail"
@@ -1397,7 +1397,7 @@ array of ARGB32.
 
 A matrix 50 wide and 30 high => a table 30 rows by 50 cols
 
-```
+```julia
 using Luxor, Images
 
 Drawing(50, 50, :png)
@@ -1443,7 +1443,7 @@ The default drawing is 256 by 256 points.
 
 You don't need `finish()` (the macro calls it), and it's not previewed by `preview()`.
 
-```
+```julia
 m = @imagematrix begin
         sethue("red")
         box(O, 20, 20, :fill)
@@ -1461,7 +1461,7 @@ julia>  m[1220:1224] |> show
 If, for some strange reason you want to draw the matrix as another
 Luxor drawing again, use code such as this:
 
-```
+```julia
 m = @imagematrix begin
         sethue("red")
         box(O, 20, 20, :fill)
@@ -1497,7 +1497,7 @@ Transparency
 The default value for the cells in an image matrix is
 transparent black. (Luxor's default color is opaque black.)
 
-```
+```julia-repl
 julia> @imagematrix begin
        end 2 2
 2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
@@ -1508,7 +1508,7 @@ julia> @imagematrix begin
 Setting the background to a partially or completely
 transparent value may give unexpected results:
 
-```
+```julia-repl
 julia> @imagematrix begin
        background(1, 0.5, 0.0, 0.5) # semi-transparent orange
        end 2 2
@@ -1520,7 +1520,7 @@ julia> @imagematrix begin
 here the semi-transparent orange color has been partially
 applied to the transparent background.
 
-```
+```julia-repl
 julia> @imagematrix begin
            sethue(1., 0.5, 0.0)
        paint()
@@ -1550,7 +1550,7 @@ Like `image_as_matrix()`, but use an existing UInt32 buffer.
 
 `buffer` is a buffer of UInt32.
 
-```
+```julia
 w = 200
 h = 150
 buffer = zeros(UInt32, w, h)
@@ -1584,7 +1584,7 @@ end
 
 Like `@imagematrix`, but use an existing UInt32 buffer.
 
-```
+```julia
 w = 200
 h  = 150
 buffer = zeros(UInt32, w, h)
@@ -1612,14 +1612,14 @@ Returns `""` if there is no SVG information available.
 
 To display the SVG string as a graphic, try the `HTML()` function in Base.
 
-```
+```julia
 ...
 HTML(svgstring())
 ```
 
 In a Pluto notebook, you can also display the SVG using:
 
-```
+```julia
 # using PlutoUI
 ...
 PlutoUI.Show(MIME"image/svg+xml"(), svgstring())
@@ -1632,7 +1632,7 @@ PlutoUI.Show(MIME"image/svg+xml"(), svgstring())
 This example examines the generated SVG code produced by drawing
 the Julia logo.
 
-```
+```julia
 Drawing(500, 500, :svg)
 origin()
 julialogo()
@@ -1650,7 +1650,7 @@ eachmatch(r"rgb.*?;", s) |> collect
 
 Here's another example, post-processing the SVG file with the `svgo` optimizer.
 
-```
+```julia
 @drawsvg begin
     background("midnightblue")
     fontface("JuliaMono-Regular")

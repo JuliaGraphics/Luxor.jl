@@ -7,7 +7,7 @@ Use `include()` to include this file if you've installed Shapefile.jl.
 Luxor y coordinates increase downwards, but maps and shapefile coordinates increase upwards.
 In the Northern hemisphere, 0 longitude is North Pole, so we negate y coordinates.
 
-```
+```julia
 using Luxor, Shapefile
 worldshapefile = "TM_WORLD_BORDERS-0.3/TM_WORLD_BORDERS-0.3.shp"
 include(splitdir(pathof(Luxor))[1] * "/readshapefiles.jl")

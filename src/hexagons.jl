@@ -215,7 +215,7 @@ For more information about making hexagons and hexagonal grids, see [Luxor.Hexag
 
 ## Example
 
-```
+```julia-repl
 julia> h = HexagonOffsetEvenR(0, 0, 70.0)
 
 julia> hexneighbors(h)
