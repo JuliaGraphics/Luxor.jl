@@ -124,7 +124,7 @@ on the current drawing with `placeimage()`.
 
 Placing an SVG file:
 
-```
+```julia
 @draw begin
     mycoollogo = readsvg("mylogo.svg")
     placeimage(mycoollogo)
@@ -133,7 +133,7 @@ end
 
 Placing SVG code:
 
-```
+```julia
 # from https://github.com/edent/SuperTinyIcons
 julialogocode = \"\"\"<svg xmlns="http://www.w3.org/2000/svg"
     aria-label="Julia" role="img"

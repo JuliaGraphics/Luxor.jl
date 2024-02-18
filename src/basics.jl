@@ -34,12 +34,12 @@ Convert `x` from one linear scale (`from_min` to `from_max`) to another
 
 The scales can also be supplied in tuple form:
 
-```
+```julia
 rescale(x, (from_min, from_max), (to_min, to_max))
 ```
 
-```
-using Luxor
+```julia-repl
+julia> using Luxor
 julia> rescale(15, 0, 100, 0, 1)
 0.15
 
@@ -481,14 +481,14 @@ Draw a straight line through `pos` at an angle `theta` from the x axis.
 By default, the line spans the entire drawing, but you can supply a BoundingBox
 to change the extent of the line.
 
-```
+```julia
 rule(O)       # draws an x axis
 rule(O, pi/2) # draws a  y axis
 ```
 
 The function:
 
-```
+```julia
 rule(O, pi/2, boundingbox=BoundingBox()/2)
 ```
 
@@ -639,7 +639,7 @@ Scale the current workspace by different values in `x` and `y`.
 Values are relative to the current scale.
 Example:
 
-```
+```julia
 scale(0.2, 0.3)
 ```
 """
@@ -680,7 +680,7 @@ translate(pt::Point) = translate(pt.x, pt.y)
 Get the current path and return a CairoPath object, which is an array of `element_type` and
 `points` objects. With the results you can step through and examine each entry like this:
 
-```
+```julia
 o = getpath()
 x, y = currentpoint()
 for e in o

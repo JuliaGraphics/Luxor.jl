@@ -28,7 +28,7 @@ preview()
 The next example draws an ampersand and then processes the
 pixels further in Images.jl.
 
-```
+```julia
 using Luxor, Colors, Images, ImageFiltering
 
 m = @imagematrix begin
@@ -57,7 +57,7 @@ bit integer.
 
 You can display the matrix using, for example, Images.jl.
 
-```
+```julia
 using Luxor, Images
 
 # in Luxor

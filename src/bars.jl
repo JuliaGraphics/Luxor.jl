@@ -26,7 +26,7 @@ The function returns a vector of points; each is the bottom center of a bar.
 
 Draw a Fibonacci sequence as a barchart:
 
-```
+```julia
 fib(n) = n > 2 ? fib(n - 1) + fib(n - 2) : 1
 fibs = fib.(1:15)
 @draw begin
@@ -48,7 +48,7 @@ barchart(vals, barfunction=mybarfunction)
 barchart(vals, labelfunction=mylabelfunction)
 ```
 
-```
+```julia
 function myprologfunction(values, basepoint, minbarrange, maxbarrange, barchartheight)
     @layer begin
         setline(0.2)

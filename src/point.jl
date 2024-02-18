@@ -364,7 +364,7 @@ Find angle of a line starting at `pointA` and ending at `pointB`.
 
 Return a value between 0 and 2pi. Value will be relative to the current axes.
 
-```
+```julia
 slope(O, Point(0, 100)) |> rad2deg # y is positive down the page
 90.0
 
@@ -547,7 +547,7 @@ end
 
 Find `A′`, the inverse of a point A with respect to a circle `centerpoint`/`rad`, such that:
 
-```
+```julia
 distance(centerpoint, A) * distance(centerpoint, A′) == rad^2
 ```
 

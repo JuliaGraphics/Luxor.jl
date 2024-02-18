@@ -176,7 +176,7 @@ In Luxor, there's always a *current matrix* that determines how coordinates are 
 
 and Luxor/Cairo matrix functions accept and return simple 6-element vectors:
 
-```julia
+```julia-repl
 julia> getmatrix()
 6-element Array{Float64,1}:
    1.0

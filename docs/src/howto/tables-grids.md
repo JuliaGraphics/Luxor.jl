@@ -87,13 +87,13 @@ Tables don't store data, of course, but are designed to help you draw tabular da
 
 To create a simple table with 3 rows and 4 columns, using the default width and height (100):
 
-```julia
+```julia-repl
 julia> t = Table(3, 4);
 ```
 
 When you use this as an iterator, you can get the coordinates of the center of each cell, and its number:
 
-```julia
+```julia-repl
 julia> for i in t
            println("row: $(t.currentrow), column: $(t.currentcol), center: $(i[1])")
        end
@@ -113,7 +113,7 @@ row: 3, column: 4, center: Luxor.Point(150.0, 100.0)
 
 You can also access row and column information:
 
-```julia
+```julia-repl
 julia> for r in 1:size(t)[1]
            for c in 1:size(t)[2]
                @show t[r, c]

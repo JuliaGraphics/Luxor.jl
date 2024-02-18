@@ -139,7 +139,7 @@ this is easy, and the functions that provide a `reversepath`
 keyword argument can help. If not, you can do things like
 this:
 
-```
+```julia
 circle(O, 100, :path)                 # add a circle to the current path
 poly(reverse(box(O, 50, 50)), :path)  # create polygon, add to current path after reversing
 fillpath()                            # finally fill the two-part path
@@ -178,7 +178,7 @@ pathexample # save Path
 
 `pathexample` now contains the path, stored in a Luxor object of type `Path`. The current path is still present.
 
-```
+```julia-repl
 julia> pathexample
 Path([
  PathMove(Point(-220.0, 50.0)),
@@ -249,7 +249,7 @@ sequences of short straight lines.
 
 So:
 
-```
+```julia
 circle(O, 100, :path)
 p = pathtopoly()
 poly(first(p), :stroke)
@@ -257,7 +257,7 @@ poly(first(p), :stroke)
 
 is more or less equivalent to:
 
-```
+```julia
 ngon(O, 100, 129, 0, :stroke)    # a 129agon with radius 100
 ```
 

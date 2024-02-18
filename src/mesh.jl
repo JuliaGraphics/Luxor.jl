@@ -96,7 +96,7 @@ Use `setmesh()` to select the mesh, which will be used to fill shapes.
 
 # Example
 
-```
+```julia
 @svg begin
     bp = makebezierpath(ngon(O, 50, 4, 0, vertices=true))
     mesh1 = mesh(bp, [
@@ -133,7 +133,7 @@ The `colors` array define the color of each corner point. Colors are reused
 if necessary. At least one color should be supplied.
 
 # Example
-```
+```julia
 @svg begin
     pl = ngon(O, 250, 3, pi/6, vertices=true)
     mesh1 = mesh(pl, [

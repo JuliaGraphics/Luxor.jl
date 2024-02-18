@@ -361,7 +361,7 @@ If `flat` is true, use `getpathflat()` rather than `getpath()`.
 This code draws the BezierPathSegments and shows the control points as "handles", like
 a vector-editing program might.
 
-```
+```julia
 @svg begin
     fontface("MyanmarMN-Bold")
     st = "goo"
@@ -709,7 +709,7 @@ BezierPathSegment that passes through four points.
 
 ### Example
 
-```
+```julia
 drawbezierpath(beziersegmentangles(O, O + (100, 0),
     out = deg2rad(45),
     in  = 2π - deg2rad(45)),
@@ -804,18 +804,18 @@ Construct a bezigon, a path made of Bezier curves.
 
 `corners` is an array of points, the corners of the bezigon, eg this triangle:
 
-```
+```julia
 [Point(0, 0), Point(50, 50), Point(100, 0)]
 ```
 
 `sides` is an array of arrays of points, where each array contains two control
 points, eg:
 
-```
-    sides = [
-        [Point(-10, -20), Point(40, -120)], # control points for first side
-        [Point(120, -120), Point(180, -20)],
-    ]
+```julia
+sides = [
+    [Point(-10, -20), Point(40, -120)], # control points for first side
+    [Point(120, -120), Point(180, -20)],
+]
 ```
 
 The first pair of `sides` (two points) are control points, which combine with

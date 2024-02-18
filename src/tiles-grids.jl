@@ -18,7 +18,7 @@ Tiler and Partition are similar:
 
   - Tiler lets you specify how many rows and columns of cells you want, and a margin:
 
-```
+```julia
 tiles = Tiler(1000, 800, 4, 5, margin=20)
 for (pos, n) in tiles
     # the point pos is the center of the tile
@@ -27,7 +27,7 @@ end
 
 You can access the calculated tile width and height like this:
 
-```
+```julia
 tiles = Tiler(1000, 800, 4, 5, margin=20)
 for (pos, n) in tiles
     ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
@@ -39,7 +39,7 @@ It's sometimes useful to know which row and column you're currently on.
 
 To use a Tiler to make grid points:
 
-```
+```julia
 first.(collect(Tiler(800, 800, 4, 4)))
 ```
 

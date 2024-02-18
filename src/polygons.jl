@@ -133,7 +133,7 @@ end
 Split a polygon into two where it intersects with a line. It returns two
 polygons:
 
-```
+```julia
 (poly1, poly2)
 ```
 
@@ -564,7 +564,7 @@ functionality built in to Luxor. By default the function is
 `lineartween()`, so the offset changes linearly between the
 `startoffset` and the `endoffset`. The function:
 
-```
+```julia
 f(a, b, c, d) = 2sin((a * π))
 ```
 
@@ -650,7 +650,7 @@ This example draws a tilde, with the ends starting at 20
 (10 + 10) units wide, swelling to 50 (10 + 10 + 15 + 15) in
 the middle, as f(0.5) = 25.
 
-```
+```julia
 f(x, θ) =  10 + 15sin(x * π)
 sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
 pgon = offsetpoly(sinecurve, f)
@@ -660,7 +660,7 @@ poly(pgon, :fill)
 This example enhances the vertical part of the curve, and
 thins the horizontal parts.
 
-```
+```julia
 g(x, θ) = rescale(abs(sin(θ)), 0, 1, 0.1, 30)
 sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
 pgon = offsetpoly(sinecurve, g)

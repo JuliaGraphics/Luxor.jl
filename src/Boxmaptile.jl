@@ -106,7 +106,7 @@ to the original values, scaled as necessary.
 
 The return value is an array of BoxmapTiles. For example:
 
-```
+```julia
 [BoxmapTile(0.0, 0.0, 10.0, 20.0)
  BoxmapTile(10.0, 0.0, 10.0, 13.3333)
  BoxmapTile(10.0, 13.3333, 10.0, 6.66667)]
@@ -117,7 +117,7 @@ BoxmapTiles as well.
 
 # Example
 
-```
+```julia
 using Luxor
 @svg begin
     fontsize(16)

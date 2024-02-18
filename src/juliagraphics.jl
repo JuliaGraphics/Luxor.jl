@@ -43,7 +43,7 @@ asymmetric design.
 
 To use the logo as a clipping mask:
 
-```
+```julia
 julialogo(action=:clip)
 ```
 
@@ -51,7 +51,7 @@ julialogo(action=:clip)
 
 To obtain a stroked (outlined) version:
 
-```
+```julia
 julialogo(action=:path)
 sethue("red")
 strokepath()

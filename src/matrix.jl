@@ -6,7 +6,7 @@
 Get the current workspace (position, scale, and orientation) as a 6-element
 vector:
 
-```
+```julia
 [xx, yx, xy, yy, x0, y0]
 ```
 

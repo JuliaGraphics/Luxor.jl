@@ -21,21 +21,21 @@ The array `A` should be a matrix where each element is an ARGB32 value. ARGB32 i
 
 You can set and get the values of pixels by treating the drawing's array like a standard Julia array. So we can inspect pixels like this:
 
-```julia
+```julia-repl
 julia> A[10, 200]  # row 10, column 200
 ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8)
 ```
 
 and set them like this:
 
-```julia
+```julia-repl
 julia> A[10, 200] = colorant"red"
 RGB{N0f8}(1.0, 0.0, 0.0)
 ```
 
 or even like this:
 
-```julia
+```julia-repl
 julia> A[200:250, 100:250] .= colorant"green"
 julia> A[300:350, 50:450] .= colorant"blue"
 julia> [A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800]

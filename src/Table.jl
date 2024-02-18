@@ -57,21 +57,21 @@ A Table is an iterator that, for each iteration, returns a tuple of:
 
 It's sometimes useful to know which row and column you're currently on while iterating:
 
-```
+```julia
 t.currentrow
 t.currentcol
 ```
 
 and row heights and column widths are available in:
 
-```
+```julia
 t.rowheights
 t.colwidths
 ```
 
 `box(t::Table, r, c)` can be used to fill table cells:
 
-```
+```julia
 @svg begin
     for (pt, n) in (t = Table(8, 3, 30, 15))
         randomhue()
@@ -84,7 +84,7 @@ end
 
 or without iteration, using cellnumber:
 
-```
+```julia
 @svg begin
     t = Table(8, 3, 30, 15)
     for n in eachindex(t)
@@ -98,7 +98,7 @@ end
 
 To use a Table to make grid points:
 
-```
+```julia-repl
 julia> first.(collect(Table(10, 6)))
 60-element Array{Luxor.Point,1}:
  Luxor.Point(-10.0, -18.0)
