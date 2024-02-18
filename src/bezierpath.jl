@@ -746,7 +746,7 @@ Returns a tuple of two BezierPathSegments, the 'lower' one
 
 ## Example
 
-```julia
+```jldoctest
 julia> l
 bps = BezierPathSegment(ngon(O, 200, 4, vertices=true)...)
 l, h = splitbezier(bps::BezierPathSegment, 0.5)
