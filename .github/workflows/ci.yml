@@ -15,33 +15,18 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1'
-          - '1.9'
-          - 'nightly'
+          - "1.9"
+          - "1"    # Latest Release
         os:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
-        arch: 
+        arch:
           - x64
-        allow_failure: [false]
         include:
-          - version: '1'
-            os: ubuntu-latest
+          - os: ubuntu-latest
+            version: 1.10.0
             arch: x64
-            allow_failure: false
-          - version: 'nightly'
-            os: ubuntu-latest
-            arch: x64
-            allow_failure: true
-          - version: 'nightly'
-            os: macOS-latest
-            arch: x64
-            allow_failure: true
-          - version: 'nightly'
-            os: windows-latest
-            arch: x64
-            allow_failure: true
     steps:
       - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@v1
