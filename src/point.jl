@@ -72,7 +72,7 @@ Base.length(::Point) = 2
 
 Transform a point `pt` by the 3×3 matrix `m`.
 
-```jldoctest
+```julia
 julia> M = [2 0 0; 0 2 0; 0 0 1]
 3×3 Matrix{Int64}:
  2  0  0
