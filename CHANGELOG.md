@@ -1,6 +1,6 @@
 # Changelog
 
-## [v4.0] - 2024-02-17
+## [v4.0] - 2024-
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
@@ -23,6 +23,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - documents now built to https://github.com/JuliaGraphics/LuxorManual
 - fixed bug in `box(pt, w, h, cr, :path)` (don't create new path)
 - removed some invalid Point methods (#294)
+- `between` has more methods for ranges and arrays
 
 ### Removed
 

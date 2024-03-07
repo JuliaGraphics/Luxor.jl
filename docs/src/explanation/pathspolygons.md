@@ -65,10 +65,10 @@ d = @drawsvg begin
     make_path()
     clip()
     sethue("green")
-    # -> 3.9
+    # Luxor <= "v3.8"
     # rule.(between.(O - (250, 0), O + (250, 0), 0:0.01:1), -π/3)
-    # 4.0
-    rule.(between.(Ref(O - (250, 0)), Ref(O + (250, 0)), 0:0.01:1), -π/3)
+    # Luxor >= "v4.0"
+    rule.(between(O - (250, 0), O + (250, 0), 0:0.01:1), -π/3)
     end 800 500
 ```
 
@@ -113,7 +113,7 @@ also convert the path to a clipping path using
 As you can see, a single path can contain multiple separate graphic shapes.
 
 ### Holes
-
+beetween
 If you want a path to contain holes,
 you add the hole shapes to the current path after reversing
 their direction. For example, to put a square hole inside a
