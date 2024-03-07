@@ -14,20 +14,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        julia-version:
-          - "1.9"
-          - "1"  # Leave this line unchanged. '1' will automatically expand to the latest stable 1.x release of Julia
-          - "nightly"
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
-        julia-arch:
-          - x64
-        exclude:
-          - os: macOS-latest
-            julia-arch: x86
-
+        version: ['1.9', '1']
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        arch: [x64]
+        allow_failure: [false]
+        include:
+          - version: 'nightly'
+            os: ubuntu-latest
+            arch: x64
+            allow_failure: true
+          - version: 'nightly'
+            os: macOS-latest
+            arch: x64
+            allow_failure: true
+          - version: 'nightly'
+            os: windows-latest
+            arch: x64
+            allow_failure: true
     steps:
       - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@v1
