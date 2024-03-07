@@ -14,19 +14,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version:
+        julia-version:
           - "1.9"
-          - "1"    # Latest Release
+          - "1"  # Leave this line unchanged. '1' will automatically expand to the latest stable 1.x release of Julia
         os:
           - ubuntu-latest
-          - macOS-latest
+          - macos-latest
           - windows-latest
-        arch:
+        julia-arch:
           - x64
-        include:
-          - os: ubuntu-latest
-            version: 1.10.0
-            arch: x64
+        exclude:
+          - os: macOS-latest
+            julia-arch: x86
     steps:
       - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@v1
