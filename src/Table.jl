@@ -21,7 +21,7 @@ Tables are centered at `O`, but you can supply a point after the specifications.
     t = Table(nrows, ncols, colwidth, rowheight, centerpoint)
     t = Table(rowheights, columnwidths, centerpoint)
 
-Examples
+## Examples
 
 Simple tables
 
@@ -111,6 +111,20 @@ julia> first.(collect(Table(10, 6)))
 ```
 
 which returns an array of points that are the center points of the cells in the table.
+
+## Selecting cells
+
+You can select cells using `getcells(table, rows, columns)`. This returns a list
+of `(point, index)` tuples.
+
+- `getcells(t, :, :)` returns a list of all cells 
+
+- `getcells(t, 1, :)` returns a list of all cells in row 1 
+
+- `getcells(t, :, 3)` returns a list of all cells in column 3 
+
+- `getcells(t, 2:4, [3, 5])` returns a list of cells in rows 2-4, columns 3 and 5
+
 """
 function Table(nrows::Int, ncols::Int, cellwidth, cellheight, center = O)
     currentrow = 1
