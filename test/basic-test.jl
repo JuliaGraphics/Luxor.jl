@@ -34,6 +34,10 @@ rp = rand(bb)
 end
 
 @testset "concatenate" begin
+
+    finish()
+
+    
     d1 = Drawing(200,100,:svg)
     origin()
     circle(O,60,:fill)

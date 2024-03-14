@@ -102,7 +102,6 @@ function _readsvgfile(fname)
 end
 
 function _readsvgstring(str)
-
     if length(str) == 0
         throw(error("readsvg: can't read SVG from string $(str)."))
     end
