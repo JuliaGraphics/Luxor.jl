@@ -1,6 +1,14 @@
 # Changelog
 
-## [v4.0] - 2024-
+## [v4.0] - soon ...
+
+### This is a breaking release compared with v3.8
+
+Some 'invalid' `Point` methods have been removed:
+
+- broadcasting `between.(pt1, pt2, range)` now needs `Ref`; `between.(Ref(pt1), Ref(pt2), range)` (or use the new for 4.0 method `between(pt1, pt2, range)`)
+
+- `Point(x, y) .+ n` is no longer valid. Use `Point(x, y) .+ Point(m, n)`.
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
@@ -10,8 +18,8 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - `textformat()`
 - `polysmooth()` has `close` option
 - `markcells()` and `getcells()`
-- package extension for LaTeX
-- CompatHelper git workflow
+- use package extension for LaTeX support
+- add CompatHelper git workflow
 
 ### Changed
 

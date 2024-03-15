@@ -5,12 +5,13 @@ DocTestSetup = quote
 ```
 # Animation helper functions
 
-
 !!! note
 
     [Javis.jl](https://github.com/JuliaAnimators/Javis.jl) is the best way to make animated graphics  with Julia.
 
 Luxor provides some functions to help you create simple animations. It provides some assistance in creating lots of individual frames, and you have the option of stitching these together to form a moving animation in the animated GIF format.
+
+If you're looking for a way to display animations in another window, with live updates, see the [Interactive graphics and Threads](@ref) section.
 
 There are four steps to creating an animation.
 
@@ -23,6 +24,7 @@ There are four steps to creating an animation.
 4 Call the [`animate()`](@ref) function, passing in the movie and the scenes. This creates all the frames and saves them in a temporary directory.
 
 You can use the `creategif = true` option to make an animated GIF. But if you want to generate many thousands of frames, you might want to keep the `creategif` option set to the default value of false, and build the animation later. 
+
 
 ## Example
 
