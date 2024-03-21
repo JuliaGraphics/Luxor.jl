@@ -153,5 +153,5 @@ bounding box `d` units apart.
 function randompointarray(bbox::BoundingBox, d; kwargs...)
     bw = boxwidth(bbox)
     bh = boxheight(bbox)
-    return randompointarray(bw, bh, d; kwargs...) .- Ref(Point(bw/2, bh/2))
+    return randompointarray(bw, bh, d; kwargs...) .- Point(bw/2, bh/2)
 end
