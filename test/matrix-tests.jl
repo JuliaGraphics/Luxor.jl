@@ -56,7 +56,8 @@ end
 
 
 
-function matrix_tests(fname)
+@testset "matrix tests" begin
+    fname = "matrix-tests.pdf"
     # matrix tests
 
     # translate(dx, dy) =   transform([1,  0, 0,  1, dx, dy])                shift by
@@ -195,12 +196,10 @@ function matrix_tests(fname)
     text("hello world")
 
     setmatrix(original_matrix)
-    text("0/0", O .+ 15)
+    text("0/0", O + Point(15, 15))
 
     @test finish() == true
     println("...finished test: output in $(fname)")
 end
-
-matrix_tests("matrix-tests.pdf")
 
 pointmatrix("matrix-point-tests.png")

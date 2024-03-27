@@ -1191,7 +1191,7 @@ end
 Scale (permanently) a polygon by `s`, relative to `center`.
 """
 function polyscale!(pgon, s; center::Point = O)
-    return pgon .= between.(Ref(center), pgon, s)
+    return pgon .= between.(center, pgon, s)
 end
 
 """

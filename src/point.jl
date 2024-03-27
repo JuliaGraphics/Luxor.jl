@@ -38,27 +38,9 @@ Base.zero(::Point) = O
 Point((x, y)::Tuple{Real,Real}) = Point(x, y)
 
 # for broadcasting
-Base.size(::Point) = (2,)
+# Base.size(::Point) = (2,)
 Base.getindex(p::Point, i) = (p.x, p.y)[i]
-Broadcast.broadcastable(x::Point) = x
-Broadcast.BroadcastStyle(::Type{Point}) = Broadcast.Style{Point}()
-Broadcast.BroadcastStyle(::Broadcast.AbstractArrayStyle{0}, s::Broadcast.Style{Point}) = s
-Broadcast.BroadcastStyle(s::Broadcast.AbstractArrayStyle, ::Broadcast.Style{Point}) = s
-Broadcast.BroadcastStyle(s::Broadcast.Style{Point}, ::Broadcast.Style{Tuple}) = s
-Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}, Nothing}) = bc
-function Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}})
-    Broadcast.check_broadcast_axes(bc.axes, bc.args...)
-    return bc
-end
-_point2tuple(p::Point) = (p.x,p.y)
-_point2tuple(x) = x
-_tuple2point(x::Tuple{Real, Real}) = Point(x)
-_tuple2point(x::Tuple{Bool, Bool}) = x
-@inline function Base.copy(bc_p::Broadcast.Broadcasted{Broadcast.Style{Point}})
-    args = _point2tuple.(bc_p.args)
-    bc_t = Broadcast.Broadcasted(bc_p.f, args, bc_p.axes)
-    return _tuple2point(copy(bc_t))
-end
+Broadcast.broadcastable(x::Point) = Ref(x)
 
 # for iteration
 Base.eltype(::Type{Point}) = Float64
