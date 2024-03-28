@@ -776,6 +776,76 @@ function polyfit(plist::Array{Point,1}, npoints = 30)
 end
 
 """
+    bspline(controlPoints::Array{Point,1}, npoints; degree=3, clamped=true)
+
+Generate a B-spline curve from a given set of control points.
+
+# Arguments
+- `controlPoints::Array{Point,1}`: An array of control points that define the B-spline.
+- `npoints=100`: The number of points to generate on the B-spline curve.
+- `degree=3`: The degree of the B-spline. Default is 3.
+- `clamped=true`: A boolean to indicate if the B-spline is clamped. Default is true.
+
+# Returns
+- An array of points on the B-spline curve.
+"""
+function bspline(controlPoints::Array{Point,1}, npoints=30;degree=3, clamped=true)
+    nCP = length(controlPoints)
+    nCP == 0 && error("Error: controlPoints array cannot be empty.")
+    npoints <= 0 && error("Error: npoints must be greater than zero.")
+    degree <= 0 && error("Error: degree must be greater than zero.")
+    degree >= nCP && error("Error: degree cannot be greater than the number of control points.")
+    points = []
+    T = []
+    clamped && (T = fill(0., degree))
+    for i=0:(clamped ? nCP-degree : nCP+degree)
+        push!(T, i / (clamped ? nCP-degree : nCP+degree))
+    end
+    clamped && append!(T, fill(1., degree))
+    
+    """De Boor's algorithm for B-spline evaluation.
+        from https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
+        Arguments
+        ---------
+        k: Index of knot interval that contains x.
+        x: Position.
+        t: Array of knot positions, needs to be padded as described above.
+        c: Array of control points.
+        p: Degree of B-spline.
+    """
+    function deBoor(k,x,t,c,p)
+        d = []
+        for j=1:p+1
+            push!(d,c[j+k-p])
+        end
+        for r=1:p
+            for j=p+1:-1:r+1
+                alpha=(x-t[j+k-p])/(t[j+1+k-r] - t[j+k-p])
+                d[j]=(1-alpha)*d[j-1]+alpha*d[j]
+            end
+        end
+        return d[p+1]
+    end
+
+    for i=0:npoints
+        t=i/npoints
+        if !clamped
+            t = t*(T[nCP-degree]-T[degree+1])+T[degree+1]
+        end
+        k=1 #index of knot interval
+        while k < nCP
+            if (t<T[k+1])
+                break
+            end
+            k += 1
+        end
+        println("t: ",t," k: ",k)
+        push!(points,deBoor(k-1,t,T,controlPoints,degree))
+    end
+    return points
+end
+
+"""
     pathtopoly()
 
 Build a copy of the current path as an array of polygons. The current path remains active.
