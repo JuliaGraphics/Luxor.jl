@@ -63,11 +63,11 @@ What happened? Can you see this image somewhere?
 
 ![point example](../assets/figures/tutorial-hello-world.png)
 
-If you're using VS-Code, the image should appear in the Plots window. If you're working in a Jupyter or Pluto notebook, the image should appear below or above the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing-(time stamp).png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
+If you're using VS-Code and run the file in the Julia REPL, the image should appear in the Plots window. The preview will not be shown if there is any executed code following the macro. If you're working in a Jupyter or Pluto notebook, the image should appear below or above the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing-(time stamp).png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
 !!! note
     
-    In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`background`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref), [`@pdf`](@ref), and [`@drawsvg`](@ref) macros, which do similar things. 
+    In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`background`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref), [`@pdf`](@ref), [`@draw`](@ref), and [`@drawsvg`](@ref) macros, which do similar things. 
 
 PNGs and SVGs are good because they show up in VS-Code, Jupyter, and Pluto. SVGs are usually higher quality too, but they're text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.
 
