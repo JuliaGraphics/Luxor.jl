@@ -251,11 +251,13 @@ end
 
 placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
 
-function placeimage(buffer::Drawing, args...;
+function placeimage(d::Drawing, args...;
     kargs...)
-    if buffer.surfacetype == :svg
+    if d.surfacetype == :svg
         @layer begin
-            placeimage(_readsvgstring(String(copy(buffer.bufferdata))), args...; kargs...)
+             seekstart(d.buffer)
+            drawingdata = read(d.buffer, String)
+            placeimage(_readsvgstring(drawingdata), args...; kargs...)
         end
     else
         throw(error("surfacetype `$(buffer.surfacetype)` is not supported. Use `image` instead."))

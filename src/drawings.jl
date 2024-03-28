@@ -9,18 +9,16 @@ mutable struct Drawing
     greenvalue::Float64
     bluevalue::Float64
     alpha::Float64
-    buffer::IOBuffer # Keeping both buffer and data because I think the buffer might get GC'ed otherwise
-    bufferdata::Array{UInt8,1} # Direct access to data
+    buffer::IOBuffer 
     strokescale::Bool
 
     function Drawing(img::Matrix{T}, f::AbstractString = ""; strokescale = false) where {T<:Union{RGB24,ARGB32}}
         w, h = size(img)
-        bufdata = UInt8[]
-        iobuf = IOBuffer(bufdata, read = true, write = true)
+        iobuf = IOBuffer(UInt8[], read = true, write = true)
         the_surfacetype = :image
         the_surface = Cairo.CairoImageSurface(img)
         the_cr = Cairo.CairoContext(the_surface)
-        currentdrawing = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
+        currentdrawing = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, strokescale)
         if !isassigned(_current_drawing(), _current_drawing_index())
             push!(_current_drawing(), currentdrawing)
             _current_drawing_index(lastindex(_current_drawing()))
@@ -31,8 +29,7 @@ mutable struct Drawing
     end
 
     function Drawing(w, h, stype::Symbol, f::AbstractString = ""; strokescale = false)
-        bufdata = UInt8[]
-        iobuf = IOBuffer(bufdata, read = true, write = true)
+        iobuf = IOBuffer(UInt8[], read = true, write = true)
         the_surfacetype = stype
         if stype == :pdf
             the_surface = Cairo.CairoPDFSurface(iobuf, w, h)
@@ -66,7 +63,7 @@ mutable struct Drawing
         end
         the_cr = Cairo.CairoContext(the_surface)
         # @info("drawing '$f' ($w w x $h h) created in $(pwd())")
-        currentdrawing = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, bufdata, strokescale)
+        currentdrawing = new(w, h, f, the_surface, the_cr, the_surfacetype, 0.0, 0.0, 0.0, 1.0, iobuf, strokescale)
         if !isassigned(_current_drawing(), _current_drawing_index())
             push!(_current_drawing(), currentdrawing)
             _current_drawing_index(lastindex(_current_drawing()))
@@ -159,7 +156,6 @@ function _get_current_drawing_save()
     #     cr::CairoSurface
     #   not checked but perhaps needed:
     #     buffer::IOBuffer
-    #     bufferdata::Array{UInt8, 1}
     if _current_drawing_index() <= 0 ||
        (
         _current_drawing_index() > 0 &&
@@ -227,7 +223,6 @@ _current_surface_ptr()  = getfield(getfield(_get_current_drawing_save(), :surfac
 _current_surface_type() = getfield(_get_current_drawing_save(), :surfacetype)
 
 _current_buffer()     = getfield(_get_current_drawing_save(), :buffer)
-_current_bufferdata() = getfield(_get_current_drawing_save(), :bufferdata)
 
 _get_current_strokescale() = getfield(_get_current_drawing_save(), :strokescale)
 _set_current_strokescale(s) = setfield!(_get_current_drawing_save(), :strokescale, s)
@@ -426,13 +421,12 @@ end
 
 function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
     @debug "show MIME:text/plain"
-    returnvalue = d.filename
-
+    
     # IJulia call the `show` function twice: once for
     # the image MIME and a second time for the text/plain MIME.
     # We check if this is such a 'second call':
     if get(io, :jupyter, false) &&
-       (d.surfacetype == :svg || d.surfacetype == :png)
+        (d.surfacetype == :svg || d.surfacetype == :png)
         return d.filename
     end
 
@@ -445,6 +439,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Drawing)
         location = !isempty(d.filename) ? d.filename : "in memory"
         println(" Luxor drawing: (type = :$(d.surfacetype), width = $(d.width), height = $(d.height), location = $(location))")
     else
+        returnvalue = d.filename
         # open the image file
         if Sys.isapple()
             run(`open $(returnvalue)`)
@@ -525,13 +520,16 @@ function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
     @debug "show MIME:svg "
     r = string(rand(100000:999999))
     # regex is faster 
-    smod = replace(String(d.bufferdata), r"glyph" => "glyph-$r")
+    seekstart(d.buffer)
+    drawingdata = read(d.buffer, String)
+    smod = replace(drawingdata, r"glyph" => "glyph-$r")
     write(f, smod)
 end
 
 function Base.show(f::IO, ::MIME"image/png", d::Luxor.Drawing)
     @debug "show MIME:png "
-    write(f, d.bufferdata)
+    seekstart(d.buffer)
+    write(f, read(d.buffer, String))
 end
 
 """
@@ -715,7 +713,8 @@ If `addmarker` is not set to false, a class property is set as marker:
 ```
 """
 function _adjust_background_rects(buffer; addmarker = true)
-    adjusted_buffer = String(buffer)
+    seekstart(buffer)
+    adjusted_buffer = read(buffer, String)
     # check if there is any transform= part, if not we do not need the next heavy regex
     m = match(r"transform=\"matrix\((.+?),(.+?),(.+?),(.+?),(.+?),(.+?)\)\"/>"is, adjusted_buffer)
     if !isnothing(m) && length(m.captures) == 6
@@ -873,8 +872,7 @@ function finish(; svgpostprocess = false, addmarker = true)
        (
            typeof(_current_surface()) == Cairo.CairoSurfaceImage{ARGB32} ||
            typeof(_current_surface()) == Cairo.CairoSurfaceImage{RGB24}
-       ) &&
-       endswith(_current_filename(), r"\.png"i)
+       ) && endswith(_current_filename(), r"\.png"i)
         Cairo.write_to_png(_current_surface(), _current_buffer())
     end
 
@@ -882,9 +880,14 @@ function finish(; svgpostprocess = false, addmarker = true)
     Cairo.destroy(_current_surface())
 
     if _current_filename() != ""
+        @debug " ... finish() $(_current_filename())"
         if _current_surface_type() != :svg || !svgpostprocess
-            write(_current_filename(), _current_bufferdata())
+            @debug " ... finish() not :svg or not svgpostprocess)"
+            seekstart(_current_buffer())
+            drawingdata = read(_current_buffer(), String)
+            write(_current_filename(), drawingdata)
         else
+            @debug " ... finish() :svg || svgpostprocess"
             # next function call adresses the issue in
             # https://github.com/JuliaGraphics/Luxor.jl/issues/150
             #   short: setting a background in svg results in 
@@ -896,10 +899,11 @@ function finish(; svgpostprocess = false, addmarker = true)
             #          which is applied to every element including the background rects.
             #          This transformation needs to be inversed for the background rects
             #          which is added in this function.
-            buffer = _adjust_background_rects(copy(_current_bufferdata()); addmarker = addmarker)
+            seekstart(_current_buffer())
+            modified_buffer = _adjust_background_rects(copy(_current_buffer()); addmarker = addmarker)
             # hopefully safe as we are at the end of finish:
-            _current_drawing()[_current_drawing_index()].bufferdata = buffer
-            write(_current_filename(), buffer)
+            _current_drawing()[_current_drawing_index()].buffer = IOBuffer(modified_buffer)
+            write(_current_filename(), read(_current_buffer(), String))
         end
     end
 
@@ -1666,8 +1670,9 @@ run(`svgo txt.svg -o txt-min.svg`)
 """
 function svgstring()
     if Luxor._current_surface_type() == :svg
-        svgsource = String(Luxor._current_bufferdata())
-        return svgsource
+        seekstart(_current_buffer())
+        drawingdata = read(_current_buffer(), String)
+        return drawingdata
     else
         @warn "Drawing is not SVG"
         return ""
