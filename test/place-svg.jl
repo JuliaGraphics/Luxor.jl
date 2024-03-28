@@ -79,12 +79,23 @@ function svg_rec_format()
     # does without the _adjust_background_rects(buffer) tweak
     Luxor.Cairo.finish(Luxor._current_surface())
     Luxor.Cairo.destroy(Luxor._current_surface())
+    
+    #= pre Julia v1.11
     buffer=copy(Luxor._current_bufferdata())
     currentdrawing(rd)
     #Luxor._current_drawing()[Luxor._current_drawing_index()] = rd
     finish()
 
     testsvg=String(buffer)
+    =#
+
+    # Julia v1.11 and up
+    seekstart(Luxor._current_buffer())
+    buffer=copy(Luxor._current_buffer())
+    currentdrawing(rd)
+    finish()
+    testsvg=read(buffer, String)
+
     # check if the SVG contains lines like
     #   <use xlink:href="#surface31" transform="matrix(1,0,0,1,150,150)"/>
     # or
