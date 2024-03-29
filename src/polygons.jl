@@ -776,12 +776,12 @@ function polyfit(plist::Array{Point,1}, npoints = 30)
 end
 
 """
-    bspline(controlPoints::Array{Point,1}, npoints; degree=3, clamped=true)
+    polybspline(controlpoints::Array{Point,1}, npoints; degree=3, clamped=true)
 
 Generate a B-spline curve from a given set of control points.
 
 # Arguments
-- `controlPoints::Array{Point,1}`: An array of control points that define the B-spline.
+- `controlpoints::Array{Point,1}`: An array of control points that define the B-spline.
 - `npoints=100`: The number of points to generate on the B-spline curve.
 - `degree=3`: The degree of the B-spline. Default is 3.
 - `clamped=true`: A boolean to indicate if the B-spline is clamped. Default is true.
@@ -789,14 +789,14 @@ Generate a B-spline curve from a given set of control points.
 # Returns
 - An array of points on the B-spline curve.
 """
-function bspline(controlPoints::Array{Point,1}, npoints=30;degree=3, clamped=true)
-    nCP = length(controlPoints)
-    nCP == 0 && error("Error: controlPoints array cannot be empty.")
+function polybspline(controlpoints::Array{Point,1}, npoints=30;degree=3, clamped=true)
+    nCP = length(controlpoints)
+    nCP == 0 && error("Error: controlpoints array cannot be empty.")
     npoints <= 0 && error("Error: npoints must be greater than zero.")
     degree <= 0 && error("Error: degree must be greater than zero.")
     degree >= nCP && error("Error: degree cannot be greater than the number of control points.")
-    points = []
-    T = []
+    points = Point[]
+    T = Float64[]
     clamped && (T = fill(0., degree))
     for i=0:(clamped ? nCP-degree : nCP+degree)
         push!(T, i / (clamped ? nCP-degree : nCP+degree))
@@ -814,7 +814,7 @@ function bspline(controlPoints::Array{Point,1}, npoints=30;degree=3, clamped=tru
         p: Degree of B-spline.
     """
     function deBoor(k,x,t,c,p)
-        d = []
+        d = Float64[]
         for j=1:p+1
             push!(d,c[j+k-p])
         end
@@ -830,17 +830,16 @@ function bspline(controlPoints::Array{Point,1}, npoints=30;degree=3, clamped=tru
     for i=0:npoints
         t=i/npoints
         if !clamped
-            t = t*(T[nCP-degree]-T[degree+1])+T[degree+1]
+            t *=(T[nCP-degree]-T[degree+1])+T[degree+1]
         end
         k=1 #index of knot interval
         while k < nCP
-            if (t<T[k+1])
+            if t<T[k+1]
                 break
             end
             k += 1
         end
-        println("t: ",t," k: ",k)
-        push!(points,deBoor(k-1,t,T,controlPoints,degree))
+        push!(points,deBoor(k-1,t,T,controlpoints,degree))
     end
     return points
 end
