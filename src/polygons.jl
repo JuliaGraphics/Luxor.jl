@@ -814,7 +814,7 @@ function polybspline(controlpoints::Array{Point,1}, npoints=30;degree=3, clamped
         p: Degree of B-spline.
     """
     function deBoor(k,x,t,c,p)
-        d = Float64[]
+        d = Point[]
         for j=1:p+1
             push!(d,c[j+k-p])
         end
