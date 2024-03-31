@@ -308,7 +308,7 @@ Use [`textonpoly()`](@ref) to draw a string `str` that follows the route of a po
 ```@example
 using Luxor, Colors # hide
 
-d = @drawsvg begin # hide
+d = @draw begin # hide
     origin() # hide
     background("black") # hide
     setmesh(mesh(

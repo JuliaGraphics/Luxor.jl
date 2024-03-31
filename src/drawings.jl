@@ -881,8 +881,10 @@ function finish(; svgpostprocess = false, addmarker = true)
 
     if _current_filename() != ""
         @debug " ... finish() $(_current_filename())"
-        if _current_surface_type() != :svg || !svgpostprocess
+        if (_current_surface_type() != :svg) || !svgpostprocess
             @debug " ... finish() not :svg or not svgpostprocess)"
+            @debug _current_surface_type()
+            @debug !svgpostprocess
             seekstart(_current_buffer())
             drawingdata = read(_current_buffer(), String)
             write(_current_filename(), drawingdata)
