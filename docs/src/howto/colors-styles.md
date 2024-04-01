@@ -612,20 +612,19 @@ triangular patches, where each patch shows a different area
 of the HSB color space. Any graphic drawn after `setmesh()`, such as the hypotrochoid, is drawn using the mesh.
 
 ```@example
-using Luxor, Colors
-
-@drawsvg begin
+@draw begin
+    background("grey10")
     radius = 300
     L = 300
-    mesh1 = mesh([Point(0, 0), polar(radius, 0), polar(radius, 2π/100)], [RGBA(0, 0, 0, 0)])
+    mesh1 = mesh([Point(0, 0), polar(radius, 0), polar(radius, 2π / 100)], [RGBA(0, 0, 0, 0)])
     sethue("red")
     for θ in range(0, 2π, length=L)
-        t = [O, O + polar(radius, θ), O + polar(radius, θ + 2π/L)]
+        t = [O, O + polar(radius, θ), O + polar(radius, θ + 2π / L)]
         add_mesh_patch(mesh1, t,
             [
-            HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
-            HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
-            HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
+                HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
+                HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
+                HSB(rescale(θ, 0, 2π, 0, 360), 0.9, 1),
             ])
     end
     setmesh(mesh1)
