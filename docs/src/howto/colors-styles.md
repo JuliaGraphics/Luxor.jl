@@ -612,6 +612,7 @@ triangular patches, where each patch shows a different area
 of the HSB color space. Any graphic drawn after `setmesh()`, such as the hypotrochoid, is drawn using the mesh.
 
 ```@example
+using Luxor, Colors
 @draw begin
     background("grey10")
     radius = 300
