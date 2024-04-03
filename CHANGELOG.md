@@ -20,6 +20,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - `markcells()` and `getcells()`
 - use package extension for LaTeX support
 - add CompatHelper git workflow
+- add Aqua.jl testing
 
 ### Changed
 

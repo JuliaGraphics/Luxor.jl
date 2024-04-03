@@ -1,9 +1,15 @@
-using Test, Random
+using Test
+using Random
+using Luxor
+using Aqua
+
 Random.seed!(42)
 
 ENV["JULIA_DEBUG"] = Main
 
 function run_all_tests()
+
+    Aqua.test_all(Luxor)
 
     @testset "Basics" begin
         include("basic-test.jl")
