@@ -1,11 +1,12 @@
 # Make simple animations
 
 Luxor.jl can help you build simple animations, by assembling
-a series of PNG images into an animated GIF.
+a series of PNG images into an animated movie.
 
 !!! note
 
-    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl), which is designed specifically for the purpose.
+    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl), which is designed specifically for the purpose. 
+    [Makie.jl](https://docs.makie.org/stable/) is also a good choice.
 
 ## 1: A Julia spinner
 
@@ -47,7 +48,7 @@ rotation value of about `2π * 0.5`.
 
 The Scene object has details about the number of frames for this scene, including the number of times the `frame` function is called.
 
-To actually build the animation, the [`animate`](@ref) function takes a movie and an array of one or more scenes and creates all the drawings required. It can also build a GIF.
+To actually build the animation, the [`animate`](@ref) function takes a movie and an array of one or more scenes and creates all the drawings required. It can also build a GIF or movie file.
 
 ```julia
 animate(mymovie,
@@ -65,6 +66,15 @@ Obviously, if you increase the range from 1:60 to, say,
 rotation will take longer and will be much
 smoother. Of course, you could change the framerate to be
 something other than the default `30`.
+
+Use `createmovie = true` instead of `creategif = true` if you want to make a video file. Specify the location and format for the video file in `pathname`:
+
+```julia
+...
+    createmovie = true,
+    pathname = "/tmp/juliaspinner.mkv"
+...
+```
 
 ## 2: Combining scenes
 

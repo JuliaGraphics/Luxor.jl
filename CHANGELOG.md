@@ -21,6 +21,7 @@ See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
 - use package extension for LaTeX support
 - add CompatHelper git workflow
 - add Aqua.jl testing
+- `createmovie` option for `animate`
 
 ### Changed
 

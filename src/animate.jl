@@ -120,21 +120,24 @@ end
 
 """
     animate(movie::Movie, scenelist::Array{Scene, 1};
-        creategif=false,
-        framerate=30,
-        pathname="",
-        tempdirectory="",
-        usenewffmpeg=true)
+        creategif = false,
+        createmovie = false,
+        framerate = 30,
+        pathname = "",
+        tempdirectory = "")
 
-Create the movie defined in `movie` by rendering the frames define in the array of scenes
+Create all the frames of the movie, using the array of scenes
 in `scenelist`.
 
-If `creategif` is `true`, the function runs the `ffmpeg` utility on the
-resulting frames to build a GIF animation. This will be stored in the `pathname`
-keyword argument (an existing file will be overwritten; use a ".gif" suffix), or
-in `(movietitle).gif` in a temporary directory. The FFMPEG package is loaded with Luxor,
+If `creategif` is `true`, also create an animated GIF (".gif").
 
-In suitable environments, the resulting animation is displayed in the Plots window.
+If `createmovie` is `true`, also create a movie (".mkv", ".mp4", ".webm") file.
+
+The file will be stored in the `pathname` keyword argument, or otherwise in a
+temporary directory.
+
+In suitable environments, a GIF animation is displayed in the Plots
+window.
 
 ### Example
 
@@ -146,13 +149,9 @@ animate(bang, [
     pathname="/tmp/animationtest.gif")
 ```
 
-The `usenewffmpeg` option, `true` by default, uses single-pass palette
-generation and more complex filtering provided by recent versions of the
-`ffmpeg` utility, mainly to cope with transparent backgrounds. If set to
-`false`, the behavior is the same as in previous versions of Luxor.
-
-If you prefer to use the FFMPEG.jl package and run `ffmpeg` with your own options - 
-to create an MPF file, for exxample - use code like this:
+If you prefer, you can use the FFMPEG.jl package (or the `ffmpeg` executable)
+separately on the set of still images that have been generated. For example, 
+use code like this:
 
 ```julia
 using Luxor
@@ -168,20 +167,22 @@ animate(movie, [
     creategif=false, 
     tempdirectory=tempdirectory)
 
-FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i \$(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
+FFMPEG.exe(`-r 30 -f image2 -i \$(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
 
 ```
 """
-function animate(movie::Movie, scenelist::Array{Scene, 1};
-        creategif=false,
-        framerate=30,
-        pathname="",
-        tempdirectory="",
-        usenewffmpeg=true,
-        debug=false)
+function animate(movie::Movie, scenelist::Array{Scene,1};
+    creategif = false,
+    createmovie = false,
+    framerate = 30,
+    pathname = "",
+    tempdirectory = "",
+    usenewffmpeg = true,
+    debug = false)
 
+    # error if pathname is directory
     if isdir(pathname)
-        suggestedpathname = joinpath(pathname, "myanimation.gif")
+        suggestedpathname = joinpath(pathname, "myanimation.gif or mp4 or mkv")
         @error("Parameter pathname=$pathname points to a directory. Please pass a filename like '$suggestedpathname' as pathname parameter!")
         return false
     end
@@ -217,40 +218,113 @@ function animate(movie::Movie, scenelist::Array{Scene, 1};
         filecounter += 1
     end
     @info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
-    if creategif == false
+
+    if creategif == false && createmovie == false
+        @info "to create a movie or GIF, use `creategif = true`` or `createmovie=true`."
         return true # we're done
     end
-    # the FFMPEG commands create a palette and then create an animated GIF from the resulting images
-    if !usenewffmpeg
-        # old version of ffmpeg up to 2.1.3
-        # these two commands create a palette and then an animated GIF from the resulting images using the palette
-        FFMPEG.ffmpeg_exe(`-loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
-        FFMPEG.ffmpeg_exe(`-loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
-    else
-        @debug "we're running bundled FFMPEG", FFMPEG.exe("-version")
-        # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters ¯\\\_(ツ)_/¯
-        if debug
-            @info "$(framerate)"
-            @info "$(tempdirectory)"
-            @info "$(tempdirectory)/$(movie.movietitle).gif"
-            FFMPEG.ffmpeg_exe(`-framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+
+    # # we could do both I suppose, but if not:
+    # if creategif == true && createmovie == true
+    #     throw(error("animate() - GIF or Movie?"))
+    # end
+
+    ### gif creation?
+
+    if creategif == true
+        # the FFMPEG commands create a palette and then create an animated GIF from the resulting images
+        if !usenewffmpeg
+            # old version of ffmpeg up to 2.1.3
+            # these two commands create a palette and then an animated GIF from the resulting images using the palette
+            Luxor.FFMPEG.exe(`-loglevel panic -f image2 -i $(tempdirectory)/%10d.png -vf palettegen -y $(tempdirectory)/$(movie.movietitle)-palette.png`)
+            Luxor.FFMPEG.exe(`-loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -i $(tempdirectory)/$(movie.movietitle)-palette.png -lavfi paletteuse -y $(tempdirectory)/$(movie.movietitle).gif`)
         else
-            # reduce verbosity !
-            FFMPEG.ffmpeg_exe(`-loglevel panic -framerate $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+            @debug "we're running bundled FFMPEG", Luxor.FFMPEG.exe("-version")
+            # the latest version of ffmpeg uses built-in palettes and allegedly does transparency using complex filters ¯\\\_(ツ)_/¯
+            if debug
+                @info "$(framerate)"
+                @info "$(tempdirectory)"
+                @info "$(tempdirectory)/$(movie.movietitle).gif"
+                Luxor.FFMPEG.exe(`-r $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+            else
+                # reduce verbosity !
+                Luxor.FFMPEG.exe(`-loglevel panic -r $(framerate) -f image2 -i $(tempdirectory)/%10d.png -filter_complex "[0:v] split [a][b]; [a] palettegen=stats_mode=full:reserve_transparent=on:transparency_color=FFFFFF [p]; [b][p] paletteuse=new=1:alpha_threshold=128" -y $(tempdirectory)/$(movie.movietitle).gif`)
+            end
         end
+
+        if !isempty(pathname)
+            targetdir, movieformat = splitext(pathname)
+            if movieformat != ".gif"
+                pathname = targetdir * ".gif"
+                movieformat = ".gif"
+            end 
+            mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force = true)
+            @info("GIF is: $pathname")
+            giffn = pathname
+        else
+            @info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
+            giffn = tempdirectory * "/" * movie.movietitle * ".gif"
+        end
+        return Luxor.AnimatedGif(giffn)
     end
 
-    if ! isempty(pathname)
-        mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force=true)
-        @info("GIF is: $pathname")
-        giffn  = pathname
-    else
-        @info("GIF is: $(tempdirectory)/$(movie.movietitle).gif")
-        giffn  = tempdirectory * "/" * movie.movietitle * ".gif"
+    ## movie creation?
+
+    if createmovie == true
+        if pathname == ""
+            # default to mkv
+            pathname = tempdirectory * "/" * movie.movietitle * ".mkv"
+        end
+        targetdir, movieformat = splitext(pathname)
+        if movieformat ∉ [".mkv", ".mp4", ".webm"]
+            @info "using default movie format .mkv"
+            movieformat = ".mkv"
+            pathname = targetdir * movieformat
+        end
+        _make_video(movieformat, pathname, framerate, tempdirectory)
     end
-    AnimatedGif(giffn)
 end
 
+function _make_video(movieformat, pathname, framerate, tempdirectory)
+    if movieformat == ".mkv"
+        @ffmpeg_env run(`ffmpeg 
+        -loglevel panic
+        -f image2 
+        -i $(tempdirectory)/%10d.png 
+        -r $(framerate) 
+        -pixel_format rgb24
+        -c:v libx264 
+        -pix_fmt yuv420p 
+        -an
+        -y $(pathname)`)
+    elseif movieformat == ".mp4"
+        @ffmpeg_env run(`ffmpeg 
+        -loglevel panic
+        -f image2 
+        -i $(tempdirectory)/%10d.png 
+        -r $(framerate) 
+        -pixel_format rgb24
+        -c:v libx264 
+        -pix_fmt yuv420p 
+        -an
+        -y $(pathname)`)
+    elseif movieformat == ".webm"
+        @ffmpeg_env run(`ffmpeg 
+        -loglevel panic
+        -f image2 
+        -i $(tempdirectory)/%10d.png 
+        -r $(framerate) 
+        -lossless 0 
+        -c:v libvpx-vp9
+        -b:v 0
+        -pix_fmt yuv420p 
+        -an
+        -y $(pathname)`)
+    else
+        throw(error("animate() can't do $(movieformat) videos "))
+    end
+    @info "saved video in $(pathname)"
+end
 """
     animate(movie::Movie, scene::Scene; creategif=false, framerate=30)
 

@@ -9,7 +9,7 @@ DocTestSetup = quote
 
     [Javis.jl](https://github.com/JuliaAnimators/Javis.jl) is the best way to make animated graphics  with Julia.
 
-Luxor provides some functions to help you create simple animations. It provides some assistance in creating lots of individual frames, and you have the option of stitching these together to form a moving animation in the animated GIF format.
+Luxor provides some functions to help you create simple animations. It provides some assistance in creating lots of individual frames, and you have the option of stitching these together to form a moving animation, as an animated GIF or video file.
 
 If you're looking for a way to display animations in another window, with live updates, see the [Interactive graphics and Threads](@ref) section.
 
@@ -23,12 +23,12 @@ There are four steps to creating an animation.
 
 4 Call the [`animate()`](@ref) function, passing in the movie and the scenes. This creates all the frames and saves them in a temporary directory.
 
-You can use the `creategif = true` option to make an animated GIF. But if you want to generate many thousands of frames, you might want to keep the `creategif` option set to the default value of false, and build the animation later. 
-
+You can also use the `creategif = true` option to make an animated GIF, or the `createmovie = true` option to make a video file. 
 
 ## Example
 
 ```julia
+using Luxor, Colors
 demo = Movie(400, 400, "test")
 
 function backdrop(scene, framenumber)
@@ -63,17 +63,13 @@ In this example, the movie uses two scenes, each specifying a function to draw f
 
 ## Making the animation
 
-You can request that GIF animations are made automatically. The `creategif` keyword argument for the `animate` function, when set to `true`, runs `ffmpeg` when the frames have all been generated. The `pathname` keyword argument lets you specify a pathname for the animated GIF; if you don't provide one, it will be saved in a temporary folder (and listed in the REPL). 
+You can request that animations are made automatically:
 
-Inside [`animate`](@ref), the first pass creates a GIF color palette, the second builds the file:
+- the `creategif` keyword when set to `true` makes an animated GIF
 
-```julia
-run(`ffmpeg -f image2 -i $(tempdirectory)/%10d.png -vf palettegen
-    -y $(seq.stitle)-palette.png`)
+- the `createmovie` keyword when set to `true` makes an animated video file
 
-run(`ffmpeg -framerate 30 -f image2 -i $(tempdirectory)/%10d.png
-    -i $(seq.stitle)-palette.png -lavfi paletteuse -y /tmp/$(seq.stitle).gif`)
-```
+The `pathname` keyword argument lets you specify a pathname; if you don't provide one, it will be saved in a temporary folder (and listed in the REPL).
 
 Many movie editing programs, such as Final Cut Pro, will also let you import sequences of still images into a movie timeline.
 
@@ -90,15 +86,14 @@ tempdirectory = "/tmp/temp/"
 animate(movie, [
         Scene(movie, frame, 1:50)
     ], 
-    creategif=false, # don't have to create the GIF here
     tempdirectory=tempdirectory)
 
 # run a custom ffmpeg command
-FFMPEG.ffmpeg_exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
+FFMPEG.exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
 
 ```
 
-`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment and color palette tweaking. 
+`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment, and color palette tweaking. 
 
 ### Passing information to the frame() function
 
@@ -128,8 +123,8 @@ function main()
                 0:100)
         ],
         tempdirectory="/tmp/tempdir",
-        creategif=true, 
-        pathname="/tmp/t.gif")
+        createmovie=true, 
+        pathname="/tmp/t.mkv")
 end
 ```
 
@@ -137,6 +132,7 @@ Or, use the `optarg` keyword argument for `Scene()`, and access it using `scene.
 ` keyword.
 
 ```julia
+using Luxor, Colors
 function frame(scene, framenumber)
     databuffer = scene.opts
     eased_n = scene.easingfunction(framenumber - scene.framerange.start,
@@ -156,8 +152,8 @@ function main()
     demo = Movie(250, 250, "buffer")
     animate(demo, [Scene(demo, frame, optarg=databuffer, 0:100)],
         tempdirectory="/tmp/tempdir",
-        creategif=true,
-        pathname="/tmp/t.gif")
+        createmovie=true,
+        pathname="/tmp/t.mp4")
 end
 ```
 
