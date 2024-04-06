@@ -94,4 +94,32 @@ end
     end
 end
 
+@testset "test output" begin
+    demo = Movie(100, 100, "test")
+    function frame(scene, framenumber)
+        sethue("purple")
+        eased_n = scene.easingfunction(framenumber, 0, 1, scene.framerange.stop)
+        circle(Point(-180 + (360 * eased_n), -20), 10, :fill)
+    end
+    mktempdir() do tmpdir
+        cd(tmpdir) do
+            # true if no gif
+            @test animate(demo, [Scene(demo, frame, 0:20, easingfunction = easeinsine)],
+                creategif = false) == true
+            # return gif 
+            ag = animate(demo, [Scene(demo, frame, 0:20, easingfunction = easeinsine)], creategif = true)
+            @test ag isa Luxor.AnimatedGif
+            # true if movie
+            @test animate(demo, [Scene(demo, frame, 0:10)], createmovie = true) == true
+            @test animate(demo, [Scene(demo, frame, 0:10)], createmovie = true, creategif = false) == true
+            animate(demo, [Scene(demo, frame, 0:10)], createmovie = true, pathname = "temp")
+            @test isfile("temp.mkv")
+            animate(demo, [Scene(demo, frame, 0:10)], createmovie = true, pathname = "temp.mp4")
+            @test isfile("temp.mp4")
+            animate(demo, [Scene(demo, frame, 0:10)], createmovie = true, pathname = "temp.webm")
+            @test isfile("temp.mp4")
+        end
+    end
+end
+
 println("...finished animation tests")

@@ -126,12 +126,12 @@ end
         pathname = "",
         tempdirectory = "")
 
-Create all the frames of the movie, using the array of scenes
-in `scenelist`.
+Create all the frames of the `movie``, using the array of scenes
+defined in `scenelist`.
 
 If `creategif` is `true`, also create an animated GIF (".gif").
 
-If `createmovie` is `true`, also create a movie (".mkv", ".mp4", ".webm") file.
+If `createmovie` is `true`, also create a movie (".mkv", ".mp4", or ".webm") file.
 
 The file will be stored in the `pathname` keyword argument, or otherwise in a
 temporary directory.
@@ -220,7 +220,7 @@ function animate(movie::Movie, scenelist::Array{Scene,1};
     @info("... $(filecounter-1) frames saved in directory:\n\t $(tempdirectory)")
 
     if creategif == false && createmovie == false
-        @info "to create a movie or GIF, use `creategif = true`` or `createmovie=true`."
+        @info "to create a GIF or a movie, use `creategif = true` or `createmovie=true`."
         return true # we're done
     end
 
@@ -282,6 +282,7 @@ function animate(movie::Movie, scenelist::Array{Scene,1};
             pathname = targetdir * movieformat
         end
         _make_video(movieformat, pathname, framerate, tempdirectory)
+        return true
     end
 end
 
