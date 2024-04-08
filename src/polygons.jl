@@ -1181,7 +1181,7 @@ Move (permanently) a polygon from `frompoint` to `topoint`.
 """
 function polymove!(pgon, frompoint::Point, topoint::Point)
     d = topoint - frompoint
-    return pgon .+= Ref(d)
+    return pgon .+= d
 end
 
 """
