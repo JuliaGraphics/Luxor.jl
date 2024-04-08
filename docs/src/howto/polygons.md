@@ -614,7 +614,7 @@ background("white") # hide
 setline(2) # hide
 setlinejoin("round") # hide
 
-spine = between(O - (200, 0), O + (200, 0), 0:0.025:1)
+spine = between.(O - (200, 0), O + (200, 0), 0:0.025:1)
 
 sethue("red")
 prettypoly(spine, action = :stroke)
