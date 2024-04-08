@@ -6,8 +6,6 @@
 
 Some 'invalid' `Point` methods have been removed:
 
-- broadcasting `between.(pt1, pt2, range)` now needs `Ref`; `between.(Ref(pt1), Ref(pt2), range)` (or use the new for 4.0 method `between(pt1, pt2, range)`)
-
 - `Point(x, y) .+ n` is no longer valid. Use `Point(x, y) + Point(n, n)`.
 
 LaTeX support is still under development. 
