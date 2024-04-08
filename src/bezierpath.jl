@@ -49,7 +49,7 @@ mutable struct BezierPath <: AbstractArray{BezierPathSegment,1}
 end
 
 BezierPath(bps::BezierPathSegment) = BezierPath([bps])
-BezierPath() = BezierPath([])
+BezierPath() = BezierPath(BezierPathSegment[])
 
 Base.size(bp::BezierPath) = size(bp.segments)
 Base.length(bp::BezierPath) = length(bp.segments)
