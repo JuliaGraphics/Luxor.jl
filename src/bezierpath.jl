@@ -746,7 +746,7 @@ Returns a tuple of two BezierPathSegments, the 'lower' one
 
 ## Example
 
-```julia
+```julia-repl
 julia> bps = BezierPathSegment(ngon(O, 200, 4, vertices=true)...)
 4-element BezierPathSegment:
  Point(1.2246467991473532e-14, 200.0)
