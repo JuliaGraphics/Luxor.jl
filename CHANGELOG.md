@@ -6,7 +6,8 @@
 
 Some 'invalid' `Point` methods have been removed:
 
-- `Point(x, y) .+ n` is no longer valid. Use `Point(x, y) + Point(n, n)`.
+- Broadcasting on xy-elements like `Point(x, y) .+ n` are no longer valid. Use `Point(x, y) + Point(n, n)`.
+- `Point`-`Real` arithmetic operations such as `Point(x, y) + n` are also no longer valid.
 
 LaTeX support is still under development. 
 See https://github.com/JuliaGraphics/Cairo.jl/pull/357.
