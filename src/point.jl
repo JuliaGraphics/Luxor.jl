@@ -132,12 +132,8 @@ function Base.isapprox(p1::Point, p2::Point;
 end
 
 isless(p1::Point, p2::Point) = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p2.y))
-!=(p1::Point, p2::Point) = !isequal(p1, p2)
 <(p1::Point, p2::Point) = isless(p1, p2)
->(p1::Point, p2::Point) = p2 < p1
 ==(p1::Point, p2::Point) = isequal(p1, p2)
-
-cmp(p1::Point, p2::Point) = (p1 < p2) ? -1 : (p2 < p1) ? 1 : 0
 
 # a unique that works better on points?
 # I think this uses ==
