@@ -38,27 +38,9 @@ Base.zero(::Point) = O
 Point((x, y)::Tuple{Real,Real}) = Point(x, y)
 
 # for broadcasting
-Base.size(::Point) = (2,)
+# Base.size(::Point) = (2,)
 Base.getindex(p::Point, i) = (p.x, p.y)[i]
-Broadcast.broadcastable(x::Point) = x
-Broadcast.BroadcastStyle(::Type{Point}) = Broadcast.Style{Point}()
-Broadcast.BroadcastStyle(::Broadcast.AbstractArrayStyle{0}, s::Broadcast.Style{Point}) = s
-Broadcast.BroadcastStyle(s::Broadcast.AbstractArrayStyle, ::Broadcast.Style{Point}) = s
-Broadcast.BroadcastStyle(s::Broadcast.Style{Point}, ::Broadcast.Style{Tuple}) = s
-Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}, Nothing}) = bc
-function Broadcast.instantiate(bc::Broadcast.Broadcasted{Broadcast.Style{Point}})
-    Broadcast.check_broadcast_axes(bc.axes, bc.args...)
-    return bc
-end
-_point2tuple(p::Point) = (p.x,p.y)
-_point2tuple(x) = x
-_tuple2point(x::Tuple{Real, Real}) = Point(x)
-_tuple2point(x::Tuple{Bool, Bool}) = x
-@inline function Base.copy(bc_p::Broadcast.Broadcasted{Broadcast.Style{Point}})
-    args = _point2tuple.(bc_p.args)
-    bc_t = Broadcast.Broadcasted(bc_p.f, args, bc_p.axes)
-    return _tuple2point(copy(bc_t))
-end
+Broadcast.broadcastable(x::Point) = Ref(x)
 
 # for iteration
 Base.eltype(::Type{Point}) = Float64
@@ -234,24 +216,6 @@ end
 function between(couple::NTuple{2,Point}, x)
     p1, p2 = couple
     return p1 + (x * (p2 - p1))
-end
-
-"""
-    between(p1::Point, p2::Point, r:range)
-    between(p1::Point, p2::Point, a:array)
-
-Return an array of Points between point `p1` and point `p2` for 
-every `x` in range `r` or array `a`.
-
-If `x` is 0.0, that point will be at `p1`; if `x` is 1.0, that point will be at `p2`.
-When `x` is 0.5, that point is the midpoint between `p1` and `p2`.
-"""
-function Luxor.between(pt1::Point, pt2::Point, r::AbstractRange)
-    [between(pt1, pt2, e) for e in r]
-end
-
-function Luxor.between(pt1::Point, pt2::Point, a::AbstractArray)
-    [between(pt1, pt2, e) for e in a]
 end
 
 """

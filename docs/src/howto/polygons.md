@@ -71,7 +71,7 @@ for (pos, n) in tiles
 
         circle(Point(0, 0), 4, action=:fill)
 
-        label.([string(i) for i in 1:n], slope.(Ref(O), plist), plist, offset=5)
+        label.([string(i) for i in 1:n], slope.(O, plist), plist, offset=5)
     end
 end
 
@@ -614,7 +614,7 @@ background("white") # hide
 setline(2) # hide
 setlinejoin("round") # hide
 
-spine = between(O - (200, 0), O + (200, 0), 0:0.025:1)
+spine = between.(O - (200, 0), O + (200, 0), 0:0.025:1)
 
 sethue("red")
 prettypoly(spine, action = :stroke)
@@ -960,7 +960,7 @@ origin() # hide
 setline(0.5)
 
 @layer begin
-    rule.(Ref(O), (0, (π / 2)))
+    rule.(O, (0, (π / 2)))
 end
 
 P = O
