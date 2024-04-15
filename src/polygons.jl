@@ -1,13 +1,11 @@
 # polygons, part of Luxor
 
 """
-Draw a polygon.
-
     poly(pointlist::Array{Point, 1}, action = :none;
         close=false,
         reversepath=false)
 
-Create a path with the points in `pointlist` and apply `action`.
+Draw a polygon. Create a path with the points in `pointlist` and apply `action`.
 By default `poly()` doesn't close or fill the polygon.
 """
 function poly(pointlist::Array{Point,1};
@@ -38,12 +36,11 @@ poly(pointlist::Array{Point,1}, a::Symbol;
     close = false,
     reversepath = false) = poly(pointlist, action = action, close = close, reversepath = reversepath)
 
-
 """
+    polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
+
 Sort the points of a polygon into order. Points are sorted according to the angle they make
 with a specified point.
-
-    polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
 
 The `refpoint` can be chosen, but the default minimum point is usually OK too:
 
@@ -59,10 +56,10 @@ function polysortbyangle(pointlist::Array{Point,1}, refpoint = minimum(pointlist
 end
 
 """
+    polysortbydistance(p, starting::Point)
+
 Sort a polygon by finding the nearest point to the starting point, then
 the nearest point to that, and so on.
-
-    polysortbydistance(p, starting::Point)
 
 You can end up with convex (self-intersecting) polygons, unfortunately.
 """
@@ -82,9 +79,9 @@ function polysortbydistance(pointlist::Array{Point,1}, starting::Point)
 end
 
 """
-Use a non-recursive Douglas-Peucker algorithm to simplify a polygon. Used by `simplify()`.
+     douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
 
-    douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
+Use a non-recursive Douglas-Peucker algorithm to simplify a polygon. Used by `simplify()`.
 """
 function douglas_peucker(pointlist::Array{Point,1}, start_index, last_index, epsilon)
     temp_stack = Tuple{Int,Int}[]
@@ -117,9 +114,9 @@ function douglas_peucker(pointlist::Array{Point,1}, start_index, last_index, eps
 end
 
 """
-Simplify a polygon:
-
     simplify(pointlist::Array, detail=0.1)
+
+Simplify a polygon.
 
 `detail` is the maximum approximation error of simplified polygon.
 """
@@ -380,7 +377,7 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
         # there are less than three points to smooth
         return nothing
     else
-        @inbounds for i in 1:(close ? l : l-2)
+        @inbounds for i in 1:(close ? l : l - 2)
             p1 = points[mod1(i, l)]
             p2 = points[mod1(i + 1, l)]
             p3 = points[mod1(i + 2, l)]
@@ -622,7 +619,7 @@ end
 # third method
 
 """
-offsetpoly(plist, shape::Function)
+    offsetpoly(plist, shape::Function)
 
 Return a closed polygon that is offset from and encloses an
 polyline.
@@ -651,8 +648,8 @@ This example draws a tilde, with the ends starting at 20
 the middle, as f(0.5) = 25.
 
 ```julia
-f(x, θ) =  10 + 15sin(x * π)
-sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
+f(x, θ) = 10 + 15sin(x * π)
+sinecurve = [Point(50x, 50sin(x)) for x in (-π):(π / 24):π]
 pgon = offsetpoly(sinecurve, f)
 poly(pgon, :fill)
 ```
@@ -662,7 +659,7 @@ thins the horizontal parts.
 
 ```julia
 g(x, θ) = rescale(abs(sin(θ)), 0, 1, 0.1, 30)
-sinecurve = [Point(50x, 50sin(x)) for x in -π:π/24:π]
+sinecurve = [Point(50x, 50sin(x)) for x in (-π):(π / 24):π]
 pgon = offsetpoly(sinecurve, g)
 poly(pgon, :fill)
 ```
@@ -781,34 +778,36 @@ end
 Generate a B-spline curve from a given set of control points.
 
 # Arguments
-- `controlpoints::Array{Point,1}`: An array of control points that define the B-spline.
-- `npoints=100`: The number of points to generate on the B-spline curve.
-- `degree=3`: The degree of the B-spline. Default is 3.
-- `clamped=true`: A boolean to indicate if the B-spline is clamped. Default is true.
+
+  - `controlpoints::Array{Point,1}`: An array of control points that define the B-spline.
+  - `npoints=100`: The number of points to generate on the B-spline curve.
+  - `degree=3`: The degree of the B-spline. Default is 3.
+  - `clamped=true`: A boolean to indicate if the B-spline is clamped. Default is true.
 
 # Returns
-- An array of points on the B-spline curve.
+
+  - An array of points on the B-spline curve.
 """
-function polybspline(controlpoints::Array{Point,1}, npoints=30;degree=3, clamped=true)
+function polybspline(controlpoints::Array{Point,1}, npoints = 30; degree = 3, clamped = true)
     nCP::Int64 = length(controlpoints)
     nCP == 0 && error("Error: controlpoints array cannot be empty.")
     npoints <= 0 && error("Error: npoints must be greater than zero.")
     degree <= 0 && error("Error: degree must be greater than zero.")
     degree >= nCP && error("Error: degree cannot be greater than the number of control points.")
     points = Array{Point,1}(undef, npoints)
-    T = Array{Float64,1}(undef, nCP+degree+1)
+    T = Array{Float64,1}(undef, nCP + degree + 1)
     if clamped
-        T[1:degree] .= 0.
-        for i=degree+1:nCP+1
+        T[1:degree] .= 0.0
+        for i in (degree + 1):(nCP + 1)
             T[i] = (i - degree - 1) / (nCP - degree)
         end
-        T[nCP+2:end] .= 1.
+        T[(nCP + 2):end] .= 1.0
     else
-        for i=1:nCP+degree+1
+        for i in 1:(nCP + degree + 1)
             T[i] = (i - 1) / (nCP + degree)
         end
     end
-    
+
     """De Boor's algorithm for B-spline evaluation.
         from https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
         Arguments
@@ -819,33 +818,33 @@ function polybspline(controlpoints::Array{Point,1}, npoints=30;degree=3, clamped
         c: Array of control points.
         p: Degree of B-spline.
     """
-    function deBoor(k::Int64,x::Float64,t::Array{Float64,1},c::Array{Point,1},p::Int64)::Point
-        d = Array{Point,1}(undef, p+1)
-        for j=1:p+1
-            d[j] = c[j+k-p]
+    function deBoor(k::Int64, x::Float64, t::Array{Float64,1}, c::Array{Point,1}, p::Int64)::Point
+        d = Array{Point,1}(undef, p + 1)
+        for j in 1:(p + 1)
+            d[j] = c[j + k - p]
         end
-        @inbounds for r=1:p
-            for j=p+1:-1:r+1
-                alpha=(x-t[j+k-p])/(t[j+1+k-r] - t[j+k-p])
-                d[j]=(1-alpha)*d[j-1]+alpha*d[j]
+        @inbounds for r in 1:p
+            for j in (p + 1):-1:(r + 1)
+                alpha = (x - t[j + k - p]) / (t[j + 1 + k - r] - t[j + k - p])
+                d[j] = (1 - alpha) * d[j - 1] + alpha * d[j]
             end
         end
-        return d[p+1]
+        return d[p + 1]
     end
 
-    @inbounds for i=0:npoints-1
-        t=i/(npoints-1)
+    @inbounds for i in 0:(npoints - 1)
+        t = i / (npoints - 1)
         if !clamped
-            t =t*(T[nCP+1]-T[degree+1])+T[degree+1]
+            t = t * (T[nCP + 1] - T[degree + 1]) + T[degree + 1]
         end
-        k=1 #index of knot interval
+        k = 1 #index of knot interval
         while k < nCP
-            if t<T[k+1]
+            if t < T[k + 1]
                 break
             end
             k += 1
         end
-        points[i+1]=deBoor(k-1,t,T,controlpoints,degree)
+        points[i + 1] = deBoor(k - 1, t, T, controlpoints, degree)
     end
     return points
 end
@@ -928,7 +927,7 @@ than `value`, and the difference value. Array is assumed to be sorted.
 
 (Designed for use with `polydistances()`).
 """
-function nearestindex(a::Array{Float64, 1}, val)
+function nearestindex(a::Array{Float64,1}, val)
     ind = findlast(v -> (v < val), a)
     if isnothing(ind)
         throw(error("nearestindex: no index"))
@@ -963,9 +962,9 @@ using `polydistances(p, closed=closed)`.
 Use the complementary `polyremainder()` function to return
 the other part.
 """
-function polyportion(p::Array{Point,1}, portion = 0.5; 
-        closed = true, 
-        pdist = Array{Float64, 1}[])
+function polyportion(p::Array{Point,1}, portion = 0.5;
+    closed = true,
+    pdist = Array{Float64,1}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)
@@ -1017,9 +1016,9 @@ calculated afresh, using `polydistances(p, closed=closed)`.
 
 Use the complementary `polyportion()` function to return the other part.
 """
-function polyremainder(p::Array{Point,1}, portion = 0.5; 
-        closed = true, 
-        pdist = Array{Union{Float64, Int}, 1}[])
+function polyremainder(p::Array{Point,1}, portion = 0.5;
+    closed = true,
+    pdist = Array{Union{Float64,Int},1}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)
@@ -1277,7 +1276,7 @@ Scale (permanently) a polygon by `sh` horizontally and `sv` vertically,
 relative to `center`.
 """
 function polyscale!(pgon, sh, sv;
-        center = O)
+    center = O)
     return pgon .= (pgon .- center) .* Ref((sh, sv))
 end
 
@@ -1654,10 +1653,10 @@ end
 ```
 """
 function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
-        samples = 100,
-        easingfunction = easingflat,
-        kludge = true,
-        closed = true)
+    samples = 100,
+    easingfunction = easingflat,
+    kludge = true,
+    closed = true)
     isapprox(k, 0.0) && return pgon1
     isapprox(k, 1.0) && return pgon2
     loopcount1 = length(pgon1)

@@ -111,8 +111,8 @@ end
 
 """
 isequal(p1::Point, p2::Point) =
-    isapprox(p1.x, p2.x, atol = 0.00000001) &&
-   (isapprox(p1.y, p2.y, atol = 0.00000001))
+isapprox(p1.x, p2.x, atol = 0.00000001) &&
+(isapprox(p1.y, p2.y, atol = 0.00000001))
 
 Compare points.
 """
@@ -214,6 +214,26 @@ function between(couple::NTuple{2,Point}, x)
     return p1 + (x * (p2 - p1))
 end
 
+# convenience functions for my own use :) 
+"""
+     between(p1::Point, p2::Point, r:range)
+     between(p1::Point, p2::Point, a:array)
+
+Return an array of Points between point `p1` and point `p2` for
+every `x` in range `r` or array `a`.
+
+If `x` is 0.0, that point will be at `p1`; if `x` is 1.0, that point will be at `p2`.
+
+When `x` is 0.5, that point is the midpoint between `p1` and `p2`.
+"""
+function between(pt1::Point, pt2::Point, r::AbstractRange)
+    [between(pt1, pt2, e) for e in r]
+end
+
+function between(pt1::Point, pt2::Point, a::AbstractArray)
+    [between(pt1, pt2, e) for e in a]
+end
+
 """
     perpendicular(p1::Point, p2::Point, p3::Point)
 
@@ -311,9 +331,9 @@ function ispointonline(pt::Point, pt1::Point, pt2::Point;
 
     # point on the line
     if (abs(dxl) >= abs(dyl))
-        return dxl > 0 ? pt1.x <= pt.x+atol && pt.x <= pt2.x+atol : pt2.x <= pt.x+atol && pt.x <= pt1.x+atol
+        return dxl > 0 ? pt1.x <= pt.x + atol && pt.x <= pt2.x + atol : pt2.x <= pt.x + atol && pt.x <= pt1.x + atol
     else
-        return dyl > 0 ? pt1.y <= pt.y+atol && pt.y <= pt2.y+atol : pt2.y <= pt.y+atol && pt.y <= pt1.y+atol
+        return dyl > 0 ? pt1.y <= pt.y + atol && pt.y <= pt2.y + atol : pt2.y <= pt.y + atol && pt.y <= pt1.y + atol
     end
 end
 

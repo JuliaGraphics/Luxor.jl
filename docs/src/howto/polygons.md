@@ -22,13 +22,13 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |[`epitrochoid`](@ref)         |                           |                         |[`ispolyconvex`](@ref)   |[`polyclip`](@ref)          |
 |[`polyrotate!`](@ref)         |                           |                         |[`ispointonpoly`](@ref)  |[`polymove!`](@ref)         |
 |[`polyfit`](@ref)             |                           |                         |                         |[`polyscale!`](@ref)        |
-|[`polyhull`](@ref)            |                           |                         |                         |                            |
-|[`polysuper`](@ref)           |                           |                         |                         |                            |
-|                              |                           |                         |                         |[`polyreflect!`](@ref)      |
-|                              |                           |                         |                         |[`polysample`](@ref)        |
-|                              |                           |                         |                         |[`polytriangulate`](@ref)   |
+|[`polyhull`](@ref)            |                           |                         |                         |[`polyreflect!`](@ref)      |
+|[`polysuper`](@ref)           |                           |                         |                         |[`polysample`](@ref)        |
+| [`polybspline`](@ref)        |                           |                         |                         |[`polytriangulate`](@ref)   |
 |                              |                           |                         |                         |[`insertvertices!`](@ref)   |
 |                              |                           |                         |                         |[`polymorph`](@ref)         |
+|                              |                           |                         |                         |                            |
+|                              |                           |                         |                         |                            |
 | *paths*                      |                           |                         |                         |                            |
 |[`storepath`](@ref)           |                           |                         |                         |                            |
 |[`getpath`](@ref)             |[`pathtopoly`](@ref)       |[`drawpath`](@ref)       |[`pathlength`](@ref)     |[`pathsample`](@ref)        |

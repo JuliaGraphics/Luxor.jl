@@ -148,7 +148,7 @@ export Drawing,
     noise, initnoise,
 
     # experimental polygon functions
-    polyremovecollinearpoints, polytriangulate!,
+    polyremovecollinearpoints, 
     polytriangulate, ispointinsidetriangle, ispolyclockwise,
     polyorientation, ispolyconvex, polymorph,
 
