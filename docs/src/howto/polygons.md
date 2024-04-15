@@ -714,6 +714,28 @@ nothing # hide
 
 ![offset poly](../assets/figures/polyfit.png)
 
+There is also the [`polybspline`](@ref) function, which constructs a B-spline curve based on the control points and desired degree with the option of being unclamped.
+
+```@example
+using Luxor, Random # hide
+Drawing(600, 250, "../assets/figures/polyfit.png") # hide
+origin() # hide
+background("white") # hide
+Random.seed!(42) # hide
+
+pts = [Point(x, rand(-100:100)) for x in -280:30:280] # hide
+setopacity(0.7) # hide
+sethue("red") # hide
+prettypoly(pts, () -> circle(O, 5, action = :fill)) # hide
+sethue("darkmagenta") # hide
+poly(polybspline(pts, 200; degree = 5), action = :stroke)
+
+finish() # hide
+nothing # hide
+```
+
+![B-Spline](../assets/figures/polybspline.png)
+
 ## Converting paths to polygons
 
 You can convert the current path to an array of polygons, using [`pathtopoly`](@ref).
