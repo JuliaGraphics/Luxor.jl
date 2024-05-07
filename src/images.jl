@@ -44,7 +44,7 @@ function placeimage(img::Cairo.CairoSurface, xpos, ypos; centered = false)
         Cairo.set_source_surface(_get_current_cr(), img, xpos, ypos)
         # no alpha
         Cairo.paint(_get_current_cr())
-    end  
+    end
 end
 
 placeimage(img::Cairo.CairoSurface, pt::Point = O; kwargs...) = placeimage(img, pt.x, pt.y; kwargs...)
@@ -229,11 +229,11 @@ function placeimage(buffer::AbstractMatrix{UInt32}, pt = O;
     @layer begin
         Cairo.set_source_surface(Luxor._get_current_cr(), Cairo.CairoImageSurface(buffer, Cairo.FORMAT_ARGB32), pt.x, pt.y)
         paint_with_alpha(_get_current_cr(), alpha)
-    end 
+    end
 end
 
 """
-    placeimage(buffer::AbstractMatrix{ARGB32}, args...; 
+    placeimage(buffer::AbstractMatrix{ARGB32}, args...;
         kargs...)
 
 Place an array of ARGB32 lements on the drawing at `pos` with opacity/transparency `alpha`.
@@ -251,11 +251,10 @@ end
 
 placeimage(buffer::AbstractMatrix{<:Colorant}, args...; kargs...) = placeimage(convert.(ARGB32, buffer), args...; kargs...)
 
-function placeimage(d::Drawing, args...;
-    kargs...)
+function placeimage(d::Drawing, args...; kargs...)
     if d.surfacetype == :svg
         @layer begin
-             seekstart(d.buffer)
+            seekstart(d.buffer)
             drawingdata = read(d.buffer, String)
             placeimage(_readsvgstring(drawingdata), args...; kargs...)
         end

@@ -2,13 +2,14 @@
 The `Movie` and `Scene` types and the `animate()` function are designed to help you
 create the frames that can be used to make an animated GIF or movie.
 
-1 Provide width, height, title, and optionally a frame range to the Movie constructor:
+1. Provide width, height, title, and optionally a frame range to the Movie constructor:
+   ```julia
+   demo = Movie(400, 400, "test", 1:500)
+   ```
 
-    demo = Movie(400, 400, "test", 1:500)
+2. Define one or more scenes and scene-drawing functions.
 
-2 Define one or more scenes and scene-drawing functions.
-
-3 Run the `animate()` function, calling those scenes.
+3. Run the `animate()` function, calling those scenes.
 
 Example
 
@@ -150,7 +151,7 @@ animate(bang, [
 ```
 
 If you prefer, you can use the FFMPEG.jl package (or the `ffmpeg` executable)
-separately on the set of still images that have been generated. For example, 
+separately on the set of still images that have been generated. For example,
 use code like this:
 
 ```julia
@@ -163,8 +164,8 @@ tempdirectory = "/tmp/temp/"
 
 animate(movie, [
         Scene(movie, frame, 1:50)
-    ], 
-    creategif=false, 
+    ],
+    creategif=false,
     tempdirectory=tempdirectory)
 
 FFMPEG.exe(`-r 30 -f image2 -i \$(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix_fmt yuv420p -y /tmp/animation.mp4`)
@@ -257,7 +258,7 @@ function animate(movie::Movie, scenelist::Array{Scene,1};
             if movieformat != ".gif"
                 pathname = targetdir * ".gif"
                 movieformat = ".gif"
-            end 
+            end
             mv("$(tempdirectory)/$(movie.movietitle).gif", pathname, force = true)
             @info("GIF is: $pathname")
             giffn = pathname
@@ -288,37 +289,37 @@ end
 
 function _make_video(movieformat, pathname, framerate, tempdirectory)
     if movieformat == ".mkv"
-        @ffmpeg_env run(`ffmpeg 
+        @ffmpeg_env run(`ffmpeg
         -loglevel panic
-        -f image2 
-        -i $(tempdirectory)/%10d.png 
-        -r $(framerate) 
+        -f image2
+        -i $(tempdirectory)/%10d.png
+        -r $(framerate)
         -pixel_format rgb24
-        -c:v libx264 
-        -pix_fmt yuv420p 
+        -c:v libx264
+        -pix_fmt yuv420p
         -an
         -y $(pathname)`)
     elseif movieformat == ".mp4"
-        @ffmpeg_env run(`ffmpeg 
+        @ffmpeg_env run(`ffmpeg
         -loglevel panic
-        -f image2 
-        -i $(tempdirectory)/%10d.png 
-        -r $(framerate) 
+        -f image2
+        -i $(tempdirectory)/%10d.png
+        -r $(framerate)
         -pixel_format rgb24
-        -c:v libx264 
-        -pix_fmt yuv420p 
+        -c:v libx264
+        -pix_fmt yuv420p
         -an
         -y $(pathname)`)
     elseif movieformat == ".webm"
-        @ffmpeg_env run(`ffmpeg 
+        @ffmpeg_env run(`ffmpeg
         -loglevel panic
-        -f image2 
-        -i $(tempdirectory)/%10d.png 
-        -r $(framerate) 
-        -lossless 0 
+        -f image2
+        -i $(tempdirectory)/%10d.png
+        -r $(framerate)
+        -lossless 0
         -c:v libvpx-vp9
         -b:v 0
-        -pix_fmt yuv420p 
+        -pix_fmt yuv420p
         -an
         -y $(pathname)`)
     else

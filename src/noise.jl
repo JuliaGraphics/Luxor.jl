@@ -191,7 +191,7 @@ julia> initnoise(); noise(1)
 ```
 
 If you provide an integer seed, it will be used
-to seed `Random.seed!()`` when the noise code is initialized:
+to seed `Random.seed!()` when the noise code is initialized:
 
 ```julia-repl
 julia> initnoise(41); noise(1) # yesterday

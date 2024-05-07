@@ -50,11 +50,11 @@ Base.length(::Point) = 2
 # matrix
 
 """
-*(m::Matrix, pt::Point)
+    *(m::Matrix, pt::Point)
 
 Transform a point `pt` by the 3×3 matrix `m`.
 
-```julia-repl
+```jldoctest
 julia> M = [2 0 0; 0 2 0; 0 0 1]
 3×3 Matrix{Int64}:
  2  0  0
@@ -110,18 +110,18 @@ end
 # comparisons
 
 """
-isequal(p1::Point, p2::Point) =
-isapprox(p1.x, p2.x, atol = 0.00000001) &&
-(isapprox(p1.y, p2.y, atol = 0.00000001))
+    isequal(p1::Point, p2::Point) =
+        isapprox(p1.x, p2.x, atol = 0.00000001) &&
+        isapprox(p1.y, p2.y, atol = 0.00000001)
 
 Compare points.
 """
 isequal(p1::Point, p2::Point) =
-    isapprox(p1.x, p2.x, atol = 0.00000001) && (isapprox(p1.y, p2.y, atol = 0.00000001))
+    (isapprox(p1.x, p2.x, atol = 0.00000001)) && (isapprox(p1.y, p2.y, atol = 0.00000001))
 
 # allow kwargs
 """
-isapprox(p1::Point, p2::Point; atol = 1e-6, kwargs...)
+    isapprox(p1::Point, p2::Point; atol = 1e-6, kwargs...)
 
 Compare points.
 """
@@ -214,10 +214,10 @@ function between(couple::NTuple{2,Point}, x)
     return p1 + (x * (p2 - p1))
 end
 
-# convenience functions for my own use :) 
+# convenience functions for my own use :)
 """
-     between(p1::Point, p2::Point, r:range)
-     between(p1::Point, p2::Point, a:array)
+    between(p1::Point, p2::Point, r:range)
+    between(p1::Point, p2::Point, a:array)
 
 Return an array of Points between point `p1` and point `p2` for
 every `x` in range `r` or array `a`.
@@ -362,11 +362,11 @@ Find angle of a line starting at `pointA` and ending at `pointB`.
 
 Return a value between 0 and 2pi. Value will be relative to the current axes.
 
-```julia
-slope(O, Point(0, 100)) |> rad2deg # y is positive down the page
+```jldoctest
+julia> slope(O, Point(0, 100)) |> rad2deg # y is positive down the page
 90.0
 
-slope(Point(0, 100), O) |> rad2deg
+julia> slope(Point(0, 100), O) |> rad2deg
 270.0
 ```
 
@@ -429,13 +429,17 @@ intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r) =
 
 Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.
 
-    @polar (10, pi/4)
-    @polar [10, pi/4]
-    @polar 10, pi/4
+```jldoctest
+julia> @polar 10, pi/4
+Point(7.0710678118654755, 7.071067811865475)
+```
 
-produces
-
-    Luxor.Point(7.0710678118654755, 7.071067811865475)
+Example usage
+```julia
+@polar (10, pi/4)
+@polar [10, pi/4]
+@polar 10, pi/4
+```
 """
 macro polar(p)
     quote
@@ -448,11 +452,10 @@ end
 
 Convert a point specified in polar form (radius and angle) to a Point.
 
-    polar(10, pi/4)
-
-produces
-
-    Luxor.Point(7.071067811865475, 7.0710678118654755)
+```jldoctest
+julia> polar(10, pi/4)
+Point(7.0710678118654755, 7.071067811865475)
+```
 """
 polar(r, theta) = Point(r * cos(theta), r * sin(theta))
 
@@ -713,6 +716,6 @@ function ispointonleftofline(A::Point, B::Point, C::Point)
     elseif z < -10e-6
         return false
     else
-        return false # point is on the line 
+        return false # point is on the line
     end
 end

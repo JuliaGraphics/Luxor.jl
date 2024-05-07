@@ -94,7 +94,10 @@ function buildboxmap(A, x, y, w, h)
         i += 1
     end
     layoutleftoverx, layoutleftovery, layoutleftoverw, layoutleftoverh = layoutleftover(A[1:i], x, y, w, h)
-    return append!(layout(A[1:i], x, y, w, h), buildboxmap(A[i+1:end], layoutleftoverx, layoutleftovery, layoutleftoverw, layoutleftoverh))
+    return append!(
+        layout(A[1:i], x, y, w, h),
+        buildboxmap(A[(i+1):end], layoutleftoverx, layoutleftovery, layoutleftoverw, layoutleftoverh)
+    )
 end
 
 """
@@ -167,7 +170,7 @@ function box(tile::BoxmapTile, action::Symbol; vertices=false)
 end
 
 box(tile::BoxmapTile; action=:none, vertices=false) =
-     box(tile, action, vertices=vertices)
+    box(tile, action, vertices=vertices)
 
 """
     BoundingBox(tile::BoxmapTile)

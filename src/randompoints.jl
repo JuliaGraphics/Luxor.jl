@@ -29,11 +29,11 @@ end
 Return an array of `n` random points somewhere inside the rectangle defined by two points.
 """
 function randompointarray(lowpt::Point, highpt::Point, n)
-  array = Point[]
-  for i in 1:n
-    push!(array, randompoint(lowpt, highpt))
-  end
-  array
+    array = Point[]
+    for i in 1:n
+        push!(array, randompoint(lowpt, highpt))
+    end
+    array
 end
 
 """
@@ -52,7 +52,7 @@ end
 
 # internal function used by Poisson disk sampling below
 """
-_empty_neighbourhood(sample, w, h, cellsize, d, points, grid)
+    _empty_neighbourhood(sample, w, h, cellsize, d, points, grid)
 
 Uses entries in `grid` to check whether the `sample`
 point is more than `d` units away from any other point

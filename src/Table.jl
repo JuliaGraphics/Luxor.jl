@@ -117,11 +117,11 @@ which returns an array of points that are the center points of the cells in the 
 You can select cells using `getcells(table, rows, columns)`. This returns a list
 of `(point, index)` tuples.
 
-- `getcells(t, :, :)` returns a list of all cells 
+- `getcells(t, :, :)` returns a list of all cells
 
-- `getcells(t, 1, :)` returns a list of all cells in row 1 
+- `getcells(t, 1, :)` returns a list of all cells in row 1
 
-- `getcells(t, :, 3)` returns a list of all cells in column 3 
+- `getcells(t, :, 3)` returns a list of all cells in column 3
 
 - `getcells(t, 2:4, [3, 5])` returns a list of cells in rows 2-4, columns 3 and 5
 

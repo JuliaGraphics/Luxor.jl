@@ -22,13 +22,14 @@ end
 Create a radial blend.
 
 Example:
-
-    redblue = blend(
-        pos, 0,                   # first circle center and radius
-        pos, tiles.tilewidth/2,   # second circle center and radius
-        "red",
-        "blue"
-        )
+```julia
+redblue = blend(
+    pos, 0,                   # first circle center and radius
+    pos, tiles.tilewidth/2,   # second circle center and radius
+    "red",
+    "blue",
+)
+```
 """
 function blend(centerpos1::Point, rad1, centerpos2::Point, rad2, color1, color2)
     newblend = blend(centerpos1, rad1, centerpos2, rad2)
@@ -127,14 +128,17 @@ the blend's definition.
 
 For example, if your blend definition was this (notice the `1`)
 
-    blendgoldmagenta = blend(
-            Point(0, 0), 0,                   # first circle center and radius
-            Point(0, 0), 1,                   # second circle center and radius
-            "gold",
-            "magenta"
-            )
+```julia
+blendgoldmagenta = blend(
+    Point(0, 0), 0,                   # first circle center and radius
+    Point(0, 0), 1,                   # second circle center and radius
+    "gold",
+    "magenta"
+)
+```
 
-you can use it in a shape that's 100 units across and centered at `pos`, by calling this:
+you can use it in a shape that's 100 units across and centered at `pos`,
+by calling this:
 
     blendadjust(blendgoldmagenta, Point(pos.x, pos.y), 100, 100)
 

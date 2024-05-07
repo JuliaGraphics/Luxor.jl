@@ -190,21 +190,25 @@ The default vertexfunction draws a 2 pt radius circle.
 
 To mark each vertex of a polygon with a randomly colored filled circle:
 
-    p = star(O, 70, 7, 0.6, 0, vertices=true)
-    prettypoly(p, action=:fill, () ->
-        begin
-            randomhue()
-            circle(O, 10, :fill)
-        end,
-        close=true)
+```julia
+p = star(O, 70, 7, 0.6, 0, vertices=true)
+prettypoly(p, action=:fill, () ->
+    begin
+        randomhue()
+        circle(O, 10, :fill)
+    end,
+    close=true)
+```
 
 The optional keyword argument `vertexlabels` lets you supply a function with
 two arguments that can access the current vertex number and the total number of vertices
 at each vertex. For example, you can label the vertices of a triangle "1 of 3", "2 of 3",
 and "3 of 3" using:
 
-    prettypoly(triangle, action=:stroke,
-        vertexlabels = (n, l) -> (text(string(n, " of ", l))))
+```julia
+prettypoly(triangle, action=:stroke,
+    vertexlabels = (n, l) -> (text(string(n, " of ", l))))
+```
 """
 function prettypoly(pointlist::Array{Point,1}, vertexfunction = () -> circle(O, 2, :stroke);
     action = :none,
@@ -943,7 +947,7 @@ end
 
 """
     polyportion(p::Array{Point, 1}, portion=0.5; 
-        closed=true, 
+        closed=true,
         pdist = Array{Union{Float64, Int}, 1}[])
 
 Return a portion of a polygon, starting at a value between
@@ -999,9 +1003,9 @@ function polyportion(p::Array{Point,1}, portion = 0.5;
 end
 
 """
-    polyremainder(p::Array{Point, 1}, portion=0.5; 
-        closed=true, 
-        pdist=Array{Union{Float64, Int}, 1}[])
+    polyremainder(p::Vector{Point}, portion=0.5;
+        closed=true,
+        pdist=Vector{Union{Float64, Int}}[])
 
 Return the rest of a polygon, starting at a value between 0.0 (the beginning)
 and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three
@@ -1126,9 +1130,9 @@ subject polygon and the clip polygon.
 
 Return `nothing` if the function can't find one.
 
-S - subject polygon - can be concave or convex.
+- S - subject polygon - can be concave or convex.
 
-C - clip polygon - must be convex.
+- C - clip polygon - must be convex.
 
 Uses the Sutherland-Hodgman clipping algorithm. Calls `ispointonleftofline()`.
 
@@ -1172,7 +1176,9 @@ end
 
 Returns a number which is positive if the polygon is clockwise in Luxor...
 
-TODO This code is still experimental...
+!!! warning
+
+    This code is still experimental...
 """
 function polyorientation(pgon::Array{Point,1})
     # in Luxor polys are usually clockwise
@@ -1191,7 +1197,9 @@ polyorientation(pt1, pt2, pt3) = polyorientation(Point[pt1, pt2, pt3])
 
 Returns true if polygon is clockwise. WHEN VIEWED IN A LUXOR DRAWING...?
 
-TODO This code is still experimental...
+!!! warning
+
+    This code is still experimental...
 """
 function ispolyclockwise(pgon::Array{Point,1})
     polyorientation(pgon) > 0.0
@@ -1231,7 +1239,9 @@ Return copy of polygon with no collinear points.
 
 Caution: may return an empty polygon... !
 
-TODO This code is still experimental...
+!!! warning
+
+    This code is still experimental...
 """
 function polyremovecollinearpoints(pgon::Array{Point,1})
     markfordeletion = []
@@ -1384,7 +1394,11 @@ Triangulate the polygon in `plist`.
 
 This uses the Bowyer–Watson/Delaunay algorithm to make triangles. It returns an array of triangular polygons.
 
-TODO: This experimental polygon function is not very efficient, because it first copies the list of points (to avoid modifying the original), and sorts it, before making triangles.
+!!! note
+
+    This experimental polygon function is not very efficient, because it first
+    copies the list of points (to avoid modifying the original), and sorts it,
+    before making triangles.
 """
 function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
     trianglelist = Vector{Point}[]

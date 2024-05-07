@@ -131,8 +131,8 @@ export Drawing,
     blendmatrix, setblendextend, rotationmatrix, scalingmatrix,
     translationmatrix, cairotojuliamatrix,
     juliatocairomatrix, getrotation, getscale,
-    gettranslation, setmode, getmode, GridHex, GridRect, nextgridpoint, Table, 
-    highlightcells, getcells, markcells, readpng, readsvg, placeimage, placeeps, 
+    gettranslation, setmode, getmode, GridHex, GridRect, nextgridpoint, Table,
+    highlightcells, getcells, markcells, readpng, readsvg, placeimage, placeeps,
     svgstring, julialogo, juliacircles, barchart, mesh, setmesh, add_mesh_patch, mask,
 
     # animation
@@ -148,7 +148,7 @@ export Drawing,
     noise, initnoise,
 
     # experimental polygon functions
-    polyremovecollinearpoints, 
+    polyremovecollinearpoints,
     polytriangulate, ispointinsidetriangle, ispolyclockwise,
     polyorientation, ispolyconvex, polymorph,
 
@@ -157,7 +157,7 @@ export Drawing,
 
     # hexagons
     HexagonAxial, HexagonCubic, HexagonOffsetOddR, HexagonOffsetEvenR,
-    # hexagon, 
+    # hexagon,
     hexcenter, hexcube_round, hexcube_linedraw,
     HexagonVertexIterator, hextile, hexspiral,
     HexagonNeighborIterator, hexneighbors,

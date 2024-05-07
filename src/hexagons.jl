@@ -16,7 +16,7 @@ this is the hexagon situated at the '0th' column and '0th' row of an imaginary
 grid. The two types of `Offset...R` constructor determine whether odd or even
 numbered 'rows' of the grid appear shifted to the right.
 
-This code draws the hexagon at column 0, row 0 of a hexagonal grid, 
+This code draws the hexagon at column 0, row 0 of a hexagonal grid,
 radius 100, and also draws the matching polygon and circle.
 
 ```julia
@@ -26,12 +26,12 @@ poly(hextile(h), :fill) # polygon of all 6 points
 
 ngon(O, 100, 6, π / 2, :stroke) # equivalent construction
 
-circle(O, 100, :stroke) # a circle circumscribed 
+circle(O, 100, :stroke) # a circle circumscribed
 
 q = 1
-h = HexagonOffsetOddR(q, 0, 100) 
+h = HexagonOffsetOddR(q, 0, 100)
 # draw the polygon in the next column
-poly(hextile(h), :fill) 
+poly(hextile(h), :fill)
 ```
 
 Functions:
@@ -75,15 +75,15 @@ end
 
 Two axes
 
-q:: first index
+- q:: first index
 
-r:: second index
+- r:: second index
 
-origin::Point
+- origin::Point
 
-width:: of tile
+- width:: of tile
 
-height:: of tile
+- height:: of tile
 """
 struct HexagonAxial <: Hexagon
     q::Int64
@@ -98,17 +98,17 @@ end
 
 Three axes
 
-q:: first index
+- q:: first index
 
-r:: second index
+- r:: second index
 
-s:: third index
+- s:: third index
 
-origin::Point
+- origin::Point
 
-width:: of tile
+- width:: of tile
 
-height:: of tile
+- height:: of tile
 """
 struct HexagonCubic <: Hexagon
     q::Int64
@@ -207,7 +207,7 @@ const CUBIC_HEX_NEIGHBOR_OFFSETS = [
 ]
 
 """
-    hexneighbors(hex::Hexagon) 
+    hexneighbors(hex::Hexagon)
 
 Return the neighbors of `hex`.
 
@@ -215,20 +215,20 @@ For more information about making hexagons and hexagonal grids, see [Luxor.Hexag
 
 ## Example
 
-```julia-repl
-julia> h = HexagonOffsetEvenR(0, 0, 70.0)
+```jldoctest
+julia> h = HexagonOffsetEvenR(0, 0, 70.0);
 
 julia> hexneighbors(h)
 HexagonNeighborIterator(HexagonCubic(0, 0, 0, Point(0.0, 0.0), 70.0, 70.0))
 
 julia> collect(hexneighbors(h))
 6-element Vector{Any}:
-HexagonCubic(1, -1, 0, Point(0.0, 0.0), 70.0, 70.0)
-HexagonCubic(1, 0, -1, Point(0.0, 0.0), 70.0, 70.0)
-HexagonCubic(0, 1, -1, Point(0.0, 0.0), 70.0, 70.0)
-HexagonCubic(-1, 1, 0, Point(0.0, 0.0), 70.0, 70.0)
-HexagonCubic(-1, 0, 1, Point(0.0, 0.0), 70.0, 70.0)
-HexagonCubic(0, -1, 1, Point(0.0, 0.0), 70.0, 70.0)
+ HexagonCubic(1, -1, 0, Point(0.0, 0.0), 70.0, 70.0)
+ HexagonCubic(1, 0, -1, Point(0.0, 0.0), 70.0, 70.0)
+ HexagonCubic(0, 1, -1, Point(0.0, 0.0), 70.0, 70.0)
+ HexagonCubic(-1, 1, 0, Point(0.0, 0.0), 70.0, 70.0)
+ HexagonCubic(-1, 0, 1, Point(0.0, 0.0), 70.0, 70.0)
+ HexagonCubic(0, -1, 1, Point(0.0, 0.0), 70.0, 70.0)
 ```
 """
 hexneighbors(hex::Hexagon) = HexagonNeighborIterator(convert(HexagonCubic, hex))
@@ -306,7 +306,7 @@ struct HexagonVertexIterator
 end
 
 """
-     hextile(hex::Hexagon)
+    hextile(hex::Hexagon)
 
 Calculate the six vertices of the hexagon `hex` and return them in an array of Points.
 
@@ -409,7 +409,7 @@ end
 """
     hexspiral(hex, n)
 
-Return an array of hexagons to spiral around a central hexagon forming `n` rings.For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
+Return an array of hexagons to spiral around a central hexagon forming `n` rings.
 
 For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
@@ -419,7 +419,7 @@ function hexspiral(hex, nrings)
     while ringn < nrings
         ringn += 1
         hexes = collect(hexring(hex, ringn))
-        # circshift!(hexes, 1) doesn't work on < v1.7 
+        # circshift!(hexes, 1) doesn't work on < v1.7
         # replace with circshift! one day
         push!(hexes, popfirst!(hexes))
         append!(result, hexes)
@@ -468,7 +468,9 @@ end
 """
     hexcube_linedraw(hexa::Hexagon, hexb::Hexagon)
 
-Find and return the hexagons that lie (mostly) on a straight line between `hexa` and `hexb`. If you filled/stroked them appropriately, you'd get a jagged line.
+Find and return the hexagons that lie (mostly) on a straight line between
+`hexa` and `hexb`. If you filled/stroked them appropriately, you'd get a
+jagged line.
 
 For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
@@ -487,8 +489,9 @@ end
 """
      hexnearest_cubic(x::Real, y::Real, z::Real, origin, width, height)
 
-Find the nearest hexagon in cubic coordinates, ie as
-`q`, `r`, `s` integer indices, given (x, y, z) as Real numbers, with the hexagonal grid centered at `origin`, and with tiles of `width`/`height`.
+Find the nearest hexagon in cubic coordinates, ie as `q`, `r`, `s` integer indices,
+given (x, y, z) as Real numbers, with the hexagonal grid centered at `origin`,
+and with tiles of `width`/`height`.
 
 For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """

@@ -422,8 +422,10 @@ end
     arrow(start::Point, finish::Point, height::Vector, action=:stroke;
         keyword arguments...)
 
-Draw a Bézier arrow between `start` and `finish`, with control points defined to fit in
-an imaginary box defined by the two supplied `height` values (see `bezierfrompoints()`). If the height values are different signs, the arrow will change direction on its way.
+Draw a Bézier arrow between `start` and `finish`, with control points
+defined to fit in an imaginary box defined by the two supplied `height`
+values (see `bezierfrompoints()`). If the height values are different signs,
+the arrow will change direction on its way.
 
 Keyword arguments are the same as [`arrow(pt1, pt2, pt3, pt4)`](@ref).
 
@@ -498,8 +500,9 @@ the higher on the page (ie probably lower y) point.
 
 Dimension graphics will be rotated to align with a line between `p1` and `p2`.
 
-In `textverticaloffset`, "vertical" and "horizontal" are best understood by "looking" along the line from the first point to the
-second. `textverticaloffset` ranges from -1 to 1, `texthorizontaloffset` in default units.
+In `textverticaloffset`, "vertical" and "horizontal" are best understood by
+"looking" along the line from the first point to the second.
+`textverticaloffset` ranges from -1 to 1, `texthorizontaloffset` in default units.
 
 ```
         toextension
@@ -768,7 +771,8 @@ function tickline(startpos, finishpos;
         end # vertices = true
     end # layer
     # calculate where the tick locations would be in reality
-    majpts = map(pt -> rotatepoint(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), majorticklocations)
-    minpts = map(pt -> rotatepoint(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos)), minorticklocations)
+    shifter(pt) = rotatepoint(Point(startpos.x + pt.x, startpos.y + pt.y), startpos, slope(startpos, finishpos))
+    majpts = map(shifter, majorticklocations)
+    minpts = map(shifter, minorticklocations)
     return (majpts, minpts)
 end

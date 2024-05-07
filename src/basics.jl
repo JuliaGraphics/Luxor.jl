@@ -38,8 +38,8 @@ The scales can also be supplied in tuple form:
 rescale(x, (from_min, from_max), (to_min, to_max))
 ```
 
-```julia-repl
-julia> using Luxor
+Examples
+```jldoctest
 julia> rescale(15, 0, 100, 0, 1)
 0.15
 
@@ -57,7 +57,6 @@ julia> rescale(25, 0, 1, 0, 1.609344)
 
 julia> rescale(15, (0, 100), (1000, 0))
 850.0
-
 ```
 """
 rescale(x, from_min, from_max, to_min = 0.0, to_max = 1.0) =
@@ -177,7 +176,7 @@ abstract type LDispatcher end
 
 #Default luxor behaviour dispatches on `DefaultLuxor`
 struct DefaultLuxor <: LDispatcher end
-#global constant to decide dispatch, a single element array which 
+#global constant to decide dispatch, a single element array which
 const DISPATCHER = Array{LDispatcher}([DefaultLuxor()])
 
 """
@@ -492,7 +491,9 @@ The function:
 rule(O, pi/2, boundingbox=BoundingBox()/2)
 ```
 
-draws a line that spans a bounding box half the width and height of the drawing, and returns a Set of end points. If you just want the vertices and don't want to draw anything, use `vertices=true`.
+draws a line that spans a bounding box half the width and height of the drawing,
+and returns a Set of end points. If you just want the vertices and don't want to
+draw anything, use `vertices=true`.
 """
 function rule(pos, theta = 0.0;
     boundingbox = BoundingBox(),
@@ -621,7 +622,7 @@ function grestore()
 end
 
 """
-    The `layer` macro is a shortcut for `gsave()` ... `grestore()`.
+The `@layer` macro is a shortcut for `gsave()` ... `grestore()`.
 """
 macro layer(a)
     quote
@@ -684,32 +685,32 @@ Get the current path and return a CairoPath object, which is an array of `elemen
 o = getpath()
 x, y = currentpoint()
 for e in o
-      if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
-          (x, y) = e.points
-          move(x, y)
-      elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO
-          (x, y) = e.points
-          # straight lines
-          line(x, y)
-          strokepath()
-          circle(x, y, 1, :stroke)
-      elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
-          (x1, y1, x2, y2, x3, y3) = e.points
-          # Bezier control lines
-          circle(x1, y1, 1, :stroke)
-          circle(x2, y2, 1, :stroke)
-          circle(x3, y3, 1, :stroke)
-          move(x, y)
-          curve(x1, y1, x2, y2, x3, y3)
-          strokepath()
-          (x, y) = (x3, y3) # update current point
-      elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
-          closepath()
-      else
-          error("unknown CairoPathEntry " * repr(e.element_type))
-          error("unknown CairoPathEntry " * repr(e.points))
-      end
-  end
+    if e.element_type == Cairo.CAIRO_PATH_MOVE_TO
+        (x, y) = e.points
+        move(x, y)
+    elseif e.element_type == Cairo.CAIRO_PATH_LINE_TO
+        (x, y) = e.points
+        # straight lines
+        line(x, y)
+        strokepath()
+        circle(x, y, 1, :stroke)
+    elseif e.element_type == Cairo.CAIRO_PATH_CURVE_TO
+        (x1, y1, x2, y2, x3, y3) = e.points
+        # Bezier control lines
+        circle(x1, y1, 1, :stroke)
+        circle(x2, y2, 1, :stroke)
+        circle(x3, y3, 1, :stroke)
+        move(x, y)
+        curve(x1, y1, x2, y2, x3, y3)
+        strokepath()
+        (x, y) = (x3, y3) # update current point
+    elseif e.element_type == Cairo.CAIRO_PATH_CLOSE_PATH
+        closepath()
+    else
+        error("unknown CairoPathEntry " * repr(e.element_type))
+        error("unknown CairoPathEntry " * repr(e.points))
+    end
+end
 ```
 """
 getpath() = Cairo.convert_cairo_path_data(Cairo.copy_path(_get_current_cr()))
@@ -801,7 +802,7 @@ function Base.hcat(D::Drawing...; valign = :top, hpad = 0, clip = true)
         dwidth += d.width + hpad
         if d.surfacetype !== :svg
             throw(error("hcat(): Drawing must be SVG, not $(d.surfacetype)"))
-        end 
+        end
     end
     dcat = Drawing(dwidth, dheight, :svg)
     @layer begin

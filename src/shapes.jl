@@ -341,14 +341,13 @@ drawn below the positive x-axis.
 If you just want the raw points, use keyword argument `vertices=true`, which
 returns the array of points. Compare:
 
-```julia
-ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
-
-4-element Array{Luxor.Point, 1}:
-Luxor.Point(2.4492935982947064e-16, 4.0)
-Luxor.Point(-4.0, 4.898587196589413e-16)
-Luxor.Point(-7.347880794884119e-16, -4.0)
-Luxor.Point(4.0, -9.797174393178826e-16)
+```jldoctest
+julia> ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
+4-element Vector{Point}:
+ Point(2.4492935982947064e-16, 4.0)
+ Point(-4.0, 4.898587196589413e-16)
+ Point(-7.347880794884119e-16, -4.0)
+ Point(4.0, -9.797174393178826e-16)
 ```
 
 whereas
@@ -442,7 +441,9 @@ instead of making it.
 star(O, 120, 5, 0.5, 0.0, :fill,
     vertices = false,
     reversepath=false)
+```
 
+```julia
 star(O, 220, 5, 0.5;
     action=:stroke,
     vertices = false,
@@ -551,7 +552,9 @@ instead of executing the action.
 polycross(O, 100, 5,
     action = :fill,
     splay  = 0.5)
+```
 
+```julia
 polycross(O, 120, 5, 0.5, 0.0, :stroke,
     splay  = 0.5)
 ```

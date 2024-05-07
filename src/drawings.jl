@@ -9,7 +9,7 @@ mutable struct Drawing
     greenvalue::Float64
     bluevalue::Float64
     alpha::Float64
-    buffer::IOBuffer 
+    buffer::IOBuffer
     strokescale::Bool
 
     function Drawing(img::Matrix{T}, f::AbstractString = ""; strokescale = false) where {T<:Union{RGB24,ARGB32}}
@@ -248,50 +248,52 @@ like MiniFB.
 
 Example:
 
-    using Luxor
-    Drawing(500, 500, "1.svg")
-    origin()
-    setcolor("red")
-    circle(Point(0, 0), 100, action = :fill)
+```julia
+using Luxor
+Drawing(500, 500, "1.svg")
+origin()
+setcolor("red")
+circle(Point(0, 0), 100, action = :fill)
 
-    Luxor._drawing_indices()               # returns 1:1
+Luxor._drawing_indices()               # returns 1:1
 
-    Luxor._get_next_drawing_index()        # returns 2 but doesn't change current drawing
-    Luxor._set_next_drawing_index()        # returns 2 and sets current drawing to it
-    Drawing(500, 500, "2.svg")
-    origin()
-    setcolor("green")
-    circle(Point(0, 0), 100, action = :fill)
+Luxor._get_next_drawing_index()        # returns 2 but doesn't change current drawing
+Luxor._set_next_drawing_index()        # returns 2 and sets current drawing to it
+Drawing(500, 500, "2.svg")
+origin()
+setcolor("green")
+circle(Point(0, 0), 100, action = :fill)
 
-    Luxor._drawing_indices()               # returns 1:2
-    Luxor._set_drawing_index(1)            # returns 1
+Luxor._drawing_indices()               # returns 1:2
+Luxor._set_drawing_index(1)            # returns 1
 
-    finish()
-    preview()                             # presents the red circle 1.svg
+finish()
+preview()                              # presents the red circle 1.svg
 
-    Luxor._drawing_indices()               # returns 1:2
-    Luxor._set_next_drawing_index()        # returns 1 because drawing 1 was finished before
+Luxor._drawing_indices()               # returns 1:2
+Luxor._set_next_drawing_index()        # returns 1 because drawing 1 was finished before
 
-    Drawing(500, 500, "3.svg")
-    origin()
-    setcolor("blue")
-    circle(Point(0, 0), 100, action = :fill)
+Drawing(500, 500, "3.svg")
+origin()
+setcolor("blue")
+circle(Point(0, 0), 100, action = :fill)
 
-    finish()
-    preview()                             # presents the blue circle 3.svg
+finish()
+preview()                              # presents the blue circle 3.svg
 
-    Luxor._set_drawing_index(2)            # returns 2
-    finish()
-    preview()                             # presents the green circle 2.svg
+Luxor._set_drawing_index(2)            # returns 2
+finish()
+preview()                              # presents the green circle 2.svg
 
-    Luxor._drawing_indices()               # returns 1:2, but all are finished
-    Luxor._set_drawing_index(1)            # returns 1
+Luxor._drawing_indices()               # returns 1:2, but all are finished
+Luxor._set_drawing_index(1)            # returns 1
 
-    preview()                             # presents the blue circle 3.svg again
+preview()                              # presents the blue circle 3.svg again
 
-    Luxor._set_drawing_index(10)           # returns 1 as 10 does not existing    
-    Luxor._get_drawing_index()             # returns 1
-    Luxor._get_next_drawing_index()        # returns 1, because 1 was finished
+Luxor._set_drawing_index(10)           # returns 1 as 10 does not existing
+Luxor._get_drawing_index()             # returns 1
+Luxor._get_next_drawing_index()        # returns 1, because 1 was finished
+```
 """
 _drawing_indices() = length(_current_drawing()) == 0 ? (1:1) : (1:length(_current_drawing()))
 
@@ -312,13 +314,15 @@ Returns the current drawing index.
 
 Example:
 
-    next_index=5
-    if Luxor._set_drawing_index(next_index) == next_index
-        # do some additional graphics on the existing drawing
-        ...
-    else
-        @warn "Drawing "*string(next_index)*" doesn't exist"
-    endif
+```julia
+next_index = 5
+if Luxor._set_drawing_index(next_index) == next_index
+    # do some additional graphics on the existing drawing
+    ...
+else
+    @warn "Drawing "*string(next_index)*" doesn't exist"
+end
+```
 """
 function _set_drawing_index(i::Int)
     if isassigned(_current_drawing(), i)
@@ -519,7 +523,7 @@ Base.showable(::MIME"image/png", d::Luxor.Drawing) = d.surfacetype == :png
 function Base.show(f::IO, ::MIME"image/svg+xml", d::Luxor.Drawing)
     @debug "show MIME:svg "
     r = string(rand(100000:999999))
-    # regex is faster 
+    # regex is faster
     seekstart(d.buffer)
     drawingdata = read(d.buffer, String)
     smod = replace(drawingdata, r"glyph" => "glyph-$r")
@@ -790,14 +794,14 @@ splits s into head, mid and tail string.
 Example:
 
 ```julia
-  s="head...<g id="\$id">...</g>...tail"
+s="head...<g id="\$id">...</g>...tail"
 ```
   results in
 
 ```julia
-  head="head..."
-  mid="<g id="\$id">...</g>"
-  tail="...tail"
+head="head..."
+mid="<g id="\$id">...</g>"
+tail="...tail"
 ```
 """
 function _split_string_into_head_mid_tail(s, id)
@@ -849,8 +853,8 @@ function _split_string_into_head_mid_tail(s, id)
 end
 
 @doc raw"""
-    finish(;svgpostprocess = false, addmarker = true)
-    
+    finish(; svgpostprocess = false, addmarker = true)
+
 Finish the drawing, close any related files. You may be able to view the drawing
 in another application with `preview()`.
 
@@ -892,7 +896,7 @@ function finish(; svgpostprocess = false, addmarker = true)
             @debug " ... finish() :svg || svgpostprocess"
             # next function call adresses the issue in
             # https://github.com/JuliaGraphics/Luxor.jl/issues/150
-            #   short: setting a background in svg results in 
+            #   short: setting a background in svg results in
             #          <rect x="0" y="0" width="16777215" height="16777215" .../>
             #          independent of an existing transform matrix (e.g. set with origin(...)
             #          or snapshot with a negative crop bounding box).
@@ -975,7 +979,7 @@ function snapshot(;
     else
         if typeof(cb) !== BoundingBox
             throw(error("Luxor.snapshot(): $(cb) is not a BoundingBox"))
-        end 
+        end
         sn = snapshot(fname, cb, scalefactor; addmarker = addmarker)
     end
     sn
@@ -992,11 +996,11 @@ function snapshot(fname, cb, scalefactor; addmarker = true)
     rs = _current_surface()
     if typeof(rd) !== Drawing
         throw(error("Luxor.snapshot(): there is not current drawing"))
-    end 
+    end
 
     if _current_surface_type() !== :rec
         throw(error("Luxor.snapshot(): drawing type should be :rec"))
-    end 
+    end
 
     # The check for an 'alive' drawing should be performed by currentdrawing()
     # Working on a dead drawing causes ugly crashes.
@@ -1116,21 +1120,33 @@ default is 600 by 600). The file is saved in the current working directory as
 
 ```julia
 @svg circle(O, 20, :fill)
+```
 
+```julia
 @svg circle(O, 20, :fill) 400
+```
 
+```julia
 @svg circle(O, 20, :fill) 400 1200
+```
 
+```julia
 @svg circle(O, 20, :fill) 400 1200 "/tmp/test"
+```
 
+```julia
 @svg circle(O, 20, :fill) 400 1200 "/tmp/test.svg"
+```
 
+```julia
 @svg begin
     setline(10)
     sethue("purple")
     circle(O, 20, :fill)
 end
+```
 
+```julia
 @svg begin
     setline(10)
     sethue("purple")
@@ -1158,7 +1174,7 @@ Create and preview an PNG drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename`, if supplied, or `luxor-drawing(timestamp).png`.
 
-These 'short-cut' macros are designed for convenience and to save typing. 
+These 'short-cut' macros are designed for convenience and to save typing.
 The macro `@png ⟦ body ⟧ width height` expands to:
 
 ```julia
@@ -1166,7 +1182,7 @@ Drawing(width, height, :png)
 origin()
 background("white")
 sethue("black")
-⟦ body ⟧ 
+⟦ body ⟧
 finish()
 preview()
 ```
@@ -1178,21 +1194,33 @@ rather than the short-cut macros.
 
 ```julia
 @png circle(O, 20, :fill)
+```
 
+```julia
 @png circle(O, 20, :fill) 400
+```
 
+```julia
 @png circle(O, 20, :fill) 400 1200
+```
 
+```julia
 @png circle(O, 20, :fill) 400 1200 "/tmp/round"
+```
 
+```julia
 @png circle(O, 20, :fill) 400 1200 "/tmp/round.png"
+```
 
+```julia
 @png begin
     setline(10)
     sethue("purple")
     circle(O, 20, :fill)
 end
+```
 
+```julia
 @png begin
     setline(10)
     sethue("purple")
@@ -1220,7 +1248,7 @@ Create and preview an PDF drawing, optionally specifying width and height (the
 default is 600 by 600). The file is saved in the current working directory as
 `filename` if supplied, or `luxor-drawing(timestamp).pdf`.
 
-These 'short-cut' macros are designed for convenience and to save typing. 
+These 'short-cut' macros are designed for convenience and to save typing.
 The macro `@pdf ⟦ body ⟧ width height` expands to:
 
 ```julia
@@ -1228,7 +1256,7 @@ Drawing(width, height, :pdf)
 origin()
 background("white")
 sethue("black")
-⟦ body ⟧ 
+⟦ body ⟧
 finish()
 preview()
 ```
@@ -1240,21 +1268,33 @@ rather than the short-cut macros.
 
 ```julia
 @pdf circle(O, 20, :fill)
+```
 
+```julia
 @pdf circle(O, 20, :fill) 400
+```
 
+```julia
 @pdf circle(O, 20, :fill) 400 1200
+```
 
+```julia
 @pdf circle(O, 20, :fill) 400 1200 "/tmp/A0-version"
+```
 
+```julia
 @pdf circle(O, 20, :fill) 400 1200 "/tmp/A0-version.pdf"
+```
 
+```julia
 @pdf begin
     setline(10)
     sethue("purple")
     circle(O, 20, :fill)
 end
+```
 
+```julia
 @pdf begin
     setline(10)
     sethue("purple")
@@ -1284,7 +1324,7 @@ default is 600 by 600). The file is saved in the current working directory as
 
 On some platforms, EPS files are converted automatically to PDF when previewed.
 
-These 'short-cut' macros are designed for convenience and to save typing. 
+These 'short-cut' macros are designed for convenience and to save typing.
 The macro `@draw ⟦ body ⟧ width height filename` expands to:
 
 ```julia
@@ -1292,7 +1332,7 @@ Drawing(width, height, filename)
 origin()
 background("white")
 sethue("black")
-⟦ body ⟧ 
+⟦ body ⟧
 finish()
 preview()
 ```
@@ -1304,21 +1344,33 @@ rather than the short-cut macros.
 
 ```julia
 @eps circle(O, 20, :fill)
+```
 
+```julia
 @eps circle(O, 20, :fill) 400
+```
 
+```julia
 @eps circle(O, 20, :fill) 400 1200
+```
 
+```julia
 @eps circle(O, 20, :fill) 400 1200 "/tmp/A0-version"
+```
 
+```julia
 @eps circle(O, 20, :fill) 400 1200 "/tmp/A0-version.eps"
+```
 
+```julia
 @eps begin
     setline(10)
     sethue("purple")
     circle(O, 20, :fill)
 end
+```
 
+```julia
 @eps begin
     setline(10)
     sethue("purple")
@@ -1345,7 +1397,7 @@ end
 Create and preview an PNG drawing, optionally specifying width and height (the
 default is 600 by 600). The drawing is stored in memory, not in a file on disk.
 
-These 'short-cut' macros are designed for convenience and to save typing. 
+These 'short-cut' macros are designed for convenience and to save typing.
 The macro `@draw ⟦ body ⟧ width height` expands to:
 
 ```julia
@@ -1353,7 +1405,7 @@ Drawing(width, height, :png)
 origin()
 background("white")
 sethue("black")
-⟦ body ⟧ 
+⟦ body ⟧
 finish()
 preview()
 ```
@@ -1363,19 +1415,25 @@ rather than the short-cut macros.
 
 ### Examples
 
+`@draw circle(O, 20, :fill)`
+
 ```julia
-@draw circle(O, 20, :fill)
-
 @draw circle(O, 20, :fill) 400
+```
 
+```julia
 @draw circle(O, 20, :fill) 400 1200
+```
 
+```julia
 @draw begin
     setline(10)
     sethue("purple")
     circle(O, 20, :fill)
 end
+```
 
+```julia
 @draw begin
     setline(10)
     sethue("purple")
@@ -1449,19 +1507,19 @@ The default drawing is 256 by 256 points.
 
 You don't need `finish()` (the macro calls it), and it's not previewed by `preview()`.
 
-```julia
-m = @imagematrix begin
-        sethue("red")
-        box(O, 20, 20, :fill)
-    end 60 60
+```jldoctest
+julia> m = @imagematrix begin
+               sethue("red")
+               box(O, 20, 20, :fill)
+           end 60 60;
 
-julia>  m[1220:1224] |> show
-    ARGB32[ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8),
-           ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)]
-
+julia> m[1220:1224]
+5-element Array{ARGB32,1} with eltype ColorTypes.ARGB32:
+ ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8)
+ ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)
+ ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)
+ ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)
+ ARGB32(1.0N0f8,0.0N0f8,0.0N0f8,1.0N0f8)
 ```
 
 If, for some strange reason you want to draw the matrix as another
@@ -1503,10 +1561,10 @@ Transparency
 The default value for the cells in an image matrix is
 transparent black. (Luxor's default color is opaque black.)
 
-```julia-repl
+```jldoctest
 julia> @imagematrix begin
        end 2 2
-2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
+2×2 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):
  ARGB32(0.0,0.0,0.0,0.0)  ARGB32(0.0,0.0,0.0,0.0)
  ARGB32(0.0,0.0,0.0,0.0)  ARGB32(0.0,0.0,0.0,0.0)
 ```
@@ -1514,11 +1572,11 @@ julia> @imagematrix begin
 Setting the background to a partially or completely
 transparent value may give unexpected results:
 
-```julia-repl
+```jldoctest
 julia> @imagematrix begin
-       background(1, 0.5, 0.0, 0.5) # semi-transparent orange
+           background(1, 0.5, 0.0, 0.5) # semi-transparent orange
        end 2 2
-2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
+2×2 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):
  ARGB32(0.502,0.251,0.0,0.502)  ARGB32(0.502,0.251,0.0,0.502)
  ARGB32(0.502,0.251,0.0,0.502)  ARGB32(0.502,0.251,0.0,0.502)
 ```
@@ -1526,12 +1584,12 @@ julia> @imagematrix begin
 here the semi-transparent orange color has been partially
 applied to the transparent background.
 
-```julia-repl
+```jldoctest
 julia> @imagematrix begin
            sethue(1., 0.5, 0.0)
-       paint()
+           paint()
        end 2 2
-2×2 reinterpret(ARGB32, ::Array{UInt32,2}):
+2×2 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):
  ARGB32(1.0,0.502,0.0,1.0)  ARGB32(1.0,0.502,0.0,1.0)
  ARGB32(1.0,0.502,0.0,1.0)  ARGB32(1.0,0.502,0.0,1.0)
 ```
@@ -1565,7 +1623,7 @@ origin()
 juliacircles(50)
 m = image_as_matrix!(buffer)
 finish()
-# collect(m)) is Array{ARGB32,2}
+# collect(m) is Array{ARGB32,2}
 Images.RGB.(m)
 ```
 """
@@ -1638,20 +1696,25 @@ PlutoUI.Show(MIME"image/svg+xml"(), svgstring())
 This example examines the generated SVG code produced by drawing
 the Julia logo.
 
-```julia
-Drawing(500, 500, :svg)
-origin()
-julialogo()
-finish()
-s = svgstring()
-eachmatch(r"rgb.*?;", s) |> collect
-    6-element Vector{RegexMatch}:
-    RegexMatch("rgb(100%,100%,100%);")
-    RegexMatch("rgb(0%,0%,0%);")
-    RegexMatch("rgb(79.6%,23.5%,20%);")
-    RegexMatch("rgb(25.1%,38.8%,84.7%);")
-    RegexMatch("rgb(58.4%,34.5%,69.8%);")
-    RegexMatch("rgb(22%,59.6%,14.9%);")
+```julia-repl
+julia> Drawing(500, 500, :svg)
+
+julia> origin()
+
+julia> julialogo()
+
+julia> finish()
+
+julia> s = svgstring()
+
+julia> eachmatch(r"rgb.*?;", s) |> collect
+6-element Vector{RegexMatch}:
+ RegexMatch("rgb(100%,100%,100%);")
+ RegexMatch("rgb(0%,0%,0%);")
+ RegexMatch("rgb(79.6%,23.5%,20%);")
+ RegexMatch("rgb(25.1%,38.8%,84.7%);")
+ RegexMatch("rgb(58.4%,34.5%,69.8%);")
+ RegexMatch("rgb(22%,59.6%,14.9%);")
 ```
 
 Here's another example, post-processing the SVG file with the `svgo` optimizer.
@@ -1710,22 +1773,20 @@ string. Uses `svgstring`.
 
 Unlike `@draw` (PNG), there is no background, by default.
 
-THis example scans the generated SVG for color values:
+This example scans the generated SVG for color values:
 
-```julia
-s = @savesvg begin
-    julialogo()
-end
+```julia-repl
+julia> s = @savesvg begin
+           julialogo()
+       end
 
-eachmatch(r"rgb.*?;", s) |> collect
-
+julia> eachmatch(r"rgb.*?;", s) |> collect
 5-element Vector{RegexMatch}:
  RegexMatch("rgb(0%,0%,0%);")
  RegexMatch("rgb(25.1%,38.8%,84.7%);")
  RegexMatch("rgb(22%,59.6%,14.9%);")
  RegexMatch("rgb(58.4%,34.5%,69.8%);")
  RegexMatch("rgb(79.6%,23.5%,20%);")
-
 ```
 """
 macro savesvg(body, width = 600, height = 600)

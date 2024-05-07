@@ -1,11 +1,11 @@
 # using algorithms from PolygonAlgorithms.jl
 
-#= which exports" 
+#= which exports"
 Point2D, Polygon2D, Segment2D, Line2D get_orientation, Orientation, on_segment
 area_polygon, first_moment, centroid_polygon, is_counter_clockwise, is_clockwise
 point_in_polygon do_intersect, intersect_geometry, intersect_edges
 intersect_convex convex_hull
-=# 
+=#
 
 @inline _point_to_tuple(pt::Point) = (pt.x, pt.y)
 @inline _points_to_tuples(pts::Vector{Point}) = _point_to_tuple.(pts)
@@ -23,13 +23,13 @@ polyarea(p::Array{Point,1}) = PA.area_polygon(_points_to_tuples(p))
     isinside(p::Point, pointlist::Array{Point,1}
         allowonedge = false)
 
-Is a point `p` inside a polygon `pointlist`? 
+Is a point `p` inside a polygon `pointlist`?
 
 If `allowonedge` is false, a point lying on the polygon is not inside.
 
 Returns true if it does, or false.
 """
-isinside(pt::Point, pgon::Array{Point,1}; allowonedge = false) = 
+isinside(pt::Point, pgon::Array{Point,1}; allowonedge = false) =
     PA.contains(_points_to_tuples(pgon), _point_to_tuple(pt);
         on_border_is_inside = allowonedge)
 
@@ -78,10 +78,10 @@ end
     polyintersect(pgon1::AbstractArray{Point, 1}, pgon2::AbstractArray{Point, 1};
         closed=true)
 
-Return an array (possibly empty) containing the polygon(s) that define  
+Return an array (possibly empty) containing the polygon(s) that define
 the intersection between the two polygons, `pgon1` and `pgon2`.
 
-The `pgon1` and `pgon2` polygons must not have holes, and cannot be 
+The `pgon1` and `pgon2` polygons must not have holes, and cannot be
 self-intersecting.
 """
 function polyintersect(pgon1::AbstractArray{Point,1}, pgon2::AbstractArray{Point,1})

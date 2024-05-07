@@ -105,7 +105,7 @@ end
 """
     circlering(o_center, o_radius, count=3)
 
-Find `count` circles that fit inside an imaginary circle centered at o_center with radius 
+Find `count` circles that fit inside an imaginary circle centered at o_center with radius
 and are tangent to it.
 
 Returns:
@@ -118,8 +118,8 @@ Returns:
 cs, ic = circlering(Point(0, 0), 200, 3)
 
 (Tuple
-    [(Point(-53.59246086870698, 92.82486512724742), 92.815078262586), 
-     (Point(-53.59246086870705, -92.82486512724739), 92.815078262586), 
+    [(Point(-53.59246086870698, 92.82486512724742), 92.815078262586),
+     (Point(-53.59246086870705, -92.82486512724739), 92.815078262586),
      (Point(107.184921737414, -2.6252734264516723e-14), 92.815078262586)
    ],
     (Point(0.0, 0.0), 14.369843474828002))
@@ -307,8 +307,8 @@ carc(x::Real, y::Real, radius, angle1, angle2, action::Symbol = :none) =
     carc(x, y, radius, angle1, angle2, action = action)
 
 """
-      arc2r(c1::Point, p2::Point, p3::Point; action=:none)
-      arc2r(c1::Point, p2::Point, p3::Point, action)
+    arc2r(c1::Point, p2::Point, p3::Point; action=:none)
+    arc2r(c1::Point, p2::Point, p3::Point, action)
 
 Add a circular arc centered at `c1` that starts at `p2` and ends at `p3`, going clockwise,
 to the current path.
@@ -883,17 +883,17 @@ and the tightness.
 
 For linear spirals (`log=false`), `b` values are:
 
-    lituus: -2
+- lituus: -2
 
-    hyperbolic spiral: -1
+- hyperbolic spiral: -1
 
-    Archimedes' spiral: 1
+- Archimedes' spiral: 1
 
-    Fermat's spiral: 2
+- Fermat's spiral: 2
 
 For logarithmic spirals (`log=true`):
 
-    golden spiral: b = ln(phi)/ (pi/2) (about 0.30)
+- golden spiral: b = ln(phi) / (pi/2) (about 0.30)
 
 Values of `b` around 0.1 produce tighter, staircase-like spirals.
 """
@@ -1042,7 +1042,6 @@ center `targetcenter`.
 This function returns a tuple:
 
   - (0, O, O)      - no circles exist
-
   - (1, pt1, O)    - 1 circle exists, centered at pt1
   - (2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2
 
@@ -1090,7 +1089,6 @@ two circles defined by `circle1...` and `circle2...`. These two circles can
 overlap, but one can't be inside the other.
 
   - (0, O, O)      - no such circles exist
-
   - (1, pt1, O)    - 1 circle exists, centered at pt1
   - (2, pt1, pt2)  - 2 circles exist, with centers at pt1 and pt2
 
@@ -1173,7 +1171,9 @@ carc2sagitta(p1::Point, p2::Point, s::Real, action::Symbol) = carc2sagitta(p1, p
 """
     circlecircleoutertangents(cpt1::Point, r1, cpt2::Point, r2)
 
-Return four points, `p1`, `p2, `p3`, `p4`, where a line through `p1`and`p2`, and a line through `p3`and`p4`, form the outer tangents to the circles defined by `cpt1/r1`and`cpt2/r2`.
+Return four points, `p1`, `p2, `p3`, `p4`, where a line through `p1`and`p2`,
+and a line through `p3`and`p4`, form the outer tangents to the circles defined
+by `cpt1/r1`and`cpt2/r2`.
 
 Returns four identical points (`O`) if one of the circles lies inside the other.
 """
@@ -1238,7 +1238,7 @@ function pointcircletangent(point::Point, circlecenter::Point, circleradius)
 end
 
 """
-circlecircleinnertangents(circle1center::Point, circle1radius, circle2center::Point, circle2radius)
+    circlecircleinnertangents(circle1center::Point, circle1radius, circle2center::Point, circle2radius)
 
 Find the inner tangents of two circles. These are tangent lines that
 cross as they skim past one circle and touch the other.
@@ -1278,7 +1278,6 @@ that form a convex polygon, and add it to the current path.
 It returns `ellipsecenter, ellipsesemimajor, ellipsesemiminor, ellipseangle`:
 
   - `ellipsecenter` the ellipse center
-
   - `ellipsesemimajor` ellipse semimajor axis
   - `ellipsesemiminor` ellipse semiminor axis
   - `ellipseangle` ellipse rotation
@@ -1290,7 +1289,9 @@ can't be found. (The qgon is probably not a convex polygon.)
 
 ```julia
 ellipseinquad(box(O, 130, 130); action = :stroke)
+```
 
+```julia
 ellipseinquad(box(O, 140, 230), :stroke)
 ```
 
@@ -1425,10 +1426,10 @@ crescent(pos::Point, innerradius::Real, outerradius::Real, action::Symbol;
     steps = steps)
 
 """
-crescent(cp1, r1, cp2, r2;
-action=nothing,
-vertices=false,
-reversepath=false)
+    crescent(cp1, r1, cp2, r2;
+        action=nothing,
+        vertices=false,
+        reversepath=false)
 
 Create a crescent-shaped polygon, aligned with the current
 x-axis, by finding the intersection of two circles, and add
@@ -1496,29 +1497,30 @@ See also: `squircle()`...
 ## Example
 
 ```julia
-polysuper(m=4, 
+polysuper(m=4,
     n1=13, n2=11, n3=3,
     a=3, b=4,
-    action=:fill, 
+    action=:fill,
     radius=200)
+```
 
 produces a weird eye/lemon shape, a bit like this:
 
-
-                        @@@@@@S                       
-                  @@@@@@@@@@@@@@@@@@                  
-               @@@@@@@@@@@@@@@@@@@@@@@@               
-            R@@@@@@@@@@@@@@@@@@@@@@@@@@@@@            
-          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         
-      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@      
-   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   
-     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@     
-         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         
-            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@            
-              E@@@@@@@@@@@@@@@@@@@@@@@@@              
-                  @@@@@@@@@@@@@@@@@@o                 
-                      @@@@@@@@@@                      
-```                                                    
+```plain
+                        @@@@@@S
+                  @@@@@@@@@@@@@@@@@@
+               @@@@@@@@@@@@@@@@@@@@@@@@
+            R@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+              E@@@@@@@@@@@@@@@@@@@@@@@@@
+                  @@@@@@@@@@@@@@@@@@o
+                      @@@@@@@@@@
+```
 """
 function polysuper(center::Point = Point(0, 0);
         n1 = 1,
