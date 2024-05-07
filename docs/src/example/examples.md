@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Simple examples
 
@@ -348,7 +348,7 @@ function drawmatrix(A::Matrix;
             halign=:center,
             valign=:middle)
         sethue("white")
-        box(table, r, c, action = :stroke)        
+        box(table, r, c, action = :stroke)
     end
 end
 

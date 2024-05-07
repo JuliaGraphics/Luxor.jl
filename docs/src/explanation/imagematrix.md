@@ -2,14 +2,14 @@
 
 # Images as matrices
 
-While drawing a PNG drawing, you can at any time copy the current graphics in a drawing as a matrix of colored pixels, using the [`image_as_matrix`](@ref) function. 
+While drawing a PNG drawing, you can at any time copy the current graphics in a drawing as a matrix of colored pixels, using the [`image_as_matrix`](@ref) function.
 
 With the
 [`@imagematrix`](@ref) macro, you can create a drawing
 in the usual way, and then return the
 result as a matrix of colored pixels.
 
-This code draws a very small PNG image and also uses the `image_as_matrix()` function to stores the pixels in `mat` as a `25×25 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):`. 
+This code draws a very small PNG image and also uses the `image_as_matrix()` function to stores the pixels in `mat` as a `25×25 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):`.
 
 ```julia
 using Luxor

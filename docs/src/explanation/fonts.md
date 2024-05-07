@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 
 # Fonts available on Linux CI systems
@@ -146,7 +146,8 @@ function drawfonts()
                     text(font, table[n])
                 end
                 @layer begin
-                    fface = replace(font, "Serif" => " Serif", 
+                    fface = replace(font,
+                        "Serif" => " Serif",
                         "Bold" => " Bold",
                         "Semibold" => " Semibold",
                         "Black" => " Black",
@@ -181,6 +182,7 @@ function drawfonts()
     end 1200 3400
     return d
 end
+nothing # hide
 ```
 
 ```@raw html

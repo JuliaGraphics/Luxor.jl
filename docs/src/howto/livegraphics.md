@@ -156,14 +156,15 @@ Now, the window will display the results of any expressions you type at the REPL
 
 ### Live animations
 
-If you want to do live animations in the window in a "while" loop, you need to call `sleep()` for a while to allow the `window_update_task()` to get some execution time. 
+If you want to do live animations in the window in a "while" loop, you need to call `sleep()` for a while to allow the `window_update_task()` to get some execution time.
 
 In this example you can enter "q" and "return" in the REPL to stop the animation's while loop. Using "ctrl-c" to stop the animation could also stop the window update task by chance.
 
 ![live graphics 2](../assets/figures/livegraphics.gif)
 
 ```@raw html
-<details closed><summary>Code for this example</summary>
+<details closed>
+<summary>Code for this example</summary>
 ```
 
 ```julia
@@ -184,7 +185,7 @@ function sticks(w, h)
     colors = [ rand(1:255), rand(1:255), rand(1:255) ]
     newcolors  = [ rand(1:255), rand(1:255), rand(1:255) ]
     c = ARGB(colors[1]/255, colors[2]/255, colors[3]/255, 1.0)
-    balls = [ Ball( rand(BoundingBox(Point(-w/2, -h/2), Point(w/2, h/2))), rand(BoundingBox(Point(-10, -10), Point(10, 10))) ) for _ in 1:2 ] 
+    balls = [ Ball( rand(BoundingBox(Point(-w/2, -h/2), Point(w/2, h/2))), rand(BoundingBox(Point(-10, -10), Point(10, 10))) ) for _ in 1:2 ]
     while true
         background(0, 0, 0, 0.05)
         if colors == newcolors
@@ -234,13 +235,13 @@ First, we'll setup our display buffers and MiniFB windows, one for each Luxor dr
 ```julia
 using MiniFB, Luxor, Colors, FixedPointNumbers
 
-WIDTH=500
-HEIGHT=500
+WIDTH = 500
+HEIGHT = 500
 
 function window_update_task(window,buffer)
-    state=mfb_update(window,buffer)
+    state = mfb_update(window,buffer)
     while state == MiniFB.STATE_OK
-        state=mfb_update(window,buffer)
+        state = mfb_update(window, buffer)
         sleep(1.0/120.0)
     end
     println("\nWindow closed\n")
@@ -264,12 +265,12 @@ Buffers 1, 2, and 3 are the buffers for the three MiniFB windows. They'll appear
 Next we'll create three Luxor drawings that connect to these buffers.
 
 ```julia
-d1 = Drawing(buffer1)    
+d1 = Drawing(buffer1)
 
-Luxor._set_next_drawing_index()   
+Luxor._set_next_drawing_index()
 d2 = Drawing(buffer2)
 
-Luxor._set_next_drawing_index()   
+Luxor._set_next_drawing_index()
 d3 = Drawing(buffer3, "julia.png")
 ```
 
@@ -277,12 +278,12 @@ We now have three drawings which are continuously updated and visible in three s
 Let's start by drawing on drawing 1.
 
 ```julia
-Luxor._set_drawing_index(1) 
+Luxor._set_drawing_index(1)
 origin()
 setopacity(0.4)
 foregroundcolors = Colors.diverging_palette(
-    rand(0:360), 
-    rand(0:360), 
+    rand(0:360),
+    rand(0:360),
     200, s=0.99, b=0.8)
 gsave()
 for i in 1:500
@@ -306,10 +307,10 @@ grestore()
 Finally, we'll switch to drawing 3, and set its contents by ANDing the buffers of drawings 1 and 2:
 
 ```julia
-Luxor.set_drawing_index(3)  
+Luxor.set_drawing_index(3)
 background("black")
-buffer3 .= reinterpret(ARGB{N0f8}, 
-    (reinterpret.(UInt32,buffer1) .& 
+buffer3 .= reinterpret(ARGB{N0f8},
+    (reinterpret.(UInt32,buffer1) .&
      reinterpret.(UInt32,buffer2)))
 ```
 
@@ -367,7 +368,9 @@ end
 Threads.@threads for i = 1:(2*Threads.nthreads())
     make_drawings(i)
 end
+```
 
+```plain
 Working on thread 2
 Working on thread 3
 Working on thread 4
@@ -382,14 +385,14 @@ Working on thread 4
 
 ## Advanced threads with live view
 
-To demonstrate what is possible, we again show live graphics in MiniFB windows, 
+To demonstrate what is possible, we again show live graphics in MiniFB windows,
 but this time in different threads.
 
-There are two ways to use threads with Luxor. 
+There are two ways to use threads with Luxor.
 
 One way is to use a single thread for
 each window we want to show, i.e each window we spawn and the Luxor graphics inside
-is a different thread. 
+is a different thread.
 
 The other way to use threads is e.g. a single window, with
 several threads all drawing into the same buffer, which is shown in the single window.
@@ -405,8 +408,8 @@ Let's start with the header and a helper function for our animation:
 ```julia
 using ThreadPools
 # the low level Threads.@spawn macro can not be used, because threads are scheduled
-# randomly into available threadids. If a thread is spawned into an already running 
-# threadid, the former thread # is closed by the scheduler. So we use the better 
+# randomly into available threadids. If a thread is spawned into an already running
+# threadid, the former thread # is closed by the scheduler. So we use the better
 # ThreadPools.spawnbg to spawn the threads.
 
 using MiniFB, Luxor, Colors, FixedPointNumbers
@@ -432,21 +435,21 @@ Open and run the first window in its own thread:
 
 ```julia
 function window_ball()
-    w=500
-    h=500
-    r=50
+    w = 500
+    h = 500
+    r = 50
     buffer = zeros(RGB24, w, h)
-    ball=Ball(Point(0, 0), rand(BoundingBox(Point(-10, -10), Point(10, 10))))
+    ball = Ball(Point(0, 0), rand(BoundingBox(Point(-10, -10), Point(10, 10))))
     Drawing(buffer)
     origin()
     window = mfb_open_ex("Ball", w, h, MiniFB.WF_RESIZABLE)
     state = MiniFB.STATE_OK
     while state == MiniFB.STATE_OK
-        ball=step_ball(ball, w, h, r)
+        ball = step_ball(ball, w, h, r)
         background(0.0, 0.0, 0.0, 1.0)
         setcolor("red")
         circle(ball.position.x, ball.position.y, r, :fill)
-        state=mfb_update(window, buffer)
+        state = mfb_update(window, buffer)
         sleep(1.0/120.0)
     end
     println("\nWindow closed\n")
@@ -458,13 +461,13 @@ Open and run a second window in its own thread:
 
 ```julia
 function window_stick()
-    w=500
-    h=500
-    r=0
+    w = 500
+    h = 500
+    r = 0
     buffer = zeros(RGB24, w, h)
-    balls=[Ball(rand(BoundingBox(Point(-w/2, -h/2), 
-        Point(w/2, h/2))), 
-        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) for _ in 1:2] 
+    balls = [Ball(rand(BoundingBox(Point(-w/2, -h/2),
+        Point(w/2, h/2))),
+        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) for _ in 1:2]
     Drawing(buffer)
     origin()
     background(0.0,0.0,0.0,1.0)
@@ -513,21 +516,21 @@ struct Window
     d::Drawing
     buffer::Matrix{ARGB32}
     function Window(w,h)
-        c=ReentrantLock()
-        b=zeros(ARGB32, w, h)
-        d=Drawing(b)
+        c = ReentrantLock()
+        b = zeros(ARGB32, w, h)
+        d = Drawing(b)
         origin()
         new(c,w,h,d,b)
     end
 end
 
 function window_update_task(win::Window, showFPS=true)
-    w=win.w
-    h=win.h
-    updateCount=0
-    startTime=floor(Int, time())
-    fps="0"
-    sb=zeros(ARGB32, 105, 55)
+    w = win.w
+    h = win.h
+    updateCount = 0
+    startTime = floor(Int, time())
+    fps = "0"
+    sb = zeros(ARGB32, 105, 55)
     window = mfb_open_ex("MiniFB", w, h, MiniFB.WF_RESIZABLE)
     state=MiniFB.STATE_OK
     set_drawing = true
@@ -615,8 +618,8 @@ function stick(win)
     newcolors = [rand(1:255), rand(1:255), rand(1:255)]
     c = ARGB(colors[1] / 255, colors[2] / 255, colors[3] / 255, 1.0)
     balls = [Ball(
-        rand(BoundingBox(Point(-w / 2, -h / 2), Point(w / 2, h / 2))), 
-        rand(BoundingBox(Point(-10, -10), Point(10, 10)))) 
+        rand(BoundingBox(Point(-w / 2, -h / 2), Point(w / 2, h / 2))),
+        rand(BoundingBox(Point(-10, -10), Point(10, 10))))
             for _ in 1:2]
     set_drawing = true
     while true

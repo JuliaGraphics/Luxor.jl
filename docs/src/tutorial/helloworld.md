@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Hello World
 
@@ -18,11 +18,11 @@ $ julia
   (_)     | (_) (_)    |
    _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
   | | | | | | |/ _` |  |
-  | | |_| | | | (_| |  |  Version 1.9.0-beta2 (2022-12-29)
+  | | |_| | | | (_| |  |  Version 1.10.3 (2024-04-30)
  _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
 |__/                   |
 
-(@v1.9) pkg> add Luxor
+(@v1.10) pkg> add Luxor
 ```
 
 then you're ready to start.
@@ -66,8 +66,8 @@ What happened? Can you see this image somewhere?
 If you're using VS-Code and run the file in the Julia REPL, the image should appear in the Plots window. The preview will not be shown if there is any executed code following the macro. If you're working in a Jupyter or Pluto notebook, the image should appear below or above the code. If you're using Julia in a terminal or text editor, the image should have opened up in some other application, or, at the very least, it should have been saved in your current working directory (as `luxor-drawing-(time stamp).png`). If nothing happened, or if something bad happened, we've got some set-up or installation issues probably unrelated to Luxor...
 
 !!! note
-    
-    In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`background`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref), [`@pdf`](@ref), [`@draw`](@ref), and [`@drawsvg`](@ref) macros, which do similar things. 
+
+    In this example we've used a macro, [`@png`](@ref). This macro is an easy way to make a drawing, because it saves a lot of typing. (The macro expands to enclose your drawing commands with calls to the [`Drawing()`](@ref), [`origin`](@ref), [`background`](@ref), [`finish`](@ref), and [`preview`](@ref) functions.) There are also [`@svg`](@ref), [`@pdf`](@ref), [`@draw`](@ref), and [`@drawsvg`](@ref) macros, which do similar things.
 
 PNGs and SVGs are good because they show up in VS-Code, Jupyter, and Pluto. SVGs are usually higher quality too, but they're text-based so can become very large and difficult to load if the image is complex. PDF documents are always higher quality, and usually open up in a separate application.
 
@@ -114,4 +114,4 @@ finish()
 The x-coordinates usually run from left to right, the y-coordinates from top to bottom. So here, `Point(0, 250)` is a point at the left/right center, but at the bottom of the drawing.
 
 The `rulers()` function draws CAD-style x and y rulers at the origin.
- 
+

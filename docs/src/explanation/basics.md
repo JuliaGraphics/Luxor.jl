@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 
 # The drawing model
@@ -27,7 +27,7 @@ usually `:path`, ie. add the graphics to the current path.
 The main Julia data types you'll encounter in Luxor are:
 
 | Name of type      | Purpose |
-| ---               | ---     |
+|:---               |:---     |
 | Drawing           | holds the current drawing |
 | Point             | specifies 2D points |
 | BoundingBox       | defines a bounding box |
@@ -74,68 +74,59 @@ svgimage # hide
 
 !!! note
 
-    Although this is the preferred coordinate system for most computer graphics software, including Luxor and Cairo, but mathematicians and scientists may well be used to the other convention, where the origin is in the center of the drawing and the y-axis increases up the page. See the macros such as [`@png`](@ref), [`@svg`](@ref), and [`@pdf`](@ref) which will put the origin at the center for you.
+    Although this is the preferred coordinate system for most computer graphics
+    software, including Luxor and Cairo, but mathematicians and scientists may
+    well be used to the other convention, where the origin is in the center of
+    the drawing and the y-axis increases up the page. See the macros such as
+    [`@png`](@ref), [`@svg`](@ref), and [`@pdf`](@ref) which will put the origin
+    at the center for you.
 
-You can reposition the origin at any time, using [`origin`](@ref). The 'user space' can be modified by functions such as [`scale`](@ref), [`translate`](@ref), and [`rotate`](@ref), or more directly using matrix transforms.
+You can reposition the origin at any time, using [`origin`](@ref). The 'user
+space' can be modified by functions such as [`scale`](@ref),
+[`translate`](@ref), and [`rotate`](@ref), or more directly using matrix
+transforms.
 
 The Point type holds two coordinates, `x` and `y`. For example:
 
-```julia-repl
-julia> P = Point(12.0, 13.0)
-Luxor.Point(12.0, 13.0)
-
-julia> P.x
-12.0
-
-julia> P.y
-13.0
+```@setup points
+using Luxor
 ```
 
-Points are immutable, so you can't change P's x or y values directly. But it's easy to make new points based on existing ones.
+```@repl points
+P = Point(12.0, 13.0)
+P.x
+P.y
+```
+
+Points are immutable, so you can't change `P`'s `x` or `y` values directly.
+But it's easy to make new points based on existing ones.
 
 Points can be added together:
 
-```julia-repl
-julia> Q = Point(4, 5)
-Luxor.Point(4.0, 5.0)
-
-julia> P + Q
-Luxor.Point(16.0, 18.0)
+```@repl points
+Q = Point(4, 5)
+P + Q
 ```
 
-You can add and multiply Points and scalars:
+You can multiply Points and scalars:
 
-```julia-repl
-julia> 10P
-Luxor.Point(120.0, 130.0)
-
-julia> P + 100
-Luxor.Point(112.0, 113.0)
+```@repl points
+10P
 ```
 
 You can also make new points by mixing Points and tuples:
 
-```julia-repl
-julia> P + (10, 0)
-Luxor.Point(22.0, 13.0)
-
-julia> Q * (0.5, 0.5)
-Luxor.Point(2.0, 2.5)
+```@repl points
+P + (10, 0)
+Q * (0.5, 0.5)
 ```
 
 You can also create points from tuples:
 
-```julia-repl
-julia> Point((1.0, 14))
-Point(1.0, 14.0)
-
-julia> plist = (1.0, 2.0), (-10, 10), (14.2, 15.4);
-
-julia> Point.(plist)
-3-element Array{Point,1}:
- Point(1.0, 2.0)
- Point(-10.0, 10.0)
- Point(14.2, 15.4)
+```@repl points
+Point((1.0, 14))
+plist = [(1.0, 2.0), (-10, 10), (14.2, 15.4)];
+Point.(plist)
 ```
 
 You can use the letter **O** as a shortcut to refer to the
@@ -294,8 +285,8 @@ s = svgstring()
 
 You can now examine the SVG elements in `s` programmatically:
 
-```julia
-eachmatch(r"rgb\(.*?\)", s) |> collect
+```julia-repl
+julia> eachmatch(r"rgb\(.*?\)", s) |> collect
 5-element Vector{RegexMatch}:
  RegexMatch("rgb(0%,0%,0%)")
  RegexMatch("rgb(79.6%,23.5%,20%)")

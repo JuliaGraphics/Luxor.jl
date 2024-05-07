@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Turtle graphics
 
@@ -9,9 +9,9 @@ Luxor provides some basic "turtle graphics" functions. Functions to control the 
 
 ```@example
 using Luxor, Colors
-Drawing(600, 400, "../assets/figures/turtles.png")  
-origin()  
-background("midnightblue")  
+Drawing(600, 400, "../assets/figures/turtles.png")
+origin()
+background("midnightblue")
 
 🐢 = Turtle() # you can type the turtle emoji with \:turtle:
 Pencolor(🐢, "cyan")
@@ -26,31 +26,31 @@ for i in 1:400
 end
 fontsize(20)
 Message(🐢, "finished")
-finish()  
+finish()
 nothing # hide
 ```
 
 ![turtles](../assets/figures/turtles.png)
 
-|List of words the turtle knows|Action     |
-|:---                          |:---       |
-|[`Forward`](@ref)             | More forward by d units  |
-|[`Turn`](@ref)                | Increase the turtle's rotation by n degrees |
-|[`Circle`](@ref)              | Draw filled circle centered at current pos |
-|[`HueShift`](@ref)            | Shift the Hue of the turtle's pen color by n |
-|[`Message`](@ref)             | Output text   |
-|[`Orientation`](@ref)         | Set the turtle's orientation to n degrees |
-|[`Pen_opacity_random`](@ref)  | Set opacity to random value  |
-|[`Pencolor`](@ref)            | Set the Red, Green, and Blue values |
-|[`Pendown`](@ref)             | Start drawing   |
-|[`Penup`](@ref)               | Stop drawing   |
-|[`Penwidth`](@ref)            | Set the width of the line to n  |
-|[`Pop `](@ref)                | Move turtle to the value stored on the stack |
-|[`Push`](@ref)                | Save the turtle's position on the stack |
+|List of words the turtle knows|Action                                         |
+|:---                          |:---                                           |
+|[`Forward`](@ref)             | More forward by d units                       |
+|[`Turn`](@ref)                | Increase the turtle's rotation by n degrees   |
+|[`Circle`](@ref)              | Draw filled circle centered at current pos    |
+|[`HueShift`](@ref)            | Shift the Hue of the turtle's pen color by n  |
+|[`Message`](@ref)             | Output text                                   |
+|[`Orientation`](@ref)         | Set the turtle's orientation to n degrees     |
+|[`Pen_opacity_random`](@ref)  | Set opacity to random value                   |
+|[`Pencolor`](@ref)            | Set the Red, Green, and Blue values           |
+|[`Pendown`](@ref)             | Start drawing                                 |
+|[`Penup`](@ref)               | Stop drawing                                  |
+|[`Penwidth`](@ref)            | Set the width of the line to n                |
+|[`Pop `](@ref)                | Move turtle to the value stored on the stack  |
+|[`Push`](@ref)                | Save the turtle's position on the stack       |
 |[`Randomize_saturation`](@ref)| Randomize the saturation of the current color |
 |[`Rectangle`](@ref)           | Draw filled rectangle centered at current pos |
-|[`Reposition`](@ref)          | Place turtle at new position  |
-|[`Towards`](@ref)             | Rotate turtle to face towards a point |
+|[`Reposition`](@ref)          | Place turtle at new position                  |
+|[`Towards`](@ref)             | Rotate turtle to face towards a point         |
 
 The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!), and you can have any number of turtles active at a time.
 
@@ -71,7 +71,7 @@ for i in 1:300
     Turn.(turtles, [60.1, 89.5, 110, 119.9, 120.1, 135.1, 145.1, 176, 190])
     n += 0.5
 end
-finish() # hide  
+finish() # hide
 nothing # hide
 ```
 

@@ -1,12 +1,12 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 
-Graphics are placed on the current drawing according to the *current transformation matrix*. You can either modify this indirectly, using functions, or set the matrix directly.
+# Transforms and matrices
 
-# Transformation functions
+Graphics are placed on the current drawing according to the *current transformation matrix*. You can either modify this indirectly, using functions, or set the matrix directly.
 
 For basic transformations, use [`translate(tx, ty)`](@ref), [`scale(sx, sy)`](@ref), and [`rotate(a)`](@ref).
 
@@ -102,8 +102,8 @@ another pair of low and high values.
 using Luxor
 
 reddot(pos) = @layer begin
-sethue("red")
-circle(pos, 8, :fill)
+    sethue("red")
+    circle(pos, 8, :fill)
 end
 
 diagram = @drawsvg begin
@@ -123,12 +123,12 @@ diagram = @drawsvg begin
 
     tickline(pts...,
         startnumber = 1,
-        finishnumber = 2,        
+        finishnumber = 2,
         minor=0,
         major=9)
     tickline(pts...,
         startnumber = 30,
-        finishnumber = 40,        
+        finishnumber = 40,
         minor=0,
         major=9,
         major_tick_function = (n, pos; startnumber=30, finishnumber=40, nticks=10) -> begin
@@ -178,13 +178,13 @@ and Luxor/Cairo matrix functions accept and return simple 6-element vectors:
 
 ```julia-repl
 julia> getmatrix()
-6-element Array{Float64,1}:
-   1.0
-   0.0
-   0.0
-   1.0
-   0.0
-   0.0
+6-element Vector{Float64}:
+ 1.0
+ 0.0
+ 0.0
+ 1.0
+ 0.0
+ 0.0
 ```
 
 !!! note
@@ -283,7 +283,7 @@ diagram = @drawsvg begin
     end
 
     @layer begin
-        translate(table[2])        
+        translate(table[2])
         text("computing: y downwards", O  + (0, 100), halign=:center)
         rulers()
     end
@@ -312,7 +312,7 @@ using Luxor # hide
 
     @layer begin
         translate(table[2])
-        transform([1 0 0 -1 0 0])               # <--
+        transform([1 0 0 -1 0 0])           # <--
         arrow(pts...)
         rulers()
     end

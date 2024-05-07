@@ -114,12 +114,12 @@ using Luxor
 d1 = @drawsvg begin
     sethue("blue")
     paint()
-     end 200 100
+end 200 100
 
 d2 = @drawsvg begin
     sethue("yellow")
     paint()
-    end 200 100
+end 200 100
 
 vcat(d1, d2)
 ```
@@ -192,15 +192,15 @@ using Interact, Colors, Luxor
     d = Drawing(300, 300, :svg)
     sethue(Colors.HSB(h, s, b))
     origin()
-    circle(Point(0, 0), 100, action = :fill)  
+    circle(Point(0, 0), 100, action = :fill)
     circle(polar(110, deg2rad(h)), 10, action = :fill)
     sethue("black")
     label(string(h, "°"), deg2rad(h), polar(120, deg2rad(h)))
-        finish()
+    finish()
     d
 end
 ```
- 
+
 ![interactive](../assets/figures/interact.png)
 
 ## Drawing pixels
