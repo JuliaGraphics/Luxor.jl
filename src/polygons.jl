@@ -1719,7 +1719,7 @@ function polymorph(pgon1::Array{Vector{Point}}, pgon2::Array{Vector{Point}}, k;
     return result
 end
 
-polymorph(pgon1::Vector{Point}, pgon2::Vector{Point,1}, k; kwargs...) = begin
+polymorph(pgon1::Vector{Point}, pgon2::Vector{Point}, k; kwargs...) = begin
     polymorph([pgon1], [pgon2], k; kwargs...)
 end
 polymorph(pgon1::Array{Vector{Point}}, pgon2::Vector{Point}, k; kwargs...) = begin
