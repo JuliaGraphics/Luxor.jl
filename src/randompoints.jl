@@ -61,7 +61,7 @@ in `points`.
 The region we're analyzing lies between the origin and
 `Point(w, h)``.
 """
-function _empty_neighbourhood(sample::Point, w, h, cellsize, d, points::Array{Point, 1}, grid)
+function _empty_neighbourhood(sample::Point, w, h, cellsize, d, points::Vector{Point}, grid)
     if sample.x >= 0 &&
             sample.x < w &&
             sample.y >= 0 &&

@@ -38,8 +38,9 @@ mutable struct Turtle
     ypos::Union{Real, Int}
     pendown::Bool
     orientation::Float64 # stored in radians but set in degrees
-    pencolor::Tuple{Float64, Float64, Float64} # it's an RGB turtle
-    function Turtle(xpos::Union{Real, Int}, ypos::Union{Real, Int}, pendown::Bool, orientation, pencolor=(0.0, 0.0, 0.0))
+    pencolor::NTuple{3, Float64} # it's an RGB turtle
+    function Turtle(xpos::Union{Real, Int}, ypos::Union{Real, Int},
+                    pendown::Bool, orientation, pencolor=(0.0, 0.0, 0.0))
         new(xpos, ypos, pendown, orientation, pencolor)
     end
 end
@@ -54,7 +55,7 @@ Turtle(pos::Point, pendown::Bool, orientation::Real, r, g, b) = Turtle(pos.x, po
 Base.broadcastable(t::Turtle) = Ref(t)
 
 # a stack to hold pushed/popped turtle positions
-const queue = Array{Array{Float64, 1}, 1}()
+const queue = Vector{Vector{Float64}}()
 
 """
     Forward(t::Turtle, d=1)

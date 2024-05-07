@@ -139,7 +139,7 @@ isless(p1::Point, p2::Point) = (p1.x < p2.x || (isapprox(p1.x, p2.x) && p1.y < p
 # I think this uses ==
 # TODO perhaps unique(x -> round(x, sigdigits=13), myarray) ?
 # "any implementation of unique with a tolerance will have some odd behaviors" Steven GJohnson
-function Base.unique(pts::Array{Point,1})
+function Base.unique(pts::Vector{Point})
     apts = Point[]
     for pt in pts
         if pt ∉ apts
@@ -343,7 +343,7 @@ end
 
 Return `true` if `pt` lies on the polygon `pgon.`
 """
-function ispointonpoly(pt::Point, pgon::Array{Point,1};
+function ispointonpoly(pt::Point, pgon::Vector{Point};
     atol = 10E-5)
     @inbounds for i in 1:length(pgon)
         p1 = pgon[i]

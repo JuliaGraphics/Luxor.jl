@@ -2,7 +2,7 @@ const Mesh = Cairo.CairoPattern
 
 """
     add_mesh_patch(pattern::Mesh, bezierpath::BezierPath,
-        colors=Array{Colors.Colorant, 1})
+        colors=Vector{Colors.Colorant})
 
 Add a new patch to the mesh pattern in `pattern`.
 
@@ -14,7 +14,7 @@ if necessary. At least one color should be supplied.
 
 Use `setmesh()` to select the mesh, which will be used to fill shapes.
 """
-function add_mesh_patch(pattern::Mesh, bezierpath::BezierPath, colors=Array{Colors.Colorant, 1})
+function add_mesh_patch(pattern::Mesh, bezierpath::BezierPath, colors=Vector{Colors.Colorant})
     Cairo.mesh_pattern_begin_patch(pattern)
     # we must do 3 or 4 vertices, so need 2, 3, and possibly 4
     if length(bezierpath) == 3
@@ -43,7 +43,7 @@ function add_mesh_patch(pattern::Mesh, bezierpath::BezierPath, colors=Array{Colo
 end
 
 """
-    add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Array{Colors.Colorant, 1})
+    add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Vector{Colors.Colorant})
 
 Add a new patch to the mesh pattern in `pattern`.
 
@@ -53,7 +53,7 @@ define the three or four sides of the mesh shape.
 The `colors` array define the color of each corner point. Colors are reused
 if necessary. At least one color should be supplied.
 """
-function add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Array{Colors.Colorant, 1})
+function add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Vector{Colors.Colorant})
     Cairo.mesh_pattern_begin_patch(pattern)
     # we must do 3 or 4 vertices, so need 2, 3, and possibly 4
     if length(plist) == 3
@@ -84,7 +84,7 @@ end
 
 """
     mesh(bezierpath::BezierPath,
-         colors=Array{Colors.Colorant, 1})
+         colors=Vector{Colors.Colorant})
 
 Create a mesh. The first three or four elements of the supplied `bezierpath`
 define the three or four sides of the mesh shape.
@@ -110,19 +110,17 @@ Use `setmesh()` to select the mesh, which will be used to fill shapes.
 end
 ```
 """
-function mesh(bezierpath::BezierPath,
-              colors=Array{Colors.Colorant, 1})
+function mesh(bezierpath::BezierPath, colors=Vector{Colors.Colorant})
     pattern = Cairo.CairoPatternMesh()
     return add_mesh_patch(pattern, bezierpath, colors)
 end
 
 # old style for compatibility
-mesh(bezierpath::Array{NTuple{4, Point}}, colors=Array{Colors.Colorant, 1}) =
+mesh(bezierpath::Array{NTuple{4, Point}}, colors=Vector{Colors.Colorant}) =
     mesh(BezierPath(bezierpath), colors)
 
 """
-    mesh(points::Array{Point},
-         colors=Array{Colors.Colorant, 1})
+    mesh(points::Array{Point}, colors=Vector{Colors.Colorant})
 
 Create a mesh.
 
@@ -150,7 +148,7 @@ if necessary. At least one color should be supplied.
 end
 ```
 """
-function mesh(plist::Array{Point}, colors=Array{Colors.Colorant, 1})
+function mesh(plist::Array{Point}, colors=Vector{Colors.Colorant})
     pattern = Cairo.CairoPatternMesh()
     return add_mesh_patch(pattern, plist, colors)
 end

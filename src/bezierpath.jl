@@ -6,7 +6,7 @@ BezierPathSegment is an array of four points:
 - `cp2` - control point for finishpoint
 - `p2`  - finish point
 """
-mutable struct BezierPathSegment <: AbstractArray{Luxor.Point,1}
+mutable struct BezierPathSegment <: AbstractVector{Point}
     p1::Point
     cp1::Point
     cp2::Point
@@ -26,13 +26,13 @@ function Base.iterate(bps::BezierPathSegment)
 end
 
 function Base.iterate(bps::BezierPathSegment, s)
-    if (s > length(bps))
+    if s > length(bps)
         return
     end
     return bps[s], s + 1
 end
 
-BezierPathSegment(a::Array{Point,1}) =
+BezierPathSegment(a::Vector{Point}) =
     BezierPathSegment(a[1], a[2], a[3], a[4])
 
 # function Base.show(io::IO, bps::BezierPathSegment)
@@ -44,7 +44,7 @@ BezierPathSegment(a::Array{Point,1}) =
 BezierPath is an array of BezierPathSegments.
 `segments` is `Vector{BezierPathSegment}`.
 """
-mutable struct BezierPath <: AbstractArray{BezierPathSegment,1}
+mutable struct BezierPath <: AbstractVector{BezierPathSegment}
     segments::Vector{BezierPathSegment}
 end
 
@@ -175,7 +175,7 @@ function findbeziercontrolpoints(
 end
 
 """
-    makebezierpath(pgon::Array{Point, 1};
+    makebezierpath(pgon::Vector{Point};
         smoothing=1.0)
 
 Return a Bézier path (a BezierPath) that represents a polygon (an array of points).
@@ -187,7 +187,7 @@ polygon. A value of 0 returns a straight-sided path; as
 values move above 1 the paths deviate further from the
 original polygon's edges.
 """
-function makebezierpath(pgon::Array{Point,1};
+function makebezierpath(pgon::Vector{Point};
     smoothing = 1.0)
     lpg = length(pgon)
     newpath = BezierPath()
@@ -256,7 +256,7 @@ end
 drawbezierpath(bps::BezierPathSegment, action::Symbol; close = true) =
     drawbezierpath(bps, action = action, close = close)
 
-drawbezierpath(bpsa::Array{BezierPathSegment,1}, action = :none) =
+drawbezierpath(bpsa::Vector{BezierPathSegment}, action = :none) =
     foreach(b -> drawbezierpath(b, action), bpsa)
 
 """
@@ -481,11 +481,11 @@ function bezierfrompoints(startpoint::Point,
 end
 
 """
-    bezierfrompoints(ptslist::Array{Point, 1})
+    bezierfrompoints(ptslist::Vector{Point})
 
 Given four points, return the Bézier curve that passes through all four points.
 """
-bezierfrompoints(ptslist::Array{Point,1}) = bezierfrompoints(ptslist...)
+bezierfrompoints(ptslist::Vector{Point}) = bezierfrompoints(ptslist...)
 
 """
     bezierstroke(point1, point2, width=0.0)
@@ -796,7 +796,7 @@ function trimbezier(bps::BezierPathSegment, lowpt, highpt)
 end
 
 """
-    bezigon(corners::Array{Point,1}, sides;
+    bezigon(corners::Vector{Point}, sides;
         close = false,
         action = :none))
 
@@ -823,7 +823,7 @@ the first two points in corners to define a Bezier curve. And so on for the next
 
 Returns a path.
 """
-function bezigon(pts::Array{Point,1}, sides;
+function bezigon(pts::Vector{Point}, sides;
         close = false,
         action = :none)
     if isempty(sides)
@@ -848,6 +848,6 @@ function bezigon(pts::Array{Point,1}, sides;
     return path
 end
 
-bezigon(pts::Array{Point,1}, sides, the_action::Symbol; close::Bool=false) = begin
+bezigon(pts::Vector{Point}, sides, the_action::Symbol; close::Bool=false) = begin
     bezigon(pts, sides, action = the_action, close = close)
 end

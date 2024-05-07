@@ -513,7 +513,7 @@ function rule(pos, theta = 0.0;
     rsina = r * sin(theta)
     ruledline = (pos - (rcosa, rsina), pos + (rcosa, rsina))
 
-    interpoints = Array{Point,1}()
+    interpoints = Vector{Point}()
 
     # check for intersection with top of bounding box
     flag, ip = intersectionlines(ruledline[1], ruledline[2], topside[1], topside[2], crossingonly = true)
@@ -562,7 +562,7 @@ end
 #   - predefine all needed Dict entries in a thread safe way
 #   - each thread has it's own stack, separated by threadid
 # this is not enough for Threads.@spawn (TODO, but no solution yet)
-let _SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64,Float64,Float64,Float64},1}}}(Dict(0 => Array{Tuple{Float64,Float64,Float64,Float64},1}()))
+let _SAVED_COLORS_STACK = Ref{Dict{Int,Vector{NTuple{4,Float64}}}}(Dict(0 => Vector{NTuple{4,Float64}}()))
     global _saved_colors
     function _saved_colors()
         id = Threads.threadid()
@@ -571,7 +571,7 @@ let _SAVED_COLORS_STACK = Ref{Dict{Int,Array{Tuple{Float64,Float64,Float64,Float
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                _SAVED_COLORS_STACK[][preID] = Array{Tuple{Float64,Float64,Float64,Float64},1}()
+                _SAVED_COLORS_STACK[][preID] = Vector{NTuple{4,Float64}}()
             end
             unlock(lc)
         end

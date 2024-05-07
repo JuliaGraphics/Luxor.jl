@@ -597,7 +597,7 @@ attached to the preceding word.
 function splittext(s::T where {T<:AbstractString})
     # split text into array, keeping all separators
     # hyphens stay with first word
-    result = Array{String,1}()
+    result = Vector{String}()
     iobuffer = IOBuffer()
     for c in s
         if isspace(c)

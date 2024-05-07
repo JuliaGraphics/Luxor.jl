@@ -120,7 +120,7 @@ struct AnimatedGif
 end
 
 """
-    animate(movie::Movie, scenelist::Array{Scene, 1};
+    animate(movie::Movie, scenelist::Vector{Scene};
         creategif = false,
         createmovie = false,
         framerate = 30,
@@ -172,7 +172,7 @@ FFMPEG.exe(`-r 30 -f image2 -i \$(tempdirectory)/%10d.png -c:v libx264 -r 30 -pi
 
 ```
 """
-function animate(movie::Movie, scenelist::Array{Scene,1};
+function animate(movie::Movie, scenelist::Vector{Scene};
     creategif = false,
     createmovie = false,
     framerate = 30,

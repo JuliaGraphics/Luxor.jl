@@ -79,7 +79,7 @@ end
 #   - predefine all needed Dict entries in a thread safe way
 #   - each thread has it's own stack, separated by threadid
 # this is not enough for Threads.@spawn (TODO, but no solution yet)
-let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing,1},Nothing}}}(Dict(0 => nothing)),
+let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Vector{Drawing},Nothing}}}(Dict(0 => nothing)),
     _CURRENTDRAWINGINDICES = Ref{Dict{Int,Int}}(Dict(0 => 0))
 
     global _current_drawing
@@ -90,7 +90,7 @@ let _CURRENTDRAWINGS = Ref{Dict{Int,Union{Array{Drawing,1},Nothing}}}(Dict(0 => 
             lc = ReentrantLock()
             lock(lc)
             for preID in 1:Threads.nthreads()
-                _CURRENTDRAWINGS[][preID] = Array{Drawing,1}()
+                _CURRENTDRAWINGS[][preID] = Vector{Drawing}()
             end
             unlock(lc)
         end

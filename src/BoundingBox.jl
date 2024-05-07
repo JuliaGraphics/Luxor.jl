@@ -78,11 +78,11 @@ function BoundingBox(;
 end
 
 """
-    BoundingBox(pointlist::Array)
+    BoundingBox(pointlist::Vector)
 
 Return the BoundingBox of a polygon (array of points).
 """
-function BoundingBox(pointlist::Array{Point,1})
+function BoundingBox(pointlist::Vector{Point})
     lowx, lowy = pointlist[1].x, pointlist[1].y
     highx, highy = pointlist[end].x, pointlist[end].y
     for p in pointlist

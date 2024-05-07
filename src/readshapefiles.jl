@@ -15,7 +15,7 @@ table = Shapefile.Table(worldshapefile)
 geoms = Shapefile.shapes(table)
 # set up Luxor drawing, then:
 for shape in geoms
-    pgons, bbox = convert(Array{Luxor.Point, 1}, shape)
+    pgons, bbox = convert(Vector{Luxor.Point}, shape)
     for pg in pgons
         setgray(rand(0.5:0.1:0.8))
         poly(pg, :fill)
@@ -27,7 +27,7 @@ end
 =#
 
 # Convert a Shapefile rectangle to an array of points suitable for a Luxor rectangle
-function Base.convert(::Type{Array{Luxor.Point, 1}}, R::Shapefile.Rect)
+function Base.convert(::Type{Vector{Luxor.Point}}, R::Shapefile.Rect)
     return [R.left, R.top, R.right-R.left, R.bottom-R.top]
 end
 
@@ -37,8 +37,8 @@ function  Base.convert(::Type{Luxor.Point}, pt::Shapefile.Point)
 end
 
 # Convert Shapefile PolyLine to a Luxor poly
-function Base.convert(::Type{Array{Luxor.Point, 1}}, pl::Shapefile.Polyline)
-    resultbbox = convert(Array{Luxor.Point, 1}, pl.MBR)
+function Base.convert(::Type{Vector{Luxor.Point}}, pl::Shapefile.Polyline)
+    resultbbox = convert(Vector{Luxor.Point}, pl.MBR)
     resultpoly = Luxor.Point[]
     for pt in pl.points
         push!(resultpoly, convert(Luxor.Point, pt))
@@ -52,9 +52,9 @@ end
 # belong to the same Shapefile.Polygon and the return value will include these and other
 # polygons in the array.
 
-function Base.convert(::Type{Array{Luxor.Point, 1}}, pl::Shapefile.Polygon)
+function Base.convert(::Type{Vector{Luxor.Point}}, pl::Shapefile.Polygon)
     bbox = [Luxor.Point(pl.MBR.left, -pl.MBR.top), pl.MBR.right - pl.MBR.left, pl.MBR.top - pl.MBR.bottom]
-    polygons = Array{Point, 1}[] # to hold all the polygons for a shape
+    polygons = Vector{Point}[] # to hold all the polygons for a shape
     if length(pl.parts) >= 2
         points = Luxor.Point[]
         for i in 1:length(pl.parts) - 1
