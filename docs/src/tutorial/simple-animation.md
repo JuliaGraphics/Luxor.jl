@@ -5,7 +5,7 @@ a series of PNG images into an animated movie.
 
 !!! note
 
-    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl), which is designed specifically for the purpose. 
+    To make richer and more complex animations, use [Javis.jl](https://github.com/Wikunia/Javis.jl), which is designed specifically for the purpose.
     [Makie.jl](https://docs.makie.org/stable/) is also a good choice.
 
 ## 1: A Julia spinner
@@ -41,9 +41,9 @@ This function is responsible for drawing all the graphics
 for a single frame. The incoming frame number is converted
 (normalized) to lie between 0 and 1 - ie. between the first
 frame and the last frame of the scene. It's multiplied by 2π
-and used as input to `rotate`. So, as the framenumber goes from 1 to the last frame in the scene, each drawing will
-be rotated by an increasing angle from 0 to 2π. For example,
-for a scene with 60 frames, framenumber 30 will set a
+and used as input to `rotate`. So, as the framenumber goes from 1 to the last
+frame in the scene, each drawing will be rotated by an increasing angle from 0
+to 2π. For example, for a scene with 60 frames, framenumber 30 will set a
 rotation value of about `2π * 0.5`.
 
 The Scene object has details about the number of frames for this scene, including the number of times the `frame` function is called.
@@ -124,8 +124,8 @@ The `sunfunction` draws a sun at 24 positions during the day. Since the framenum
 function sunfunction(scene::Scene, framenumber)
     t = rescale(framenumber, 0, 23, 2pi, 0)
     gsave()
-        sethue("yellow")
-        circle(polar(150, t), 20, action = :fill)
+    sethue("yellow")
+    circle(polar(150, t), 20, action = :fill)
     grestore()
 end
 ```
@@ -161,7 +161,7 @@ frame to build the animation:
 
 ```julia
 animate(sun24demo, [
-   backdrop, nightsky, nightsky1, daysky, sun, ground
+       backdrop, nightsky, nightsky1, daysky, sun, ground
    ],
    framerate=5,
    creategif=true)

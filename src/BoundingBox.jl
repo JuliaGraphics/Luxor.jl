@@ -23,20 +23,30 @@ modified (by `translate()`, `scale()`, `rotate()` etc.)
 An instance of the BoundingBox type holds two Points,
 `corner1` and `corner2`.
 
+```julia
 BoundingBox(;centered = true)   # the bounding box of the Drawing
+```
 
+```julia
 BoundingBox(s::AbstractString)  # the bounding box of a text string at the origin
+```
 
+```julia
 BoundingBox(pt::Array)          # the bounding box of a polygon
+```
 
+```julia
 BoundingBox(circle(O, 100))     # the bounding box of a path added by circle()
+```
 
+```julia
 BoundingBox(path::Path)         # the bounding box of a Path
+```
 
 You can use `BoundingBox()` with the functions that add
 graphic shapes to the current path (eg `box()`, `circle()`,
-`star()`, `ngon()`). But note that eg `BoundingBox(box(O, 100, 100))` adds a shape to the current path as well as
-returning a bounding box.
+`star()`, `ngon()`). But note that eg `BoundingBox(box(O, 100, 100))` adds a
+shape to the current path as well as returning a bounding box.
 """
 function BoundingBox(;
     centered = true)
@@ -68,11 +78,11 @@ function BoundingBox(;
 end
 
 """
-    BoundingBox(pointlist::Array)
+    BoundingBox(pointlist::Vector)
 
 Return the BoundingBox of a polygon (array of points).
 """
-function BoundingBox(pointlist::Array{Point,1})
+function BoundingBox(pointlist::Vector{Point})
     lowx, lowy = pointlist[1].x, pointlist[1].y
     highx, highy = pointlist[end].x, pointlist[end].y
     for p in pointlist

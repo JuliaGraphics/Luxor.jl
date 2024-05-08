@@ -1,12 +1,12 @@
 """
 BezierPathSegment is an array of four points:
 
-`p1`  - start point
-`cp1` - control point for start point
-`cp2` - control point for finishpoint
-`p2`  - finish point
+- `p1`  - start point
+- `cp1` - control point for start point
+- `cp2` - control point for finishpoint
+- `p2`  - finish point
 """
-mutable struct BezierPathSegment <: AbstractArray{Luxor.Point,1}
+mutable struct BezierPathSegment <: AbstractVector{Point}
     p1::Point
     cp1::Point
     cp2::Point
@@ -26,13 +26,13 @@ function Base.iterate(bps::BezierPathSegment)
 end
 
 function Base.iterate(bps::BezierPathSegment, s)
-    if (s > length(bps))
+    if s > length(bps)
         return
     end
     return bps[s], s + 1
 end
 
-BezierPathSegment(a::Array{Point,1}) =
+BezierPathSegment(a::Vector{Point}) =
     BezierPathSegment(a[1], a[2], a[3], a[4])
 
 # function Base.show(io::IO, bps::BezierPathSegment)
@@ -44,7 +44,7 @@ BezierPathSegment(a::Array{Point,1}) =
 BezierPath is an array of BezierPathSegments.
 `segments` is `Vector{BezierPathSegment}`.
 """
-mutable struct BezierPath <: AbstractArray{BezierPathSegment,1}
+mutable struct BezierPath <: AbstractVector{BezierPathSegment}
     segments::Vector{BezierPathSegment}
 end
 
@@ -80,7 +80,7 @@ bezier(t, bps::BezierPathSegment) =
     bezier(t, bps.p1, bps.cp1, bps.cp1, bps.p2)
 
 """
-bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
+    bezier′(t, A::Point, A1::Point, B1::Point, B::Point)
 
 Return the first derivative of the Bézier function.
 """
@@ -102,18 +102,17 @@ bezier′′(t, bps::BezierPathSegment) =
 """
     beziercurvature(t, A::Point, A1::Point, B1::Point, B::Point)
 
-Return the curvature of the Bézier curve at `t` ([0-1]), given start and end
+Return the curvature of the Bézier curve at `t` in [0, 1], given start and end
 points A and B, and control points A1 and B1. The value (kappa) will typically
 be a value between -0.001 and 0.001 for points with coordinates in the 100-500
 range.
 
-κ(t) is the curvature of the curve at point t, which for a parametric planar
+``κ(t)`` is the curvature of the curve at point t, which for a parametric planar
 curve is:
 
 ```math
 \\begin{equation}
-\\kappa = \\frac{\\mid \\dot{x}\\ddot{y}-\\dot{y}\\ddot{x}\\mid}
-    {(\\dot{x}^2 + \\dot{y}^2)^{\\frac{3}{2}}}
+κ = \\frac{\\left| ẋ ÿ - ẏ ẍ \\right|}{(ẋ^2 + ẏ^2)^{\\frac{3}{2}}}
 \\end{equation}
 ```
 
@@ -176,19 +175,19 @@ function findbeziercontrolpoints(
 end
 
 """
-    makebezierpath(pgon::Array{Point, 1};
+    makebezierpath(pgon::Vector{Point};
         smoothing=1.0)
 
-Return a Bézier path (a BezierPath) that represents a polygon (an array of points). The Bézier
-path is an array of segments (tuples of 4 points); each segment contains the
-four points that make up a section of the entire Bézier path.
+Return a Bézier path (a BezierPath) that represents a polygon (an array of points).
+The Bézier path is an array of segments (tuples of 4 points); each segment
+contains the four points that make up a section of the entire Bézier path.
 
 `smoothing` determines how closely the curve follows the
 polygon. A value of 0 returns a straight-sided path; as
 values move above 1 the paths deviate further from the
 original polygon's edges.
 """
-function makebezierpath(pgon::Array{Point,1};
+function makebezierpath(pgon::Vector{Point};
     smoothing = 1.0)
     lpg = length(pgon)
     newpath = BezierPath()
@@ -257,7 +256,7 @@ end
 drawbezierpath(bps::BezierPathSegment, action::Symbol; close = true) =
     drawbezierpath(bps, action = action, close = close)
 
-drawbezierpath(bpsa::Array{BezierPathSegment,1}, action = :none) =
+drawbezierpath(bpsa::Vector{BezierPathSegment}, action = :none) =
     foreach(b -> drawbezierpath(b, action), bpsa)
 
 """
@@ -482,11 +481,11 @@ function bezierfrompoints(startpoint::Point,
 end
 
 """
-    bezierfrompoints(ptslist::Array{Point, 1})
+    bezierfrompoints(ptslist::Vector{Point})
 
 Given four points, return the Bézier curve that passes through all four points.
 """
-bezierfrompoints(ptslist::Array{Point,1}) = bezierfrompoints(ptslist...)
+bezierfrompoints(ptslist::Vector{Point}) = bezierfrompoints(ptslist...)
 
 """
     bezierstroke(point1, point2, width=0.0)
@@ -552,7 +551,7 @@ points in the BezierPathSegment `bps`.
 
 `angles` are the two angles that the "handles" make with the line direciton.
 
-` handles` are the lengths of the "handles". 0.3 is a typical value.
+`handles` are the lengths of the "handles". 0.3 is a typical value.
 """
 function setbezierhandles(bps::BezierPathSegment;
     angles = [0.05, -0.1],
@@ -575,7 +574,7 @@ every Bézier path segment of the BezierPath in `bezpath`.
 
 `angles` are the two angles that the "handles" make with the line direciton.
 
-` handles` are the lengths of the "handles". 0.3 is a typical value.
+`handles` are the lengths of the "handles". 0.3 is a typical value.
 """
 function setbezierhandles(bezpath::BezierPath;
     angles = [0.05, -0.1],
@@ -640,7 +639,7 @@ Bezier paths.
 `strokefunction` allows a function to process a BezierPathSegment or do other things before it's drawn.
 
 !!! note
-    
+
     There is a lot of randomness in this function. Results are unpredictable.
 """
 function brush(pt1, pt2, width = 10;
@@ -766,6 +765,7 @@ julia> h
 
 julia> l.p2 == h.p1
 true
+```
 """
 function splitbezier(bps::BezierPathSegment, t)
     p1, cp1, cp2, p2 = bps.p1, bps.cp1, bps.cp2, bps.p2
@@ -796,7 +796,7 @@ function trimbezier(bps::BezierPathSegment, lowpt, highpt)
 end
 
 """
-    bezigon(corners::Array{Point,1}, sides;
+    bezigon(corners::Vector{Point}, sides;
         close = false,
         action = :none))
 
@@ -823,7 +823,7 @@ the first two points in corners to define a Bezier curve. And so on for the next
 
 Returns a path.
 """
-function bezigon(pts::Array{Point,1}, sides;
+function bezigon(pts::Vector{Point}, sides;
         close = false,
         action = :none)
     if isempty(sides)
@@ -848,6 +848,6 @@ function bezigon(pts::Array{Point,1}, sides;
     return path
 end
 
-bezigon(pts::Array{Point,1}, sides, the_action::Symbol; close::Bool=false) = begin
+bezigon(pts::Vector{Point}, sides, the_action::Symbol; close::Bool=false) = begin
     bezigon(pts, sides, action = the_action, close = close)
 end

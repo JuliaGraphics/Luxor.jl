@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors, Random
-    end
+end
 ```
 
 # Geometry tools
@@ -111,27 +111,27 @@ The [`pointinverse`](@ref) function finds the inverse of a point relative to a r
 ```@example
 using Luxor, Colors # hide
 d = @drawsvg begin
-origin() # hide
-background("antiquewhite") # hide
-setline(1) # hide
-radius = 60
-circle(O, radius + 20, action = :stroke)
+    origin() # hide
+    background("antiquewhite") # hide
+    setline(1) # hide
+    radius = 60
+    circle(O, radius + 20, action = :stroke)
 
-points = polycross(O, radius, 7, vertices=true)
-poly(points, action = :stroke, close=true)
+    points = polycross(O, radius, 7, vertices=true)
+    poly(points, action = :stroke, close=true)
 
-antipoints = last.([pointinverse(pt, O, radius + 20) for pt in points])
+    antipoints = last.([pointinverse(pt, O, radius + 20) for pt in points])
 
-#antipoints = last.(pointinverse.(points, O, radius+20))
+    #antipoints = last.(pointinverse.(points, O, radius+20))
 
-for (n, ptpair) in enumerate(zip(points, antipoints))
-    pt1, pt2, = ptpair
-    sethue(HSB(length(points) * n, 0.8, 0.8))
-    circle(pt1, distance(O, pt1)/6, action = :fill)
-    circle(pt2, distance(O, pt2)/6, action = :fill)
-    sethue("black")
-    arrow(pt1, pt2)
-end
+    for (n, ptpair) in enumerate(zip(points, antipoints))
+        pt1, pt2, = ptpair
+        sethue(HSB(length(points) * n, 0.8, 0.8))
+        circle(pt1, distance(O, pt1)/6, action = :fill)
+        circle(pt2, distance(O, pt2)/6, action = :fill)
+        sethue("black")
+        arrow(pt1, pt2)
+    end
 end 800 500
 d # hide
 ```
@@ -181,7 +181,7 @@ Other functions that help with geometry include:
 
 - [`distance`](@ref) distance between two points
 
-- [`getnearestpointonline`](@ref) drop perpendicular 
+- [`getnearestpointonline`](@ref) drop perpendicular
 
 - [`pointlinedistance`](@ref) distance of point from line between two points
 
@@ -234,7 +234,7 @@ fontsize(11) # hide
 @layer begin
     sethue("red")
     setline(2)
-    poly(▲,  :stroke, close=true)
+    poly(▲, :stroke, close=true)
 end
 
 # circumcenter
@@ -253,7 +253,7 @@ pt1 = getnearestpointonline(▲[1], ▲[2], cp)
     label("incenter", :S, cp)
 end
 
-# center    
+# center
 cp = trianglecenter(▲...)
 circle(cp, 2, action = :fill)
 label("center", :w, cp)
@@ -631,8 +631,8 @@ tiles = Tiler(800, 400, 200, 200)
 sethue("black")
 for (pos, n) in tiles
     freq = 0.05
-    pos.y < 0 ? d = 1      : d = 4
-    pos.x < 0 ? pers = 0.3 : pers = 1.0
+    d    = pos.y < 0 ? 1   : 4
+    pers = pos.x < 0 ? 0.3 : 1.0
     ns = noise(freq * pos.x, freq * pos.y,
         detail=d,
         persistence=pers)

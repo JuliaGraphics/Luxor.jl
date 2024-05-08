@@ -20,7 +20,9 @@ and the current graphics state (color, line thickness, and
 so on), in response to the functions you call.
 
 When called, the following function creates a single path consisting of three separate
-shapes - a line, a rectangular box, and a circle. The [`move()`](@ref) function as used here is essentially a "pick up the pen and move it elsewhere" instruction. [`line()`](@ref) adds a straight line segment to the current path.
+shapes - a line, a rectangular box, and a circle. The [`move()`](@ref) function
+as used here is essentially a "pick up the pen and move it elsewhere"
+instruction. [`line()`](@ref) adds a straight line segment to the current path.
 The `circle()` function adds four Bézier curves that provide a good approximation to a circle.
 
 ```julia
@@ -69,7 +71,7 @@ d = @drawsvg begin
     # rule.(between.(O - (250, 0), O + (250, 0), 0:0.01:1), -π/3)
     # Luxor >= "v4.0"
     rule.(between(O - (250, 0), O + (250, 0), 0:0.01:1), -π/3)
-    end 800 500
+end 800 500
 ```
 
 ```@example pathexample
@@ -77,16 +79,15 @@ d # hide
 ```
 
 When you run this function, the path is added to the drawing.
-The top path, in purple, is drawn when
-[`strokepath()`](@ref) is called. Each of the
-three shapes is stroked with the same current settings
+The top path, in purple, is drawn when [`strokepath()`](@ref) is called.
+Each of the three shapes is stroked with the same current settings
 (color, line thickness, dash pattern, and so on).
 
 After calling the function again, the middle row shows the effect of calling
 [`fillpath()`](@ref) on the new path. It fills each of
 the three shapes in the path with orange.
 
-Finally, after calling the function again, 
+Finally, after calling the function again,
 the [`clip()`](@ref) function turns this new path into a clipping path. The
 [`rule()`](@ref) function draws green ruled lines, which are
 clipped by the outlines of the shapes in the path.
@@ -100,7 +101,7 @@ Many functions in Luxor have an `action` keyword argument or
 parameter. If you want to add that shape to the current
 path, use `:path`. If you want to both add the shape _and_
 finish and draw the current path, use one of `stroke`,
-`fill`, etc.  
+`fill`, etc.
 
 After the path is stroked or filled, it's emptied out, ready
 for you to start over again. There's always a current path. But you can also use one of the
@@ -113,7 +114,6 @@ also convert the path to a clipping path using
 As you can see, a single path can contain multiple separate graphic shapes.
 
 ### Holes
-beetween
 If you want a path to contain holes,
 you add the hole shapes to the current path after reversing
 their direction. For example, to put a square hole inside a

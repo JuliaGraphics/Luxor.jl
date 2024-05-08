@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # A tutorial
 
@@ -18,7 +18,7 @@ For now, you can continue to store all the drawing instructions between the `@pn
 Define the variable `radius` to hold a value of 80 units (there are 72 units in a traditional inch):
 
 ```julia
-    radius=80
+    radius = 80
 ```
 
 Select gray dotted lines. To specify a color you can supply RGB (or HSB or LAB or LUV) values or use named colors, such as "red" or "green". "gray0" is black, and "gray100" is white. (For more information about colors, see [Colors.jl](https://github.com/JuliaGraphics/Colors.jl).)
@@ -252,7 +252,6 @@ To find (and draw) these points is straightforward. We'll mark these as intermed
 So we can use the [`distance`](@ref) function to find the distance between two points, and it's simple enough to compare the values and choose the shortest.
 
 ```julia
-
 # >>>>
 
     if distance(C1, I1) < distance(C1, I2)

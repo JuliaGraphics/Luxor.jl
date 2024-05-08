@@ -18,16 +18,19 @@ vector:
   - `y0` translation component of the affine transformation
 
 When a drawing is first created, the 'matrix' looks like this:
-
-    getmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+```
+getmatrix() = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+```
 
 When the origin is moved to 400/400, it looks like this:
-
-    getmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]
+```
+getmatrix() = [1.0, 0.0, 0.0, 1.0, 400.0, 400.0]
+```
 
 To reset the 'matrix' to the original:
-
-    setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
+```
+setmatrix([1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
+```
 
 To modify the current 'matrix' by multiplying it by a 6 element 'matrix' `a`,
 see `transform(a::Array)`.
@@ -43,41 +46,41 @@ Here are some basic matrix transforms:
 
   - translate
 
-`transform([1, 0, 0, 1, dx, dy])` shifts by `dx`, `dy`
+    `transform([1, 0, 0, 1, dx, dy])` shifts by `dx`, `dy`
 
   - scale
 
-`transform([fx 0 0 fy 0 0])` scales by `fx` and `fy`
+    `transform([fx 0 0 fy 0 0])` scales by `fx` and `fy`
 
   - rotate
 
-`transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])` rotates around to `a` radians
+    `transform([cos(a), -sin(a), sin(a), cos(a), 0, 0])` rotates around to `a` radians
 
-rotate around O: [c -s s c 0 0]
+    rotate around O: [c -s s c 0 0]
 
   - shear
 
-`transform([1 0 a 1 0 0])` shears in x direction by `a`
+    `transform([1 0 a 1 0 0])` shears in x direction by `a`
 
-shear in y direction by `a`: [1 a 0 1 0 0]
+    shear in y direction by `a`: `[1 a 0 1 0 0]`
 
   - x-skew
 
-`transform([1, 0, tan(a), 1, 0, 0])` skews in x by `a`
+    `transform([1, 0, tan(a), 1, 0, 0])` skews in x by `a`
 
   - y-skew
 
-`transform([1, tan(a), 0, 1, 0, 0])` skews in y by `a`
+    `transform([1, tan(a), 0, 1, 0, 0])` skews in y by `a`
 
   - flip
 
-`transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])` flips with center at `centerx`/`centery`
+    `transform([fx, 0, 0, fy, centerx * (1 - fx), centery * (fy-1)])` flips with center at `centerx`/`centery`
 
   - reflect
 
-`transform([1 0 0 -1 0 0])` reflects in xaxis
+    `transform([1 0 0 -1 0 0])` reflects in xaxis
 
-`transform([-1 0 0 1 0 0])` reflects in yaxis
+    `transform([-1 0 0 1 0 0])` reflects in yaxis
 """
 function getmatrix()
     gm = Cairo.get_matrix(_get_current_cr())
@@ -112,9 +115,9 @@ end
 Modify the current matrix by multiplying it by matrix `a`.
 
 For example, to skew the current state by 45 degrees in x and move by 20 in y direction:
-
-    transform([1, 0, tand(45), 1, 0, 20])
-
+```julia
+transform([1, 0, tand(45), 1, 0, 20])
+```
 See `getmatrix()` for details.
 """
 function transform(a::Array)
@@ -196,8 +199,8 @@ end
 
 Get the rotation of a Julia 3x3 matrix, or the current Luxor rotation.
 
-```julia
-getrotation()
+```julia-repl
+julia> getrotation()
 0.0
 ```
 
@@ -231,8 +234,8 @@ Get the current scale of a 3x3 matrix, or the current Luxor scale.
 
 Returns a tuple of x and y values.
 
-```julia
-getscale()
+```julia-repl
+julia> getscale()
 (1.0, 1.0)
 ```
 

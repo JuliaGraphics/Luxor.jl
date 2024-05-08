@@ -7,7 +7,7 @@ This function loads and interprets an EPS file previously exported by
 Cairo. Commands are 'applied' to the current drawing.
 
 The primary intention is to extract some geometry  - points and curves,
-etc. - from an EPS vector graphic. 
+etc. - from an EPS vector graphic.
 
 !!! warning
 
@@ -23,11 +23,13 @@ Also note:
 
 - ignores clipping for now; I'm not sure how the Cairo->EPS->Cairo transformations work yet
 
-- ignores `rectfill`` commands for now - I think these are often used just for the initial BoundingBoxes/clipping, but if they're used matrix transforms they'll need interpreting somehow
+- ignores `rectfill`` commands for now - I think these are often used just for
+  the initial BoundingBoxes/clipping, but if they're used matrix transforms
+  they'll need interpreting somehow
 
 - ignores blends and gradients, embedded images, embedded fonts, among many other things...
 
-Use `log` to print the commands to the REPL as well as execute them. 
+Use `log` to print the commands to the REPL as well as execute them.
 
 ## Examples
 
@@ -52,7 +54,9 @@ end 800 500 "/tmp/julia.eps"
 end
 ```
 
-If you want to put the list of Luxor commands in a text file for pasting into another file, you could try this (Julia v.1.7 and up). Let's say you have an SVG called `julia.svg`.
+If you want to put the list of Luxor commands in a text file for pasting into
+another file, you could try this (Julia v.1.7 and up). Let's say you have an SVG
+called `julia.svg`.
 
 ```julia
 # load an SVG and save as EPS
@@ -91,7 +95,7 @@ function placeeps(epsfile;
             if !occursin("cairo", i)
                 @warn "This EPS file was not created with Cairo. Expect disappointment and failure in equal measure."
             end
-        end 
+        end
         if startswith(i, "%!PS-Adobe-3.0")
             prolog = true
         end
@@ -117,13 +121,13 @@ function placeeps(epsfile;
                 p1 = pop!(s)
                 p2 = pop!(s)
                 move(Point(p2, (p1)))
-                log && println("move(Point($(p2), $(p1)))") 
-            elseif tkn == "l" # lineto 
+                log && println("move(Point($(p2), $(p1)))")
+            elseif tkn == "l" # lineto
                 p1 = pop!(s)
                 p2 = pop!(s)
                 line(Point(p2, p1))
                 log && println("line(Point($(p2), $(p1)))")
-            elseif tkn == "c" # curveto 
+            elseif tkn == "c" # curveto
                 p1 = pop!(s)
                 p2 = pop!(s)
                 p3 = pop!(s)
@@ -135,15 +139,15 @@ function placeeps(epsfile;
             elseif tkn == "h" # closepath
                 closepath()
                 log && println("closepath()")
-            elseif tkn == "S" # stroke 
+            elseif tkn == "S" # stroke
                 strokepath()
                 log && println("strokepath()")
-            elseif tkn == "f" # fill 
+            elseif tkn == "f" # fill
                 fillpath()
                 log && println("fillpath()")
-            elseif tkn == "f*" # eofill 
+            elseif tkn == "f*" # eofill
                 log && println("# eofill?")
-            elseif tkn == "n" # newpath 
+            elseif tkn == "n" # newpath
                 newpath()
                 log && println("newpath()")
             elseif tkn == "g"
@@ -171,7 +175,7 @@ function placeeps(epsfile;
                 p5 = pop!(s)
                 p6 = pop!(s)
                 m = [p6, p5, p4, p3, p2, p1]
-                # matrix transforms ignored")              
+                # matrix transforms ignored
                 # setmatrix([$p6, $p5, $p4, $p3, $p2, $p1])
                 log && println("# setmatrix([$p6, $p5, $p4, $p3, $p2, $p1])")
             elseif tkn == "w" # linewidth

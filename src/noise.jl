@@ -33,7 +33,7 @@ noise(x, y, z, w; detail::T = 1, persistence = 1.0) where T <: Integer =
 
 # call simplexnoise on values in array
 # coords is [x] or [x, y] or [x, y, z] or [x, y, z, w]
-function _octaves(coords::Array{T, 1} where T <: Real;
+function _octaves(coords::Vector{T} where T <: Real;
         octaves::Int = 1,
         persistence=1.0)
     total     = 0.0
@@ -173,8 +173,8 @@ end
 
 # Initialize the two main arrays that are used by all noise functions
 
-const perm            = Array{Int8}(undef, 256)
-const permGradIndex3D = Array{Int8}(undef, 256)
+const perm            = Vector{Int8}(undef, 256)
+const permGradIndex3D = Vector{Int8}(undef, 256)
 
 """
     initnoise(seed::Int)
@@ -191,7 +191,7 @@ julia> initnoise(); noise(1)
 ```
 
 If you provide an integer seed, it will be used
-to seed `Random.seed!()`` when the noise code is initialized:
+to seed `Random.seed!()` when the noise code is initialized:
 
 ```julia-repl
 julia> initnoise(41); noise(1) # yesterday

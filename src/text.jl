@@ -36,7 +36,7 @@ Other text functions:
 
 `label()` - draw text relative to a point with offset and leader lines
 
-`textbox()` - draw an array of strings vertically downwards 
+`textbox()` - draw an array of strings vertically downwards
 
 `textcurve()` - draw text on a circular arc
 
@@ -142,7 +142,9 @@ fontsize(n) = Cairo.set_font_size(_get_current_cr(), n)
 Return the font size set by `fontsize` or. more precisely. the y-scale of the Cairo font matrix
 if `Cairo.set_font_matrix` is used directly. (Toy API)
 
-> This only works if Cairo is at least at v1.0.5.
+!!! note
+
+    This only works if Cairo is at least at v1.0.5.
 """
 function get_fontsize()
     if @isdefined get_font_matrix
@@ -160,17 +162,17 @@ end
 Return an array of six Float64s containing the measurements of the string `str`
 when set using the current font settings (Toy API):
 
-1 x_bearing
+1. x_bearing
 
-2 y_bearing
+2. y_bearing
 
-3 width
+3. width
 
-4 height
+4. height
 
-5 x_advance
+5. x_advance
 
-6 y_advance
+6. y_advance
 
 The x and y bearings are the displacement from the reference point to the
 upper-left corner of the bounding box. It is often zero or a small positive
@@ -437,9 +439,10 @@ textcurvecentred = textcurvecentered
 Select a font and specify the size.
 
 Example:
-
-    setfont("Helvetica", 24)
-    settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
+```julia
+setfont("Helvetica", 24)
+settext("Hello in Helvetica 24 using the Pro API", Point(0, 10))
+```
 """
 function setfont(family::T where {T<:AbstractString}, fontsize)
     # output is set relative to 96dpi
@@ -470,7 +473,7 @@ default clockwise (+x-axis to +y-axis) radians.
 If `markup` is `true`, then the string can contain some HTML-style markup.
 Supported tags include:
 
-    <b>, <i>, <s>, <sub>, <sup>, <small>, <big>, <u>, <tt>, and <span>
+`<b>`, `<i>`, `<s>`, `<sub>`, `<sup>`, `<small>`, `<big>`, `<u>`, `<tt>`, and `<span>`
 
 The `<span>` tag can contains things like this:
 
@@ -493,10 +496,12 @@ North and places the text directly above that point.
 Use one of `:N`, `:S`, `:E`, `:W`, `:NE`, `:SE`, `:SW`, `:NW` to position the label
 relative to that point.
 
-    label("text")          # positions text at North (above), relative to the origin
-    label("text", :S)      # positions text at South (below), relative to the origin
-    label("text", :S, pt)  # positions text South of pt
-    label("text", :N, pt, offset=20)  # positions text North of pt, offset by 20
+```julia
+label("text")          # positions text at North (above), relative to the origin
+label("text", :S)      # positions text at South (below), relative to the origin
+label("text", :S, pt)  # positions text South of pt
+label("text", :N, pt, offset=20)  # positions text North of pt, offset by 20
+```
 
 The default offset is 5 units.
 
@@ -552,7 +557,9 @@ end
 Add a text label at a point, positioned relative to that point, for example,
 `0.0` is East, `pi` is West.
 
-    label("text", pi)          # positions text to the left of the origin
+```julia
+label("text", pi)          # positions text to the left of the origin
+```
 """
 function label(txt::T where {T<:AbstractString}, direction::Real, pos::Point=O;
     offset=5,
@@ -590,7 +597,7 @@ attached to the preceding word.
 function splittext(s::T where {T<:AbstractString})
     # split text into array, keeping all separators
     # hyphens stay with first word
-    result = Array{String,1}()
+    result = Vector{String}()
     iobuffer = IOBuffer()
     for c in s
         if isspace(c)
@@ -775,26 +782,25 @@ textwrap(s::T where {T<:AbstractString}, width::Real, pos::Point; kwargs...) =
 Place the text in `txt` at `pos`, left-justified, and letter
 space ('track') the text using the value in `tracking`.
 
-The tracking units depend on the current font size. In a
-12‑point font, 1 em equals 12 points. A point is about
-0.35mm, 1em is about 4.2mm, and a 1000 units of tracking are
-about 4.2mm. So a tracking value of 1000 for a 12 point font
-places about 4mm between each character.
+The tracking units depend on the current font size. In a 12‑point font,
+1 em equals 12 points. A point is about 0.35mm, 1em is about 4.2mm, and a
+1000 units of tracking are about 4.2mm. So a tracking value of 1000 for a
+12 point font places about 4mm between each character.
 
 A negative value tightens the letter spacing noticeably.
 
 The text drawing action applied to each character defaults
 to `textoutlines(... :fill)`.
 
-If `startnewpath` is true, each character is acted on
-separately. To clip and track text, specify the clip action
-and avoid resetting the clipping path for each character.
+If `startnewpath` is true, each character is acted on separately.
+To clip and track text, specify the clip action and avoid resetting
+the clipping path for each character.
 
 ```julia
-    newpath()
-    texttrack(t, O + (0, 80), 200, action=:clip, startnewpath=false)
-    ...
-    clipreset()
+newpath()
+texttrack(t, O + (0, 80), 200, action=:clip, startnewpath=false)
+...
+clipreset()
 ```
 
 TODO Is it possible to fix strings with combining characters such as "\u0308"?
@@ -1235,7 +1241,7 @@ function _textformat_tuple(str::String, pos::Point, tempparams, defaultparams)
 end
 
 """
-    textformat(e1, e2, e3...; 
+    textformat(e1, e2, e3...;
         color=getcolor(),
         fontsize=get_fontsize(),
         fontface="Helvetica",
@@ -1257,7 +1263,7 @@ Text starts at `position` and is constrained by the `width`.
 A named tuple element can be something like this:
 
 ```julia
-( 
+(
     text= "a string",
     color = "blue",
     fontsize = 12,
@@ -1333,13 +1339,13 @@ function textformat(args...; kwargs...)
             if arg isa NamedTuple
                 # get the temporary parameters, use defaults for the others
                 # righmost value takes priority
-                tempparams = merge((color=defaultparams.color, 
-                        advance=defaultparams.advance, 
-                        prolog=defaultparams.prolog, 
-                        leading=defaultparams.leading, 
-                        baseline=defaultparams.baseline, 
-                        fontsize=defaultparams.fontsize, 
-                        fontface=defaultparams.fontface,), 
+                tempparams = merge((color=defaultparams.color,
+                        advance=defaultparams.advance,
+                        prolog=defaultparams.prolog,
+                        leading=defaultparams.leading,
+                        baseline=defaultparams.baseline,
+                        fontsize=defaultparams.fontsize,
+                        fontface=defaultparams.fontface,),
                     arg)
                 if !haskey(tempparams, :text)
                     throw(error("textformat(): there's no `text` field in the tuple $(arg)"))

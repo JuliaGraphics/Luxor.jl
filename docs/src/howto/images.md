@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Placing images
 
@@ -18,7 +18,7 @@ You can access this image's dimensions with `img.width` and `img.height`.
 
 Use [`placeimage(img)`](@ref) to place the image by its top
 left corner at point `pt`. Use the `centered=true`
-keyword to place the image's center point there. 
+keyword to place the image's center point there.
 
 ```@example
 using Luxor # hide
@@ -55,13 +55,13 @@ You can use `placeimage()` to place an array of RGB or RGBA pixels on a drawing.
 using Luxor, Colors # hide
 N = 500
 i = reshape([RGBA(rand(4)...) for p in 1:N^2], N, N)
-# i is Matrix{RGBA{Float64}} 
+# i is Matrix{RGBA{Float64}}
 # (alias for Array{RGBA{Float64}, 2})
 @draw begin
-  origin()
-  sethue("orange")
-  box(O, N/2, N/2, :fill)
-  placeimage(i, O, centered=true, alpha=0.5)
+    origin()
+    sethue("orange")
+    box(O, N/2, N/2, :fill)
+    placeimage(i, O, centered=true, alpha=0.5)
 end 500 500
 ```
 
@@ -96,8 +96,8 @@ s = svgstring()
 
 You'll get the SVG source code stored, as a string, in `s`. You can examine or process it further. For example, the five colors used for the logo were:
 
-```julia
-eachmatch(r"rgb\\(.*?\\)", s) |> collect
+```julia-repl
+julia> eachmatch(r"rgb\\(.*?\\)", s) |> collect
 5-element Vector{RegexMatch}:
  RegexMatch("rgb(0%,0%,0%)")
  RegexMatch("rgb(79.6%,23.5%,20%)")
@@ -113,7 +113,7 @@ To display the image in a Jupyter or Pluto notebook, use the `HTML` function, or
 EPS (Encapsulated PostScript) files created by Luxor (or any Cairo-based package) can be re-imported and placed on the current drawing with the [`placeeps`](@ref) function. This function converts the EPS commands to the equivalent Luxor commands and evaluates them immediately in the context of the current drawing.
 
 !!! warning
-    
+
     This function is designed to extract just the coordinates of paths from an EPS
     file. An EPS file can contain much more information about an image than
     coordinates: there migth be image and pixel data, font data, linear color
@@ -135,14 +135,14 @@ epsfile = dirname(@__FILE__) * "../assets/figures/linux.eps"
     img = readsvg(svgfile)
     placeimage(img, centered = true)
 end 500 500 epsfile
-    
+
 @drawsvg begin
     translate(midpoint(boxtopleft(), O))
     scale(0.5)
     rotate(π/12)
     placeeps(epsfile)
     rulers()
-end 
+end
 ```
 
 If you want to obtain the paths and coordinates for use elsewhere, you can use the `log=true` function, which sends the commands to the REPL as well:
@@ -182,7 +182,7 @@ This example uses noise to define the RGB values in a matrix of ARGB32 color val
 using Luxor # hide
 D = 600
 mat = [Luxor.ARGB32(
-    noise(0.01r, 0.01c), 
+    noise(0.01r, 0.01c),
     noise(0.1r, 0.02c),
     noise(0.1r, 0.01c)) for r in 1:D ÷ 2, c in 1:D]
 
@@ -193,7 +193,7 @@ mat = [Luxor.ARGB32(
     sethue("white")
     setopacity(0.5)
     text("woah", halign=:center)
-end D D ÷ 2 
+end D D ÷ 2
 ```
 
 The next example saves vector graphics into an image matrix, then places that matrix at random on another drawing.
@@ -201,7 +201,7 @@ The next example saves vector graphics into an image matrix, then places that ma
 ```julia
 using Luxor
 
-mat = @imagematrix begin    
+mat = @imagematrix begin
     juliacircles(6)
 end 40 40
 
@@ -293,11 +293,11 @@ nothing # hide
 
 You sometimes want to combine vector graphics and images, for example, to annotate them with text or vector graphics.
 
-There are two ways you can do this: 
+There are two ways you can do this:
 
-- by adding the image with `placeimage()` and then drawing vector graphics on top. 
+- by adding the image with `placeimage()` and then drawing vector graphics on top.
 
-- by opening the image as a drawing, and adding vector graphics into the image. 
+- by opening the image as a drawing, and adding vector graphics into the image.
 
 The things to be aware of are mostly to do with coordinates and transforms.
 
@@ -338,15 +338,15 @@ text("width $w", Point(w/2, 70), halign=:center)
 # temporarily position the axes at the center:
 
 @layer begin
-  setline(0.5)
-  sethue("green")
-  fontsize(12)
-  translate(w/2, h/2)
-  tiles = Tiler(w, h, 8, 8, margin=0)
-  for (pos, n) in tiles
-      box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
-      text(string(n-1), pos, halign=:center)
-  end
+    setline(0.5)
+    sethue("green")
+    fontsize(12)
+    translate(w/2, h/2)
+    tiles = Tiler(w, h, 8, 8, margin=0)
+    for (pos, n) in tiles
+        box(pos, tiles.tilewidth, tiles.tileheight, :stroke)
+        text(string(n-1), pos, halign=:center)
+    end
 end
 finish() # hide
 nothing # hide

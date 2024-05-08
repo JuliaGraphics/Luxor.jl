@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Text and fonts
 
@@ -172,7 +172,7 @@ On macOS, the fontname required by the Toy API's [`fontface`](@ref) should be th
 
 On macOS, a list of currently activated fonts can be found (after a while) with the shell command:
 
-```julia
+```bash
 system_profiler SPFontsDataType
 ```
 
@@ -180,7 +180,7 @@ Fonts currently activated by a Font Manager can be found and used by the Toy API
 
 On macOS, you can obtain a list of fonts that `fontconfig` considers are installed and available for use (via the Pro Text API with [`setfont`](@ref)) using the shell command:
 
-```julia
+```bash
 fc-list | cut -f 2 -d ":"
 ```
 
@@ -309,29 +309,29 @@ Use [`textonpoly()`](@ref) to draw a string `str` that follows the route of a po
 using Luxor, Colors # hide
 
 d = @draw begin # hide
-    origin() # hide
-    background("black") # hide
-    setmesh(mesh(
-        box(BoundingBox()),
-        [
-            RGB(0.2, 0.2, 0.99),
-            RGB(0.9, 0.2, 0.3),
-            RGB(0.9, 0.9, 0.4),
-            RGB(0.2, 0.8, 0.99),
-        ],
-    ))
+origin() # hide
+background("black") # hide
+setmesh(mesh(
+    box(BoundingBox()),
+    [
+        RGB(0.2, 0.2, 0.99),
+        RGB(0.9, 0.2, 0.3),
+        RGB(0.9, 0.9, 0.4),
+        RGB(0.2, 0.8, 0.99),
+    ],
+))
 
-    fontsize(15)
+fontsize(15)
 
-    for y = -250:20:250
-        points = [
-            Point(
-                65x,
-                y + 30sin(x + rescale(y, -260, 250, 0, 2π)),
-            ) for x = -2π:π/10:2π
-        ]
-        textonpoly("WAVES " ^ 15, points)
-    end
+for y = -250:20:250
+    points = [
+        Point(
+            65x,
+            y + 30sin(x + rescale(y, -260, 250, 0, 2π)),
+        ) for x = -2π:π/10:2π
+    ]
+    textonpoly("WAVES " ^ 15, points)
+end
 
 end 800 500 # hide
 d # hide
@@ -491,8 +491,8 @@ using Luxor
     sethue("white")
     fontsize(30)
     textformat(
-        (text="that", fontsize=60), 
-        "is the", 
+        (text="that", fontsize=60),
+        "is the",
         (text="question", color="magenta"))
 end 800 200
 ```
@@ -505,17 +505,17 @@ using Luxor
     background("grey10")
     setopacity(0.5)
     textformat(
-        (text="R", 
-            color="red", 
+        (text="R",
+            color="red",
             advance=-80,
             ),
-        (text="G", 
-            color="green", 
+        (text="G",
+            color="green",
             advance=-80,
             baseline =  50,
             ),
-            (text="B", 
-            color="blue", 
+            (text="B",
+            color="blue",
             advance=-80,
             baseline =  -50,
             ),
@@ -530,7 +530,7 @@ With named tuples, remember to insert the trailing `,` where necessary:
 ```julia
 textformat((text="oops"))
 
-textformat((text="yes",)) 
+textformat((text="yes",))
 ```
 
 A `prolog` keyword lets you specify a function `(pos, str)` that will be called before the text is drawn. You can use this, for example, to draw colored boxes and other graphics relative to the text.

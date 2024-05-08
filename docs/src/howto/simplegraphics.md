@@ -68,7 +68,7 @@ d = @drawsvg begin
         label("p", :S, p, offset=20)
         corners = box(BoundingBox(box(p, 140, 140))...)
         arrow(corners[2] + (0, -15), corners[3] + (0, -15), decorate = () -> text("w", O + (0, -10)))
-        arrow(corners[2] + (-15, 0), corners[1] + (-15, 0), decorate = () -> text("h", O + (0, 10), angle=-π/2))                
+        arrow(corners[2] + (-15, 0), corners[1] + (-15, 0), decorate = () -> text("h", O + (0, 10), angle=-π/2))
     end
     @layer begin
         translate(panes[3])
@@ -107,20 +107,13 @@ or
 
 ```julia
 box(corner1,  corner2, vertices=true)
-```    
+```
 
 [`box`](@ref) is also able to draw some of the other Luxor objects, such as BoundingBoxes and Table cells, and usually also returns the coordinates of the corners.
 
-```julia
+```@example
+using Luxor # hide
 box(Point(0, 0), 100, 100)
-```
-
-```
-4-element Array{Point,1}:
- Point(-50.0, 50.0)
- Point(-50.0, -50.0)
- Point(50.0, -50.0)
- Point(50.0, 50.0)
 ```
 
 To draw a box/rectangle with rounded corners, supply one or
@@ -485,7 +478,7 @@ circle(circle2..., action = :stroke)
 requiredradius = 25
 ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
 
-if ncandidates==2
+if ncandidates == 2
     sethue("orange")
     circle(p1, requiredradius, action = :fill)
     sethue("green")
@@ -501,7 +494,7 @@ end
 requiredradius = 10
 ncandidates, p1, p2 = circletangent2circles(requiredradius, circle1..., circle2...)
 
-if ncandidates==1
+if ncandidates == 1
     sethue("blue")
     circle(p1, requiredradius, action = :fill)
     sethue("cyan")
@@ -531,7 +524,7 @@ requiredradius = 50
 requiredpassthrough = O + (80, 0)
 ncandidates, p1, p2 = circlepointtangent(requiredpassthrough, requiredradius, circle1...)
 
-if ncandidates==2
+if ncandidates == 2
     sethue("orange")
     circle(p1, requiredradius, action = :stroke)
     sethue("green")
@@ -561,7 +554,7 @@ using Luxor # hide
     cs, ic = circlering(Point(0, 0), 200, 10)
     for c in cs
         circle(first(c), last(c), :stroke)
-    end 
+    end
     circle(first(ic), last(ic), :stroke)
 end 800 450 # hide
 ```
@@ -699,7 +692,7 @@ arrow(pts[[4, 2, 6, 8]]..., :stroke,
     finisharrow=true,
     arrowheadangle = π/6,
     arrowheadlength = 35,
-    linewidth  = 1.5)
+    linewidth = 1.5)
 finish() # hide
 nothing # hide
 ```
@@ -759,8 +752,7 @@ sethue("olivedrab")
 
 # no arrow, just a graphic, at 0.75
 arrow(pts[1:4]...,
-    decorate = () ->
-        ngon(Point(0, 0), 20, 4, 0, action = :fill),
+    decorate = () -> ngon(Point(0, 0), 20, 4, 0, action = :fill),
     decoration = 0.75, :none) # default action is :stroke
 
 finish() # hide
@@ -1286,7 +1278,7 @@ end
         end
     end
     clipreset()
-    end
+end
 
 finish() # hide
 nothing # hide
@@ -1496,8 +1488,8 @@ dimension(pentagon[1], pentagon[2],
     format        = (d) -> string(round(d, digits=4), "pts"))
 
 dimension(pentagon[2], pentagon[3],
-     offset        = -40,
-     format        =  string)
+     offset = -40,
+     format =  string)
 
 dimension(pentagon[5], Point(pentagon[5].x, pentagon[4].y),
     offset        = 60,
@@ -1637,7 +1629,7 @@ for (n, t) in enumerate(tiles)
     text(string(sort(fib, rev=true)[n]),
         midpoint(bb[1], bb[2]),
         halign=:center,
-            valign=:middle)
+        valign=:middle)
 end
 
 finish() # hide

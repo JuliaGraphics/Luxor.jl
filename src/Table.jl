@@ -1,6 +1,6 @@
 mutable struct Table
-    rowheights::Array{T,1} where {T<:Real}
-    colwidths::Array{T,1} where {T<:Real}
+    rowheights::Vector{T} where {T<:Real}
+    colwidths::Vector{T} where {T<:Real}
     nrows::Int
     ncols::Int
     currentrow::Int
@@ -100,7 +100,7 @@ To use a Table to make grid points:
 
 ```julia-repl
 julia> first.(collect(Table(10, 6)))
-60-element Array{Luxor.Point,1}:
+60-element Vector{Point}:
  Luxor.Point(-10.0, -18.0)
  Luxor.Point(-6.0, -18.0)
  Luxor.Point(-2.0, -18.0)
@@ -117,11 +117,11 @@ which returns an array of points that are the center points of the cells in the 
 You can select cells using `getcells(table, rows, columns)`. This returns a list
 of `(point, index)` tuples.
 
-- `getcells(t, :, :)` returns a list of all cells 
+- `getcells(t, :, :)` returns a list of all cells
 
-- `getcells(t, 1, :)` returns a list of all cells in row 1 
+- `getcells(t, 1, :)` returns a list of all cells in row 1
 
-- `getcells(t, :, 3)` returns a list of all cells in column 3 
+- `getcells(t, :, 3)` returns a list of all cells in column 3
 
 - `getcells(t, 2:4, [3, 5])` returns a list of cells in rows 2-4, columns 3 and 5
 
@@ -156,7 +156,7 @@ function Table(nrows::Int, ncols::Int, center = O)
 end
 
 # row heights in array, column widths in array
-function Table(rowheights::Array{T1,1}, colwidths::Array{T2,1}, center = O) where {T1<:Real} where {T2<:Real}
+function Table(rowheights::Vector{T1}, colwidths::Vector{T2}, center = O) where {T1<:Real} where {T2<:Real}
     rowheights = collect(Iterators.flatten(rowheights))
     colwidths  = collect(Iterators.flatten(colwidths))
     nrows      = length(rowheights)
@@ -169,11 +169,11 @@ function Table(rowheights::Array{T1,1}, colwidths::Array{T2,1}, center = O) wher
 end
 
 # row heights in array, a single column width
-Table(rowheights::Array{T1,1}, colwidth::T2, center = O) where {T1<:Real} where {T2<:Real} =
+Table(rowheights::Vector{T1}, colwidth::T2, center = O) where {T1<:Real} where {T2<:Real} =
     Table(rowheights, [colwidth], center)
 
 # a single row height, column widths in an array
-Table(row_height::T1, colwidths::Array{T2,1}, center = O) where {T1<:Real} where {T2<:Real} =
+Table(row_height::T1, colwidths::Vector{T2}, center = O) where {T1<:Real} where {T2<:Real} =
     Table([row_height], colwidths, center)
 
 # a range of row heights, a range of column widths
@@ -181,11 +181,11 @@ Table(rowheights::AbstractRange{T1}, colwidths::AbstractRange{T2}, center = O) w
     Table(collect(rowheights), collect(colwidths), center)
 
 # an array of row heights, a range of column widths
-Table(rowheights::Array{T1,1}, colwidths::AbstractRange{T2}, center = O) where {T1<:Real} where {T2<:Real} =
+Table(rowheights::Vector{T1}, colwidths::AbstractRange{T2}, center = O) where {T1<:Real} where {T2<:Real} =
     Table(rowheights, collect(colwidths), center)
 
 # a range of row heights, an array of column widths
-Table(rowheights::AbstractRange{T1}, colwidths::Array{T2,1}, center = O) where {T1<:Real} where {T2<:Real} =
+Table(rowheights::AbstractRange{T1}, colwidths::Vector{T2}, center = O) where {T1<:Real} where {T2<:Real} =
     Table(collect(rowheights), colwidths, center)
 
 # interfaces

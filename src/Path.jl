@@ -168,7 +168,8 @@ function drawpath(cp::Path;
     return currentpoint()
 end
 
-drawpath(cp::Path, action::Symbol; startnewpath = true) = drawpath(cp::Path; action = action, startnewpath = startnewpath)
+drawpath(cp::Path, action::Symbol; startnewpath = true) =
+    drawpath(cp::Path; action = action, startnewpath = startnewpath)
 
 """
     polytopath(ptlist)
@@ -328,7 +329,8 @@ drawing it. If you want to draw a large path more than once,
 it might be more efficient to calculate the length of the
 path first, and provide it to the `pathlength` keyword.
 
-The `steps` parameter is used when approximating the length of any curve (Bezier) sections. Higher values will be more accurate.
+The `steps` parameter is used when approximating the length of any curve
+(Bezier) sections. Higher values will be more accurate.
 """
 function drawpath(path::Path, k::Real;
     steps = 20, # used when approximating Bezier curve segments
@@ -366,7 +368,7 @@ function drawpath(path::Path, k::Real;
                 # currentposition is the first pt
                 drawpath(PathCurve(newbezier[2], newbezier[3], newbezier[4]))
                 mostrecentpoint = newbezier[4]
-                # don't do any more 
+                # don't do any more
                 finished = true
             else
                 drawpath(pathelement)

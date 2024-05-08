@@ -135,13 +135,15 @@ For a column, set the `xspacing` to 0:
     grid = GridRect(O, 0, 40)
 
 To get points from the grid, use `nextgridpoint(g::Grid)`.
+```jldoctest
+julia> grid = GridRect(O, 0, 40);
 
-    julia> grid = GridRect(O, 0, 40);
-    julia> nextgridpoint(grid)
-    Luxor.Point(0.0, 0.0)
+julia> nextgridpoint(grid)
+Point(0.0, 0.0)
 
-    julia> nextgridpoint(grid)
-    Luxor.Point(0.0, 40.0)
+julia> nextgridpoint(grid)
+Point(0.0, 40.0)
+```
 
 When you run out of grid points, you'll wrap round and start again.
 """
@@ -171,7 +173,7 @@ Define a hexagonal grid, to start at `startpoint` and proceed along the x-axis a
 then along the y-axis, `radius` is the radius of a circle that encloses each hexagon.
 The distance in `x` between the centers of successive hexagons is:
 
-``\\frac{\\sqrt{(3)} radius}{2}``
+``\\frac{\\sqrt{(3)} \\text{radius}}{2}``
 
 To get the next point from the grid, use `nextgridpoint(g::Grid)`.
 
@@ -265,20 +267,24 @@ Tiler and Partition are similar:
   - Partition lets you specify the width and height of a cell
 
   - Tiler lets you specify how many rows and columns of cells you want, and a margin
-    
+
+    ```julia
     tiles = Partition(1200, 1200, 30, 30)
     for (pos, n) in tiles
-    
-    # the point pos is the center of the tile
-    
+
+        # the point pos is the center of the tile
+
     end
+    ```
 
 You can access the calculated tile width and height like this:
 
-    tiles = Partition(1200, 1200, 30, 30)
-    for (pos, n) in tiles
-        ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
-    end
+```julia
+tiles = Partition(1200, 1200, 30, 30)
+for (pos, n) in tiles
+    ellipse(pos.x, pos.y, tiles.tilewidth, tiles.tileheight, :fill)
+end
+```
 
 It's sometimes useful to know which row and column you're currently on:
 
@@ -402,12 +408,15 @@ Mark the cells of Tiler/Table `t` in the `cells`.
 
 By default a box is drawn around the cell using the current settings and filled or stroked according to `action`.
 
-You can supply a function for the `func` keyword that can do anything you want. The function should accept four arguments, `position`, `width`, `height`, and `number`.
+You can supply a function for the `func` keyword that can do anything you want.
+The function should accept four arguments, `position`, `width`, `height`, and
+`number`.
 
 ## Example
 
-This code draws 30 circles in 5 rows and 6 columns, numbered and
-colored sequentially in four colors. `getcells()` obtains a selection of the cells from the Tiler.
+This code draws 30 circles in 5 rows and 6 columns, numbered and colored
+sequentially in four colors. `getcells()` obtains a selection of the cells
+from the Tiler.
 
 ```julia
 @draw begin
@@ -464,7 +473,7 @@ Returns an array of Tuples, where each Tuple is `(Point, Number)`.
 
 `markcells()` can use the result of this function to mark selected cells.
 
-    ## Example
+## Example
 
 ```julia
 @draw begin

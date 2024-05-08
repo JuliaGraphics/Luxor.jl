@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Clipping
 
@@ -10,7 +10,7 @@ There's two types of clipping in Luxor: polygon clipping and visual clipping.
 ## Polygon clipping
 
 Use [`polyclip`](@ref) to clip one polygon by another. The clipping polygon must
-be convex (every interior angle is less than or equal to 180°). 
+be convex (every interior angle is less than or equal to 180°).
 
 ```@example
 using Luxor # hide

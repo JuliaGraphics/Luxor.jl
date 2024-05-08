@@ -1,14 +1,14 @@
 # polygons, part of Luxor
 
 """
-    poly(pointlist::Array{Point, 1}, action = :none;
+    poly(pointlist::Vector{Point}, action = :none;
         close=false,
         reversepath=false)
 
 Draw a polygon. Create a path with the points in `pointlist` and apply `action`.
 By default `poly()` doesn't close or fill the polygon.
 """
-function poly(pointlist::Array{Point,1};
+function poly(pointlist::Vector{Point};
     action = :none,
     close = false,
     reversepath = false)
@@ -31,13 +31,13 @@ end
 
 poly(pts::NTuple{N,Point} where {N}; kwargs...) = poly(collect(pts); kwargs...)
 
-poly(pointlist::Array{Point,1}, a::Symbol;
+poly(pointlist::Vector{Point}, a::Symbol;
     action = a,
     close = false,
     reversepath = false) = poly(pointlist, action = action, close = close, reversepath = reversepath)
 
 """
-    polysortbyangle(pointlist::Array, refpoint=minimum(pointlist))
+    polysortbyangle(pointlist::Vector{Point}, refpoint=minimum(pointlist))
 
 Sort the points of a polygon into order. Points are sorted according to the angle they make
 with a specified point.
@@ -46,7 +46,7 @@ The `refpoint` can be chosen, but the default minimum point is usually OK too:
 
     polysortbyangle(parray, polycentroid(parray))
 """
-function polysortbyangle(pointlist::Array{Point,1}, refpoint = minimum(pointlist))
+function polysortbyangle(pointlist::Vector{Point}, refpoint = minimum(pointlist))
     angles = Float64[]
     sizehint!(angles, length(pointlist))
     @inbounds for pt in pointlist
@@ -63,7 +63,7 @@ the nearest point to that, and so on.
 
 You can end up with convex (self-intersecting) polygons, unfortunately.
 """
-function polysortbydistance(pointlist::Array{Point,1}, starting::Point)
+function polysortbydistance(pointlist::Vector{Point}, starting::Point)
     route = [starting]
     sizehint!(route, length(pointlist))
     # start with the first point in pointlist
@@ -79,11 +79,11 @@ function polysortbydistance(pointlist::Array{Point,1}, starting::Point)
 end
 
 """
-     douglas_peucker(pointlist::Array, start_index, last_index, epsilon)
+     douglas_peucker(pointlist::Vector{Point}, start_index, last_index, epsilon)
 
 Use a non-recursive Douglas-Peucker algorithm to simplify a polygon. Used by `simplify()`.
 """
-function douglas_peucker(pointlist::Array{Point,1}, start_index, last_index, epsilon)
+function douglas_peucker(pointlist::Vector{Point}, start_index, last_index, epsilon)
     temp_stack = Tuple{Int,Int}[]
     push!(temp_stack, (start_index, last_index))
     global_start_index = start_index
@@ -114,13 +114,13 @@ function douglas_peucker(pointlist::Array{Point,1}, start_index, last_index, eps
 end
 
 """
-    simplify(pointlist::Array, detail=0.1)
+    simplify(pointlist::Vector{Point}, detail=0.1)
 
 Simplify a polygon.
 
 `detail` is the maximum approximation error of simplified polygon.
 """
-function simplify(pointlist::Array{Point,1}, detail = 0.1)
+function simplify(pointlist::Vector{Point}, detail = 0.1)
     douglas_peucker(pointlist, 1, length(pointlist), detail)
 end
 
@@ -137,7 +137,7 @@ polygons:
 This doesn't always work, of course. For example, a polygon the shape of the
 letter "E" might end up being divided into more than two parts.
 """
-function polysplit(pointlist::Array{Point,1}, p1::Point, p2::Point)
+function polysplit(pointlist::Vector{Point}, p1::Point, p2::Point)
     # the two-pass version
     # TODO should be one-pass
     newpointlist = Point[]
@@ -176,7 +176,7 @@ function polysplit(pointlist::Array{Point,1}, p1::Point, p2::Point)
 end
 
 """
-    prettypoly(points::Array{Point, 1}, vertexfunction = () -> circle(O, 2, :stroke);
+    prettypoly(points::Vector{Point}, vertexfunction = () -> circle(O, 2, :stroke);
         action=:none,
         close=false,
         reversepath=false,
@@ -190,23 +190,27 @@ The default vertexfunction draws a 2 pt radius circle.
 
 To mark each vertex of a polygon with a randomly colored filled circle:
 
-    p = star(O, 70, 7, 0.6, 0, vertices=true)
-    prettypoly(p, action=:fill, () ->
-        begin
-            randomhue()
-            circle(O, 10, :fill)
-        end,
-        close=true)
+```julia
+p = star(O, 70, 7, 0.6, 0, vertices=true)
+prettypoly(p, action=:fill, () ->
+    begin
+        randomhue()
+        circle(O, 10, :fill)
+    end,
+    close=true)
+```
 
 The optional keyword argument `vertexlabels` lets you supply a function with
 two arguments that can access the current vertex number and the total number of vertices
 at each vertex. For example, you can label the vertices of a triangle "1 of 3", "2 of 3",
 and "3 of 3" using:
 
-    prettypoly(triangle, action=:stroke,
-        vertexlabels = (n, l) -> (text(string(n, " of ", l))))
+```julia
+prettypoly(triangle, action=:stroke,
+    vertexlabels = (n, l) -> (text(string(n, " of ", l))))
+```
 """
-function prettypoly(pointlist::Array{Point,1}, vertexfunction = () -> circle(O, 2, :stroke);
+function prettypoly(pointlist::Vector{Point}, vertexfunction = () -> circle(O, 2, :stroke);
     action = :none,
     close = false,
     reversepath = false,
@@ -254,7 +258,7 @@ function prettypoly(pointlist::Array{Point,1}, vertexfunction = () -> circle(O, 
 end
 
 # method with action as argument
-prettypoly(pointlist::Array{Point,1}, action::Symbol, vertexfunction = () -> circle(O, 2, :stroke);
+prettypoly(pointlist::Vector{Point}, action::Symbol, vertexfunction = () -> circle(O, 2, :stroke);
     close = false,
     reversepath = false,
     vertexlabels = (n, l) -> ()) = prettypoly(pointlist, vertexfunction,
@@ -370,7 +374,7 @@ The `debug` option also draws the construction circles at each corner.
 
 TODO Return something more useful than a Boolean.
 """
-function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = false, close = true)
+function polysmooth(points::Vector{Point}, radius, action::Symbol; debug = false, close = true)
     temppath = Tuple[]
     l = length(points)
     if l < 3
@@ -410,11 +414,11 @@ function polysmooth(points::Array{Point,1}, radius, action::Symbol; debug = fals
     do_action(action)
 end
 
-polysmooth(points::Array{Point,1}, radius; action = :none, debug = false, close = true) =
+polysmooth(points::Vector{Point}, radius; action = :none, debug = false, close = true) =
     polysmooth(points, radius, action; debug = debug, close = close)
 
 """
-    offsetpoly(plist::Array{Point, 1}, d) where T<:Number
+    offsetpoly(plist::Vector{Point}, d::T) where T<:Number
 
 Return a polygon that is offset from a polygon by `d` units.
 
@@ -434,10 +438,10 @@ be aware of:
   - very sharp vertices will produce even sharper offsets, as the calculated intersection point veers off to infinity
   - duplicated adjacent points might cause the routine to scratch its head and wonder how to draw a line parallel to them
 """
-function offsetpoly(plist::Array{Point,1}, d::T) where {T<:Number}
+function offsetpoly(plist::Vector{Point}, d::T) where {T<:Number}
     # don't try to calculate offset of two identical points
     l = length(plist)
-    resultpoly = Array{Point}(undef, l)
+    resultpoly = Vector{Point}(undef, l)
     previouspoint = plist[end]
     for i in 1:l
         plist[i] == previouspoint && continue
@@ -735,14 +739,14 @@ function offsetpoly(plist, shape::Function)
 end
 
 """
-    polyfit(plist::Array, npoints=30)
+    polyfit(plist::Vector, npoints=30)
 
 Build a polygon that constructs a B-spine approximation to it. The resulting list of points
 makes a smooth path that runs between the first and last points.
 """
-function polyfit(plist::Array{Point,1}, npoints = 30)
+function polyfit(plist::Vector{Point}, npoints = 30)
     l = length(plist)
-    resultpoly = Array{Point}(undef, 0)
+    resultpoly = Vector{Point}(undef, 0)
     sizehint!(resultpoly, npoints)
     # start at first point
     push!(resultpoly, plist[1])
@@ -773,13 +777,13 @@ function polyfit(plist::Array{Point,1}, npoints = 30)
 end
 
 """
-    polybspline(controlpoints::Array{Point,1}, npoints; degree=3, clamped=true)
+    polybspline(controlpoints::Vector{Point}, npoints; degree=3, clamped=true)
 
 Generate a B-spline curve from a given set of control points.
 
 # Arguments
 
-  - `controlpoints::Array{Point,1}`: An array of control points that define the B-spline.
+  - `controlpoints::Vector{Point}`: An array of control points that define the B-spline.
   - `npoints=100`: The number of points to generate on the B-spline curve.
   - `degree=3`: The degree of the B-spline. Default is 3.
   - `clamped=true`: A boolean to indicate if the B-spline is clamped. Default is true.
@@ -788,14 +792,14 @@ Generate a B-spline curve from a given set of control points.
 
   - An array of points on the B-spline curve.
 """
-function polybspline(controlpoints::Array{Point,1}, npoints = 30; degree = 3, clamped = true)
+function polybspline(controlpoints::Vector{Point}, npoints = 30; degree = 3, clamped = true)
     nCP::Int64 = length(controlpoints)
     nCP == 0 && error("Error: controlpoints array cannot be empty.")
     npoints <= 0 && error("Error: npoints must be greater than zero.")
     degree <= 0 && error("Error: degree must be greater than zero.")
     degree >= nCP && error("Error: degree cannot be greater than the number of control points.")
-    points = Array{Point,1}(undef, npoints)
-    T = Array{Float64,1}(undef, nCP + degree + 1)
+    points = Vector{Point}(undef, npoints)
+    T = Vector{Float64}(undef, nCP + degree + 1)
     if clamped
         T[1:degree] .= 0.0
         for i in (degree + 1):(nCP + 1)
@@ -818,8 +822,8 @@ function polybspline(controlpoints::Array{Point,1}, npoints = 30; degree = 3, cl
         c: Array of control points.
         p: Degree of B-spline.
     """
-    function deBoor(k::Int64, x::Float64, t::Array{Float64,1}, c::Array{Point,1}, p::Int64)::Point
-        d = Array{Point,1}(undef, p + 1)
+    function deBoor(k::Int64, x::Float64, t::Vector{Float64}, c::Vector{Point}, p::Int64)::Point
+        d = Vector{Point}(undef, p + 1)
         for j in 1:(p + 1)
             d[j] = c[j + k - p]
         end
@@ -858,7 +862,7 @@ Returns an array of polygons, corresponding to the paths and subpaths of the ori
 """
 function pathtopoly()
     originalpath = getpathflat()
-    polygonlist = Array{Point,1}[]
+    polygonlist = Vector{Point}[]
     sizehint!(polygonlist, length(originalpath))
     if length(originalpath) > 0
         pointslist = Point[]
@@ -890,11 +894,11 @@ function pathtopoly()
 end
 
 """
-    polydistances(p::Array{Point, 1}; closed=true)
+    polydistances(p::Vector{Point}; closed=true)
 
 Return an array of the cumulative lengths of a polygon.
 """
-function polydistances(p::Array{Point,1}; closed = true)
+function polydistances(p::Vector{Point}; closed = true)
     l = length(p)
     r = Float64[0.0]
     sizehint!(r, l)
@@ -911,11 +915,11 @@ function polydistances(p::Array{Point,1}; closed = true)
 end
 
 """
-    polyperimeter(p::Array{Point, 1}; closed=true)
+    polyperimeter(p::Vector{Point}; closed=true)
 
 Find the total length of the sides of polygon `p`.
 """
-function polyperimeter(p::Array{Point,1}; closed = true)
+function polyperimeter(p::Vector{Point}; closed = true)
     return polydistances(p, closed = closed)[end]
 end
 
@@ -927,7 +931,7 @@ than `value`, and the difference value. Array is assumed to be sorted.
 
 (Designed for use with `polydistances()`).
 """
-function nearestindex(a::Array{Float64,1}, val)
+function nearestindex(a::Vector{Float64}, val)
     ind = findlast(v -> (v < val), a)
     if isnothing(ind)
         throw(error("nearestindex: no index"))
@@ -942,9 +946,9 @@ function nearestindex(a::Array{Float64,1}, val)
 end
 
 """
-    polyportion(p::Array{Point, 1}, portion=0.5; 
-        closed=true, 
-        pdist = Array{Union{Float64, Int}, 1}[])
+    polyportion(p::Vector{Point}, portion=0.5; 
+        closed=true,
+        pdist = Vector{Union{Float64, Int}}[])
 
 Return a portion of a polygon, starting at a value between
 0.0 (the beginning) and 1.0 (the end). 0.5 returns the first
@@ -962,9 +966,9 @@ using `polydistances(p, closed=closed)`.
 Use the complementary `polyremainder()` function to return
 the other part.
 """
-function polyportion(p::Array{Point,1}, portion = 0.5;
+function polyportion(p::Vector{Point}, portion = 0.5;
     closed = true,
-    pdist = Array{Float64,1}[])
+    pdist = Vector{Float64}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)
@@ -999,9 +1003,9 @@ function polyportion(p::Array{Point,1}, portion = 0.5;
 end
 
 """
-    polyremainder(p::Array{Point, 1}, portion=0.5; 
-        closed=true, 
-        pdist=Array{Union{Float64, Int}, 1}[])
+    polyremainder(p::Vector{Point}, portion=0.5;
+        closed=true,
+        pdist=Vector{Union{Float64, Int}}[])
 
 Return the rest of a polygon, starting at a value between 0.0 (the beginning)
 and 1.0 (the end). 0.5 returns the last half of the polygon, 0.25 the last three
@@ -1016,9 +1020,9 @@ calculated afresh, using `polydistances(p, closed=closed)`.
 
 Use the complementary `polyportion()` function to return the other part.
 """
-function polyremainder(p::Array{Point,1}, portion = 0.5;
+function polyremainder(p::Vector{Point}, portion = 0.5;
     closed = true,
-    pdist = Array{Union{Float64,Int},1}[])
+    pdist = Vector{Union{Float64,Int}}[])
     # portion is 0 to 1
     if isempty(pdist)
         pdist = polydistances(p, closed = closed)
@@ -1046,7 +1050,7 @@ function polyremainder(p::Array{Point,1}, portion = 0.5;
 end
 
 """
-    polysample(p::Array{Point, 1}, npoints::T where T <: Integer;
+    polysample(p::Vector{Point}, npoints::T where T <: Integer;
             closed=true)
 
 Sample the polygon `p`, returning a polygon with `npoints`
@@ -1069,7 +1073,7 @@ included in the result.
 If the resulting polygon's first and end points are the
 same, the end point is discarded.
 """
-function polysample(p::Array{Point,1}, npoints::T where {T<:Integer};
+function polysample(p::Vector{Point}, npoints::T where {T<:Integer};
     include_first = false,
     closed        = true)
     l = length(p)
@@ -1104,7 +1108,7 @@ end
 
 Return an array of the points where a line between pt1 and pt2 crosses polygon C.
 """
-function intersectlinepoly(pt1::Point, pt2::Point, C::Array{Point,1})
+function intersectlinepoly(pt1::Point, pt2::Point, C::Vector{Point})
     intersectingpoints = Point[]
     @inbounds for j in eachindex(C)
         Cpointpair = (C[j], C[mod1(j + 1, length(C))])
@@ -1126,15 +1130,15 @@ subject polygon and the clip polygon.
 
 Return `nothing` if the function can't find one.
 
-S - subject polygon - can be concave or convex.
+- S - subject polygon - can be concave or convex.
 
-C - clip polygon - must be convex.
+- C - clip polygon - must be convex.
 
 Uses the Sutherland-Hodgman clipping algorithm. Calls `ispointonleftofline()`.
 
 To find where two polygon intersections, use `polyintersect()`.
 """
-function polyclip(S::Array{Point,1}, C::Array{Point,1})
+function polyclip(S::Vector{Point}, C::Vector{Point})
     if !ispolyconvex(C)
         @warn "polyclip(S, C): the second argument, C, must be a convex polygon."
         return nothing
@@ -1172,9 +1176,11 @@ end
 
 Returns a number which is positive if the polygon is clockwise in Luxor...
 
-TODO This code is still experimental...
+!!! warning
+
+    This code is still experimental...
 """
-function polyorientation(pgon::Array{Point,1})
+function polyorientation(pgon::Vector{Point})
     # in Luxor polys are usually clockwise
     # perhaps this is because the Y axis goes down...
     sum = 0.0
@@ -1191,15 +1197,17 @@ polyorientation(pt1, pt2, pt3) = polyorientation(Point[pt1, pt2, pt3])
 
 Returns true if polygon is clockwise. WHEN VIEWED IN A LUXOR DRAWING...?
 
-TODO This code is still experimental...
+!!! warning
+
+    This code is still experimental...
 """
-function ispolyclockwise(pgon::Array{Point,1})
+function ispolyclockwise(pgon::Vector{Point})
     polyorientation(pgon) > 0.0
 end
 
 """
     ispointinsidetriangle(p, p1, p2, p3)
-    ispointinsidetriangle(p, triangle::Array{Point, 1})
+    ispointinsidetriangle(p, triangle::Vector{Point})
 
 Returns false if `p` is not inside triangle p1 p2 p3.
 """
@@ -1221,19 +1229,21 @@ function ispointinsidetriangle(p::Point, p1::Point, p2::Point, p3::Point)
            (s >= 0 && s + t <= A)
 end
 
-ispointinsidetriangle(p::Point, triangle::Array{Point,1}) =
+ispointinsidetriangle(p::Point, triangle::Vector{Point}) =
     ispointinsidetriangle(p, triangle[1], triangle[2], triangle[3])
 
 """
-    polyremovecollinearpoints(pgon::Array{Point, 1})
+    polyremovecollinearpoints(pgon::Vector{Point})
 
 Return copy of polygon with no collinear points.
 
 Caution: may return an empty polygon... !
 
-TODO This code is still experimental...
+!!! warning
+
+    This code is still experimental...
 """
-function polyremovecollinearpoints(pgon::Array{Point,1})
+function polyremovecollinearpoints(pgon::Vector{Point})
     markfordeletion = []
     @inbounds for n in 1:length(pgon)
         p1 = pgon[n]
@@ -1378,15 +1388,19 @@ function _edgesequal(edge1::TriEdge, edge2::TriEdge)
 end
 
 """
-    polytriangulate(plist::Array{Point,1}; epsilon = -0.01)
+    polytriangulate(plist::Vector{Point}; epsilon = -0.01)
 
 Triangulate the polygon in `plist`.
 
 This uses the Bowyer–Watson/Delaunay algorithm to make triangles. It returns an array of triangular polygons.
 
-TODO: This experimental polygon function is not very efficient, because it first copies the list of points (to avoid modifying the original), and sorts it, before making triangles.
+!!! note
+
+    This experimental polygon function is not very efficient, because it first
+    copies the list of points (to avoid modifying the original), and sorts it,
+    before making triangles.
 """
-function polytriangulate(plist::Array{Point,1}; epsilon = -0.001)
+function polytriangulate(plist::Vector{Point}; epsilon = -0.001)
     trianglelist = Vector{Point}[]
     pointlist = deepcopy(plist)
     vertexcount = length(pointlist)
@@ -1555,7 +1569,7 @@ function _betweenpoly(loop1, loop2, k;
 end
 
 """
-    polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
+    polymorph(pgon1::Array{Vector{Point}}, pgon2::Array{Vector{Point}}, k;
         samples = 100,
         easingfunction = easingflat,
         kludge = true
@@ -1652,7 +1666,7 @@ for i in reverse(0.0:0.1:1.0)
 end
 ```
 """
-function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k;
+function polymorph(pgon1::Array{Vector{Point}}, pgon2::Array{Vector{Point}}, k;
     samples = 100,
     easingfunction = easingflat,
     kludge = true,
@@ -1661,7 +1675,7 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
     isapprox(k, 1.0) && return pgon2
     loopcount1 = length(pgon1)
     loopcount2 = length(pgon2)
-    result = Array{Point,1}[]
+    result = Vector{Point}[]
     centroid1 = centroid2 = O # kludge-y eh?
     for i in 1:max(loopcount1, loopcount2)
         from_ok = to_ok = false
@@ -1705,12 +1719,12 @@ function polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Array{Point,1}}, k
     return result
 end
 
-polymorph(pgon1::Array{Point,1}, pgon2::Array{Point,1}, k; kwargs...) = begin
+polymorph(pgon1::Vector{Point}, pgon2::Vector{Point}, k; kwargs...) = begin
     polymorph([pgon1], [pgon2], k; kwargs...)
 end
-polymorph(pgon1::Array{Array{Point,1}}, pgon2::Array{Point,1}, k; kwargs...) = begin
+polymorph(pgon1::Array{Vector{Point}}, pgon2::Vector{Point}, k; kwargs...) = begin
     polymorph(pgon1, [pgon2], k; kwargs...)
 end
-polymorph(pgon1::Array{Point,1}, pgon2::Array{Array{Point,1}}, k; kwargs...) = begin
+polymorph(pgon1::Vector{Point}, pgon2::Array{Vector{Point}}, k; kwargs...) = begin
     polymorph([pgon1], pgon2, k; kwargs...)
 end

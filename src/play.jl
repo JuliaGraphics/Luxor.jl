@@ -143,7 +143,11 @@ mutable struct Ball
 end
 
 function f()
-    balls = [Ball(rand(BoundingBox(Point(-300, -300), Point(300, 300))), rand(BoundingBox(Point(-300, -300), Point(300, 300))), rand(1:10), rand(0:360)) for i in 1:450]
+    balls = [Ball(rand(BoundingBox(Point(-300, -300), Point(300, 300))),
+                  rand(BoundingBox(Point(-300, -300), Point(300, 300))),
+                  rand(1:10),
+                  rand(0:360))
+             for i in 1:450]
     @play 600 600 begin
         w = 500
         h = 500

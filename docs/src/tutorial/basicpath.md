@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Basic path construction
 
@@ -74,7 +74,7 @@ Next, the `line(Point(250, 100))` function call adds a straight line from the cu
 The `curve()` function takes three point arguments, and adds a cubic Bézier curve to the current path. The curve runs from the current point to the third point argument, with the first and second point arguments defining the Bézier curve's control points. These don't lie on the curve, they just 'influence' the shape of the curve. Finally, the current point is updated to the point supplied as the third argument. We're now at the top left of the path.
 
 !!! note
-    
+
     To learn about Bézier curves, read [A Primer on Bézier Curves](https://pomax.github.io/Bézierinfo/).
 
 Finally, the `closepath()` function adds a straight line to the path, joining the current point to the beginning of the path. (More precisely, it goes to the most recent point that you `move`d to). The current point is then updated to this point.
@@ -85,7 +85,7 @@ So, now we've constructed and finished a path - but now we must decide what to d
 
 After you've rendered the path by stroking or filling it, the current path is empty again.
 
-And that's how you draw paths in Luxor. 
+And that's how you draw paths in Luxor.
 
 However, you'd be right if you're thinking that constructing every single shape like this would be a lot of work. This is why there are so many other functions in Luxor, such as `circle()`, `ngon()`, `star()`, `rect()`, `box()`, etc. See [Simple graphics](@ref).
 
@@ -93,7 +93,7 @@ However, you'd be right if you're thinking that constructing every single shape 
 
 There are `arc()` and `carc()` (counterclockwise arc) functions that provide the ability to add circular arcs to the current path, just as `curve()` adds a Bézier curve. However, these need careful handling. Consider this drawing:
 
-```@example 
+```@example
 using Luxor
 @drawsvg begin
     background("black")
@@ -117,7 +117,7 @@ The `move()` and `line()` functions require absolute coordinates, which always r
 
 This drawing draws two boxes with 120 unit sides.
 
-```@example 
+```@example
 using Luxor
 @drawsvg begin
     background("black")
@@ -162,23 +162,23 @@ An important feature of subpaths is that they can form holes in paths.
 ```@example
 using Luxor
 @drawsvg begin
-background("black")
-sethue("white")
+    background("black")
+    sethue("white")
 
-move(0, 0)
-line(Point(0, 100))
-line(Point(100, 100))
-line(Point(100, 0))
-closepath()
+    move(0, 0)
+    line(Point(0, 100))
+    line(Point(100, 100))
+    line(Point(100, 0))
+    closepath()
 
-newsubpath()
-move(25, 25)
-line(Point(75, 25))
-line(Point(75, 75))
-line(Point(25, 75))
-closepath()
+    newsubpath()
+    move(25, 25)
+    line(Point(75, 25))
+    line(Point(75, 75))
+    line(Point(25, 75))
+    closepath()
 
-fillpath()
+    fillpath()
 end
 ```
 
@@ -189,7 +189,7 @@ The first subpath is counterclockwise, the second subpath is clockwise and thus 
 As well as `strokepath()` or `fillpath()`, you can:
 
 - `fillstroke()`: fill and stroke the path
-- `clip()`:  turn the path into a clipping path 
+- `clip()`:  turn the path into a clipping path
 - `strokepreserve()`: stroke the path but don't empty the current path
 - `fillpreserve()`: fill the path but don't empty the current path
 
@@ -198,24 +198,24 @@ The `-preserve()` functions are useful for using different styles for fill and s
 ```@example
 using Luxor
 @drawsvg begin
-background("black")
+    background("black")
 
-move(0, 0)
-line(Point(0, 100))
-line(Point(100, 100))
-line(Point(100, 0))
-closepath()
+    move(0, 0)
+    line(Point(0, 100))
+    line(Point(100, 100))
+    line(Point(100, 0))
+    closepath()
 
-# purple fill
-sethue("purple")
-fillpreserve() 
+    # purple fill
+    sethue("purple")
+    fillpreserve()
 
-# current path is still here!
+    # current path is still here!
 
-# cyan stroke
-sethue("cyan")
-strokepath()
-end 
+    # cyan stroke
+    sethue("cyan")
+    strokepath()
+end
 ```
 
 ## Translate, scale, rotate
@@ -235,9 +235,9 @@ function t()
 end
 
 @drawsvg begin
-background("black")
-sethue("white")
-t()
+    background("black")
+    sethue("white")
+    t()
 end
 ```
 
@@ -256,12 +256,12 @@ function t()
 end
 
 @drawsvg begin
-background("black")
-sethue("white")
-t()
+    background("black")
+    sethue("white")
+    t()
 
-translate(Point(150, 150))
-t()
+    translate(Point(150, 150))
+    t()
 end
 ```
 
@@ -278,20 +278,20 @@ function t()
 end
 
 @drawsvg begin
-background("black")
-sethue("white")
-t()
+    background("black")
+    sethue("white")
+    t()
 
-translate(Point(150, 150))
-t()
+    translate(Point(150, 150))
+    t()
 
-translate(Point(30, 30))
-scale(0.5)
-t()
+    translate(Point(30, 30))
+    scale(0.5)
+    t()
 
-translate(Point(120, 120))
-rotate(π/3)
-t()
+    translate(Point(120, 120))
+    rotate(π/3)
+    t()
 end
 ```
 
@@ -299,13 +299,13 @@ As you experiment with these three functions, you'll notice that the changes are
 
 So how do you return to a default initial state? You could of course keep a record of each transformation and apply the opposites, making sure you do this in the right order.
 
-But a better way is to enclose a sequence of changes of position, scale, and orientation in a pair of functions (`gsave()` and `grestore()`). After `gsave()`, you can change position, scale, orientation, and set styling information, draw and render as many paths as you want, but then all the changes to position, scale, orientation, etc. will be discarded when you call `grestore()`. 
+But a better way is to enclose a sequence of changes of position, scale, and orientation in a pair of functions (`gsave()` and `grestore()`). After `gsave()`, you can change position, scale, orientation, and set styling information, draw and render as many paths as you want, but then all the changes to position, scale, orientation, etc. will be discarded when you call `grestore()`.
 
 The following code generates a grid of points in a nested loop. At each iteration:
 
 1. `gsave()` saves the current position, scale, and orientation on an internal stack.
 
-2. The graphics state is translated, scaled, and rotated. 
+2. The graphics state is translated, scaled, and rotated.
 
 3. The `t()` function is called, and draws the triangular path with the new settings - scaled, rotated, and translated relative to the current values of the `x` and `y` coordinates defined by the loop variables.
 
@@ -342,7 +342,7 @@ end
 
 ## Useful tools
 
-You can use `currentpoint()` to get the current point. 
+You can use `currentpoint()` to get the current point.
 
 `rulers()` is useful for drawing the current x and y axes before you start a path.
 
@@ -364,7 +364,7 @@ strokepath()
 
 ## Polygonal thinking
 
-In Luxor, a polygon is an array (a standard Julia vector) of Points. You can treat it like any standard Julia array, and then eventually draw it using the `poly()` function. 
+In Luxor, a polygon is an array (a standard Julia vector) of Points. You can treat it like any standard Julia array, and then eventually draw it using the `poly()` function.
 
 It's all straight lines, no curves, so you might have to use a lot of points to get smooth curves.
 
@@ -379,7 +379,7 @@ using Luxor
     translate(0, 100)
 
     poly(pts, :fill)
-end 
+end
 ```
 
 You might find it easier to generate polygons using Julia code than to generate paths. But, of course, there are no curves. If you need arcs and Bézier curves, stick to paths.
@@ -390,16 +390,16 @@ There are some Luxor functions that let you modify the points in a polygon in va
 
 - `polymove!(pgon, pt1, pt2)`
 
-move all points by `pt1` -> `pt2`
+  move all points by `pt1` -> `pt2`
 
 - `polyreflect!(pgon, pt1, pt2)`
 
-reflect all points in line between `pt1` and `pt2`
+  reflect all points in line between `pt1` and `pt2`
 
 - `polyrotate!(pgon, θ)`
 
-rotate all points by `θ`
+  rotate all points by `θ`
 
 - `polyscale!(pgon, s)`
 
-scale all points by `s`
+  scale all points by `s`

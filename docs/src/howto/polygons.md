@@ -24,7 +24,7 @@ Luxor also provides a BezierPath type, which is an array of four-point tuples, e
 |[`polyfit`](@ref)             |                           |                         |                         |[`polyscale!`](@ref)        |
 |[`polyhull`](@ref)            |                           |                         |                         |[`polyreflect!`](@ref)      |
 |[`polysuper`](@ref)           |                           |                         |                         |[`polysample`](@ref)        |
-| [`polybspline`](@ref)        |                           |                         |                         |[`polytriangulate`](@ref)   |
+|[`polybspline`](@ref)         |                           |                         |                         |[`polytriangulate`](@ref)   |
 |                              |                           |                         |                         |[`insertvertices!`](@ref)   |
 |                              |                           |                         |                         |[`polymorph`](@ref)         |
 |                              |                           |                         |                         |                            |
@@ -108,15 +108,10 @@ nothing # hide
 
 The functions return the vertices, or you can use the `vertices=true` option.
 
-```julia
+```@example
+using Luxor # hide
+Drawing() # hide
 ngon(Point(0, 0), 10, 5)
-```
-```5-element Array{Point,1}:
- Point(3.0901699437494745, 9.510565162951535)
- Point(-8.090169943749473, 5.877852522924733)
- Point(-8.090169943749475, -5.87785252292473)
- Point(3.0901699437494723, -9.510565162951536)
- Point(10.0, -2.4492935982947065e-15)
 ```
 
 ## Polygons
@@ -556,7 +551,7 @@ inverted and starts getting larger again.
 ![offset poly problem](../assets/figures/polygon-offset.gif)
 
 
-#### 2 `n` vertices joined by `n-1` lines
+#### 2: `n` vertices joined by `n-1` lines
 
 The `offsetpoly(plist)` method constructs a polygon around a
 line joining the lines in `plist`. At the start of the line,
@@ -671,7 +666,7 @@ using Luxor, Colors # hide
 
 f(x, θ) =  10 + 40sin(x * π)
 
-@drawsvg begin # hide 
+@draw begin # hide
 
 spine = spiral(30, 1.3, vertices=true)
 ps = polysample(spine, 250, include_first=true, closed=false)
@@ -795,7 +790,7 @@ end 600 400 # hide
 
 ## Polygons to Bézier paths and back again
 
-Use the [`makebezierpath`](@ref) and [`drawbezierpath`](@ref) functions to make and draw Bézier paths, and [`pathtobezierpaths`](@ref) to convert the current path to an array of Bézier paths.  
+Use the [`makebezierpath`](@ref) and [`drawbezierpath`](@ref) functions to make and draw Bézier paths, and [`pathtobezierpaths`](@ref) to convert the current path to an array of Bézier paths.
 
 A BezierPath type contains a sequence of `BezierPathSegment`s; each curve segment is defined by four points: two end points and their control points.
 
@@ -895,11 +890,11 @@ setline(4)
 
 sethue("orangered")
 
-np = makebezierpath(pgon)    
+np = makebezierpath(pgon)
 drawbezierpath(np, action = :stroke)
 
 sethue("steelblue")
-p = bezierpathtopoly(np, steps=3)    
+p = bezierpathtopoly(np, steps=3)
 
 q1 = offsetpoly(p, 20)
 prettypoly(q1, action = :stroke, close=true)
@@ -1019,7 +1014,7 @@ finish() # hide
 d # hide
 ```
 
-When working with Bézier curves it's usual to consider the curve in terms of a parameter `t` going from 0.0 to 1.0.  
+When working with Bézier curves it's usual to consider the curve in terms of a parameter `t` going from 0.0 to 1.0.
 
 [`splitbezier`](@ref) can split a segment into two shorter segments.
 
@@ -1044,14 +1039,14 @@ function numberit(pos, n)
     @layer begin
         sethue("black")
         text(string(n), pos)
-    end    
+    end
 end
 
 Drawing(800, 700, "../assets/figures/brush1.png") # hide
 origin() # hide
 background("white") # hide
 Random.seed!(42) # hide
-t  = Tiler(800, 700, 5, 1)
+t = Tiler(800, 700, 5, 1)
 sethue("orange3")
 fontsize(20)
 for (pos, n) in t
@@ -1072,11 +1067,11 @@ for (pos, n) in t
         # twist and adjust handles to taste
          brush(start, finish, minwidth = -.1, maxwidth = .2,
              twist = 2, highhandle = 2, tidystart=false)
-         numberit(pos, n)    
-    elseif n == 5   
+         numberit(pos, n)
+    elseif n == 5
         # call a function to modify each stroke
         brush(start, finish, 1, minwidth = -2.2, maxwidth = .8,
-            lowhandle = -.4, highhandle = 1.5, twist = .5,  
+            lowhandle = -.4, highhandle = 1.5, twist = .5,
             strokefunction = brushα)
         numberit(pos, n)
     end
@@ -1137,7 +1132,7 @@ origin() # hide
 apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
 for pt in collect(first.(Table(30, 30, 15, 15)))
     sethue(noise(pt.x/600, pt.y/600), noise(pt.x/300, pt.y/300), noise(pt.x/250, pt.y/250))
-    isinside(pt, apolygon, allowonedge=true) ? 
+    isinside(pt, apolygon, allowonedge=true) ?
         circle(pt, 8, action = :fill) : circle(pt, 3, action = :fill)
 end
 
@@ -1151,7 +1146,7 @@ nothing # hide
 
 A convex hull of a polygon is the subset of points such that, when connected with straight lines, the resulting shape contains every point of the polygon.
 
-Use [`polyhull`](@ref) to find the convex hull of an array of points. 
+Use [`polyhull`](@ref) to find the convex hull of an array of points.
 
 This code obtains all the points in the Julia logo's circles, combines them into a single array, and then calculates the convex hull that encloses them all.
 
@@ -1262,7 +1257,7 @@ for (n, npoints) in enumerate(reverse([4, 8, 16, 32, 48]))
         () -> begin
                 circle(O, 2n, action = :stroke)
               end)
-end    
+end
 
 finish() # hide
 nothing # hide
@@ -1336,17 +1331,19 @@ nothing # hide
 
 `polydistances` returns an array of the accumulated side lengths of a polygon.
 
-    julia> p = ngon(O, 100, 7, 0, vertices=true);
-    julia> polydistances(p)
-    8-element Array{Real,1}:
-       0.0000
-      86.7767
-     173.553
-     260.33
-     347.107
-     433.884
-     520.66
-     607.437
+```julia-repl
+julia> p = ngon(O, 100, 7, 0, vertices=true);
+julia> polydistances(p)
+8-element Vector{Float64}:
+   0.0
+  86.77674782351163
+ 173.55349564702325
+ 260.33024347053487
+ 347.10699129404645
+ 433.8837391175581
+ 520.6604869410697
+ 607.4372347645814
+```
 
 It's used by [`polyportion`](@ref) and [`polyremainder`](@ref), and you can pre-calculate and pass them to these functions via keyword arguments for performance. By default the result includes the final closing segment (`closed=true`).
 
@@ -1364,7 +1361,8 @@ sethue("black") # hide
 setline(0.5) # hide
 
 p = ngonside(O, 200, 3, vertices=true)
-prettypoly(p, action = :stroke, close=true, vertexlabels = (n, l) -> label(string(n), :NW, offset=10))
+prettypoly(p, action = :stroke, close=true,
+    vertexlabels = (n, l) -> label(string(n), :NW, offset=10))
 
 # distances array
 da = polydistances(p)
@@ -1468,8 +1466,8 @@ using Luxor # hide
 background("grey10") # hide
 setline(1.5) # hide
 rotate(π/2)
-fromshape  = [Point(90x, -230 + 50sin(3x)) for x in range(-π, π, length=250)]
-toshape  = [Point(90x, 230 + 50sin(-3x)) for x in range(-π, π, length=250)]
+fromshape = [Point(90x, -230 + 50sin(3x)) for x in range(-π, π, length=250)]
+toshape = [Point(90x, 230 + 50sin(-3x)) for x in range(-π, π, length=250)]
 for i in 0:0.03:1
     sethue(1 - i, i/4 + 0.2, 1 - i/4)
     morph = polymorph(fromshape, toshape, i,
@@ -1653,7 +1651,7 @@ using Luxor, Colors
     circle1 = ngon(pts[1], D, npoints, vertices=true)
     circle2 = ngon(pts[2], D, npoints, vertices=true)
     circle3 = ngon(pts[3], D, npoints, vertices=true)
-    
+
     sethue("cyan"); poly(circle1, :fill)
     sethue("magenta"); poly(circle2, :fill)
     sethue("yellow"); poly(circle3, :fill)
@@ -1661,17 +1659,17 @@ using Luxor, Colors
     sethue("blue")
     pc1 = polyclip(circle1, circle2)
     poly(pc1, :fill, close=true)
-    
+
     sethue("red")
     pc2 = polyclip(circle1, circle3)
     poly(pc2, :fill, close=true)
-    
+
     sethue("green")
     pc3 = polyclip(circle2, circle3)
     poly(pc3, :fill, close=true)
 
-    pc4 = polyclip(pc1, pc2) # or polyclip(pc1, pc3) ... 
-    
+    pc4 = polyclip(pc1, pc2) # or polyclip(pc1, pc3) ...
+
     sethue("white")
     poly(pc4, :fill, close=true)
 end
@@ -1720,9 +1718,9 @@ In the following illustration, the annular sector polygon and a varying rectangu
 In each case, the returned result is an array of polygons. The number of
 polygons in the array depends on how the two polygons intersect - there could be
 anything from 0 to a lot. Then we iterate through the array, drawing each
-polygon in different colors. 
+polygon in different colors.
 
-```@example 
+```@example
 using Luxor, Colors # hide
 @drawsvg begin
     background("grey10")
@@ -1736,8 +1734,8 @@ using Luxor, Colors # hide
             sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
             pg1 = pathtopoly()[1]
 
-            pg2 = box(O, 
-                    [250, 80, 250][n], 
+            pg2 = box(O,
+                    [250, 80, 250][n],
                     [120, 250, 80][n])
 
             setopacity(0.6)
@@ -1747,9 +1745,9 @@ using Luxor, Colors # hide
 
             sethue("yellowgreen")
             poly(pg2, :fill)
-            
+
             pintersection = polyintersect(pg1, pg2)
-            
+
             for (i, p) in enumerate(pintersection)
                 setcolor(HSB([0, 180, 310][i], 0.9, 0.9))
                 poly(p, :fill)
@@ -1783,7 +1781,7 @@ triangles = polytriangulate(pts)
 for (n, tri) in enumerate(triangles)
     sethue([Luxor.julia_purple,
             Luxor.julia_blue,
-            Luxor.julia_red,  
+            Luxor.julia_red,
             Luxor.julia_green
             ][mod1(n, end)])
     poly(offsetpoly(tri, -2), action = :fill, close = true)

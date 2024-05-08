@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Tables and grids
 
@@ -245,7 +245,7 @@ nothing # hide
 
 With [`getcells()`](@ref) and [`markcells()`](@ref) you can select and apply graphics to cells of Tables and Tilers.
 
-`getcells()` has two ways to select cells: either by their single index value, or by specifying rows and columns. 
+`getcells()` has two ways to select cells: either by their single index value, or by specifying rows and columns.
 Remember, unlike with typical Julia arrays, in a 2 row by 4 column table, the cell at row 1, column 4 will have the index number 4, not 7:
 
 ```plain
@@ -263,34 +263,34 @@ The `markcells()` function takes a Table or Tiler, and the selected cells made b
 ```@example
 using Luxor # hide
 @drawsvg begin
-background("grey10")
-fontsize(10)
+    background("grey10")
+    fontsize(10)
 
-t = Tiler(600, 300, 6, 6)
+    t = Tiler(600, 300, 6, 6)
 
-sethue("cyan")
-# mark even cells
-markcells(t, getcells(t, 2:2:36))
+    sethue("cyan")
+    # mark even cells
+    markcells(t, getcells(t, 2:2:36))
 
-sethue("orange")
-setopacity(0.5)
-# fill odd cells orange
-markcells(t, getcells(t, 1:2:35), action=:fill)
+    sethue("orange")
+    setopacity(0.5)
+    # fill odd cells orange
+    markcells(t, getcells(t, 1:2:35), action=:fill)
 
-sethue("blue")
-setopacity(0.5)
-# fill cells in rows 2:5, columns 3:4 blue
-markcells(t, getcells(t, 2:5, 3:4), action=:fill)
-setopacity(1)
+    sethue("blue")
+    setopacity(0.5)
+    # fill cells in rows 2:5, columns 3:4 blue
+    markcells(t, getcells(t, 2:5, 3:4), action=:fill)
+    setopacity(1)
 
-# draw circles and index numbers for primes
-primes = filter(n -> all(i -> n % i != 0, 2:floor(Int, sqrt(n))), 2:36)
-markcells(t, getcells(t, primes), func=(pt, w, h, n) -> begin
-    sethue("purple")
-    circle(pt, h / 2, :fill)
-    sethue("white")
-    text(string(n), pt, halign=:center, valign=:middle)
-end)
+    # draw circles and index numbers for primes
+    primes = filter(n -> all(i -> n % i != 0, 2:floor(Int, sqrt(n))), 2:36)
+    markcells(t, getcells(t, primes), func=(pt, w, h, n) -> begin
+        sethue("purple")
+        circle(pt, h / 2, :fill)
+        sethue("white")
+        text(string(n), pt, halign=:center, valign=:middle)
+    end)
 end 600 300
 ```
 
@@ -355,7 +355,7 @@ poly(hextile(HexagonOffsetOddR(1, -1, 40)), :fill)
 end 600 300  # hide
 ```
 
-### Hexagonal grid indexing 
+### Hexagonal grid indexing
 
 Whereas rectangular grids can be indexed using x ("column") and y ("row") integers, hexagonal grids can be indexed in various ways. For example, odd-numbered "rows" can be shifted to the right:
 
@@ -399,13 +399,13 @@ end
 end 600 350 # hide
 ```
 
-The cubic hexagon constructor accepts three coordinates: 
+The cubic hexagon constructor accepts three coordinates:
 
 ```@example
 using Luxor, Colors, Random  # hide
 @drawsvg begin # hide
-for q in -2:2 
-    for r in -2:2 
+for q in -2:2
+    for r in -2:2
         pgon = hextile(HexagonCubic(q, r, -q - r, 25))
         sethue(HSB(rand(1:360), 0.6, 0.7))
         poly(pgon, :fill)
@@ -433,7 +433,7 @@ end 600 350 # hide
 
 The `hexring()` function finds the `n`th ring of adjacent hexagons surrounding a hexagon.
 
-The first ring consists of six hexagons. Ring `n` consists of `6n` hexagons. 
+The first ring consists of six hexagons. Ring `n` consists of `6n` hexagons.
 
 ```@example
 using Luxor # hide

@@ -10,13 +10,13 @@ Use `sethue()` for changing colors without changing current opacity level.
 
 `sethue()` and `setcolor()` return the three or four values that were used:
 
-    julia> setcolor(sethue("red")..., .8)
+```jldoctest
+julia> setcolor(sethue("red")..., .8)
+(1.0N0f8, 0.0N0f8, 0.0N0f8, 0.8)
 
-    (1.0, 0.0, 0.0, 0.8)
-
-    julia> sethue(setcolor("red")[1:3]...)
-
-    (1.0, 0.0, 0.0)
+julia> sethue(setcolor("red")[1:3]...)
+(1.0N0f8, 0.0N0f8, 0.0N0f8)
+```
 
 You can also do:
 

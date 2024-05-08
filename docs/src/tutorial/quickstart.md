@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Design a logo
 
@@ -171,11 +171,13 @@ svgimage # hide
 ## Taking particles seriously
 
 The flat circles are a bit dull, so let's write a function that draws the
-circles as ‘particles’. 
+circles as ‘particles’.
 
 The `drawcircle()` function draws lots of circular disks on top of each other, but each
 one is drawn with a slightly smaller radius and a slightly lighter shade of the
-incoming color. The [`rescale`](@ref) function in Luxor provides an easy way to map or adjust values from one range to another. Here, it's used to change both the color and the size of the disks as the loop counter goes from 5 down to 1.
+incoming color. The [`rescale`](@ref) function in Luxor provides an easy way to
+map or adjust values from one range to another. Here, it's used to change both
+the color and the size of the disks as the loop counter goes from 5 down to 1.
 
 Also, let's make them get larger as they spiral outwards, by adding `4i` to the
 radius when called by `drawcircle()`.

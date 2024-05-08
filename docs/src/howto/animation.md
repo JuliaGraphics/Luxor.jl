@@ -1,7 +1,7 @@
 ```@meta
 DocTestSetup = quote
     using Luxor, Colors
-    end
+end
 ```
 # Animation helper functions
 
@@ -15,15 +15,15 @@ If you're looking for a way to display animations in another window, with live u
 
 There are four steps to creating an animation.
 
-1 Use `Movie` to create a Movie object which determines the title and dimensions.
+1. Use `Movie` to create a Movie object which determines the title and dimensions.
 
-2 Define some functions that draw the graphics for specific frames.
+2. Define some functions that draw the graphics for specific frames.
 
-3 Define one or more Scenes that call these functions for specific frames.
+3. Define one or more Scenes that call these functions for specific frames.
 
-4 Call the [`animate()`](@ref) function, passing in the movie and the scenes. This creates all the frames and saves them in a temporary directory.
+4. Call the [`animate()`](@ref) function, passing in the movie and the scenes. This creates all the frames and saves them in a temporary directory.
 
-You can also use the `creategif = true` option to make an animated GIF, or the `createmovie = true` option to make a video file. 
+You can also use the `creategif = true` option to make an animated GIF, or the `createmovie = true` option to make a video file.
 
 ## Example
 
@@ -93,7 +93,7 @@ FFMPEG.exe(`-r 30 -f image2 -i $(tempdirectory)/%10d.png -c:v libx264 -r 30 -pix
 
 ```
 
-`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment, and color palette tweaking. 
+`ffmpeg` has literally hundreds of options, which include codec selection, framerate adjustment, and color palette tweaking.
 
 ### Passing information to the frame() function
 
@@ -123,7 +123,7 @@ function main()
                 0:100)
         ],
         tempdirectory="/tmp/tempdir",
-        createmovie=true, 
+        createmovie=true,
         pathname="/tmp/t.mkv")
 end
 ```
