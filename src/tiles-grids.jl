@@ -560,3 +560,119 @@ Returns an array of Tuples, where each Tuple is `(Point, Number)`.
 """
 getcells(t::Table, n::Int) = [(t[n], n)] # array of tuples
 getcells(t::Tiler, n::Int) = [(t[n])] # array of tuples
+
+"""
+An EquilateralTriangleGrid is an iterator that makes a grid of equilateral
+triangles with side length `side` positioned on a rectangular grid with `nrows`
+and `ncols`.
+
+The first triangle is centered at `startpoint` and points up if `up` is true.
+
+Example
+
+```julia
+nrows = 5
+ncols = 8
+side = 150
+eqtg = EquilateralTriangleGrid(O, side, nrows, ncols)
+
+# now you can use the iterator to generate (and draw) triangles:
+for tri in eqtg
+    vertices, trianglenumber = tri
+    randomhue()
+    poly(vertices, :fill)
+end
+```
+"""
+mutable struct EquilateralTriangleGrid
+    startpoint::Point
+    side::Union{Float64,Int}
+    nrows::Int64
+    ncols::Int64
+    currentrow::Int64
+    currentcol::Int64
+    up::Bool
+    function EquilateralTriangleGrid(startpoint, side, nrows, ncols; up = true)
+        if nrows < 1 || ncols < 1
+            throw(error("EquilateralTriangleGrid: grid must have rows and columns, not $nrows rows, $ncols columns"))
+        end
+        currentrow = 1
+        currentcol = 1
+        new(startpoint, side, nrows, ncols, currentrow, currentcol, up)
+    end
+end
+
+"""
+    _equilateral_triangle(center::Point, side, dir=:up)
+
+Return vertices of equilateral triangle, `center` is the centroid,
+`side` is the side length, `dir` is `:up` for △ (or something else for ▽)
+"""
+function _equilateral_triangle(center::Point, side, dir = :up)
+    h = (sqrt(3) * side) / 2
+    if dir == :up
+        return Point[
+            Point(center.x - side / 2, center.y + h / 2),
+            Point(center.x, center.y - h / 2),
+            Point(center.x + side / 2, center.y + h / 2),
+        ]
+    else
+        return Point[
+            Point(center.x - side / 2, center.y - h / 2),
+            Point(center.x + side / 2, center.y - h / 2),
+            Point(center.x, center.y + h / 2),
+        ]
+    end
+end
+
+function Base.iterate(eqt::EquilateralTriangleGrid)
+    eqt.currentrow, eqt.currentcol = 1, 1
+    cellnumber = (eqt.currentrow - 1) * eqt.nrows + eqt.currentcol
+    h = (sqrt(3) * eqt.side) / 2
+    pointup = (isodd(eqt.currentrow) && isodd(eqt.currentcol)) || (iseven(eqt.currentrow) && iseven(eqt.currentcol)) ? eqt.up : !eqt.up
+    # this triangle
+    cpt_c = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
+    pts_c = _equilateral_triangle(cpt_c, eqt.side, pointup ? :up : :down)
+    # next one
+    cpt_n = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
+    pts_n = _equilateral_triangle(cpt_n, eqt.side, pointup ? :down : :up)
+    return ((pts_c, cellnumber), (pts_n, cellnumber + 1))
+end
+
+function Base.iterate(eqt::EquilateralTriangleGrid, state)
+    cellnumber = state[2]
+    if cellnumber > (eqt.nrows * eqt.ncols)
+        return
+    end
+    eqt.currentcol += 1
+    if eqt.currentcol > eqt.ncols
+        eqt.currentcol = 1
+        eqt.currentrow += 1
+    end
+    h = (sqrt(3) * eqt.side) / 2
+    pointup = (isodd(eqt.currentrow) && isodd(eqt.currentcol)) || (iseven(eqt.currentrow) && iseven(eqt.currentcol)) ? eqt.up : !eqt.up
+    cpt_c = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
+    pts_c = _equilateral_triangle(cpt_c, eqt.side, pointup ? :up : :down)
+    cpt_n = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
+    pts_n = _equilateral_triangle(cpt_n, eqt.side, pointup ? :down : :up)
+    return ((pts_c, cellnumber), (pts_n, cellnumber + 1))
+end
+
+function Base.length(eqt::EquilateralTriangleGrid)
+    eqt.nrows * eqt.ncols
+end
+
+function Base.getindex(eqt::EquilateralTriangleGrid, i::Int)
+    1 <= i <= eqt.ncols * eqt.nrows || throw(BoundsError(eqt, i))
+    h = (sqrt(3) * eqt.side) / 2
+    c = mod1(i, eqt.ncols)
+    r = 1 + div(i - 1, eqt.ncols)
+    pointup = (isodd(r) && isodd(c)) || (iseven(r) && iseven(c)) ? eqt.up : !eqt.up
+    cpt_c = Point(eqt.startpoint.x + (eqt.side / 2 * c), eqt.startpoint.y + (h * r))
+    pts_c = _equilateral_triangle(cpt_c, eqt.side, pointup ? :up : :down)
+    return pts_c
+end
+
+function Base.size(eqt::EquilateralTriangleGrid)
+    return (eqt.nrows, eqt.ncols)
+end

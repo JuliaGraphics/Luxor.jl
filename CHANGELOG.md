@@ -1,5 +1,19 @@
 # Changelog
 
+## [v4.1] - forthcoming
+
+### Added
+
+- triangular grids
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
 ## [v4.0] - 2024-04-15
 
 ### This is a breaking release compared with v3.8
