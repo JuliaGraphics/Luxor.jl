@@ -341,7 +341,7 @@ drawn below the positive x-axis.
 If you just want the raw points, use keyword argument `vertices=true`, which
 returns the array of points. Compare:
 
-```jldoctest
+```julia
 julia> ngon(0, 0, 4, 4, 0, vertices=true) # returns the polygon's points:
 4-element Vector{Point}:
  Point(2.4492935982947064e-16, 4.0)

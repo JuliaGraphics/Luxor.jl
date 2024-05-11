@@ -54,7 +54,7 @@ Base.length(::Point) = 2
 
 Transform a point `pt` by the 3×3 matrix `m`.
 
-```jldoctest
+```julia
 julia> M = [2 0 0; 0 2 0; 0 0 1]
 3×3 Matrix{Int64}:
  2  0  0
@@ -362,7 +362,7 @@ Find angle of a line starting at `pointA` and ending at `pointB`.
 
 Return a value between 0 and 2pi. Value will be relative to the current axes.
 
-```jldoctest
+```julia
 julia> slope(O, Point(0, 100)) |> rad2deg # y is positive down the page
 90.0
 
@@ -429,7 +429,7 @@ intersectionlinecircle(p1::Point, p2::Point, cpoint::Point, r) =
 
 Convert a tuple of two numbers to a Point of x, y Cartesian coordinates.
 
-```jldoctest
+```julia
 julia> @polar 10, pi/4
 Point(7.0710678118654755, 7.071067811865475)
 ```
@@ -452,7 +452,7 @@ end
 
 Convert a point specified in polar form (radius and angle) to a Point.
 
-```jldoctest
+```julia
 julia> polar(10, pi/4)
 Point(7.0710678118654755, 7.071067811865475)
 ```

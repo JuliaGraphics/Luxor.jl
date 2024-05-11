@@ -10,7 +10,7 @@ Use `sethue()` for changing colors without changing current opacity level.
 
 `sethue()` and `setcolor()` return the three or four values that were used:
 
-```jldoctest
+```julia
 julia> setcolor(sethue("red")..., .8)
 (1.0N0f8, 0.0N0f8, 0.0N0f8, 0.8)
 

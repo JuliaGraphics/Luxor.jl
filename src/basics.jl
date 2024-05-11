@@ -39,7 +39,7 @@ rescale(x, (from_min, from_max), (to_min, to_max))
 ```
 
 Examples
-```jldoctest
+```julia
 julia> rescale(15, 0, 100, 0, 1)
 0.15
 

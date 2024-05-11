@@ -1507,7 +1507,7 @@ The default drawing is 256 by 256 points.
 
 You don't need `finish()` (the macro calls it), and it's not previewed by `preview()`.
 
-```jldoctest
+```julia
 julia> m = @imagematrix begin
                sethue("red")
                box(O, 20, 20, :fill)
@@ -1561,7 +1561,7 @@ Transparency
 The default value for the cells in an image matrix is
 transparent black. (Luxor's default color is opaque black.)
 
-```jldoctest
+```julia
 julia> @imagematrix begin
        end 2 2
 2×2 reinterpret(ColorTypes.ARGB32, ::Matrix{UInt32}):
@@ -1572,7 +1572,7 @@ julia> @imagematrix begin
 Setting the background to a partially or completely
 transparent value may give unexpected results:
 
-```jldoctest
+```julia
 julia> @imagematrix begin
            background(1, 0.5, 0.0, 0.5) # semi-transparent orange
        end 2 2
@@ -1584,7 +1584,7 @@ julia> @imagematrix begin
 here the semi-transparent orange color has been partially
 applied to the transparent background.
 
-```jldoctest
+```julia
 julia> @imagematrix begin
            sethue(1., 0.5, 0.0)
            paint()

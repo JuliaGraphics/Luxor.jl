@@ -7,14 +7,16 @@ end
 
 You often want to position graphics at regular locations on the drawing. The positions can be provided by:
 
-- `Tiler`: a rectangular grid which you specify by enclosing area, and the number of rows and columns
-- `Partition`: a rectangular grid which you specify by enclosing area, and the width and height of each cell
-- `Grid` a rectangular grid, points supplied on demand
-- `Table`: a rectangular grid which you specify by providing row and column numbers, row heights and column widths
+- `Tiler`: a rectangular grid iterator which you specify by enclosing area, and the number of rows and columns
+- `Partition`: a rectangular grid iterator which you specify by enclosing area, and the width and height of each cell
+- `Grid` a rectangular grid iterator, where points are supplied on demand
+- `Table`: a rectangular grid iterator which you specify by providing row and column numbers, row heights and column widths
 
 These are types which act as iterators. Their job is to provide you with centerpoints; you'll probably want to use these in combination with the cell's widths and heights.
 
-There are also functions to make hexagonal grids. See [Hexagonal grids](@ref).
+There are functions to make hexagonal grids. See [Hexagonal grids](@ref).
+
+There is [EquilateralTriangleGrid](@ref), a grid iterator which generates the vertices for a rectangular grid of equilateral triangles.
 
 ## Tiles and partitions
 
@@ -488,5 +490,34 @@ for (n, h) in enumerate(hexspiral(hexagon, 10))
     text(string(n), hexcenter(h), halign=:center)
     strokepath()
 end
+end # hide
+```
+
+## EquilateralTriangleGrid
+
+To create a grid of equilateral triangles, you can use
+[`EquilateralTriangleGrid`](@ref). Provide the starting point, the side length,
+and the number of rows and columns. The iterator provides a tuple of the
+vertices and number for each triangle.
+
+```@example
+using Luxor, Colors
+@drawsvg begin # hide
+    background("black")
+    nrows = 12
+    ncols = 20
+    side = 45
+    startpoint = boxtopleft() + (50, 50)
+    eqtg = EquilateralTriangleGrid(startpoint, side, nrows, ncols)
+
+    for e in eqtg
+        vertices, trianglenumber = e
+        sethue(HSB(rescale(trianglenumber, 0, nrows * ncols, 0, 360), 
+            0.7, 0.8))
+        poly(vertices, :fillpreserve)
+        sethue("black")
+        strokepath()
+        text(string(trianglenumber), halign=:center, polycentroid(vertices))
+    end
 end # hide
 ```

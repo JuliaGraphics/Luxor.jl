@@ -135,7 +135,7 @@ For a column, set the `xspacing` to 0:
     grid = GridRect(O, 0, 40)
 
 To get points from the grid, use `nextgridpoint(g::Grid)`.
-```jldoctest
+```julia
 julia> grid = GridRect(O, 0, 40);
 
 julia> nextgridpoint(grid)
