@@ -630,8 +630,9 @@ function Base.iterate(eqt::EquilateralTriangleGrid)
     cellnumber = (eqt.currentrow - 1) * eqt.nrows + eqt.currentcol
     h = (sqrt(3) * eqt.side) / 2
     pointup = (isodd(eqt.currentrow) && isodd(eqt.currentcol)) || (iseven(eqt.currentrow) && iseven(eqt.currentcol)) ? eqt.up : !eqt.up
-    # this triangle
-    cpt_c = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
+    # the first triangle
+    cpt_c = Point(eqt.startpoint.x - eqt.side/2 + (eqt.side / 2 * eqt.currentcol), 
+        eqt.startpoint.y -h + (h * eqt.currentrow))
     pts_c = _equilateral_triangle(cpt_c, eqt.side, pointup ? :up : :down)
     # next one
     cpt_n = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
@@ -651,7 +652,8 @@ function Base.iterate(eqt::EquilateralTriangleGrid, state)
     end
     h = (sqrt(3) * eqt.side) / 2
     pointup = (isodd(eqt.currentrow) && isodd(eqt.currentcol)) || (iseven(eqt.currentrow) && iseven(eqt.currentcol)) ? eqt.up : !eqt.up
-    cpt_c = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
+    cpt_c = Point(eqt.startpoint.x - eqt.side / 2 + (eqt.side / 2 * eqt.currentcol),
+        eqt.startpoint.y - h + (h * eqt.currentrow))
     pts_c = _equilateral_triangle(cpt_c, eqt.side, pointup ? :up : :down)
     cpt_n = Point(eqt.startpoint.x + (eqt.side / 2 * eqt.currentcol), eqt.startpoint.y + (h * eqt.currentrow))
     pts_n = _equilateral_triangle(cpt_n, eqt.side, pointup ? :down : :up)
