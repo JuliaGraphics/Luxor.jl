@@ -514,7 +514,7 @@ using Luxor, Colors
         vertices, trianglenumber = e
         sethue(HSB(rescale(trianglenumber, 0, nrows * ncols, 0, 360), 
             0.7, 0.8))
-        poly(vertices, :fillpreserve)
+        poly(vertices, :fillpreserve, close=true)
         sethue("black")
         strokepath()
         text(string(trianglenumber), halign=:center, polycentroid(vertices))

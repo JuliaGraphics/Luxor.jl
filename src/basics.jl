@@ -491,9 +491,11 @@ The function:
 rule(O, pi/2, boundingbox=BoundingBox()/2)
 ```
 
-draws a line that spans a bounding box half the width and height of the drawing,
-and returns a Set of end points. If you just want the vertices and don't want to
-draw anything, use `vertices=true`.
+draws a line that spans a bounding box half the width and height of the drawing. 
+
+Returns the two end points in a Vector.
+
+Use `vertices=true` to just return the end points, without drawing a line.
 """
 function rule(pos, theta = 0.0;
     boundingbox = BoundingBox(),
@@ -507,8 +509,8 @@ function rule(pos, theta = 0.0;
     bottomside = vcat(bbox[4], bbox[1])
     leftside   = bbox[1:2]
 
-    # ruled line could be as long as the diagonal so add a bit extra
-    r = boxdiagonal(boundingbox) + 10
+    # ruled line could be as long as the diagonal so make it longer
+    r = boxdiagonal(boundingbox) * 2
     rcosa = r * cos(theta)
     rsina = r * sin(theta)
     ruledline = (pos - (rcosa, rsina), pos + (rcosa, rsina))
@@ -550,11 +552,41 @@ function rule(pos, theta = 0.0;
     # eliminate duplicates due to rounding errors
     ruledline = unique(interpoints)
 
+    if length(ruledline) != 2
+        @debug "bounding box doesn't contain this line"
+    end 
     # finally draw the line if we have two points
     if vertices == false && length(ruledline) == 2
         line(ruledline..., :stroke)
     end
     return ruledline
+end
+
+"""
+
+    rule1(point1::Point, point2::Point;
+        boundingbox=BoundingBox(),
+        vertices=false)
+
+Draw a straight line passing through points `point1` and `point2`.
+
+```julia
+rule(Point(10, 10), Point(30, -30))
+```
+
+Supply a BoundingBox to restrict the ruled lines to a rectangular area.
+
+Returns the two end points in a Vector.
+
+Use `vertices=true` to just return the end points, without drawing a line.
+"""
+function rule(point1::Point, point2::Point;
+        boundingbox=BoundingBox(),
+        vertices=false) 
+    theta = slope(point1, point2)
+    rule(point1, theta; 
+        boundingbox=boundingbox,
+        vertices=vertices)
 end
 
 # we need a thread safe way to store the color palette as a stack:

@@ -212,8 +212,8 @@ ellipse(c::Point, w::Real, h::Real, action::Symbol) = ellipse(c, w, h, action = 
     squircle(center::Point, hradius, vradius, action;
         rt = 0.5, stepby = pi/40, vertices=false)
 
-Make a squircle or superellipse (basically a rectangle with rounded corners),
-and add it to the current path. Specify the center position, horizontal radius
+Make a squircle or superellipse (basically a rectangle with rounded corners). 
+Specify the center position, horizontal radius
 (distance from center to a side), and vertical radius (distance from center to
 top or bottom):
 
@@ -221,7 +221,9 @@ The root (`rt`) option defaults to 0.5, and gives an intermediate shape. Values
 less than 0.5 make the shape more rectangular. Values above make the shape more
 round. The horizontal and vertical radii can be different.
 
-See also: `polysuper()`.
+This function generates a series of points and makes a polygon or returns an array of Points.
+
+See also: `polysuper()` and `squirclepath()`.
 """
 function squircle(center::Point, hradius::Real, vradius::Real;
     action = :none,
@@ -254,6 +256,52 @@ squircle(center::Point, hradius::Real, vradius::Real, action::Symbol;
         stepby = pi / 40,
         reversepath = false)
 
+"""
+    squirclepath(cpos, w, h;
+        action = :none,
+        kappa = 0.75,
+        reversepath = false)
+
+Make a squircle or superellipse (basically a rectangle with rounded corners).
+Specify the center position, width, and height. 
+
+`kappa` is a value (usually between 0 and 1) that determines the circularity of
+the shape. If `kappa` is `4.0 * (sqrt(2.0) - 1.0) / 3.0` (ie `0.5522847498307936`),
+the shape is a resonable approximation to a circle. 
+
+Use the `reversepath` option to construct the path in the opposite direction.
+
+The difference betweeen `squircle()` and `squirclepath()` is that the former
+builds polygons from points, the latter uses Bezier curves to build paths.
+
+See also `circlepath()`.
+"""
+function squirclepath(cpos, w, h;
+        action = :none,
+        kappa = 0.75,
+        reversepath = false)
+    @layer begin
+        translate(cpos)
+        if reversepath
+            bottom_left, top_left, top_right, bottom_right = reverse(box(O, 2w, 2h))
+        else
+            bottom_left, top_left, top_right, bottom_right = box(O, 2w, 2h)
+        end
+        top_center = midpoint(top_left, top_right)
+        right_center = midpoint(top_right, bottom_right)
+        bottom_center = midpoint(bottom_left, bottom_right)
+        left_center = midpoint(top_left, bottom_left)
+        move(left_center)
+        curve(between(left_center, top_left, kappa), between(top_center, top_left, kappa), top_center)
+        curve(between(top_center, top_right, kappa), between(right_center, top_right, kappa), right_center)
+        curve(between(right_center, bottom_right, kappa), between(bottom_center, bottom_right, kappa), bottom_center)
+        curve(between(bottom_center, bottom_left, kappa), between(left_center, bottom_left, kappa), left_center)
+        closepath()
+        result = storepath()
+        do_action(action)
+    end
+    return result
+end
 function arc(xc, yc, radius, angle1, angle2;
     action = :none)
     Cairo.arc(_get_current_cr(), xc, yc, radius, angle1, angle2)

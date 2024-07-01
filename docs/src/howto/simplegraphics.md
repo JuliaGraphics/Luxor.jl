@@ -605,6 +605,8 @@ Use [`line`](@ref) and [`rline`](@ref) to draw straight lines. `line(pt1, pt2, a
 
 You can use [`rule`](@ref) to draw a horizontal line through a point. Supply an angle for lines at an angle to the current x-axis.
 
+Another method of `rule()` draws a line through two points.
+
 ```@example
 using Luxor # hide
 Drawing(800, 200, "../assets/figures/rule.png") # hide
@@ -625,7 +627,7 @@ nothing # hide
 
 ![arc](../assets/figures/rule.png)
 
-Use the `boundingbox` keyword argument to crop the ruled lines with a BoundingBox.
+Use the `boundingbox` keyword argument to crop the ruled lines where they cross the boundaries of a BoundingBox.
 
 ```@example
 using Luxor # hide

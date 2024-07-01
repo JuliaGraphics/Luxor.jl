@@ -5,6 +5,8 @@
 ### Added
 
 - triangular grids
+- `squirclepath()`
+- `rule(pt1, pt2)`
 
 ### Changed
 
