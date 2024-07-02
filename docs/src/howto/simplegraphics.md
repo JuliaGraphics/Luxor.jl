@@ -1073,8 +1073,23 @@ end
 finish() # hide
 nothing # hide
 ```
-
 ![squircles](../assets/figures/squircle.png)
+
+`squirclepath()` builds a squircle shape using Bézier curves as paths, rather than using polygons. Here, `kappa` determines the circularity. 
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+    background("grey10") # hide
+    setfillrule(:even_odd)
+    sethue("white")
+    for x in 280:-10:10
+    squirclepath(O, x, x;
+        kappa = x/150, action=:path)
+    end 
+    fillpath()
+end 800 700 # hide
+```
 
 ## Stars and crosses
 

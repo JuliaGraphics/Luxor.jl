@@ -272,7 +272,7 @@ the shape is a resonable approximation to a circle.
 Use the `reversepath` option to construct the path in the opposite direction.
 
 The difference betweeen `squircle()` and `squirclepath()` is that the former
-builds polygons from points, the latter uses Bezier curves to build paths.
+builds polygons from points, the latter uses Bezier curves to build paths. 
 
 See also `circlepath()`.
 """
@@ -302,6 +302,15 @@ function squirclepath(cpos, w, h;
     end
     return result
 end
+
+squirclepath(cpos, w, h, the_action::Symbol;
+        action = :none,
+        kappa = 0.75,
+        reversepath = false) = squirclepath(cpos, w, h;
+        action = the_action,
+        kappa = kappa,
+        reversepath = reversepath)
+
 function arc(xc, yc, radius, angle1, angle2;
     action = :none)
     Cairo.arc(_get_current_cr(), xc, yc, radius, angle1, angle2)
