@@ -1,4 +1,5 @@
 using Documenter, Luxor
+using DocumenterTools: Themes
 
 # Setup for doctests in docstrings
 DocMeta.setdocmeta!(Luxor, :DocTestSetup, :(using Luxor))

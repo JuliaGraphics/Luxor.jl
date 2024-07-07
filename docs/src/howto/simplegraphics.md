@@ -603,9 +603,7 @@ For more about paths, see [Polygons and paths](@ref) and [Paths versus polygons]
 
 Use [`line`](@ref) and [`rline`](@ref) to draw straight lines. `line(pt1, pt2, action)` makes a path consisting of a line between two points. `line(pt)` adds a line to the current path going from the most recent current point to `pt`. `rline(pt)` adds a line relative to the current point.
 
-You can use [`rule`](@ref) to draw a horizontal line through a point. Supply an angle for lines at an angle to the current x-axis.
-
-Another method of `rule()` draws a line through two points.
+You can use [`rule`](@ref) to draw a horizontal line through a point. Supply an angle for lines at an angle to the current x-axis. This example rules lines at an angle of -π/2 to the current x-axis.
 
 ```@example
 using Luxor # hide
@@ -625,7 +623,7 @@ finish() # hide
 nothing # hide
 ```
 
-![arc](../assets/figures/rule.png)
+![ruling lines](../assets/figures/rule.png)
 
 Use the `boundingbox` keyword argument to crop the ruled lines where they cross the boundaries of a BoundingBox.
 
@@ -645,7 +643,62 @@ finish() # hide
 nothing # hide
 ```
 
-![arc](../assets/figures/rulebbox.png)
+![ruling lines clipped to bounding boxes](../assets/figures/rulebbox.png)
+
+Another method of `rule()` draws a line through two points. This example rules lines passing through each pair of adjacent points of the edge of a squircle curve.
+
+```@example
+using Luxor, Colors
+
+@drawsvg begin
+    background("black")
+    fontsize(500)
+    fontface("Times-Bold")
+    pts = polybspline(squircle(O, 140, 140, vertices=true), 120)
+    setline(0.5)
+        for i in eachindex(pts)
+            sethue(HSL(rescale(i, 1, length(pts), 1, 360), 0.8, 0.8))
+            rule(pts[i], pts[mod1(i + 1, end)])
+        end
+end 800 500
+d1 = svgstring()
+
+@drawsvg begin
+    background("grey10")
+    # draw image 
+    im = readsvg(d1)
+    placeimage(im, centered=true, O)
+
+    # define "loupe"
+    point_of_interest = Point(120, -120)
+    radius_of_interest = 25
+
+    point_of_display = Point(350, -50)
+    radius_of_display = 140
+    # "magnification is $(radius_of_display / radius_of_interest)"
+
+    # draw contents of loupe
+    @layer begin
+        translate(point_of_display)
+        setline(2)
+        circle(O, radius_of_display, :clip)
+        scale(radius_of_display / radius_of_interest)
+        placeimage(im, centered=true, -point_of_interest)
+        clipreset()
+    end
+
+    # draw loupe itself
+    sethue("white")
+    setline(2)
+    circle(point_of_interest, radius_of_interest, :stroke)
+    circle(point_of_display, radius_of_display, :stroke)
+    d = distance(point_of_interest, point_of_display)
+    line(
+        between(point_of_display, point_of_interest, radius_of_display / d),
+        between(point_of_display, point_of_interest, 1 - radius_of_interest / d),
+        :stroke)
+end 1200 500
+```
 
 ## Arrows
 
