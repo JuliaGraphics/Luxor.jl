@@ -8,9 +8,9 @@ DocTestSetup = quote
 In Luxor, there are different ways of working with graphical
 items:
 
-- Draw them immediately. Create lines and curves to build a **path** on the drawing. When you paint the path, the graphics are ‘fixed’, and you move on to the next.
+- Draw them immediately. Add points and control points defining curves to build a **path** on the drawing. When you paint the path, the graphics are drawn, and ‘fixed’, and you move on to the next.
 
-- Construct arrays of points - **polygons** - which you can draw at some later point. Watch out for a `vertices=true` option, which returns coordinate data rather than adding shapes to the current path.
+- Construct arrays of points - **polygons** - which you can draw at some later stage. Watch out for a `vertices=true` option, which returns coordinate data rather than adding shapes to the current path. Polygons are copied to paths when they're drawn.
 
 - You can combine these two approaches: create a path from lines and curves (and jumps), then store the path, ready for drawing later on.
 
@@ -155,7 +155,7 @@ The [`squircle`](@ref) function makes nicer shapes.
 
 ## Triangles, pentagons, and regular polygons
 
-For regular polygons, pentagons, and so on, see the section on [Polygons and paths](@ref). If you like drawing hexagons, you could also read [Hexagonal grids](@ref).
+For regular polygons, pentagons, and so on, see the section on [Polygons and paths](@ref). If you like drawing hexagons, you could also read [Hexagonal grids](@ref). Eqilateral Triangular grids are also provided ([EquilateralTriangleGrid](@ref)).
 
 ## Circles and ellipses
 
@@ -333,7 +333,7 @@ nothing # hide
 
 ![ellipse in quadrilateral](../assets/figures/ellipseinquad.png)
 
-[`circlepath`](@ref) constructs a circular path from Bézier curves, which allows you to use circles as paths.
+[`circlepath`](@ref) constructs a circular path from Bézier curves.
 
 ```@example
 using Luxor # hide
@@ -547,7 +547,7 @@ These last two functions can return 0, 1, or 2 points (since there are often two
 ```@example
 using Luxor # hide
 @drawsvg begin # hide
-    background("grey10")
+    background("antiquewhite")
     sethue("rebeccapurple")
     setline(3)
     circle(Point(0, 0), 200, :stroke)
@@ -645,7 +645,22 @@ nothing # hide
 
 ![ruling lines clipped to bounding boxes](../assets/figures/rulebbox.png)
 
-Another method of `rule()` draws a line through two points. This example rules lines passing through each pair of adjacent points of the edge of a squircle curve.
+Another method of `rule()` draws a line through two points. 
+
+```@example
+using Luxor, Colors # hide
+
+@drawsvg begin
+    background("antiquewhite")
+    sethue("black")
+    pt1 = Point(-100, -50)
+    pt2 = Point(200, 120)
+    circle.((pt1, pt2), 10, :fill)
+    rule(pt1, pt2)
+end 800 500
+```
+
+This next example rules lines passing through each pair of adjacent points of the edge of a squircle curve.
 
 ```@example
 using Luxor, Colors

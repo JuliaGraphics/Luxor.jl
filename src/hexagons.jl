@@ -34,6 +34,19 @@ h = HexagonOffsetOddR(q, 0, 100)
 poly(hextile(h), :fill)
 ```
 
+This code draws a 5 by 5 hexagonal grid: 
+
+```julia
+@draw begin
+    for q in -2:2 # horizontal
+        for r in -2:2 # vertical
+            pgon = hextile(HexagonOffsetOddR(q, r, 40))
+            poly(pgon, :stroke, close = true)
+        end
+    end
+end
+```
+
 Functions:
 
 - `hextile(hex::Hexagon)` - return the six vertices

@@ -1,12 +1,13 @@
 # Changelog
 
-## [v4.1] - forthcoming
+## [v4.1] - 2024-07-31
 
 ### Added
 
 - triangular grids
 - `squirclepath()`
 - `rule(pt1, pt2)`
+- `polysidelengths()`
 
 ### Changed
 

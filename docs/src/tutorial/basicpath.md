@@ -5,7 +5,7 @@ end
 ```
 # Basic path construction
 
-This tutorial covers the basics of drawing paths in Luxor. If you're familiar with the basics of Cairo, PostScript, Processing, HTML canvas, or similar graphics applications, you can probably glance through these tutorials and then refer to the How To sections. For more information about how paths are built, refer to the [Cairo API documentation](https://cairographics.org/manual/cairo-Paths.html); Luxor hides the details behind friendly Julia syntax, but the underlying mechanics are the same.
+This tutorial covers the basics of drawing paths in Luxor. If you're familiar with the basics of Cairo, PostScript, Processing, HTML canvas, or similar graphics applications, you can probably glance through these tutorials and then refer to the How To sections. For much more information about how paths are built, refer to the [Cairo API documentation](https://cairographics.org/manual/cairo-Paths.html); Luxor hides the details behind friendly Julia syntax, but the underlying mechanics are the same.
 
 ## How to build a path
 
@@ -83,15 +83,15 @@ We could have used `line(Point(200, 0))` rather than `closepath()`, but `closepa
 
 So, now we've constructed and finished a path - but now we must decide what to do with it. Above, we used `strokepath()` to draw the path using a line with the current settings (width, color, etc). But an alternative is to use `fillpath()` to fill the shape with the current color. `fillstroke()` does both. To change colors and styles, see [Colors and styles](@ref).
 
-After you've rendered the path by stroking or filling it, the current path is empty again.
+After you've rendered the path by stroking or filling it, the current path is empty again, ready for the next set of instructions.
 
 And that's how you draw paths in Luxor.
 
-However, you'd be right if you're thinking that constructing every single shape like this would be a lot of work. This is why there are so many other functions in Luxor, such as `circle()`, `ngon()`, `star()`, `rect()`, `box()`, etc. See [Simple graphics](@ref).
+However, you'd be right if you're thinking that constructing every single shape like this would be a lot of work. This is why there are so many other functions in Luxor, such as `circle()`, `ngon()`, `star()`, `rect()`, `box()`, `rule`, `crescent`, `squircle`, etc. See [Simple graphics](@ref) for a few of the more basic ones.
 
 ## Arcs
 
-There are `arc()` and `carc()` (counterclockwise arc) functions that provide the ability to add circular arcs to the current path, just as `curve()` adds a Bézier curve. However, these need careful handling. Consider this drawing:
+There are `arc()` and `carc()` (counterclockwise arc) functions that provide the ability to add circular arcs to the current path, just as `curve()` adds a Bézier curve. However, these need careful handling, because Luxor will insert lines sometimes that you didn't expect. Consider this drawing:
 
 ```@example
 using Luxor
@@ -107,9 +107,9 @@ end
 
 The `arc()` function arguments are: the center point, the radius, the start angle, and the end angle.
 
-But you'll notice that there are two straight lines, not just one. After moving down to (100, 200), the calculated start point for the arc isn't (100, 200), but (70, 0). So a straight line is drawn from the current point (100, 200) back up to the arc's starting point (70, 0) - this was automatically added to the path, even though you didn't specify a line.
+But you'll notice that there are two straight lines, not just one. After moving down to (100, 200), the calculated start point for the arc isn't (100, 200), but (70, 0). So an extra straight line had to be inserted to go from the current point (100, 200) back up to the arc's starting point (70, 0) - this was automatically added to the path, even though you didn't specify it.
 
-Internally, circular arcs are converted to Bézier curves.
+Internally, circular arcs are converted to Bézier curves by the Cairo engine.
 
 ## Relative coordinates
 
@@ -125,7 +125,7 @@ using Luxor
 
     move(0, 0)
 
-    rline(Point(120, 0))
+    rline(Point(120, 0)) 
     rline(Point(0, 120))
     rline(Point(-120, 0))
     rline(Point(0, -120))
@@ -134,7 +134,7 @@ using Luxor
 
     rmove(150, 0)
 
-    rline(Point(120, 0))
+    rline(Point(120, 0)) 
     rline(Point(0, 120))
     rline(Point(-120, 0))
     rline(Point(0, -120))
@@ -145,15 +145,15 @@ using Luxor
 end
 ```
 
-The drawing instructions to make the two shapes are the same, the second is just moved 150 units in x.
+The drawing instructions to make the two shapes are the same, the second set are applied shifted 150 units in x.
 
 `rmove()` requires a current point to be "relative to". This is why the first drawing function is `move()` rather than `rmove()`.
 
-Notice that this code draws two shapes, but there was only one `strokepath()` function call. These two shapes are in fact *subpaths*.
+Notice that this code draws two shapes, but there was only one `strokepath()` function call. These two shapes are in fact *subpaths*. A path can contain a number of separate shapes.
 
 ## Subpaths
 
-A path consists of one or more of these move-line-curve-arc-closepath sequences. Each is a subpath. When you call a `strokepath()` or `fillpath()` function, all the subpaths in the entire path are rendered, and then the current path is emptied.
+A path consists of one or more of these move-line-curve-arc-closepath sequences. Each is a subpath. When you call a `strokepath()` or `fillpath()` function, all the subpaths in the entire path are rendered in the same way, and then the current path is emptied.
 
 You can create a new subpath either by doing a `move()` or `rmove()` in the middle of building a path (before you render it), or with the specific `newsubpath()` function.
 
@@ -220,9 +220,9 @@ end
 
 ## Translate, scale, rotate
 
-Suppose you want to repeat a path in various places on the drawing. Obviously you don't want to code the same steps over and over again.
+Suppose you want to repeat a path in various places on the drawing. Obviously you don't want to write the same code over and over again.
 
-In this example, the `t()` function draws a triangle path.
+In this example, the `t()` function draws a triangle path relative to the current (0, 0) point.
 
 ```@example
 using Luxor
@@ -241,9 +241,9 @@ end
 end
 ```
 
-Inside `t()`, the coordinates are interpreted relative to the current graphics state: the current origin position (0, 0), scale (1), and rotation (0°).
+Inside `t()`, the coordinates, and other settings, are interpreted relative to the current graphics state: the current origin position (0, 0), scale (1), and rotation (0°), and so on.
 
-To draw the triangle in another location, you can first use `translate()` to shift the (0, 0) origin to another location. Now the `move()` and `line()` calls inside the `t()` function all refer to the new location.
+To draw the triangle in another location, you first use `translate()` to shift the (0, 0) origin to another location. Now the `move()` and `line()` calls inside the `t()` function all automatically refer to the new location.
 
 ```@example
 using Luxor
@@ -340,11 +340,13 @@ end
 
     As an alternative to `gsave()` and `grestore()` you can use the `@layer begin ... end` macro, which does the same thing.
 
+The other way to manipulate the graphics state (position, translation, rotation, scale) is to learn about the current transformation matrix. See [Transforms and matrices](@ref) for more.
+
 ## Useful tools
 
 You can use `currentpoint()` to get the current point.
 
-`rulers()` is useful for drawing the current x and y axes before you start a path.
+`rulers()` is useful for drawing the current x and y axes before you start a path. (For obvious reasons it's not useful while you're in the middle of drawing your path, becaause it applies its own set of paths.)
 
 `storepath()` grabs the current path and saves it as a Path object. This feature is intended to make Luxor paths more like other Julia objects, which you can save and manipulate before drawing them.
 
@@ -364,7 +366,7 @@ strokepath()
 
 ## Polygonal thinking
 
-In Luxor, a polygon is an array (a standard Julia vector) of Points. You can treat it like any standard Julia array, and then eventually draw it using the `poly()` function.
+In Luxor, a polygon is an array (a standard Julia vector) of Points. You can treat it like any standard Julia array. When you want to draw it (or use it for clipping), you use the `poly()` function to make a path.
 
 It's all straight lines, no curves, so you might have to use a lot of points to get smooth curves.
 
@@ -382,11 +384,11 @@ using Luxor
 end
 ```
 
-You might find it easier to generate polygons using Julia code than to generate paths. But, of course, there are no curves. If you need arcs and Bézier curves, stick to paths.
+You might find it easier to generate your graphics using polygons than to generate paths by issuing lots of path functions. But, of course, there are no curves. If you need arcs and Bézier curves, stick to paths.
 
 The `poly()` function simply builds a path with straight lines, and then does the `:fill` or `:stroke` action, depending on which you provide.
 
-There are some Luxor functions that let you modify the points in a polygon in various ways:
+There are some Luxor functions that let you modify all the points in a polygon in various ways:
 
 - `polymove!(pgon, pt1, pt2)`
 

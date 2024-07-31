@@ -196,3 +196,44 @@ function frame(scene, framenumber)
     end
 end
 ```
+
+## Live graphics
+
+Although Luxor is designed primarily for creating static graphics, it's possible to run it with an external buffer to display moving graphics. This example finds an approximation to π, updating the window continually with the latest estimate:
+
+```julia
+using Luxor
+using MiniFB
+include(dirname(pathof(Luxor)) * "/play.jl")
+
+function run()
+    within_circle = 0
+    total_points = 0
+    @play 400 400 begin
+        pt = Point(rand(), rand())
+        total_points += 1
+        d = distance(O, pt)
+        if d <= 1
+            randomhue()
+            circle(200pt, 1, :fill)
+            within_circle += 1
+        end
+        pi_estimate = 4.0within_circle / total_points
+        # show estimate
+        sethue("black")
+        box(boxtopleft(), boxmiddleright(), :fill)
+        sethue("white")
+        fontsize(30)
+        text(string(pi_estimate), boxtopleft() + (10, 50), halign=:left)
+        fontsize(20)
+        text(string(total_points), boxtopleft() + (10, 100), halign=:left)
+        sleep(0.05)
+    end
+end
+
+run()
+```
+
+![pi live drawing](../assets/figures/minifb-pi.png) ![a few moments later...](../assets/figures/minifb-pi-1.png)
+
+For more information, see [Interactive graphics and Threads](@ref). 

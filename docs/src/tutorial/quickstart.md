@@ -8,11 +8,11 @@ end
 ## Logo beginnings
 
 The new (and currently fictitious) organization JuliaFission
-has just asked you to design a new logo for them. They're
-something to do with atoms and particles, perhaps? So we'll
+has just asked you to design a new logo for them. They’re
+something to do with atoms and particles, perhaps? So we’ll
 design a new logo for them using some basic shapes; perhaps
 colored circles in some kind of spiral formation would look
-suitably "atomic".
+suitably “atomic”.
 
 Let's try out some ideas.
 
@@ -50,7 +50,7 @@ This short piece of code does the following things:
 
 - finishes the drawing and displays it on the screen
 
-In case you're wondering, the units are *points* (as in font sizes), and there are 72 points in an inch, just over 3 per millimeter. The y-axis points down the page. If you want to be reminded of where the x and y axes are, use the [`rulers`](@ref) function.
+In case you’re wondering, the units are *points* (as in font sizes), and there are 72 points in an inch, just over 3 per millimeter. The y-axis points down the page. If you want to be reminded of where the x and y axes are, use the [`rulers`](@ref) function.
 
 The `action=:fill` at the end of [`circle`](@ref) uses one of a set of symbols that let you use the shape you've created in different ways. There's the `:stroke` action, which draws around the edges but doesn't fill the shape with color. You might also meet the `:fillstroke`, `:fillpreserve`, `:strokepreserve`, `:clip`, and `:path` actions.
 
@@ -86,9 +86,9 @@ svgimage # hide
 
 Notice the "." after `circle`. This broadcasts the `circle()` function over the `corners`, thus drawing a 10-unit red-filled circle at every point.
 
-The arguments to `ngon` are usually centerpoint, radius, and the number of sides. Try changing the third argument from 3 (triangle) to 4 (square) or 31 (traikontagon?).
+The arguments to `ngon` are centerpoint, radius, and the number of sides. Try changing the third argument from 3 (triangle) to 4 (square) or 31 (traikontagon?).
 
-To create a spiral of circles, we want to repeat this "draw a circle at each vertex of a triangle" procedure more than once. A simple loop will do: we'll rotate the current drawing context by `i * ` 5° (`deg2rad(5)` radians) each time (so 5°, 10°, 15°, 20°, 25°, and 30°), and at the same time increase the size of the polygon by multiples of 10:
+To create a spiral of circles, we want to repeat this “draw a circle at each vertex of a triangle” procedure more than once. A simple loop will do: we’ll rotate the current drawing context by `i * ` 5° (`deg2rad(5)` radians) each time (so 5°, 10°, 15°, 20°, 25°, and 30°), and at the same time increase the size of the polygon by multiples of 10:
 
 ```@setup example_3
 using Luxor

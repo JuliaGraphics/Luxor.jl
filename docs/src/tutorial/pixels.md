@@ -1,24 +1,24 @@
 ```@meta
 DocTestSetup = quote
-    using Luxor, Colors, Images
+    using Luxor, Colors
 end
 ```
 # Playing with pixels
 
 As well as working with PNG, SVG, and PDF drawings, Luxor lets you play directly with pixels, and combine these freely with vector graphics and text.
 
-This section is a quick walkthrough of some functions you can use to control pixels. You'll need the Images.jl package as well as Luxor.jl.
+This section is a quick walkthrough of some functions you can use to control pixels. You'll probably need the Images.jl package as well as Luxor.jl.
 
-When you create a new Luxor drawing with [`Drawing()`](@ref), you can choose to use the contents of an existing Julia array as the drawing surface, rather than a PNG or SVG.
+When you create a new Luxor drawing with [`Drawing()`](@ref), you can choose to use the contents of an existing Julia array as the drawing surface, rather than ask for a new PNG or SVG.
 
-```@example blocks
-using Luxor, Colors, Images
+```@julia
+using Luxor, Colors
 A = zeros(ARGB32, 400, 800)
 Drawing(A)
 nothing # hide
 ```
 
-The array `A` should be a matrix where each element is an ARGB32 value. ARGB32 is a way of fitting four integers (using 8 bits for alpha, 8 bits for Red, 8 for Green, and 8 for Blue) into a 32-bit number between 0 and 4,294,967,296 - a 32 bit unsigned integer. The ARGB32 type is provided by the Images.jl package (or ColorTypes.jl).
+The array `A` should be a matrix where each element is an *ARGB32& value. ARGB32 is a way of fitting four small integers (using 8 bits for alpha, 8 bits for Red, 8 for Green, and 8 for Blue) into a 32-bit number between 0 and 4,294,967,296 - each element is a 32 bit unsigned integer that represents a colored pixel. The ARGB32 type is provided by the Images.jl package (or ColorTypes.jl).
 
 You can set and get the values of pixels by treating the drawing's array like a standard Julia array. So we can inspect pixels like this:
 
@@ -41,15 +41,17 @@ A[300:350, 50:450] .= colorant"blue";
 [A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800];
 ```
 
-Because this is an array rather than a PNG/SVG, we could either use Images.jl to display it in a notebook or code editor such as VS-Code.
+Because this is an array rather than a PNG/SVG, we must either use Images.jl to display it in a notebook or code editor such as VS-Code.
 
-```@example blocks
+```julia blocks
 A
 ```
 
+![playing with pixels tutorial 1](../assets/figures/playing-pixels-1.png)
+
 Or, to display it in Luxor, start a new drawing, and use [`placeimage()`](@ref) to position the array on the drawing:
 
-```@example
+```julia
 using Luxor, Colors # hide
 A = zeros(ARGB32, 400, 800)
 Drawing(A)
@@ -66,9 +68,11 @@ finish()
 preview()
 ```
 
+![playing with pixels tutorial 2](../assets/figures/playing-pixels-2.png)
+
 Here's some code that sets the HSV color of each pixel to the value of some arbitrary maths function operating on complex numbers:
 
-```@example
+```julia
 using Luxor, Colors, Images
 A = zeros(ARGB32, 400, 800)
 Drawing(A)
@@ -91,13 +95,15 @@ finish()
 A
 ```
 
+![playing with pixels tutorial 3](../assets/figures/playing-pixels-3.png)
+
 ## Rows and columns, height and width
 
-A quick note about the two coordinate systems at work here.
+A note about the two coordinate systems at work here.
 
-Locations in arrays and images are typically specified with row and column values, or perhaps just a single index value. Because arrays are column-major in Julia, the address `A[10, 200]` is "row 10, column 200 of A".
+Locations in arrays and images are typically specified with row and column values, or perhaps just a single index value. Because arrays are column-major in Julia, the address `A[10, 200]` is "row 10, column 200 of A", with a single index `A[79610]`.
 
-Locations on plots and Luxor drawings are typically specified as Cartesian x and y coordinates. So `Point(10, 200)` would identify a point 10 units along the x-axis and 200 along the y-axis from the origin, In Luxor, like most computer graphics systems, the y-axis points vertically down the drawing.
+Locations on plots and Luxor drawings are typically specified as Cartesian x and y coordinates. So `Point(10, 200)` would identify a point 10 units along the x-axis and 200 along the y-axis from the origin, In Luxor, like most computer graphics systems, the y-axis points vertically *down* the drawing.
 
 The origin point of an array or image is the first pixel - usually drawn at the top left. In Luxor, the origin point (0/0) of a drawing (if created by `Drawing()`) is also at the top left, until you move it, or use the `origin()` function. (The `@draw` macros also set the origin at the centre of the drawing, for your convenience.)
 
@@ -134,13 +140,15 @@ text("f(z) = (z + 3)^3 / ((z + 2im) * (z - 2im)^2)",
 A
 ```
 
+![playing with pixels tutorial 4](../assets/figures/playing-pixels-4.png)
+
 A disadvantage is that `BoundingBox()` functions don't work, because they're not yet aware of transformation matrices.
 
 ## Array as image
 
 An alternative way of using pixel arrays is to add them to a PNG or SVG drawing using [`placeimage`](@ref).
 
-For example, create a new drawing, and this time add the array A to the drawing. You can use it like any other image, such as clipping it by the Julia logo:
+For example, create a new drawing, and this time place the array A on the drawing. You can use it like any other image, such as clipping it by the Julia logo:
 
 ```julia
 # with A defined as above
@@ -158,44 +166,4 @@ finish()
 preview()
 ```
 
-```@setup final_example
-using Luxor, Colors
-A = zeros(ARGB32, 400, 800)
-w, h = 800, 400
-Drawing(A)
-f(z) = (z + 3)^3 / ((z + 2im) * (z - 2im)^2)
-function pixelcolor(r, c;
-    rows=100,
-    cols=100)
-    z = rescale(r, 1, rows, -2π, 2π) + rescale(c, 2π, cols, -2π, 2π) * im
-    n = f(z)
-    h = 360rescale(angle(n), 0, 2π)
-    s = abs(sin(π / 2 * real(f(z)))) # * (sin(π * imag(f(z)))))
-    v = abs(sin(2π * real(f(z))))
-    return HSV(h, s, v)
-end
-for r in 1:size(A, 1), c in 1:size(A, 2)
-    A[r, c] = pixelcolor(r, c, rows=400, cols=800)
-end
-transform([0 1 1 0 h/2 w/2])
-fontsize(18)
-sethue("white")
-text("f(z) = (z + 3)^3 / ((z + 2im) * (z - 2im)^2)",
-    O + (0, h / 2 - 20), halign=:center)
-finish()
-
-d = Drawing(800, 400, :png)
-origin()
-placeimage(A, O - (w / 2, h / 2), alpha=0.4)
-julialogo(centered=true, action=:clip)
-placeimage(A, O - (w / 2, h / 2))
-clipreset()
-julialogo(centered=true, action=:path)
-sethue("white")
-strokepath()
-finish()
-```
-
-```@example final_example
-d # hide
-```
+![playing with pixels tutorial 5](../assets/figures/playing-pixels-5.png)

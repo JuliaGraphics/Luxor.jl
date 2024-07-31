@@ -5,7 +5,7 @@ end
 ```
 # Tables and grids
 
-You often want to position graphics at regular locations on the drawing. The positions can be provided by:
+You often want to position graphics at regularly-spaced locations on the drawing. These positions can be provided by:
 
 - `Tiler`: a rectangular grid iterator which you specify by enclosing area, and the number of rows and columns
 - `Partition`: a rectangular grid iterator which you specify by enclosing area, and the width and height of each cell
@@ -14,9 +14,7 @@ You often want to position graphics at regular locations on the drawing. The pos
 
 These are types which act as iterators. Their job is to provide you with centerpoints; you'll probably want to use these in combination with the cell's widths and heights.
 
-There are functions to make hexagonal grids. See [Hexagonal grids](@ref).
-
-There is [EquilateralTriangleGrid](@ref), a grid iterator which generates the vertices for a rectangular grid of equilateral triangles.
+There are also functions to make hexagonal grids ([Hexagonal](@ref) grids and [EquilateralTriangleGrid](@ref) grids.
 
 ## Tiles and partitions
 

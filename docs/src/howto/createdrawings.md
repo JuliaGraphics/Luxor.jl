@@ -6,7 +6,7 @@ To create a drawing, and optionally specify the filename, type, and dimensions, 
 
 To finish a drawing and close the file, use [`finish`](@ref).
 
-Ff the drawing doesn't appear automatically in your notebook or editing environment, you can type [`preview`](@ref) to see it.
+If the drawing doesn't appear automatically in your notebook or editing environment, you can type [`preview`](@ref) to see it.
 
 ![jupyter](../assets/figures/jupyter.png)
 
@@ -17,6 +17,20 @@ If you're using VS Code, then PNG and SVG drawings should automatically appear i
 !!! note
 
     SVGs are text-based, and can get quite big. Up to a certain size, SVGs will preview as easily and quickly as PNGs. As they get larger, though, they'll take longer, and it won't be long before they'll take longer to preview than to create in the first place. Very large drawings in SVG format might not display at all.
+
+In Julia, the result of the most recently evaluated expression is usually displayed in a suitable form for the current environment. If the most recent expression was a Luxor drawing, it will probably be displayed somewhere, unless you're working in the REPL. So  this code:
+
+```julia
+Drawing(100, 100, :png)
+origin()
+sethue("green")
+circle(O, 10, :fill)
+finish()
+preview()
+println("finished")
+```
+
+won't display a drawing with a circle - the most recent result is returned by `println()`, not `preview()`. 
 
 ## Quick drawings with macros
 
@@ -96,7 +110,7 @@ Drawing(width, height, surfacetype, [filename])
 
 lets you supply `surfacetype` as a symbol (`:svg`, `:png`, `:image`, or `:rec`). This creates a new drawing of the given surface type and stores the image only in memory if no `filename` is supplied.
 
-The [`@draw`](@ref) macro (equivalent to `Drawing(..., :png)` creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (VSCode, Jupyter, Pluto).
+The [`@draw`](@ref) macro (equivalent to `Drawing(..., :png)`) creates a PNG drawing in-memory (not saved in a file). You should see it displayed if you're working in a suitable environment (VSCode, Jupyter, Pluto).
 
 The SVG equivalent of `@draw` is [`@drawsvg`](@ref).
 
@@ -184,7 +198,11 @@ end
 
 ### Using Jupyter notebooks (IJulia and Interact)
 
-Currently, you should use an in-memory SVG drawing to display graphics if you're using Interact.jl. This example provides an HSB color widget.
+This example uses Interact.jl to provide an HSB color widget.
+
+!!! note
+    
+    Interact.jl may be obsolete by the time you read this.
 
 ```julia
 using Interact, Colors, Luxor
@@ -235,7 +253,7 @@ finish()
 As a standard Julia array, `A` will be shown as an image in your notebook or editor if you're using Images.jl.
 
 !!! note
-
+    
     In this example the array uses Julian "column-major" array addressing. Luxor functions use the `Point` type on a Cartesian coordinate system, where the origin is (by default) at the top left of the drawing. Locations along the x-axis correspond to the column indices of the array, locations along the y-axis correspond to the rows of the array (until you use the `origin()` function, for example).
 
 You can also create a pixel array on a PNG drawing when saved as a file:
