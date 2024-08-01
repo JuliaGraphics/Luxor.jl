@@ -23,12 +23,14 @@ The array `A` should be a matrix where each element is an *ARGB32& value. ARGB32
 You can set and get the values of pixels by treating the drawing's array like a standard Julia array. So we can inspect pixels like this:
 
 ```@repl blocks
+using Luxor, Colors # hide
 A[10, 200]  # row 10, column 200
 ```
 
 and set them like this:
 
 ```@repl blocks
+using Luxor, Colors # hide
 A[10, 200] = colorant"red"
 
 ```
@@ -36,6 +38,7 @@ A[10, 200] = colorant"red"
 or even like this:
 
 ```@repl blocks
+using Luxor, Colors # hide
 A[200:250, 100:250] .= colorant"green";
 A[300:350, 50:450] .= colorant"blue";
 [A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800];
@@ -138,6 +141,7 @@ sethue("white")
 text("f(z) = (z + 3)^3 / ((z + 2im) * (z - 2im)^2)",
     Point(0, h/2 - 30), halign=:center)
 A
+nothing # hide
 ```
 
 ![playing with pixels tutorial 4](../assets/figures/playing-pixels-4.png)

@@ -5,7 +5,9 @@ end
 ```
 # Turtle graphics
 
-Luxor provides some basic "turtle graphics" functions. Functions to control the turtle begin (somewhat unusually) with a capital letter: Forward, Turn, Circle, Orientation, Towards, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition, and so on, and angles are specified in degrees rather than radians.
+Luxor provides some basic "turtle graphics" functions. Functions to control the turtle begin (somewhat unusually) with a capital letter: Forward, Turn, Circle, Orientation, Towards, Rectangle, Pendown, Penup, Pencolor, Penwidth, and Reposition. 
+
+Angles are specified in clockwise degrees rather than radians.
 
 ```@example
 using Luxor, Colors
@@ -52,7 +54,9 @@ nothing # hide
 |[`Reposition`](@ref)          | Place turtle at new position                  |
 |[`Towards`](@ref)             | Rotate turtle to face towards a point         |
 
-The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!), and you can have any number of turtles active at a time.
+The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!).
+
+You can have any number of turtles active at a time. 
 
 ```@example
 using Luxor, Colors # hide

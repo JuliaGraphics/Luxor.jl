@@ -57,12 +57,26 @@ Base.broadcastable(t::Turtle) = Ref(t)
 # a stack to hold pushed/popped turtle positions
 const queue = Vector{Vector{Float64}}()
 
+# users can define prolog and epilog functions to monitor turtle's progress
+function _prolog(t::Turtle)
+    if isdefined(Main, :turtleprolog)
+        Main.turtleprolog(t)
+    end 
+end
+
+function _epilog(t::Turtle)
+    if isdefined(Main, :turtleepilog)
+        Main.turtleepilog(t)
+    end 
+end
+
 """
     Forward(t::Turtle, d=1)
 
 Move the turtle forward by `d` units. The stored position is updated.
 """
 function Forward(t::Turtle, d=1)
+    _prolog(t)
     oldx, oldy = t.xpos, t.ypos
     t.xpos += (d * cos(t.orientation))
     t.ypos += (d * sin(t.orientation))
@@ -72,6 +86,7 @@ function Forward(t::Turtle, d=1)
         line(Point(oldx, oldy), Point(t.xpos, t.ypos), :stroke)
         grestore()
     end
+    _epilog(t)
 end
 
 """
@@ -80,7 +95,9 @@ end
 Increase the turtle's rotation by `r` degrees. See also `Orientation`.
 """
 function Turn(t::Turtle, r=5.0)
+    _prolog(t)
     t.orientation = mod2pi(t.orientation + deg2rad(r))
+    _epilog(t)
 end
 
 """
@@ -89,7 +106,9 @@ end
 Set the turtle's orientation to `r` degrees. See also `Turn`.
 """
 function Orientation(t::Turtle, r=0.0)
+    _prolog(t)
     t.orientation = mod2pi(deg2rad(r))
+    _epilog(t)
 end
 
 """
@@ -98,12 +117,14 @@ end
 Rotate the turtle to face towards a given point.
 """
 function Towards(t::Turtle, pos::Point)
+    _prolog(t)
     x, y = pos
 
     dx = x - t.xpos
     dy = y - t.ypos
 
     t.orientation = atan(dy, dx)
+    _epilog(t)
 end
 
 """
@@ -112,7 +133,9 @@ end
 Put that pen down and start drawing.
 """
 function Pendown(t::Turtle)
+    _prolog(t)
     t.pendown = true
+    _epilog(t)
 end
 
 """
@@ -121,7 +144,9 @@ end
 Pick that pen up and stop drawing.
 """
 function Penup(t::Turtle)
+    _prolog(t)
     t.pendown = false
+    _epilog(t)
 end
 
 """
@@ -130,10 +155,12 @@ end
 Draw a filled circle centered at the current position with the given radius.
 """
 function Circle(t::Turtle, radius=1.0)
+    _prolog(t)
     gsave()
     sethue(t.pencolor...)
     circle(t.xpos, t.ypos, radius, :fill)
     grestore()
+    _epilog(t)
 end
 
 """
@@ -142,10 +169,12 @@ end
 Draw a filled rectangle centered at the current position with the given radius.
 """
 function Rectangle(t::Turtle, width=10.0, height=10.0)
+    _prolog(t)
     gsave()
     sethue(t.pencolor...)
     rect(t.xpos-width/2, t.ypos-height/2, width, height, :fill)
     grestore()
+    _epilog(t)
 end
 
 """
@@ -154,9 +183,11 @@ end
 Save the turtle's position and orientation on a stack.
 """
 function Push(t::Turtle)
-# save xpos, ypos, turn in a queue
+    _prolog(t)
+    # save xpos, ypos, turn in a queue
     global queue
     push!(queue, [t.xpos, t.ypos, t.orientation])
+    _epilog(t)
 end
 
 """
@@ -165,7 +196,8 @@ end
 Lift the turtle's position and orientation off a stack.
 """
 function Pop(t::Turtle)
-# restore xpos, ypos, turn from queue
+    _prolog(t)
+    # restore xpos, ypos, turn from queue
     global queue
     if isempty(queue)
         @info("stack was already empty")
@@ -173,6 +205,7 @@ function Pop(t::Turtle)
     else
         t.xpos, t.ypos, t.orientation = pop!(queue)
     end
+    _epilog(t)
 end
 
 """
@@ -181,10 +214,12 @@ end
 Write some text at the current position.
 """
 function Message(t::Turtle, txt)
+    _prolog(t)
     gsave()
     sethue(t.pencolor...)
     text(txt, t.xpos, t.ypos)
     grestore()
+    _epilog(t)
 end
 
 """
@@ -195,12 +230,14 @@ Shift the Hue of the turtle's pen forward by `inc`. Hue values range between
 will be black.)
 """
 function HueShift(t::Turtle, inc=1.0)
+    _prolog(t)
     r, g, b = t.pencolor
     hsv = convert(Colors.HSV, Colors.RGB(r, g, b))
     newhsv = (mod(hsv.h + inc, 360), hsv.s, hsv.v)
     newrgb = convert(Colors.RGB, Colors.HSV(newhsv[1], newhsv[2], newhsv[3]))
     sethue(newrgb)
     t.pencolor = (newrgb.r, newrgb.g, newrgb.b)
+    _epilog(t)
 end
 
 """
@@ -209,12 +246,14 @@ end
 Randomize the saturation of the turtle's pen color.
 """
 function Randomize_saturation(t::Turtle)
+    _prolog(t)
     r, g, b = t.pencolor
     hsv = convert(Colors.HSV, Colors.RGB(r, g, b))
     newhsv = (hsv.h, rand(0.5:0.05:1.0), hsv.v)
     newrgb= convert(Colors.RGB, Colors.HSV(newhsv[1], newhsv[2], newhsv[3]))
     sethue(newrgb)
     t.pencolor = (newrgb.r, newrgb.g, newrgb.b)
+    _epilog(t)
 end
 
 """
@@ -223,18 +262,24 @@ end
 Set the Red, Green, and Blue colors of the turtle.
 """
 function Pencolor(t::Turtle, r, g, b)
+    _prolog(t)
     sethue(r, g, b)
     t.pencolor = (r, g, b)
+    _epilog(t)
 end
 
 function Pencolor(t::Turtle, col::Colors.Colorant)
+    _prolog(t)
     temp = convert(RGBA, col)
     Pencolor(t::Turtle, temp.r, temp.g, temp.b)
+    _epilog(t)
 end
 
 function Pencolor(t::Turtle, col::AbstractString)
+    _prolog(t)
     temp = parse(RGBA, col)
     Pencolor(t::Turtle, temp.r, temp.g, temp.b)
+    _epilog(t)
 end
 
 Pencolor(t::Turtle, col::NTuple{3, Number}) = Pencolor(t, col...)
@@ -248,6 +293,7 @@ Reposition: pick the turtle up and place it at another position.
 function Reposition(t::Turtle, x, y)
     t.xpos = x
     t.ypos = y
+    _epilog(t)
 end
 
 Reposition(t::Turtle, pos::Point) = Reposition(t, pos.x, pos.y)
