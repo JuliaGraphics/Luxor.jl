@@ -14,7 +14,7 @@ You often want to position graphics at regularly-spaced locations on the drawing
 
 These are types which act as iterators. Their job is to provide you with centerpoints; you'll probably want to use these in combination with the cell's widths and heights.
 
-There are also functions to make hexagonal grids ([Hexagonal](@ref) grids and [EquilateralTriangleGrid](@ref) grids.
+There are also functions to make hexagonal grids ([Hexagonal grids](@ref) grids and [EquilateralTriangleGrid](@ref) grids.
 
 ## Tiles and partitions
 

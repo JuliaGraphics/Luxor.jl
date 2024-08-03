@@ -22,14 +22,16 @@ The array `A` should be a matrix where each element is an *ARGB32& value. ARGB32
 
 You can set and get the values of pixels by treating the drawing's array like a standard Julia array. So we can inspect pixels like this:
 
-```@repl blocks
+```julia
 using Luxor, Colors # hide
 A[10, 200]  # row 10, column 200
+
+ARGB32(0.0N0f8,0.0N0f8,0.0N0f8,0.0N0f8)
 ```
 
 and set them like this:
 
-```@repl blocks
+```julia
 using Luxor, Colors # hide
 A[10, 200] = colorant"red"
 
@@ -37,16 +39,17 @@ A[10, 200] = colorant"red"
 
 or even like this:
 
-```@repl blocks
+```julia
 using Luxor, Colors # hide
+A[:] = colorant"purple"
 A[200:250, 100:250] .= colorant"green";
 A[300:350, 50:450] .= colorant"blue";
-[A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800];
+[A[rand(1:(400 * 800))] = RGB(rand(), rand(), rand()) for i in 1:800]
 ```
 
 Because this is an array rather than a PNG/SVG, we must either use Images.jl to display it in a notebook or code editor such as VS-Code.
 
-```julia blocks
+```julia
 A
 ```
 

@@ -74,8 +74,13 @@ function run_all_tests()
         include("text-boxes.jl")
         include("label-tests.jl")
         include("textfit-tests.jl")
-        include("latex.jl")
         include("textformat.jl")
+    end
+
+    @testset "latex" begin
+        include("latex.jl")
+        include("latex_more.jl")
+        include("latex-even-harder.jl")
     end
 
     @testset "curves" begin

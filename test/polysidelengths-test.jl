@@ -26,7 +26,6 @@ function main()
     for S in 3:10
         D = rand(9:173)
         pg = ngonside(rand(BoundingBox()), D, S, vertices = true)
-        @show sum(polysidelengths(pg)), S * D
         @test isapprox(sum(polysidelengths(pg)), S * D)
     end
 

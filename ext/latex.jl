@@ -139,7 +139,7 @@ function text(lstr::LaTeXString, pt::Point;
 
     translate_x, translate_y = texalign(halign, valign, bottom_pt, top_pt, font_size)
 
-    # Writes text using ModernCMU font.
+    # Write each character 
     for text in sentence
         @layer begin
             translate(pt)
@@ -154,8 +154,9 @@ function text(lstr::LaTeXString, pt::Point;
             end
 
             if text[1] isa TeXChar
-
-                if paths == true
+                if paths == false
+                    writelatexchar(text, font_size)
+                else
                     fontface(text[1].font.family_name)
                     fontsize(font_size * text[3])
                     newsubpath()
@@ -164,57 +165,73 @@ function text(lstr::LaTeXString, pt::Point;
                         Point(text[2]...) * font_size * (1, -1),
                         action=:path,
                         startnewpath=false)
-                else
-                    writelatexchar(text, font_size)
                 end
             elseif text[1] isa HLine
                 # text is eg (HLine{Float64}(0.7105, 0.009), [0.0, 0.2106], 1.0))
                 #                            width   thick    x     y      scale
-                if paths == true
+                if paths == false
+                    pointstart = Point(text[2]...) * font_size * (1, -1)
+                    pointend = pointstart + Point(text[1].width, 0) * font_size
+                    setline(0.5)
+                    line(pointstart, pointend, :stroke)
+                else
                     pointstart = Point(text[2]...) * font_size * (1, -1)
                     pointend = pointstart + Point(text[1].width, 0) * font_size
                     poly([pointstart, pointend], :path)
                     closepath()
                     newsubpath()
-                else
-                    pointstart = Point(text[2]...) * font_size * (1, -1)
-                    pointend = pointstart + Point(text[1].width, 0) * font_size
-                    setline(0.5)
-                    line(pointstart, pointend, :stroke)
                 end
             end
         end
     end
 end
 
+# dictionary to convert MathTeXEngine font requirement to toy font names
+fontdict = Dict{String, String}(
+    "NewComputerModern|10 Regular"  => "NewCM10-Regular",
+    "NewComputerModern|10 Italic"   => "NewCM10-Italic", 
+    "NewComputerModern|12 Regular"  => "NewCM12-Regular",
+    "NewComputerModern|12 Italic"   => "NewCM12-Italic", 
+    "NewComputerModern Math|Regular" => "NewCMMath-Regular",
+)
 
 """
     writelatexchar(t::AbstractString)
-
-Helper function to handle extra chars that are not supported
-in MathTeXEngine.
 """
-function writelatexchar(text, font_size)
-    # Extra chars not supported by MathTeXEngine
-    extrachars = ["⨟","{","}","𝔸","𝔹","ℂ","𝔻","𝔽", "𝔾", "ℍ", "𝕀", "𝕁", "𝕂", "𝕃", "𝕄", "ℕ", "𝕆", "ℙ", "ℚ", "ℝ", "𝕊", "𝕋", "𝕌", "𝕎", "𝕍", "𝕏", "ℤ", "𝔄", "𝔅", "ℭ", "𝔇", "𝔈", "𝔉", "𝔊", "ℌ", "ℑ", "𝔍", "𝔎", "𝔏", "𝔐", "𝔑", "𝔒", "𝔓", "𝔔", "ℜ", "𝔖", "𝔗", "𝔘", "𝔙", "𝔚", "𝔛", "𝔜", "ℨ", "𝕬", "𝕭", "𝕮", "𝕯", "𝕰", "𝕱", "𝕲", "𝕳", "𝕴", "𝕵", "𝕶", "𝕷", "𝕸", "𝕹", "𝕺", "𝕻", "𝕼", "𝕽", "𝕾", "𝕿", "𝖀", "𝖁", "𝖂", "𝖃", "𝖄", "𝖅", "𝒜", "ℬ", "𝒞", "𝒟", "ℰ", "ℱ", "𝒢", "ℋ", "ℐ", "𝒥", "𝒦", "ℒ", "ℳ", "𝒩", "𝒪", "𝒫", "𝒬", "ℛ", "𝒮", "𝒯", "𝒰", "𝒱", "𝒲", "𝒳", "𝒴", "𝒵","𝕒","𝕓" ,"𝕔" ,"𝕕" ,"𝕖" ,"𝕗","𝕘" ,"𝕙" ,"𝕚" ,"𝕛" ,"𝕜" ,"𝕝" ,"𝕞" ,"𝕟" ,"𝕠" ,"𝕡" ,"𝕢" ,"𝕣" ,"𝕤" ,"𝕥" ,"𝕦" ,"𝕧" ,"𝕩" ,"𝕨" ,"𝕪" ,"𝕫" ,"𝐚" ,"𝐛" ,"𝐜" ,"𝐝" ,"𝐞" ,"𝐟" ,"𝐠" ,"𝐡" ,"𝐢" ,"𝐣" ,"𝐤" ,"𝐥" ,"𝐦" ,"𝐧" ,"𝐨" ,"𝐩" ,"𝐪" ,"𝐫" ,"𝐬" ,"𝐭" ,"𝐮" ,"𝐯" ,"𝐱" ,"𝐰" ,"𝐲" ,"𝐳" ,"𝐀" ,"𝐁" ,"𝐂" ,"𝐃" ,"𝐄" ,"𝐅" ,"𝐆" ,"𝐇" ,"𝐈" ,"𝐉" ,"𝐊" ,"𝐋" ,"𝐌" ,"𝐍" ,"𝐎" ,"𝐏" ,"𝐐" ,"𝐑" ,"𝐒" ,"𝐓" ,"𝐔" ,"𝐕" ,"𝐗" ,"𝐖" ,"𝐘" ,"𝐙" ,"𝓐" ,"𝓑" ,"𝓒" ,"𝓓" ,"𝓔" ,"𝓕" ,"𝓖" ,"𝓗" ,"𝓘" ,"𝓙" ,"𝓚" ,"𝓛" ,"𝓜" ,"𝓝" ,"𝓞" ,"𝓟" ,"𝓠" ,"𝓡" ,"𝓢" ,"𝓣" ,"𝓤" ,"𝓥" ,"𝓧" ,"𝓦" ,"𝓨" ,"𝓩"]
+function writelatexchar(texchar, font_size)
+    #extrachars = ["⨟","{","}","𝔸","𝔹","ℂ","𝔻","𝔽", "𝔾", "ℍ", "𝕀", "𝕁", "𝕂", "𝕃", "𝕄", "ℕ", "𝕆", "ℙ", "ℚ", "ℝ", "𝕊", "𝕋", "𝕌", "𝕎", "𝕍", "𝕏", "ℤ", "𝔄", "𝔅", "ℭ", "𝔇", "𝔈", "𝔉", "𝔊", "ℌ", "ℑ", "𝔍", "𝔎", "𝔏", "𝔐", "𝔑", "𝔒", "𝔓", "𝔔", "ℜ", "𝔖", "𝔗", "𝔘", "𝔙", "𝔚", "𝔛", "𝔜", "ℨ", "𝕬", "𝕭", "𝕮", "𝕯", "𝕰", "𝕱", "𝕲", "𝕳", "𝕴", "𝕵", "𝕶", "𝕷", "𝕸", "𝕹", "𝕺", "𝕻", "𝕼", "𝕽", "𝕾", "𝕿", "𝖀", "𝖁", "𝖂", "𝖃", "𝖄", "𝖅", "𝒜", "ℬ", "𝒞", "𝒟", "ℰ", "ℱ", "𝒢", "ℋ", "ℐ", "𝒥", "𝒦", "ℒ", "ℳ", "𝒩", "𝒪", "𝒫", "𝒬", "ℛ", "𝒮", "𝒯", "𝒰", "𝒱", "𝒲", "𝒳", "𝒴", "𝒵","𝕒","𝕓" ,"𝕔" ,"𝕕" ,"𝕖" ,"𝕗","𝕘" ,"𝕙" ,"𝕚" ,"𝕛" ,"𝕜" ,"𝕝" ,"𝕞" ,"𝕟" ,"𝕠" ,"𝕡" ,"𝕢" ,"𝕣" ,"𝕤" ,"𝕥" ,"𝕦" ,"𝕧" ,"𝕩" ,"𝕨" ,"𝕪" ,"𝕫" ,"𝐚" ,"𝐛" ,"𝐜" ,"𝐝" ,"𝐞" ,"𝐟" ,"𝐠" ,"𝐡" ,"𝐢" ,"𝐣" ,"𝐤" ,"𝐥" ,"𝐦" ,"𝐧" ,"𝐨" ,"𝐩" ,"𝐪" ,"𝐫" ,"𝐬" ,"𝐭" ,"𝐮" ,"𝐯" ,"𝐱" ,"𝐰" ,"𝐲" ,"𝐳" ,"𝐀" ,"𝐁" ,"𝐂" ,"𝐃" ,"𝐄" ,"𝐅" ,"𝐆" ,"𝐇" ,"𝐈" ,"𝐉" ,"𝐊" ,"𝐋" ,"𝐌" ,"𝐍" ,"𝐎" ,"𝐏" ,"𝐐" ,"𝐑" ,"𝐒" ,"𝐓" ,"𝐔" ,"𝐕" ,"𝐗" ,"𝐖" ,"𝐘" ,"𝐙" ,"𝓐" ,"𝓑" ,"𝓒" ,"𝓓" ,"𝓔" ,"𝓕" ,"𝓖" ,"𝓗" ,"𝓘" ,"𝓙" ,"𝓚" ,"𝓛" ,"𝓜" ,"𝓝" ,"𝓞" ,"𝓟" ,"𝓠" ,"𝓡" ,"𝓢" ,"𝓣" ,"𝓤" ,"𝓥" ,"𝓧" ,"𝓦" ,"𝓨" ,"𝓩"]
+    
+    # first(texchar)[1] has fields .font .font_family .glyph_id .represented_char .slanted, 
+    finfo = first(texchar)
 
-    fontface(text[1].font.family_name)
-    fontsize(font_size * text[3])
+    represented_char = finfo.represented_char
+    required_font_family_name = finfo.font.family_name
+    required_font_style_name = finfo.font.style_name
+    chosen_font = get(fontdict, string(required_font_family_name, "|", required_font_style_name), "TimesNewRoman")
 
-    if string(text[1].represented_char) == "⨟"
-        setfont(text[1].font.family_name, font_size * text[3])
-        Luxor.settext(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0.25,0.3)*font_size)
-
-    elseif text[1].represented_char == '{' || text[1].represented_char == '}'
-        Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0,-0.8)*font_size)
-
-    elseif string(text[1].represented_char) in extrachars
-        setfont(text[1].font.family_name, 1.3font_size * text[3])
-        Luxor.settext(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1)+Point(0,0.3)*font_size)
-
-    else
-        Luxor.text(string(text[1].represented_char), Point(text[2]...) * font_size * (1, -1))
+    @debug begin
+        print(represented_char)
+        print(": ", required_font_family_name)
+        print(": ", required_font_style_name)
+        println(": ", chosen_font)
     end
+    
+    # if string(represented_char) == "⨟"
+    #     setfont(chosen_font, font_size * texchar[3])
+    #     Luxor.settext(string(represented_char), Point(texchar[2]...) * font_size * (1, -1) + Point(0.25,0.3) * font_size)
+    
+    # elseif represented_char == '{' || represented_char == '}'
+    #     setfont(chosen_font, font_size * texchar[3])
+    #     Luxor.text(string(represented_char), Point(texchar[2]...) * font_size * (1, -1) + Point(0, -0.8) * font_size)
+    
+    # elseif string(represented_char) in extrachars
+    #     setfont(chosen_font, 1.3font_size * texchar[3])
+    #     Luxor.settext(string(represented_char), Point(texchar[2]...) * font_size * (1, -1) + Point(0, 0.3) * font_size)
+    # else
+    fontface(chosen_font)
+    fontsize(font_size * texchar[3])
+    Luxor.text(string(represented_char), Point(texchar[2]...) * font_size * (1, -1))
+    #end
 end
 
 # versions of _textformat that accept LaTeXString

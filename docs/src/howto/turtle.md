@@ -34,25 +34,25 @@ nothing # hide
 
 ![turtles](../assets/figures/turtles.png)
 
-|List of words the turtle knows|Action                                         |
-|:---                          |:---                                           |
-|[`Forward`](@ref)             | More forward by d units                       |
-|[`Turn`](@ref)                | Increase the turtle's rotation by n degrees   |
-|[`Circle`](@ref)              | Draw filled circle centered at current pos    |
-|[`HueShift`](@ref)            | Shift the Hue of the turtle's pen color by n  |
-|[`Message`](@ref)             | Output text                                   |
-|[`Orientation`](@ref)         | Set the turtle's orientation to n degrees     |
-|[`Pen_opacity_random`](@ref)  | Set opacity to random value                   |
-|[`Pencolor`](@ref)            | Set the Red, Green, and Blue values           |
-|[`Pendown`](@ref)             | Start drawing                                 |
-|[`Penup`](@ref)               | Stop drawing                                  |
-|[`Penwidth`](@ref)            | Set the width of the line to n                |
-|[`Pop `](@ref)                | Move turtle to the value stored on the stack  |
-|[`Push`](@ref)                | Save the turtle's position on the stack       |
-|[`Randomize_saturation`](@ref)| Randomize the saturation of the current color |
-|[`Rectangle`](@ref)           | Draw filled rectangle centered at current pos |
-|[`Reposition`](@ref)          | Place turtle at new position                  |
-|[`Towards`](@ref)             | Rotate turtle to face towards a point         |
+|List of words the turtle knows | Arguments | Action                                         |
+|:---                           | :---      | :---                                           |
+|[`Forward`](@ref)              | n (1)     |  More forward by d units                       |
+|[`Turn`](@ref)                 | θ (5°)    |  Increase the turtle's rotation by n°          |
+|[`Circle`](@ref)               | r (1)     |  Draw filled circle centered at current pos    |
+|[`HueShift`](@ref)             | n (1)     |  Shift the Hue of the turtle's pen color by n  |
+|[`Message`](@ref)              | t ("")    |  Output text `t`                               |
+|[`Orientation`](@ref)          | θ (5°)    |  Set the turtle's orientation to θ degrees     |
+|[`Pen_opacity_random`](@ref)   |           |  Set opacity to random value                   |
+|[`Pencolor`](@ref)             | r g b     |  Set the Red, Green, and Blue values           |
+|[`Pendown`](@ref)              |           |  Start drawing                                 |
+|[`Penup`](@ref)                |           |  Stop drawing                                  |
+|[`Penwidth`](@ref)             | w         |  Set the width of the line to w                |
+|[`Pop `](@ref)                 |           |  Move turtle to the value stored on the stack  |
+|[`Push`](@ref)                 |           |  Save the turtle's position on the stack       |
+|[`Randomize_saturation`](@ref) |           |  Randomize the saturation of the current color |
+|[`Rectangle`](@ref)            | w h       |  Draw filled rectangle centered at current pos |
+|[`Reposition`](@ref)           | pt        |  Place turtle at new position `pt`             |
+|[`Towards`](@ref)              | pt        |  Rotate turtle to face towards a point         |
 
 The turtle commands expect a reference to a turtle as the first argument (it doesn't have to be a turtle emoji!).
 

@@ -384,11 +384,13 @@ fontsize(35)
 end
 sethue("grey5")
 text(L"f(t) = [4\cos(t) + 2\cos(5t), 4\sin(t) + 2\sin(5t)]", O, halign=:center)
+fontsize(5) # hide 
+text(Libc.strftime(time()), boxtopleft(BoundingBox()) + (0, 12)) # hide
 finish()
-d
+d # hide
 ```
 
-<!-- ![LaTeX text](../assets/figures/latexequation.svg) -->
+![LaTeX text](../assets/figures/latexequation.svg)
 
 See the [Writing LaTeX](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
 

@@ -80,10 +80,8 @@ bezierarithmetic()
 
 fname = "bezierpath.png"
 bezierpathtest(fname)
-
-println("...bezier test: output in $(fname)")
+println("...finished bezier tests 1: output in $(fname)")
 
 fname = "pathtobezierpath.svg"
 pathtobezierpath(fname)
-
-println("...finished bezier tests: output in $(fname)")
+println("...finished bezier tests 2: output in $(fname)")

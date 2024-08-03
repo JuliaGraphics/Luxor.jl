@@ -103,7 +103,7 @@ end
 """
     Orientation(t::Turtle, r=0.0)
 
-Set the turtle's orientation to `r` degrees. See also `Turn`.
+Set the turtle's orientation to `r` degrees. See also `Turn` and `Towards`.
 """
 function Orientation(t::Turtle, r=0.0)
     _prolog(t)
@@ -158,7 +158,9 @@ function Circle(t::Turtle, radius=1.0)
     _prolog(t)
     gsave()
     sethue(t.pencolor...)
-    circle(t.xpos, t.ypos, radius, :fill)
+    if t.pendown
+        circle(t.xpos, t.ypos, radius, :fill)
+    end 
     grestore()
     _epilog(t)
 end
@@ -172,7 +174,9 @@ function Rectangle(t::Turtle, width=10.0, height=10.0)
     _prolog(t)
     gsave()
     sethue(t.pencolor...)
-    rect(t.xpos-width/2, t.ypos-height/2, width, height, :fill)
+    if t.pendown
+        rect(t.xpos-width/2, t.ypos-height/2, width, height, :fill)
+    end 
     grestore()
     _epilog(t)
 end
@@ -217,7 +221,9 @@ function Message(t::Turtle, txt)
     _prolog(t)
     gsave()
     sethue(t.pencolor...)
-    text(txt, t.xpos, t.ypos)
+    if t.pendown
+        text(txt, t.xpos, t.ypos)
+    end 
     grestore()
     _epilog(t)
 end
@@ -225,9 +231,12 @@ end
 """
     HueShift(t::Turtle, inc=1.0)
 
-Shift the Hue of the turtle's pen forward by `inc`. Hue values range between
-0 and 360. (Don't start with black, otherwise the saturation and brightness values
-will be black.)
+Shift the Hue of the turtle's pen by `inc`. Hue values range between 0 and 360.
+
+If the turtle's `Pencolor` was "black" to start with, the saturation and
+brightness will be 0, so changing just the hue won't make a color that's easily
+distinguishable from black. The brightness and saturation of the new color will still be
+0.
 """
 function HueShift(t::Turtle, inc=1.0)
     _prolog(t)
