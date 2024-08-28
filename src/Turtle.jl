@@ -52,10 +52,20 @@ Turtle(pos::Point, pendown::Bool, orientation::Real) = Turtle(pos.x, pos.y, pend
 Turtle(pos::Point, pendown::Bool, orientation::Real, col::NTuple{3, Number}) = Turtle(pos.x, pos.y, pendown, orientation, col)
 Turtle(pos::Point, pendown::Bool, orientation::Real, r, g, b) = Turtle(pos.x, pos.y, pendown, orientation, (r, g, b))
 
+function Turtle(pos::Point, col::Colorant)
+    r, g, b = getfield.(convert(RGB, col), 1:3)
+    Turtle(pos.x, pos.y, true, 0, (r, g, b))
+end 
+
+function Turtle(col::Colorant)
+    r, g, b = getfield.(convert(RGB, col), 1:3)
+    Turtle(0.0, 0.0, true, 0, (r, g, b))
+end 
+
 Base.broadcastable(t::Turtle) = Ref(t)
 
-# a stack to hold pushed/popped turtle positions
-const queue = Vector{Vector{Float64}}()
+# a stack to hold pushed/popped turtle positions and orientations
+const _turtle_stack = Vector{Vector{Float64}}()
 
 # users can define prolog and epilog functions to monitor turtle's progress
 function _prolog(t::Turtle)
@@ -184,30 +194,43 @@ end
 """
     Push(t::Turtle)
 
-Save the turtle's position and orientation on a stack.
+Save the turtle's position and orientation on the stack. 
+
+Use `Pop()` to restore this position and orientation from the top value on the
+stack, discarding the current position and orientation.
+
+Turtles can be sociable creatures; there's just one stack, and it's shared by
+all turtles, So it's possible for one turtle to pop the stack values that were
+`pushed` by another turtle.
 """
 function Push(t::Turtle)
     _prolog(t)
     # save xpos, ypos, turn in a queue
-    global queue
-    push!(queue, [t.xpos, t.ypos, t.orientation])
+    global _turtle_stack
+    push!(_turtle_stack, [t.xpos, t.ypos, t.orientation])
     _epilog(t)
 end
 
 """
     Pop(t::Turtle)
 
-Lift the turtle's position and orientation off a stack.
+Get the position and orientation off the stack, as previously saved with
+`Push()`, and set the turtle to those values, discarding the current position
+and orientation.
+
+Turtles can be sociable creatures; there's just one stack, and it's shared by
+all turtles, So it's possible for one turtle to pop the stack values that were
+`pushed` by another turtle. 
 """
 function Pop(t::Turtle)
     _prolog(t)
     # restore xpos, ypos, turn from queue
-    global queue
-    if isempty(queue)
-        @info("stack was already empty")
+    global _turtle_stack
+    if isempty(_turtle_stack)
+        @info("turtle stack was already empty")
         t.xpos, t.ypos, t.orientation = 0.0, 0.0, 0.0
     else
-        t.xpos, t.ypos, t.orientation = pop!(queue)
+        t.xpos, t.ypos, t.orientation = pop!(_turtle_stack)
     end
     _epilog(t)
 end
@@ -300,6 +323,7 @@ Pencolor(t::Turtle, col::NTuple{3, Number}) = Pencolor(t, col...)
 Reposition: pick the turtle up and place it at another position.
 """
 function Reposition(t::Turtle, x, y)
+    _prolog(t)
     t.xpos = x
     t.ypos = y
     _epilog(t)

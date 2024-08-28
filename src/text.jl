@@ -213,7 +213,7 @@ end
         valign=:baseline,
         startnewpath=true)
 
-Convert the text in string `s` to paths and apply the action.
+Convert the text in string `s` to paths and apply the action. (ToyAPI)
 
 TODO Return something more useful than a Boolean.
 """
@@ -260,7 +260,7 @@ textpath(s::T where {T<:AbstractString}, pos::Point, action::Symbol;
         valign=:baseline,
         startnewpath=true)
 
-Convert text to polygons and apply `action`.
+Convert text to polygons and apply `action`. (ToyAPI)
 
 By default this function discards any current path, unless you use `startnewpath=false`
 
@@ -436,7 +436,7 @@ textcurvecentred = textcurvecentered
 """
     setfont(family, fontsize)
 
-Select a font and specify the size.
+Select a font and specify the size. (ProAPI)
 
 Example:
 ```julia

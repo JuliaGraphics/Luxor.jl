@@ -9,9 +9,9 @@ ENV["JULIA_DEBUG"] = ""
 function latex_test_with_a_vengeance(fname)
     Drawing(800, 800, fname)
     origin()
-    translate(boxtopcenter() + (-300, 40))
+    translate(boxtopcenter() + (-300, 6))
     background("grey6")
-    fontsize(22)
+    fontsize(40)
     sethue("white")
     t1 = L"e^{i\pi} + 1 = 0"
     t2 = L"e^x = \sum^\infty_{n=0} \frac{x^n}{n!} = \lim_{n\to\infty}(1+\frac{x}{n})^n"
