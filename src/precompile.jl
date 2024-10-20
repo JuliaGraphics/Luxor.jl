@@ -21,4 +21,5 @@ PrecompileTools.@compile_workload begin
     randomhue()
     textoutlines("snoopy", Point(10, 10), action=:path)
     fillpath()
+    _reset_all_drawings()
 end
