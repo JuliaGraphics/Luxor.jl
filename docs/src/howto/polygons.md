@@ -1722,59 +1722,169 @@ nothing # hide
 
 ![line/polygon intersections](../assets/figures/linepolyintersections.png)
 
-## Polygon intersections
+## Boolean operations with polygons
 
-Use [`polyintersect()`](@ref) to find the areas where two polygons intersect.
+The functions  [`polyintersect()`](@ref) ,  [`polyunion()`](@ref) ,  [`polydifference()`](@ref) , and [`polyxor()`](@ref) carry out Boolean comparisons of polygons, and return differences or intersections.
 
-In the following illustration, the annular sector polygon and a varying rectangular polygon are passed to `polyintersect()`.
+- `polyintersect(p1, p2)` finds all polygonal areas that are inside both polygon `p1` and `p2`.
 
-In each case, the returned result is an array of polygons. The number of
-polygons in the array depends on how the two polygons intersect - there could be
-anything from 0 to a lot. Then we iterate through the array, drawing each
-polygon in different colors.
+- `polyunion(p1, p2)` finds all polygonal areas that are inside polygon `p1` and/or inside polygon `p2`, or both.
+
+- `polydifference(p1, p2)` finds all polygonal areas that are inside polygon `p1` but not inside polygon `p2`.
+
+- `polyxor(p1, p2)` finds all polygonal areas that are inside polygon `p1`, inside polygon `p2`, but not inside both.
+
+Each command returns an array of polygons, which may contain any number of polygons, including 0.
+
+Documentation for the code run by these functions can be found at the [PolygonAlgorithms.jl]((https://github.com/lin/2023/09/30/polygon-clipping.html) page.
+
+### Intersection: polyintersect
+
+Use [`polyintersect()`](@ref) to find the areas where the two polygons intersect.
+
+The returned result is an array of polygons. The number of
+polygons in the array depends on how the two polygons intersect - there could be anything from 0 to a lot.
 
 ```@example
 using Luxor, Colors # hide
 @drawsvg begin
     background("grey10")
 
-    tiles = Tiler(800, 300, 1, 3)
+    sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
+    pg1 = pathtopoly()[1]
+    pg2 = box(O, 250, 120)
 
-    for (pos, n) in tiles
-        @layer begin
-            translate(pos)
+    setopacity(0.6)
 
-            sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
-            pg1 = pathtopoly()[1]
+    translate(-200, 0)
+    sethue("lightpink")
+    poly(pg1, :fill)
 
-            pg2 = box(O,
-                    [250, 80, 250][n],
-                    [120, 250, 80][n])
+    sethue("yellowgreen")
+    poly(pg2, :fill)
 
-            setopacity(0.6)
+    result = polyintersect(pg2, pg1)
 
-            sethue("lightpink")
-            poly(pg1, :fill)
-
-            sethue("yellowgreen")
-            poly(pg2, :fill)
-
-            pintersection = polyintersect(pg1, pg2)
-
-            for (i, p) in enumerate(pintersection)
-                setcolor(HSB([0, 180, 310][i], 0.9, 0.9))
-                poly(p, :fill)
-                sethue("grey90")
-                poly(p, :stroke, close=true)
-            end
-        end
+    translate(400, 0)
+    for (i, p) in enumerate(result)
+        sethue(HSB(30i, 0.9, 0.9))
+        poly(p, :fill)
+        sethue("grey90")
+        poly(p, :stroke, close=true)
     end
 end 800 300
 ```
 
 In case there's no intersection, the returned result is empty: `Vector{Point}[]`.
 
-The algorithm used is the [Weiler-Atherton algorithm](https://liorsinai.github.io/mathematics/2023/09/30/polygon-clipping.html).
+### Union: polyunion
+
+Use [`polyunion()`](@ref) to find the polygonal areas in either or both of the two polygons.
+
+The returned result is an array of polygons.
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin
+    background("grey10")
+
+    sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
+    pg1 = pathtopoly()[1]
+    pg2 = box(O, 250, 120)
+
+    setopacity(0.6)
+
+    translate(-200, 0)
+    sethue("lightpink")
+    poly(pg1, :fill)
+
+    sethue("yellowgreen")
+    poly(pg2, :fill)
+
+    result = polyunion(pg2, pg1)
+
+    translate(400, 0)
+    for (i, p) in enumerate(result)
+        sethue(HSB(30i, 0.9, 0.9))
+        poly(p, :fill)
+        sethue("grey90")
+        poly(p, :stroke, close=true)
+    end
+end 800 300
+```
+
+### Xor (exclusive OR): polyxor
+
+Use [`polyunion()`](@ref) to find the polygonal areas that are inside either the first polygon or the second, but not both.
+
+The returned result is an array of polygons.
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin
+    background("grey10")
+
+    sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
+    pg1 = pathtopoly()[1]
+    pg2 = box(O, 250, 120)
+
+    setopacity(0.6)
+
+    translate(-200, 0)
+    sethue("lightpink")
+    poly(pg1, :fill)
+
+    sethue("yellowgreen")
+    poly(pg2, :fill)
+
+    result = polyxor(pg2, pg1)
+
+    translate(400, 0)
+    for (i, p) in enumerate(result)
+        sethue(HSB(30i, 0.9, 0.9))
+        poly(p, :fill)
+        sethue("grey90")
+        poly(p, :stroke, close=true)
+    end
+end 800 300
+```
+
+
+### Difference: polydifference
+
+Use [`polydifference()`](@ref) to find the polygonal areas that are inside the first polygon but not the second.
+
+The returned result is an array of polygons.
+
+```@example
+using Luxor, Colors # hide
+@drawsvg begin
+    background("grey10")
+
+    sector(O, 50, 100, 0 + π / 8, 2π - π / 8, :path)
+    pg1 = pathtopoly()[1]
+    pg2 = box(O, 250, 120)
+
+    setopacity(0.6)
+
+    translate(-200, 0)
+    sethue("lightpink")
+    poly(pg1, :fill)
+
+    sethue("yellowgreen")
+    poly(pg2, :fill)
+
+    result = polydifference(pg1, pg2)
+
+    translate(400, 0)
+    for (i, p) in enumerate(result)
+        sethue(HSB([0, 180, 310][i], 0.9, 0.9))
+        poly(p, :fill)
+        sethue("grey90")
+        poly(p, :stroke, close=true)
+    end
+end 800 300
+```
 
 ## Triangulation
 

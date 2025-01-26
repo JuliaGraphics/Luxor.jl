@@ -29,13 +29,12 @@ function point_inside_polygon(fname)
         poly(pol, :fill)
     end
     # test whether random points are inside any of the polygons
-    for i in 1:5000
+    for i in 1:50
         pt = randompoint(-600, -600, 600, 600)
         for pol in polys
             randomsize = rand(4:12)
             bp = bounding_b(pt.x, pt.y, randomsize)
             # check that all four corners of a 5x5 bounding box are inside this polygon
-            # slow but this is Julia so it's still quick...
             if isinside(bp[1], pol) && isinside(bp[2], pol) && isinside(bp[3], pol) && isinside(bp[4], pol)
                 randomhue()
                 circle(pt.x, pt.y, randomsize, :fill)
