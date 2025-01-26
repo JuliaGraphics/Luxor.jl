@@ -1,5 +1,19 @@
 # Changelog
 
+## [v4.2] - 
+
+### Added
+
+- `polyxor()`, `polydifference()`, `polyunion()`
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
 ## [v4.1] - 2024-07-31
 
 ### Added

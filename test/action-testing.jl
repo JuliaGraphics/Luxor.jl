@@ -164,7 +164,7 @@ end),
 :(textoutlines("text", Point(0, 0), :stroke, halign=:left, valign=:middle, startnewpath=true)),
 ]
 
-fname = "action-dispatch-tests.pdf"
+fname = "/tmp/action-dispatch-tests.png"
 Drawing(2000, 2000, fname)
 origin()
 background("black")
@@ -174,7 +174,6 @@ for (pos, n) in tiles
     @layer begin
         translate(pos)
         if n <= length(expressions)
-            sethue("white")
             textwrap(string(expressions[n]), tiles.tilewidth * 0.7, O - (tiles.tilewidth/2, tiles.tileheight/2), leading=10)
             sethue("gold")
             eval(expressions[n])

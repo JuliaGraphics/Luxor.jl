@@ -1,12 +1,5 @@
 # using algorithms from PolygonAlgorithms.jl
 
-#= which exports"
-Point2D, Polygon2D, Segment2D, Line2D get_orientation, Orientation, on_segment
-area_polygon, first_moment, centroid_polygon, is_counter_clockwise, is_clockwise
-point_in_polygon do_intersect, intersect_geometry, intersect_edges
-intersect_convex convex_hull
-=#
-
 @inline _point_to_tuple(pt::Point) = (pt.x, pt.y)
 @inline _points_to_tuples(pts::Vector{Point}) = _point_to_tuple.(pts)
 @inline _tuples_to_points(t::Vector{Tuple{Float64,Float64}}) = [Point(t[1], t[2]) for t in t]
@@ -29,9 +22,9 @@ If `allowonedge` is false, a point lying on the polygon is not inside.
 
 Returns true if it does, or false.
 """
-isinside(pt::Point, pgon::Vector{Point}; allowonedge = false) =
-    PA.contains(_points_to_tuples(pgon), _point_to_tuple(pt);
-        on_border_is_inside = allowonedge)
+isinside(pt::Point, pgon::Vector{Point}; allowonedge = false, rtol=AbstractFloat=1e-10) =
+    PA.contains(_points_to_tuples(pgon), _point_to_tuple(pt),
+         on_border_is_inside = allowonedge, rtol=rtol)
 
 """
     polyhull(ptspgon::Vector{Point})
@@ -75,8 +68,7 @@ function polyintersectconvex(p1::AbstractVector{Point}, p2::AbstractVector{Point
 end
 
 """
-    polyintersect(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point};
-        closed=true)
+    polyintersect(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point})
 
 Return an array (possibly empty) containing the polygon(s) that define
 the intersection between the two polygons, `pgon1` and `pgon2`.
@@ -91,3 +83,43 @@ function polyintersect(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point
 end
 
 polyintersections(S::Vector{Point}, C::Vector{Point}) = polyintersect(S, C)
+
+"""
+    polydifference(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point})
+
+Find polygonal areas that are inside `pg1` but not in `pg2`.
+"""
+function polydifference(pg1::AbstractVector{Point}, pg2::AbstractVector{Point})
+    return Luxor._tuples_to_points.(PA.difference_geometry(Luxor._points_to_tuples(pg1),
+        Luxor._points_to_tuples(pg2), PA.MartinezRuedaAlg()))
+end
+
+"""
+    polyunion(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point})
+
+Find polygonal areas that are inside `pg1` or in `pg2`.
+
+Return an array of polygons.
+
+Boolean Union.
+"""
+function polyunion(pg1::AbstractVector{Point}, pg2::AbstractVector{Point})
+    return Luxor._tuples_to_points.(PA.union_geometry(Luxor._points_to_tuples(pg1),
+        Luxor._points_to_tuples(pg2), PA.MartinezRuedaAlg()))
+end
+
+"""
+    polyxor(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point})
+
+Find polygon areas that are inside either `pg1` or `pg2`, but not both.
+
+Return an array of polygons.
+
+Boolean XOR.
+
+Possibly returns holes but does not classify them as holes.
+"""
+function polyxor(pg1, pg2)
+    return Luxor._tuples_to_points.(PA.xor_geometry(Luxor._points_to_tuples(pg1),
+        Luxor._points_to_tuples(pg2), PA.MartinezRuedaAlg()))
+end
