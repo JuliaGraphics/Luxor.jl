@@ -164,7 +164,7 @@ end),
 :(textoutlines("text", Point(0, 0), :stroke, halign=:left, valign=:middle, startnewpath=true)),
 ]
 
-fname = "/tmp/action-dispatch-tests.png"
+fname = "action-dispatch-tests.png"
 Drawing(2000, 2000, fname)
 origin()
 background("black")
