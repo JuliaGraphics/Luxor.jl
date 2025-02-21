@@ -550,7 +550,6 @@ inverted and starts getting larger again.
 
 ![offset poly problem](../assets/figures/polygon-offset.gif)
 
-
 #### 2: `n` vertices joined by `n-1` lines
 
 The `offsetpoly(plist)` method constructs a polygon around a
@@ -566,6 +565,7 @@ each side at the end.
 
 ```@example
 using Luxor # hide
+
 Drawing(800, 500, "../assets/figures/polyoffset-open.png") # hide
 origin() # hide
 background("purple") # hide
@@ -584,6 +584,7 @@ for θ in range(0, 2π, step=π/12)
 end
 
 finish() # hide
+
 nothing # hide
 ```
 
@@ -948,6 +949,7 @@ nothing # hide
 
 ```@example
 using Luxor # hide
+
 Drawing(600, 400, "../assets/figures/beziersegmentangles.svg") # hide
 background("ivory") # hide
 origin() # hide
@@ -1090,6 +1092,7 @@ For more information (and more than you probably wanted to know) about Luxor's B
 
 ```@example
 using Luxor, Random # hide
+
 Drawing(600, 250, "../assets/figures/polyperimeter.png") # hide
 origin() # hide
 background("white") # hide
@@ -1125,8 +1128,11 @@ The [`isinside`](@ref) function returns true if a point is inside a polygon.
 
 ```@example
 using Luxor # hide
+
 Drawing(500, 500, "../assets/figures/isinside.png") # hide
+
 background("white") # hide
+
 origin() # hide
 
 apolygon = star(O, 200, 8, 0.5, 0, vertices=true)
@@ -1137,6 +1143,7 @@ for pt in collect(first.(Table(30, 30, 15, 15)))
 end
 
 finish() # hide
+
 nothing # hide
 ```
 
@@ -1152,8 +1159,11 @@ This code obtains all the points in the Julia logo's circles, combines them into
 
 ```@example
 using Luxor # hide
+
 d = Drawing(800, 500, :svg) # hide
+
 origin() # hide
+
 setline(4)
 
 juliacircles(130) # draw in color
@@ -1169,6 +1179,7 @@ sethue("gold2")
 prettypoly(hull, close=true, action = :stroke)
 
 finish() # hide
+
 d # hide
 ```
 
@@ -1180,12 +1191,19 @@ There are Luxor functions to return the first part or last part of a polygon. Yo
 
 ```@example
 using Luxor, Random # hide
+
 Drawing(600, 250, "../assets/figures/polyportion.png") # hide
+
 origin() # hide
+
 background("white") # hide
+
 Random.seed!(42) # hide
+
 setline(1.5) # hide
+
 sethue("black") # hide
+
 fontsize(20) # hide
 
 p = ngon(O, 100, 7, 0, vertices=true)
@@ -1217,10 +1235,15 @@ You can insert vertices in the edges of a polygon with [`insertvertices!`](@ref)
 
 ```@example
 using Luxor # hide
+
 Drawing(600, 250, "../assets/figures/insertvertices.png") # hide
+
 origin() # hide
+
 background("white") # hide
+
 setline(1) # hide
+
 sethue("black") # hide
 
 pts = box(O, 500, 200, vertices=true)
@@ -1244,6 +1267,7 @@ To resample a polygon, use [`polysample`](@ref). In this example, the same four-
 
 ```@example
 using Luxor # hide
+
 Drawing(600, 250, "../assets/figures/polysample.png") # hide
 origin() # hide
 background("white") # hide
@@ -1405,7 +1429,9 @@ This code draws some regular polygons and calculates their area, perimeter, and 
 
 ```@example
 using Luxor # hide
+
 Drawing(650, 500, "../assets/figures/polyarea.png") # hide
+
 origin() # hide
 background("white") # hide
 fontsize(13) # hide
@@ -1453,6 +1479,7 @@ By default, the polygons are assumed to be closed, suitable for filling.
 
 ```@example
 using Luxor, Colors # hide
+
 @drawsvg begin # hide
 background("grey10") # hide
 
@@ -1475,6 +1502,7 @@ In the next example, each of the two wavy-line polygons are open rather than clo
 
 ```@example
 using Luxor # hide
+
 @drawsvg begin # hide
 background("grey10") # hide
 setline(1.5) # hide
@@ -1499,6 +1527,7 @@ Here are all the easing functions used to `polymorph()` between two polygons:
 
 ```@example
 using Luxor, Colors # hide
+
 @drawsvg begin # hide
 background("grey10")
 setline(1)
@@ -1541,6 +1570,7 @@ In the next example, a square morphs into a hexagon.
 
 ```@example
 using Luxor # hide
+
 @drawsvg begin # hide
 background(0.15, 0.15, 0.1) # hide
 pgon1 = ngon(O, 80, 4,  vertices = true)
@@ -1560,6 +1590,7 @@ In the next example, an octagon with a square hole morphs into a square with an 
 
 ```@example
 using Luxor # hide
+
 @drawsvg begin # hide
 background(0.15, 0.15, 0.1) # hide
 # build first polygon
@@ -1593,7 +1624,7 @@ Because both polygons have reversed subpaths (holes), the polygons should be dra
 The next example animates a morph between two programming languages.
 
 ```julia
-using Luxor, Colors
+using Luxor, Colors # hide
 
 function frame(scene, framenumber)
     background("grey10")
@@ -1653,7 +1684,8 @@ These functions are still in development. Expect varying degrees of success when
 [`polyclip()`](@ref) returns the region of a source polygon that lies inside a clipping polygon. In this example, each intersecting piece is created by clipping one of the "circles" with another (each circle is an 80-sided polygon).
 
 ```@example
-using Luxor, Colors
+using Luxor, Colors # hide
+
 @drawsvg begin
     background("grey10")
 
@@ -1694,7 +1726,9 @@ end
 
 ```@example
 using Luxor, Random # hide
+
 Drawing(600, 550, "../assets/figures/linepolyintersections.png") # hide
+
 origin() # hide
 background("white") # hide
 Random.seed!(5) # hide
@@ -1736,7 +1770,7 @@ The functions  [`polyintersect()`](@ref) ,  [`polyunion()`](@ref) ,  [`polydiffe
 
 Each command returns an array of polygons, which may contain any number of polygons, including 0.
 
-Documentation for the code run by these functions can be found at the [PolygonAlgorithms.jl]((https://github.com/lin/2023/09/30/polygon-clipping.html) page.
+Documentation for the code run by these functions can be found at the [PolygonAlgorithms.jl](https://github.com/lin/2023/09/30/polygon-clipping.html) page.
 
 ### Intersection: polyintersect
 
@@ -1747,6 +1781,7 @@ polygons in the array depends on how the two polygons intersect - there could be
 
 ```@example
 using Luxor, Colors # hide
+
 @drawsvg begin
     background("grey10")
 

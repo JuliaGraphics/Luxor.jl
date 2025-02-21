@@ -35,6 +35,7 @@ Here's a very simple example:
 
 ```julia
 using Luxor, Colors # hide
+
 @drawsvg begin
     background("honeydew")
     🐢 = Turtle()          # we create the turtle
@@ -50,6 +51,7 @@ Or - with the same result, without using the drawing-creation macro (which saves
 
 ```@example
 using Luxor, Colors # hide
+
 Drawing(500, 500, :png)
 origin()
 background("honeydew")
@@ -123,7 +125,7 @@ end
 end
 ```
 
-After the first pentagon is drawn by `a_pentagon`, the turtle rotates 72° - so the next pentagon doesn't overlap the previous one. We've used `HueShift()` as well, so that each pentagon is drawn in a different color, starting with redw.
+After the first pentagon is drawn by `a_pentagon`, the turtle rotates 72° - so the next pentagon doesn't overlap the previous one. We've used `HueShift()` as well, so that each pentagon is drawn in a different color, starting with red.
 
 ## More instructions
 
@@ -131,23 +133,22 @@ Turtles understand more instructions than just `Forward` and `Turn`:
 
 - `Pendown(🐢)` (the default)
 - `Penup(🐢)`  lift the pen from the drawing
-- `Pencolor(🐢, r, g, b)` change the color (default is (0, 0, 0) or "black")
+- `Pencolor(🐢, r, g, b)` change the color (default is (0, 0, 0) i.e. "black")
 - `Penwidth(🐢, w)` change the pen width to `w`
 - `Circle(🐢, r)` draw a filled circle with radius `r`
 - `Orientation(🐢, θ)` face θ°
 - `Rectangle(🐢, w, h)` draw a rectangle with width `w` and height `h`
-- `Reposition(🐢, pt)` move the turtle to a new location point 
+- `Reposition(🐢, pt)` move the turtle to a new location 
 - `Message(🐢, t)` draw the text in `t`
-- `HueShift(🐢, h)` change the hue of the pen's color by a `h`, or a small amount
+- `HueShift(🐢, h)` change the hue of the pen's color by a `h`
 
-plus a few more.
-
-All these require a turtle name as the first argument. The full list is here: [Turtle graphics](@ref).
+plus a few more. All these require a turtle name as the first argument. The full list is here: [Turtle graphics](@ref).
 
 This next drawing is also simple, but the gradual shifting hue - again thanks to `HueShift()` - is effective:
 
 ```@example
-using Luxor, Colors
+using Luxor, Colors # hide
+
 function draw_graphics()
     🐢 = Turtle()
     Pencolor(🐢, "cyan")
@@ -223,7 +224,7 @@ The `Push()` instruction tells the turtle to remember the current position and r
 
 ## Adding new commands
 
-There's isn't a `Back()` instruction as you might expect - because it's not clear how it should work. For example, is it like putting a car in reverse and reversing, when you don't change the direction you're facing, or is it like turning through 180° and then going forward? And do you turn round afterwards?. But it's easy to add your own `Back()` command that does exactly what you want it to:
+There's isn't a `Back()` instruction as you might expect - because it's not clear how it should work. For example, is it like putting a car in reverse and reversing, when you don't change the direction you're facing? Or is it like turning through 180° and then going forward? And do you turn round afterwards? But it's easy to add your own `Back()` command that does exactly what you want it to:
 
 ```@example
 using Luxor, Colors # hide
@@ -259,7 +260,8 @@ end
 Here's the code for the abstract splash image at the top of this section:
 
 ```julia
-using Luxor, Colors
+using Luxor, Colors # hide
+
 Drawing(800, 300, "/tmp/turtles.svg")
 origin()
 background("black")
@@ -286,7 +288,7 @@ finish()
 preview()
 ```
 
-This code generates a hundred turtles in random positions and moves and turns them randomly. When a turtle reaches the edge, its orientation is changed so that it  points to the center.
+This code generates a hundred turtles in random positions and moves and turns them randomly. When a turtle reaches the edge, its orientation is changed so that it points back to the center.
 
 If you enjoy drawing with turtles, you might enjoy the [Lindenmayer.jl](https://github.com/cormullion/Lindenmayer.jl) package.
 
