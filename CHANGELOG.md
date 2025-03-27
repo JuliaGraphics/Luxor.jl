@@ -1,6 +1,20 @@
 # Changelog
 
-## [v4.2] - 
+## [v4.3] - forthcoming
+
+### Added
+
+- `text(ts::TypstString, pos::Point)` uses Typstry.jl for text.
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
+## [v4.2] - 2025-02-21
 
 ### Added
 
