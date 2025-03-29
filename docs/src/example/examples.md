@@ -392,7 +392,39 @@ d # hide
 
 ![LaTeX text](../assets/figures/latexequation.svg)
 
-See the [Writing LaTeX](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
+See the [Writing LaTeX and Typst](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
+
+## Simple Typst equations
+
+You can also add equations to drawings using the [Typstry](https://github.com/jakobjpeters/Typstry.jl) package, which uses the [Typst](https://typst.app) typsetting engine. Pass the string containing the equation as a `TypstString` to the `text()` function. General formatting can be passed via the `preamble` keyword.
+
+```julia
+using Luxor
+using Typstry
+
+ts = typst"""$ f(t) = [4 cos(t) + 2 cos(5t), 4 sin(t) + 2 sin(5t)] $""";
+
+ty_preamble = typst"""
+    #set page(fill: none, height: 300pt, width: 800pt, margin: 140pt);
+    #set text(fill: black, size: 35pt)
+"""
+
+d = Drawing(800, 300, "/tmp/typst.svg")
+origin()
+background("khaki")
+f(t) = Point(4cos(t) + 2cos(5t), 4sin(t) + 2sin(5t))
+setline(15)
+@layer begin
+    setopacity(0.4)
+    sethue("purple")
+    poly(20f.(range(0, 2π, length=160)), action=:stroke)
+end
+text(ts, O, preamble=ty_preamble, centered=true)
+finish()
+preview()
+```
+
+![Typst equation](../assets/figures/typstequation.svg)
 
 ## Drawing pixels
 

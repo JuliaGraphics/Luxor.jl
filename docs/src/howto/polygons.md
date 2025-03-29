@@ -1488,7 +1488,6 @@ toshape = ngon(O, 350, 4, π/4, vertices=true)
 
 setline(8)
 for i in range(0, 1, length=10)
-    @show i
     sethue(HSB(360i, 0.8, 0.8))
     morph = polymorph(fromshape, toshape, i)
     for p in morph

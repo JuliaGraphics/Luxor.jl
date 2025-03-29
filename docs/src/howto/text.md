@@ -106,7 +106,11 @@ nothing # hide
 
 ![pro text placement](../assets/figures/pro-text-placement.png)
 
-## Writing LaTeX
+## Writing LaTeX and Typst
+
+Luxor allows you to use LaTeX and Typst to add equations to drawings.
+
+### LaTeX
 
 It's possible to write math equations in ``\LaTeX`` by
 passing a `LaTeXString` to the `text` function. Luxor uses
@@ -163,6 +167,30 @@ nothing # hide
     without having to escape backslashes and dollar signs
     (and they'll add the dollar signs for you if you omit
     them).
+
+### Typst
+
+You can also use [Typst](https://typst.app) to add equations and other formatted text to Luxor drawings. This feature is provided by the Julia package [Typstry.jl](https://github.com/jakobjpeters/Typstry.jl).
+
+```julia
+using Luxor
+using Typstry
+
+ts = typst""" $a + b/c = sum_i x^i $""";
+
+ty_preamble = typst"""
+#set page(fill: rgb("#eeffdd"), height: 200pt, width: 400pt, margin: 0pt);
+#set text(fill: purple, size: 60pt)
+"""
+
+@draw begin
+    text(ts, O, preamble=ty_preamble, centered=true)
+end
+```
+
+![typst example](../assets/figures/typst.svg)
+
+In this example, the string in `ts` is a TypstString containing the equation to be typeset. The contents of `ty_preamble` passed as the `preamble` keyword argument is also a TypstString. It contains general formatting instructions for the Typst document. It can be omitted, and the default preamble is used.
 
 ## Notes on fonts
 

@@ -1543,7 +1543,6 @@ function drawimagematrix(m)
     w, h = size(m)
     t = Tiler(500, 500, w, h)
     mi = convertmatrixtocolors(m)
-    @show mi[30, 30]
     for (pos, n) in t
         c = mi[t.currentrow, t.currentcol]
         setcolor(c)
