@@ -4,7 +4,6 @@ using Test
 @testset "nolatexextension" begin
     @test ! @isdefined LaTeXStrings
     @test Base.get_extension(Luxor, :LuxorExtLatex) isa Nothing
-    @test length(methods(text)) == 3
     @test length(methods(latextextsize)) == 1
     @test length(methods(latexboundingbox)) == 1
     @test length(methods(rawlatexboundingbox)) == 1
@@ -18,7 +17,6 @@ using LaTeXStrings
 using MathTeXEngine
 @testset "latexextension" begin
     @test Base.get_extension(Luxor, :LuxorExtLatex) isa Module
-    @test length(methods(text)) == 4
     @test length(methods(latextextsize)) == 2
     @test length(methods(latexboundingbox)) == 3
     @test length(methods(rawlatexboundingbox)) == 2

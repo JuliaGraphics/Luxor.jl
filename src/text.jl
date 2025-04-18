@@ -12,6 +12,7 @@
     text(str, valign = :baseline, halign = :left)
     text(str, pos, valign = :baseline, halign = :left)
     text(latexstr, pos, valign = :baseline, halign = :left, rotationfixed = false, angle = 0)
+    text(typststr, pos::Point, place=true, centered=false, preamble=typststr)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
 string at the point. If you omit the point, it's placed at the current `0/0`.
@@ -689,6 +690,8 @@ function textbox(lines::Array, pos::Point=O;
     linefunc::Function=(linenumber, linetext, startpos, leading) -> (),
     alignment=:left)
 
+    # abandon if empty
+    isempty(lines) && return pos
     # find height of first non-empty line
     firstrealline = filter(!isempty, lines)[1]
     te = textextents(firstrealline)
@@ -703,6 +706,7 @@ function textbox(lines::Array, pos::Point=O;
     end
     return startpos
 end
+
 """
     textbox(s::T where T <: AbstractString, pos::Point=O;
         leading = 12,

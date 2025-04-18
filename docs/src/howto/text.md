@@ -108,7 +108,7 @@ nothing # hide
 
 ## Writing LaTeX and Typst
 
-Luxor allows you to use LaTeX and Typst to add equations to drawings.
+Luxor allows you to use LaTeX or Typst to add equations to drawings.
 
 ### LaTeX
 
@@ -170,7 +170,7 @@ nothing # hide
 
 ### Typst
 
-You can also use [Typst](https://typst.app) to add equations and other formatted text to Luxor drawings. This feature is provided by the Julia package [Typstry.jl](https://github.com/jakobjpeters/Typstry.jl).
+You can use [Typst](https://typst.app) to add equations and other formatted text to Luxor drawings. This feature is provided by the Julia package [Typstry.jl](https://github.com/jakobjpeters/Typstry.jl).
 
 ```julia
 using Luxor
@@ -191,6 +191,8 @@ end
 ![typst example](../assets/figures/typst.svg)
 
 In this example, the string in `ts` is a TypstString containing the equation to be typeset. The contents of `ty_preamble` passed as the `preamble` keyword argument is also a TypstString. It contains general formatting instructions for the Typst document. It can be omitted, and the default preamble is used.
+
+Only single page images can be added.
 
 ## Notes on fonts
 
