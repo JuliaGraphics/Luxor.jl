@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Julia 1.10+ 
+
 ### Removed
 
 ### Deprecated
