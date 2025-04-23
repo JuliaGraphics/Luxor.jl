@@ -361,7 +361,26 @@ function setlinejoin(str = "miter")
 end
 
 """
-    setdash("dot")
+    setlinejoin(:miter)
+    setlinejoin(:round)
+    setlinejoin(:bevel)
+
+Set the way line segments are joined when the path is stroked.
+
+The default joining style is mitered.
+"""
+function setlinejoin(sym::Symbol)
+    if sym === :round
+        Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_ROUND)
+    elseif sym === :bevel
+        Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_BEVEL)
+    else
+        Cairo.set_line_join(_get_current_cr(), Cairo.CAIRO_LINE_JOIN_MITER)
+    end
+end
+
+"""
+    setdash(::String)
 
 Set the dash pattern of lines to one of: "solid", "dotted", "dot", "dotdashed",
 "longdashed", "shortdashed", "dash", "dashed", "dotdotdashed",
@@ -371,6 +390,19 @@ Use `setdash(dashes::Vector)` to specify the pattern numerically.
 """
 function setdash(dashing::AbstractString)
     Cairo.set_line_type(_get_current_cr(), dashing)
+end
+
+"""
+    setdash(::Symbol)
+
+Set the dash pattern of lines to one of: :solid, :dotted, :dot, :dotdashed,
+:longdashed, :shortdashed, :dash, :dashed, :dotdotdashed,
+:dotdotdotdashed.
+
+Use `setdash(dashes::Vector)` to specify the pattern numerically.
+"""
+function setdash(dashing::Symbol)
+    Cairo.set_line_type(Luxor._get_current_cr(), string(dashing))
 end
 
 """

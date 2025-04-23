@@ -10,6 +10,99 @@ One place to look for examples is the `Luxor/test` directory.
 
 !["tiled images"](../assets/figures/tiled-images.png)
 
+## Other packages that work with Luxor
+
+### 3D with Thebes.jl
+
+Some limited 3D graphics capabilities can be added to Luxor using the [Thebes.jl](https://github.com/cormullion/Thebes.jl) package.
+
+!["mobius band"](../assets/figures/mobius-band.svg)
+
+```julia
+using Luxor
+using Thebes
+using Colors
+
+function makemobius()
+    x(u, v) = (1 + (v / 2 * cos(u / 2))) * cos(u)
+    y(u, v) = (1 + (v / 2 * cos(u / 2))) * sin(u)
+    z(u, v) = v / 2 * sin(u / 2)
+    w = 1
+    st = 2π / 150
+    Δ = 0.2
+    result = Array{Point3D,1}[]
+    for u in 0:st:2π-st
+        for v in -w:Δ:w
+            p1 = Point3D(
+                x(u, v + Δ / 2),
+                y(u, v + Δ / 2),
+                z(u, v + Δ / 2))
+            p2 = Point3D(
+                x(u + st, v + Δ / 2),
+                y(u + st, v + Δ / 2),
+                z(u + st, v + Δ / 2))
+            p3 = Point3D(
+                x(u + st, v - Δ / 2),
+                y(u + st, v - Δ / 2),
+                z(u + st, v - Δ / 2))
+            p4 = Point3D(
+                x(u, v - Δ / 2),
+                y(u, v - Δ / 2),
+                z(u, v - Δ / 2))
+            push!(result, [p1, p2, p3, p4])
+        end
+    end
+    return result
+end
+
+@svg begin
+    background("grey20")
+    eyepoint(300, 250, 400)
+    setline(0.5)
+    setopacity(0.8)
+    mb = makemobius()
+    for pgon in mb
+        randomhue()
+        pin(100pgon, gfunction = (pt3, pt2)
+        -> begin
+            a = cartesiantospherical(pt3[1])
+            sethue(HSL(rescale(a[2], 0, 2π, 0, 360), 0.8, 0.5))
+            poly(pt2, :fillpreserve, close=true)
+            sethue("white")
+            strokepath()
+        end 
+        )
+    end
+end 800 600 "mobius-band.svg"
+```
+
+### Graphs with Karnak
+
+Luxor provides the drawing tools for the graph visualization package [Karnak](https://github.com/cormullion/Karnak.jl).
+
+!["karnak graph"](../assets/figures/karnak-barabasi.svg)
+
+```julia
+
+using Karnak
+using Graphs
+using Colors
+g = barabasi_albert(100, 1)
+@drawsvg begin
+    background("black")
+    sethue("grey40")
+    fontsize(8)
+    drawgraph(g, 
+        layout=stress, 
+        vertexlabels = 1:nv(g),
+        vertexfillcolors = 
+            [RGB(rand()/2, rand()/2, rand()/2) 
+               for i in 1:nv(g)]
+    )
+end 600 400
+```
+
+
 ## Illustrating this document
 
 This documentation was built with [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl), which is an amazingly powerful and flexible documentation generator written in Julia. The illustrations are mostly created when the HTML pages are built: the Julia source for the image is stored in the Markdown source document, and the code to create the images runs each time the documentation is generated.
