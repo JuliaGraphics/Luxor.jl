@@ -1,13 +1,19 @@
+import Pkg
 using Luxor
 using Test
 
-@testset "notypstryextension" begin
-    @test !@isdefined typst
-    @test Base.get_extension(Luxor, :LuxorExtTypstry) isa Nothing
- end
+if VERSION < v"1.10"
+    @warn "can't test Typstry on Julia versions < 1.10"
+else
+    @testset "notypstryextension" begin
+        @test !@isdefined typst
+        @test Base.get_extension(Luxor, :LuxorExtTypstry) isa Nothing
+    end
 
-using Typstry
+    Pkg.add("Typstry")
+    using Typstry
 
-@testset "typstryextension" begin
-    @test Base.get_extension(Luxor, :LuxorExtTypstry) isa Module
+    @testset "typstryextension" begin
+        @test Base.get_extension(Luxor, :LuxorExtTypstry) isa Module
+    end
 end

@@ -31,4 +31,4 @@ function test_polybspline()
 end
 
 test_polybspline()
-println("...finished polybpline() test")
+println("...finished polybspline test")
