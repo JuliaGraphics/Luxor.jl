@@ -396,7 +396,7 @@ See the [Writing LaTeX and Typst](@ref) section for more information. You'll hav
 
 ## Simple Typst equations
 
-You can also add equations to drawings using the [Typstry](https://github.com/jakobjpeters/Typstry.jl) package, which uses the [Typst](https://typst.app) typsetting engine. Pass the string containing the equation as a `TypstString` to the `text()` function. General formatting can be passed via the `preamble` keyword.
+You can also add equations and typeset text to drawings using the [Typstry](https://github.com/jakobjpeters/Typstry.jl) package, which uses the [Typst](https://typst.app) typsetting engine. Pass the string containing the equation as a `TypstString` to the `text()` function. General formatting can be passed via the `preamble` keyword.
 
 ```julia
 using Luxor
@@ -425,6 +425,8 @@ preview()
 ```
 
 ![Typst equation](../assets/figures/typstequation.svg)
+
+You can also render multipage Typst documents.
 
 ## Drawing pixels
 

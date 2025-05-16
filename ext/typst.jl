@@ -1,4 +1,5 @@
 using Luxor
+import Luxor: render_typst_document
 using Typstry
 
 """
@@ -47,4 +48,55 @@ function Luxor.text(ts::TypstString, pos::Point;
     else
         return svgimage
     end
+end
+
+"""
+    render_typst_document(ts::TypstString)
+
+Render the Typst string in `ts` to an array of SVG images, one 
+for each page.
+
+## Example
+
+This example takes a Typst string which defines
+a three page document. The `pages` array contains
+the pages as SVG images. These are placed using
+Luxor tiles.
+
+```julia
+using Luxor
+using Typstry
+
+ts = typst\"\"\"
+#set page(fill: white, height:100pt, width: 100pt)
+#set text(size: 8pt, fill: black)
+#lorem(10)
+#pagebreak()
+#lorem(10)
+#pagebreak()
+#lorem(10)
+\"\"\"
+
+@draw begin
+    pages = render_typst_document(ts)
+    tiles = Tiler(500, 200, 1, length(pages))
+    for p in eachindex(pages)
+        cpos = first(tiles[p])
+        w, h = pages[p].width, pages[p].height
+        box(cpos, w, h, :stroke)
+        placeimage(pages[p], cpos, centered=true)
+    end
+end
+```
+"""
+function render_typst_document(ts::TypstString)
+    path = mktempdir(tempdir(), cleanup = false)
+    cd(path)
+    write("document{0p}.typ", ts)
+    typst("compile document{0p}.typ --format svg")
+    result = Luxor.SVGimage[]
+    for f in filter(fn -> endswith(fn, "svg"), readdir(path, join = true))
+        push!(result, readsvg(f))
+    end
+    return result
 end

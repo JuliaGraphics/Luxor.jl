@@ -179,7 +179,10 @@ export Drawing,
     tidysvg,
 
     # latex. These always throw errors if Base.get_extension(Luxor, :LuxorExtLatex) isa Nothing
-    latextextsize, latexboundingbox, rawlatexboundingbox
+    latextextsize, latexboundingbox, rawlatexboundingbox,
+
+    # Typst. Throw error if Base.get_extension(Luxor, :LuxorExtTypstry) isa Nothing
+    render_typst_document
 
 # basic unit conversion to Cairo/PostScript points
 const inch = 72.0

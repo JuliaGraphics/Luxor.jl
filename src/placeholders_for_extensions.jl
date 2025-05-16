@@ -23,3 +23,10 @@ function rawlatexboundingbox(catch_all)
         throw(ErrorException("Modules LaTeXStrings and MathTeXEngine are not loaded."))
     end
 end
+function render_typst_document(catch_all)
+    if Base.get_extension(Luxor, :LuxorExtTypstry) isa Module
+        throw(MethodError(render_typst_document, catch_all))
+    else
+        throw(ErrorException("Module Typstry is not loaded."))
+    end
+end

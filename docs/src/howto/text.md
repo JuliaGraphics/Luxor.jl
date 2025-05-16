@@ -108,7 +108,7 @@ nothing # hide
 
 ## Writing LaTeX and Typst
 
-Luxor allows you to use LaTeX or Typst to add equations to drawings.
+Luxor allows you to use LaTeX to add equations to drawings, and Typst to add equations and other typeset text to drawings.
 
 ### LaTeX
 
@@ -170,7 +170,7 @@ nothing # hide
 
 ### Typst
 
-You can use [Typst](https://typst.app) to add equations and other formatted text to Luxor drawings. This feature is provided by the Julia package [Typstry.jl](https://github.com/jakobjpeters/Typstry.jl).
+You can use [Typst](https://typst.app) to add equations and other typeset text to Luxor drawings. This feature is provided by the Julia package [Typstry.jl](https://github.com/jakobjpeters/Typstry.jl).
 
 ```julia
 using Luxor
@@ -192,7 +192,41 @@ end
 
 In this example, the string in `ts` is a TypstString containing the equation to be typeset. The contents of `ty_preamble` passed as the `preamble` keyword argument is also a TypstString. It contains general formatting instructions for the Typst document. It can be omitted, and the default preamble is used.
 
-Only single page images can be added.
+#### Multipage documents
+
+The `render_typst_document` converts a TypstString containing the source for a Typst document into an array of SVGimages. Each page is saved as an SVG image. You can place any or all of these on the Luxor drawing with `placeimage()`.
+
+```julia
+using Luxor
+using Typstry
+
+ts = typst"""
+#set text(size: 12pt, fill: black)
+#set page(numbering: "1", 
+    fill: none, 
+    height: 240pt, width: 240pt)
+#lorem(200)
+#rect(width: 1em, height: 1em, fill: red)
+"""
+
+@draw begin
+    pages = render_typst_document(ts)
+    centers = first.(Tiler(600, 600, 2, 2))
+    for n in eachindex(pages)
+        n > length(centers) && break
+        @layer begin
+            setopacity(0.2)
+            randomhue()
+            box(centers[n], 250, 250, :fill)
+        end
+        @layer begin
+            placeimage(pages[n], centers[n], centered=true)
+        end
+    end
+end
+```
+
+![typst example 2 ](../assets/figures/typst2.png)
 
 ## Notes on fonts
 
@@ -223,7 +257,7 @@ In the Pro API, the default font is Times Roman (on macOS). In the Toy API, the 
 
 One difference between [`settext`](@ref) and [`text`](@ref) (on macOS) is that many more missing Unicode glyphs are automatically substituted by other fonts when you use the former.
 
-Cairo.jl (and hence Luxor.jl) doesn't support emoji currently. 😢
+Cairo.jl (and hence Luxor.jl) doesn't support emoji currently. 😢 But you can use [Typst](@ref) () to render text containing emojis.
 
 Text is rasterized (converted from outlines to pixels)
 only when you output to the PNG format. For SVG formats, text
