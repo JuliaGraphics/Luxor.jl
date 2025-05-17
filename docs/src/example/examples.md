@@ -394,9 +394,9 @@ d # hide
 
 See the [Writing LaTeX and Typst](@ref) section for more information. You'll have to install the fonts that MathTeXEngine.jl requires. 
 
-## Simple Typst equations
+## Basic typesetting with Typst
 
-You can also add equations and typeset text to drawings using the [Typstry](https://github.com/jakobjpeters/Typstry.jl) package, which uses the [Typst](https://typst.app) typsetting engine. Pass the string containing the equation as a `TypstString` to the `text()` function. General formatting can be passed via the `preamble` keyword.
+You can typeset text, including equations, onto Luxor drawings using the [Typstry](https://github.com/jakobjpeters/Typstry.jl) package, which uses the [Typst](https://typst.app) typesetting engine. Pass the text to be typeset as a `TypstString` to the `text()` function. General formatting and configuration information can be passed via the `preamble` keyword.
 
 ```julia
 using Luxor
@@ -405,7 +405,9 @@ using Typstry
 ts = typst"""$ f(t) = [4 cos(t) + 2 cos(5t), 4 sin(t) + 2 sin(5t)] $""";
 
 ty_preamble = typst"""
-    #set page(fill: none, height: 300pt, width: 800pt, margin: 140pt);
+    #set page(fill: none, 
+        height: 300pt, width: 800pt, 
+        margin: 140pt);
     #set text(fill: black, size: 35pt)
 """
 
@@ -426,7 +428,7 @@ preview()
 
 ![Typst equation](../assets/figures/typstequation.svg)
 
-You can also render multipage Typst documents.
+You can render multipage Typst documents with the [`render_typst_document()`](@ref) function.
 
 ## Drawing pixels
 

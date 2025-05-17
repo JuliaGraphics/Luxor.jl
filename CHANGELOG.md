@@ -1,10 +1,11 @@
 # Changelog
 
-## [v4.3] - forthcoming
+## [v4.3] - 2025-05-17
 
 ### Added
 
-- `text(ts::TypstString, pos::Point)` uses Typstry.jl for text.
+- `text(ts::TypstString, pos::Point)` and 
+  `render_typst_document(ts::TypstString)` use Typstry.jl for text typesetting.
 
 ### Changed
 

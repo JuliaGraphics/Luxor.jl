@@ -192,9 +192,9 @@ end
 
 In this example, the string in `ts` is a TypstString containing the equation to be typeset. The contents of `ty_preamble` passed as the `preamble` keyword argument is also a TypstString. It contains general formatting instructions for the Typst document. It can be omitted, and the default preamble is used.
 
-#### Multipage documents
+#### Multipage Typst documents
 
-The `render_typst_document` converts a TypstString containing the source for a Typst document into an array of SVGimages. Each page is saved as an SVG image. You can place any or all of these on the Luxor drawing with `placeimage()`.
+The `render_typst_document()` function converts a TypstString containing the source for a Typst document into an array of SVGimages. Each page is saved as a single SVG image. You can place any or all of these on the Luxor drawing with `placeimage()`.
 
 ```julia
 using Luxor
