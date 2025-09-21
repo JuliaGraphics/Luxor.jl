@@ -23,6 +23,10 @@ function rawlatexboundingbox(catch_all)
         throw(ErrorException("Modules LaTeXStrings and MathTeXEngine are not loaded."))
     end
 end
+"""
+Render the Typst string in `ts` to an array of SVG images, one 
+for each page.
+"""
 function render_typst_document(catch_all)
     if Base.get_extension(Luxor, :LuxorExtTypstry) isa Module
         throw(MethodError(render_typst_document, catch_all))

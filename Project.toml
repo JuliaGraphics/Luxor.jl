@@ -1,7 +1,7 @@
 name = "Luxor"
 uuid = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
 authors = ["cormullion <cormullion@mac.com>"]
-version = "4.3.0"
+version = "4.4.0"
 
 [deps]
 Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -43,7 +43,7 @@ Pkg = "1"
 PolygonAlgorithms = "0.3.2, 0.4"
 PrecompileTools = "1"
 Random = "1.6"
-Rsvg = "1.0"
+Rsvg = "1.0, 1.1"
 Test = "1.6"
 Typstry = "0.5, 0.6"
 julia = "1.9"

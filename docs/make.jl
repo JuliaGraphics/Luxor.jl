@@ -4,6 +4,8 @@ using DocumenterTools: Themes
 # Setup for doctests in docstrings
 DocMeta.setdocmeta!(Luxor, :DocTestSetup, :(using Luxor))
 
+println("Starting makedocs")
+
 makedocs(
     modules  = [Luxor],
     sitename = "Luxor",
@@ -62,6 +64,8 @@ makedocs(
         ],
     ],
 )
+
+println("Finished makedocs")
 
 repo = "github.com/JuliaGraphics/LuxorManual.git"
 withenv("GITHUB_REPOSITORY" => repo) do

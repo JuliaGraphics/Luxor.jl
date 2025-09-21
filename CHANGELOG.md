@@ -1,5 +1,17 @@
 # Changelog
 
+## [v4.4] - forthcoming
+
+### Added
+
+### Changed
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
 ## [v4.3] - 2025-05-17
 
 ### Added

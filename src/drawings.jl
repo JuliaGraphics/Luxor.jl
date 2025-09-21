@@ -1415,7 +1415,9 @@ rather than the short-cut macros.
 
 ### Examples
 
-`@draw circle(O, 20, :fill)`
+```julia
+@draw circle(O, 20, :fill)
+```
 
 ```julia
 @draw circle(O, 20, :fill) 400
