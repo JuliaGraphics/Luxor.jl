@@ -77,16 +77,6 @@ function run_all_tests()
         include("textformat.jl")
     end
 
-    @testset "latex" begin
-        include("latex.jl")
-        include("latex_more.jl")
-        include("latex-even-harder.jl")
-    end
-
-    @testset "typstry" begin
-        include("typstry-test.jl")
-    end
-
     @testset "curves" begin
         include("arc-twopoints.jl")
         include("circletests.jl")

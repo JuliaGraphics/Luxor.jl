@@ -1,5 +1,5 @@
 using Luxor
-import Luxor: render_typst_document
+
 using Typstry
 
 """
@@ -89,7 +89,7 @@ ts = typst\"\"\"
 end
 ```
 """
-function render_typst_document(ts::TypstString)
+function Luxor.render_typst_document(ts::TypstString)
     path = mktempdir(tempdir(), cleanup = false)
     cd(path)
     write("document{0p}.typ", ts)

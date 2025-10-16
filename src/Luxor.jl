@@ -74,7 +74,7 @@ include("randompoints.jl")
 include("Path.jl")
 include("precompile.jl")
 include("placeeps.jl")
-include("placeholders_for_extensions.jl")
+include("extension_handling.jl")
 # include("play.jl") # will require MiniFB
 # include("shapefile.jl") # don't load unless you've loaded Shapefile.jl
 
@@ -178,10 +178,10 @@ export Drawing,
     # experimental
     tidysvg,
 
-    # latex. These always throw errors if Base.get_extension(Luxor, :LuxorExtLatex) isa Nothing
+    # latex 
     latextextsize, latexboundingbox, rawlatexboundingbox,
 
-    # Typst. Throw error if Base.get_extension(Luxor, :LuxorExtTypstry) isa Nothing
+    # typst
     render_typst_document
 
 # basic unit conversion to Cairo/PostScript points
