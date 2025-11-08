@@ -418,6 +418,92 @@ polysmooth(points::Vector{Point}, radius; action = :none, debug = false, close =
     polysmooth(points, radius, action; debug = debug, close = close)
 
 """
+    roundcorner(p1::Point, cornerpoint::Point, p2::Point, radius)
+
+Given a corner `cornerpoint` defined by the three points `p1`, `cornerpoint`, and `p2`,
+calculate the intersection points and centerpoint for a smooth rounded corner. 
+    
+Returns
+    
+    `p1_cross`, `circlepoint`, `p2_cross`, `clockwise`
+    
+The corner can be drawn as:
+
+    p1 -> p1_cross -> arc2r(circlepoint, p1_cross, p2_cross) -> p2_cross -> p2
+
+`clockwise` is true if the arc is to drawn clockwise.
+"""
+function roundcorner(p1::Point, cornerpoint::Point, p2::Point, radius)
+    if isapprox(radius, 0.0)
+		throw(error("roundcorner: impossibly small radius $radius"))
+	end
+    dx1 = cornerpoint.x - p1.x     # vector 1
+    dy1 = cornerpoint.y - p1.y
+    dx2 = cornerpoint.x - p2.x     # vector 2
+    dy2 = cornerpoint.y - p2.y
+
+    # Angle between vector 1 and vector 2 divided by 2
+    angle2 = (atan(dy1, dx1) - atan(dy2, dx2)) / 2
+
+    #  length of segment between corner point and the
+    #  points of intersection with the circle of a given radius
+    t = abs(tan(angle2))
+    segment = radius / t
+
+    # Check the segment
+    length1 = hypot(dx1, dy1)
+    length2 = hypot(dx2, dy2)
+    seglength = min(length1, length2)
+    if segment > seglength
+        segment = seglength
+        radius = seglength * t
+    end
+
+    #  points of intersection are calculated by the proportion between
+    #  the coordinates of the vector, length of vector and the length of the segment.
+    p1_cross = Luxor.getproportionpoint(cornerpoint, segment, length1, dx1, dy1)
+    p2_cross = Luxor.getproportionpoint(cornerpoint, segment, length2, dx2, dy2)
+
+    #  calculation of the coordinates of the circle's center by the addition of angular vectors
+    dx = cornerpoint.x * 2 - p1_cross.x - p2_cross.x
+    dy = cornerpoint.y * 2 - p1_cross.y - p2_cross.y
+    L = hypot(dx, dy)
+    d = hypot(segment, radius)
+    # this prevents impossible constructions; Cairo will crash if L is 0
+    if isapprox(L, 0.0)
+        L = 0.01
+    end
+    circlepoint = Luxor.getproportionpoint(cornerpoint, d, L, dx, dy)
+
+    # start angle and end engle of arc
+    startangle = atan(p1_cross.y - circlepoint.y, p1_cross.x - circlepoint.x)
+    endangle = atan(p2_cross.y - circlepoint.y, p2_cross.x - circlepoint.x)
+
+    if endangle < 0
+        endangle = 2π + endangle
+    end
+    if startangle < 0
+        startangle = 2π + startangle
+    end
+    sweepangle = endangle - startangle
+
+    if abs(sweepangle) > π
+        if startangle < endangle
+            clockwise = false
+        else
+            clockwise = true
+        end
+    else
+        if startangle < endangle
+            clockwise = true
+        else
+            clockwise = false
+        end
+    end
+    return p1_cross, circlepoint, p2_cross, clockwise
+end
+
+"""
     offsetpoly(plist::Vector{Point}, d::T) where T<:Number
 
 Return a polygon that is offset from a polygon by `d` units.

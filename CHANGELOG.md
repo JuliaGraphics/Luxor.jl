@@ -1,10 +1,14 @@
 # Changelog
 
-## [v4.4] - forthcoming
+## [v4.4] - 2025-11-08
 
 ### Added
 
+- roundcorner()
+
 ### Changed
+
+- compat entries
 
 ### Removed
 

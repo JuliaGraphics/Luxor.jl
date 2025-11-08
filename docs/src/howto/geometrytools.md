@@ -177,6 +177,38 @@ nothing # hide
 
 ![angle three points](../assets/figures/anglethreepoints.png)
 
+## Round corners
+
+The [`roundcorner`](@ref) function takes three points that define a corner, plus a radius. The function returns three points and a Boolean flag: the first and third define the ends of the circular arc, the second defines the center of the circle with the given radius. The Boolean flag indicates whether the arc should be drawn clockwise.
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+    background(0.8, 0.7, 0.7)
+    fontsize(25)
+    
+    p1, corner, p3 = ngon(O, 250, 3, vertices=true)
+    
+    label.(("p1", "corner", "p3"), :NE, (p1, corner, p3))
+    circle.((p1, corner, p3), 5, :fill)
+    
+    p1c, cp, p2c, clockwise = roundcorner(p1, corner, p3, 80)
+    
+    label.(("p1c", "cp", "p2c"), :NW, (p1c, cp, p2c))
+    circle.((p1c, cp, p2c), 5, :fill)
+
+    @layer begin setdash("dot"); circle(cp, 80, :stroke) end
+
+    move(p1)
+    line(p1c)
+    arc2r(cp, p1c, p2c)
+    line(p3)
+    strokepath()
+end 800 600 # hide
+```
+
+## Other functions
+
 Other functions that help with geometry include:
 
 - [`distance`](@ref) distance between two points
