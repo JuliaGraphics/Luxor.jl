@@ -34,8 +34,12 @@ function add_mesh_patch(pattern::Mesh, bezierpath::BezierPath, colors=Vector{Col
     end
 
     for n in 1:vcount
+        col = colors[mod1(n, length(colors))]
+        if !(col isa Colorant)
+            col = parse(RGBA, col)
+        end
         # always use RGBA, even if RGB supplied
-        col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
+        col = convert(RGBA, col)
         Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
     end
     Cairo.mesh_pattern_end_patch(pattern)
@@ -73,8 +77,12 @@ function add_mesh_patch(pattern::Mesh, plist::Array{Point}, colors=Vector{Colors
     end
 
     for n in 1:vcount
+        col = colors[mod1(n, length(colors))]
+        if !(col isa Colorant)
+            col = parse(RGBA, col)
+        end
         # always use RGBA, even if RGB supplied
-        col = convert(Colors.RGBA, parse(Colors.Colorant, colors[mod1(n, length(colors))]))
+        col = convert(RGBA, col)
         Cairo.mesh_pattern_set_corner_color_rgba(pattern, n - 1, col.r, col.g, col.b, col.alpha)
     end
     Cairo.mesh_pattern_end_patch(pattern)

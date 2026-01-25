@@ -1,5 +1,20 @@
 # Changelog
 
+## [v4.4.1] - 2026-01-25
+
+### Added
+
+### Changed
+
+- compat entry for PolygonAlgorithms
+- colorant parsing in mesh.jl
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
 ## [v4.4] - 2025-11-08
 
 ### Added
