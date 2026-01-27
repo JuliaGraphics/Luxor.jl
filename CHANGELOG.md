@@ -1,5 +1,19 @@
 # Changelog
 
+## [v4.5] - forthcoming
+
+### Added
+
+### Changed
+
+- compat for PolygonAlgorithms 0.4
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
 ## [v4.4.1] - 2026-01-25
 
 ### Added

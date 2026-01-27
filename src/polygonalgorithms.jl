@@ -1,4 +1,5 @@
 # using algorithms from PolygonAlgorithms.jl
+# updated at version 0.4
 
 @inline _point_to_tuple(pt::Point) = (pt.x, pt.y)
 @inline _points_to_tuples(pts::Vector{Point}) = _point_to_tuple.(pts)
@@ -36,8 +37,8 @@ This uses the Graham Scan algorithm.
 """
 function polyhull(pgon::Vector{Point};
     algorithm=PA.GrahamScanAlg())
-    # in PA alg can either be GiftWrappingAlg() or GrahamScanAlg().
-    return pgon[PA.convex_hull(_points_to_tuples(pgon), algorithm)]
+    # in PA algorithm can either be GiftWrappingAlg() or GrahamScanAlg().
+    return pgon[PA.convex_hull(algorithm, _points_to_tuples(pgon))]
 end
 
 """
@@ -62,9 +63,10 @@ end
 Use `polyintersect()`.
 """
 function polyintersectconvex(p1::AbstractVector{Point}, p2::AbstractVector{Point})
-    # `alg` can either be `ChasingEdgesAlg()`, `PointSearchAlg()` or `WeilerAthertonAlg()`.
+    # alg can either be ChasingEdgesAlg(), MartinezRuedaAlg(), PointSearchAlg() or WeilerAthertonAlg(). 
+    # The two general algorithms MartinezRuedaAlg and WeilerAthertonAlg will throw an error if more than one area of intersection is found.
     return _tuples_to_points(
-        PA.intersect_convex(_points_to_tuples(p1), _points_to_tuples(p2)))
+        PA.intersect_convex(PA.WeilerAthertonAlg(), _points_to_tuples(p1), _points_to_tuples(p2)))
 end
 
 """
@@ -78,7 +80,7 @@ self-intersecting.
 """
 function polyintersect(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point})
     return _tuples_to_points.(
-        PA.intersect_geometry(_points_to_tuples(pgon1), _points_to_tuples(pgon2))
+        PA.intersect_geometry(PA.MartinezRuedaAlg(), _points_to_tuples(pgon1), _points_to_tuples(pgon2))
     )
 end
 
@@ -90,8 +92,8 @@ polyintersections(S::Vector{Point}, C::Vector{Point}) = polyintersect(S, C)
 Find polygonal areas that are inside `pg1` but not in `pg2`.
 """
 function polydifference(pg1::AbstractVector{Point}, pg2::AbstractVector{Point})
-    return Luxor._tuples_to_points.(PA.difference_geometry(Luxor._points_to_tuples(pg1),
-        Luxor._points_to_tuples(pg2), PA.MartinezRuedaAlg()))
+    return Luxor._tuples_to_points.(PA.difference_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
+        Luxor._points_to_tuples(pg2)))
 end
 
 """
@@ -104,8 +106,8 @@ Return an array of polygons.
 Boolean Union.
 """
 function polyunion(pg1::AbstractVector{Point}, pg2::AbstractVector{Point})
-    return Luxor._tuples_to_points.(PA.union_geometry(Luxor._points_to_tuples(pg1),
-        Luxor._points_to_tuples(pg2), PA.MartinezRuedaAlg()))
+    return Luxor._tuples_to_points.(PA.union_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
+        Luxor._points_to_tuples(pg2)))
 end
 
 """
@@ -120,6 +122,6 @@ Boolean XOR.
 Possibly returns holes but does not classify them as holes.
 """
 function polyxor(pg1, pg2)
-    return Luxor._tuples_to_points.(PA.xor_geometry(Luxor._points_to_tuples(pg1),
-        Luxor._points_to_tuples(pg2), PA.MartinezRuedaAlg()))
+    return Luxor._tuples_to_points.(PA.xor_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
+        Luxor._points_to_tuples(pg2)))
 end
