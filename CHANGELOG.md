@@ -1,8 +1,10 @@
 # Changelog
 
-## [v4.5] - forthcoming
+## [v4.5] - 2026-04-09
 
 ### Added
+
+- easing functions for `rescale()`
 
 ### Changed
 

@@ -27,9 +27,10 @@ function origin(pt)
 end
 
 """
-    rescale(x, from_min, from_max, to_min=0.0, to_max=1.0)
+    rescale(x, from_min, from_max, to_min = 0.0, to_max = 1.0;
+        easingfunction=easingflat)
 
-Convert `x` from one linear scale (`from_min` to `from_max`) to another
+Convert `x` from one scale (`from_min` to `from_max`) to another
 (`to_min` to `to_max`).
 
 The scales can also be supplied in tuple form:
@@ -38,7 +39,8 @@ The scales can also be supplied in tuple form:
 rescale(x, (from_min, from_max), (to_min, to_max))
 ```
 
-Examples
+## Examples
+
 ```julia
 julia> rescale(15, 0, 100, 0, 1)
 0.15
@@ -58,11 +60,20 @@ julia> rescale(25, 0, 1, 0, 1.609344)
 julia> rescale(15, (0, 100), (1000, 0))
 850.0
 ```
+
+The function provides linear interpolation; but you can pass an
+easing function to the `easingfunction` keyword.
 """
-rescale(x, from_min, from_max, to_min = 0.0, to_max = 1.0) =
-    ((x - from_min) / (from_max - from_min)) * (to_max - to_min) + to_min
-rescale(x, from::NTuple{2,Number}, to::NTuple{2,Number}) =
-    ((x - from[1]) / (from[2] - from[1])) * (to[2] - to[1]) + to[1]
+
+function rescale(x, from_min, from_max, to_min = 0.0, to_max = 1.0;
+        easingfunction=easingflat)
+    t = (x - from_min) / (from_max - from_min)
+    t_eased = easingfunction(t, 0.0, 1.0, 1.0)
+    return to_min + t_eased * (to_max - to_min)
+end
+
+rescale(x, from::NTuple{2,Number}, to::NTuple{2,Number}; easingfunction=easingflat) =
+    rescale(x, from[1], from[2], to[1], to[2]; easingfunction=easingflat)
 
 """
     background(col::Colors.Colorant)
