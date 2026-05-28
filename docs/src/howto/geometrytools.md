@@ -395,6 +395,96 @@ nothing # hide
 ```
 ![intersection of two circles](../assets/figures/intersection2circles.png)
 
+## Scaling and interpolation
+
+[`rescale`](@ref) is a convenient utility function for
+interpolation. 
+
+`rescale(i, lo, hi)` interprets the value `i` on a scale between `lo` and `hi`. So `rescale(0.5, 0, 10)` returns 0.05, being 0.5ths of the way between 0 and 10,
+
+Interpolation is linear, unless you pass an easing function to the `easingfunction` keyword.
+
+In the next example, the x-coordinates are scaled linearly between -300 and 300, but the y-coordinates are scaled between -150 and 150 using an easing function.
+
+```@example
+using Luxor # hide
+
+@drawsvg begin
+    background("antiquewhite")
+    sethue("black")
+    for i in range(0, 1, length=50)
+        pt = Point(rescale(i, 0, 1, -300, 300), 
+                   rescale(i, 0, 1, -150, 150, 
+                   easingfunction=easeinoutexpo))
+        circle(pt, 4, :fill)
+        rule(pt, π/2)
+    end
+end 800 400
+```
+
+A way to visualize interpolation is by imagining two number lines. A value relative to a pair of low and high values is rescaled to have the equivalent value relative to another pair of low and high values.
+
+```@setup lerp
+using Luxor
+
+reddot(pos) = @layer begin
+    sethue("red")
+    circle(pos, 8, :fill)
+end
+
+diagram = @drawsvg begin
+    background("antiquewhite")
+    sethue("black")
+    setline(1)
+    fontsize(14)
+
+    n = 35
+    dot′′ = between(O + (-200, 40), O + (200, 40), rescale(n, 30, 40, 0, 1))
+    reddot(dot′′)
+
+    text(string("n = $(n)"), O + (0, -60), halign=:center)
+    text("rescale(n, 30, 40, 1, 2) = $(rescale(n, 30, 40, 1, 2))", dot′′ + (0, -60), halign=:center)
+
+    pts = (O + (-200, 40), O + (200, 40))
+
+    tickline(pts...,
+        startnumber = 1,
+        finishnumber = 2,
+        minor=0,
+        major=9)
+    tickline(pts...,
+        startnumber = 30,
+        finishnumber = 40,
+        minor=0,
+        major=9,
+        major_tick_function = (n, pos; startnumber=30, finishnumber=40, nticks=10) -> begin
+            @layer begin
+                translate(pos)
+                line(O, O + polar(5, 3π/2), :stroke)
+                k = rescale(n, 0, nticks - 1, startnumber, finishnumber)
+                ticklength = get_fontsize() * 1.3
+                text("$(round(k, digits=2))", O + (0, -ticklength), halign=:center, valign=:middle, angle = -getrotation())
+            end
+        end)
+    finish()
+end 800 200
+```
+
+```@example lerp
+diagram # hide
+```
+
+This function is sometimes called “lerp” in other systems.
+For example, in Processing, the `lerp()` function takes the
+form `lerp(low, high, value)`, where the returned value
+lies between `low` and `high` corresponding to how `value`
+lies between 0 and 1.
+
+The equivalent to `lerp(10, 20, 0.5)` in Luxor is
+`rescale(0.5, 0, 1, 10, 20)`. Luxor requires a ‘from’ scale
+(here `... 0, 1, ...`) although the ‘to’ scale is optional and
+defaults to `0, 1`.
+
 ## Bounding boxes
 
 The `BoundingBox` type allows you to use rectangular extents

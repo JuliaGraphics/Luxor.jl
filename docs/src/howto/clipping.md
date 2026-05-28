@@ -31,7 +31,7 @@ See also `[polyintersect()](@ref)`.
 
 ## Visual clipping
 
-Use [`clip`](@ref) to turn the current path into a clipping region, masking any graphics outside the path. [`clippreserve`](@ref) keeps the current path, but also uses it as a clipping region. [`clipreset`](@ref) resets it. `:clip` is also an action for drawing functions like [`circle`](@ref).
+Use [`clip`](@ref) to turn the current path into a *clipping region*. Subsequent graphics will be drawn if they're inside the region, and will not be drawn if they're outside the region. [`clippreserve`](@ref) keeps the current path, but also uses it as a clipping region. [`clipreset`](@ref) resets it. `:clip` is also an action for drawing functions like [`circle`](@ref).
 
 ```@example
 using Luxor # hide
@@ -77,3 +77,47 @@ draw(0, 0)
 finish()
 preview()
 ```
+
+You can define a clipping region that excludes graphics by defining paths with holes.
+
+In the following example, the drawing on the left defines a clipping region consisting of a 4×4 grid of squares, and the circles are drawn over the entire drawing, only if they're inside the squares. In the drawing on the right, the first enclosing path drawn forces the 16 subsequent squares to become holes in the clipping region. The circles are drawn only if they're outside the squares.
+
+```@example
+using Luxor # hide
+
+hcat(
+    @drawsvg begin
+        background("orange")
+        setfillrule(:even_odd)
+        for (pos, n) in Tiler(260, 260, 4, 4)
+            @layer begin
+                translate(pos)
+                box(O, 50, 50, :path)
+            end
+        end
+        clip()
+        sethue("black")
+        circle.(randompointarray(BoundingBox(), 10), 4, :fill)
+        clipreset()
+    end 300 300
+    ,
+    @drawsvg begin
+        background("orange")
+        # box forms the first part of the path
+        box(BoundingBox(), :path)
+        setfillrule(:even_odd)
+        # squares form holes
+        for (pos, n) in Tiler(260, 260, 4, 4)
+            @layer begin
+                translate(pos)
+                box(O, 50, 50, :path)
+            end
+        end
+        clip()
+        sethue("black")
+        circle.(randompointarray(BoundingBox(), 10), 4, :fill)        
+        clipreset()
+    end 300 300
+)
+```
+
