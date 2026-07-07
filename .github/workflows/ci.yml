@@ -26,7 +26,6 @@ jobs:
       - uses: julia-actions/setup-julia@v3
         with:
           version: ${{ matrix.julia-version }}
-          arch: ${{ matrix.julia-arch }}
       - uses: actions/cache@v6
         env:
           cache-name: cache-artifacts
