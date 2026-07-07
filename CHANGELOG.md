@@ -1,5 +1,20 @@
 # Changelog
 
+## [v4.6] - forthcoming
+
+### Added
+
+### Changed
+
+- fixed some method ambiguities that Julia nightly 14 1.14.0-DEV.2604
+  introduced and that Aqua started finding.
+
+### Removed
+
+### Deprecated
+
+# ───────────────────────────────────────────────────
+
 ## [v4.5] - 2026-04-09
 
 ### Added

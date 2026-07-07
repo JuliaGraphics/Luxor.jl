@@ -676,7 +676,7 @@ buffer=zeros(ARGB32, 100, 100)
 d=Drawing(buffer)
 ```
 """
-function Drawing(w = 800.0, h = 800.0, f::AbstractString = "luxor-drawing.png"; strokescale = false)
+function Drawing(w::Real = 800.0, h::Real = 800.0, f::AbstractString = "luxor-drawing.png"; strokescale = false)
     (path, ext) = splitext(f)
     currentdrawing = Drawing(w, h, Symbol(ext[2:end]), f, strokescale = strokescale)
     return currentdrawing
