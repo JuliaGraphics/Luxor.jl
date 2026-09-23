@@ -1311,7 +1311,6 @@ end
 
 Returns false if `p` is not inside triangle p1 p2 p3.
 """
-
 function ispointinsidetriangle(p::Point, p1::Point, p2::Point, p3::Point)
     if polyorientation([p1, p2, p3]) < 0.0
         p1, p3 = p3, p1
