@@ -16,7 +16,7 @@ function crescent_tests(fname)
 
     # test for null crescent, no intersections
     pts = crescent(O, 10, O, 10, vertices=true)
-    @test pts == nothing
+    @test pts === nothing
     @test finish() == true
     println("...finished test: output in $(fname)")
 end

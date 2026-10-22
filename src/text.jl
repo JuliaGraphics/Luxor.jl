@@ -77,7 +77,7 @@ function text(t::T where {T<:AbstractString}, pt::Point;
     halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
 
     # if unspecified or wrong, default to left, also treat UK spelling centre as center
-    if halignment == nothing
+    if halignment === nothing
         halignment = 1
     elseif halignment == 4
         halignment = 2
@@ -89,7 +89,7 @@ function text(t::T where {T<:AbstractString}, pt::Point;
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
 
     # if unspecified or wrong, default to baseline
-    if valignment == nothing
+    if valignment === nothing
         valignment = 3
     end
 
@@ -227,14 +227,14 @@ function textpath(s::T where {T<:AbstractString}, pos::Point;
     # TODO this duplicates text() too much; re-factor needed
     xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(s)
     halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
-    if halignment == nothing
+    if halignment === nothing
         halignment = 1
     elseif halignment == 4
         halignment = 2
     end
     textpointx = pos.x - [0, xadvance / 2, textwidth + xbearing][halignment]
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
-    if valignment == nothing
+    if valignment === nothing
         valignment = 3
     end
     textpointy = pos.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
@@ -278,14 +278,14 @@ function textoutlines(s::T where {T<:AbstractString}, pos::Point;
     # TODO this duplicates text() too much; re-factor needed
     xbearing, ybearing, textwidth, textheight, xadvance, yadvance = textextents(s)
     halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
-    if halignment == nothing
+    if halignment === nothing
         halignment = 1
     elseif halignment == 4
         halignment = 2
     end
     textpointx = pos.x - [0, xadvance / 2, textwidth + xbearing][halignment]
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
-    if valignment == nothing
+    if valignment === nothing
         valignment = 3
     end
     textpointy = pos.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
@@ -835,7 +835,7 @@ function texttrack(txt::T where {T<:AbstractString}, pos, tracking, fsize;
     halignment = findfirst(isequal(halign), [:left, :center, :right, :centre])
 
     # if unspecified or wrong, default to left, also treat UK spelling centre as center
-    if halignment == nothing
+    if halignment === nothing
         halignment = 1
     elseif halignment == 4
         halignment = 2
@@ -848,7 +848,7 @@ function texttrack(txt::T where {T<:AbstractString}, pos, tracking, fsize;
     # next vertical alignment
     valignment = findfirst(isequal(valign), [:top, :middle, :baseline, :bottom])
     # if unspecified or wrong, default to baseline
-    if valignment == nothing
+    if valignment === nothing
         valignment = 3
     end
     ybearing, textheight = textextents(txt)[[2, 4]]
