@@ -36,7 +36,7 @@ function Luxor.text(ts::TypstString, pos::Point;
         centered=false,
         preamble=Typstry.typst"")
     io = IOBuffer()
-    show(IOContext(io, :preamble => preamble), "image/svg+xml", ts)
+    show(IOContext(io, TypstContext(; preamble)), MIME"image/svg+xml"(), ts)
     svgimage = readsvg(String(take!(io)))
     if place == true
         xpos, ypos = pos
@@ -91,9 +91,10 @@ end
 """
 function Luxor.render_typst_document(ts::TypstString)
     path = mktempdir(tempdir(), cleanup = false)
-    cd(path)
-    write("document{0p}.typ", ts)
-    typst("compile document{0p}.typ --format svg")
+    cd(path) do
+        write("document{0p}.typ", ts)
+        run(typst`compile document{0p}.typ --format svg`)
+    end
     result = Luxor.SVGimage[]
     for f in filter(fn -> endswith(fn, "svg"), readdir(path, join = true))
         push!(result, readsvg(f))

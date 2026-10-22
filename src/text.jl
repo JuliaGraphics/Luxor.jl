@@ -768,6 +768,7 @@ function textwrap(s::T where {T<:AbstractString}, width::Real, pos::Point, linef
     rightgutter=5,
     leading=0)
     lines = textlines(s, width; rightgutter=rightgutter)
+    filter!(!isempty, lines)
     textbox(lines, pos, linefunc=linefunc, leading=leading)
 end
 

@@ -8,6 +8,7 @@
 
 ### Changed
 - Fixed method ambiguities that Julia nightly 1.14.0-DEV.2604 introduced, and that Aqua started finding.
+- small modifications to Typst support to keep up with Typstry.jl changes
 
 ---
 

@@ -719,6 +719,8 @@ function grestore()
 end
 
 """
+    @layer ...
+
 The `@layer` macro is a shortcut for `gsave()` ... `grestore()`.
 """
 macro layer(a)

@@ -43,6 +43,8 @@ BezierPathSegment(a::Vector{Point}) =
 # end
 
 """
+    BezierPath
+
 BezierPath is an array of BezierPathSegments.
 `segments` is `Vector{BezierPathSegment}`.
 """

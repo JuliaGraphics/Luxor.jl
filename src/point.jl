@@ -15,7 +15,9 @@ struct Point <: AbstractPoint
 end
 
 """
-`O` is a shortcut for the current origin, `0/0`
+    O
+
+The letter `O` is a shortcut for the current origin, `0/0`.
 """
 const O = Point(0, 0)
 Base.zero(::Type{Point}) = O

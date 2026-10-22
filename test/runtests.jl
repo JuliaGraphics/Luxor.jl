@@ -174,6 +174,11 @@ function run_all_tests()
         include("pointcrossesboundingboxtests.jl")
         include("polyclip-tests.jl")
     end
+
+    @testset "typst" begin
+        include("typst.jl")
+    end
+
     @testset "misc" begin
         include("luxor-test1.jl")
         include("rules.jl")

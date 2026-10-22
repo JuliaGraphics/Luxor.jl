@@ -496,40 +496,46 @@ The [`textbox`](@ref) function also draws text inside a box, but doesn't alter t
 
 This example counts the number of characters drawn, using a simple closure. The function returns the position of the start of what would have been the next line.
 
-```julia
-fontface("Georgia")
-fontsize(30)
+```@example
+using Luxor
+using Colors
 
-loremipsum = """Lorem ipsum dolor sit amet, consectetur
-adipiscing elit. Nunc placerat lorem ullamcorper,
-sagittis massa et, elementum dui. Sed dictum ipsum vel
-commodo pellentesque. Aliquam erat volutpat. Nam est
-dolor, vulputate a molestie aliquet, rutrum quis lectus.
-Sed lectus mauris, tristique et tempor id, accumsan
-pharetra lacus. Donec quam magna, accumsan a quam
-quis, mattis hendrerit nunc. Nullam vehicula leo ac
-leo tristique, a condimentum tortor faucibus."""
+@drawsvg begin
+    background("antiquewhite")
+    fontface("Georgia")
+    fontsize(30)
 
-_counter() = (a = 0; (n) -> a += n)
-counter = _counter()
+    loremipsum = """Lorem ipsum dolor sit amet, consectetur
+    adipiscing elit. Nunc placerat lorem ullamcorper,
+    sagittis massa et, elementum dui. Sed dictum ipsum vel
+    commodo pellentesque. Aliquam erat volutpat. Nam est
+    dolor, vulputate a molestie aliquet, rutrum quis lectus.
+    Sed lectus mauris, tristique et tempor id, accumsan
+    pharetra lacus. Donec quam magna, accumsan a quam
+    quis, mattis hendrerit nunc. Nullam vehicula leo ac
+    leo tristique, a condimentum tortor faucibus."""
 
-translate(boxtopleft(BoundingBox()))
-fontface("Georgia")
-fontsize(20)
+    _counter() = (a = 0; (n) -> a += n)
+    counter = _counter()
 
-finishpos = textbox(filter(!isempty, split(loremipsum, "\n")),
-    O + (5, 0),
-    leading = 28,
-    linefunc = (lnumber, str, pt, h) -> begin
-        text(string(lnumber), pt - (30, 0))
-        counter(length(str))
-    end)
+    translate(boxtopleft(BoundingBox()))
+    fontface("Georgia")
+    fontsize(20)
 
-fontsize(10)
-text(string(counter(0), " characters"), finishpos)
+    finishpos = textbox(
+        filter(!isempty, split(loremipsum, "\n")),
+        O + (50, 50),
+        leading = 28,
+        linefunc = (lnumber, str, pt, h) -> begin
+            text(string(lnumber), pt - (30, 0))
+            counter(length(str))
+        end
+    )
+
+    fontsize(10)
+    text(string(counter(0), " characters"), finishpos)
+end 800 400
 ```
-
-![textbox](../assets/figures/textbox.png)
 
 ## Text formatting
 

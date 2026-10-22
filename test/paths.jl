@@ -161,7 +161,6 @@ function path_test_3(fname)
         @layer begin
             translate(grid[i])
             for i in 1:0.5:5
-                @show 0.2i
                 drawpath(scalepath(path, .2i), :stroke)
             end
         end

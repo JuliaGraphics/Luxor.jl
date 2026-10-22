@@ -1,6 +1,6 @@
 name = "Luxor"
 uuid = "ae8d54c2-7ccd-5906-9d76-62fc9837b5bc"
-version = "4.6"
+version = "4.6.0"
 authors = ["cormullion <cormullion@mac.com>"]
 
 [deps]
@@ -58,4 +58,4 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Typstry = "f0ed7684-a786-439e-b1e3-3b82803b501e"
 
 [targets]
-test = ["Pkg", "Aqua", "ImageIO", "Test", "MathTeXEngine", "LaTeXStrings"]
+test = ["Pkg", "Aqua", "ImageIO", "Test", "MathTeXEngine", "LaTeXStrings", "Typstry"]
