@@ -159,7 +159,7 @@ export Drawing,
 
     # hexagons
     HexagonAxial, HexagonCubic, HexagonOffsetOddR, HexagonOffsetEvenR,
-    # hexagon,
+    Hexagon,
     hexcenter, hexcube_round, hexcube_linedraw,
     HexagonVertexIterator, hextile, hexspiral,
     HexagonNeighborIterator, hexneighbors,

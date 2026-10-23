@@ -206,7 +206,7 @@ all turtles, So it's possible for one turtle to pop the stack values that were
 function Push(t::Turtle)
     _prolog(t)
     # save xpos, ypos, turn in a queue
-    global _turtle_stack
+    #global _turtle_stack
     push!(_turtle_stack, [t.xpos, t.ypos, t.orientation])
     _epilog(t)
 end
@@ -225,7 +225,7 @@ all turtles, So it's possible for one turtle to pop the stack values that were
 function Pop(t::Turtle)
     _prolog(t)
     # restore xpos, ypos, turn from queue
-    global _turtle_stack
+    #global _turtle_stack
     if isempty(_turtle_stack)
         @info("turtle stack was already empty")
         t.xpos, t.ypos, t.orientation = 0.0, 0.0, 0.0

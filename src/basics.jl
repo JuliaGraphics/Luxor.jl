@@ -493,10 +493,13 @@ rmove(x, y) = Cairo.rel_move_to(_get_current_cr(), x, y)
 rmove(pt) = rmove(pt.x, pt.y)
 
 """
-    line(pt::Point)
+    line(x, y)
 
-Add a straight line to the current path that joins the path's current point to `pt`. The
-current point is then updated to `pt`.
+Add a straight line to the current path that joins the
+path's current point to `Point(x, y)`. The current point is
+then updated to `Point(x, y)`. 
+
+You can also call `line(pt::Point)`.
 
 Other path-building functions are `move()`, `curve()`, `arc()`, `rline()`, and
 `rmove()`.
@@ -504,13 +507,20 @@ Other path-building functions are `move()`, `curve()`, `arc()`, `rline()`, and
 See also `currentpoint()` and `hascurrentpoint()`.
 """
 line(x, y) = Cairo.line_to(_get_current_cr(), x, y)
+
+"""
+    line(pt::Point)
+
+Add a straight line to the current path that joins the path's current point to `pt`.
+The current point is then updated to `pt`. 
+"""
 line(pt) = line(pt.x, pt.y)
 
 """
     line(pt1::Point, pt2::Point; action=:path)
-    line(pt1::Point, pt2::Point, action=:path)
 
-Add a straight line between two points `pt1` and `pt2`, and do the action.
+Add a straight line between two points `pt1` and `pt2`, and
+do the action (`:stroke` is useful, `:fill` less so). 
 """
 function line(pt1::Point, pt2::Point;
     action = :path)

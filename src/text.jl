@@ -745,18 +745,33 @@ to split a string or array into chunks:
 chunk(x, n) = [x[i:min(i+n-1,length(x))] for i in 1:n:length(x)]
 ```
 
-For example:
+This example appends the number of vowels in each line.
 
 ```julia
-textwrap(the_text, 300, boxtopleft(BoundingBox()) + 20,
-    (ln, lt, sp, ht) -> begin
-        c = count(t -> occursin(r"[[:punct:]]", t), split(lt, ""))
-        @layer begin
-            fontface("Menlo")
-            sethue("darkred")
-            text(string("[", c, "]"), sp + (310, 0))
+using Luxor
+
+loremipsum = \"\"\"Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Nunc placerat lorem ullamcorper,
+sagittis massa et, elementum dui. Sed dictum ipsum vel
+commodo pellentesque. Aliquam erat volutpat. Nam est
+dolor, vulputate a molestie aliquet, rutrum quis lectus.\"\"\"
+
+@draw begin
+    fontsize(20)
+    textwrap(
+        loremipsum,
+        300,
+        leading = 25,
+        boxtopleft(BoundingBox()) + (20, 20),
+        (ln, lt, sp, ht) -> begin
+            c = count(t -> occursin(r"a|e|i|o|u", t), split(lt, ""))
+            @layer begin
+                sethue("darkred")
+                text(string("[", c, "]"), sp + (310, 0))
+            end
         end
-    end)
+    )
+end
 ```
 
 puts a count of the number of punctuation characters in each

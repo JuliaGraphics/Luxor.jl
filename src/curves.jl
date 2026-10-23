@@ -1,5 +1,16 @@
 # arcs, circles, ellipses, curves, pie, sector, bezier
 
+"""
+    circle(x::Real, y::Real, r::Real; action = :none)
+
+Make a circle of radius `r` centered at `Point(x, y)`.
+
+`action` is one of the actions applied by `do_action()`,
+defaulting to `:none`.
+
+Returns a tuple of two points, the corners of a bounding box
+that encloses the circle.
+"""
 function circle(x::Real, y::Real, r::Real;
     action = :none)
     if action != :path
@@ -18,7 +29,7 @@ end
     circle(centerpoint::Point, r; action=:none)
     circle(centerpoint::Point, r, action)
 
-Make a circle of radius `r` centered at 'centerpoint', and add it to the current path.
+Make a circle of radius `r` centered at 'centerpoint'.
 
 `action` is one of the actions applied by `do_action()`, defaulting to `:none`.
 

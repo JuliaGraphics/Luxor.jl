@@ -35,8 +35,6 @@ function setcolor(col::AbstractString)
 end
 
 """
-    setcolor(r, g, b)
-    setcolor(r, g, b, alpha)
     setcolor(color)
     setcolor(col::Colors.Colorant)
     setcolor(sethue("red")..., .2)
@@ -62,6 +60,12 @@ function setcolor(col::Colors.Colorant)
     return (temp.r, temp.g, temp.b, temp.alpha)
 end
 
+"""
+    setcolor(r, g, b)
+    setcolor(r, g, b, alpha=1.0)
+
+Set the current color.
+"""
 function setcolor(r, g, b, a = 1.0)
     _set_current_color(r, g, b, a)
     Cairo.set_source_rgba(_get_current_cr(), r, g, b, a)

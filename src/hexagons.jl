@@ -2,7 +2,7 @@
 # first adapted by GiovineItalia/Hexagons.jl
 # then further tweaked for Julia v1 compatibility, Luxor use, etc.
 """
-    Hexagon
+    Luxor.Hexagon
 
 To create a hexagon, use one of the constructor types:
 
@@ -157,53 +157,53 @@ HexagonOffsetEvenR(q, r, o::Point, w) = HexagonOffsetEvenR(q, r, o::Point, w, w)
 HexagonOffsetEvenR(q, r, w, h) = HexagonOffsetEvenR(q, r, Point(0, 0), w, h)
 
 function Base.convert(::Type{HexagonAxial}, hex::HexagonCubic)
-    HexagonAxial(hex.q, hex.s, hex.origin, hex.width, hex.height)
+    return HexagonAxial(hex.q, hex.s, hex.origin, hex.width, hex.height)
 end
 
 function Base.convert(::Type{HexagonAxial}, hex::HexagonOffsetOddR)
-    convert(HexagonAxial, convert(HexagonCubic, hex))
+    return convert(HexagonAxial, convert(HexagonCubic, hex))
 end
 
 function Base.convert(::Type{HexagonAxial}, hex::HexagonOffsetEvenR)
-    convert(HexagonAxial, convert(HexagonCubic, hex))
+    return convert(HexagonAxial, convert(HexagonCubic, hex))
 end
 
 function Base.convert(::Type{HexagonCubic}, hex::HexagonAxial)
-    HexagonCubic(hex.q, -hex.q - hex.r, hex.r, hex.origin, hex.width, hex.height)
+    return HexagonCubic(hex.q, -hex.q - hex.r, hex.r, hex.origin, hex.width, hex.height)
 end
 
 function Base.convert(::Type{HexagonCubic}, hex::HexagonOffsetOddR)
     q = hex.q - (hex.r >> 1)
     s = hex.r
     r = -q - s
-    HexagonCubic(q, r, s, hex.origin, hex.width, hex.height)
+    return HexagonCubic(q, r, s, hex.origin, hex.width, hex.height)
 end
 
 function Base.convert(::Type{HexagonCubic}, hex::HexagonOffsetEvenR)
     q = hex.q - (hex.r >> 1) - Int(isodd(hex.r)) # ?
     s = hex.r
     r = -q - s
-    HexagonCubic(q, r, s, hex.origin, hex.width, hex.height)
+    return HexagonCubic(q, r, s, hex.origin, hex.width, hex.height)
 end
 
 function Base.convert(::Type{HexagonOffsetOddR}, hex::HexagonCubic)
     q = hex.q + (hex.s >> 1)
     r = hex.s
-    HexagonOffsetOddR(q, r, hex.origin, hex.width, hex.height)
+    return HexagonOffsetOddR(q, r, hex.origin, hex.width, hex.height)
 end
 
 function Base.convert(::Type{HexagonOffsetOddR}, hex::HexagonAxial)
-    convert(HexagonOffsetOddR, convert(HexagonCubic, hex))
+    return convert(HexagonOffsetOddR, convert(HexagonCubic, hex))
 end
 
 function Base.convert(::Type{HexagonOffsetEvenR}, hex::HexagonCubic)
     q = hex.q + (hex.s >> 1) + Int(isodd(hex.s))
     r = hex.s
-    HexagonOffsetEvenR(q, r, hex.origin, hex.width, hex.height)
+    return HexagonOffsetEvenR(q, r, hex.origin, hex.width, hex.height)
 end
 
 function Base.convert(::Type{HexagonOffsetEvenR}, hex::HexagonAxial)
-    convert(HexagonOffsetEvenR, convert(HexagonCubic, hex))
+    return convert(HexagonOffsetEvenR, convert(HexagonCubic, hex))
 end
 
 struct HexagonNeighborIterator
@@ -223,8 +223,6 @@ const CUBIC_HEX_NEIGHBOR_OFFSETS = [
     hexneighbors(hex::Hexagon)
 
 Return the neighbors of `hex`.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 
 ## Example
 
@@ -274,10 +272,6 @@ const CUBIC_HEX_DIAGONAL_OFFSETS = [
     hexdiagonals(hex::Hexagon)
 
 Return the six hexagons that lie on the diagonals to `hex`.
-
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
-
 """
 hexdiagonals(hex::Hexagon) = HexagonDiagonalIterator(convert(HexagonCubic, hex))
 
@@ -299,22 +293,28 @@ struct HexagonVertexIterator
     ysize::Float64
 
     function HexagonVertexIterator(x, y, xsize = 10.0, ysize = 10.0)
-        new(Float64(x),
+        return new(
+            Float64(x),
             Float64(y),
             Float64(xsize),
-            Float64(ysize))
+            Float64(ysize)
+        )
     end
 
-    function HexagonVertexIterator(hex::Hexagon,
-        xsize = hex.width,
-        ysize = hex.height,
-        xoff = hex.origin.x,
-        yoff = hex.origin.y)
+    function HexagonVertexIterator(
+            hex::Hexagon,
+            xsize = hex.width,
+            ysize = hex.height,
+            xoff = hex.origin.x,
+            yoff = hex.origin.y
+        )
         c = hexcenter(hex)
-        new(Float64(c[1]),
+        return new(
+            Float64(c[1]),
             Float64(c[2]),
             xsize,
-            ysize)
+            ysize
+        )
     end
 end
 
@@ -322,8 +322,6 @@ end
     hextile(hex::Hexagon)
 
 Calculate the six vertices of the hexagon `hex` and return them in an array of Points.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hextile(hex::Hexagon)
     c = hexcenter(hex)
@@ -355,12 +353,10 @@ end
 Return all the hexagons within index distance `n` of `hex`. If `n` is 0, only
 the `hex` itself is returned. If `n` is 1, `hex` and the six hexagons one index
 away are returned. If `n` is 2, 19 hexagons surrounding `hex` are returned.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hexagons_within(n::Int, hex::Hexagon)
     cubic_hex = convert(HexagonCubic, hex)
-    HexagonDistanceIterator(cubic_hex, n)
+    return HexagonDistanceIterator(cubic_hex, n)
 end
 
 hexagons_within(hex::Hexagon, n::Int) = hexagons_within(n, hex)
@@ -381,7 +377,7 @@ function Base.iterate(it::HexagonDistanceIterator, state = (-it.n, 0))
 end
 
 function Base.collect(it::HexagonDistanceIterator)
-    collect(HexagonCubic, it)
+    return collect(HexagonCubic, it)
 end
 
 struct HexagonRingIterator
@@ -394,37 +390,32 @@ end
 
 Return the ring of hexagons that surround `hex`. If `n` is 1, the hexagons
 immediately surrounding `hex` are returned.
-
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hexring(n::Int, hex::Hexagon)
     cubic_hex = convert(HexagonCubic, hex)
-    HexagonRingIterator(cubic_hex, n)
+    return HexagonRingIterator(cubic_hex, n)
 end
 
 hexring(hex::Hexagon, n::Int) = hexring(n, hex)
 
 Base.length(it::HexagonRingIterator) = it.n * 6
 
-function Base.iterate(it::HexagonRingIterator, state::(Tuple{Int,HexagonCubic}) = (1, hexneighbor(it.hex, 5, it.n)))
+function Base.iterate(it::HexagonRingIterator, state::(Tuple{Int, HexagonCubic}) = (1, hexneighbor(it.hex, 5, it.n)))
     hex_i, cur_hex = state
     hex_i > length(it) && return nothing
     ring_part = div(hex_i - 1, it.n) + 1
     next_hex = hexneighbor(cur_hex, ring_part)
-    cur_hex, (hex_i + 1, next_hex)
+    return cur_hex, (hex_i + 1, next_hex)
 end
 
 function Base.collect(it::HexagonRingIterator)
-    collect(HexagonCubic, it)
+    return collect(HexagonCubic, it)
 end
 
 """
     hexspiral(hex, n)
 
 Return an array of hexagons to spiral around a central hexagon forming `n` rings.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hexspiral(hex, nrings)
     result = Hexagon[]
@@ -444,23 +435,21 @@ end
     distance(h1::Hexagon, h2::Hexagon)
 
 Find distance between hexagons h1 and h2.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function Luxor.distance(a::Hexagon, b::Hexagon)
     hexa = convert(HexagonCubic, a)
     hexb = convert(HexagonCubic, b)
-    max(abs(hexa.q - hexb.q),
+    return max(
+        abs(hexa.q - hexb.q),
         abs(hexa.r - hexb.r),
-        abs(hexa.s - hexb.s))
+        abs(hexa.s - hexb.s)
+    )
 end
 
 """
     hexcenter(hex::Hexagon)
 
 Find the center of the `hex` hexagon. Returns a Point.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hexcenter(hex::Hexagon)
     xsize = hex.width
@@ -475,7 +464,7 @@ function hexneighbor(hex::HexagonCubic, direction::Int, distance::Int = 1)
     dq = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 1] * distance
     dr = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 2] * distance
     ds = CUBIC_HEX_NEIGHBOR_OFFSETS[direction, 3] * distance
-    HexagonCubic(hex.q + dq, hex.r + dr, hex.s + ds, hex.origin, hex.width, hex.height)
+    return HexagonCubic(hex.q + dq, hex.r + dr, hex.s + ds, hex.origin, hex.width, hex.height)
 end
 
 """
@@ -484,8 +473,6 @@ end
 Find and return the hexagons that lie (mostly) on a straight line between
 `hexa` and `hexb`. If you filled/stroked them appropriately, you'd get a
 jagged line.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hexcube_linedraw(a::Hexagon, b::Hexagon)
     hexa = convert(HexagonCubic, a)
@@ -495,8 +482,8 @@ function hexcube_linedraw(a::Hexagon, b::Hexagon)
     h = hexa.height
     N = distance(hexa, hexb)
     dx, dy, dz = hexb.q - hexa.q, hexb.r - hexa.r, hexb.s - hexa.s
-    ax, ay, az = hexa.q + 1e-6, hexa.r + 1e-6, hexa.s - 2e-6
-    map(i -> hexnearest_cubic(ax + i * dx, ay + i * dy, az + i * dz, o, w, h), 0:(1 / N):1)
+    ax, ay, az = hexa.q + 1.0e-6, hexa.r + 1.0e-6, hexa.s - 2.0e-6
+    return map(i -> hexnearest_cubic(ax + i * dx, ay + i * dy, az + i * dz, o, w, h), 0:(1 / N):1)
 end
 
 """
@@ -505,8 +492,6 @@ end
 Find the nearest hexagon in cubic coordinates, ie as `q`, `r`, `s` integer indices,
 given (x, y, z) as Real numbers, with the hexagonal grid centered at `origin`,
 and with tiles of `width`/`height`.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
 """
 function hexnearest_cubic(x::Real, y::Real, z::Real, origin, width, height)
     rx, ry, rz = round(Integer, x), round(Integer, y), round(Integer, z)
@@ -519,17 +504,14 @@ function hexnearest_cubic(x::Real, y::Real, z::Real, origin, width, height)
     else
         rz = -rx - ry
     end
-    HexagonCubic(rx, ry, rz, origin, width, height)
+    return HexagonCubic(rx, ry, rz, origin, width, height)
 end
 
 """
     hexcube_round(x, y, origin, width = 10.0, height = 10.0)
 
 Return the hexagon containing the point `x`, `y`, on the hexagonal grid centered at
-`origin`, and with tiles of `width`/`height` point in Cartesian space can be
-mapped to the index of the hexagon that contains it.
-
-For more information about making hexagons and hexagonal grids, see [Luxor.Hexagon](@ref).
+`origin`, and with tiles of `width`/`height`.
 """
 function hexcube_round(x, y, origin = Point(0, 0), width = 10.0, height = 10.0)
     x /= width
@@ -539,3 +521,17 @@ function hexcube_round(x, y, origin = Point(0, 0), width = 10.0, height = 10.0)
     h = hexnearest_cubic(q, -q - r, r, origin, width, height)
     return h
 end
+
+"""
+    hexcube_round(pt::Point, origin, width = 10.0, height = 10.0)
+
+Return the hexagon containing the point `pt`, on the hexagonal grid centered at
+`origin`, and with tiles of `width`/`height`.
+
+```julia
+pt = rand(BoundingBox())
+poly(hextile(hexcube_round(pt.x, pt.y, O, 23, 23)), :fill)
+```
+"""
+hexcube_round(pt::Point, origin = Point(0, 0), width = 10.0, height = 10.0) =
+    hexcube_round(pt.x, pt.y, origin, width, height)

@@ -85,9 +85,6 @@ A turtle graphics approach lends itself well to recursive programming. This shor
 
 ```@example
 using Luxor, Colors # hide
-Drawing(400, 400, "../assets/figures/hilbertturtle.svg") # hide
-origin() # hide
-background("black") # hide
 
 function hilbert(t::Turtle, level, angle, lengthstep)
     level == 0 && return
@@ -111,18 +108,20 @@ function hilbert(t::Turtle, level, angle, lengthstep)
     Turn(t, angle)
 end
 
-@draw begin
+@drawsvg begin 
+origin()
 background("black")
+
 setline(2)
 setlinecap("round")
 
-hilbert(Turtle(first(BoundingBox()) + (12, 12), true, 0, (1, 0, 0)),
-        6,  # level
-        90, # turn angle, in degrees
-        6   # steplength
-        )
+hilbert(Turtle(first(BoundingBox()) + (12, 12)
+    true, 0, (1, 0, 0)),
+    6,  # hilbert level
+    90, # hilbert turn angle, in degrees
+    6   # hilbert steplength
+    )
 end
-nothing # hide
 ```
 
 ![hilbert turtle](../assets/figures/hilbertturtle.svg)
