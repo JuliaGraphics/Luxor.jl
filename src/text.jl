@@ -25,7 +25,8 @@ measured clockwise.
 
 `hoffset` and `voffset` specify horizontal and vertical offsets, respectively.
 `toffset` and `noffset` specify offsets in the tangential and normal directions
-relative to `angle`.
+relative to `angle`. When `angle` is 0, they're the same as `hoffset` and
+`voffset`.
 
 Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
 `:right`.  Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or

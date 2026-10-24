@@ -5,6 +5,7 @@
 ### Added
 - `movepath()`
 - `scalepath()`
+- `hoffset`, `voffset`, `toffset`, and `noffset` keywords for `text()`
 
 ### Changed
 - Fixed method ambiguities that Julia nightly 1.14.0-DEV.2604 introduced, and that Aqua started finding.
