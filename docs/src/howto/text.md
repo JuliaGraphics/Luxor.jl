@@ -83,6 +83,23 @@ fontface("Georgia")
 
 ![text rotation](../assets/figures/text-rotation.png)
 
+You can move the text away from the point with `hoffset` and `voffset`, which shift it horizontally and vertically. If the text is rotated, `toffset` and `noffset` shift it along the rotated baseline (tangent) and at right angles to it (normal). With `angle=0` they're the same as `hoffset` and `voffset`. This makes it easier to keep labels the same distance away from a line, whatever its slope:
+
+```@example
+using Luxor # hide
+@drawsvg begin # hide
+background("white") # hide
+fontsize(14)
+sethue("black")
+pts = [Point(-200, 80), Point(-120, -80), Point(60, -60), Point(220, 60), Point(0, 100)]
+poly(pts, :stroke, close=true)
+for (p1, p2) in zip(pts, circshift(pts, -1))
+    text(string(round(Int, distance(p1, p2))), midpoint(p1, p2),
+        halign=:center, angle=slope(p1, p2), noffset=-8)
+end
+end 600 250 # hide
+```
+
 ## Placing text ("Pro" API)
 
 Use [`settext`](@ref) to place text. You can include some pseudo-HTML markup with the keyword argument `markup=true`.
