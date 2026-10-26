@@ -11,13 +11,22 @@
     text(str, valign = :baseline)
     text(str, valign = :baseline, halign = :left)
     text(str, pos, valign = :baseline, halign = :left)
+    text(str, pos, valign = :baseline, halign = :left, angle = 0, 
+        hoffset = 0.0, voffset = 0.0, 
+        toffset = 0.0, noffset = 0.0)
     text(latexstr, pos, valign = :baseline, halign = :left, rotationfixed = false, angle = 0)
     text(typststr, pos::Point, place=true, centered=false, preamble=typststr)
 
 Draw the text in the string `str` at `x`/`y` or `pt`, placing the start of the
 string at the point. If you omit the point, it's placed at the current `0/0`.
 
-`angle` specifies the rotation of the text relative to the current x-axis.
+`angle` specifies the rotation of the text relative to the current x-axis,
+measured clockwise.
+
+`hoffset` and `voffset` specify horizontal and vertical offsets, respectively.
+`toffset` and `noffset` specify offsets in the tangential and normal directions
+relative to `angle`. When `angle` is 0, they're the same as `hoffset` and
+`voffset`.
 
 Horizontal alignment `halign` can be `:left`, `:center`, (also `:centre`) or
 `:right`.  Vertical alignment `valign` can be `:baseline`, `:top`, `:middle`, or
@@ -60,7 +69,11 @@ Other text functions:
 function text(t::T where {T<:AbstractString}, pt::Point;
     halign=:left,
     valign=:baseline,
-    angle=0.0)
+    angle=0.0,
+    hoffset=0.0,
+    voffset=0.0,
+    toffset=0.0,
+    noffset=0.0)
     #= text can aligned by one of the following points
         top/left       top/center       top/right
         middle/left    middle/center    middle/right
@@ -95,9 +108,13 @@ function text(t::T where {T<:AbstractString}, pt::Point;
 
     textpointy = pt.y - [ybearing, ybearing / 2, 0, textheight + ybearing][valignment]
 
+    # apply horizontal/vertical and tangential/normal offsets
+    Δx = hoffset + toffset * cos(angle) - noffset * sin(angle)
+    Δy = voffset + toffset * sin(angle) + noffset * cos(angle)
+
     # need to adjust for any rotation now
     # rotate around original point
-    finalpt = rotatepoint(Point(textpointx, textpointy), pt, angle)
+    finalpt = rotatepoint(Point(textpointx, textpointy), pt, angle) + Point(Δx, Δy)
 
     gsave()
     translate(finalpt)

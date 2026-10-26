@@ -5,7 +5,7 @@
 ### Added
 - `movepath()`
 - `scalepath()`
-- additional alignment options for `text()`
+- additional alignment options for `text()`: `hoffset`, `voffset`, `toffset`, and `noffset`
 
 ### Changed
 
