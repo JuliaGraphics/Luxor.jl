@@ -115,8 +115,7 @@ background("black")
 setline(2)
 setlinecap("round")
 
-hilbert(Turtle(first(BoundingBox()) + (12, 12)
-    true, 0, (1, 0, 0)),
+hilbert(Turtle(first(BoundingBox()) + (12, 12), true, 0, (1, 0, 0)),
     6,  # hilbert level
     90, # hilbert turn angle, in degrees
     6   # hilbert steplength

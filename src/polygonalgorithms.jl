@@ -15,7 +15,8 @@ polyarea(p::Vector{Point}) = PA.area_polygon(_points_to_tuples(p))
 
 """
     isinside(p::Point, pointlist::Vector{Point}
-        allowonedge = false)
+        allowonedge = false,
+        rtol=AbstractFloat=1e-10)
 
 Is a point `p` inside a polygon `pointlist`?
 
@@ -23,9 +24,16 @@ If `allowonedge` is false, a point lying on the polygon is not inside.
 
 Returns true if it does, or false.
 """
-isinside(pt::Point, pgon::Vector{Point}; allowonedge = false, rtol=AbstractFloat=1e-10) =
-    PA.contains(_points_to_tuples(pgon), _point_to_tuple(pt),
-         on_border_is_inside = allowonedge, rtol=rtol)
+function isinside(pt::Point, pgon::Vector{Point};
+        allowonedge = false,
+        atol::AbstractFloat = PA.default_atol,
+        rtol = nothing)
+    if rtol !== nothing
+        Base.depwarn("`rtol` is no longer used by `isinside`; use `atol`, an absolute distance.", :isinside)
+    end
+    return PA.contains(_points_to_tuples(pgon), _point_to_tuple(pt);
+        on_border_is_inside = allowonedge, atol = atol)
+end
 
 """
     polyhull(ptspgon::Vector{Point})
@@ -79,9 +87,10 @@ The `pgon1` and `pgon2` polygons must not have holes, and cannot be
 self-intersecting.
 """
 function polyintersect(pgon1::AbstractVector{Point}, pgon2::AbstractVector{Point})
-    return _tuples_to_points.(
+    result = _tuples_to_points.(
         PA.intersect_geometry(PA.MartinezRuedaAlg(), _points_to_tuples(pgon1), _points_to_tuples(pgon2))
     )
+    return filter(p -> length(p) > 2, result)
 end
 
 polyintersections(S::Vector{Point}, C::Vector{Point}) = polyintersect(S, C)
@@ -92,8 +101,9 @@ polyintersections(S::Vector{Point}, C::Vector{Point}) = polyintersect(S, C)
 Find polygonal areas that are inside `pg1` but not in `pg2`.
 """
 function polydifference(pg1::AbstractVector{Point}, pg2::AbstractVector{Point})
-    return Luxor._tuples_to_points.(PA.difference_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
+    result = Luxor._tuples_to_points.(PA.difference_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
         Luxor._points_to_tuples(pg2)))
+    return filter(p -> length(p) > 2, result)
 end
 
 """
@@ -106,8 +116,9 @@ Return an array of polygons.
 Boolean Union.
 """
 function polyunion(pg1::AbstractVector{Point}, pg2::AbstractVector{Point})
-    return Luxor._tuples_to_points.(PA.union_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
+    result = Luxor._tuples_to_points.(PA.union_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
         Luxor._points_to_tuples(pg2)))
+    return filter(p -> length(p) > 2, result)
 end
 
 """
@@ -122,6 +133,7 @@ Boolean XOR.
 Possibly returns holes but does not classify them as holes.
 """
 function polyxor(pg1, pg2)
-    return Luxor._tuples_to_points.(PA.xor_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
+    result = Luxor._tuples_to_points.(PA.xor_geometry(PA.MartinezRuedaAlg(), Luxor._points_to_tuples(pg1),
         Luxor._points_to_tuples(pg2)))
+    return filter(p -> length(p) > 2, result)
 end

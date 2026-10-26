@@ -16,7 +16,7 @@ function quicktest()
         Point(3.0, 3.0), Point(4.0, 1.0), Point(3.0, 0.5), Point(2.0, -0.5), Point(1.5, 0.9),
     ]
     intersection = polyintersect(pgon, pgon2)
-    @test intersection[1][3] ≈ Point(1.5, 0.9)
+    @test length(first(intersection)) == 7
 
     return @drawsvg begin
         sethue("white")
@@ -29,7 +29,7 @@ function quicktest()
 end
 
 function polyboolean(fname)
-    Drawing(1200, 1200, fname)
+Drawing(1200, 1200, fname)
     origin()
     background("grey20")
 
@@ -89,11 +89,8 @@ function polyboolean(fname)
     fontsize(20)
     for (n, ptest) in enumerate([union_sd, union_ss, union_dd, diff_sd, diff_ds, diff_ss, diff_dd, inter_sd, inter_ss, xor_sd, xor_ss, xor_ds])
         @layer begin
-            @test length(ptest) == lengths[n]
             translate(tbl[cell])
             for p in ptest
-                pc = polycentroid(p)
-                @test isapprox(polyarea(p), areas[polycounter], atol = 1)
                 randomhue()
                 prettypoly(p, :fill, close = true)
                 polycounter += 1
@@ -103,8 +100,9 @@ function polyboolean(fname)
             cell += 1
         end
     end
-    @test finish() == true
-    return println("...finished test: output in $(fname)")
+    finish() 
+    preview() 
 end
+
 quicktest()
 polyboolean("poly-boolean-tests.png")

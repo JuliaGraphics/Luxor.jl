@@ -197,6 +197,10 @@ function run_all_tests()
         include("dispatcher.jl")
         include("tidy-svg.jl")
     end
+
+    @testset "boolean" begin
+        include("polyboolean.jl")
+    end
 end
 
 if get(ENV, "LUXOR_KEEP_TEST_RESULTS", false) == "true"
