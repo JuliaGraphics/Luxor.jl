@@ -1,11 +1,12 @@
 # Changelog
 
-## [v4.6] - forthcoming
+## [v4.6] - 2026-11-07
 
 ### Added
 - `movepath()`
 - `scalepath()`
 - additional alignment options for `text()`: `hoffset`, `voffset`, `toffset`, and `noffset`
+- currentpathboundingbox(; stroke=false)
 
 ### Changed
 

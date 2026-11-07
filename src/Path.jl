@@ -496,8 +496,23 @@ end
 """
     movepath(path::Path, pt::Point)
 
-Return a new Path by moving every point in `path` by 
-`pt.x` and `pt.y`.
+Return a new Path by moving every point in `path` through 
+a line parallel with the vector `Point(0, 0) -> pt`. 
+
+```julia
+@draw begin
+    ngon(O, 50, 5, action = :path)
+    d = storepath()
+    setopacity(0.5)
+    for i in 1:10
+        randomhue()
+        drawpath(
+            movepath(d, polar(150, i * π / 5)),
+            action = :fill
+        )
+    end
+end
+```
 """
 function movepath(path::Path, pt::Point)
     op = Path(PathElement[])

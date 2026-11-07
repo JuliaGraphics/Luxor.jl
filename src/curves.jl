@@ -52,8 +52,6 @@ circle(centerpoint::Point, r::Real; action = :none) =
 
 circle(pt::Point, r::Real, action::Symbol) = circle(pt, r, action = action::Symbol)
 
-circle(x::Real, y::Real, r::Real, action::Symbol) = circle(Point(x, y), r, action = action::Symbol)
-
 """
     circle(pt1::Point, pt2::Point; action=:none)
     circle(pt1::Point, pt2::Point, action)
@@ -81,6 +79,13 @@ function circle(pt1::Point, pt2::Point, pt3::Point;
     radius = distance(pt1, pt2) / 2
     circle(center3pts(pt1, pt2, pt3)..., action = action)
 end
+
+"""
+    circle(x::Real, y::Real, r::Real, action::Symbol)
+
+Make a circle centered at `Point(x, y)` with radius `r`.
+"""
+circle(x::Real, y::Real, r::Real, action::Symbol) = circle(Point(x, y), r, action = action::Symbol)
 
 circle(pt1::Point, pt2::Point, pt3::Point, action::Symbol) =
     circle(pt1, pt2, pt3; action = action)
@@ -622,6 +627,13 @@ end
 pie(x::Real, y::Real, radius::Real, startangle::Real, endangle::Real, action::Symbol) =
     pie(x, y, radius, startangle, endangle, action = action)
 
+"""
+    pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real;
+        action = :none)
+
+Make a pie shape centered at `centerpoint`, with radius `radius`, from `startangle` to `endangle`. Angles start at the positive x-axis and
+are measured clockwise. Add it to the current path. Apply `action`.
+"""
 pie(centerpoint::Point, radius::Real, startangle::Real, endangle::Real; action = :none) =
     pie(centerpoint.x, centerpoint.y, radius, startangle, endangle, action = action)
 

@@ -11,8 +11,8 @@ function main()
     Drawing(w, h, fname)
     background("white")
     origin()
-    setline(0.5)
-
+    setline(2.5)
+    sethue("black")
     pg = ngon(O, 100, 4, vertices = true)
 
     r = polysidelengths(pg)
@@ -26,7 +26,15 @@ function main()
     for S in 3:10
         D = rand(9:173)
         pg = ngonside(rand(BoundingBox()), D, S, vertices = true)
-        @test isapprox(sum(polysidelengths(pg)), S * D)
+        sm = sum(polysidelengths(pg))
+        @test isapprox(sm, S * D)
+        poly(pg, :stroke)
+        @layer begin
+            sethue("blue")
+            circle.([pg[1], pg[2]], 5, :fill)
+            sl = slope(pg[1], pg[2])
+            text(string(round(sm, digits=1)), midpoint(pg[1], pg[2]), angle=sl + π, noffset=10)
+        end
     end
 
     @test finish() == true

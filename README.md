@@ -1,11 +1,9 @@
 ![luxor splash image](docs/src/assets/figures/luxor-social-media-preview.png)
 
-| **Documentation**                       | **Build Status**                          | **Code Coverage**               |
-|:---------------------------------------:|:-----------------------------------------:|:-------------------------------:|
-| [![][docs-stable-img]][docs-stable-url] | [![Build Status][ci-img]][ci-url]         | [![][codecov-img]][codecov-url] |
-| [![][docs-development-img]][docs-development-url] | [![Build Status][appvey-img]][appvey-url] |                                 |
-
-PkgEval: [![PkgEval][pkgeval-img]][pkgeval-url]
+| **Documentation**                                  | **Build Status**                          | **Tests and Coverage**          |
+|:--------------------------------------------------:|:-----------------------------------------:|:-------------------------------:|
+| [![][docs-stable-img]][docs-stable-url]            | [![Build Status][ci-img]][ci-url]         | [![][codecov-img]][codecov-url] |
+| [![][docs-development-img]][docs-development-url]  | [![PkgEval][pkgeval-img]][pkgeval-url]    | [![Aqua QA](https://juliatesting.github.io/Aqua.jl/dev/assets/badge.svg)](https://github.com/JuliaTesting/Aqua.jl) |
 
 ## Luxor
 

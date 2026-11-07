@@ -621,3 +621,54 @@ function box(bbox::BoundingBox, cornerradius::Real;
     box(bbox, fill(cornerradius, 4),
         action = action)
 end
+
+"""
+    currentpathboundingbox(;
+        stroke=false)
+
+Return the Luxor BoundingBox of the current path's extents. If `stroke=true`,
+the extent of the path when stroked will be returned - sharp corners
+can stick out quite a bit further than the path.
+
+```julia
+    setline(4)
+    setopacity(0.4)
+    sethue("red")
+    # make a path
+    crescent(O, 90, O + (30, 0), 100, :path)
+
+    # find its extents
+    bbox = currentpathboundingbox()
+
+    # stroke the path
+    strokepath()
+
+    # draw the bounding box
+    sethue("blue")
+    box(bbox, :stroke)
+
+    # repeat for stroke
+    crescent(O, 90, O + (30, 0), 100, :path)
+    bbox = currentpathboundingbox(;stroke=true)
+    sethue("green")
+    box(bbox, :stroke)
+```
+"""
+function currentpathboundingbox(;stroke=false)
+    dx1 = Cdouble[0]
+    dx2 = Cdouble[0]
+    dy1 = Cdouble[0]
+    dy2 = Cdouble[0]
+    if stroke
+        ccall((:cairo_stroke_extents, Luxor.Cairo.libcairo),
+            Nothing, (Ptr{Nothing}, Ptr{Cdouble}, Ptr{Cdouble},
+                Ptr{Cdouble}, Ptr{Cdouble}),
+            Luxor._get_current_cr().ptr, dx1, dy1, dx2, dy2)
+    else
+        ccall((:cairo_path_extents, Luxor.Cairo.libcairo),
+            Nothing, (Ptr{Nothing}, Ptr{Cdouble}, Ptr{Cdouble},
+                Ptr{Cdouble}, Ptr{Cdouble}),
+            Luxor._get_current_cr().ptr, dx1, dy1, dx2, dy2)
+    end
+    return BoundingBox(Point(dx1[1], dy1[1]), Point(dx2[1], dy2[1]))
+end

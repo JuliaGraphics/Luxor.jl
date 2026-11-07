@@ -20,7 +20,7 @@ function test_bboxes_1(fname)
     box(BoundingBox() * 0.9, :stroke)
 
     sethue("green")
-    box(BoundingBox(centered=false) * 0.9, :stroke)
+    box(BoundingBox(centered = false) * 0.9, :stroke)
 
     sethue("purple")
     setopacity(0.7)
@@ -39,8 +39,8 @@ function test_bboxes_1(fname)
     end
 
     # combine and intersections
-    box1 = BoundingBox()/3 - (200, 200)
-    box2 = BoundingBox()/4 - (300, 300)
+    box1 = BoundingBox() / 3 - (200, 200)
+    box2 = BoundingBox() / 4 - (300, 300)
     box3 = box1 + box2
     box4 = intersectboundingboxes(box1, box2)
     sethue("black")
@@ -64,7 +64,7 @@ function test_bboxes_1(fname)
     @test isapprox(boxdiagonal(box1), 614.636, atol = 0.01)
 
     # get vertices
-    bv = box(box1, vertices=true)
+    bv = box(box1, vertices = true)
     @test isapprox(bv[1].y, 33.333, atol = 0.1)
 
     setline(1)
@@ -88,12 +88,30 @@ function test_bboxes_1(fname)
     end
 
     # poly
-    s = star(O, 300, 7, 0.5, 0, vertices=true)
+    s = star(O, 300, 7, 0.5, 0, vertices = true)
     box5 = BoundingBox(s)
-    poly(s, :stroke, close=true)
-    prettypoly(box5, :stroke, close=true, vertexlabels=(n, t) -> label(string(n)))
+    poly(s, :stroke, close = true)
+    prettypoly(box5, :stroke, close = true, vertexlabels = (n, t) -> label(string(n)))
+
+    # current path
+    @layer begin
+        translate(-300, 400)
+        setline(4)
+        setopacity(0.4)
+        sethue("red")
+        crescent(O, 90, O + (30, 0), 100, :path)
+        bbox = currentpathboundingbox()
+        strokepath()
+        sethue("blue")
+        box(bbox, :stroke)
+        crescent(O, 90, O + (30, 0), 100, :path)
+        bbox = currentpathboundingbox(; stroke = true)
+        sethue("green")
+        box(bbox, :stroke)
+    end
+
     @test finish() == true
-    println("...finished bounding box test, saved in $(fname)")
+    return println("...finished bounding box test, saved in $(fname)")
 end
 
 Random.seed!(42)

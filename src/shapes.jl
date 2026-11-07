@@ -23,6 +23,12 @@ function rect(xmin::Real, ymin::Real, w::Real, h::Real;
     return Point(xmin, ymin), Point(xmin + w, ymin + h)
 end
 
+"""
+    rect(xmin::Real, ymin::Real, w::Real, h::Real, action::Symbol)
+
+Create a rectangle with one corner at (`xmin`/`ymin`) with
+width `w` and height `h`, and apply `action`.
+"""
 rect(xmin::Real, ymin::Real, w::Real, h::Real, action::Symbol) = rect(xmin, ymin, w, h, action = action)
 
 """
