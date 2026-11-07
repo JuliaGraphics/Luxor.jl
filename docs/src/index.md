@@ -12,7 +12,7 @@ layout: home
 hero:
   name: Luxor.jl
   text: Simple vector graphics
-  tagline: Cairo for tourists!
+  tagline: a simple interface to Cairo.jl - Cairo for tourists!
   actions:
     - theme: brand
       text: Tutorial

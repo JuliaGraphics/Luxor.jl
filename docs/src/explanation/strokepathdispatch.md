@@ -1,6 +1,6 @@
-# Custom behavior for strokepath and fillpath
+# Custom behaviour for strokepath and fillpath
 
-You can customize the behvaiour of the functions that "paint" the current path to the drawing, such as `strokepath` , `strokepreserve` , `fillpath`, and `fillpreserve`.
+You can customize the behaviour of the functions that "paint" the current path to the drawing, such as `strokepath` , `strokepreserve` , `fillpath`, and `fillpreserve`.
 
 Luxor provides a way to add some custom behaviour to the standard operation of these functions. 
 
@@ -29,36 +29,40 @@ does what you want it to do.
 
 3. Finally, change `Luxor.DISPATCHER[1]` to an instance of your struct.
 
-Here's an example that changes the behavior of all calls
-to `strokepath()` such that the current color is printed to the terminal just before each path is stroked.
+Here's an example that changes all calls
+to `strokepath()` so that the length of the paths being stroked is tallied.
 
 ```julia
+using Luxor
+
 struct MyDispatcher <: Luxor.LDispatcher end
 
 # define your own strokepath() function
+
 function Luxor.strokepath(::MyDispatcher)
-    # new behavior 
-    println("$(Luxor.get_current_color())")
-    # you can call the default behavior too
+    # new behavior
+    p = storepath()
+    pl = pathlength(p)
+    global journey += pl
+    # you can still call the default behaviour
     return Luxor.strokepath(Luxor.DefaultLuxor())
 end
 
 Luxor.DISPATCHER[1] = MyDispatcher()
 
+global journey = 0
+
 @draw begin
     for i in 1:20
-        randomhue()
-        star(rand(BoundingBox()), 30, 6, 0.5, action = :stroke)
+        ngon(rand(BoundingBox()), rand(10:200), rand(3:12), 0, :stroke)
     end
+    println(journey)
 end
 ```
 
-Now, all calls to `strokepath()` - whether explicitly called 
-or through other functions (for example, with the `:stroke` action) -
-will print the current color in the REPL just before the path is stroked.
+Now, all calls to `strokepath()` - whether explicitly called  or through other functions (for example, with the `:stroke` action) - will add the length of the path to the variable `journey`.
 
 Similar dispatches can be written for `strokepreserve`, `fillpath`,
 `fillpreserve`, `clip`, `clippreserve`, and `paint`.
 
-Functions which don't have methods defined for the types will default
-to calling `funcname(Luxor.DefaultLuxor())`
+Functions which don't have methods defined for the types will default to calling `funcname(Luxor.DefaultLuxor())`

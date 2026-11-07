@@ -1331,12 +1331,11 @@ Other functions for working with stored paths include:
 
 - [`pathlength`](@ref) find the length of a stored path
 
-- [`movepath`](@ref) move the stored coordinates of the path
+- [`movepath`](@ref) return a new path by moving the stored coordinates of the path by a vector
 
-- [`scalepath`](@ref) scale the path around its center
+- [`scalepath`](@ref) return a new path by scaling the path around its center
 
 - [`BoundingBox`](@ref) find the bounding box of a stored path
-
 
 ```@example gpath
 @drawsvg begin # hide

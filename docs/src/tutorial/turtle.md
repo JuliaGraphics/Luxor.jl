@@ -7,7 +7,7 @@ end
 
 ![turtle splash](../assets/figures/turtle-splash.svg)
 
-Luxor includes "turtle graphics". This is a way of making drawings by steering an imaginary turtle around a 2D drawing surface. The turtle holds (somehow) a pen, and draws lines behind it, as it wanders around the drawing obeying your instructions.
+Luxor includes "turtle graphics". This is a way of making drawings by steering an imaginary turtle around a 2D drawing surface. The turtle holds (somehow) a pen, and draws lines behind it as it wanders around the drawing obeying your instructions.
 
 ## How to type the turtle emoji
 
@@ -20,6 +20,10 @@ using Luxor
 ```
 
 That's "backslash colon turtle colon tab" in VS-Code, for example. (It's Unicode character `U+1F422`.)
+
+```julia
+Char('\U1F422')
+```
 
 Or you can use any simple Julia variable name if you'd prefer:
 
@@ -97,6 +101,27 @@ The smaller turn angle of 85° makes the pattern more interesting.
 !!! note
 
     All the turtle instructions in Luxor.jl start with an uppercase letter. This isn't considered good practice in Julia code; initial capitalization is supposed to be restricted to module and type names. In Luxor, this bad habit (I was young once) at least helps to distinguish between turtle graphics commands and non-turtle graphics commands.
+
+```julia
+julia> apropos("turtle")
+Luxor.Circle
+Luxor.Towards
+Luxor.Pendown
+Luxor.Forward
+Luxor.Rectangle
+Luxor.Randomize_saturation
+Luxor.Penwidth
+Luxor.Pen_opacity_random
+Luxor.Message
+Luxor.Turtle
+Luxor.Push
+Luxor.Pencolor
+Luxor.Orientation
+Luxor.Turn
+Luxor.Penup
+Luxor.Pop
+Luxor.Reposition
+```
 
 The idea of turtle graphics is that it's easy to build up complicated pictures just by repeating very simple instructions such as moving along a line and turning through angles.
 

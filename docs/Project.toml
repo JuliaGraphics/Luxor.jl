@@ -11,7 +11,7 @@ Typstry = "f0ed7684-a786-439e-b1e3-3b82803b501e"
 
 [sources]
 DocumenterLandingPage = {rev = "main", url = "https://github.com/csvance/DocumenterLandingPage.jl"}
-Luxor = {path = "/Users/pete/.julia/dev/Luxor"}
+Luxor = {rev = "master", url = "https://github.com/JuliaGraphics/Luxor.jl"}
 
 [compat]
 Colors = "0.12, 0.13"

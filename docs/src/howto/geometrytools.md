@@ -500,9 +500,9 @@ You can make a BoundingBox from:
 - an existing polygon
 - a stored path
 - a table or table cell
+- the current path under construction
 
-and by modifying an existing bounding box, or using the results of functions such
-as `circle()` or `box()`.
+and by modifying an existing bounding box, or using the results of functions such as `circle()` or `box()`.
 
 [`BoundingBox`](@ref) without arguments defines an extent that
 encloses the drawing (assuming that the origin is at the
